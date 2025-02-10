@@ -18,7 +18,7 @@
     "typescript": "5.5.2"
   },
   "devDependencies": {
-    "@tinacms/cli": "^1.8.1",
+    "@tinacms/cli": "^1.8.3",
     "@types/node": "^22.10.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
