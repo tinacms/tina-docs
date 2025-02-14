@@ -1,8 +1,10 @@
-import { defineConfig } from "tinacms";
-import page from "./collections/page";
-import post from "./collections/post";
+import { Collection, defineConfig } from "tinacms";
+import { docsCollection } from "./collections/docs";
+import { schema } from "./schema";
+
 
 export const config = defineConfig({
+  schema,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
   branch:
     process.env.NEXT_PUBLIC_TINA_BRANCH || // custom branch env override
@@ -18,15 +20,12 @@ export const config = defineConfig({
     // this is the config for the tina cloud media store
     tina: {
       publicFolder: "public",
-      mediaRoot: "uploads",
+      mediaRoot: "",
     },
   },
   build: {
     publicFolder: "public", // The public asset folder for your framework
     outputFolder: "admin", // within the public folder
-  },
-  schema: {
-    collections: [page, post],
   },
 });
 
