@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import React from 'react';
-import '../styles/global.css';
-import { SiteLayout } from '../components/SiteLayout';
+import Link from "next/link";
+import React from "react";
+import "../styles/global.css";
+import { SiteLayout } from "../components/SiteLayout";
 
 export default function RootLayout({
   children,
@@ -14,7 +14,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#E6FAF8" />
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
       </head>
-      <body style={{ margin: '3rem' }}>
+      <body>
         <SiteLayout>{children}</SiteLayout>
       </body>
     </html>
