@@ -16,13 +16,13 @@ export default function NotFound() {
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
-            <Link href="/docs" passHref>
+            <Link href="https://tina.io/docs" passHref>
               <div>Documentation</div>
             </Link>
-            <Link href="/docs/guides" passHref>
+            <Link href="https://tina.io/docs/guides" passHref>
               <div>Guides</div>
             </Link>
-            <Link href="/" passHref>
+            <Link href="https://tina.io/" passHref>
               <div>Home</div>
             </Link>
           </div>

@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'tuner-medium';
+    src: url('/fonts/tuner-medium.woff2') format('woff2'),
+      url('/fonts/tuner-medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
