@@ -52,7 +52,7 @@ export const GraphQLQueryResponseTabs = ({ ...props }) => {
                 }}>
                 {/* 
                     TECH DEBT: the replaceAll is a hack to get around TinaCMS limitations with nested rich-text.
-                    TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 
+                    TODO (ignore for now) - remove as per https://github.com/tinacms/tina.io/issues/2047 
                 */}
                 <Prism
                     value={props.query?.replaceAll('#', ' ') || ''}
@@ -68,7 +68,7 @@ export const GraphQLQueryResponseTabs = ({ ...props }) => {
                 }}>
                 {/*
                     TECH DEBT: the replaceAll is a hack to get around TinaCMS limitations with nested rich-text.
-                    TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 
+                    TODO (ignore for now) - remove as per https://github.com/tinacms/tina.io/issues/2047 
                  */}
                 <Prism
                     value={props.response?.replaceAll('#', ' ') || ''}
