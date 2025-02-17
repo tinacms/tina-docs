@@ -116,7 +116,7 @@ const NavLevel = ({
   const navLevelElem = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const path = pathname || "";
-  console.log(path, pathname)
+  
   
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
   const [expanded, setExpanded] = React.useState(
@@ -125,12 +125,12 @@ const NavLevel = ({
       level === 0
   );
 
-  console.log('categoryData:', categoryData);
+  
 
   const selected =
     path.split("#")[0] === slug || (slug === "/docs" && path === "/docs/");
     
-    console.log('selected: ', selected);
+    
     
 
   const childSelected = hasNestedSlug(categoryData.items, path);
@@ -159,8 +159,6 @@ const NavLevel = ({
     }
   }, [navLevelElem.current, navListElem, selected]);
 
-  console.log(childSelected);
-  console.log(getUrl(categoryData.slug))
 
   return (
     <>

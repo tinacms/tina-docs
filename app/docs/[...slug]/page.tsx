@@ -33,9 +33,9 @@ export default async function DocsPage({ params }: { params: { slug: string[] } 
       getDocsNav(),
     ]);
 
-    console.log('documentData: ', documentData.data.docs.body);
+    
     const pageTableOfContents = getTableOfContents(documentData?.data.docs.body);
-    console.log('paged:', pageTableOfContents)
+    
 
     const props = {
       query: documentData.query,

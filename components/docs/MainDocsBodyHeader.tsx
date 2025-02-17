@@ -4,7 +4,6 @@ import { Breadcrumbs } from './Breadcrumbs';
 // import DocsMobileHeader from './docsMobileHeader';
 
 const MainDocsBodyHeader = ({ DocumentTitle, NavigationDocsItems, allData, screenResizing }) => {
-console.log('NavDocsItems: ', NavigationDocsItems);
   return (
     <div>
       {/* TOOD: Add DocsMobileHeader back */}
