@@ -1,0 +1,19 @@
+{
+  "supermenuGroup": [
+    {
+      "title": "Introduction",
+      "items": [
+        {
+          "title": "index",
+          "slug": "content/docs/introduction/index.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "faq",
+          "slug": "content/docs/introduction/faq.mdx",
+          "_template": "item"
+        }
+      ]
+    }
+  ]
+}

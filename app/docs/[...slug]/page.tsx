@@ -1,6 +1,9 @@
 import fg from 'fast-glob';
 import { notFound } from 'next/navigation';
 import client from '../../../tina/__generated__/client';
+import DocumentPageClient from './DocumentPageClient';
+import getTableOfContents from '../../../utils/docs/getPageTableOfContents';
+import { getDocsNav } from '../../../utils/docs/getDocumentNavigation';
 
 //Placeholder for SEO
 
@@ -24,10 +27,28 @@ export default async function DocsPage({ params }: { params: { slug: string[] } 
   const slug = params.slug.join('/');
 
   try {
-    const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
+   
+    const [documentData, docsToCData] = await Promise.all([
+      client.queries.docs({ relativePath: `${slug}.mdx` }),
+      getDocsNav(),
+    ]);
 
-    return <div>{JSON.stringify(data, null, 2)}</div>;
+    console.log('documentData: ', documentData.data.docs.body);
+    const pageTableOfContents = getTableOfContents(documentData?.data.docs.body);
+    console.log('paged:', pageTableOfContents)
+
+    const props = {
+      query: documentData.query,
+      variables: documentData.variables,
+      data: documentData.data,
+      pageTableOfContents,
+      documentationData: documentData,
+      navigationDocsData: docsToCData,
+    };
+
+    return <div> <DocumentPageClient props={props}/></div>
   } catch (e) {
+    console.error(e);
     return notFound();
   }
 }

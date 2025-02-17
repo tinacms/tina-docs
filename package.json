@@ -10,10 +10,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "^4.0.5",
     "next": "^14.2.18",
+    "prismjs": "^1.29.0",
     "react": "^18.3.1",
+    "react-animate-height": "^3.2.3",
     "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.3",
+    "styled-components": "^6.1.15",
     "tinacms": "^2.6.1",
     "typescript": "5.5.2"
   },
