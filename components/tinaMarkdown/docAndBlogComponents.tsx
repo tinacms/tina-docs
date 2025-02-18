@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { CheckIcon, ClipboardIcon } from '@heroicons/react/24/outline';
@@ -12,7 +11,7 @@ import { getDocId } from '../../utils/docs/getDocsIds';
 import { WarningCallout } from '../docs/WarningCallout';
 import { Prism } from '../styles/Prism';
 
-// Removed unused dynamic import
+
 
 // Casting fixes to address TS errors
 const NextImage = Image as unknown as React.FC<any>;
