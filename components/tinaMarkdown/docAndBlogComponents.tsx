@@ -317,7 +317,7 @@ export const docAndBlogComponents: Components<{
   ),
   // @ts-ignore TODO: fix this in TinaCMS
   code_block: ({ value, lang, children }) => {
-    const [hasCopied, setHasCopied] = React.useState(false);
+    const [hasCopied, setHasCopied] = useState(false);
 
     const handleCopy = () => {
       navigator.clipboard.writeText(children || value || '');

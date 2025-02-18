@@ -157,7 +157,7 @@ const NavLevel = ({
         });
       }
     }
-  }, [navLevelElem.current, navListElem, selected]);
+  }, [navListElem, selected]);
 
 
   return (

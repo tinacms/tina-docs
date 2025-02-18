@@ -90,7 +90,6 @@ export const LinkButton = ({
 export const FlushButton = ({
   link = '/',
   color = 'seafoam',
-  size = 'medium',
   className = '',
   children,
   ...props
@@ -108,6 +107,7 @@ export const FlushButton = ({
     </Link>
   );
 };
+
 
 export const ModalButton = ({
   color = 'seafoam',
