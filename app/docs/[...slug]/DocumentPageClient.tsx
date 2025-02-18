@@ -1,7 +1,7 @@
 "use client";
 
 import { useTina } from "tinacms/dist/react";
-import { screenResizer } from "../../../components/hooks/ScreenResizer";
+import { useScreenResizer } from "../../../components/hooks/ScreenResizer";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { docAndBlogComponents } from "../../../components/tinaMarkdown/docAndBlogComponents";
 import { formatDate } from "../../../utils/docs/getFormattedDate";
@@ -22,8 +22,6 @@ export default function DocumentPageClient({ props }) {
   const { pageTableOfContents, navigationDocsData } = props;
   const allData = [documentationData, pageTableOfContents, navigationDocsData];
 
-
-
   const formattedDate = formatDate(documentationData?.last_edited);
   const previousPage = {
     slug: documentationData?.previous?.id.slice(7, -4),
@@ -37,8 +35,8 @@ export default function DocumentPageClient({ props }) {
 
   const { activeIds, contentRef } = useTocListener(documentationData);
 
-  const isScreenSmallerThan1200 = screenResizer().isScreenSmallerThan1200;
-  const isScreenSmallerThan840 = screenResizer().isScreenSmallerThan840;
+  const isScreenSmallerThan1200 = useScreenResizer().isScreenSmallerThan1200;
+  const isScreenSmallerThan840 = useScreenResizer().isScreenSmallerThan840;
   const gridClass = isScreenSmallerThan840
     ? "grid-cols-1"
     : isScreenSmallerThan1200
@@ -60,9 +58,9 @@ export default function DocumentPageClient({ props }) {
         {/* MIDDLE COLUMN */}
         <div className={`mx-8 max-w-full overflow-hidden break-words px-2 `}>
           <MainDocsBodyHeader
-            allData={allData}
+            // allData={allData}
             DocumentTitle={documentationData?.title}
-            screenResizing={isScreenSmallerThan840}
+            // screenResizing={isScreenSmallerThan840}
             NavigationDocsItems={navigationDocsData?.data}
           />
           <div ref={contentRef}>

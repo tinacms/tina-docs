@@ -27,13 +27,13 @@ export const Prism = (props: {
             width: '100%',
             border: 'none',
             marginBottom: 0,
-            borderRadius: '12px', 
+            borderRadius: '12px',
           }}
         >
           {tokens.map((line, i) => (
-            <div {...getLineProps({ line, key: i })}>
+            <div key={`line-${i}`} {...getLineProps({ line, key: i })}>
               {line.map((token, key) => (
-                <span {...getTokenProps({ token, key })} />
+                <span key={`token-${i}-${key}`} {...getTokenProps({ token, key })} />
               ))}
             </div>
           ))}

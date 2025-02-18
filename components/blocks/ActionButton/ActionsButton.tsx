@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { BiArrowBack } from 'react-icons/bi';
 import { tinaField } from 'tinacms/dist/react';
 import { sanitizeLabel } from '../../../utils/sanitizeLabel';

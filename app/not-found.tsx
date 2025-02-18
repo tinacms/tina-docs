@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from "next/link";
+import Image from "next/image";
 
 export default function NotFound() {
   return (
@@ -12,7 +12,7 @@ export default function NotFound() {
             </h2>
             <hr className="block border-none bg-[url('/svg/hr.svg')] bg-no-repeat bg-[length:auto_100%] h-[7px] w-full my-8" />
             <p className="text-lg lg:text-xl lg:leading-normal block bg-gradient-to-br from-blue-700 via-blue-900 to-blue-1000 bg-clip-text text-transparent -mb-1">
-              We couldn't find what you were looking for.
+              We couldn&apos;t find what you were looking for.
             </p>
           </div>
           <div className="flex flex-wrap gap-4">

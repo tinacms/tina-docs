@@ -3,7 +3,7 @@
 import { Breadcrumbs } from './Breadcrumbs';
 // import DocsMobileHeader from './docsMobileHeader';
 
-const MainDocsBodyHeader = ({ DocumentTitle, NavigationDocsItems, allData, screenResizing }) => {
+const MainDocsBodyHeader = ({ DocumentTitle, NavigationDocsItems }) => {
   return (
     <div>
       {/* TOOD: Add DocsMobileHeader back */}

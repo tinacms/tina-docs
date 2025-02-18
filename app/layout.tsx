@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import "../styles/global.css";
 import { SiteLayout } from "../components/SiteLayout";

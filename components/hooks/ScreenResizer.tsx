@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export function screenResizer() {
+export function useScreenResizer() {
   const [isScreenSmallerThan1200, setIsScreenSmallerThan1200] = useState(false);
   const [isScreenSmallerThan840, setIsScreenSmallerThan840] = useState(false);
 
@@ -12,9 +12,9 @@ export function screenResizer() {
 
     updateScreenSize();
 
-    window.addEventListener('resize', updateScreenSize);
+    window.addEventListener("resize", updateScreenSize);
 
-    return () => window.removeEventListener('resize', updateScreenSize);
+    return () => window.removeEventListener("resize", updateScreenSize);
   }, []);
 
   return { isScreenSmallerThan1200, isScreenSmallerThan840 };
