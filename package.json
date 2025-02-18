@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "^4.0.5",
+    "fast-glob": "^3.3.3",
     "next": "^14.2.18",
     "prismjs": "^1.29.0",
     "react": "^18.3.1",
