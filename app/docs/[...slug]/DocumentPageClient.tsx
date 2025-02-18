@@ -20,7 +20,7 @@ export default function DocumentPageClient({ props }) {
 
   const documentationData = data.docs;
   const { pageTableOfContents, navigationDocsData } = props;
-  const allData = [documentationData, pageTableOfContents, navigationDocsData];
+  // const allData = [documentationData, pageTableOfContents, navigationDocsData];
 
   const formattedDate = formatDate(documentationData?.last_edited);
   const previousPage = {
