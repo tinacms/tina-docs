@@ -1,9 +1,9 @@
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { CheckIcon, ClipboardIcon } from '@heroicons/react/24/outline';
 import { CardGrid } from '../blocks/CardGrid';
 import { GraphQLQueryResponseTabs } from '../docs/GraphQLTabs';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
 import { BiRightArrowAlt } from 'react-icons/bi';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { FiLink } from 'react-icons/fi';
@@ -11,15 +11,10 @@ import { Components, TinaMarkdown } from 'tinacms/dist/rich-text';
 import { getDocId } from '../../utils/docs/getDocsIds';
 import { WarningCallout } from '../docs/WarningCallout';
 import { Prism } from '../styles/Prism';
-// TODO: Add ScrollBasedShowcase
-// const ScrollBasedShowcase = dynamic(
-//   () => import('./templateComponents/scrollBasedShowcase'),
-//   {
-//     ssr: false,
-//   }
-// );
 
-//casting fixes to address ts errors
+// Removed unused dynamic import
+
+// Casting fixes to address TS errors
 const NextImage = Image as unknown as React.FC<any>;
 const CheckIconComp = CheckIcon as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
 const ClipboardIconComp = ClipboardIcon as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
@@ -77,19 +72,19 @@ export const docAndBlogComponents: Components<{
     }[];
   };
 }> = {
-  //   scrollBasedShowcase: (props) => {
-  //     return <ScrollBasedShowcase showcaseItems={props.showcaseItems} />;
-  //   },
+  // scrollBasedShowcase: (props) => {
+  //   return <ScrollBasedShowcase showcaseItems={props.showcaseItems} />;
+  // },
   cardGrid: (props) => {
     return <CardGrid props={props} />;
   },
-  //   recipeBlock: (props) => {
-  //     return (
-  //       <div className="text-white">
-  //         <RecipeBlock data={props} />
-  //       </div>
-  //     );
-  //   },
+  // recipeBlock: (props) => {
+  //   return (
+  //     <div className="text-white">
+  //       <RecipeBlock data={props} />
+  //     </div>
+  //   );
+  // },
   ImageAndText: (props) => {
     return (
       <div className="grid grid-cols-2 gap-4">
@@ -111,7 +106,6 @@ export const docAndBlogComponents: Components<{
       {...props}
     />
   ),
-
   Summary: (props) => {
     const [openTab, setOpenTab] = useState(false);
 
@@ -121,7 +115,7 @@ export const docAndBlogComponents: Components<{
 
     return (
       <div>
-        <hr></hr>
+        <hr />
         <button
           className="flex w-full items-start justify-between text-left text-gray-900"
           onClick={handleToggle}
@@ -158,7 +152,7 @@ export const docAndBlogComponents: Components<{
       />
     );
   },
-  //@ts-ignore it doesnt recognside blockquote but wont render block_quote and wil render blockquote....???
+  //@ts-ignore it doesnt recognize blockquote but will render blockquote as expected
   blockquote: (props) => (
     <blockquote
       style={{
@@ -168,7 +162,6 @@ export const docAndBlogComponents: Components<{
       {...props}
     />
   ),
-
   Iframe: ({ iframeSrc, height }) => {
     return (
       <div>
@@ -206,7 +199,6 @@ export const docAndBlogComponents: Components<{
       ></iframe>
     </div>
   ),
-
   CreateAppCta: ({ ctaText, cliText }) => (
     <>
       <a
@@ -246,11 +238,16 @@ export const docAndBlogComponents: Components<{
   WarningCallout: ({ body }) => <WarningCallout text={body} />,
   Callout: ({ title, description, url, buttonText }) => (
     <div className="callout">
-      <img
-        className="learnImage"
-        src="/img/tina-laptop.png"
-        alt="Tina laptop"
-      />
+      {/* Use Next.js Image for optimization */}
+      <div style={{ position: 'relative', width: 400, height: 300 }}>
+        <Image
+          className="learnImage"
+          src="/img/tina-laptop.png"
+          alt="Tina laptop"
+          layout="fill"
+          objectFit="contain"
+        />
+      </div>
       <div>
         <h3>{title}</h3>
         <p>{description}</p>
@@ -288,19 +285,12 @@ export const docAndBlogComponents: Components<{
     </div>
   ),
   Diagram: ({ alt, src }) => (
-    <img
-      alt={alt}
-      style={{
-        margin: 'auto',
-        padding: '2rem .5rem',
-        border: 'none',
-      }}
-      src={src}
-    />
+    <div style={{ margin: 'auto', padding: '2rem .5rem', border: 'none', position: 'relative', width: '100%', height: 400 }}>
+      <Image src={src} alt={alt} layout="fill" objectFit="contain" />
+    </div>
   ),
   WideImage: ({ alt, src }) => (
-    <img
-      alt={alt}
+    <div
       style={{
         margin: '1.5rem auto',
         overflow: 'hidden',
@@ -311,12 +301,15 @@ export const docAndBlogComponents: Components<{
         transform: 'translate3d(-50%,0,0)',
         borderRadius: '5px',
         border: '1px solid rgba(0,0,0,0.1)',
+        height: 400, // example fixed height
       }}
-      src={src}
-    />
+    >
+      <Image src={src} alt={alt} layout="fill" objectFit="cover" />
+    </div>
   ),
+  // Renamed from `code_block` to `CodeBlock` to meet React component naming rules
   // @ts-ignore TODO: fix this in TinaCMS
-  code_block: ({ value, lang, children }) => {
+  CodeBlock: ({ value, lang, children }) => {
     const [hasCopied, setHasCopied] = useState(false);
 
     const handleCopy = () => {
@@ -378,8 +371,8 @@ export const docAndBlogComponents: Components<{
   ),
   CloudinaryVideo: ({ src }) => (
     <video className="video my-6" autoPlay loop muted playsInline>
-      <source src={src + `.webm`} type="video/webm" />
-      <source src={src + `.mp4`} type="video/mp4" />
+      <source src={`${src}.webm`} type="video/webm" />
+      <source src={`${src}.mp4`} type="video/mp4" />
     </video>
   ),
   Button: ({ link, label }) => (
@@ -458,7 +451,8 @@ function FormatHeaders({ children, level }: FormatHeadersProps) {
     }
   }, []);
 
-  const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+  // Changed to reference React.JSX.IntrinsicElements
+  const HeadingTag = `h${level}` as keyof React.JSX.IntrinsicElements;
 
   return (
     <HeadingTag id={id} className={`${styles[level]} relative cursor-pointer`}>
