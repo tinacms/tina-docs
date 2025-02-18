@@ -11,8 +11,6 @@ import { getDocId } from '../../utils/docs/getDocsIds';
 import { WarningCallout } from '../docs/WarningCallout';
 import { Prism } from '../styles/Prism';
 
-
-
 // Casting fixes to address TS errors
 const NextImage = Image as unknown as React.FC<any>;
 const CheckIconComp = CheckIcon as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
@@ -443,15 +441,8 @@ function FormatHeaders({ children, level }: FormatHeadersProps) {
     }
   };
 
-  useEffect(() => {
-    if (window.location.hash) {
-      const hash = window.location.hash.substring(1);
-      scrollToElement(hash);
-    }
-  }, []);
-
-  // Changed to reference React.JSX.IntrinsicElements
-  const HeadingTag = `h${level}` as keyof React.JSX.IntrinsicElements;
+  // Changed HeadingTag to React.ElementType for valid JSX usage
+  const HeadingTag = `h${level}` as React.ElementType;
 
   return (
     <HeadingTag id={id} className={`${styles[level]} relative cursor-pointer`}>
@@ -466,3 +457,5 @@ function FormatHeaders({ children, level }: FormatHeadersProps) {
     </HeadingTag>
   );
 }
+
+export default docAndBlogComponents;
