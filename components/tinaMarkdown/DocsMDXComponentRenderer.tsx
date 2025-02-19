@@ -45,17 +45,6 @@ export const DocsMDXComponentRenderer: Components<{
   Button: { link: string; label: string };
   ImageAndText: { docText: string; image: string };
   Summary: { heading: string; text: string };
-  recipeBlock: {
-    title?: string;
-    description?: string;
-    codeblock?: any;
-    instruction?: {
-      header?: string;
-      itemDescription?: string;
-      codeLineStart?: number;
-      codeLineEnd?: number;
-    }[];
-  };
   scrollBasedShowcase: {
     showcaseItems: {
       image: string;
@@ -79,13 +68,6 @@ export const DocsMDXComponentRenderer: Components<{
   cardGrid: (props) => {
     return <CardGrid props={props} />;
   },
-  // recipeBlock: (props) => {
-  //   return (
-  //     <div className="text-white">
-  //       <RecipeBlock data={props} />
-  //     </div>
-  //   );
-  // },
   ImageAndText: (props) => {
     return (
       <div className="grid grid-cols-2 gap-4">
