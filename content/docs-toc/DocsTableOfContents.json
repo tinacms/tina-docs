@@ -24,6 +24,27 @@
           "_template": "item"
         }
       ]
+    },
+    {
+      "title": "Core Concepts",
+      "items": [
+        {
+          "title": "Overview",
+          "slug": "content/docs/core-concepts/overview.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Sub Items in Here",
+          "items": [
+            {
+              "title": "Overview",
+              "slug": "content/docs/core-concepts/sub-item.mdx",
+              "_template": "item"
+            }
+          ],
+          "_template": "items"
+        }
+      ]
     }
   ]
 }

@@ -41,6 +41,9 @@ export default function DocumentPageClient({ props }) {
     : isScreenSmallerThan1200
     ? "grid-cols-[1.25fr_3fr]"
     : "grid-cols-[1.25fr_3fr_0.75fr]";
+
+
+  console.log('left hand side parent content: ', navigationDocsData?.data);
   return (
     <div className="relative my-6 lg:my-16 flex justify-center items-start">
       <div className={`lg:px-16 px-3 w-full max-w-[2000px] grid ${gridClass}`}>
