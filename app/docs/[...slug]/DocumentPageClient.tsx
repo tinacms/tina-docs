@@ -18,6 +18,8 @@ export default function DocumentPageClient({ props }) {
     data: props.data,
   });
 
+  console.log(props);
+
   const documentationData = data.docs;
   const { pageTableOfContents, navigationDocsData } = props;
   // const allData = [documentationData, pageTableOfContents, navigationDocsData];

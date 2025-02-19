@@ -15,7 +15,7 @@ export default async function DocsPage() {
     ]);
 
     const docData = documentData.data.docs;
-    const PageTableOfContents = getTableOfContents(docData.body.children);
+    const pageTableOfContents = getTableOfContents(docData.body.children);
 
     return (
       <TinaClient
@@ -24,9 +24,9 @@ export default async function DocsPage() {
           query: documentData.query,
           variables: documentData.variables,
           data: documentData.data,
-          PageTableOfContents,
-          DocumentationData: docData,
-          NavigationDocsData: docsToCData,
+          pageTableOfContents,
+          documentationData: docData,
+          navigationDocsData: docsToCData,
         }}
       />
     );
