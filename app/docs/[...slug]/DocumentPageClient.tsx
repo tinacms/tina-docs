@@ -3,7 +3,7 @@
 import { useTina } from "tinacms/dist/react";
 import { useScreenResizer } from "../../../components/hooks/ScreenResizer";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { docAndBlogComponents } from "../../../components/tinaMarkdown/docAndBlogComponents";
+import { DocsMDXComponentRenderer } from "../../../components/tinaMarkdown/DocsMDXComponentRenderer";
 import { formatDate } from "../../../utils/docs/getFormattedDate";
 import DocsPagination from "../../../components/ui/Pagination";
 import MainDocsBodyHeader from "../../../components/docs/MainDocsBodyHeader";
@@ -42,8 +42,7 @@ export default function DocumentPageClient({ props }) {
     ? "grid-cols-[1.25fr_3fr]"
     : "grid-cols-[1.25fr_3fr_0.75fr]";
 
-
-  console.log('left hand side parent content: ', navigationDocsData?.data);
+  console.log("left hand side parent content: ", navigationDocsData?.data);
   return (
     <div className="relative my-6 lg:my-16 flex justify-center items-start">
       <div className={`lg:px-16 px-3 w-full max-w-[2000px] grid ${gridClass}`}>
@@ -68,7 +67,7 @@ export default function DocumentPageClient({ props }) {
           <div ref={contentRef}>
             <TinaMarkdown
               content={documentationData?.body}
-              components={docAndBlogComponents}
+              components={DocsMDXComponentRenderer}
             />
           </div>
           {formattedDate && (

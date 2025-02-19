@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { CheckIcon, ClipboardIcon } from '@heroicons/react/24/outline';
-import { CardGrid } from '../blocks/CardGrid';
-import { GraphQLQueryResponseTabs } from '../docs/GraphQLTabs';
-import { BiRightArrowAlt } from 'react-icons/bi';
-import { FaMinus, FaPlus } from 'react-icons/fa';
-import { FiLink } from 'react-icons/fi';
-import { Components, TinaMarkdown } from 'tinacms/dist/rich-text';
-import { getDocId } from '../../utils/docs/getDocsIds';
-import { WarningCallout } from '../docs/WarningCallout';
-import { Prism } from '../styles/Prism';
+import React, { useState } from "react";
+import Image from "next/image";
+import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
+import { CardGrid } from "../blocks/CardGrid";
+import { GraphQLQueryResponseTabs } from "../docs/GraphQLTabs";
+import { BiRightArrowAlt } from "react-icons/bi";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { FiLink } from "react-icons/fi";
+import { Components, TinaMarkdown } from "tinacms/dist/rich-text";
+import { getDocId } from "../../utils/docs/getDocsIds";
+import { WarningCallout } from "../docs/WarningCallout";
+import { Prism } from "../styles/Prism";
 
 // Casting fixes to address TS errors
 const NextImage = Image as unknown as React.FC<any>;
-const CheckIconComp = CheckIcon as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
-const ClipboardIconComp = ClipboardIcon as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
+const CheckIconComp = CheckIcon as unknown as React.FC<
+  React.SVGProps<SVGSVGElement>
+>;
+const ClipboardIconComp = ClipboardIcon as unknown as React.FC<
+  React.SVGProps<SVGSVGElement>
+>;
 
-export const docAndBlogComponents: Components<{
+export const DocsMDXComponentRenderer: Components<{
   Iframe: { iframeSrc: string; height: string };
   Youtube: { embedSrc: string };
   CreateAppCta: { ctaText: string; cliText: string };
@@ -88,7 +92,7 @@ export const docAndBlogComponents: Components<{
         <div className="bg-red">
           <TinaMarkdown
             content={props.docText as any}
-            components={docAndBlogComponents}
+            components={DocsMDXComponentRenderer}
           />
         </div>
         <div>
@@ -124,7 +128,7 @@ export const docAndBlogComponents: Components<{
           <div>
             <TinaMarkdown
               content={props.text as any}
-              components={docAndBlogComponents}
+              components={DocsMDXComponentRenderer}
             />
           </div>
         )}
@@ -153,7 +157,7 @@ export const docAndBlogComponents: Components<{
   blockquote: (props) => (
     <blockquote
       style={{
-        backgroundColor: 'var(--color-seafoam)',
+        backgroundColor: "var(--color-seafoam)",
       }}
       className="my-6 border-l-4 py-6 border-x-teal-400/50 pl-4 rounded-tr-lg rounded-br-lg pr-2"
       {...props}
@@ -166,7 +170,7 @@ export const docAndBlogComponents: Components<{
       </div>
     );
   },
-  WebmEmbed: ({ embedSrc, width = '100%' }) => (
+  WebmEmbed: ({ embedSrc, width = "100%" }) => (
     <div className="video-container flex py-2 justify-center">
       <video
         width={width}
@@ -185,7 +189,7 @@ export const docAndBlogComponents: Components<{
   Youtube: ({ embedSrc }) => (
     <div
       className="youtube-container my-6 w-full relative"
-      style={{ paddingBottom: '56.25%' }}
+      style={{ paddingBottom: "56.25%" }}
     >
       <iframe
         className="absolute top-0 left-0 w-full h-full"
@@ -201,14 +205,14 @@ export const docAndBlogComponents: Components<{
       <a
         href="/docs/introduction/using-starter/"
         style={{
-          textDecoration: 'none',
-          borderRadius: '10px',
-          padding: '1rem 1.5rem',
-          lineHeight: '1em',
-          fontWeight: 'bold',
-          background: '#ec4815',
-          display: 'inline-block',
-          color: 'white',
+          textDecoration: "none",
+          borderRadius: "10px",
+          padding: "1rem 1.5rem",
+          lineHeight: "1em",
+          fontWeight: "bold",
+          background: "#ec4815",
+          display: "inline-block",
+          color: "white",
         }}
       >
         {ctaText}
@@ -216,16 +220,16 @@ export const docAndBlogComponents: Components<{
 
       <div
         style={{
-          padding: '1rem 1.5rem',
-          fontFamily: 'monospace',
-          whiteSpace: 'nowrap',
-          width: 'auto',
-          display: 'inline-block',
-          border: '1px solid #8080803b',
-          lineHeight: '1em',
-          borderRadius: '10px',
-          marginLeft: '20px',
-          fontSize: '1rem',
+          padding: "1rem 1.5rem",
+          fontFamily: "monospace",
+          whiteSpace: "nowrap",
+          width: "auto",
+          display: "inline-block",
+          border: "1px solid #8080803b",
+          lineHeight: "1em",
+          borderRadius: "10px",
+          marginLeft: "20px",
+          fontSize: "1rem",
         }}
       >
         {cliText}
@@ -236,7 +240,7 @@ export const docAndBlogComponents: Components<{
   Callout: ({ title, description, url, buttonText }) => (
     <div className="callout">
       {/* Use Next.js Image for optimization */}
-      <div style={{ position: 'relative', width: 400, height: 300 }}>
+      <div style={{ position: "relative", width: 400, height: 300 }}>
         <Image
           className="learnImage"
           src="/img/tina-laptop.png"
@@ -268,11 +272,11 @@ export const docAndBlogComponents: Components<{
       <iframe
         src={embedSrc}
         style={{
-          width: '100%',
-          height: '500px',
-          border: 'none',
-          borderRadius: '4px',
-          overflow: 'hidden',
+          width: "100%",
+          height: "500px",
+          border: "none",
+          borderRadius: "4px",
+          overflow: "hidden",
         }}
         title={title}
         allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -282,22 +286,31 @@ export const docAndBlogComponents: Components<{
     </div>
   ),
   Diagram: ({ alt, src }) => (
-    <div style={{ margin: 'auto', padding: '2rem .5rem', border: 'none', position: 'relative', width: '100%', height: 400 }}>
+    <div
+      style={{
+        margin: "auto",
+        padding: "2rem .5rem",
+        border: "none",
+        position: "relative",
+        width: "100%",
+        height: 400,
+      }}
+    >
       <Image src={src} alt={alt} layout="fill" objectFit="contain" />
     </div>
   ),
   WideImage: ({ alt, src }) => (
     <div
       style={{
-        margin: '1.5rem auto',
-        overflow: 'hidden',
-        width: '140%',
-        maxWidth: 'calc(100vw - 5rem)',
-        left: '50%',
-        position: 'relative',
-        transform: 'translate3d(-50%,0,0)',
-        borderRadius: '5px',
-        border: '1px solid rgba(0,0,0,0.1)',
+        margin: "1.5rem auto",
+        overflow: "hidden",
+        width: "140%",
+        maxWidth: "calc(100vw - 5rem)",
+        left: "50%",
+        position: "relative",
+        transform: "translate3d(-50%,0,0)",
+        borderRadius: "5px",
+        border: "1px solid rgba(0,0,0,0.1)",
         height: 400, // example fixed height
       }}
     >
@@ -310,7 +323,7 @@ export const docAndBlogComponents: Components<{
     const [hasCopied, setHasCopied] = useState(false);
 
     const handleCopy = () => {
-      navigator.clipboard.writeText(children || value || '');
+      navigator.clipboard.writeText(children || value || "");
       setHasCopied(true);
       setTimeout(() => setHasCopied(false), 2000);
     };
@@ -329,8 +342,8 @@ export const docAndBlogComponents: Components<{
           <span className="sr-only">Copy</span>
         </button>
         <Prism
-          value={children || value || ''}
-          lang={lang || 'jsx'}
+          value={children || value || ""}
+          lang={lang || "jsx"}
           theme="nightOwl"
         />
       </div>
@@ -349,7 +362,7 @@ export const docAndBlogComponents: Components<{
   CustomFieldComponentDemo: () => (
     <iframe
       height="450"
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       scrolling="no"
       title="CSS Filters + A Springer Spaniel"
       src="https://codepen.io/kendallstrautman/embed/WNbzLJZ?height=265&theme-id=default&default-tab=css,result"
@@ -357,12 +370,12 @@ export const docAndBlogComponents: Components<{
       allowTransparency={true}
       allowFullScreen={true}
     >
-      See the Pen{' '}
+      See the Pen{" "}
       <a href="https://codepen.io/kendallstrautman/pen/WNbzLJZ">
         CSS Filters + A Springer Spaniel
-      </a>{' '}
+      </a>{" "}
       by Kendall Strautman (
-      <a href="https://codepen.io/kendallstrautman">@kendallstrautman</a>) on{' '}
+      <a href="https://codepen.io/kendallstrautman">@kendallstrautman</a>) on{" "}
       <a href="https://codepen.io">CodePen</a>.
     </iframe>
   ),
@@ -398,32 +411,32 @@ function FormatHeaders({ children, level }: FormatHeadersProps) {
         // Use a type assertion to allow access to 'content'
         const content = (child.props as { content?: any }).content;
         if (Array.isArray(content)) {
-          return content.map((c: any) => c.text).join('');
+          return content.map((c: any) => c.text).join("");
         }
       }
-      if (typeof child === 'string') return child;
-      return '';
+      if (typeof child === "string") return child;
+      return "";
     })
-    .join('');
-  const id = getDocId(headerText || '');
+    .join("");
+  const id = getDocId(headerText || "");
 
   const currentUrl =
-    typeof window !== 'undefined' ? window.location.pathname : '';
+    typeof window !== "undefined" ? window.location.pathname : "";
   const linkHref = `${currentUrl}#${id}`;
 
   const styles: Record<number, string> = {
-    1: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-4xl mt-4 mb-4',
-    2: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-3xl mt-4 mb-3',
-    3: 'bg-gradient-to-br from-blue-800 via-blue-900 to-blue-100 bg-clip-text text-transparent text-xl font-medium mt-2 mb-2 !important',
-    4: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-xl font-medium mt-2 mb-2',
-    5: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-lg font-medium mt-2 mb-1',
-    6: 'text-gray-500 text-base font-normal mt-2 mb-1',
+    1: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-4xl mt-4 mb-4",
+    2: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-3xl mt-4 mb-3",
+    3: "bg-gradient-to-br from-blue-800 via-blue-900 to-blue-100 bg-clip-text text-transparent text-xl font-medium mt-2 mb-2 !important",
+    4: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-xl font-medium mt-2 mb-2",
+    5: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-lg font-medium mt-2 mb-1",
+    6: "text-gray-500 text-base font-normal mt-2 mb-1",
   };
 
   const handleHeaderClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     scrollToElement(id);
-    window.history.pushState(null, '', linkHref);
+    window.history.pushState(null, "", linkHref);
   };
 
   const scrollToElement = (elementId: string) => {
@@ -436,7 +449,7 @@ function FormatHeaders({ children, level }: FormatHeadersProps) {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -458,4 +471,4 @@ function FormatHeaders({ children, level }: FormatHeadersProps) {
   );
 }
 
-export default docAndBlogComponents;
+export default DocsMDXComponentRenderer;
