@@ -23,6 +23,10 @@ function getUrl(input: any): string {
     }
     
     url = url.replace(/\.(mdx|md)$/, "");
+
+    if (url === "/docs/index") {
+      url = "/docs";
+    }
     
     if (!url.startsWith("/")) {
       url = "/" + url;

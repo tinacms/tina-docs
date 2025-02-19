@@ -13,17 +13,16 @@ export async function getDocsNav(preview?: boolean, previewData?: any) {
 }
 
 const stripReferenceDownToSlug = (tableOfContentsSubset: any) => {
-  tableOfContentsSubset.forEach((obj: any, index: number, array: any[]) => {
+  tableOfContentsSubset.forEach((obj, index, array) => {
     if (obj._template) {
-      if (obj._template === "items") {
+      if (obj._template === 'items') {
         array[index].items = stripReferenceDownToSlug(obj.items);
       } else {
-        // Handles the docs homepage case, as the only docs page with a unique (i.e. no) slug,
-        // otherwise reformat the slug
+        //Handles the docs homepage case, as the only docs page with a unique (i.e. no) slug, otherwise reformat
         array[index].slug =
-          array[index].slug === `content${data.docsHomepage}.mdx`
-            ? "/docs"
-            : obj.slug.replace(/^content\/|\.mdx$/g, "/");
+          array[index].slug == `content${data.docsHomepage}.mdx`
+            ? '/docs'
+            : obj.slug.replace(/^content\/|\.mdx$/g, '/');
       }
     }
   });
