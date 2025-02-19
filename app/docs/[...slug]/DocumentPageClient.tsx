@@ -27,11 +27,13 @@ export default function DocumentPageClient({ props }) {
     title: documentationData?.previous?.title,
   };
 
+  
+
   const nextPage = {
     slug: documentationData?.next?.id.slice(7, -4),
     title: documentationData?.next?.title,
   };
-
+  
   const { activeIds, contentRef } = useTocListener(documentationData);
 
   const isScreenSmallerThan1200 = useScreenResizer().isScreenSmallerThan1200;
