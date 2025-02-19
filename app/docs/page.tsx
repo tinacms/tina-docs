@@ -9,24 +9,24 @@ export default async function DocsPage() {
   const defaultSlug = "index"; 
 
   try {
-    const [results, navDocData] = await Promise.all([
+    const [documentData, docsToCData] = await Promise.all([
       client.queries.docs({ relativePath: `${defaultSlug}.mdx` }),
       getDocsNav(),
     ]);
 
-    const docData = results.data.docs;
+    const docData = documentData.data.docs;
     const PageTableOfContents = getTableOfContents(docData.body.children);
 
     return (
       <TinaClient
         Component={DocumentPageClient}
         props={{
-          query: results.query,
-          variables: results.variables,
-          data: results.data,
+          query: documentData.query,
+          variables: documentData.variables,
+          data: documentData.data,
           PageTableOfContents,
           DocumentationData: docData,
-          NavigationDocsData: navDocData,
+          NavigationDocsData: docsToCData,
         }}
       />
     );
