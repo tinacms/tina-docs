@@ -6,11 +6,11 @@ import { TinaClient } from "../tina-client";
 import DocumentPageClient from "./[...slug]/DocumentPageClient";
 
 export default async function DocsPage() {
-  const slug = "index"; // Default root document slug for /docs
+  const defaultSlug = "index"; 
 
   try {
     const [results, navDocData] = await Promise.all([
-      client.queries.docs({ relativePath: `${slug}.mdx` }),
+      client.queries.docs({ relativePath: `${defaultSlug}.mdx` }),
       getDocsNav(),
     ]);
 

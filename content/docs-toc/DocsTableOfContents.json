@@ -5,7 +5,7 @@
       "items": [
         {
           "title": "index",
-          "slug": "content/docs/introduction/index.mdx",
+          "slug": "content/docs/index.mdx",
           "_template": "item"
         },
         {
