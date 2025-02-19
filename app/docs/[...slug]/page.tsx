@@ -14,7 +14,7 @@ export async function generateStaticParams() {
     return files
       .filter((file) => !file.endsWith('index.mdx'))
       .map((file) => {
-        const path = file.substring(contentDir.length, file.length - 5); // Remove "./content/docs/" and ".mdx"
+        const path = file.substring(contentDir.length, file.length - 4); // Remove "./content/docs/" and ".mdx"
         return { slug: path.split('/') };
       });
   } catch (error) {
@@ -25,6 +25,7 @@ export async function generateStaticParams() {
 
 export default async function DocsPage({ params }: { params: { slug: string[] } }) {
   const slug = params.slug.join('/');
+  
 
   try {
    
