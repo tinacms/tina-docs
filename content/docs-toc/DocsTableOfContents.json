@@ -4,13 +4,23 @@
       "title": "Introduction",
       "items": [
         {
-          "title": "index",
+          "title": "Overview",
           "slug": "content/docs/index.mdx",
           "_template": "item"
         },
         {
-          "title": "faq",
+          "title": "FAQ",
           "slug": "content/docs/introduction/faq.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Using the Editor",
+          "slug": "content/docs/introduction/tina-init.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Using a Starter",
+          "slug": "content/docs/introduction/using-starter.mdx",
           "_template": "item"
         }
       ]
