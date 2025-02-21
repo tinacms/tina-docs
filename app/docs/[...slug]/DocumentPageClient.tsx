@@ -18,7 +18,7 @@ export default function DocumentPageClient({ props }) {
     data: props.data,
   });
   const { globalSiteConfig } = props;
-  console.log("globalSiteConfig: ", globalSiteConfig);
+  
   const documentationData = data.docs;
   const { pageTableOfContents, navigationDocsData } = props;
   // const allData = [documentationData, pageTableOfContents, navigationDocsData];
@@ -44,7 +44,7 @@ export default function DocumentPageClient({ props }) {
     ? "grid-cols-[1.25fr_3fr]"
     : "grid-cols-[1.25fr_3fr_0.75fr]";
 
-  console.log("left hand side parent content: ", navigationDocsData?.data);
+  
   return (
     <div className="relative my-6 lg:my-16 flex justify-center items-start">
       <div className={`lg:px-16 px-3 w-full max-w-[2000px] grid ${gridClass}`}>
