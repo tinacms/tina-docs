@@ -14,11 +14,6 @@
           "_template": "item"
         },
         {
-          "title": "Using a Starter",
-          "slug": "content/docs/introduction/using-starter.mdx",
-          "_template": "item"
-        },
-        {
           "title": "FAQ",
           "slug": "content/docs/introduction/faq.mdx",
           "_template": "item"
@@ -34,15 +29,44 @@
           "_template": "item"
         },
         {
-          "title": "Sub Items in Here",
+          "title": "Data Fetching",
+          "slug": "content/docs/core-concepts/data-fetching.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Visual Editing",
           "items": [
             {
               "title": "Overview",
-              "slug": "content/docs/core-concepts/sub-item.mdx",
+              "slug": "content/docs/core-concepts/visual-editing/overview.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "React",
+              "slug": "content/docs/core-concepts/visual-editing/react.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Setting up the Router",
               "_template": "item"
             }
           ],
           "_template": "items"
+        },
+        {
+          "title": "Querying Content",
+          "slug": "content/docs/core-concepts/querying-content.mdx",
+          "_template": "item"
+        }
+      ]
+    },
+    {
+      "title": "The \"Tina\" Folder",
+      "items": [
+        {
+          "title": "Overview",
+          "slug": "content/docs/tina-folder/overview.mdx",
+          "_template": "item"
         }
       ]
     }
