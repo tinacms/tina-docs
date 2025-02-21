@@ -4,6 +4,7 @@ import { getDocsNav } from "../../utils/docs/getDocumentNavigation";
 import getTableOfContents from "../../utils/docs/getPageTableOfContents";
 import { TinaClient } from "../tina-client";
 import DocumentPageClient from "./[...slug]/DocumentPageClient";
+import getGlobalSiteConfig from "../../utils/getGlobalSiteConfig";
 
 export default async function DocsPage() {
   const defaultSlug = "index"; 
@@ -13,6 +14,9 @@ export default async function DocsPage() {
       client.queries.docs({ relativePath: `${defaultSlug}.mdx` }),
       getDocsNav(),
     ]);
+
+    const globalSiteConfig = await getGlobalSiteConfig();
+    console.log(globalSiteConfig);
 
     const docData = documentData.data.docs;
     const pageTableOfContents = getTableOfContents(docData.body.children);
@@ -27,6 +31,7 @@ export default async function DocsPage() {
           pageTableOfContents,
           documentationData: docData,
           navigationDocsData: docsToCData,
+          globalSiteConfig: globalSiteConfig,
         }}
       />
     );

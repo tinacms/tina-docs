@@ -17,6 +17,8 @@ export default function DocumentPageClient({ props }) {
     variables: props.variables,
     data: props.data,
   });
+  const { globalSiteConfig } = props;
+  console.log("globalSiteConfig: ", globalSiteConfig);
   const documentationData = data.docs;
   const { pageTableOfContents, navigationDocsData } = props;
   // const allData = [documentationData, pageTableOfContents, navigationDocsData];
@@ -27,13 +29,11 @@ export default function DocumentPageClient({ props }) {
     title: documentationData?.previous?.title,
   };
 
-  
-
   const nextPage = {
     slug: documentationData?.next?.id.slice(7, -4),
     title: documentationData?.next?.title,
   };
-  
+
   const { activeIds, contentRef } = useTocListener(documentationData);
 
   const isScreenSmallerThan1200 = useScreenResizer().isScreenSmallerThan1200;
@@ -56,6 +56,7 @@ export default function DocumentPageClient({ props }) {
         >
           <LeftHandSideParentContainer
             tableOfContents={navigationDocsData?.data}
+            globalSiteConfigTitle={globalSiteConfig?.documentationSiteTitle}
           />
         </div>
         {/* MIDDLE COLUMN */}
