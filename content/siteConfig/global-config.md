@@ -2,6 +2,6 @@
 documentationSiteTitle: TinaDocs
 customColorToggle:
   disableColor: true
-  colorValue: '#e15151'
+  colorValue: '#f50000'
 ---
 

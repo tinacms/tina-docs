@@ -16,8 +16,7 @@ export default async function DocsPage() {
     ]);
 
     const globalSiteConfig = await getGlobalSiteConfig();
-    console.log(globalSiteConfig);
-
+    
     const docData = documentData.data.docs;
     const pageTableOfContents = getTableOfContents(docData.body.children);
 
