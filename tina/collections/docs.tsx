@@ -1,3 +1,5 @@
+import { seoInformation } from "./seoInformation";
+
 export const docsCollection = {
   name: "docs",
   label: "Docs",
@@ -12,7 +14,7 @@ export const docsCollection = {
     },
   },
   fields: [
-    // Placeholder for seoInformation
+    seoInformation,
     {
       name: "title",
       label: "Title",

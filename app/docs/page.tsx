@@ -5,6 +5,31 @@ import getTableOfContents from "../../utils/docs/getPageTableOfContents";
 import { TinaClient } from "../tina-client";
 import DocumentPageClient from "./[...slug]/DocumentPageClient";
 import getGlobalSiteConfig from "../../utils/getGlobalSiteConfig";
+import { getExcerpt } from "../../utils/docs/getExcerpt";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string[] };
+}) {
+  const slug = 'index'
+  try {
+    const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
+    const excerpt = getExcerpt(data.docs.body, 140);
+
+    return {
+      title: `${data.docs.seo?.title || data.docs.title} | TinaCMS Docs`,
+      description: data.docs.seo?.description || `${excerpt} || TinaCMS Docs`,
+      openGraph: {
+        title: data.docs.title || 'TinaCMS Docs',
+        description: data.docs.seo?.description || `${excerpt} || TinaCMS Docs`,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return notFound();
+  }
+}
 
 export default async function DocsPage() {
   const defaultSlug = "index"; 
@@ -16,7 +41,7 @@ export default async function DocsPage() {
     ]);
 
     const globalSiteConfig = await getGlobalSiteConfig();
-    console.log(globalSiteConfig);
+    
 
     const docData = documentData.data.docs;
     const pageTableOfContents = getTableOfContents(docData.body.children);
