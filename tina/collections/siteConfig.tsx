@@ -6,12 +6,9 @@ export const globalSiteConfiguration = {
   name: "globalSiteConfiguration",
   label: "Global Site Configuration",
   ui: {
-    global: true,
-    ui: {
-      allowedActions: {
-        create: false,
-        delete: false,
-      },
+    allowedActions: {
+      create: false,
+      delete: false,
     },
   },
   path: "content/siteConfig",
@@ -25,6 +22,13 @@ export const globalSiteConfiguration = {
       name: "siteColors",
       label: "Site Colors",
       type: "object",
+      defaultItem: () =>{
+        return{
+          primaryStart: "#f97316",
+          primaryEnd: "#f97316",
+          primaryVia: "#f97316",
+        }
+      },
       fields: [
         {
           name: "primaryStart",
@@ -58,6 +62,39 @@ export const globalSiteConfiguration = {
             widget: "sketch",
           },
         },
+        {
+          name: "secondaryStart",
+          label: "Secondary Color | Gradient Start",
+          type: "string",
+          description:
+            "This is the start of the secondary color gradient ⚠️ If you want a solid color leave the end and via empty ⚠️",
+          ui: {
+            component: "color",
+            colorFormat: "hex",
+            widget: "sketch",
+          },
+        },
+        {
+          name: "secondaryEnd",
+          label: "Secondary Color | Gradient End",
+          type: "string",
+          ui: {
+            component: "color",
+            colorFormat: "hex",
+            widget: "sketch",
+          },
+        },
+        {
+          name: "secondaryVia",
+          label: "Secondary Color | Gradient Via",
+          type: "string",
+          ui: {
+            component: "color",
+            colorFormat: "hex",
+            widget: "sketch",
+          },
+        },
+
       ],
     },
     
@@ -84,5 +121,17 @@ export const globalSiteConfiguration = {
         component: CustomColorToggle,
       },
     },
+    {
+      name: 'leftSidebarBackground',
+      label: 'Left Sidebar Background',
+      type: "string",
+      description:
+        "This is the background color of the left sidebar",
+      ui: {
+        component: "color",
+        colorFormat: "hex",
+        widget: "sketch",
+      },
+    }
   ],
 };

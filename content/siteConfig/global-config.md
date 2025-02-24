@@ -1,7 +1,12 @@
 ---
 documentationSiteTitle: TinaDocs
+siteColors:
+  primaryStart: '#F58C23'
+  primaryEnd: '#F37A09'
+  primaryVia: '#F0710E'
 customColorToggle:
-  disableColor: true
-  colorValue: '#e15151'
+  disableColor: false
+  colorValue: '#553a3a'
+leftSidebarBackground: '#FFFFFF'
 ---
 

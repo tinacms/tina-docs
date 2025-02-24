@@ -10,6 +10,7 @@ import MainDocsBodyHeader from "../../../components/docs/MainDocsBodyHeader";
 import { useTocListener } from "../../../utils/docs/tocListener";
 import ToC from "../../../components/docs/PageToc";
 import { LeftHandSideParentContainer } from "../../../components/docs/LeftHandSideParent";
+import TocOverflowButton from "../../../components/docs/ToCOverflow";
 
 export default function DocumentPageClient({ props }) {
   const { data } = useTina({
@@ -18,10 +19,11 @@ export default function DocumentPageClient({ props }) {
     data: props.data,
   });
   const { globalSiteConfig } = props;
-  
+
+  console.log("globalSiteConfig", globalSiteConfig);
+
   const documentationData = data.docs;
   const { pageTableOfContents, navigationDocsData } = props;
-  // const allData = [documentationData, pageTableOfContents, navigationDocsData];
 
   const formattedDate = formatDate(documentationData?.last_edited);
   const previousPage = {
@@ -44,7 +46,6 @@ export default function DocumentPageClient({ props }) {
     ? "grid-cols-[1.25fr_3fr]"
     : "grid-cols-[1.25fr_3fr_0.75fr]";
 
-  
   return (
     <div className="relative my-6 lg:my-16 flex justify-center items-start">
       <div className={`lg:px-16 px-3 w-full max-w-[2000px] grid ${gridClass}`}>
@@ -57,16 +58,21 @@ export default function DocumentPageClient({ props }) {
           <LeftHandSideParentContainer
             tableOfContents={navigationDocsData?.data}
             globalSiteConfigTitle={globalSiteConfig?.documentationSiteTitle}
+            globalSiteConfigColors={globalSiteConfig?.siteColors}
+            leftSidebarBackground={globalSiteConfig?.leftSidebarBackground}
           />
         </div>
         {/* MIDDLE COLUMN */}
         <div className={`mx-8 max-w-full overflow-hidden break-words px-2 `}>
           <MainDocsBodyHeader
-            // allData={allData}
             DocumentTitle={documentationData?.title}
-            // screenResizing={isScreenSmallerThan840}
+            screenResizing={isScreenSmallerThan840}
             NavigationDocsItems={navigationDocsData?.data}
+            globalSiteConfigColors={globalSiteConfig?.siteColors}
           />
+          {isScreenSmallerThan1200 && !documentationData?.tocIsHidden && (
+            <TocOverflowButton tocData={pageTableOfContents} />
+          )}
           <div ref={contentRef}>
             <TinaMarkdown
               content={documentationData?.body}
@@ -88,7 +94,11 @@ export default function DocumentPageClient({ props }) {
               isScreenSmallerThan1200 ? "hidden" : "block"
             }`}
           >
-            <ToC tocItems={pageTableOfContents} activeIds={activeIds} />
+            <ToC
+              tocItems={pageTableOfContents}
+              activeIds={activeIds}
+              globalSiteConfigColors={globalSiteConfig?.siteColors}
+            />
           </div>
         )}
       </div>

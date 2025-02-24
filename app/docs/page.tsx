@@ -34,6 +34,7 @@ export async function generateMetadata({
 export default async function DocsPage() {
   const defaultSlug = "index"; 
 
+
   try {
     const [documentData, docsToCData] = await Promise.all([
       client.queries.docs({ relativePath: `${defaultSlug}.mdx` }),

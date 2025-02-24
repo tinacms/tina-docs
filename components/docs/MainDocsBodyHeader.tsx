@@ -1,18 +1,41 @@
-'use client';
+"use client";
 
-import { Breadcrumbs } from './Breadcrumbs';
+import { Breadcrumbs } from "./Breadcrumbs";
+import DirectoryOverflowButton from "./DirectoryOverflow";
 // import DocsMobileHeader from './docsMobileHeader';
 
-const MainDocsBodyHeader = ({ DocumentTitle, NavigationDocsItems, }) => {
+const DocsMobileHeader = (data) => {
+  
+  return (
+    <div className="relative">
+      <DirectoryOverflowButton tocData={data.data} />
+    </div>
+  );
+};
+
+const MainDocsBodyHeader = ({
+  DocumentTitle,
+  NavigationDocsItems,
+  globalSiteConfigColors,
+  screenResizing
+}) => {
   return (
     <div>
       {/* TOOD: Add DocsMobileHeader back */}
-      {/* {screenResizing && (
+      {screenResizing && (
         <DocsMobileHeader data={NavigationDocsItems}></DocsMobileHeader>
-      )} */}
+      )}
 
       <Breadcrumbs navItems={NavigationDocsItems} />
-      <div className="pt-4 font-tuner text-4xl bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
+      <div
+        className="pt-4 font-tuner text-4xl"
+        style={{
+          backgroundImage: `linear-gradient(to bottom right, ${globalSiteConfigColors?.primaryStart}, ${globalSiteConfigColors?.primaryVia}, ${globalSiteConfigColors?.primaryEnd})`,
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+        }}
+      >
         {DocumentTitle}
       </div>
     </div>

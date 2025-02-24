@@ -8,6 +8,7 @@ import { getDocId } from '../../utils/docs/getDocsIds';
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
   activeIds: string[];
+  globalSiteConfigColors: string[]
 }
 
 export const generateMarkdown = (
@@ -22,7 +23,7 @@ export const generateMarkdown = (
     .join('\n');
 };
 
-const ToC = ({ tocItems, activeIds }: TocProps) => {
+const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -87,7 +88,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                     <a
                       {...props}
                       className={`
-                        block py-1 px-2 rounded-md hover:bg-gray-50/75 transition-colors duration-150
+                        block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150
                         ${
                           isActive
                             ? 'text-orange-500 font-medium no-underline'
