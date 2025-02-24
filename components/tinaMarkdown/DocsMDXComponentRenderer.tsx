@@ -299,9 +299,9 @@ export const DocsMDXComponentRenderer: Components<{
       <Image src={src} alt={alt} layout="fill" objectFit="cover" />
     </div>
   ),
-  // Renamed from `code_block` to `CodeBlock` to meet React component naming rules
+
   // @ts-ignore TODO: fix this in TinaCMS
-  CodeBlock: ({ value, lang, children }) => {
+  code_block: ({ value, lang, children }) => {
     const [hasCopied, setHasCopied] = useState(false);
 
     const handleCopy = () => {
