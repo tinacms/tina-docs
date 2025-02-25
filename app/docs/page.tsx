@@ -4,7 +4,6 @@ import { getDocsNav } from "../../utils/docs/getDocumentNavigation";
 import getTableOfContents from "../../utils/docs/getPageTableOfContents";
 import { TinaClient } from "../tina-client";
 import DocumentPageClient from "./[...slug]/DocumentPageClient";
-import getGlobalSiteConfig from "../../utils/getGlobalSiteConfig";
 import { getExcerpt } from "../../utils/docs/getExcerpt";
 
 export async function generateMetadata() {
@@ -37,7 +36,7 @@ export default async function DocsPage() {
       getDocsNav(),
     ]);
 
-    const globalSiteConfig = await getGlobalSiteConfig();
+  
     
 
     const docData = documentData.data.docs;
@@ -53,7 +52,6 @@ export default async function DocsPage() {
           pageTableOfContents,
           documentationData: docData,
           navigationDocsData: docsToCData,
-          globalSiteConfig: globalSiteConfig,
         }}
       />
     );

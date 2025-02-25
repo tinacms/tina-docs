@@ -18,9 +18,6 @@ export default function DocumentPageClient({ props }) {
     variables: props.variables,
     data: props.data,
   });
-  const { globalSiteConfig } = props;
-
-  console.log("globalSiteConfig", globalSiteConfig);
 
   const documentationData = data.docs;
   const { pageTableOfContents, navigationDocsData } = props;
@@ -57,9 +54,6 @@ export default function DocumentPageClient({ props }) {
         >
           <LeftHandSideParentContainer
             tableOfContents={navigationDocsData?.data}
-            globalSiteConfigTitle={globalSiteConfig?.documentationSiteTitle}
-            globalSiteConfigColors={globalSiteConfig?.siteColors}
-            leftSidebarBackground={globalSiteConfig?.leftSidebarBackground}
           />
         </div>
         {/* MIDDLE COLUMN */}
@@ -68,7 +62,6 @@ export default function DocumentPageClient({ props }) {
             DocumentTitle={documentationData?.title}
             screenResizing={isScreenSmallerThan840}
             NavigationDocsItems={navigationDocsData?.data}
-            globalSiteConfigColors={globalSiteConfig?.siteColors}
           />
           {isScreenSmallerThan1200 && !documentationData?.tocIsHidden && (
             <TocOverflowButton tocData={pageTableOfContents} />
@@ -97,7 +90,6 @@ export default function DocumentPageClient({ props }) {
             <ToC
               tocItems={pageTableOfContents}
               activeIds={activeIds}
-              globalSiteConfigColors={globalSiteConfig?.siteColors}
             />
           </div>
         )}
