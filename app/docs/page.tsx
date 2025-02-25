@@ -7,11 +7,7 @@ import DocumentPageClient from "./[...slug]/DocumentPageClient";
 import getGlobalSiteConfig from "../../utils/getGlobalSiteConfig";
 import { getExcerpt } from "../../utils/docs/getExcerpt";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string[] };
-}) {
+export async function generateMetadata() {
   const slug = 'index'
   try {
     const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
