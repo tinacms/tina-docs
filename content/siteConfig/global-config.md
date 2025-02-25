@@ -2,8 +2,10 @@
 documentationSiteTitle: TinaDocs
 siteColors:
   primaryStart: '#FFFFFF'
-  primaryEnd: '#B8F1AF'
-  primaryVia: '#F69AD7'
+  primaryEnd: '#FA0000'
+  primaryVia: '#24AADF'
+  rightHandSideActiveColor: '#0AFE2D'
+  rightHandSideInactiveColor: '#F8E71C'
 customColorToggle:
   disableColor: false
   colorValue: '#553a3a'

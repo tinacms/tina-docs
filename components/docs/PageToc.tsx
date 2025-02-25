@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import styled, { css } from 'styled-components';
-import { getDocId } from '../../utils/docs/getDocsIds';
+import { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
+import styled, { css } from "styled-components";
+import { getDocId } from "../../utils/docs/getDocsIds";
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
   activeIds: string[];
-  globalSiteConfigColors: string[]
+  globalSiteConfigColors: any;
 }
 
 export const generateMarkdown = (
@@ -17,24 +17,28 @@ export const generateMarkdown = (
   return tocItems
     .map((item) => {
       const anchor = getDocId(item.text);
-      const prefix = item.type === 'h3' ? '  ' : '';
+      const prefix = item.type === "h3" ? "  " : "";
       return `${prefix}- [${item.text}](#${anchor})`;
     })
-    .join('\n');
+    .join("\n");
 };
 
 const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
-  console.log(globalSiteConfigColors)
+  console.log("globalSiteConfigColors from ToC: ", globalSiteConfigColors);
+  console.log(
+    "globalSiteConfigColors from ToC: ",
+    globalSiteConfigColors?.rightHandSideActiveColor
+  );
 
   useEffect(() => {
     const close = () => setIsOpen(false);
-    const allLinks = document.querySelectorAll('a');
-    allLinks.forEach((a) => a.addEventListener('click', close));
+    const allLinks = document.querySelectorAll("a");
+    allLinks.forEach((a) => a.addEventListener("click", close));
 
     return () => {
-      allLinks.forEach((a) => a.removeEventListener('click', close));
+      allLinks.forEach((a) => a.removeEventListener("click", close));
     };
   }, []);
 
@@ -52,7 +56,7 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
 
         tocList.scrollTo({
           top: activeTop - listHeight / 2 + activeHeight / 2,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       }
     }
@@ -82,19 +86,20 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
                   <li className="leading-relaxed">{children}</li>
                 ),
                 a: ({ children, ...props }) => {
-                  // Ensure we always have a string for the href
-                  const hrefText = props.href ? props.href.slice(1) : '';
+                  
+                  const hrefText = props.href ? props.href.slice(1) : "";
                   const isActive = activeIds.includes(hrefText);
                   return (
                     <a
                       {...props}
-                      className={`
-                        block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150
-                        ${
-                          isActive
-                            ? 'text-orange-500 font-medium no-underline'
-                            : 'text-gray-600 hover:text-orange-500'
-                        }`}
+                      className="block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150 font-medium no-underline"
+                      style={{
+                        color: isActive
+                          ? globalSiteConfigColors?.rightHandSideActiveColor ||
+                            "#FF4500" 
+                          : globalSiteConfigColors?.rightHandSideInactiveColor ||
+                            "#808080",
+                      }}
                     >
                       {children}
                     </a>
@@ -113,7 +118,7 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
 
 export default ToC;
 
-// TODO: Remove styled jsx 
+// TODO: Remove styled jsx
 const TocTitleList = styled.div`
   scrollbar-width: none;
   ::-webkit-scrollbar {

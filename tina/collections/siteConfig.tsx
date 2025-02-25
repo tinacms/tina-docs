@@ -22,12 +22,12 @@ export const globalSiteConfiguration = {
       name: "siteColors",
       label: "Site Colors",
       type: "object",
-      defaultItem: () =>{
-        return{
+      defaultItem: () => {
+        return {
           primaryStart: "#f97316",
           primaryEnd: "#f97316",
           primaryVia: "#f97316",
-        }
+        };
       },
       fields: [
         {
@@ -94,10 +94,27 @@ export const globalSiteConfiguration = {
             widget: "sketch",
           },
         },
-
+        {
+          name: "rightHandSideActiveColor",
+          label: "Right Hand Side ToC Active Color",
+          type: "string",
+          ui: {
+            component: "color",
+            colorFormat: "hex",
+          },
+        },
+        {
+          name: "rightHandSideInactiveColor",
+          label: "Right Hand Side ToC Inactive Color",
+          type: "string",
+          ui: {
+            component: "color",
+            colorFormat: "hex",
+          },
+        },
       ],
     },
-    
+
     {
       name: "customColorToggle",
       label: "Custom Color Toggle",
@@ -112,9 +129,6 @@ export const globalSiteConfiguration = {
           name: "colorValue",
           label: "Color Value",
           type: "string",
-    
-    
-    
         },
       ],
       ui: {
@@ -122,16 +136,15 @@ export const globalSiteConfiguration = {
       },
     },
     {
-      name: 'leftSidebarBackground',
-      label: 'Left Sidebar Background',
+      name: "leftSidebarBackground",
+      label: "Left Sidebar Background",
       type: "string",
-      description:
-        "This is the background color of the left sidebar",
+      description: "This is the background color of the left sidebar",
       ui: {
         component: "color",
         colorFormat: "hex",
         widget: "sketch",
       },
-    }
+    },
   ],
 };
