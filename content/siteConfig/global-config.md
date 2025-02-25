@@ -2,11 +2,11 @@
 documentationSiteTitle: TinaDocs
 siteColors:
   primaryStart: '#FFFFFF'
-  primaryEnd: '#B8F1AF'
-  primaryVia: '#F69AD7'
+  primaryEnd: '#060606'
+  primaryVia: '#070606'
 customColorToggle:
   disableColor: false
   colorValue: '#553a3a'
-leftSidebarBackground: '#99F0F7'
+leftSidebarBackground: '#F7A599'
 ---
 
