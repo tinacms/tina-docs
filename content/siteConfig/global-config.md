@@ -7,6 +7,6 @@ siteColors:
 customColorToggle:
   disableColor: false
   colorValue: '#553a3a'
-leftSidebarBackground: '#99F0F7'
+leftSidebarBackground: '#F7A599'
 ---
 
