@@ -2,7 +2,7 @@
 documentationSiteTitle: TinaDocs
 siteColors:
   primaryStart: '#FFFFFF'
-  primaryEnd: '#B8F1AF'
+  primaryEnd: '#060606'
   primaryVia: '#F69AD7'
 customColorToggle:
   disableColor: false
