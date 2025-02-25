@@ -301,7 +301,7 @@ export const DocsMDXComponentRenderer: Components<{
   ),
 
   // @ts-ignore TODO: fix this in TinaCMS
-  code_block: ({ value, lang, children }) => {
+  Code_block: ({ value, lang, children }) => {
     const [hasCopied, setHasCopied] = useState(false);
 
     const handleCopy = () => {

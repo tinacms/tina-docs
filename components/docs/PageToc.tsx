@@ -26,6 +26,7 @@ export const generateMarkdown = (
 const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
+  console.log(globalSiteConfigColors)
 
   useEffect(() => {
     const close = () => setIsOpen(false);
