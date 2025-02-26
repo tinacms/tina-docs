@@ -8,7 +8,7 @@ siteColors:
     primaryVia: '#333333'
   pageToC:
     rightHandSideTitleColor: '#333333'
-    rightHandSideActiveColor: '#797979'
+    rightHandSideActiveColor: '#CC4141'
     rightHandSideInactiveColor: '#AAAAAA'
   leftHandSideNavigation:
     leftSidebarBackground: '#CC4141'

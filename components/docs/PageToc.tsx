@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import styled, { css } from "styled-components";
 import { getDocId } from "../../utils/docs/getDocsIds";
+import { IoList } from "react-icons/io5";
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
@@ -26,6 +27,9 @@ export const generateMarkdown = (
 const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
+  
+  // Get only the current active ID (the last one in the array)
+  const currentActiveId = activeIds.length > 0 ? activeIds[activeIds.length - 1] : "";
 
   useEffect(() => {
     const close = () => setIsOpen(false);
@@ -38,11 +42,9 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
   }, []);
 
   useEffect(() => {
-    if (tocWrapperRef.current && activeIds.length > 0) {
+    if (tocWrapperRef.current && currentActiveId) {
       const tocList = tocWrapperRef.current;
-
-      const lastActiveId = activeIds[activeIds.length - 1];
-      const activeLink = tocList.querySelector(`a[href="#${lastActiveId}"]`);
+      const activeLink = tocList.querySelector(`a[href="#${currentActiveId}"]`);
 
       if (activeLink) {
         const activeTop = (activeLink as HTMLElement).offsetTop;
@@ -55,7 +57,7 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
         });
       }
     }
-  }, [activeIds]);
+  }, [currentActiveId]);
 
   if (!tocItems || tocItems.length === 0) {
     return null;
@@ -63,55 +65,87 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
 
   const tocMarkdown = generateMarkdown(tocItems);
 
+  // Get active/inactive colors from config or use defaults
+  const activeColor = globalSiteConfigColors?.pageToC?.rightHandSideActiveColor || "#FF4500";
+  const inactiveColor = globalSiteConfigColors?.pageToC?.rightHandSideInactiveColor || "#808080";
+
   return (
     <>
       <TocWrapper>
-        <TocContent activeIds={activeIds} isOpen={isOpen}>
+        <TocContent activeId={currentActiveId} isOpen={isOpen}>
           <TocDesktopHeader
             style={{
-              color: globalSiteConfigColors?.pageToC?.rightHandSideTitleColor ||
-                "#FF4500",
+              color: globalSiteConfigColors?.pageToC?.rightHandSideTitleColor || "#FF4500",
             }}
           >
-            Table of Contents
+            <div className="flex items-center gap-2">
+              <IoList /> On This Page
+            </div>
           </TocDesktopHeader>
-          <TocTitleList
-            ref={tocWrapperRef}
-            className="max-h-[70vh] 2xl:max-h-[75vh] p-4 overflow-y-auto"
-          >
-            <ReactMarkdown
-              components={{
-                ul: ({ children }) => (
-                  <ul className="space-y-1 pt-1">{children}</ul>
-                ),
-                li: ({ children }) => (
-                  <li className="leading-relaxed">{children}</li>
-                ),
-                a: ({ children, ...props }) => {
-                  
-                  const hrefText = props.href ? props.href.slice(1) : "";
-                  const isActive = activeIds.includes(hrefText);
-                  return (
-                    <a
-                      {...props}
-                      className="block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150 font-medium no-underline"
-                      style={{
-                        color: isActive
-                          ? globalSiteConfigColors?.pageToC?.rightHandSideActiveColor ||
-                            "#FF4500" 
-                          : globalSiteConfigColors?.pageToC?.rightHandSideInactiveColor ||
-                            "#808080",
-                      }}
-                    >
-                      {children}
-                    </a>
-                  );
-                },
-              }}
+          <TocOuterContainer>
+            {/* Vertical line container that stays at a fixed position */}
+            <VerticalLineContainer>
+              <VerticalLine inactiveColor={inactiveColor} />
+              {/* Active indicator that will move based on the active item */}
+              {currentActiveId && (
+                <ActiveIndicator
+                  id={`indicator-${currentActiveId}`}
+                  activeColor={activeColor}
+                />
+              )}
+            </VerticalLineContainer>
+            
+            <TocTitleList
+              ref={tocWrapperRef}
+              className="max-h-[70vh] 2xl:max-h-[75vh] p-4 pl-6 overflow-y-auto"
             >
-              {tocMarkdown}
-            </ReactMarkdown>
-          </TocTitleList>
+              <ReactMarkdown
+                components={{
+                  ul: ({ children }) => (
+                    <ul className="space-y-1 pt-1">{children}</ul>
+                  ),
+                  li: ({ children }) => (
+                    <li className="leading-relaxed">{children}</li>
+                  ),
+                  a: ({ children, ...props }) => {
+                    const hrefText = props.href ? props.href.slice(1) : "";
+                    const isActive = hrefText === currentActiveId;
+                    
+                    // Update the active indicator position when this link is active
+                    useEffect(() => {
+                      if (isActive && tocWrapperRef.current) {
+                        const activeLink = tocWrapperRef.current.querySelector(`a[href="#${hrefText}"]`) as HTMLElement;
+                        const indicator = document.getElementById(`indicator-${hrefText}`);
+                        
+                        if (activeLink && indicator) {
+                          const linkTop = activeLink.offsetTop;
+                          const linkHeight = activeLink.offsetHeight;
+                          
+                          indicator.style.top = `${linkTop}px`;
+                          indicator.style.height = `${linkHeight}px`;
+                        }
+                      }
+                    }, [isActive, hrefText]);
+                    
+                    return (
+                      <TocLink
+                        {...props}
+                        isActive={isActive}
+                        activeColor={activeColor}
+                        inactiveColor={inactiveColor}
+                        className="block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150 font-medium no-underline"
+                        data-id={hrefText}
+                      >
+                        {children}
+                      </TocLink>
+                    );
+                  },
+                }}
+              >
+                {tocMarkdown}
+              </ReactMarkdown>
+            </TocTitleList>
+          </TocOuterContainer>
         </TocContent>
       </TocWrapper>
     </>
@@ -119,6 +153,50 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
 };
 
 export default ToC;
+
+// Container to hold both the line and content
+const TocOuterContainer = styled.div`
+  position: relative;
+  display: flex;
+`;
+
+// Container for the vertical line that stays at a fixed position
+const VerticalLineContainer = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  padding: 4px 0;
+  z-index: 1;
+`;
+
+// The actual grey vertical line
+const VerticalLine = styled.div<{ inactiveColor: string }>`
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: ${props => props.inactiveColor};
+  border-radius: 2px;
+`;
+
+// Active indicator that moves to highlight the current section
+const ActiveIndicator = styled.div<{ activeColor: string }>`
+  position: absolute;
+  left: 0;
+  width: 3px;
+  background-color: ${props => props.activeColor};
+  border-radius: 2px;
+  transition: top 0.3s ease, height 0.3s ease;
+`;
+
+// TocLink styled component without the vertical line
+const TocLink = styled.a<{ isActive: boolean; activeColor: string; inactiveColor: string }>`
+  color: ${props => props.isActive ? props.activeColor : props.inactiveColor} !important;
+  transition: color 0.2s ease;
+`;
 
 // TODO: Remove styled jsx
 const TocTitleList = styled.div`
@@ -146,6 +224,7 @@ const TocTitleList = styled.div`
   );
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
+  width: 100%;
 `;
 
 const TocDesktopHeader = styled.span`
@@ -172,7 +251,7 @@ const TocWrapper = styled.div`
   }
 `;
 
-const TocContent = styled.div<{ isOpen: boolean; activeIds: string[] }>`
+const TocContent = styled.div<{ isOpen: boolean; activeId: string }>`
   display: block;
   width: 100%;
   line-height: 1.25;

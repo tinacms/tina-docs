@@ -11,6 +11,7 @@ import { useTocListener } from "../../../utils/docs/tocListener";
 import ToC from "../../../components/docs/PageToc";
 import { LeftHandSideParentContainer } from "../../../components/docs/LeftHandSideParent";
 import TocOverflowButton from "../../../components/docs/ToCOverflow";
+import { useActiveHeadings } from "../../../components/hooks/useActiveHeadings";
 
 export default function DocumentPageClient({ props }) {
   const { data } = useTina({
@@ -36,7 +37,8 @@ export default function DocumentPageClient({ props }) {
     title: documentationData?.next?.title,
   };
 
-  const { activeIds, contentRef } = useTocListener(documentationData);
+  const { contentRef } = useTocListener(documentationData);
+  const activeIds = useActiveHeadings();
 
   const isScreenSmallerThan1200 = useScreenResizer().isScreenSmallerThan1200;
   const isScreenSmallerThan840 = useScreenResizer().isScreenSmallerThan840;
