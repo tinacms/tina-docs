@@ -38,6 +38,7 @@ export default async function DocsPage() {
     ]);
 
     const globalSiteConfig = await getGlobalSiteConfig();
+    console.log('globalSiteConfig from Docs Page: ', globalSiteConfig)
     
 
     const docData = documentData.data.docs;

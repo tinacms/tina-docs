@@ -1,14 +1,25 @@
 ---
+leftSidebarBackground: '#878787'
 documentationSiteTitle: TinaDocs
 siteColors:
-  primaryStart: '#FFFFFF'
-  primaryEnd: '#FA0000'
-  primaryVia: '#24AADF'
-  rightHandSideActiveColor: '#0AFE2D'
-  rightHandSideInactiveColor: '#F8E71C'
+  primaryColor:
+    primaryStart: '#333333'
+    primaryEnd: '#333333'
+    primaryVia: '#333333'
+  pageToC:
+    rightHandSideTitleColor: '#333333'
+    rightHandSideActiveColor: '#797979'
+    rightHandSideInactiveColor: '#AAAAAA'
+  leftHandSideNavigation:
+    leftSidebarBackground: '#CC4141'
+    backgroundOpacity: 0.6
+    leftSidebarH1Color: '#515151'
+    leftSidebarH2Color: '#797979'
+    leftSidebarH3Color: '#797979'
+  docsBodyStyling:
+    docsBodyText: '#CC4141'
 customColorToggle:
   disableColor: false
-  colorValue: '#553a3a'
-leftSidebarBackground: '#99F0F7'
+  colorValue: '#ffffff'
 ---
 

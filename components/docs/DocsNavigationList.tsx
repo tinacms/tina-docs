@@ -44,31 +44,35 @@ interface NavTitleProps {
   childSelected?: boolean;
   children: React.ReactNode;
   onClick?: () => void;
+  lefthandSideColors: any;
 }
 
 const NavTitle = ({
   children,
   level = 3,
   selected,
+  lefthandSideColors,
   childSelected,
   ...props
 }: NavTitleProps) => {
   const headerLevelClasses = {
-    0: "opacity-100 font-tuner-light text-orange-500 text-xl pt-2",
+    0: {
+      default: `opacity-100 font-tuner-light text-xl pt-2`,
+    },
     1: {
-      default: "text-base font-sans pt-1 text-gray-800",
-      selected: "text-base font-sans pt-1 font-bold text-blue-500",
-      childSelected: "text-base font-sans pt-1 font-[500] text-gray-800",
+      default: `text-base font-sans pt-1`,
+      selected: `text-base font-sans pt-1 font-bold`,
+      childSelected: `text-base font-sans pt-1 font-[500]`,
     },
     2: {
-      default: "text-[15px] font-sans opacity-80 pt-0.5 text-gray-700",
-      selected: "text-[15px] font-sans pt-0.5 font-bold text-blue-500",
-      childSelected: "text-[15px] font-sans pt-1 font-[500] text-gray-800",
+      default: `text-[15px] font-sans opacity-80 pt-0.5`,
+      selected: `text-[15px] font-sans pt-0.5 font-bold`,
+      childSelected: `text-[15px] font-sans pt-1 font-[500]`,
     },
     3: {
-      default: "text-[15px] font-sans opacity-80 pt-0.5 text-gray-700",
-      selected: "text-[15px] font-sans pt-0.5 font-bold text-blue-500",
-      childSelected: "text-[15px] font-sans pt-1 font-[500] text-gray-800",
+      default: `text-[15px] font-sans opacity-80 pt-0.5 text-gray-700`,
+      selected: `text-[15px] font-sans pt-0.5 font-bold text-blue-500`,
+      childSelected: `text-[15px] font-sans pt-1 font-[500] text-gray-800`,
     },
   };
 
@@ -78,20 +82,33 @@ const NavTitle = ({
     : childSelected
     ? "childSelected"
     : "default";
+
   const classes =
     level < 1
-      ? headerLevelClasses[headerLevel]
+      ? headerLevelClasses[headerLevel].default
       : headerLevelClasses[headerLevel][selectedClass];
 
   return (
     <div
       className={`group flex items-center gap-1 transition duration-150 ease-out cursor-pointer hover:opacity-100 leading-tight pb-0.5 pl-4 ${classes}`}
+      style={{
+        color:
+          level === 0
+            ? lefthandSideColors?.leftSidebarH1Color
+            : level === 1
+            ? lefthandSideColors?.leftSidebarH2Color
+            : level === 2
+            ? lefthandSideColors?.leftSidebarH3Color
+            : undefined,
+      }}
       {...props}
     >
       {children}
     </div>
   );
 };
+
+
 
 const hasNestedSlug = (navItems: any[] = [], slug: string) => {
   for (let item of navItems) {
@@ -112,10 +129,12 @@ const NavLevel = ({
   navListElem,
   categoryData,
   level = 0,
+  lefthandSideColors,
 }: {
   navListElem?: React.RefObject<HTMLDivElement | null>;
   categoryData: any;
   level?: number;
+  lefthandSideColors: any;
 }) => {
   const navLevelElem = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -169,7 +188,7 @@ const NavLevel = ({
       <NavLabelContainer ref={navLevelElem} status={categoryData.status}>
         {categoryData.slug ? (
           <DynamicLink href={getUrl(categoryData.slug)} passHref>
-            <NavTitle level={level} selected={selected && !childSelected}>
+            <NavTitle level={level} selected={selected && !childSelected} lefthandSideColors={lefthandSideColors}>
               <span className="pr-2 -mr-2">{categoryData.title}</span>
             </NavTitle>
           </DynamicLink>
@@ -181,6 +200,7 @@ const NavLevel = ({
             onClick={() => {
               setExpanded(!expanded);
             }}
+            lefthandSideColors={lefthandSideColors}
           >
             <span className="pr-2 -mr-2">{categoryData.title}</span>
             {categoryData.items && !selected && (
@@ -210,6 +230,7 @@ const NavLevel = ({
                     navListElem={navListElem}
                     level={level + 1}
                     categoryData={item}
+                    lefthandSideColors={lefthandSideColors}
                   />
                 </div>
               ))}
@@ -271,9 +292,9 @@ const NavLabelContainer = styled.div<{ status: string }>`
     `}
 `;
 
-export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
+export const DocsNavigationList = ({ navItems, lefthandSideColors }) => {
   const navListElem = React.useRef<HTMLDivElement>(null);
-
+  console.log('inside docsnavigationlist: ', lefthandSideColors)
   return (
     <DocsNavigationContainer ref={navListElem}>
       {navItems?.map((categoryData: any) => (
@@ -284,6 +305,7 @@ export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
           }
           navListElem={navListElem}
           categoryData={categoryData}
+          lefthandSideColors={lefthandSideColors}
         />
       ))}
     </DocsNavigationContainer>

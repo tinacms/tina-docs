@@ -44,7 +44,7 @@ export default function DocumentPageClient({ props }) {
     ? "grid-cols-1"
     : isScreenSmallerThan1200
     ? "grid-cols-[1.25fr_3fr]"
-    : "grid-cols-[1.25fr_3fr_0.75fr]";
+    : "grid-cols-[1fr_3fr_0.75fr]"; 
 
   return (
     <div className="relative my-6 lg:my-16 flex justify-center items-start">
@@ -59,7 +59,7 @@ export default function DocumentPageClient({ props }) {
             tableOfContents={navigationDocsData?.data}
             globalSiteConfigTitle={globalSiteConfig?.documentationSiteTitle}
             globalSiteConfigColors={globalSiteConfig?.siteColors}
-            leftSidebarBackground={globalSiteConfig?.leftSidebarBackground}
+            leftSidebarColors={globalSiteConfig?.siteColors.leftHandSideNavigation}
           />
         </div>
         {/* MIDDLE COLUMN */}

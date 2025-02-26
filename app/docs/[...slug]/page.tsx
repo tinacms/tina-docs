@@ -5,6 +5,7 @@ import DocumentPageClient from './DocumentPageClient';
 import getTableOfContents from '../../../utils/docs/getPageTableOfContents';
 import { getDocsNav } from '../../../utils/docs/getDocumentNavigation';
 import { getExcerpt } from '../../../utils/docs/getExcerpt';
+import getGlobalSiteConfig from '../../../utils/getGlobalSiteConfig';
 
 
 
@@ -60,6 +61,7 @@ export default async function DocsPage({ params }: { params: { slug: string[] } 
       getDocsNav(),
     ]);
 
+    const globalSiteConfig = await getGlobalSiteConfig();
     
     const pageTableOfContents = getTableOfContents(documentData?.data.docs.body);
     
@@ -71,6 +73,7 @@ export default async function DocsPage({ params }: { params: { slug: string[] } 
       pageTableOfContents,
       documentationData: documentData,
       navigationDocsData: docsToCData,
+      globalSiteConfig: globalSiteConfig,
     };
 
     return <div> <DocumentPageClient props={props}/></div>

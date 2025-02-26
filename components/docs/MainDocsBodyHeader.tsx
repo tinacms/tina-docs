@@ -30,7 +30,7 @@ const MainDocsBodyHeader = ({
       <div
         className="pt-4 font-tuner text-4xl"
         style={{
-          backgroundImage: `linear-gradient(to bottom right, ${globalSiteConfigColors?.primaryStart}, ${globalSiteConfigColors?.primaryVia}, ${globalSiteConfigColors?.primaryEnd})`,
+          backgroundImage: `linear-gradient(to bottom right, ${globalSiteConfigColors?.primaryColor?.primaryStart}, ${globalSiteConfigColors?.primaryColor?.primaryVia}, ${globalSiteConfigColors?.primaryColor?.primaryEnd})`,
           WebkitBackgroundClip: "text",
           backgroundClip: "text",
           color: "transparent",

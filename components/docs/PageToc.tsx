@@ -26,11 +26,6 @@ export const generateMarkdown = (
 const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
-  console.log("globalSiteConfigColors from ToC: ", globalSiteConfigColors);
-  console.log(
-    "globalSiteConfigColors from ToC: ",
-    globalSiteConfigColors?.rightHandSideActiveColor
-  );
 
   useEffect(() => {
     const close = () => setIsOpen(false);
@@ -72,7 +67,14 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
     <>
       <TocWrapper>
         <TocContent activeIds={activeIds} isOpen={isOpen}>
-          <TocDesktopHeader>Table of Contents</TocDesktopHeader>
+          <TocDesktopHeader
+            style={{
+              color: globalSiteConfigColors?.pageToC?.rightHandSideTitleColor ||
+                "#FF4500",
+            }}
+          >
+            Table of Contents
+          </TocDesktopHeader>
           <TocTitleList
             ref={tocWrapperRef}
             className="max-h-[70vh] 2xl:max-h-[75vh] p-4 overflow-y-auto"
@@ -95,9 +97,9 @@ const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
                       className="block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150 font-medium no-underline"
                       style={{
                         color: isActive
-                          ? globalSiteConfigColors?.rightHandSideActiveColor ||
+                          ? globalSiteConfigColors?.pageToC?.rightHandSideActiveColor ||
                             "#FF4500" 
-                          : globalSiteConfigColors?.rightHandSideInactiveColor ||
+                          : globalSiteConfigColors?.pageToC?.rightHandSideInactiveColor ||
                             "#808080",
                       }}
                     >
@@ -149,8 +151,6 @@ const TocTitleList = styled.div`
 const TocDesktopHeader = styled.span`
   display: none;
   font-size: 1rem;
-  color: var(--color-secondary);
-  opacity: 0.5;
   background: transparent;
   line-height: 1;
   margin-bottom: 1.125rem;
