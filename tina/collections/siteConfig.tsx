@@ -233,7 +233,37 @@ export const globalSiteConfiguration = {
                 component: 'color',
                 colorFormat: 'hex',
               },
-            }
+            },
+            {
+              name: 'docsBodyH1',
+              label: 'Docs Body H1 Styling',
+              description: 'This is for the styling of the H1 in the docs body',
+              type: 'object',
+              fields: [
+                {
+                  name: 'color',
+                  label: 'Color',
+                  type: 'string',
+                  ui: {
+                    component: 'color',
+                    colorFormat: 'hex',
+                  },
+                }, 
+                {
+                  name: 'fontSize',
+                  label: 'Font Size',
+                  type: 'string',
+                  options: ['md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
+                },
+                {
+                  name: 'fontWeight',
+                  label: 'Font Weight',
+                  type: 'string',
+                  options: ['normal', 'bold'],
+                },
+                // PlaceHolder to add FONT options
+              ]
+            },
           ]
         }
       ],

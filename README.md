@@ -39,7 +39,7 @@ pnpm build
 
 To learn more about Tina, take a look at the following resources:
 
-- [Tina Docs](https://tina.io/docs)
+- [TinaDocs](https://tina.io/docs)
 - [Getting started](https://tina.io/docs/setup-overview/)
 
 You can check out [Tina Github repository](https://github.com/tinacms/tinacms) - your feedback and contributions are welcome!

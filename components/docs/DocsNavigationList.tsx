@@ -224,8 +224,10 @@ const NavLevel = ({
             AnimateHeight as any,
             { duration: 300, height: expanded ? "auto" : 0 },
             <NavLevelChildContainer level={level}>
-              {(categoryData.items || []).map((item: any) => (
-                <div key={item.slug ? item.slug + level : item.title + level}>
+              {(categoryData.items || []).map((item: any, index: number) => (
+                <div 
+                  key={`nav-level-${level}-${index}-${typeof item.slug === 'string' ? item.slug : (typeof item.title === 'string' ? item.title : index)}`}
+                >
                   <NavLevel
                     navListElem={navListElem}
                     level={level + 1}
