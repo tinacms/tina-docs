@@ -17,6 +17,7 @@ export default function RootLayout({
       </head>
       <body>
         <AdminLink />
+        {/* ts-ignore children is passed through */}
         <ThemeProvider>
           <SiteLayout>{children}</SiteLayout>
         </ThemeProvider>
