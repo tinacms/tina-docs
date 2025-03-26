@@ -4,7 +4,7 @@ import { SiteLayout } from "../components/SiteLayout";
 import AdminLink from "../components/ui/AdminLink";
 
 export default function RootLayout({
-  children,
+  children = null, //default value for cms
 }: {
   children: React.ReactNode;
 }) {
