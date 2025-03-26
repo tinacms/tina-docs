@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { client } from "../tina/__generated__/client";
 
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 export const ThemeProvider = ({ children }: Props) => {
