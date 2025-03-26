@@ -9,6 +9,8 @@
   --secondary-color-start: #3b82f6;
   --secondary-color-via: #2563eb;
   --secondary-color-end: #1d4ed8;
+
+  --default-background: url("/svg/default-background.svg");
 }
 
 @font-face {
