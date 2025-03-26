@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from "react";
 import styled, { css } from "styled-components";
@@ -9,30 +9,30 @@ import { BiChevronRight } from "react-icons/bi";
 import AnimateHeight from "react-animate-height";
 
 function getUrl(input: any): string {
-    let url = "";
-    if (typeof input === "string") {
-      url = input;
-    } else if (input && typeof input === "object") {
-      if (input.id && typeof input.id === "string") {
-        url = input.id;
-      }
+  let url = "";
+  if (typeof input === "string") {
+    url = input;
+  } else if (input && typeof input === "object") {
+    if (input.id && typeof input.id === "string") {
+      url = input.id;
     }
-    
-    if (url.startsWith("content")) {
-      url = url.replace(/^content/, "");
-    }
-    
-    url = url.replace(/\.(mdx|md)$/, "");
-
-    if (url === "/docs/index") {
-      url = "/docs";
-    }
-    
-    if (!url.startsWith("/")) {
-      url = "/" + url;
-    }
-    return url;
   }
+
+  if (url.startsWith("content")) {
+    url = url.replace(/^content/, "");
+  }
+
+  url = url.replace(/\.(mdx|md)$/, "");
+
+  if (url === "/docs/index") {
+    url = "/docs";
+  }
+
+  if (!url.startsWith("/")) {
+    url = "/" + url;
+  }
+  return url;
+}
 
 export interface DocsNavProps {
   navItems: any;
@@ -95,7 +95,6 @@ const NavTitle = ({
 
 const hasNestedSlug = (navItems: any[] = [], slug: string) => {
   for (let item of navItems) {
-    
     if (matchActualTarget(getUrl(item.slug || item.href), slug)) {
       return true;
     }
@@ -112,19 +111,15 @@ const NavLevel = ({
   navListElem,
   categoryData,
   level = 0,
-  
 }: {
   navListElem?: React.RefObject<HTMLDivElement | null>;
   categoryData: any;
   level?: number;
-  
-  
 }) => {
   const navLevelElem = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const path = pathname || "";
-  
-  
+
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
@@ -132,13 +127,8 @@ const NavLevel = ({
       level === 0
   );
 
-  
-
   const selected =
     path.split("#")[0] === slug || (slug === "/docs" && path === "/docs/");
-    
-    
-    
 
   const childSelected = hasNestedSlug(categoryData.items, path);
 
@@ -150,9 +140,13 @@ const NavLevel = ({
       selected
     ) {
       const scrollOffset = (navListElem.current as HTMLElement).scrollTop;
-      const navListOffset = (navListElem.current as HTMLElement).getBoundingClientRect().top;
+      const navListOffset = (
+        navListElem.current as HTMLElement
+      ).getBoundingClientRect().top;
       const navListHeight = (navListElem.current as HTMLElement).offsetHeight;
-      const navItemOffset = (navLevelElem.current as HTMLElement).getBoundingClientRect().top;
+      const navItemOffset = (
+        navLevelElem.current as HTMLElement
+      ).getBoundingClientRect().top;
       const elementOutOfView =
         navItemOffset - navListOffset > navListHeight + scrollOffset;
 
@@ -165,7 +159,6 @@ const NavLevel = ({
       }
     }
   }, [navListElem, selected]);
-
 
   return (
     <>
@@ -280,14 +273,14 @@ export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
   return (
     <DocsNavigationContainer ref={navListElem}>
       {navItems?.map((categoryData: any) => (
-        <NavLevel
+        <div
           key={
             "mobile-" +
             (categoryData.slug ? getUrl(categoryData.slug) : categoryData.title)
           }
-          navListElem={navListElem}
-          categoryData={categoryData}
-        />
+        >
+          <NavLevel navListElem={navListElem} categoryData={categoryData} />
+        </div>
       ))}
     </DocsNavigationContainer>
   );
