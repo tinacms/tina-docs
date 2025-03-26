@@ -4,7 +4,7 @@ type ExtraProps = Omit<LinkProps, 'as' | 'href'>;
 
 interface DynamicLinkProps extends ExtraProps {
   href: string;
-  children: any;
+  children?: any;
 }
 
 export const DynamicLink = ({ children, href, ...props }: DynamicLinkProps) => {
