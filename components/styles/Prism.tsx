@@ -22,7 +22,7 @@ export const Prism = (props: {
 
   return (
     <div>
-      {/* // @ts-expect-error prism-react-renderer type inference issue */}
+      {/* @ts-ignore prism-react-renderer types are incorrect */}
       <Highlight
         theme={themes[props.theme || "github"]}
         code={props.value}
