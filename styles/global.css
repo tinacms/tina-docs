@@ -10,7 +10,10 @@
   --secondary-color-via: #2563eb;
   --secondary-color-end: #1d4ed8;
 
-  --default-background: url("/svg/default-background.svg");
+  --default-background-type: "'image'";
+  --default-background-image: url("/svg/default-background.svg");
+  --default-background-color: #FFFFFF;
+
 }
 
 @font-face {

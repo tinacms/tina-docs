@@ -1,3 +1,6 @@
+import { wrapFieldsWithMeta } from "tinacms";
+import React from 'react'
+
 export const globalSiteColours = {
   name: "GlobalSiteColours",
   label: "Global Site Colours",
@@ -85,6 +88,37 @@ export const globalSiteColours = {
           },
         },
       ],
+    },
+    {
+      name: 'backgroundType',
+      label: 'Background Type',
+      type: 'string',
+      options: [
+        {
+          label: 'Image',
+          value: 'image',
+        },
+        {
+          label: 'Solid Color',
+          value: 'color',
+        },
+      ],
+    },
+    {
+      name: 'background',
+      label: 'Background Image',
+      type: 'image',
+
+    },
+    {
+      name: 'backgroundColor',
+      label: 'Background Color',
+      type: 'string',
+      ui: {
+        component: 'color',
+        colorFormat: 'hex',
+        widget: 'sketch',
+      },
     },
   ],
 };
