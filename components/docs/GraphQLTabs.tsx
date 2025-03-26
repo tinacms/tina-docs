@@ -12,7 +12,7 @@ export const GraphQLQueryResponseTabs = ({ ...props }) => {
         style={{
             backgroundColor: 'rgb(1, 22, 39)',
         }}></div>
-    const underlineStyling = "transition-[width] absolute h-1 bottom-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg"
+    const underlineStyling = "transition-[width] absolute h-1 bottom-0 bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)] rounded-lg"
     const containerStyling = "w-full flex col-start-1 row-start-1 overflow-x-scroll flex-col"
 
     return <div

@@ -1,14 +1,25 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
 
-@font-face {
-    font-family: 'tuner-medium';
-    src: url('/fonts/tuner-medium.woff2') format('woff2'),
-      url('/fonts/tuner-medium.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-
 :root {
-  --primary-color: #f97316
+  --primary-color-start: #fb923c;
+  --primary-color-via: #f97316;
+  --primary-color-end: #ea580c;
+
+  --secondary-color-start: #3b82f6;
+  --secondary-color-via: #2563eb;
+  --secondary-color-end: #1d4ed8;
+
+  --default-background-type: "'image'";
+  --default-background-image: url("/svg/default-background.svg");
+  --default-background-color: #FFFFFF;
+
+}
+
+@font-face {
+  font-family: 'tuner-medium';
+  src: url('/fonts/tuner-medium.woff2') format('woff2'),
+       url('/fonts/tuner-medium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }

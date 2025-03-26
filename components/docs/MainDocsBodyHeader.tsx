@@ -26,7 +26,9 @@ const MainDocsBodyHeader = ({
 
       <Breadcrumbs navItems={NavigationDocsItems} />
       <div
-        className="pt-4 font-tuner text-4xl bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent"
+      // Cant use from-primaryStart (a tailwind extesion) as gradients dont use th theme.colors values 
+        className="pt-4 font-tuner text-4xl bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)] bg-clip-text text-transparent"
+
       >
         {DocumentTitle}
       </div>
