@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import {  useEffect } from "react";
 import { client } from "../tina/__generated__/client";
 
 type Props = {
