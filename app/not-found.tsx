@@ -11,7 +11,7 @@ export default function NotFound() {
               Sorry, Friend.
             </h2>
             <hr className="block border-none bg-[url('/svg/hr.svg')] bg-no-repeat bg-[length:auto_100%] h-[7px] w-full my-8" />
-            <p className="text-lg lg:text-xl lg:leading-normal block bg-gradient-to-br from-blue-700 via-blue-900 to-blue-1000 bg-clip-text text-transparent -mb-1">
+            <p className="text-lg lg:text-xl lg:leading-normal block bg-gradient-to-br from-[var(--secondary-color-start)] via-[var(--secondary-color-via)] to-[var(--secondary-color-end)] bg-clip-text text-transparent -mb-1">
               We couldn&apos;t find what you were looking for.
             </p>
           </div>

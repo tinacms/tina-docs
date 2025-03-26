@@ -19,9 +19,17 @@ export const ThemeProvider = ({ children }: Props) => {
       const primaryVia = data?.data?.GlobalSiteColours?.primaryColour?.primaryVia
       const primaryEnd = data?.data?.GlobalSiteColours?.primaryColour?.primaryEnd
 
+      const secondaryStart = data?.data?.GlobalSiteColours?.secondaryColour?.secondaryStart 
+      const secondaryVia = data?.data?.GlobalSiteColours?.secondaryColour?.secondaryVia
+      const secondaryEnd = data?.data?.GlobalSiteColours?.secondaryColour?.secondaryEnd
+
       document.documentElement.style.setProperty('--primary-color-start', primaryStart || '--primary-color-start')
       document.documentElement.style.setProperty('--primary-color-via', primaryVia || '--primary-color-via')
       document.documentElement.style.setProperty('--primary-color-end', primaryEnd || '--primary-color-end')
+
+      document.documentElement.style.setProperty('--secondary-color-start', secondaryStart || '--secondary-color-start')
+      document.documentElement.style.setProperty('--secondary-color-via', secondaryVia || '--secondary-color-via')
+      document.documentElement.style.setProperty('--secondary-color-end', secondaryEnd || '--secondary-color-end')
     }
 
     fetchTheme()

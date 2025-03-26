@@ -24,7 +24,7 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
             style={{ backgroundColor: '#FAFAFA' }}
           >
             <span className="text-sm uppercase opacity-50 pl-10">Previous</span>
-            <h5 className="text-base md:text-xl leading-[1.3] m-0 pl transition-all ease-out duration-150 text-blue-800 group-hover:text-[var(--primary-color-via)] flex items-center">
+            <h5 className="text-base md:text-xl leading-[1.3] m-0 pl transition-all ease-out duration-150 text-[var(--secondary-color-end)] group-hover:text-[var(--primary-color-via)] flex items-center">
               <NextImage
                 src="/svg/right-arrow.svg"
                 alt="Right arrow"
@@ -44,7 +44,7 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
             style={{ backgroundColor: '#FAFAFA' }}
           >
             <span className="text-sm uppercase opacity-50 md:pr-10 pr-6">Next</span>
-            <h5 className="text-base md:text-xl leading-[1.3] m-0 transition-all ease-out duration-150 text-blue-800 group-hover:text-[var(--primary-color-via)] flex items-center justify-end">
+            <h5 className="text-base md:text-xl leading-[1.3] m-0 transition-all ease-out duration-150 text-[var(--secondary-color-end)] group-hover:text-[var(--primary-color-via)] flex items-center justify-end">
               {nextPage.title}
               <NextImage
                 src="/svg/right-arrow.svg"

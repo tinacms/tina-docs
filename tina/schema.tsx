@@ -1,7 +1,7 @@
 import { Collection, defineSchema } from "tinacms";
 import { docsCollection } from "./collections/docs";
 import { docsTableOfContentsCollection } from "./collections/docsTableOfContents";
-import { globalSiteColours } from "./collections/siteConfig";
+import { globalSiteColours } from "./collections/siteColors";
 
 export const schema = defineSchema({
     collections: [
