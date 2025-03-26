@@ -1,150 +1,54 @@
-import React from "react";
-import { Collection } from "tinacms";
-import { CustomColorToggle } from "../../components/ui/CustomColorToggle";
-
-export const globalSiteConfiguration = {
-  name: "globalSiteConfiguration",
-  label: "Global Site Configuration",
+export const globalSiteColours = {
+  name: 'GlobalSiteColours',
+  label: 'Global Site Colours',
+  format: 'mdx',
+  path: 'content/site-colors',
   ui: {
     allowedActions: {
       create: false,
       delete: false,
     },
   },
-  path: "content/siteConfig",
   fields: [
     {
-      name: "documentationSiteTitle",
-      label: "Documentation Site Title",
-      type: "string",
-    },
-    {
-      name: "siteColors",
-      label: "Site Colors",
-      type: "object",
-      defaultItem: () => {
-        return {
-          primaryStart: "#f97316",
-          primaryEnd: "#f97316",
-          primaryVia: "#f97316",
-        };
-      },
+      
+      name: 'primaryColour',
+      label: 'Primary Colour',
+      type: 'object',
       fields: [
         {
-          name: "primaryStart",
-          label: "Primary Color | Gradient Start",
-          type: "string",
-          description:
-            "This is the start of the primary color gradient ⚠️ If you want a solid color leave the end and via empty ⚠️",
+          name: 'primaryStart',
+          label: 'Primary Start',
+          type: 'string',
+          description: 'If you do not wish to have 3 different colours, you can set the all three colours to be the same.',
           ui: {
-            component: "color",
-            colorFormat: "hex",
-            widget: "sketch",
+            component: 'color',
+            colorFormat: 'hex',
+            widget: 'sketch',
+          }
+        },
+        {
+          name: 'primaryVia',
+          label: 'Primary Via',
+          type: 'string',
+          ui: {
+            component: 'color',
+            colorFormat: 'hex',
+            widget: 'sketch',
           },
         },
         {
-          name: "primaryEnd",
-          label: "Primary Color | Gradient End",
-          type: "string",
+          name: 'primaryEnd',
+          label: 'Primary End',
+          type: 'string',
           ui: {
-            component: "color",
-            colorFormat: "hex",
-            widget: "sketch",
-          },
-        },
-        {
-          name: "primaryVia",
-          label: "Primary Color | Gradient Via",
-          type: "string",
-          ui: {
-            component: "color",
-            colorFormat: "hex",
-            widget: "sketch",
-          },
-        },
-        {
-          name: "secondaryStart",
-          label: "Secondary Color | Gradient Start",
-          type: "string",
-          description:
-            "This is the start of the secondary color gradient ⚠️ If you want a solid color leave the end and via empty ⚠️",
-          ui: {
-            component: "color",
-            colorFormat: "hex",
-            widget: "sketch",
-          },
-        },
-        {
-          name: "secondaryEnd",
-          label: "Secondary Color | Gradient End",
-          type: "string",
-          ui: {
-            component: "color",
-            colorFormat: "hex",
-            widget: "sketch",
-          },
-        },
-        {
-          name: "secondaryVia",
-          label: "Secondary Color | Gradient Via",
-          type: "string",
-          ui: {
-            component: "color",
-            colorFormat: "hex",
-            widget: "sketch",
-          },
-        },
-        {
-          name: "rightHandSideActiveColor",
-          label: "Right Hand Side ToC Active Color",
-          type: "string",
-          ui: {
-            component: "color",
-            colorFormat: "hex",
-          },
-        },
-        {
-          name: "rightHandSideInactiveColor",
-          label: "Right Hand Side ToC Inactive Color",
-          type: "string",
-          ui: {
-            component: "color",
-            colorFormat: "hex",
+            component: 'color',
+            colorFormat: 'hex',
+            widget: 'sketch',
           },
         },
       ],
-    },
-
-    {
-      name: "customColorToggle",
-      label: "Custom Color Toggle",
-      type: "object",
-      fields: [
-        {
-          name: "disableColor",
-          label: "Tick to use Default Background Color",
-          type: "boolean",
-        },
-        {
-          name: "colorValue",
-          label: "Color Value",
-          type: "string",
-        },
-      ],
-      ui: {
-        component: CustomColorToggle,
-      },
-    },
-    {
-      name: "leftSidebarBackground",
-      label: "Left Sidebar Background",
-      type: "string",
-      description: "This is the background color of the left sidebar",
-      ui: {
-        component: "color",
-        colorFormat: "hex",
-        widget: "sketch",
-      },
     },
   ],
-};
+}
+

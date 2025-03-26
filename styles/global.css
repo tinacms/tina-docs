@@ -1,4 +1,4 @@
-@config "../tailwind.config.js";
+@import "../tailwind.config.js";
 @import "tailwindcss";
 
 @font-face {
@@ -9,6 +9,9 @@
     font-style: normal;
   }
 
-:root {
-  --primary-color: #f97316
-}
+  :root {
+    --primary-color-start: #fb923c;
+    --primary-color-via: #f97316;
+    --primary-color-end: #ea580c;
+  }
+  

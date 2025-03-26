@@ -6,7 +6,7 @@ export const LeftHandSideParentContainer = ({ tableOfContents }: { tableOfConten
   return (
     <div className="rounded-2xl shadow-xl w-full bg-white/50 h-5/6">
         <h1
-          className={`text-4xl pb-4 font-tuner pl-6 pt-6 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent`}
+          className={`text-4xl pb-4 font-tuner pl-6 pt-6 bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)] bg-clip-text text-transparent`}
         >
           TinaDocs
           

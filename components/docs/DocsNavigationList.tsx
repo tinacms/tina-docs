@@ -54,7 +54,7 @@ const NavTitle = ({
   ...props
 }: NavTitleProps) => {
   const headerLevelClasses = {
-    0: "opacity-100 font-tuner-light text-orange-500 text-xl pt-2",
+    0: "opacity-100 font-tuner-light text-[var(--primary-color-start)] text-xl pt-2",
     1: {
       default: "text-base font-sans pt-1 text-gray-800",
       selected: "text-base font-sans pt-1 font-bold text-blue-500",
@@ -183,7 +183,7 @@ const NavLevel = ({
               <BiChevronRight
                 className={`${
                   level < 1
-                    ? "text-orange-100 group-hover:text-orange-300"
+                    ? "text-orange-100 group-hover:text-[var(--primary-color-start)]"
                     : "text-blue-200 group-hover:text-blue-400"
                 } group-hover:rotate-90 w-5 h-auto -my-2 transition ease-out duration-300 transform ${
                   expanded ? "rotate-90" : ""

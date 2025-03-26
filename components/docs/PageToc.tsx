@@ -90,8 +90,8 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                         block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150
                         ${
                           isActive
-                            ? 'text-orange-500 font-medium no-underline'
-                            : 'text-gray-600 hover:text-orange-500'
+                            ? 'text-[var(--primary-color-start)] font-medium no-underline'
+                            : 'text-gray-600 hover:text-[var(--primary-color-start)]'
                         }`}
                     >
                       {children}

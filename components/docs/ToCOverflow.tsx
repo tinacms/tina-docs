@@ -15,7 +15,7 @@ const TocOverflow = ({ tocData }) => {
           <Link
             key={index}
             href={linkHref}
-            className={`block hover:text-orange-500 transition-colors pl-6 ${textIndentation} pb-1`}
+            className={`block hover:text-[var(--primary-color-start)] transition-colors pl-6 ${textIndentation} pb-1`}
           >
             {item.text}
           </Link>
@@ -54,7 +54,7 @@ const TocOverflowButton = (tocData) => {
             onClick={() => setIsTableOfContentsOpen(!isTableOfContentsOpen)}
           >
             <span className="flex items-center space-x-2">
-              <MdMenu size={20} className="text-orange-500" />
+              <MdMenu size={20} className="text-[var(--primary-color-start)]" />
               <span className="text-slate-600 py-1">Table of Contents</span>
             </span>
           </div>
