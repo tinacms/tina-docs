@@ -16,7 +16,7 @@ export default function RootLayout({
       </head>
       <body>
         <AdminLink />
-        <SiteLayout>{children}</SiteLayout>
+        <SiteLayout children={children} />
       </body>
     </html>
   );
