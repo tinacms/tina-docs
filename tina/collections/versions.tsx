@@ -68,18 +68,22 @@ export const versionsCollection = {
             async (versionNumber: string) => {
               if (input.value) {
                 setError("You have already created this version.");
+                setDisabled(true);
                 return;
               }
               if (form.getFieldState("filename")?.value) {
                 setError("Save this file before creating a version.");
+                setDisabled(true);
                 return;
               }
               if (!versionNumber) {
                 setError("Version number is required");
+                setDisabled(true);
                 return;
               }
               if (versionNumber.includes(" ")) {
                 setError("Version number cannot contain spaces");
+                setDisabled(true);
                 return;
               }
               try {
@@ -92,16 +96,13 @@ export const versionsCollection = {
                     "_versions/" + versionNumber + "/_version-index.json",
                 });
                 setError("Version with this id already exists");
+                setDisabled(true);
               } catch (err) {
                 setDisabled(false);
                 setError(null);
-              } finally {
-                if (error) {
-                  setDisabled(true);
-                }
               }
             },
-            [form, input, error]
+            [form, input]
           );
 
           //Controlling when to run validation
