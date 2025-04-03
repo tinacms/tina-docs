@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { FaChevronRight } from 'react-icons/fa';
-import { matchActualTarget } from '../../utils/docs/urls';
+import { matchActualTarget } from '../../utils/navigation/urls';
 
 export interface DocsNavProps {
   navItems: any;
