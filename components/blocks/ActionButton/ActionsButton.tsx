@@ -1,6 +1,6 @@
 import { BiArrowBack } from 'react-icons/bi';
 import { tinaField } from 'tinacms/dist/react';
-import { sanitizeLabel } from '../../../utils/sanitizeLabel';
+import { sanitizeLabel } from '../../../utils/generic/sanitizeLabel';
 import { FlushButton, LinkButton } from '../../ui/Buttons';
 
 export const Actions = ({ items, align = 'left', flush = false }) => {
