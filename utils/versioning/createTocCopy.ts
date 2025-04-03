@@ -2,20 +2,18 @@ import client from "../../tina/__generated__/client";
 import { getEntireCollection } from "../generic/fetchEntireCollection";
 import { addSubpathToSlug } from "./addSubpath";
 
-// Recursive helper for formatting nested TOC items for the mutation
+// Recursive helper for formatting nested TOC items for the mutation – this one's a little tricky because it uses union types (Templates)
 const formatTocItemsRecursive = (tocItemsNode: any, versionNumber: string): any => {
     // Input is a node with { title, items } from the query result (e.g., DocsTableOfContentsSupermenuGroupItemsItems)
     // Output needs to match the corresponding Mutation structure (e.g., DocsTableOfContentsSupermenuGroupItemsItemsMutation)
+    //see __generated__/types.ts for the types
     return {
       title: tocItemsNode.title,
       items:
         tocItemsNode.items
           ?.map((item: any) => {
-            // item is the next level down in the query structure union
             if (!item) return null;
-            // Check if it's an Item type (leaf node in this branch) - Ensure slug and id exist
             if (item.slug && typeof item.slug.id === "string") {
-              // Return the { item: ... } structure for the Mutation union
               return {
                 item: {
                   title: item.title,
@@ -23,9 +21,7 @@ const formatTocItemsRecursive = (tocItemsNode: any, versionNumber: string): any 
                 },
               };
             }
-            // Check if it's an Items type (node with children)
             else if (item.items) {
-              // Return the { items: ... } structure for the Mutation union, calling recursively
               return {
                 items: formatTocItemsRecursive(item, versionNumber),
               };
@@ -36,33 +32,27 @@ const formatTocItemsRecursive = (tocItemsNode: any, versionNumber: string): any 
             );
             return null;
           })
-          .filter(Boolean) || [], // Filter out nulls from skipped items
+          .filter(Boolean) || [],
     };
   };
 
 const createTocCopy = async (docsToc: any[], versionNumber: string) => {
     docsToc.forEach(async (doc) => {
-        if (!doc?.node) return; // Skip if node is null/undefined
-
-        // Format the supermenuGroup for the mutation
+        if (!doc?.node) return;
         const formattedSupermenuGroup =
           doc.node.supermenuGroup
             ?.map((group: any) => {
-              // group is DocsTableOfContentsSupermenuGroup
               if (!group) return null;
               return {
                 title: group.title,
                 items:
                   group.items
                     ?.map((item: any) => {
-                      // item is DocsTableOfContentsSupermenuGroupItems union
                       if (!item) return null;
-                      // Check if it's an Item type - Ensure slug and id exist
                       if (
                         item.slug &&
                         typeof item.slug.id === "string"
                       ) {
-                        // Return the { item: ... } structure for the Mutation union
                         return {
                           item: {
                             title: item.title,
@@ -70,11 +60,9 @@ const createTocCopy = async (docsToc: any[], versionNumber: string) => {
                           },
                         };
                       }
-                      // Check if it's an Items type
                       else if (item.items) {
-                        // Return the { items: ... } structure for the Mutation union
                         return {
-                          items: formatTocItemsRecursive(item, versionNumber), // Use the recursive helper
+                          items: formatTocItemsRecursive(item, versionNumber),
                         };
                       }
                       console.warn(
@@ -83,10 +71,10 @@ const createTocCopy = async (docsToc: any[], versionNumber: string) => {
                       );
                       return null;
                     })
-                    .filter(Boolean) || [], // Filter out nulls from skipped items
+                    .filter(Boolean) || [],
               };
             })
-            .filter(Boolean) || []; // Filter out nulls from skipped groups
+            .filter(Boolean) || [];
         await client.queries.addVersionToc({
           relativePath:
             "_versions/" +
