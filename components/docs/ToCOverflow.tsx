@@ -1,21 +1,26 @@
-import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
-import { MdMenu } from 'react-icons/md';
+import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
+import { MdMenu } from "react-icons/md";
+import { cn } from "../../utils/cn";
 
 const TocOverflow = ({ tocData }) => {
   return (
     <div className="absolute z-10 bg-white mt-4 rounded-lg w-full p-6 shadow-lg animate-fade-down animate-duration-300 max-h-96 overflow-y-scroll">
       {tocData.tocData.map((item, index) => {
         const textIndentation =
-          item.type === 'h3' ? 'ml-4' : item.type === 'h4' ? 'ml-8' : '';
+          item.type === "h3" ? "ml-4" : item.type === "h4" ? "ml-8" : "";
 
-        const linkHref = `#${item.text.replace(/\s+/g, '-').toLowerCase()}`;
+        const linkHref = `#${item.text.replace(/\s+/g, "-").toLowerCase()}`;
 
         return (
           <Link
             key={index}
             href={linkHref}
-            className={`block hover:text-[var(--primary-color-start)] transition-colors pl-6 ${textIndentation} pb-1`}
+            className={cn(
+              "block hover:text-[var(--primary-color-start)] transition-colors pl-6",
+              textIndentation,
+              "pb-1"
+            )}
           >
             {item.text}
           </Link>
@@ -39,9 +44,9 @@ const TocOverflowButton = (tocData) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 

@@ -10,6 +10,7 @@ import { Components, TinaMarkdown } from "tinacms/dist/rich-text";
 import { getDocId } from "../../utils/docs/getDocsIds";
 import { WarningCallout } from "../docs/WarningCallout";
 import { Prism } from "../styles/Prism";
+import { cn } from "../../utils/cn";
 
 // Casting fixes to address TS errors
 const NextImage = Image as unknown as React.FC<any>;
@@ -85,7 +86,9 @@ export const DocsMDXComponentRenderer: Components<{
   },
   code: (props) => (
     <code
-      className="px-1 text-[var(--primary-color-start)] py-0.5 border-y-stone-600 bg-white rounded"
+      className={cn(
+        "px-1 text-[var(--primary-color-start)] py-0.5 border-y-stone-600 bg-white rounded"
+      )}
       {...props}
     />
   ),
@@ -131,7 +134,9 @@ export const DocsMDXComponentRenderer: Components<{
       <a
         href={props?.url}
         {...props}
-        className="underline opacity-80 transition-all duration-[185ms] ease-out hover:text-[var(--primary-color-start)]"
+        className={cn(
+          "underline opacity-80 transition-all duration-[185ms] ease-out hover:text-[var(--primary-color-start)]"
+        )}
       />
     );
   },
@@ -440,7 +445,10 @@ function FormatHeaders({ children, level }: FormatHeadersProps) {
   const HeadingTag = `h${level}` as React.ElementType;
 
   return (
-    <HeadingTag id={id} className={`${styles[level]} relative cursor-pointer`}>
+    <HeadingTag
+      id={id}
+      className={cn(styles[level], "relative cursor-pointer")}
+    >
       <a
         href={linkHref}
         className="no-underline group"

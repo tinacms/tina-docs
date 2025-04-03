@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import styled, { css } from 'styled-components';
-import { getDocId } from '../../utils/docs/getDocsIds';
+import { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
+import styled, { css } from "styled-components";
+import { getDocId } from "../../utils/docs/getDocsIds";
+import { cn } from "../../utils/cn";
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
@@ -16,10 +17,10 @@ export const generateMarkdown = (
   return tocItems
     .map((item) => {
       const anchor = getDocId(item.text);
-      const prefix = item.type === 'h3' ? '  ' : '';
+      const prefix = item.type === "h3" ? "  " : "";
       return `${prefix}- [${item.text}](#${anchor})`;
     })
-    .join('\n');
+    .join("\n");
 };
 
 const ToC = ({ tocItems, activeIds }: TocProps) => {
@@ -28,11 +29,11 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
 
   useEffect(() => {
     const close = () => setIsOpen(false);
-    const allLinks = document.querySelectorAll('a');
-    allLinks.forEach((a) => a.addEventListener('click', close));
+    const allLinks = document.querySelectorAll("a");
+    allLinks.forEach((a) => a.addEventListener("click", close));
 
     return () => {
-      allLinks.forEach((a) => a.removeEventListener('click', close));
+      allLinks.forEach((a) => a.removeEventListener("click", close));
     };
   }, []);
 
@@ -50,7 +51,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
 
         tocList.scrollTo({
           top: activeTop - listHeight / 2 + activeHeight / 2,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       }
     }
@@ -81,18 +82,17 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                 ),
                 a: ({ children, ...props }) => {
                   // Ensure we always have a string for the href
-                  const hrefText = props.href ? props.href.slice(1) : '';
+                  const hrefText = props.href ? props.href.slice(1) : "";
                   const isActive = activeIds.includes(hrefText);
                   return (
                     <a
                       {...props}
-                      className={`
-                        block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150
-                        ${
-                          isActive
-                            ? 'text-[var(--primary-color-start)] font-medium no-underline'
-                            : 'text-gray-600 hover:text-[var(--primary-color-start)]'
-                        }`}
+                      className={cn(
+                        "block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150",
+                        isActive
+                          ? "text-[var(--primary-color-start)] font-medium no-underline"
+                          : "text-gray-600 hover:text-[var(--primary-color-start)]"
+                      )}
                     >
                       {children}
                     </a>
@@ -111,7 +111,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
 
 export default ToC;
 
-// TODO: Remove styled jsx 
+// TODO: Remove styled jsx
 const TocTitleList = styled.div`
   scrollbar-width: none;
   ::-webkit-scrollbar {

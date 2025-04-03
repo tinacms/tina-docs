@@ -7,6 +7,11 @@ type Props = {
   children?: React.ReactNode;
 };
 
+// Utility function to merge Tailwind classes
+export const cn = (...classes: (string | undefined)[]) => {
+  return classes.filter(Boolean).join(" ");
+};
+
 export const ThemeProvider = ({ children }: Props) => {
   useEffect(() => {
     const fetchTheme = async () => {
