@@ -11,6 +11,7 @@ import { useTocListener } from "../../../utils/docs/tocListener";
 import ToC from "../../../components/docs/PageToc";
 import { LeftHandSideParentContainer } from "../../../components/docs/LeftHandSideParent";
 import TocOverflowButton from "../../../components/docs/ToCOverflow";
+import { cn } from "../../../utils/cn";
 
 export default function DocumentPageClient({ props }) {
   const { data } = useTina({
@@ -45,12 +46,15 @@ export default function DocumentPageClient({ props }) {
 
   return (
     <div className="relative my-6 lg:my-16 flex justify-center items-start">
-      <div className={`lg:px-16 px-3 w-full max-w-[2000px] grid ${gridClass}`}>
+      <div
+        className={cn("lg:px-16 px-3 w-full max-w-[2000px] grid", gridClass)}
+      >
         {/* LEFT COLUMN */}
         <div
-          className={`block sticky top-32 h-[calc(100vh)] ${
+          className={cn(
+            "block sticky top-32 h-[calc(100vh)]",
             isScreenSmallerThan840 ? "hidden" : "block"
-          }`}
+          )}
         >
           <LeftHandSideParentContainer
             tableOfContents={navigationDocsData?.data}
@@ -66,7 +70,7 @@ export default function DocumentPageClient({ props }) {
           {isScreenSmallerThan1200 && !documentationData?.tocIsHidden && (
             <TocOverflowButton tocData={pageTableOfContents} />
           )}
-          <div ref={contentRef}>
+          <div ref={contentRef} className="prose">
             <TinaMarkdown
               content={documentationData?.body}
               components={DocsMDXComponentRenderer}
@@ -83,14 +87,12 @@ export default function DocumentPageClient({ props }) {
         {/* RIGHT COLUMN */}
         {documentationData?.tocIsHidden ? null : (
           <div
-            className={`block sticky top-32 h-[calc(100vh)] ${
+            className={cn(
+              "block sticky top-32 h-[calc(100vh)]",
               isScreenSmallerThan1200 ? "hidden" : "block"
-            }`}
+            )}
           >
-            <ToC
-              tocItems={pageTableOfContents}
-              activeIds={activeIds}
-            />
+            <ToC tocItems={pageTableOfContents} activeIds={activeIds} />
           </div>
         )}
       </div>
