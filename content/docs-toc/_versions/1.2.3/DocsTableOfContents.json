@@ -5,17 +5,17 @@
       "items": [
         {
           "title": "Overview",
-          "slug": "content/docs/index.mdx",
+          "slug": "content/docs/_versions/1.2.3/index.mdx",
           "_template": "item"
         },
         {
           "title": "Using TinaDocs Starter",
-          "slug": "content/docs/introduction/using-tinadocs.mdx",
+          "slug": "content/docs/_versions/1.2.3/introduction/using-tinadocs.mdx",
           "_template": "item"
         },
         {
           "title": "FAQ",
-          "slug": "content/docs/introduction/faq.mdx",
+          "slug": "content/docs/_versions/1.2.3/introduction/faq.mdx",
           "_template": "item"
         }
       ]
@@ -25,12 +25,12 @@
       "items": [
         {
           "title": "Overview",
-          "slug": "content/docs/core-concepts/overview.mdx",
+          "slug": "content/docs/_versions/1.2.3/core-concepts/overview.mdx",
           "_template": "item"
         },
         {
           "title": "Data Fetching",
-          "slug": "content/docs/core-concepts/data-fetching.mdx",
+          "slug": "content/docs/_versions/1.2.3/core-concepts/data-fetching.mdx",
           "_template": "item"
         },
         {
@@ -38,12 +38,12 @@
           "items": [
             {
               "title": "Overview",
-              "slug": "content/docs/core-concepts/visual-editing/overview.mdx",
+              "slug": "content/docs/_versions/1.2.3/core-concepts/visual-editing/overview.mdx",
               "_template": "item"
             },
             {
               "title": "React",
-              "slug": "content/docs/core-concepts/visual-editing/react.mdx",
+              "slug": "content/docs/_versions/1.2.3/core-concepts/visual-editing/react.mdx",
               "_template": "item"
             }
           ],
@@ -51,7 +51,7 @@
         },
         {
           "title": "Querying Content",
-          "slug": "content/docs/core-concepts/querying-content.mdx",
+          "slug": "content/docs/_versions/1.2.3/core-concepts/querying-content.mdx",
           "_template": "item"
         }
       ]
@@ -61,7 +61,7 @@
       "items": [
         {
           "title": "Overview",
-          "slug": "content/docs/tina-folder/overview.mdx",
+          "slug": "content/docs/_versions/1.2.3/tina-folder/overview.mdx",
           "_template": "item"
         }
       ]
