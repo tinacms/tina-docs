@@ -89,36 +89,37 @@ export const globalSiteColours = {
         },
       ],
     },
-    {
-      name: 'backgroundType',
-      label: 'Background Type',
-      type: 'string',
-      options: [
-        {
-          label: 'Image',
-          value: 'image',
-        },
-        {
-          label: 'Solid Color',
-          value: 'color',
-        },
-      ],
-    },
-    {
-      name: 'background',
-      label: 'Background Image',
-      type: 'image',
+    //TODO: Implement background colour editing
+    // {
+    //   name: 'backgroundType',
+    //   label: 'Background Type',
+    //   type: 'string',
+    //   options: [
+    //     {
+    //       label: 'Image',
+    //       value: 'image',
+    //     },
+    //     {
+    //       label: 'Solid Color',
+    //       value: 'color',
+    //     },
+    //   ],
+    // },
+    // {
+    //   name: 'background',
+    //   label: 'Background Image',
+    //   type: 'image',
 
-    },
-    {
-      name: 'backgroundColor',
-      label: 'Background Color',
-      type: 'string',
-      ui: {
-        component: 'color',
-        colorFormat: 'hex',
-        widget: 'sketch',
-      },
-    },
+    // },
+    // {
+    //   name: 'backgroundColor',
+    //   label: 'Background Color',
+    //   type: 'string',
+    //   ui: {
+    //     component: 'color',
+    //     colorFormat: 'hex',
+    //     widget: 'sketch',
+    //   },
+    // },
   ],
 };
