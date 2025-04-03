@@ -25,6 +25,25 @@ export const ThemeProvider = ({ children }: Props) => {
       const getDefaultValue = (prop: string) =>
         document.documentElement.style.getPropertyValue(prop);
 
+      // Handle background settings
+      let backgroundImage = "";
+      let backgroundColor = "";
+
+      switch (theme.backgroundType) {
+        case "default":
+          backgroundImage = 'url("/svg/default-background.svg")';
+          backgroundColor = "#FFFFFF";
+          break;
+        case "image":
+          backgroundImage = theme.backgroundImage
+            ? `url("${theme.backgroundImage}")`
+            : "";
+          break;
+        case "color":
+          backgroundColor = theme.backgroundColor || "#FFFFFF";
+          break;
+      }
+
       const cssVars = {
         //Setting Primary Colors
         "--primary-color-start":
@@ -40,8 +59,10 @@ export const ThemeProvider = ({ children }: Props) => {
           theme.secondaryColour?.secondaryVia || "--secondary-color-via",
         "--secondary-color-end":
           theme.secondaryColour?.secondaryEnd || "--secondary-color-end",
+        //Setting Background
+        "--background-image": backgroundImage,
+        "--background-color": backgroundColor,
       };
-      console.log("CSS Variables:", cssVars);
 
       Object.entries(cssVars).forEach(([prop, val]) =>
         document.documentElement.style.setProperty(prop, val as string)

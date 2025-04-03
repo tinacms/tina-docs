@@ -9,11 +9,11 @@ export const SiteLayout: React.FC<LayoutProps> = ({ children }) => {
     <div
       className="flex flex-col min-h-screen font-sans"
       style={{
-        backgroundImage: "var(--default-background-image)",
+        backgroundImage: "var(--background-image)",
+        backgroundColor: "var(--background-color)",
         backgroundSize: "100% 100%",
         backgroundPosition: "top",
         backgroundAttachment: "fixed",
-        
       }}
     >
       <div className="flex flex-col flex-1">{children}</div>

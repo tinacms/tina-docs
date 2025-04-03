@@ -1,5 +1,5 @@
 import { wrapFieldsWithMeta } from "tinacms";
-import React from 'react'
+import React from "react";
 
 export const globalSiteColours = {
   name: "GlobalSiteColours",
@@ -89,37 +89,43 @@ export const globalSiteColours = {
         },
       ],
     },
-    //TODO: Implement background colour editing
-    // {
-    //   name: 'backgroundType',
-    //   label: 'Background Type',
-    //   type: 'string',
-    //   options: [
-    //     {
-    //       label: 'Image',
-    //       value: 'image',
-    //     },
-    //     {
-    //       label: 'Solid Color',
-    //       value: 'color',
-    //     },
-    //   ],
-    // },
-    // {
-    //   name: 'background',
-    //   label: 'Background Image',
-    //   type: 'image',
-
-    // },
-    // {
-    //   name: 'backgroundColor',
-    //   label: 'Background Color',
-    //   type: 'string',
-    //   ui: {
-    //     component: 'color',
-    //     colorFormat: 'hex',
-    //     widget: 'sketch',
-    //   },
-    // },
+    {
+      name: "backgroundType",
+      label: "Background Type",
+      type: "string",
+      options: [
+        {
+          label: "Default",
+          value: "default",
+        },
+        {
+          label: "Image",
+          value: "image",
+        },
+        {
+          label: "Color",
+          value: "color",
+        },
+      ],
+    },
+    {
+      name: "backgroundImage",
+      label: "Background Image",
+      type: "image",
+      ui: {
+        condition: (values) => values?.backgroundType === "image",
+      },
+    },
+    {
+      name: "backgroundColor",
+      label: "Background Color",
+      type: "string",
+      ui: {
+        component: "color",
+        colorFormat: "hex",
+        widget: "sketch",
+        condition: (values) => values?.backgroundType === "color",
+      },
+    },
   ],
 };
