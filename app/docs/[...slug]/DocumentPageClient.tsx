@@ -70,7 +70,7 @@ export default function DocumentPageClient({ props }) {
           {isScreenSmallerThan1200 && !documentationData?.tocIsHidden && (
             <TocOverflowButton tocData={pageTableOfContents} />
           )}
-          <div ref={contentRef}>
+          <div ref={contentRef} className="prose">
             <TinaMarkdown
               content={documentationData?.body}
               components={DocsMDXComponentRenderer}

@@ -62,6 +62,8 @@ export const ThemeProvider = ({ children }: Props) => {
         //Setting Background
         "--background-image": backgroundImage,
         "--background-color": backgroundColor,
+        //Setting Text Color
+        "--text-color": theme.textColor || "#374151", // Default to a dark gray if not set
       };
 
       Object.entries(cssVars).forEach(([prop, val]) =>

@@ -14,6 +14,16 @@
   --default-background-image: url("/svg/default-background.svg");
   --default-background-color: #FFFFFF;
 
+  --text-color: #374151;
+}
+
+/* Apply text color to documentation content */
+.prose p {
+  color: var(--text-color);
+}
+
+.prose li {
+  color: var(--text-color);
 }
 
 @font-face {

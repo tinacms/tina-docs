@@ -127,5 +127,15 @@ export const globalSiteColours = {
         condition: (values) => values?.backgroundType === "color",
       },
     },
+    {
+      name: "textColor",
+      label: "Paragraph Text Color",
+      type: "string",
+      ui: {
+        component: "color",
+        colorFormat: "hex",
+        widget: "sketch",
+      },
+    },
   ],
 };
