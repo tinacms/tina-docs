@@ -1,3 +1,5 @@
+import React from "react";
+import { Collection } from "tinacms";
 import { CustomColorToggle } from "../../components/ui/CustomColorToggle";
 
 export const globalSiteConfiguration = {

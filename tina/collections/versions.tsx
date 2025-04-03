@@ -3,9 +3,10 @@ import client from "../__generated__/client";
 import { useCMS } from "tinacms";
 import { wrapFieldsWithMeta } from "tinacms";
 import { BaseTextField } from "tinacms";
-import { createDocs } from "../../utils/versioning/createDocsCopy";
-import { createToc } from "../../utils/versioning/createTocCopy";
-import formButtonStyling from "../../components/styles/cmsStyling/buttonStyling";
+import { notFound } from "next/navigation";
+
+const shadcnButtonStyling =
+  "text-gray-700 h-10 px-4 py-2 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground";
 
 export const versionsCollection = {
   name: "versions",
@@ -50,36 +51,36 @@ export const versionsCollection = {
       type: "boolean",
       ui: {
         component: function CreateVersionField(props) {
-
-          //UI states
           const [isLoading, setIsLoading] = useState(false);
           const [error, setError] = useState(null);
           const [disabled, setDisabled] = useState(false);
           const [showModal, setShowModal] = useState(false);
           const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-          //Form states and control
           const [versionNumber, setVersionNumber] = useState(null);
           const cms = useCMS();
           const { form, input } = props;
 
-          //Validation steps
+          //Validating the version number
           const checkExistingVersion = useCallback(
             async (versionNumber: string) => {
               if (input.value) {
+                setDisabled(true);
                 setError("You have already created this version.");
                 return;
               }
               if (form.getFieldState("filename")?.value) {
+                setDisabled(true);
                 setError("Save this file before creating a version.");
                 return;
               }
               if (!versionNumber) {
                 setError("Version number is required");
+                setDisabled(true);
                 return;
               }
               if (versionNumber.includes(" ")) {
                 setError("Version number cannot contain spaces");
+                setDisabled(true);
                 return;
               }
               try {
@@ -91,23 +92,20 @@ export const versionsCollection = {
                   relativePath:
                     "_versions/" + versionNumber + "/_version-index.json",
                 });
+                setDisabled(true);
                 setError("Version with this id already exists");
               } catch (err) {
                 setDisabled(false);
                 setError(null);
-              } finally {
-                if (error) {
-                  setDisabled(true);
-                }
               }
             },
-            [form, input, error]
+            [form, input]
           );
 
-          //Controlling when to run validation
           useEffect(() => {
             setVersionNumber(form.getFieldState("versionNumber")?.value);
             checkExistingVersion(versionNumber);
+            console.log("initial check", versionNumber);
             const unsubscribe = form.subscribe(
               ({ values }) => {
                 setVersionNumber(values.versionNumber);
@@ -118,6 +116,77 @@ export const versionsCollection = {
             return () => unsubscribe();
           }, [form, checkExistingVersion, versionNumber]);
 
+          const addSubpathToSlug = (slug: string) => {
+            return slug.replace(
+              /^(.+?\/docs\/)/,
+              `$1_versions/${versionNumber}/`
+            );
+          };
+
+          // Recursive helper for formatting nested TOC items for the mutation
+          const formatTocItemsRecursive = (tocItemsNode: any): any => {
+            // Input is a node with { title, items } from the query result (e.g., DocsTableOfContentsSupermenuGroupItemsItems)
+            // Output needs to match the corresponding Mutation structure (e.g., DocsTableOfContentsSupermenuGroupItemsItemsMutation)
+            return {
+              title: tocItemsNode.title,
+              items:
+                tocItemsNode.items
+                  ?.map((item: any) => {
+                    // item is the next level down in the query structure union
+                    if (!item) return null;
+                    // Check if it's an Item type (leaf node in this branch) - Ensure slug and id exist
+                    if (item.slug && typeof item.slug.id === "string") {
+                      // Return the { item: ... } structure for the Mutation union
+                      return {
+                        item: {
+                          title: item.title,
+                          slug: addSubpathToSlug(item.slug.id),
+                        },
+                      };
+                    }
+                    // Check if it's an Items type (node with children)
+                    else if (item.items) {
+                      // Return the { items: ... } structure for the Mutation union, calling recursively
+                      return {
+                        items: formatTocItemsRecursive(item),
+                      };
+                    }
+                    console.warn(
+                      "Skipping unexpected TOC item structure during recursion:",
+                      item
+                    );
+                    return null;
+                  })
+                  .filter(Boolean) || [], // Filter out nulls from skipped items
+            };
+          };
+
+          const getAllQuery = async (queryName: string) => {
+            let hasNextPage = true;
+            let allArray: any[] = [];
+            let after: string | null = null;
+
+            while (hasNextPage) {
+              try {
+                const data = await client.queries[queryName]({ after });
+
+                const edges = data?.data?.[queryName]?.edges || [];
+                const pageInfo = data?.data?.[queryName]?.pageInfo || {
+                  hasNextPage: false,
+                  endCursor: null,
+                };
+
+                allArray = allArray.concat(edges);
+
+                hasNextPage = pageInfo.hasNextPage;
+                after = pageInfo.endCursor;
+              } catch (error) {
+                console.error("Error during static params generation:", error);
+                notFound();
+              }
+            }
+            return allArray;
+          };
 
           //Creating the version
           const createVersion = async () => {
@@ -128,15 +197,130 @@ export const versionsCollection = {
             }
             setIsLoading(true);
             try {
-              await createDocs(versionNumber);
-              await createToc(versionNumber);
-              //state management
+              const docsRaw = await getAllQuery("docsConnection");
+              const docs = docsRaw.filter(
+                (edge) => !edge?.node?._sys.breadcrumbs.includes("_versions")
+              );
+              if (!docs) return;
+              //This is run synchronously to ensure the docs are created before the toc, which uses the new docs as reference
+              for (const doc of docs) {
+                let docCreated = false;
+                const docPath =
+                  "_versions/" +
+                  versionNumber +
+                  "/" +
+                  doc?.node?._sys.breadcrumbs.join("/") +
+                  ".mdx";
+                while (!docCreated) {
+                  try {
+                    await client.queries.addVersionDocFiles({
+                      relativePath: docPath,
+                    });
+                    await client.queries.updateVersionDoc({
+                      relativePath: docPath,
+                      body: doc?.node?.body,
+                      title: doc?.node?.title,
+                      last_edited: doc?.node?.last_edited,
+                      tocIsHidden: doc?.node?.tocIsHidden,
+                      next: doc?.node?.next?.id,
+                      previous: doc?.node?.previous?.id,
+                    });
+                    const newDoc = await client.queries.docs({
+                      relativePath: docPath,
+                    });
+                    if (newDoc) {
+                      docCreated = true;
+                    }
+                  } catch (err) {
+                    console.log("err", err);
+                  }
+                }
+              }
+              //create versioned toc
+              const tocRaw = await getAllQuery("docsTableOfContentsConnection");
+              const docsToc = tocRaw.filter(
+                (edge) => !edge?.node?._sys.breadcrumbs.includes("_versions")
+              );
+              docsToc &&
+                docsToc.forEach(async (doc) => {
+                  if (!doc?.node) return; // Skip if node is null/undefined
+
+                  // Format the supermenuGroup for the mutation
+                  const formattedSupermenuGroup =
+                    doc.node.supermenuGroup
+                      ?.map((group: any) => {
+                        // group is DocsTableOfContentsSupermenuGroup
+                        if (!group) return null;
+                        return {
+                          title: group.title,
+                          items:
+                            group.items
+                              ?.map((item: any) => {
+                                // item is DocsTableOfContentsSupermenuGroupItems union
+                                if (!item) return null;
+                                // Check if it's an Item type - Ensure slug and id exist
+                                if (
+                                  item.slug &&
+                                  typeof item.slug.id === "string"
+                                ) {
+                                  // Return the { item: ... } structure for the Mutation union
+                                  return {
+                                    item: {
+                                      title: item.title,
+                                      slug: addSubpathToSlug(item.slug.id),
+                                    },
+                                  };
+                                }
+                                // Check if it's an Items type
+                                else if (item.items) {
+                                  // Return the { items: ... } structure for the Mutation union
+                                  return {
+                                    items: formatTocItemsRecursive(item), // Use the recursive helper
+                                  };
+                                }
+                                console.warn(
+                                  "Skipping unexpected top-level TOC item structure:",
+                                  item
+                                );
+                                return null;
+                              })
+                              .filter(Boolean) || [], // Filter out nulls from skipped items
+                        };
+                      })
+                      .filter(Boolean) || []; // Filter out nulls from skipped groups
+                  await client.queries.addVersionToc({
+                    relativePath:
+                      "_versions/" +
+                      versionNumber +
+                      "/" +
+                      doc?.node?._sys.breadcrumbs.join("/") +
+                      ".json",
+                  });
+                  await client.queries.updateVersionDocToc({
+                    relativePath:
+                      "_versions/" +
+                      versionNumber +
+                      "/" +
+                      doc?.node?._sys.breadcrumbs.join("/") +
+                      ".json",
+                    supermenuGroup: formattedSupermenuGroup,
+                  });
+                });
+              //create identifier files
+              await client.queries.addVersionToc({
+                relativePath:
+                  "_versions/" + versionNumber + "/_version-index.json",
+              });
+              await client.queries.addVersionDocFiles({
+                relativePath:
+                  "_versions/" + versionNumber + "/_version-index.mdx",
+              });
               setShowModal(false);
               setShowSuccessModal(true);
               setError(null);
               setDisabled(true);
               input.onChange(true);
-              //force-saving the form to ensure correct validation
+              // Manually submit the form to trigger the version label update
               cms.state.forms[0]?.tinaForm.submit();
             } catch (err) {
               checkExistingVersion(versionNumber);
@@ -174,12 +358,12 @@ export const versionsCollection = {
               <button
                 onClick={() => setShowModal(true)}
                 disabled={disabled}
-                className={formButtonStyling}
+                className={shadcnButtonStyling}
               >
                 Create Version
               </button>
               {error && (
-                <p className="text-red-900/80 font-sans text-xs mt-2">💡 {error}</p>
+                <p className="text-red-900/80 font-sans text-xs">💡 {error}</p>
               )}
 
               {showModal && (
@@ -215,14 +399,14 @@ export const versionsCollection = {
                     <div className="flex justify-end space-x-4">
                       <button
                         onClick={() => setShowModal(false)}
-                        className={formButtonStyling}
+                        className={shadcnButtonStyling}
                         disabled={isLoading}
                       >
                         Cancel
                       </button>
                       <button
                         onClick={createVersion}
-                        className={`${formButtonStyling} ${
+                        className={`${shadcnButtonStyling} ${
                           isLoading ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                         disabled={isLoading}
@@ -278,7 +462,7 @@ export const versionsCollection = {
                     <div className="flex justify-end">
                       <button
                         onClick={() => setShowSuccessModal(false)}
-                        className={formButtonStyling}
+                        className={shadcnButtonStyling}
                       >
                         Close
                       </button>
@@ -286,51 +470,38 @@ export const versionsCollection = {
                   </div>
                 </div>
               )}
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: "tip",
-      label: "Tip",
-      type: "boolean",
-      ui: {
-        component: () => { 
-          return (
-            <>
-            <h4 className="font-sans text-xs font-semibold text-gray-700 whitespace-normal mt-8">
-              Delete Version
-            </h4>
-            <p className="block font-sans text-xs italic font-light text-gray-400 pt-0.5 whitespace-normal mb-2">
-              To remove a version:
-              <br />
-              1. delete the file from this collection, and
-              <br />
-              2. manually remove the folders from the related{" "}
-              <span className="font-mono">
-                content/docs/_versions/
-              </span> and{" "}
-              <span className="font-mono">content/docs-toc/_versions/</span>{" "}
-              sub-directories.
-            </p>
-            <div className="border-gray-200 border my-8 mr-8 p-4 rounded-md bg-red-50/50 text-wrap">
-              <p className="font-sans text-xs font-semibold text-gray-700 whitespace-normal mb-2">
-                ⚠️ Caveats ⚠️
-              </p>
-              <p className="font-sans text-xs font-light text-gray-400 whitespace-normal">
-                This is one approach to managing versioned documentation,{" "}
-                <span className="font-semibold">
-                  which keeps all versioned documentation accessible via
-                  TinaCMS.
-                </span>
+              <h4 className="font-sans text-xs font-semibold text-gray-700 whitespace-normal mt-8">
+                Delete Version
+              </h4>
+              <p className="block font-sans text-xs italic font-light text-gray-400 pt-0.5 whitespace-normal mb-2">
+                To remove a version:
                 <br />
-                It is not the only approach, and may not be the best approach
-                for your use case.
-                {/* TODO: Add a link to the docs on how to manage versioned documentation. */}
+                1. delete the file from this collection, and
+                <br />
+                2. manually remove the folders from the related{" "}
+                <span className="font-mono">
+                  content/docs/_versions/
+                </span> and{" "}
+                <span className="font-mono">content/docs-toc/_versions/</span>{" "}
+                sub-directories.
               </p>
+              <div className="border-gray-200 border my-8 mr-8 p-4 rounded-md bg-red-50/50 text-wrap">
+                <p className="font-sans text-xs font-semibold text-gray-700 whitespace-normal mb-2">
+                  ⚠️ Caveats ⚠️
+                </p>
+                <p className="font-sans text-xs font-light text-gray-400 whitespace-normal">
+                  This is one approach to managing versioned documentation,{" "}
+                  <span className="font-semibold">
+                    which keeps all versioned documentation accessible via
+                    TinaCMS.
+                  </span>
+                  <br />
+                  It is not the only approach, and may not be the best approach
+                  for your use case.
+                  {/* TODO: Add a link to the docs on how to manage versioned documentation. */}
+                </p>
+              </div>
             </div>
-            </>
           );
         },
       },

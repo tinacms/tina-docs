@@ -7,7 +7,7 @@ import { BiRightArrowAlt } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
 import { Components, TinaMarkdown } from "tinacms/dist/rich-text";
-import { getDocId } from "../../utils/navigation/getDocsIds";
+import { getDocId } from "../../utils/docs/getDocsIds";
 import { WarningCallout } from "../docs/WarningCallout";
 import { Prism } from "../styles/Prism";
 
