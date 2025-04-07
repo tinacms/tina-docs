@@ -25,7 +25,7 @@ const AdminLink = () => {
   return (
     <>
       {showAdminLink && (
-        <div className="fixed top-4 right-4 flex items-center justify-between bg-blue-500 text-white px-3 py-1 rounded-full z-50">
+        <div className="fixed top-4 right-4 flex items-center justify-between bg-[var(--secondary-color-start)] text-white px-3 py-1 rounded-full z-50">
           <a
             href={`/admin/index.html#/~${window.location.pathname}`}
             className="text-xs"

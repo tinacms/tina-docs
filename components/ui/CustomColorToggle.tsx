@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "../../utils/cn";
 
 export const CustomColorToggle = ({ input }) => {
   const { value = {}, onChange } = input;
@@ -19,7 +20,6 @@ export const CustomColorToggle = ({ input }) => {
         Custom Background Selector
       </label>
       <div className="flex items-center pt-2">
-        
         <label className="flex items-center cursor-pointer">
           <div className="relative shadow-lg">
             <input
@@ -28,17 +28,19 @@ export const CustomColorToggle = ({ input }) => {
               onChange={handleCheckboxChange}
               className="sr-only"
             />
-        
+
             <div
-              className={`w-10 h-5 rounded-full shadow-inner transition-colors duration-200 ${
+              className={cn(
+                "w-10 h-5 rounded-full shadow-inner transition-colors duration-200",
                 disableColor ? "bg-green-500" : "bg-gray-300"
-              }`}
+              )}
             ></div>
-            
+
             <div
-              className={`absolute w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 left-0 top-0 ${
+              className={cn(
+                "absolute w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 left-0 top-0",
                 disableColor ? "translate-x-full" : ""
-              }`}
+              )}
             ></div>
           </div>
           <span className="ml-3 text-gray-700">
