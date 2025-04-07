@@ -1,0 +1,101 @@
+mutation addVersionDocFiles($relativePath: String!) {
+  addPendingDocument(collection: "docs", relativePath: $relativePath) {
+    __typename
+  }
+}
+
+mutation addVersionToc($relativePath: String!) {
+  addPendingDocument(collection: "docsTableOfContents", relativePath: $relativePath) {
+    __typename
+  }
+}
+
+mutation updateVersionDoc($relativePath: String!, $body: JSON, $title: String, $last_edited: String, $tocIsHidden: Boolean, $next: String, $previous: String) {
+  updateDocs(relativePath: $relativePath, params: {
+    body: $body,
+    title: $title,
+    last_edited: $last_edited,
+    tocIsHidden: $tocIsHidden,
+    next: $next,
+    previous: $previous
+  }) {
+    body
+    title
+    last_edited
+    tocIsHidden
+    next {
+      ... on Docs {
+        id
+      }
+    }
+    previous {
+      ... on Docs {
+        id
+      }
+    }
+  }
+}
+
+mutation updateVersionDocToc($relativePath: String!, $supermenuGroup: [DocsTableOfContentsSupermenuGroupMutation]) {
+  updateDocsTableOfContents(relativePath: $relativePath, params: {
+    supermenuGroup: $supermenuGroup
+  }) {
+    id
+    _sys {
+      filename
+      basename
+      breadcrumbs
+      path
+      relativePath
+      extension
+      template
+      collection {
+        name
+        slug
+        label
+        path
+        format
+        matches
+        templates
+        fields
+      }
+    }
+    supermenuGroup {
+      title
+      items { # L1 Union
+        ... on DocsTableOfContentsSupermenuGroupItemsItems { # L1 Items Type
+          title 
+          items { # L2 Union
+            ... on DocsTableOfContentsSupermenuGroupItemsItemsItemsItems { # L2 Items Type
+              title
+              items { # L3 Union
+                 ... on DocsTableOfContentsSupermenuGroupItemsItemsItemsItemsItemsItems { # L3 Items Type (6 Items)
+                   title 
+                   items { # L4 List (Contains ONLY L4 Item Type)
+                     ... on DocsTableOfContentsSupermenuGroupItemsItemsItemsItemsItemsItemsItemsItem { # L4 Item Type (7 Items)
+                       title 
+                       slug { ... on Docs { id } }
+                     }
+                     # NO OTHER TYPE POSSIBLE HERE
+                   }
+                 }
+                 ... on DocsTableOfContentsSupermenuGroupItemsItemsItemsItemsItemsItem { # L3 Item Type (5 Items)
+                   title
+                   slug { ... on Docs { id } }
+                 }
+              }
+            }
+            ... on DocsTableOfContentsSupermenuGroupItemsItemsItemsItem { # L2 Item Type (3 Items)
+              title
+              slug { ... on Docs { id } }
+            }
+          }
+        }
+        ... on DocsTableOfContentsSupermenuGroupItemsItem { # L1 Item Type (1 Item)
+          title
+          slug { ... on Docs { id } }
+        }
+      }
+    }
+  }
+}
