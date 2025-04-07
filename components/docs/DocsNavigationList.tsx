@@ -269,7 +269,6 @@ const NavLabelContainer = styled.div<{ status: string }>`
 
 export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
   const navListElem = React.useRef<HTMLDivElement>(null);
-  console.log(navItems);
 
   return (
     <DocsNavigationContainer ref={navListElem}>
