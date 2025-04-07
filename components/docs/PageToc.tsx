@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import styled, { css } from "styled-components";
 import { getDocId } from "../../utils/docs/getDocsIds";
 import { cn } from "../../utils/cn";
+import { MdMenu } from "react-icons/md";
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
@@ -67,7 +68,11 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
     <>
       <TocWrapper>
         <TocContent activeIds={activeIds} isOpen={isOpen}>
-          <TocDesktopHeader>Table of Contents</TocDesktopHeader>
+          <div className="flex items-center text-center text-xl gap-2 text-[var(--primary-color-start)]">
+            {" "}
+            <MdMenu />
+            On This Page
+          </div>
           <TocTitleList
             ref={tocWrapperRef}
             className="max-h-[70vh] 2xl:max-h-[75vh] p-4 overflow-y-auto"
