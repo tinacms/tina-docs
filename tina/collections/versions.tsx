@@ -40,11 +40,6 @@ export const versionsCollection = {
         "This is the value that will be used to save the version behind the scenes. Once generated, this value should not be changed.",
     },
     {
-      name: "versionLabel",
-      label: "Version Label",
-      type: "string",
-    },
-    {
       name: "createField",
       label: "Create Field",
       type: "boolean",

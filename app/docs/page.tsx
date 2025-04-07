@@ -5,6 +5,7 @@ import getTableOfContents from "../../utils/navigation/getPageTableOfContents";
 import { TinaClient } from "../tina-client";
 import DocumentPageClient from "./[...slug]/DocumentPageClient";
 import { getExcerpt } from "../../utils/seo/getExcerpt";
+import { getEntireCollection } from "../../utils/generic/fetchEntireCollection";
 
 export async function generateMetadata() {
   const slug = 'index'
@@ -31,9 +32,10 @@ export default async function DocsPage() {
 
 
   try {
-    const [documentData, docsToCData] = await Promise.all([
+    const [documentData, docsToCData, versionData] = await Promise.all([
       client.queries.docs({ relativePath: `${defaultSlug}.mdx` }),
-      getDocsNav(),
+      getDocsNav({version: null}),
+      getEntireCollection('versionsConnection'),
     ]);
 
   
@@ -52,6 +54,7 @@ export default async function DocsPage() {
           pageTableOfContents,
           documentationData: docData,
           navigationDocsData: docsToCData,
+          versionData: versionData,
         }}
       />
     );

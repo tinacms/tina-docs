@@ -5,7 +5,7 @@ import DocumentPageClient from './DocumentPageClient';
 import getTableOfContents from '../../../utils/navigation/getPageTableOfContents';
 import { getDocsNav } from '../../../utils/navigation/getDocumentNavigation';
 import { getExcerpt } from '../../../utils/seo/getExcerpt';
-
+import { getEntireCollection } from '../../../utils/generic/fetchEntireCollection';
 
 
 
@@ -55,9 +55,10 @@ export default async function DocsPage({ params }: { params: { slug: string[] } 
 
   try {
    
-    const [documentData, docsToCData] = await Promise.all([
+    const [documentData, docsToCData, versionData] = await Promise.all([
       client.queries.docs({ relativePath: `${slug}.mdx` }),
-      getDocsNav(),
+      getDocsNav({version: slug.split("/")[1], versioned: slug.split("/")[0] === "_versions"}),
+      getEntireCollection('versionsConnection'),
     ]);
 
     
@@ -71,6 +72,7 @@ export default async function DocsPage({ params }: { params: { slug: string[] } 
       pageTableOfContents,
       documentationData: documentData,
       navigationDocsData: docsToCData,
+      versionData: versionData,
     };
 
     return <div> <DocumentPageClient props={props}/></div>

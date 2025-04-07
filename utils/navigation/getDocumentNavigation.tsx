@@ -1,10 +1,10 @@
 import client from '../../tina/__generated__/client';
 import data from '../../content/siteConfig.json';
 
-export async function getDocsNav(preview?: boolean) {
+export async function getDocsNav({version = null, versioned = false, preview}: {version?: string | null, versioned?: boolean, preview?: boolean}) {
 
   const docsToCData = await client.queries.docsTableOfContents({
-    relativePath: "DocsTableOfContents.json",
+    relativePath: versioned ? `_versions/${version}/DocsTableOfContents.json` : "DocsTableOfContents.json",
   });
 
   
