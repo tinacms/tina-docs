@@ -9,7 +9,6 @@ import { IoList } from "react-icons/io5";
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
   activeIds: string[];
-  globalSiteConfigColors: any;
 }
 
 export const generateMarkdown = (
@@ -24,7 +23,7 @@ export const generateMarkdown = (
     .join("\n");
 };
 
-const ToC = ({ tocItems, activeIds, globalSiteConfigColors }: TocProps) => {
+const ToC = ({ tocItems, activeIds }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
 

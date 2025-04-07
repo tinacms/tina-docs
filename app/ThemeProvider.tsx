@@ -22,9 +22,6 @@ export const ThemeProvider = ({ children }: Props) => {
       const theme = data?.data?.GlobalSiteColours;
       if (!theme) return;
 
-      const getDefaultValue = (prop: string) =>
-        document.documentElement.style.getPropertyValue(prop);
-
       // Handle background settings
       let backgroundImage = "";
       let backgroundColor = "";
