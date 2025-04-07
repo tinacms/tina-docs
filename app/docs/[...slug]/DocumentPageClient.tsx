@@ -42,7 +42,6 @@ export default function DocumentPageClient({ props }) {
           <MainDocsBodyHeader
             DocumentTitle={documentationData?.title}
             NavigationDocsItems={navigationDocsData?.data}
-            header={"Tina Docs"}
           />
           <div className="block xl:hidden"> 
             <TocOverflowButton tocData={pageTableOfContents} />

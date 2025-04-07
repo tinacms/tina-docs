@@ -3,10 +3,9 @@
 import { Breadcrumbs } from "./Breadcrumbs";
 import DirectoryOverflowButton from "./DirectoryOverflow";
 
-const DocsMobileHeader = ({ data, header }) => {
+const DocsMobileHeader = ({ data }) => {
   return (
     <div className="relative">
-      {header}
       <DirectoryOverflowButton tocData={data.data} />
     </div>
   );
@@ -14,15 +13,13 @@ const DocsMobileHeader = ({ data, header }) => {
 
 const MainDocsBodyHeader = ({
   DocumentTitle,
-  NavigationDocsItems,
-  header,
+  NavigationDocsItems
 }) => {
   return (
     <div>
       <div className="block md:hidden">
         <DocsMobileHeader
           data={NavigationDocsItems}
-          header={header}
         ></DocsMobileHeader>
       </div>
 

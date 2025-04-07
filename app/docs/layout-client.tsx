@@ -12,7 +12,7 @@ type NavigationDataContextType = {
   NavigationDocsData: any;
 };
 
-function DocsHeader(props) {
+function VersionSelectHeader(props) {
     const { versions, title, currentVersion } = props;
     const { setCurrentVersion } = useVersion();
   
@@ -133,15 +133,17 @@ export default function DocsLayoutClient({
   }, [currentVersion, getTocData]);
 
 
-  const headerComponent = <DocsHeader versions={versions} title={header} currentVersion={currentVersion} />;
+  const headerComponent = <VersionSelectHeader versions={versions} title={header} currentVersion={currentVersion} />;
 
   return (
+    //@ts-ignore
     <DocsNavigationProvider>
       <NavigationDataContext.Provider value={{ NavigationDocsData }}>
         <div className="relative my-6 lg:mb-16 xl:mt-16 flex justify-center items-start">
           <div
             className={`xl:px-16 md:px-8 px-3 w-full max-w-[2000px] grid grid-cols-1 md:grid-cols-[1.25fr_3fr] xl:grid-cols-[1.25fr_3fr_0.75fr]`}
           >
+
             {/* LEFT COLUMN */}
             <div className={`sticky top-32 h-[calc(100vh)] hidden md:block`}>
               <LeftHandSideParentContainer

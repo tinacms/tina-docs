@@ -17,7 +17,9 @@ export default async function DocsLayout({
   const versions = versionData.map((version: any) => version.node.versionNumber);
 
   return (
+    //@ts-ignore
     <VersionProvider versions={versions} initialVersion="Latest">
+      {/* @ts-ignore */}
       <DocsLayoutClient NavigationDocsData={navDocData} header="Tina Docs" versions={versions}>
         {children}
       </DocsLayoutClient>

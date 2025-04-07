@@ -4,6 +4,7 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 type VersionContextType = {
   currentVersion: string;
+  // eslint-disable-next-line no-unused-vars
   setCurrentVersion: (value: string) => void;
   availableVersions: string[];
 };
@@ -20,8 +21,8 @@ export const useVersion = () => useContext(VersionContext);
 
 export const VersionProvider = ({
   children,
-  initialVersion = 'Latest',
-  versions = ['Latest'],
+  initialVersion = 'latest',
+  versions = ['latest'],
 }: {
   children: ReactNode;
   initialVersion?: string;
