@@ -80,14 +80,12 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                   <li className="leading-relaxed">{children}</li>
                 ),
                 a: ({ children, ...props }) => {
-                  // Ensure we always have a string for the href
-                  const hrefText = props.href ? props.href.slice(1) : '';
-                  const isActive = activeIds.includes(hrefText);
+                  const isActive = activeIds.includes(props.href?.slice(1) || ''); // Match href with activeIds
                   return (
                     <a
                       {...props}
                       className={`
-                        block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150
+                        block py-1 px-2 rounded-md hover:bg-gray-50/75 transition-colors duration-150
                         ${
                           isActive
                             ? 'text-orange-500 font-medium no-underline'
@@ -110,17 +108,17 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
 };
 
 export default ToC;
-
-// TODO: Remove styled jsx 
-const TocTitleList = styled.div`
+const TocTitleList = styled.div<{ ref: React.RefObject<HTMLDivElement> }>`
   scrollbar-width: none;
   ::-webkit-scrollbar {
     display: none;
   }
   -ms-overflow-style: none;
+
   word-wrap: break-word;
   white-space: normal;
   overflow-wrap: break-word;
+
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent,
@@ -138,7 +136,6 @@ const TocTitleList = styled.div`
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 `;
-
 const TocDesktopHeader = styled.span`
   display: none;
   font-size: 1rem;
@@ -147,6 +144,7 @@ const TocDesktopHeader = styled.span`
   background: transparent;
   line-height: 1;
   margin-bottom: 1.125rem;
+
   @media (min-width: 1200px) {
     display: block;
   }
@@ -155,10 +153,11 @@ const TocDesktopHeader = styled.span`
 const TocWrapper = styled.div`
   margin-bottom: -0.375rem;
   flex: 0 0 auto;
-  width: 300px;
-  word-wrap: break-word;
+  width: 300px; /* fix width */
+  word-wrap: break-word; /* break the long word */
   white-space: normal;
-  overflow-wrap: break-word;
+  overflow-wrap: break-word; /* suppport Chrome */
+
   @media (min-width: 1200px) {
     position: sticky;
     top: 8rem;
@@ -173,15 +172,18 @@ const TocContent = styled.div<{ isOpen: boolean; activeIds: string[] }>`
   max-height: 0;
   overflow: hidden;
   transition: all 400ms ease-out;
+
   ${(props) =>
     props.isOpen &&
     css`
       transition: all 750ms ease-in;
       max-height: 1500px;
     `}
+
   @media (min-width: 1200px) {
     max-height: none;
   }
+
   ul {
     list-style-type: none;
     padding: 0;
@@ -190,12 +192,15 @@ const TocContent = styled.div<{ isOpen: boolean; activeIds: string[] }>`
     flex-direction: column;
     flex-wrap: wrap;
   }
+
   li {
     margin: 0;
     padding: 0.375rem 0;
   }
+
   ul ul {
     padding-left: 0.75rem;
+
     li {
       padding: 0.25rem 0;
     }

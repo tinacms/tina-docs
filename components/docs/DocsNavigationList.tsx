@@ -42,7 +42,7 @@ interface NavTitleProps {
   level: number;
   selected: boolean;
   childSelected?: boolean;
-  children?: React.ReactNode;
+  children: React.ReactNode | React.ReactNode[];
   onClick?: () => void;
 }
 
@@ -54,30 +54,30 @@ const NavTitle = ({
   ...props
 }: NavTitleProps) => {
   const headerLevelClasses = {
-    0: "opacity-100 font-tuner-light text-orange-500 text-xl pt-2",
+    0: 'opacity-100 font-tuner-light text-orange-500 text-xl pt-2',
     1: {
-      default: "text-base font-sans pt-1 text-gray-800",
-      selected: "text-base font-sans pt-1 font-bold text-blue-500",
-      childSelected: "text-base font-sans pt-1 font-[500] text-gray-800",
+      default: 'text-base font-sans pt-1 text-gray-800',
+      selected: 'text-base font-sans pt-1 font-bold text-blue-500',
+      childSelected: 'text-base font-sans pt-1 font-[500] text-gray-800',
     },
     2: {
-      default: "text-[15px] font-sans opacity-80 pt-0.5 text-gray-700",
-      selected: "text-[15px] font-sans pt-0.5 font-bold text-blue-500",
-      childSelected: "text-[15px] font-sans pt-1 font-[500] text-gray-800",
+      default: 'text-[15px] font-sans opacity-80 pt-0.5 text-gray-700',
+      selected: 'text-[15px] font-sans pt-0.5 font-bold text-blue-500',
+      childSelected: 'text-[15px] font-sans pt-1 font-[500] text-gray-800',
     },
     3: {
-      default: "text-[15px] font-sans opacity-80 pt-0.5 text-gray-700",
-      selected: "text-[15px] font-sans pt-0.5 font-bold text-blue-500",
-      childSelected: "text-[15px] font-sans pt-1 font-[500] text-gray-800",
+      default: 'text-[15px] font-sans opacity-80 pt-0.5 text-gray-700',
+      selected: 'text-[15px] font-sans pt-0.5 font-bold text-blue-500',
+      childSelected: 'text-[15px] font-sans pt-1 font-[500] text-gray-800',
     },
   };
 
   const headerLevel = level > 3 ? 3 : level;
   const selectedClass = selected
-    ? "selected"
+    ? 'selected'
     : childSelected
-    ? "childSelected"
-    : "default";
+    ? 'childSelected'
+    : 'default';
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -112,14 +112,13 @@ const NavLevel = ({
   categoryData,
   level = 0,
 }: {
-  navListElem?: React.RefObject<HTMLDivElement | null>;
+  navListElem?: any;
   categoryData: any;
   level?: number;
 }) => {
-  const navLevelElem = React.useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-  const path = pathname || "";
-
+  const navLevelElem = React.useRef(null);
+  const pathname = usePathname(); // Replace useRouter with usePathname
+  const path = pathname || ''; // Get current path
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
@@ -128,7 +127,7 @@ const NavLevel = ({
   );
 
   const selected =
-    path.split("#")[0] === slug || (slug === "/docs" && path === "/docs/");
+    path.split('#')[0] === slug || (slug === '/docs' && path === '/docs/');
 
   const childSelected = hasNestedSlug(categoryData.items, path);
 
@@ -139,22 +138,18 @@ const NavLevel = ({
       navListElem.current &&
       selected
     ) {
-      const scrollOffset = (navListElem.current as HTMLElement).scrollTop;
-      const navListOffset = (
-        navListElem.current as HTMLElement
-      ).getBoundingClientRect().top;
-      const navListHeight = (navListElem.current as HTMLElement).offsetHeight;
-      const navItemOffset = (
-        navLevelElem.current as HTMLElement
-      ).getBoundingClientRect().top;
+      const scrollOffset = navListElem.current.scrollTop;
+      const navListOffset = navListElem.current.getBoundingClientRect().top;
+      const navListHeight = navListElem.current.offsetHeight;
+      const navItemOffset = navLevelElem.current.getBoundingClientRect().top;
       const elementOutOfView =
         navItemOffset - navListOffset > navListHeight + scrollOffset;
 
       if (elementOutOfView) {
         navLevelElem.current.scrollIntoView({
-          behavior: "auto",
-          block: "center",
-          inline: "nearest",
+          behavior: 'auto',
+          block: 'center',
+          inline: 'nearest',
         });
       }
     }
@@ -165,7 +160,7 @@ const NavLevel = ({
       <NavLabelContainer ref={navLevelElem} status={categoryData.status}>
         {categoryData.slug ? (
           <DynamicLink href={getUrl(categoryData.slug)} passHref>
-            <NavTitle level={level} selected={selected && !childSelected}>
+             <NavTitle level={level} selected={selected && !childSelected}>
               <span className="pr-2 -mr-2">{categoryData.title}</span>
             </NavTitle>
           </DynamicLink>
@@ -178,15 +173,15 @@ const NavLevel = ({
               setExpanded(!expanded);
             }}
           >
-            <span className="pr-2 -mr-2">{categoryData.title}</span>
+            <span className=" pr-2 -mr-2">{categoryData.title}</span>
             {categoryData.items && !selected && (
               <BiChevronRight
                 className={`${
                   level < 1
-                    ? "text-orange-100 group-hover:text-orange-300"
-                    : "text-blue-200 group-hover:text-blue-400"
+                    ? 'text-orange-100 group-hover:text-orange-300'
+                    : 'text-blue-200 group-hover:text-blue-400'
                 } group-hover:rotate-90 w-5 h-auto -my-2 transition ease-out duration-300 transform ${
-                  expanded ? "rotate-90" : ""
+                  expanded ? 'rotate-90' : ''
                 }`}
               />
             )}
@@ -195,12 +190,10 @@ const NavLevel = ({
       </NavLabelContainer>
       {categoryData.items && (
         <>
-          {React.createElement(
-            // Cast AnimateHeight as any to bypass TS issues
-            AnimateHeight as any,
-            { duration: 300, height: expanded ? "auto" : 0 },
+          <div className="mb-1.5"></div>
+          <AnimateHeight duration={300} height={expanded ? 'auto' : 0}>
             <NavLevelChildContainer level={level}>
-              {(categoryData.items || []).map((item: any) => (
+              {(categoryData.items || []).map((item) => (
                 <div key={item.slug ? item.slug + level : item.title + level}>
                   <NavLevel
                     navListElem={navListElem}
@@ -210,7 +203,7 @@ const NavLevel = ({
                 </div>
               ))}
             </NavLevelChildContainer>
-          )}
+          </AnimateHeight>
         </>
       )}
     </>
@@ -228,7 +221,7 @@ const NavLevelChildContainer = styled.div<NavLevelChildContainerProps>`
   padding-top: 0.125rem;
   padding-bottom: 0.125rem;
 
-  ${(props) =>
+  ${(props: any) =>
     props.level === 0 &&
     css`
       padding-left: 0.75rem;
@@ -245,11 +238,12 @@ const NavLabelContainer = styled.div<{ status: string }>`
     margin-bottom: 0.375rem;
   }
 
-  ${(props) =>
+  ${(props: { status: string }) =>
     props.status &&
     css`
       a::after {
-        content: "${props.status.toLowerCase()}";
+        display: -ms-inline-flexbox;
+        content: '${props.status.toLowerCase()}';
         text-transform: capitalize;
         font-size: 12px;
         font-weight: bold;
@@ -260,27 +254,30 @@ const NavLabelContainer = styled.div<{ status: string }>`
         border-radius: 5px;
         letter-spacing: 0.25px;
         color: #ec4815;
-        margin: 0 5px;
+        margin-right: 5px;
+        margin-left: 5px;
         line-height: 1;
         vertical-align: middle;
+        height: fit-content;
+        align-self: center;
       }
     `}
 `;
 
 export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
-  const navListElem = React.useRef<HTMLDivElement>(null);
+  const navListElem = React.useRef(null);
 
   return (
     <DocsNavigationContainer ref={navListElem}>
-      {navItems?.map((categoryData: any) => (
-        <div
+      {navItems?.map((categoryData) => (
+        <NavLevel
           key={
-            "mobile-" +
+            'mobile-' +
             (categoryData.slug ? getUrl(categoryData.slug) : categoryData.title)
           }
-        >
-          <NavLevel navListElem={navListElem} categoryData={categoryData} />
-        </div>
+          navListElem={navListElem}
+          categoryData={categoryData}
+        />
       ))}
     </DocsNavigationContainer>
   );

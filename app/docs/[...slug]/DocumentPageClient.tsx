@@ -39,7 +39,7 @@ export default function DocumentPageClient({ props }) {
   const isScreenSmallerThan840 = useScreenResizer().isScreenSmallerThan840;
   const gridClass = isScreenSmallerThan840
     ? "grid-cols-1"
-    : isScreenSmallerThan1200
+    : isScreenSmallerThan1200 || documentationData?.tocIsHidden
     ? "grid-cols-[1.25fr_3fr]"
     : "grid-cols-[1.25fr_3fr_0.75fr]";
 
@@ -66,12 +66,16 @@ export default function DocumentPageClient({ props }) {
           {isScreenSmallerThan1200 && !documentationData?.tocIsHidden && (
             <TocOverflowButton tocData={pageTableOfContents} />
           )}
-          <div ref={contentRef}>
-            <TinaMarkdown
-              content={documentationData?.body}
-              components={DocsMDXComponentRenderer}
-            />
-          </div>
+          <div
+          ref={contentRef}
+          className="pb-6 leading-7 text-slate-800 max-w-full space-y-3 mt-6"
+        >
+          {' '}
+          <TinaMarkdown
+            content={documentationData?.body}
+            components={DocsMDXComponentRenderer}
+          />
+        </div>
           {formattedDate && (
             <span className="text-slate-500 text-md">
               {" "}

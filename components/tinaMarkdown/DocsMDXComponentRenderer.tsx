@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
 import { CardGrid } from "../blocks/CardGrid";
@@ -8,32 +8,64 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
 import { Components, TinaMarkdown } from "tinacms/dist/rich-text";
 import { getDocId } from "../../utils/docs/getDocsIds";
-import { WarningCallout } from "../docs/WarningCallout";
 import { Prism } from "../styles/Prism";
+import ScrollBasedShowcase from "./scrollBasedShowcase";
+import {ChevronRightIcon} from "@heroicons/react/24/outline";
+import {LightBulbIcon} from "@heroicons/react/24/outline";
+import {ExclamationTriangleIcon} from "@heroicons/react/24/outline";
+import MermaidElement from "./mermaid";
+import {InformationCircleIcon} from "@heroicons/react/24/outline";
+import RecipeBlock from "./Recipe";
 
 // Casting fixes to address TS errors
 const NextImage = Image as unknown as React.FC<any>;
-const CheckIconComp = CheckIcon as unknown as React.FC<
+const CheckIconComponent = CheckIcon as unknown as React.FC<
   React.SVGProps<SVGSVGElement>
 >;
-const ClipboardIconComp = ClipboardIcon as unknown as React.FC<
+const ClipboardIconComponent = ClipboardIcon as unknown as React.FC<
+  React.SVGProps<SVGSVGElement>
+>;
+const ChevronRightIconComponent = ChevronRightIcon as unknown as React.FC<
+  React.SVGProps<SVGSVGElement>
+>;
+const LightBulbIconComponent = LightBulbIcon as unknown as React.FC<
+  React.SVGProps<SVGSVGElement>
+>;
+const ExclamationTriangleIconComponent = ExclamationTriangleIcon as unknown as React.FC<
+  React.SVGProps<SVGSVGElement>
+>;
+
+const InformationCircleIconComponent = InformationCircleIcon as unknown as React.FC<
   React.SVGProps<SVGSVGElement>
 >;
 
 export const DocsMDXComponentRenderer: Components<{
   Iframe: { iframeSrc: string; height: string };
-  Youtube: { embedSrc: string };
+  Youtube: { embedSrc: string; caption?: string; minutes?: string };
   CreateAppCta: { ctaText: string; cliText: string };
   GraphQLCodeBlock: {
     query: string;
     response: string;
     preselectResponse: boolean;
+    customQueryName?: string;
+    customResponseName?: string;
   };
   Callout: {
     title: string;
     description: string;
     url: string;
     buttonText: string;
+  };
+  ApiReference: {
+    title: string;
+    property: {
+      groupName: string;
+      name: string;
+      description: string;
+      type: string;
+      default: string;
+      required: boolean;
+    }[];
   };
   WebmEmbed: { embedSrc: string; width?: string };
   WarningCallout: { body: string };
@@ -43,8 +75,19 @@ export const DocsMDXComponentRenderer: Components<{
   CustomFieldComponentDemo: {};
   CloudinaryVideo: { src: string };
   Button: { link: string; label: string };
-  ImageAndText: { docText: string; image: string };
+  ImageAndText: { docText: string; image: string; heading?: string };
   Summary: { heading: string; text: string };
+  recipeBlock: {
+    title?: string;
+    description?: string;
+    codeblock?: any;
+    instruction?: {
+      header?: string;
+      itemDescription?: string;
+      codeLineStart?: number;
+      codeLineEnd?: number;
+    }[];
+  };
   scrollBasedShowcase: {
     showcaseItems: {
       image: string;
@@ -61,34 +104,86 @@ export const DocsMDXComponentRenderer: Components<{
       linkText: string;
     }[];
   };
+  code_block: {
+    value: string;
+    lang: string;
+    children: string;
+  };
 }> = {
-  // scrollBasedShowcase: (props) => {
-  //   return <ScrollBasedShowcase showcaseItems={props.showcaseItems} />;
-  // },
+  scrollBasedShowcase: (props) => {
+    return <ScrollBasedShowcase showcaseItems={props.showcaseItems} />;
+  },
   cardGrid: (props) => {
     return <CardGrid props={props} />;
   },
-  ImageAndText: (props) => {
+  recipeBlock: (props) => {
     return (
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-red">
-          <TinaMarkdown
-            content={props.docText as any}
-            components={DocsMDXComponentRenderer}
-          />
+      <div className="text-white">
+        <RecipeBlock data={props} />
+      </div>
+    );
+  },
+  ImageAndText: (props) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    const toggleExpand = () => {
+      setIsExpanded(!isExpanded);
+    };
+
+    return (
+      <div
+        className={`bg-white/40 rounded-lg shadow-sm mb-2 overflow-hidden transition-[width] duration-300 ease-in-out max-w-full ${
+          isExpanded ? 'w-full' : 'w-80 delay-700'
+        }`}
+      >
+        <div
+          className="py-1 px-4 cursor-pointer flex justify-between items-center"
+          onClick={toggleExpand}
+        >
+          {FormatHeaders({
+            children: props.heading || 'Click to expand',
+            level: 6,
+          })}
+          <div>
+            {isExpanded ? (
+              <FaMinus className="text-blue-800 size-3" />
+            ) : (
+              <FaPlus className="text-gray-500 size-3" />
+            )}
+          </div>
         </div>
-        <div>
-          <NextImage src={props?.image} alt="image" className="w-full" />
+
+        <div
+          className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
+            isExpanded
+              ? 'max-h-[2000px] opacity-100 delay-500'
+              : 'max-h-0 opacity-0 overflow-hidden'
+          } ${props?.image ? 'sm:grid-cols-2' : ''}`}
+          ref={contentRef}
+        >
+          <div className="p-4">
+            <TinaMarkdown
+              content={props.docText as any}
+              components={DocsMDXComponentRenderer}
+            />
+          </div>
+          {props?.image && (
+            <div className="p-4">
+                <NextImage src={props?.image} alt="image" className="w-full rounded-lg" />
+            </div>
+          )}
         </div>
       </div>
     );
   },
   code: (props) => (
     <code
-      className="px-1 text-orange-500 py-0.5 border-y-stone-600 bg-white rounded"
+      className="px-1 text-orange-500 py-0.5 border-y-stone-600 bg-white/50 rounded"
       {...props}
     />
   ),
+
   Summary: (props) => {
     const [openTab, setOpenTab] = useState(false);
 
@@ -98,7 +193,7 @@ export const DocsMDXComponentRenderer: Components<{
 
     return (
       <div>
-        <hr />
+        <hr></hr>
         <button
           className="flex w-full items-start justify-between text-left text-gray-900"
           onClick={handleToggle}
@@ -123,28 +218,98 @@ export const DocsMDXComponentRenderer: Components<{
   h4: (props) => <FormatHeaders level={5} {...props} />,
   h5: (props) => <FormatHeaders level={5} {...props} />,
   h6: (props) => <FormatHeaders level={6} {...props} />,
-  ul: (props) => <ul className="list-disc my-6 ml-5" {...props} />,
-  ol: (props) => <ol className="list-decimal ml-5" {...props} />,
-  li: (props) => <li className="mb-2 ml-10" {...props} />,
+  img: (props) => {
+    const ImageComponent = () => {
+      const [dimensions, setDimensions] = useState({ width: 16, height: 9 });
+      const [isLoading, setIsLoading] = useState(true);
+
+      const handleImageLoad = (img: HTMLImageElement) => {
+        if (img) {
+          setDimensions({
+            width: img.naturalWidth,
+            height: img.naturalHeight
+          });
+          setIsLoading(false);
+        }
+      };
+
+      return (
+        <div className="flex flex-col gap-2 my-4">
+          <div className="relative w-full max-w-xl mx-auto">
+            <div 
+              className="relative rounded-xl overflow-hidden" 
+              style={{ 
+                aspectRatio: `${dimensions.width}/${dimensions.height}`,
+                maxHeight: '600px',
+                minHeight: '200px',
+                opacity: isLoading ? 0 : 1,
+                transition: 'opacity 0.3s ease-in-out'
+              }}
+            >
+              <NextImage
+                src={props?.url || ''}
+                alt={props?.alt || ''}
+                title={props?.caption || ''}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
+                style={{ objectFit: 'contain' }}
+                onLoadingComplete={handleImageLoad}
+                priority
+              />
+            </div>
+          </div>
+          {props?.caption && (
+            <div className="text-sm font-tuner text-gray-500">
+              Figure: {props.caption}
+            </div>
+          )}
+          
+        </div>
+      );
+    };
+
+    return <ImageComponent />;
+  },
+  ul: (props) => <ul className="list-disc my-4 ml-2" {...props} />,
+  ol: (props) => <ol className="list-decimal my-4 ml-2" {...props} />,
+  li: (props) => <li className="mb-2 ml-8" {...props} />,
+  p: (props) => <p className="mb-2" {...props} />,
   a: (props) => {
     return (
       <a
         href={props?.url}
         {...props}
-        className="underline opacity-80 transition-all duration-[185ms] ease-out hover:text-orange-500"
+        className="underline opacity-80 transition-all duration-200 ease-out hover:text-orange-500"
       />
+      //Ripped the styling from styles/RichText.tsx " a:not([class]) "
     );
   },
-  //@ts-ignore it doesnt recognize blockquote but will render blockquote as expected
-  blockquote: (props) => (
+  block_quote: (props) => (
     <blockquote
       style={{
-        backgroundColor: "var(--color-seafoam)",
+        backgroundColor: 'var(--color-white)',
       }}
-      className="my-6 border-l-4 py-6 border-x-teal-400/50 pl-4 rounded-tr-lg rounded-br-lg pr-2"
-      {...props}
-    />
+      className="!my-6 border-l-4 md:py-6 pt-2 pb-4 border-x-teal-400 pl-3 rounded-tr-lg rounded-br-lg pr-2 relative overflow-hidden"
+    >
+      <div className="flex flex-col md:flex-row md:items-center md:gap-2 items-start">
+        <div className="flex-shrink-0">
+          <LightBulbIconComponent
+            size={40}
+            className="text-white bg-gradient-to-br from-seafoam-500 to-seafoam-700 p-2 rounded-full my-2 md:my-0 md:mx-2 mx-0"
+          />
+        </div>
+        <div className="leading-6">
+          <TinaMarkdown
+            content={props?.children?.props?.content as any}
+            components={DocsMDXComponentRenderer}
+          />
+        </div>
+      </div>
+    </blockquote>
   ),
+  mermaid: (value) => {
+    return <MermaidElement value={value?.value} />;
+  },
   Iframe: ({ iframeSrc, height }) => {
     return (
       <div>
@@ -152,8 +317,246 @@ export const DocsMDXComponentRenderer: Components<{
       </div>
     );
   },
-  WebmEmbed: ({ embedSrc, width = "100%" }) => (
-    <div className="video-container flex py-2 justify-center">
+  ApiReference: (props) => {
+    const [openGroups, setOpenGroups] = useState([]);
+    const propertyItem = (property) => {
+      return (
+        <div className="space-y-4 py-4 px-6">
+          <div className="flex flex-col md:flex-row md:items-start gap-4">
+            <div className="w-full md:w-1/3">
+              <div className="mb-1">
+                {property.required && (
+                  <span className="text-orange-500 font-medium text-sm">
+                    REQUIRED
+                  </span>
+                )}
+                {property.experimental && (
+                  <span className="text-seafoam-700 font-medium text-sm">
+                    EXPERIMENTAL
+                  </span>
+                )}
+              </div>
+              <div className="font-tuner text-blue-500 font-medium break-normal max-w-full inline-block">
+                {property?.name?.replace(/([A-Z])/g, '\u200B$1')}
+              </div>
+              <div className="text-gray-500 text-sm">{property.type}</div>
+            </div>
+            <div className="w-full md:w-2/3">
+              <TinaMarkdown
+                content={property.description as any}
+                components={DocsMDXComponentRenderer}
+              />
+              {property.default && (
+                <div className="text-slate-900 text-md">
+                  Default is{' '}
+                  <span className="font-mono text-orange-500">
+                    {property.default}
+                  </span>
+                  .
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const group = (groupName, groupProperties) => {
+      const required = groupProperties.some((property) => property.required);
+
+      return (
+        <div className=" my-4 overflow-hidden group">
+          <button
+            onClick={() =>
+              setOpenGroups(
+                openGroups.includes(groupName)
+                  ? openGroups.filter((group) => group !== groupName)
+                  : [...openGroups, groupName]
+              )
+            }
+            className="bg-gradient-to-b from-blue-100/20 to-blue-50/20 w-full flex items-center justify-between px-6 py-4 text-left bg-transparent hover:bg-blue-200/10 transition-colors"
+          >
+            <div>
+              {required && (
+                <p className="text-orange-500 font-medium text-sm">REQUIRED</p>
+              )}
+              <h3 className="text-md font-medium text-blue-500 font-tuner">
+                {groupName || 'Object'}
+              </h3>
+            </div>
+
+            <ChevronRightIconComponent
+              className={`w-5 h-5 text-blue-200 transition-transform ${
+                openGroups.includes(groupName) ? 'rotate-90' : ''
+              } group-hover:text-blue-500`}
+            />
+          </button>
+          {openGroups.includes(groupName) && (
+            <div className="px-4">
+              {groupProperties.map((property, index) => {
+                return (
+                  <div key={`property-${index}`}>
+                    {index !== 0 && (
+                      <hr className="h-0.5 w-[80%] m-auto bg-gray-200 rounded-lg -my-0.5" />
+                    )}
+                    <div className="mx-2 border-l-2 border-solid border-orange-400">
+                      <React.Fragment>{propertyItem(property)}</React.Fragment>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    return (
+      <div
+        className={`bg-white rounded-lg shadow-lg my-6 pb-6 ${
+          props.title ? 'pt-6' : 'pt-2'
+        }`}
+      >
+        {props.title && (
+          <h2 className="text-3xl text-blue-600 mb-6">{props.title}</h2>
+        )}
+
+        {/* Process properties in order, grouping only adjacent items with same groupName */}
+        {(() => {
+          if (!props.property?.length) return null;
+
+          const result: any[] = [];
+          let currentGroup: string | null = null;
+          let currentGroupProperties: any[] = [];
+
+          // Process each property in original order
+          props.property.forEach((property, index) => {
+            // If property has no groupName, render it individually
+            if (!property.groupName) {
+              // If we were building a group, finalize it
+              if (currentGroup) {
+                result.push(
+                  <React.Fragment key={`group-${result.length}`}>
+                    {group(currentGroup, currentGroupProperties)}
+                  </React.Fragment>
+                );
+                currentGroup = null;
+                currentGroupProperties = [];
+              } else {
+                if (index !== 0) {
+                  result.push(
+                    <hr className="h-0.5 w-[80%] m-auto bg-gray-200 rounded-lg" />
+                  );
+                }
+              }
+
+              // Add the individual property
+              result.push(
+                <React.Fragment key={`ind-${index}`}>
+                  {propertyItem(property)}
+                </React.Fragment>
+              );
+            }
+            // If property has a groupName
+            else {
+              // If it's the same group as we're currently building, add to it
+              if (currentGroup === property.groupName) {
+                currentGroupProperties.push(property);
+              }
+              // If it's a different group or first group
+              else {
+                // Finalize previous group if it exists
+                if (currentGroup) {
+                  result.push(
+                    <React.Fragment key={`group-${result.length}`}>
+                      {group(currentGroup, currentGroupProperties)}
+                    </React.Fragment>
+                  );
+                }
+
+                // Start a new group
+                currentGroup = property.groupName;
+                currentGroupProperties = [property];
+              }
+            }
+          });
+
+          // Don't forget to add the last group if we were building one
+          if (currentGroup) {
+            result.push(
+              <React.Fragment key={`group-${result.length}`}>
+                {group(currentGroup, currentGroupProperties)}
+              </React.Fragment>
+            );
+          }
+
+          return result;
+        })()}
+
+        {props.property?.some((property) => property.required) && (
+          <div className=" mx-6 mt-6 p-4 bg-blue-50 rounded-md flex items-start gap-3">
+            <InformationCircleIconComponent className="text-[#3B82F6] w-5 h-5 mt-0.5 flex-shrink-0" />
+            <p className="text-sm text-gray-700">
+              All properties marked as{' '}
+              <span className="text-[#FF5533] font-medium">REQUIRED</span> must
+              be specified for the field to work properly.
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  },
+  table: (props) => {
+    // Navigate through the nested structure to find the actual table content
+    // @ts-ignore - Linter is wrong about the actual structure
+    const tableRows = props?.children?.props?.children || [];
+
+    return (
+      <div className="overflow-x-auto my-6 rounded-lg shadow-md">
+        <table className="table-auto w-full">
+          <tbody>
+            {tableRows.map((row, rowIndex) => {
+              // Each row has its own props.children array containing cells
+              // @ts-ignore - Linter is wrong about the actual structure
+              const cells = row?.props?.children || [];
+              const CellComponent = rowIndex === 0 ? 'th' : 'td';
+
+              return (
+                <tr
+                  key={`row-${rowIndex}`}
+                  className={
+                    rowIndex % 2 === 0 ? 'bg-white/5' : 'bg-blue-500/5'
+                  }
+                >
+                  {cells.map((cell, cellIndex) => {
+                    return (
+                      <CellComponent
+                        key={`cell-${rowIndex}-${cellIndex}`}
+                        className={`border border-orange-100 px-4 py-2 ${
+                          rowIndex === 0
+                            ? 'font-normal bg-white/50 text-left text-orange-500 font-tuner'
+                            : ''
+                        } ${cellIndex === 0 ? 'break-words max-w-xs' : ''}`}
+                      >
+                        {/* @ts-ignore - Linter is wrong about the actual structure */}
+                        {cell?.props?.children}
+                        <TinaMarkdown
+                          content={cell?.props?.content as any}
+                          components={DocsMDXComponentRenderer}
+                        />
+                      </CellComponent>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  },
+  WebmEmbed: ({ embedSrc, width = '100%' }) => (
+    <div className="video-container flex justify-center my-4">
       <video
         width={width}
         height="auto"
@@ -168,33 +571,40 @@ export const DocsMDXComponentRenderer: Components<{
       </video>
     </div>
   ),
-  Youtube: ({ embedSrc }) => (
-    <div
-      className="youtube-container my-6 w-full relative"
-      style={{ paddingBottom: "56.25%" }}
-    >
-      <iframe
-        className="absolute top-0 left-0 w-full h-full"
-        src={embedSrc}
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen={true}
-      ></iframe>
+  Youtube: ({ embedSrc, caption, minutes }) => (
+    <div className="flex flex-col gap-2 my-6">
+      <div
+        className="w-full relative aspect-video"
+      >
+        <iframe
+          className="absolute top-0 left-0 w-full h-full rounded-xl"
+          src={embedSrc}
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen={true}
+        ></iframe>
+      </div>
+      {caption && (
+        <div className="text-sm font-tuner text-gray-500">
+          Video: {caption} {minutes && `(${minutes} minutes)`}
+        </div>
+      )}
     </div>
   ),
+
   CreateAppCta: ({ ctaText, cliText }) => (
     <>
       <a
         href="/docs/introduction/using-starter/"
         style={{
-          textDecoration: "none",
-          borderRadius: "10px",
-          padding: "1rem 1.5rem",
-          lineHeight: "1em",
-          fontWeight: "bold",
-          background: "#ec4815",
-          display: "inline-block",
-          color: "white",
+          textDecoration: 'none',
+          borderRadius: '10px',
+          padding: '1rem 1.5rem',
+          lineHeight: '1em',
+          fontWeight: 'bold',
+          background: '#ec4815',
+          display: 'inline-block',
+          color: 'white',
         }}
       >
         {ctaText}
@@ -202,26 +612,47 @@ export const DocsMDXComponentRenderer: Components<{
 
       <div
         style={{
-          padding: "1rem 1.5rem",
-          fontFamily: "monospace",
-          whiteSpace: "nowrap",
-          width: "auto",
-          display: "inline-block",
-          border: "1px solid #8080803b",
-          lineHeight: "1em",
-          borderRadius: "10px",
-          marginLeft: "20px",
-          fontSize: "1rem",
+          padding: '1rem 1.5rem',
+          fontFamily: 'monospace',
+          whiteSpace: 'nowrap',
+          width: 'auto',
+          display: 'inline-block',
+          border: '1px solid #8080803b',
+          lineHeight: '1em',
+          borderRadius: '10px',
+          marginLeft: '20px',
+          fontSize: '1rem',
         }}
       >
         {cliText}
       </div>
     </>
   ),
-  WarningCallout: ({ body }) => <WarningCallout text={body} />,
+  WarningCallout: ({ body }) => (
+    <blockquote
+      style={{
+        backgroundColor: 'var(--color-white)',
+      }}
+      className="my-4 border-l-4 md:py-6 pt-2 pb-4 border-x-orange-400 pl-4 rounded-tr-lg rounded-br-lg pr-2 relative overflow-hidden"
+    >
+      <div className="flex flex-col md:flex-row gap-2 md:items-center items-start">
+        <div>
+          <ExclamationTriangleIconComponent
+            size={40}
+            className="text-white bg-gradient-to-br from-orange-400 to-orange-600 px-2 pt-0.5 pb-1.5 rounded-full my-2 md:my-0 md:mx-2 mx-0"
+          />
+        </div>
+        <div className="leading-6">
+          <TinaMarkdown
+            content={body as any}
+            components={DocsMDXComponentRenderer}
+          />
+        </div>
+      </div>
+    </blockquote>
+  ),
   Callout: ({ title, description, url, buttonText }) => (
     <div className="callout">
-      {/* Use Next.js Image for optimization */}
       <div style={{ position: "relative", width: 400, height: 300 }}>
         <Image
           className="learnImage"
@@ -239,7 +670,7 @@ export const DocsMDXComponentRenderer: Components<{
           <svg
             stroke="currentColor"
             fill="currentColor"
-            strokeWidth="0"
+            stroke-width="0"
             viewBox="0 0 448 512"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -254,11 +685,11 @@ export const DocsMDXComponentRenderer: Components<{
       <iframe
         src={embedSrc}
         style={{
-          width: "100%",
-          height: "500px",
-          border: "none",
-          borderRadius: "4px",
-          overflow: "hidden",
+          width: '100%',
+          height: '500px',
+          border: 'none',
+          borderRadius: '4px',
+          overflow: 'hidden',
         }}
         title={title}
         allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -299,52 +730,68 @@ export const DocsMDXComponentRenderer: Components<{
       <Image src={src} alt={alt} layout="fill" objectFit="cover" />
     </div>
   ),
+  code_block: ({ value, lang, children }) => {
 
-  // @ts-ignore TODO: fix this in TinaCMS
-  Code_block: ({ value, lang, children }) => {
-    const [hasCopied, setHasCopied] = useState(false);
+    const Block = () => {
+      const [hasCopied, setHasCopied] = React.useState(false);
 
-    const handleCopy = () => {
-      navigator.clipboard.writeText(children || value || "");
-      setHasCopied(true);
-      setTimeout(() => setHasCopied(false), 2000);
-    };
+      const handleCopy = () => {
+        navigator.clipboard.writeText(children || value || '');
+        setHasCopied(true);
+        setTimeout(() => setHasCopied(false), 2000);
+      };
+  
+      return (
+        <div className="relative pb-3 word-break white-space overflow-x-hidden !rounded-xl margin-0">
+          <button
+            onClick={handleCopy}
+            className="absolute top-4 right-3 z-10 h-6 w-6 flex items-center justify-center text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 rounded"
+          >
+            {hasCopied ? (
+            <CheckIconComponent className="h-4 w-4" />
+          ) : (
+            <ClipboardIconComponent className="h-4 w-4" />
+          )}
+            <span className="sr-only">Copy</span>
+          </button>
+          <Prism
+            value={children || value || ''}
+            lang={lang || 'jsx'}
+            theme="nightOwl"
+          />
+        </div>
+      );
+    }
 
     return (
-      <div className="relative py-3 word-break white-space overflow-x-hidden rounded-xl">
-        <button
-          onClick={handleCopy}
-          className="absolute top-6 right-3 z-10 h-6 w-6 flex items-center justify-center text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 rounded"
-        >
-          {hasCopied ? (
-            <CheckIconComp className="h-4 w-4" />
-          ) : (
-            <ClipboardIconComp className="h-4 w-4" />
-          )}
-          <span className="sr-only">Copy</span>
-        </button>
-        <Prism
-          value={children || value || ""}
-          lang={lang || "jsx"}
-          theme="nightOwl"
-        />
+      <div className="relative">
+        <Block />
       </div>
     );
+    
   },
 
-  GraphQLCodeBlock: ({ query, response, preselectResponse }) => {
+  GraphQLCodeBlock: ({
+    query,
+    response,
+    preselectResponse,
+    customQueryName,
+    customResponseName,
+  }) => {
     return (
       <GraphQLQueryResponseTabs
         query={query}
         response={response}
         preselectResponse={preselectResponse}
+        customQueryName={customQueryName}
+        customResponseName={customResponseName}
       />
     );
   },
   CustomFieldComponentDemo: () => (
     <iframe
       height="450"
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
       scrolling="no"
       title="CSS Filters + A Springer Spaniel"
       src="https://codepen.io/kendallstrautman/embed/WNbzLJZ?height=265&theme-id=default&default-tab=css,result"
@@ -352,19 +799,19 @@ export const DocsMDXComponentRenderer: Components<{
       allowTransparency={true}
       allowFullScreen={true}
     >
-      See the Pen{" "}
+      See the Pen{' '}
       <a href="https://codepen.io/kendallstrautman/pen/WNbzLJZ">
         CSS Filters + A Springer Spaniel
-      </a>{" "}
+      </a>{' '}
       by Kendall Strautman (
-      <a href="https://codepen.io/kendallstrautman">@kendallstrautman</a>) on{" "}
+      <a href="https://codepen.io/kendallstrautman">@kendallstrautman</a>) on{' '}
       <a href="https://codepen.io">CodePen</a>.
     </iframe>
   ),
   CloudinaryVideo: ({ src }) => (
     <video className="video my-6" autoPlay loop muted playsInline>
-      <source src={`${src}.webm`} type="video/webm" />
-      <source src={`${src}.mp4`} type="video/mp4" />
+      <source src={src + `.webm`} type="video/webm" />
+      <source src={src + `.mp4`} type="video/mp4" />
     </video>
   ),
   Button: ({ link, label }) => (
@@ -380,74 +827,82 @@ export const DocsMDXComponentRenderer: Components<{
   ),
 };
 
-interface FormatHeadersProps {
-  children?: React.ReactNode;
-  level: number;
-}
-
-function FormatHeaders({ children, level }: FormatHeadersProps) {
-  const childrenArray = React.Children.toArray(children);
-  const headerText = childrenArray
-    .map((child) => {
-      if (React.isValidElement(child)) {
-        // Use a type assertion to allow access to 'content'
-        const content = (child.props as { content?: any }).content;
-        if (Array.isArray(content)) {
-          return content.map((c: any) => c.text).join("");
-        }
-      }
-      if (typeof child === "string") return child;
-      return "";
-    })
-    .join("");
-  const id = getDocId(headerText || "");
+function FormatHeaders({ children, level }: { children?: React.ReactNode, level: number }) {
+  const HeadingTag = `h${level}` as any;
+  const id = getDocId(
+    children?.props?.content?.map((content: any) => content.text).join('') ?? children
+  );
 
   const currentUrl =
-    typeof window !== "undefined" ? window.location.pathname : "";
+    typeof window !== 'undefined' ? window.location.pathname : '';
   const linkHref = `${currentUrl}#${id}`;
 
-  const styles: Record<number, string> = {
-    1: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-4xl mt-4 mb-4",
-    2: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-3xl mt-4 mb-3",
-    3: "bg-gradient-to-br from-blue-800 via-blue-900 to-blue-100 bg-clip-text text-transparent text-xl font-medium mt-2 mb-2 !important",
-    4: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-xl font-medium mt-2 mb-2",
-    5: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-lg font-medium mt-2 mb-1",
-    6: "text-gray-500 text-base font-normal mt-2 mb-1",
+  const styles = {
+    1: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-4xl !mt-16 mb-4',
+    2: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-3xl !mt-12 mb-2',
+    3: 'bg-gradient-to-br from-blue-800 via-blue-900 to-blue-100 bg-clip-text text-transparent text-xl font-medium !mt-8 mb-2 !important',
+    4: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-xl font-medium !mt-2 mb-2',
+    5: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-lg font-medium !mt-2 mb-1',
+    6: 'text-gray-500 text-base font-normal mt-2 mb-1',
   };
 
-  const handleHeaderClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const linkColor = {
+    1: 'text-orange-500',
+    2: 'text-orange-500',
+    3: 'text-blue-900',
+    4: 'text-orange-500',
+    5: 'text-orange-500',
+    6: 'text-gray-500',
+  };
+
+  const handleHeaderClick = (event) => {
     event.preventDefault();
     scrollToElement(id);
-    window.history.pushState(null, "", linkHref);
+    window.history.pushState(null, '', linkHref);
   };
 
-  const scrollToElement = (elementId: string) => {
+  const scrollToElement = (elementId) => {
     const element = document.getElementById(elementId);
     if (element) {
-      const offset = 130; // offset in pixels
+      const offset = 130; //offset in pixels
       const elementPosition =
         element.getBoundingClientRect().top + window.scrollY;
       const offsetPosition = elementPosition - offset;
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   };
 
-  // Changed HeadingTag to React.ElementType for valid JSX usage
-  const HeadingTag = `h${level}` as React.ElementType;
+  useEffect(() => {
+    if (window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      scrollToElement(hash);
+    }
+    //this is used for when you get sent a link with a hash (i.e link to a header)
+  }, []);
 
   return (
-    <HeadingTag id={id} className={`${styles[level]} relative cursor-pointer`}>
+    <HeadingTag
+      id={id}
+      className={`${styles[level]} relative cursor-pointer group`}
+    >
       <a
         href={linkHref}
-        className="no-underline group"
+        className="no-underline inline-block"
         onClick={handleHeaderClick}
       >
+        {' '}
         {children}
-        <FiLink className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 inline-flex mb-2" />
+        <FiLink
+          className={`${linkColor[level]} opacity-0 group-hover:opacity-80 transition-opacity duration-200 absolute ml-1 group-hover:animate-wiggle`}
+          style={{
+            display: 'inline-block',
+            marginTop: '0.25rem',
+          }}
+        />
       </a>
     </HeadingTag>
   );
