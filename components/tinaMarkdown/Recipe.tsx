@@ -13,7 +13,6 @@ export const RecipeBlock = ({ data }) => {
   );
   //LHSheight is the height used for the instructions block when the screen is >= 1024px
   const [LHSheight, setLHSheight] = useState<string | null>(null);
-  const [CodeBlockWidth, setCodeBlockWidth] = useState<string | null>(null);
   const [isBottomOfInstructions, setIsBottomOfInstructions] =
     useState<boolean>(false);
 
@@ -33,8 +32,7 @@ export const RecipeBlock = ({ data }) => {
 
   useEffect(() => {
     setLHSheight(`${codeblockRef.current?.offsetHeight}`);
-    setCodeBlockWidth(`${codeblockRef.current?.offsetWidth}`);
-  });
+  }, []);
 
   const checkIfBottom = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
@@ -55,7 +53,7 @@ export const RecipeBlock = ({ data }) => {
 
     if (codeblockRef.current) {
       codeblockRef.current.scrollTo({
-        top: linePixelheight * codeLineStart - linePixelBuffer,
+        top: linePixelheight * (codeLineStart || 0) - linePixelBuffer,
         behavior: 'smooth',
       });
     }
@@ -178,7 +176,6 @@ export const RecipeBlock = ({ data }) => {
             />
           ) : codeblock ? (
             <TinaMarkdown
-              key={highlightLines}
               content={codeblock}
               components={{
                 code_block: (props) => (

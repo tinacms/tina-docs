@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled, { css } from 'styled-components';
 import { getDocId } from '../../utils/docs/getDocsIds';
