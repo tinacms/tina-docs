@@ -1,5 +1,4 @@
-import { Collection, defineConfig } from "tinacms";
-import { docsCollection } from "./collections/docs";
+import { defineConfig } from "tinacms";
 import { schema } from "./schema";
 
 
@@ -26,6 +25,11 @@ export const config = defineConfig({
   build: {
     publicFolder: "public", // The public asset folder for your framework
     outputFolder: "admin", // within the public folder
+  },
+  tinaioConfig: {
+    identityApiUrlOverride: 'https://brookj-dev-identity.tinajs.dev',
+    contentApiUrlOverride: 'https://brookj-dev-content.tinajs.dev',
+    assetsApiUrlOverride: 'https://assets-api-local-brookj-dev.tinajs.dev'
   },
 });
 
