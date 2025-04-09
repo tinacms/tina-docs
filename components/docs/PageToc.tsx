@@ -26,6 +26,7 @@ export const generateMarkdown = (
 const ToC = ({ tocItems, activeIds }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
+  const activeLinkRef = useRef<HTMLElement | null>(null);
 
   const currentActiveId =
     activeIds.length > 0 ? activeIds[activeIds.length - 1] : "";
@@ -137,6 +138,21 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [currentActiveId]);
 
+  useEffect(() => {
+    if (activeLinkRef.current && currentActiveId) {
+      const activeLink = activeLinkRef.current;
+      const indicator = document.getElementById(`indicator-${currentActiveId}`);
+
+      if (activeLink && indicator) {
+        const linkTop = activeLink.offsetTop;
+        const linkHeight = activeLink.offsetHeight;
+
+        indicator.style.top = `${linkTop}px`;
+        indicator.style.height = `${linkHeight}px`;
+      }
+    }
+  }, [currentActiveId]);
+
   if (!tocItems || tocItems.length === 0) {
     return null;
   }
@@ -186,25 +202,6 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                   a: ({ children, ...props }) => {
                     const hrefText = props.href ? props.href.slice(1) : "";
                     const isActive = hrefText === currentActiveId;
-                    // ts-ignore: This is a valid useEffect (in our use-case)
-                    useEffect(() => {
-                      if (isActive && tocWrapperRef.current) {
-                        const activeLink = tocWrapperRef.current.querySelector(
-                          `a[href="#${hrefText}"]`
-                        ) as HTMLElement;
-                        const indicator = document.getElementById(
-                          `indicator-${hrefText}`
-                        );
-
-                        if (activeLink && indicator) {
-                          const linkTop = activeLink.offsetTop;
-                          const linkHeight = activeLink.offsetHeight;
-
-                          indicator.style.top = `${linkTop}px`;
-                          indicator.style.height = `${linkHeight}px`;
-                        }
-                      }
-                    }, [isActive, hrefText]);
 
                     return (
                       <TocLink
@@ -215,6 +212,13 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                         className="block py-1 px-2 rounded-xl transition-colors duration-150 font-medium no-underline"
                         data-id={hrefText}
                         data-active={isActive}
+                        ref={
+                          isActive
+                            ? (el) => {
+                                if (el) activeLinkRef.current = el;
+                              }
+                            : undefined
+                        }
                       >
                         {children}
                       </TocLink>
