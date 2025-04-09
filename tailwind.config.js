@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-const defaultTheme = require('tailwindcss/defaultTheme');
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   content: [
@@ -11,16 +11,23 @@ module.exports = {
     extend: {
       backgroundImage: {
         "blob-bg": 'url("/svg/default-background.svg")',
-      }, 
+      },
       colors: {
-        primaryStart: 'var(--primary-color-start)',
-        primaryVia: 'var(--primary-color-via)',
-        primaryEnd: 'var(--primary-color-end)',
+        primary: {
+          start: "var(--primary-color-start)",
+          via: "var(--primary-color-via)",
+          end: "var(--primary-color-end)",
+        },
+        secondary: {
+          start: "var(--secondary-color-start)",
+          via: "var(--secondary-color-via)",
+          end: "var(--secondary-color-end)",
+        },
       },
     },
     fontFamily: {
-      tuner: ['tuner-medium', ...defaultTheme.fontFamily.sans],
-      'tuner-regular': ['tuner-regular', ...defaultTheme.fontFamily.sans],
+      tuner: ["tuner-medium", ...defaultTheme.fontFamily.sans],
+      "tuner-regular": ["tuner-regular", ...defaultTheme.fontFamily.sans],
     },
   },
   plugins: [],

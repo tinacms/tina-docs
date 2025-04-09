@@ -7,11 +7,11 @@ export default function NotFound() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-24">
         <div className="flex flex-col items-center text-center">
           <div className="mb-7">
-            <h2 className="font-tuner text-6xl text-transparent bg-clip-text bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)]">
+            <h2 className="font-tuner text-6xl text-transparent bg-clip-text bg-gradient-to-br from-primary-start via-primary-via to-primary-end">
               Sorry, Friend.
             </h2>
             <hr className="block border-none bg-[url('/svg/hr.svg')] bg-no-repeat bg-[length:auto_100%] h-[7px] w-full my-8" />
-            <p className="text-lg lg:text-xl lg:leading-normal block bg-gradient-to-br from-[var(--secondary-color-start)] via-[var(--secondary-color-via)] to-[var(--secondary-color-end)] bg-clip-text text-transparent -mb-1">
+            <p className="text-lg lg:text-xl lg:leading-normal block bg-gradient-to-br from-secondary-start via-secondary-via to-secondary-end bg-clip-text text-transparent -mb-1">
               We couldn&apos;t find what you were looking for.
             </p>
           </div>

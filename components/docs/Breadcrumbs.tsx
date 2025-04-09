@@ -62,7 +62,7 @@ export function Breadcrumbs({ navItems }: DocsNavProps) {
             )}
             <a
               href={url}
-              className="text-sm uppercase text-gray-500 transition-opacity duration-150 hover:text-[var(--primary-color-start)]"
+              className="text-sm uppercase text-gray-500 transition-opacity duration-150 hover:text-primary-start"
             >
               {breadcrumb.title || breadcrumb.category}
             </a>

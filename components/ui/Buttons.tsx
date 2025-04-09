@@ -20,22 +20,22 @@ const raisedButtonClasses = "hover:shadow active:shadow-none";
 const colorClasses = {
   seafoam:
     raisedButtonClasses +
-    " text-[var(--primary-color-end)] hover:text-[var(--primary-color-via)] border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150",
+    " text-primary-end hover:text-primary-via border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150",
   blue:
     raisedButtonClasses +
-    " text-white hover:text-gray-50 border border-[var(--secondary-color-start)] bg-gradient-to-br from-[var(--secondary-color-start)] via-[var(--secondary-color-via)] to-[var(--secondary-color-end)]",
+    " text-white hover:text-gray-50 border border-secondary-start bg-gradient-to-br from-secondary-start via-secondary-via to-secondary-end",
   orange:
     raisedButtonClasses +
-    " text-white hover:text-gray-50 border border-[var(--primary-color-end)] bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)]",
+    " text-white hover:text-gray-50 border border-primary-end bg-gradient-to-br from-primary-start via-primary-via to-primary-end",
   white:
     raisedButtonClasses +
-    " text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-gray-100/60 bg-gradient-to-br from-white to-gray-50",
+    " text-primary-via hover:text-primary-start border border-gray-100/60 bg-gradient-to-br from-white to-gray-50",
   ghost:
-    "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)]",
+    "text-primary-via hover:text-primary-start",
   orangeWithBorder:
-    "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-[var(--primary-color-via)] bg-white",
+    "text-primary-via hover:text-primary-start border border-primary-via bg-white",
   ghostBlue:
-    "text-[var(--secondary-color-end)] hover:text-[var(--secondary-color-via)]",
+    "text-secondary-end hover:text-secondary-via",
 };
 
 const sizeClasses = {
@@ -57,13 +57,13 @@ export const Button = ({
       className={cn(
         baseClasses,
         color === "white"
-          ? "text-[var(--primary-color-end)] hover:text-[var(--primary-color-via)] border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150"
+          ? "text-primary-end hover:text-primary-via border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150"
           : color === "blue"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-gray-100/60 bg-gradient-to-br from-white to-gray-50"
+          ? "text-primary-via hover:text-primary-start border border-gray-100/60 bg-gradient-to-br from-white to-gray-50"
           : color === "ghost"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)]"
+          ? "text-primary-via hover:text-primary-start"
           : color === "ghostBlue"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-[var(--primary-color-via)] bg-white"
+          ? "text-primary-via hover:text-primary-start border border-primary-via bg-white"
           : ""
       )}
       {...props}
@@ -88,13 +88,13 @@ export const LinkButton = ({
       className={cn(
         baseClasses,
         color === "white"
-          ? "text-[var(--primary-color-end)] hover:text-[var(--primary-color-via)] border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150"
+          ? "text-primary-end hover:text-primary-via border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150"
           : color === "blue"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-gray-100/60 bg-gradient-to-br from-white to-gray-50"
+          ? "text-primary-via hover:text-primary-start border border-gray-100/60 bg-gradient-to-br from-white to-gray-50"
           : color === "ghost"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)]"
+          ? "text-primary-via hover:text-primary-start"
           : color === "ghostBlue"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-[var(--primary-color-via)] bg-white"
+          ? "text-primary-via hover:text-primary-start border border-primary-via bg-white"
           : ""
       )}
       {...props}
@@ -118,13 +118,13 @@ export const FlushButton = ({
       className={cn(
         baseClasses,
         color === "white"
-          ? "text-[var(--primary-color-end)] hover:text-[var(--primary-color-via)] border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150"
+          ? "text-primary-end hover:text-primary-via border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150"
           : color === "blue"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-gray-100/60 bg-gradient-to-br from-white to-gray-50"
+          ? "text-primary-via hover:text-primary-start border border-gray-100/60 bg-gradient-to-br from-white to-gray-50"
           : color === "ghost"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)]"
+          ? "text-primary-via hover:text-primary-start"
           : color === "ghostBlue"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-[var(--primary-color-via)] bg-white"
+          ? "text-primary-via hover:text-primary-start border border-primary-via bg-white"
           : ""
       )}
       {...props}
@@ -146,13 +146,13 @@ export const ModalButton = ({
       className={cn(
         baseClasses,
         color === "white"
-          ? "text-[var(--primary-color-end)] hover:text-[var(--primary-color-via)] border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150"
+          ? "text-primary-end hover:text-primary-via border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150"
           : color === "blue"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-gray-100/60 bg-gradient-to-br from-white to-gray-50"
+          ? "text-primary-via hover:text-primary-start border border-gray-100/60 bg-gradient-to-br from-white to-gray-50"
           : color === "ghost"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)]"
+          ? "text-primary-via hover:text-primary-start"
           : color === "ghostBlue"
-          ? "text-[var(--primary-color-via)] hover:text-[var(--primary-color-start)] border border-[var(--primary-color-via)] bg-white"
+          ? "text-primary-via hover:text-primary-start border border-primary-via bg-white"
           : ""
       )}
       {...props}

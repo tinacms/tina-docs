@@ -87,7 +87,7 @@ export const DocsMDXComponentRenderer: Components<{
   code: (props) => (
     <code
       className={cn(
-        "px-1 text-[var(--primary-color-start)] py-0.5 border-y-stone-600 bg-white rounded"
+        "px-1 text-primary-start py-0.5 border-y-stone-600 bg-white rounded"
       )}
       {...props}
     />
@@ -135,7 +135,7 @@ export const DocsMDXComponentRenderer: Components<{
         href={props?.url}
         {...props}
         className={cn(
-          "underline opacity-80 transition-all duration-[185ms] ease-out hover:text-[var(--primary-color-start)]"
+          "underline opacity-80 transition-all duration-[185ms] ease-out hover:text-primary-start"
         )}
       />
     );
@@ -375,7 +375,7 @@ export const DocsMDXComponentRenderer: Components<{
   Button: ({ link, label }) => (
     <div className="w-full flex justify-start my-6">
       <a
-        className="px-6 pt-[12px] pb-[10px] text-base font-medium transition duration-150 ease-out rounded-full flex items-center gap-1 font-tuner whitespace-nowrap focus:outline-none focus:shadow-outline hover:-translate-y-px active:translate-y-px hover:-translate-x-px active:translate-x-px leading-tight text-white hover:text-gray-50 border border-[var(--primary-color-start)] bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)]"
+        className="px-6 pt-[12px] pb-[10px] text-base font-medium transition duration-150 ease-out rounded-full flex items-center gap-1 font-tuner whitespace-nowrap focus:outline-none focus:shadow-outline hover:-translate-y-px active:translate-y-px hover:-translate-x-px active:translate-x-px leading-tight text-white hover:text-gray-50 border border-primary-start bg-gradient-to-br from-primary-start via-primary-via to-primary-end"
         href={link}
         target="_blank"
       >
@@ -412,11 +412,11 @@ function FormatHeaders({ children, level }: FormatHeadersProps) {
   const linkHref = `${currentUrl}#${id}`;
 
   const styles: Record<number, string> = {
-    1: "bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)] bg-clip-text text-transparent text-4xl mt-4 mb-4",
-    2: "bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)] bg-clip-text text-transparent text-3xl mt-4 mb-3",
-    3: "bg-gradient-to-br from-[var(--secondary-color-start)] via-[var(--secondary-color-via)] to-[var(--secondary-color-end)] bg-clip-text text-transparent text-xl font-medium mt-2 mb-2 !important",
-    4: "bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)] bg-clip-text text-transparent text-xl font-medium mt-2 mb-2",
-    5: "bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)] bg-clip-text text-transparent text-lg font-medium mt-2 mb-1",
+    1: "bg-gradient-to-br from-primary-start via-primary-via to-primary-end bg-clip-text text-transparent text-4xl mt-4 mb-4",
+    2: "bg-gradient-to-br from-primary-start via-primary-via to-primary-end bg-clip-text text-transparent text-3xl mt-4 mb-3",
+    3: "bg-gradient-to-br from-secondary-start via-secondary-via to-secondary-end bg-clip-text text-transparent text-xl font-medium mt-2 mb-2 !important",
+    4: "bg-gradient-to-br from-primary-start via-primary-via to-primary-end bg-clip-text text-transparent text-xl font-medium mt-2 mb-2",
+    5: "bg-gradient-to-br from-primary-start via-primary-via to-primary-end bg-clip-text text-transparent text-lg font-medium mt-2 mb-1",
     6: "text-gray-500 text-base font-normal mt-2 mb-1",
   };
 

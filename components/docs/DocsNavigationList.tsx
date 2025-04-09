@@ -54,20 +54,20 @@ const NavTitle = ({
   ...props
 }: NavTitleProps) => {
   const headerLevelClasses = {
-    0: "opacity-100 font-tuner-light text-[var(--primary-color-start)] text-xl pt-2",
+    0: "opacity-100 font-tuner-light text-primary-start text-xl pt-2",
     1: {
       default: "text-base font-sans pt-1 text-gray-800",
-      selected: "text-base font-sans pt-1 font-bold text-[var(--secondary-color-start)]",
+      selected: "text-base font-sans pt-1 font-bold text-secondary-start",
       childSelected: "text-base font-sans pt-1 font-[500] text-gray-800",
     },
     2: {
       default: "text-[15px] font-sans opacity-80 pt-0.5 text-gray-700",
-      selected: "text-[15px] font-sans pt-0.5 font-bold text-[var(--secondary-color-start)]",
+      selected: "text-[15px] font-sans pt-0.5 font-bold text-secondary-start",
       childSelected: "text-[15px] font-sans pt-1 font-[500] text-gray-800",
     },
     3: {
       default: "text-[15px] font-sans opacity-80 pt-0.5 text-gray-700",
-      selected: "text-[15px] font-sans pt-0.5 font-bold text-[var(--secondary-color-start)]",
+      selected: "text-[15px] font-sans pt-0.5 font-bold text-secondary-start",
       childSelected: "text-[15px] font-sans pt-1 font-[500] text-gray-800",
     },
   };
@@ -183,8 +183,8 @@ const NavLevel = ({
               <BiChevronRight
                 className={`${
                   level < 1
-                    ? "text-orange-100 group-hover:text-[var(--primary-color-start)]"
-                    : "text-blue-200 group-hover:text-[var(--secondary-color-start)]"
+                    ? "text-orange-100 group-hover:text-primary-start"
+                    : "text-blue-200 group-hover:text-secondary-start"
                 } group-hover:rotate-90 w-5 h-auto -my-2 transition ease-out duration-300 transform ${
                   expanded ? "rotate-90" : ""
                 }`}

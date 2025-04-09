@@ -152,7 +152,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
         <TocContent activeId={currentActiveId} isOpen={isOpen}>
           <TocDesktopHeader
             style={{
-              color: "var(--primary-color-start)",
+              color: "primary-start",
             }}
           >
             <div className="flex items-center gap-2">
@@ -166,7 +166,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
               {currentActiveId && (
                 <ActiveIndicator
                   id={`indicator-${currentActiveId}`}
-                  activeColor="var(--primary-color-start)"
+                  activeColor="primary-start"
                 />
               )}
             </VerticalLineContainer>
@@ -210,7 +210,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                       <TocLink
                         {...props}
                         isActive={isActive}
-                        activeColor="var(--primary-color-start)"
+                        activeColor="primary-start"
                         inactiveColor={inactiveColor}
                         className="block py-1 px-2 rounded-xl transition-colors duration-150 font-medium no-underline"
                         data-id={hrefText}

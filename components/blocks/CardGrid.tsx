@@ -9,7 +9,7 @@ export const CardGrid = ({ props }) => {
           href={card.link}
           className="flex flex-col justify-between p-6 bg-transparent hover:bg-seafoam-100 transition-all ease-out duration-150 rounded-lg group"
         >
-          <h2 className="bg-gradient-to-br from-[var(--primary-color-start)] via-[var(--primary-color-via)] to-[var(--primary-color-end)] group-hover:from-[var(--secondary-color-start)] group-hover:via-[var(--secondary-color-via)] group-hover:to-[var(--secondary-color-end)] bg-clip-text text-transparent font-bold text-2xl leading-snug font-tuner transition-all ease-out duration-150">
+          <h2 className="bg-gradient-to-br from-primary-start via-primary-via to-primary-end group-hover:from-secondary-start group-hover:via-secondary-via group-hover:to-secondary-end bg-clip-text text-transparent font-bold text-2xl leading-snug font-tuner transition-all ease-out duration-150">
             {card.title}
           </h2>
 
