@@ -46,7 +46,7 @@ interface NavTitleProps {
   onClick?: () => void;
 }
 
-const NavTitle = ({
+const NavTitle: React.FC<NavTitleProps> = ({
   children,
   level = 3,
   selected,
