@@ -27,7 +27,6 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
 
-  
   const currentActiveId =
     activeIds.length > 0 ? activeIds[activeIds.length - 1] : "";
 
@@ -53,25 +52,20 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
         const listHeight = tocList.clientHeight;
         const listScrollHeight = tocList.scrollHeight;
 
-        
         const targetScrollTop = activeTop - listHeight / 2 + activeHeight / 2;
 
-        
         const maxScroll = listScrollHeight - listHeight;
         const finalScrollTop = Math.min(targetScrollTop, maxScroll);
 
-        
-        const bottomThreshold = listHeight * 0.8; 
+        const bottomThreshold = listHeight * 0.8;
         const isNearBottom = activeTop > bottomThreshold;
 
         if (isNearBottom) {
-          
           tocList.scrollTo({
             top: Math.max(0, activeTop - listHeight + activeHeight + 20),
             behavior: "smooth",
           });
         } else {
-          
           tocList.scrollTo({
             top: finalScrollTop,
             behavior: "smooth",
@@ -81,12 +75,10 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
     }
   }, [currentActiveId]);
 
-  
   useEffect(() => {
     if (tocWrapperRef.current) {
       const resizeObserver = new ResizeObserver(() => {
         if (currentActiveId) {
-  
           const event = new CustomEvent("scrollToActive", {
             detail: currentActiveId,
           });
@@ -102,7 +94,6 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
     }
   }, [currentActiveId]);
 
-  
   useEffect(() => {
     const handleScroll = () => {
       if (tocWrapperRef.current && currentActiveId) {
@@ -115,28 +106,23 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
           const activeRect = activeLink.getBoundingClientRect();
           const tocRect = tocList.getBoundingClientRect();
 
-          
           const isPartiallyVisible =
             activeRect.top >= tocRect.top &&
             activeRect.bottom <= tocRect.bottom;
 
           if (!isPartiallyVisible) {
-            
             const activeTop = (activeLink as HTMLElement).offsetTop;
             const activeHeight = (activeLink as HTMLElement).offsetHeight;
             const listHeight = tocList.clientHeight;
 
-            
             const isInBottomHalf = activeTop > tocList.scrollHeight / 2;
 
             if (isInBottomHalf) {
-              
               tocList.scrollTo({
                 top: Math.max(0, activeTop - listHeight + activeHeight + 20),
                 behavior: "smooth",
               });
             } else {
-              
               tocList.scrollTo({
                 top: activeTop - listHeight / 2 + activeHeight / 2,
                 behavior: "smooth",
@@ -157,7 +143,6 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
 
   const tocMarkdown = generateMarkdown(tocItems);
 
-  
   const inactiveColor = "#808080";
   const inactiveLineColor = "#e0e0e0";
 
@@ -175,10 +160,9 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
             </div>
           </TocDesktopHeader>
           <TocOuterContainer>
-            
             <VerticalLineContainer>
               <VerticalLine inactiveColor={inactiveLineColor} />
-              
+
               {currentActiveId && (
                 <ActiveIndicator
                   id={`indicator-${currentActiveId}`}
@@ -203,7 +187,6 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                     const hrefText = props.href ? props.href.slice(1) : "";
                     const isActive = hrefText === currentActiveId;
 
-                    
                     useEffect(() => {
                       if (isActive && tocWrapperRef.current) {
                         const activeLink = tocWrapperRef.current.querySelector(
@@ -229,8 +212,9 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                         isActive={isActive}
                         activeColor="var(--primary-color-start)"
                         inactiveColor={inactiveColor}
-                        className="block py-1 px-2 rounded-xl hover:bg-gray-50/75 transition-colors duration-150 font-medium no-underline"
+                        className="block py-1 px-2 rounded-xl transition-colors duration-150 font-medium no-underline"
                         data-id={hrefText}
+                        data-active={isActive}
                       >
                         {children}
                       </TocLink>
@@ -250,12 +234,10 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
 
 export default ToC;
 
-
 const TocOuterContainer = styled.div`
   position: relative;
   display: flex;
 `;
-
 
 const VerticalLineContainer = styled.div`
   position: absolute;
@@ -266,7 +248,6 @@ const VerticalLineContainer = styled.div`
   padding: 4px 0;
   z-index: 1;
 `;
-
 
 const VerticalLine = styled.div<{ inactiveColor: string }>`
   position: absolute;
@@ -287,15 +268,18 @@ const ActiveIndicator = styled.div<{ activeColor: string }>`
   transition: top 0.3s ease, height 0.3s ease;
 `;
 
-
 const TocLink = styled.a<{
   isActive: boolean;
   activeColor: string;
   inactiveColor: string;
 }>`
   color: ${(props) =>
-    props.isActive ? props.activeColor : props.inactiveColor} !important;
+    props.isActive ? props.activeColor : props.inactiveColor};
   transition: color 0.2s ease;
+
+  &:not([data-active="true"]):hover {
+    color: black !important;
+  }
 `;
 
 // TODO: Remove styled jsx
