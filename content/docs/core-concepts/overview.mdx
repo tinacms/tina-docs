@@ -3,12 +3,50 @@ seo:
   title: Intro to core concepts
   description: Description for core concepts
 title: Content Modelling
-last_edited: '2025-02-23T23:17:03.336Z'
+last_edited: '2025-04-08T08:14:39.166Z'
+tocIsHidden: true
 next: ''
 previous: ''
 ---
 
-> Prefer to watch a video? Check out the video guide below:
+> Prefer to watch a video? Check out the video guide below:\
+> TODO:: LENIS VIRTUAL SCROLL (SLOW ON SCROLL)
+
+<scrollBasedShowcase
+  showcaseItems={[
+    {
+      title: "This is a scrolling component",
+      image: "/SCR-20250407-kyks.png",
+      content:
+        "Add a few items and see how you can scroll through them.\n\nScroll on to see some images...\n",
+      useAsSubsection: false
+    },
+    {
+      title: "Subsection's can be set with a toggle!",
+      image: "/SCR-20250408-oknp.png",
+      content: "",
+      useAsSubsection: true
+    },
+    {
+      title: "Title",
+      image: "/img/placeholder.png",
+      content: "Default Text. Edit me!\n",
+      useAsSubsection: false
+    },
+    {
+      title: "Title",
+      image: "/img/placeholder.png",
+      content: "Default Text. Edit me!\n",
+      useAsSubsection: false
+    },
+    {
+      title: "Title",
+      image: "/img/placeholder.png",
+      content: "Default Text. Edit me!\n",
+      useAsSubsection: false
+    }
+  ]}
+/>
 
 <Youtube embedSrc="https://www.youtube.com/embed/_9lDNSIh8rw" />
 
@@ -19,8 +57,6 @@ npx create-tina-app@latest
 ```
 
 From there, you will be prompted a few quick setup questions:
-
-![](https://assets.tina.io/06bcd49e-f919-4e53-a2c4-77f656491c7d/img/docs/introduction/cli-starter.png)
 
 Once your local starter has been created, to run the starter:
 `cd <your-starter-name>` into its new directory
@@ -38,5 +74,3 @@ yarn dev
 ```
 
 Next we'll show you how to use the Tina editor!
-
-<WebmEmbed embedSrc="/img/docs/introduction/homepage-demo-2.webm" />
