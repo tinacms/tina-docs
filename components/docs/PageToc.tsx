@@ -186,7 +186,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                   a: ({ children, ...props }) => {
                     const hrefText = props.href ? props.href.slice(1) : "";
                     const isActive = hrefText === currentActiveId;
-
+                    // ts-ignore: This is a valid useEffect (in our use-case)
                     useEffect(() => {
                       if (isActive && tocWrapperRef.current) {
                         const activeLink = tocWrapperRef.current.querySelector(
