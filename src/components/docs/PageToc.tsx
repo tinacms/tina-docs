@@ -3,11 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled, { css } from 'styled-components';
-import { getDocId } from '../../utils/docs/getDocsIds';
+import { getDocId } from '@/utils/docs/getDocsIds';
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
-  activeIds: string[];
+  activeids: string[];
 }
 
 export const generateMarkdown = (
@@ -22,7 +22,7 @@ export const generateMarkdown = (
     .join('\n');
 };
 
-const ToC = ({ tocItems, activeIds }: TocProps) => {
+const ToC = ({ tocItems, activeids }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -37,10 +37,10 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
   }, []);
 
   useEffect(() => {
-    if (tocWrapperRef.current && activeIds.length > 0) {
+    if (tocWrapperRef.current && activeids?.length > 0) {
       const tocList = tocWrapperRef.current;
 
-      const lastActiveId = activeIds[activeIds.length - 1];
+      const lastActiveId = activeids[activeids.length - 1];
       const activeLink = tocList.querySelector(`a[href="#${lastActiveId}"]`);
 
       if (activeLink) {
@@ -54,7 +54,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
         });
       }
     }
-  }, [activeIds]);
+  }, [activeids]);
 
   if (!tocItems || tocItems.length === 0) {
     return null;
@@ -65,7 +65,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
   return (
     <>
       <TocWrapper>
-        <TocContent activeIds={activeIds} isOpen={isOpen}>
+        <TocContent activeids={activeids} isopen={isOpen.toString()}>
           <TocDesktopHeader>Table of Contents</TocDesktopHeader>
           <TocTitleList
             ref={tocWrapperRef}
@@ -80,7 +80,7 @@ const ToC = ({ tocItems, activeIds }: TocProps) => {
                   <li className="leading-relaxed">{children}</li>
                 ),
                 a: ({ children, ...props }) => {
-                  const isActive = activeIds.includes(props.href?.slice(1) || ''); // Match href with activeIds
+                  const isActive = activeids?.includes(props.href?.slice(1) || ''); // Match href with activeIds
                   return (
                     <a
                       {...props}
@@ -164,7 +164,7 @@ const TocWrapper = styled.div`
   }
 `;
 
-const TocContent = styled.div<{ isOpen: boolean; activeIds: string[] }>`
+const TocContent = styled.div<{ isopen: string; activeids: string[] }>`
   display: block;
   width: 100%;
   line-height: 1.25;
@@ -174,7 +174,7 @@ const TocContent = styled.div<{ isOpen: boolean; activeIds: string[] }>`
   transition: all 400ms ease-out;
 
   ${(props) =>
-    props.isOpen &&
+    props.isopen === 'true' &&
     css`
       transition: all 750ms ease-in;
       max-height: 1500px;

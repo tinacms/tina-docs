@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { FaChevronRight } from 'react-icons/fa';
-import { matchActualTarget } from '../../utils/docs/urls';
+import { matchActualTarget } from '@/utils/docs/urls';
 
 export interface DocsNavProps {
   navItems: any;
@@ -50,7 +50,7 @@ export function Breadcrumbs({ navItems }: DocsNavProps) {
       {breadcrumbs.map((breadcrumb, i) => {
         const url = getUrlFromSlug(breadcrumb.slug);
         return (
-          <li key={url} className="flex items-center m-0">
+          <li key={`breadcrumb-${url}-${i}`} className="flex items-center m-0">
             {i !== 0 && (
               <FaChevronRight className="text-gray-400 mx-2" aria-hidden="true" />
             )}

@@ -234,9 +234,9 @@ export const DocsMDXComponentRenderer: Components<{
       };
 
       return (
-        <div className="flex flex-col gap-2 my-4">
-          <div className="relative w-full max-w-xl mx-auto">
-            <div 
+        <span className="flex flex-col gap-2 my-4">
+          <span className="relative w-full max-w-xl mx-auto">
+            <span 
               className="relative rounded-xl overflow-hidden" 
               style={{ 
                 aspectRatio: `${dimensions.width}/${dimensions.height}`,
@@ -256,15 +256,14 @@ export const DocsMDXComponentRenderer: Components<{
                 onLoadingComplete={handleImageLoad}
                 priority
               />
-            </div>
-          </div>
+            </span>
+          </span>
           {props?.caption && (
-            <div className="text-sm font-tuner text-gray-500">
+            <span className="text-sm font-tuner text-gray-500">
               Figure: {props.caption}
-            </div>
+            </span>
           )}
-          
-        </div>
+        </span>
       );
     };
 
@@ -833,9 +832,7 @@ function FormatHeaders({ children, level }: { children?: React.ReactNode, level:
     children?.props?.content?.map((content: any) => content.text).join('') ?? children
   );
 
-  const currentUrl =
-    typeof window !== 'undefined' ? window.location.pathname : '';
-  const linkHref = `${currentUrl}#${id}`;
+  const linkHref = `#${id}`;
 
   const styles = {
     1: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-4xl !mt-16 mb-4',

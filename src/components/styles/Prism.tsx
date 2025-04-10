@@ -39,16 +39,22 @@ export const Prism = (props: {
               borderRadius: "12px",
             }}
           >
-            {tokens.map((line, i) => (
-              <div key={`line-${i}`} {...getLineProps({ line, key: i })}>
-                {line.map((token, key) => (
-                  <span
-                    key={`token-${i}-${key}`}
-                    {...getTokenProps({ token, key })}
-                  />
-                ))}
-              </div>
-            ))}
+            {tokens.map((line, i) => {
+              const { key: lineKey, ...lineProps } = getLineProps({ line, key: i });
+              return (
+                <div key={`prism-line-${lineKey}`} {...lineProps}>
+                  {line.map((token, key) => {
+                    const { key: tokenKey, ...tokenProps } = getTokenProps({ token, key });
+                    return (
+                      <span
+                        key={`prism-token-${tokenKey}`}
+                        {...tokenProps}
+                      />
+                    );
+                  })}
+                </div>
+              );
+            })}
           </pre>
         )}
       </Highlight>

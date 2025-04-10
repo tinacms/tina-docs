@@ -3,8 +3,8 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { usePathname } from "next/navigation";
-import { matchActualTarget } from "../../utils/docs/urls";
-import { DynamicLink } from "../ui/DynamicLink";
+import { matchActualTarget } from "@/utils/docs/urls";
+import { DynamicLink } from "@/components/ui/DynamicLink";
 import { BiChevronRight } from "react-icons/bi";
 import AnimateHeight from "react-animate-height";
 
@@ -194,7 +194,7 @@ const NavLevel = ({
           <AnimateHeight duration={300} height={expanded ? 'auto' : 0}>
             <NavLevelChildContainer level={level}>
               {(categoryData.items || []).map((item) => (
-                <div key={item.slug ? item.slug + level : item.title + level}>
+                <div key={`child-container-${item.slug ? getUrl(item.slug) + level : item.title + level}`}>
                   <NavLevel
                     navListElem={navListElem}
                     level={level + 1}
@@ -271,10 +271,7 @@ export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
     <DocsNavigationContainer ref={navListElem}>
       {navItems?.map((categoryData) => (
         <div
-        key={
-          "mobile-" +
-          (categoryData.slug ? getUrl(categoryData.slug) : categoryData.title)
-        }
+        key={`mobile-${categoryData.slug ? getUrl(categoryData.slug) : categoryData.title}`}
       >
         <NavLevel navListElem={navListElem} categoryData={categoryData} />
         </div>

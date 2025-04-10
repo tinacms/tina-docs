@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import client from "../../tina/__generated__/client";
-import { getDocsNav } from "../../utils/docs/getDocumentNavigation";
-import getTableOfContents from "../../utils/docs/getPageTableOfContents";
+import client from "@/tina/__generated__/client";
+import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
+import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { TinaClient } from "../tina-client";
 import DocumentPageClient from "./[...slug]/DocumentPageClient";
-import { getExcerpt } from "../../utils/docs/getExcerpt";
+import { getExcerpt } from "@/utils/docs/getExcerpt";
 
 export async function generateMetadata() {
   const slug = 'index'
