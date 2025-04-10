@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
+import Image from 'next/image';
 
 /** Minimal inline docAndBlogComponents for headings only */
 const docAndBlogComponents = {
@@ -201,7 +202,7 @@ export default function ScrollBasedShowcase(data: {
             return (
               <div
                 key={`showcase-item-${index}`}
-                // If active => full opacity + orange border + text color
+                // If active => full opacity + orange border + text colors
                 // If not => half opacity + gray border
                 className={`mt-0 md:mt-8 transition-all duration-300 ease-in-out
                   ${
@@ -260,11 +261,15 @@ export default function ScrollBasedShowcase(data: {
 
                 {/* This image is only shown on mobile (md:hidden).
                     On larger screens, the separate container is used. */}
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="block md:hidden my-8"
-                />
+                {item.image && (
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    width={500}
+                    height={300}
+                    className="block md:hidden my-8"
+                  />
+                )}
               </div>
             );
           })}
@@ -272,26 +277,30 @@ export default function ScrollBasedShowcase(data: {
 
         {/* This image container is only displayed on md+ */}
         <div className="relative w-full flex-1 hidden md:block overflow-hidden">
-          <img
-            ref={activeImg}
-            src={headings[0]?.src || ''}
-            alt=""
-            className="absolute right-0 w-100 transition-all duration-1000 ease-in-out rounded-lg"
-            style={{
-              opacity: activeIds.length ? 1 : 0,
-              bottom: Math.max(
-                componentRef.current?.scrollHeight -
-                  headings.filter((h) => activeIds.includes(h.id))[
-                    activeIds.length - 1
-                  ]?.offset -
-                  (activeIds.includes(headings[0]?.id) && activeIds.length === 1
-                    ? activeImg.current?.scrollHeight
-                    : activeImg.current?.scrollHeight / 1.2) +
-                  (activeIds.length - 1) * 32,
-                0
-              ),
-            }}
-          />
+          {headings[0]?.src && (
+            <Image
+              ref={activeImg}
+              src={headings[0].src}
+              alt=""
+              width={500}
+              height={300}
+              className="absolute right-0 w-100 transition-all duration-1000 ease-in-out rounded-lg"
+              style={{
+                opacity: activeIds.length ? 1 : 0,
+                bottom: Math.max(
+                  (componentRef.current?.scrollHeight || 0) -
+                    (headings.filter((h) => activeIds.includes(h.id))[
+                      activeIds.length - 1
+                    ]?.offset || 0) -
+                    (activeIds.includes(headings[0]?.id) && activeIds.length === 1
+                      ? (activeImg.current?.scrollHeight || 0)
+                      : (activeImg.current?.scrollHeight || 0) / 1.2) +
+                    ((activeIds.length - 1) * 32 || 0),
+                  0
+                ),
+              }}
+            />
+          )}
         </div>
       </div>
     </div>
