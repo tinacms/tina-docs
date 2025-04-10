@@ -1,16 +1,16 @@
 "use client";
 
 import { useTina } from "tinacms/dist/react";
-import { useScreenResizer } from "../../../components/hooks/ScreenResizer";
+import { useScreenResizer } from "@/components/hooks/ScreenResizer";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { DocsMDXComponentRenderer } from "../../../components/tinaMarkdown/DocsMDXComponentRenderer";
-import { formatDate } from "../../../utils/docs/getFormattedDate";
-import DocsPagination from "../../../components/ui/Pagination";
-import MainDocsBodyHeader from "../../../components/docs/MainDocsBodyHeader";
-import { useTocListener } from "../../../utils/docs/tocListener";
-import ToC from "../../../components/docs/PageToc";
-import { LeftHandSideParentContainer } from "../../../components/docs/LeftHandSideParent";
-import TocOverflowButton from "../../../components/docs/ToCOverflow";
+import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/DocsMDXComponentRenderer";
+import { formatDate } from "@/utils/docs/getFormattedDate";
+import DocsPagination from "@/components/ui/Pagination";
+import MainDocsBodyHeader from "@/components/docs/MainDocsBodyHeader";
+import { useTocListener } from "@/utils/docs/tocListener";
+import ToC from "@/components/docs/PageToc";
+import { LeftHandSideParentContainer } from "@/components/docs/LeftHandSideParent";
+import TocOverflowButton from "@/components/docs/ToCOverflow";
 
 export default function DocumentPageClient({ props }) {
   const { data } = useTina({
@@ -93,7 +93,7 @@ export default function DocumentPageClient({ props }) {
           >
             <ToC
               tocItems={pageTableOfContents}
-              activeIds={activeIds}
+              activeids={activeIds}
             />
           </div>
         )}
