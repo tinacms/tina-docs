@@ -1,5 +1,5 @@
-import client from '../../tina/__generated__/client';
-import data from '../../content/siteConfig.json';
+import client from '@/tina/__generated__/client';
+import data from '@/content/siteConfig.json';
 
 export async function getDocsNav(preview?: boolean, previewData?: any) {
 

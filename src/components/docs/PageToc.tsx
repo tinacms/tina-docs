@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled, { css } from 'styled-components';
-import { getDocId } from '../../utils/docs/getDocsIds';
+import { getDocId } from '@/utils/docs/getDocsIds';
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;

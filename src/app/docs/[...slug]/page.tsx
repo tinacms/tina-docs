@@ -1,10 +1,10 @@
 import fg from 'fast-glob';
 import { notFound } from 'next/navigation';
-import client from '../../../tina/__generated__/client';
+import client from '@/tina/__generated__/client';
 import DocumentPageClient from './DocumentPageClient';
-import getTableOfContents from '../../../utils/docs/getPageTableOfContents';
-import { getDocsNav } from '../../../utils/docs/getDocumentNavigation';
-import { getExcerpt } from '../../../utils/docs/getExcerpt';
+import getTableOfContents from '@/utils/docs/getPageTableOfContents';
+import { getDocsNav } from '@/utils/docs/getDocumentNavigation';
+import { getExcerpt } from '@/utils/docs/getExcerpt';
 
 
 

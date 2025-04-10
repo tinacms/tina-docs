@@ -3,8 +3,8 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { usePathname } from "next/navigation";
-import { matchActualTarget } from "../../utils/docs/urls";
-import { DynamicLink } from "../ui/DynamicLink";
+import { matchActualTarget } from "@/utils/docs/urls";
+import { DynamicLink } from "@/components/ui/DynamicLink";
 import { BiChevronRight } from "react-icons/bi";
 import AnimateHeight from "react-animate-height";
 

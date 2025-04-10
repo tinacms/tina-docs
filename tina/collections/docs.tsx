@@ -1,8 +1,8 @@
 import { seoInformation } from "./seoInformation";
 import { Template } from "tinacms";
-import { CardGridSchema } from "../../components/tinaMarkdown/CardGrid.schema";
-import  ScrollBasedShowcase from "../../components/tinaMarkdown/scrollBasedShowcase.schema";
-import { RecipeBlock } from "../../components/tinaMarkdown/Recipe.template";
+import { CardGridSchema } from "@/components/tinaMarkdown/CardGrid.schema";
+import  ScrollBasedShowcase from "@/components/tinaMarkdown/scrollBasedShowcase.schema";
+import { RecipeBlock } from "@/components/tinaMarkdown/Recipe.template";
 
 export const docsCollection = {
   name: "docs",
