@@ -1,21 +1,21 @@
-import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
-import { MdMenu } from 'react-icons/md';
+import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
+import { MdMenu } from "react-icons/md";
 
 const TocOverflow = ({ tocData }) => {
   return (
-    <div className="absolute z-10 bg-white mt-4 rounded-lg w-full p-6 shadow-lg animate-fade-down animate-duration-300 max-h-96 overflow-y-scroll">
+    <div className="animate-fade-down animate-duration-300 absolute z-10 mt-4 max-h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-lg">
       {tocData.tocData.map((item, index) => {
         const textIndentation =
-          item.type === 'h3' ? 'ml-4' : item.type === 'h4' ? 'ml-8' : '';
+          item.type === "h3" ? "ml-4" : item.type === "h4" ? "ml-8" : "";
 
-        const linkHref = `#${item.text.replace(/\s+/g, '-').toLowerCase()}`;
+        const linkHref = `#${item.text.replace(/\s+/g, "-").toLowerCase()}`;
 
         return (
           <Link
             key={index}
             href={linkHref}
-            className={`block hover:text-orange-500 transition-colors pl-6 ${textIndentation} pb-1`}
+            className={`block pl-6 transition-colors hover:text-orange-500 ${textIndentation} pb-1`}
           >
             {item.text}
           </Link>
@@ -39,27 +39,27 @@ const TocOverflowButton = (tocData) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   return (
     <div>
       {tocData.tocData.length !== 0 && (
-        <div className="py-6 w-full" ref={containerRef}>
+        <div className="w-full py-6" ref={containerRef}>
           <div
-            className="py-2 px-4 border-slate-400 bg-gradient-to-r from-white/50 to-white/30 rounded-lg shadow-lg cursor-pointer"
+            className="cursor-pointer rounded-lg border-slate-400 bg-gradient-to-r from-white/50 to-white/30 px-4 py-2 shadow-lg"
             onClick={() => setIsTableOfContentsOpen(!isTableOfContentsOpen)}
           >
             <span className="flex items-center space-x-2">
               <MdMenu size={20} className="text-orange-500" />
-              <span className="text-slate-600 py-1">Table of Contents</span>
+              <span className="py-1 text-slate-600">Table of Contents</span>
             </span>
           </div>
           {isTableOfContentsOpen && (
-            <div className="w-full relative">
+            <div className="relative w-full">
               <TocOverflow tocData={tocData} />
             </div>
           )}

@@ -1,7 +1,7 @@
 import { seoInformation } from "./seoInformation";
 import { Template } from "tinacms";
 import { CardGridSchema } from "@/components/tinaMarkdown/CardGrid.schema";
-import  ScrollBasedShowcase from "@/components/tinaMarkdown/scrollBasedShowcase.schema";
+import ScrollBasedShowcase from "@/components/tinaMarkdown/scrollBasedShowcase.schema";
 import { RecipeBlock } from "@/components/tinaMarkdown/Recipe.template";
 
 export const docsCollection = {
@@ -18,7 +18,7 @@ export const docsCollection = {
     },
     router: ({ document }) => {
       if (document._sys.filename === "index") {
-        return `/`;
+        return "/";
       }
       const slug = document._sys.breadcrumbs.join("/");
       return `/docs/${slug}`;
@@ -166,7 +166,7 @@ export const docsCollection = {
               name: "query",
               label: "Query",
               description:
-                'Paste GraphQL query here. "#" are auto-inserted as spacing placeholders and should not be used.',
+                "Paste GraphQL query here. \"#\" are auto-inserted as spacing placeholders and should not be used.",
               ui: {
                 /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
                 component: "textarea",
@@ -179,7 +179,7 @@ export const docsCollection = {
               name: "response",
               label: "Response",
               description:
-                'Paste GraphQL response data here. "#" are auto-inserted as spacing placeholders and should not be used.',
+                "Paste GraphQL response data here. \"#\" are auto-inserted as spacing placeholders and should not be used.",
               ui: {
                 /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
                 component: "textarea",

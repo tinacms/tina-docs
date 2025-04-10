@@ -40,15 +40,15 @@ export default function DocumentPageClient({ props }) {
   const gridClass = isScreenSmallerThan840
     ? "grid-cols-1"
     : isScreenSmallerThan1200 || documentationData?.tocIsHidden
-    ? "grid-cols-[1.25fr_3fr]"
-    : "grid-cols-[1.25fr_3fr_0.75fr]";
+      ? "grid-cols-[1.25fr_3fr]"
+      : "grid-cols-[1.25fr_3fr_0.75fr]";
 
   return (
-    <div className="relative my-6 lg:my-16 flex justify-center items-start">
-      <div className={`lg:px-16 px-3 w-full max-w-[2000px] grid ${gridClass}`}>
+    <div className="relative my-6 flex items-start justify-center lg:my-16">
+      <div className={`grid w-full max-w-[2000px] px-3 lg:px-16 ${gridClass}`}>
         {/* LEFT COLUMN */}
         <div
-          className={`block sticky top-32 h-[calc(100vh)] ${
+          className={`sticky top-32 block h-[calc(100vh)] ${
             isScreenSmallerThan840 ? "hidden" : "block"
           }`}
         >
@@ -57,7 +57,7 @@ export default function DocumentPageClient({ props }) {
           />
         </div>
         {/* MIDDLE COLUMN */}
-        <div className={`mx-8 max-w-full overflow-hidden break-words px-2 `}>
+        <div className={"mx-8 max-w-full overflow-hidden break-words px-2 "}>
           <MainDocsBodyHeader
             DocumentTitle={documentationData?.title}
             screenResizing={isScreenSmallerThan840}
@@ -67,17 +67,17 @@ export default function DocumentPageClient({ props }) {
             <TocOverflowButton tocData={pageTableOfContents} />
           )}
           <div
-          ref={contentRef}
-          className="pb-6 leading-7 text-slate-800 max-w-full space-y-3 mt-6"
-        >
-          {' '}
-          <TinaMarkdown
-            content={documentationData?.body}
-            components={DocsMDXComponentRenderer}
-          />
-        </div>
+            ref={contentRef}
+            className="mt-6 max-w-full space-y-3 pb-6 leading-7 text-slate-800"
+          >
+            {" "}
+            <TinaMarkdown
+              content={documentationData?.body}
+              components={DocsMDXComponentRenderer}
+            />
+          </div>
           {formattedDate && (
-            <span className="text-slate-500 text-md">
+            <span className="text-md text-slate-500">
               {" "}
               Last Edited: {formattedDate}
             </span>
@@ -87,14 +87,11 @@ export default function DocumentPageClient({ props }) {
         {/* RIGHT COLUMN */}
         {documentationData?.tocIsHidden ? null : (
           <div
-            className={`block sticky top-32 h-[calc(100vh)] ${
+            className={`sticky top-32 block h-[calc(100vh)] ${
               isScreenSmallerThan1200 ? "hidden" : "block"
             }`}
           >
-            <ToC
-              tocItems={pageTableOfContents}
-              activeids={activeIds}
-            />
+            <ToC tocItems={pageTableOfContents} activeids={activeIds} />
           </div>
         )}
       </div>

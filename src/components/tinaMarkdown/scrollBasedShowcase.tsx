@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { TinaMarkdown } from 'tinacms/dist/rich-text';
-import Image from 'next/image';
+import React, { useEffect, useRef, useState } from "react";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
+import Image from "next/image";
 
 /** Minimal inline docAndBlogComponents for headings only */
 const docAndBlogComponents = {
@@ -16,17 +16,17 @@ function useWindowSize() {
   }>({ width: 1200, height: 800 });
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
+    if (typeof window === "undefined") return;
+
     const handleResize = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
-    
+
     // Set initial size
     handleResize();
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return windowSize;
@@ -37,8 +37,8 @@ function createListener(
   componentRef: React.RefObject<HTMLDivElement>,
   headings: Item[],
   // Callback to update active IDs - param name in type is just for documentation
-  // eslint-disable-next-line no-unused-vars
-  setActiveIds: (activeIds: string[]) => void
+
+  setActiveIds: (activeIds: string[]) => void,
 ) {
   let tick = false;
   const THROTTLE_INTERVAL = 100;
@@ -72,27 +72,27 @@ function createListener(
       scrollPos / componentRef.current.scrollHeight;
 
     const activeHeadingCandidates = relativePositionHeadingMap.filter(
-      (heading) => relativeScrollPosition >= heading.relativePagePosition
+      (heading) => relativeScrollPosition >= heading.relativePagePosition,
     );
 
     const activeHeading =
       activeHeadingCandidates.length > 0
         ? activeHeadingCandidates.reduce((prev, current) =>
-            (prev.offset || 0) > (current.offset || 0) ? prev : current
+            (prev.offset || 0) > (current.offset || 0) ? prev : current,
           )
-        : headings[0] ?? {};
+        : (headings[0] ?? {});
 
-    newActiveIds.push(activeHeading.id || '');
+    newActiveIds.push(activeHeading.id || "");
 
-    if (activeHeading.level !== 'H2') {
+    if (activeHeading.level !== "H2") {
       const activeHeadingParentCandidates =
         activeHeadingCandidates.length > 0
-          ? activeHeadingCandidates.filter((h) => h.level === 'H2')
+          ? activeHeadingCandidates.filter((h) => h.level === "H2")
           : [];
       const activeHeadingParent =
         activeHeadingParentCandidates.length > 0
           ? activeHeadingParentCandidates.reduce((prev, current) =>
-              (prev.offset || 0) > (current.offset || 0) ? prev : current
+              (prev.offset || 0) > (current.offset || 0) ? prev : current,
             )
           : null;
 
@@ -144,7 +144,7 @@ export default function ScrollBasedShowcase(data: {
     data.showcaseItems?.forEach((item, index) => {
       const headingData: Item = {
         id: `${item.title}-${index}`,
-        level: item.useAsSubsection ? 'H3' : 'H2',
+        level: item.useAsSubsection ? "H3" : "H2",
         src: item.image,
         offset: headingRefs.current[index]?.offsetTop ?? 0,
       };
@@ -162,20 +162,20 @@ export default function ScrollBasedShowcase(data: {
       }));
       setHeadings(updatedHeadings);
     };
-    window.addEventListener('resize', updateOffsets);
-    return () => window.removeEventListener('resize', updateOffsets);
+    window.addEventListener("resize", updateOffsets);
+    return () => window.removeEventListener("resize", updateOffsets);
   }, [headings]);
 
   /** Throttled scroll event */
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     const activeTocListener = createListener(
       componentRef,
       headings,
-      setActiveIds
+      setActiveIds,
     );
-    window.addEventListener('scroll', activeTocListener);
-    return () => window.removeEventListener('scroll', activeTocListener);
+    window.addEventListener("scroll", activeTocListener);
+    return () => window.removeEventListener("scroll", activeTocListener);
   }, [headings, windowSize]);
 
   /** Update active image when activeIds change */
@@ -183,7 +183,7 @@ export default function ScrollBasedShowcase(data: {
     if (!activeIds.length) return;
     const heading = headings.find((h) => h.id === activeIds[0]);
     if (activeImg.current) {
-      activeImg.current.src = heading?.src || '';
+      activeImg.current.src = heading?.src || "";
     }
   }, [activeIds, headings]);
 
@@ -191,10 +191,13 @@ export default function ScrollBasedShowcase(data: {
     <div
       ref={componentRef}
       // doc-container replacements:
-      className="block relative w-full my-5 mx-auto"
+      className="relative mx-auto my-5 block w-full"
     >
-      <div className="flex relative min-h-screen">
-        <div id="main-content-container" className="min-h-full flex-1 m-2 px-2 pt-8 pb-16 box-border flex flex-col justify-between">
+      <div className="relative flex min-h-screen">
+        <div
+          id="main-content-container"
+          className="m-2 box-border flex min-h-full flex-1 flex-col justify-between px-2 pb-16 pt-8"
+        >
           {data.showcaseItems?.map((item, index) => {
             const itemId = `${item.title}-${index}`;
             const isFocused = activeIds.includes(itemId);
@@ -204,11 +207,11 @@ export default function ScrollBasedShowcase(data: {
                 key={`showcase-item-${index}`}
                 // If active => full opacity + orange border + text colors
                 // If not => half opacity + gray border
-                className={`mt-0 md:mt-8 transition-all duration-300 ease-in-out
+                className={`mt-0 transition-all duration-300 ease-in-out md:mt-8
                   ${
                     isFocused
-                      ? 'opacity-100  text-gray-900'
-                      : 'opacity-15  border-gray-300 text-gray-800'
+                      ? "text-gray-900  opacity-100"
+                      : "border-gray-300  text-gray-800 opacity-15"
                   }
                 `}
               >
@@ -219,10 +222,10 @@ export default function ScrollBasedShowcase(data: {
                     ref={(el) => (headingRefs.current[index] = el)}
                   >
                     <div
-                      className={`bg-gradient-to-br bg-clip-text text-transparent text-xl font-medium mt-2 mb-2 ${
+                      className={`my-2 bg-gradient-to-br bg-clip-text text-xl font-medium text-transparent ${
                         isFocused
-                          ? 'from-orange-400 via-orange-500 to-orange-600'
-                          : 'from-gray-800 to-gray-700'
+                          ? "from-orange-400 via-orange-500 to-orange-600"
+                          : "from-gray-800 to-gray-700"
                       } !important`}
                     >
                       {item.title}
@@ -235,10 +238,10 @@ export default function ScrollBasedShowcase(data: {
                     ref={(el) => (headingRefs.current[index] = el)}
                   >
                     <h2
-                      className={`bg-gradient-to-br  bg-clip-text text-transparent text-3xl mt-4 mb-3 ${
+                      className={`mb-3  mt-4 bg-gradient-to-br bg-clip-text text-3xl text-transparent ${
                         isFocused
-                          ? 'from-orange-400 via-orange-500 to-orange-600'
-                          : 'from-gray-800 to-gray-700'
+                          ? "from-orange-400 via-orange-500 to-orange-600"
+                          : "from-gray-800 to-gray-700"
                       }`}
                     >
                       {item.title}
@@ -247,8 +250,8 @@ export default function ScrollBasedShowcase(data: {
                 )}
 
                 <ul
-                  className={`list-none pl-4 transition-colors duration-500 ease-in-out border-l-4 ${
-                    isFocused ? 'border-orange-400' : 'border-gray-800'
+                  className={`list-none border-l-4 pl-4 transition-colors duration-500 ease-in-out ${
+                    isFocused ? "border-orange-400" : "border-gray-800"
                   }`}
                 >
                   <li>
@@ -267,7 +270,7 @@ export default function ScrollBasedShowcase(data: {
                     alt={item.title}
                     width={500}
                     height={300}
-                    className="block md:hidden my-8"
+                    className="my-8 block md:hidden"
                   />
                 )}
               </div>
@@ -276,7 +279,7 @@ export default function ScrollBasedShowcase(data: {
         </div>
 
         {/* This image container is only displayed on md+ */}
-        <div className="relative w-full flex-1 hidden md:block overflow-hidden">
+        <div className="relative hidden w-full flex-1 overflow-hidden md:block">
           {headings[0]?.src && (
             <Image
               ref={activeImg}
@@ -284,7 +287,7 @@ export default function ScrollBasedShowcase(data: {
               alt=""
               width={500}
               height={300}
-              className="absolute right-0 w-100 transition-all duration-1000 ease-in-out rounded-lg"
+              className="w-100 absolute right-0 rounded-lg transition-all duration-1000 ease-in-out"
               style={{
                 opacity: activeIds.length ? 1 : 0,
                 bottom: Math.max(
@@ -292,11 +295,12 @@ export default function ScrollBasedShowcase(data: {
                     (headings.filter((h) => activeIds.includes(h.id))[
                       activeIds.length - 1
                     ]?.offset || 0) -
-                    (activeIds.includes(headings[0]?.id) && activeIds.length === 1
-                      ? (activeImg.current?.scrollHeight || 0)
+                    (activeIds.includes(headings[0]?.id) &&
+                    activeIds.length === 1
+                      ? activeImg.current?.scrollHeight || 0
                       : (activeImg.current?.scrollHeight || 0) / 1.2) +
                     ((activeIds.length - 1) * 32 || 0),
-                  0
+                  0,
                 ),
               }}
             />

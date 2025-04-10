@@ -2,7 +2,6 @@ import { Collection, defineConfig } from "tinacms";
 import { docsCollection } from "./collections/docs";
 import { schema } from "./schema";
 
-
 export const config = defineConfig({
   schema,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,

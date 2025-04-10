@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import styled, { css } from 'styled-components';
-import { getDocId } from '@/utils/docs/getDocsIds';
+import React, { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
+import styled, { css } from "styled-components";
+import { getDocId } from "@/utils/docs/getDocsIds";
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
@@ -11,15 +11,15 @@ interface TocProps {
 }
 
 export const generateMarkdown = (
-  tocItems: Array<{ type: string; text: string }>
+  tocItems: Array<{ type: string; text: string }>,
 ) => {
   return tocItems
     .map((item) => {
       const anchor = getDocId(item.text);
-      const prefix = item.type === 'h3' ? '  ' : '';
+      const prefix = item.type === "h3" ? "  " : "";
       return `${prefix}- [${item.text}](#${anchor})`;
     })
-    .join('\n');
+    .join("\n");
 };
 
 const ToC = ({ tocItems, activeids }: TocProps) => {
@@ -28,11 +28,11 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
 
   useEffect(() => {
     const close = () => setIsOpen(false);
-    const allLinks = document.querySelectorAll('a');
-    allLinks.forEach((a) => a.addEventListener('click', close));
+    const allLinks = document.querySelectorAll("a");
+    allLinks.forEach((a) => a.addEventListener("click", close));
 
     return () => {
-      allLinks.forEach((a) => a.removeEventListener('click', close));
+      allLinks.forEach((a) => a.removeEventListener("click", close));
     };
   }, []);
 
@@ -50,7 +50,7 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
 
         tocList.scrollTo({
           top: activeTop - listHeight / 2 + activeHeight / 2,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       }
     }
@@ -69,7 +69,7 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
           <TocDesktopHeader>Table of Contents</TocDesktopHeader>
           <TocTitleList
             ref={tocWrapperRef}
-            className="max-h-[70vh] 2xl:max-h-[75vh] p-4 overflow-y-auto"
+            className="max-h-[70vh] overflow-y-auto p-4 2xl:max-h-[75vh]"
           >
             <ReactMarkdown
               components={{
@@ -80,16 +80,18 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
                   <li className="leading-relaxed">{children}</li>
                 ),
                 a: ({ children, ...props }) => {
-                  const isActive = activeids?.includes(props.href?.slice(1) || ''); // Match href with activeIds
+                  const isActive = activeids?.includes(
+                    props.href?.slice(1) || "",
+                  ); // Match href with activeIds
                   return (
                     <a
                       {...props}
                       className={`
-                        block py-1 px-2 rounded-md hover:bg-gray-50/75 transition-colors duration-150
+                        block rounded-md px-2 py-1 transition-colors duration-150 hover:bg-gray-50/75
                         ${
                           isActive
-                            ? 'text-orange-500 font-medium no-underline'
-                            : 'text-gray-600 hover:text-orange-500'
+                            ? "font-medium text-orange-500 no-underline"
+                            : "text-gray-600 hover:text-orange-500"
                         }`}
                     >
                       {children}
@@ -174,7 +176,7 @@ const TocContent = styled.div<{ isopen: string; activeids: string[] }>`
   transition: all 400ms ease-out;
 
   ${(props) =>
-    props.isopen === 'true' &&
+    props.isopen === "true" &&
     css`
       transition: all 750ms ease-in;
       max-height: 1500px;

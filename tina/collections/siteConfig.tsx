@@ -1,4 +1,3 @@
-
 import { CustomColorToggle } from "@/components/ui/CustomColorToggle";
 
 export const globalSiteConfiguration = {
