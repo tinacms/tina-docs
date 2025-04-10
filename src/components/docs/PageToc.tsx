@@ -65,7 +65,7 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
   return (
     <>
       <TocWrapper>
-        <TocContent activeIds={activeids} isopen={isOpen}>
+        <TocContent activeIds={activeids} isopen={isOpen.toString()}>
           <TocDesktopHeader>Table of Contents</TocDesktopHeader>
           <TocTitleList
             ref={tocWrapperRef}
@@ -164,7 +164,7 @@ const TocWrapper = styled.div`
   }
 `;
 
-const TocContent = styled.div<{ isopen: boolean; activeIds: string[] }>`
+const TocContent = styled.div<{ isopen: string; activeIds: string[] }>`
   display: block;
   width: 100%;
   line-height: 1.25;
@@ -174,7 +174,7 @@ const TocContent = styled.div<{ isopen: boolean; activeIds: string[] }>`
   transition: all 400ms ease-out;
 
   ${(props) =>
-    props.isopen &&
+    props.isopen === 'true' &&
     css`
       transition: all 750ms ease-in;
       max-height: 1500px;
