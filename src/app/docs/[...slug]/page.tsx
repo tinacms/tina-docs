@@ -17,6 +17,7 @@ export async function generateStaticParams() {
         return { slug: path.split("/") };
       });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
     notFound();
   }
@@ -41,6 +42,7 @@ export async function generateMetadata({
       },
     };
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error generating metadata:", error);
     return notFound();
   }
@@ -79,6 +81,7 @@ export default async function DocsPage({
       </div>
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     return notFound();
   }

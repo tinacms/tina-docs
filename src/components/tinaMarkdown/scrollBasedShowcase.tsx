@@ -222,6 +222,7 @@ export default function ScrollBasedShowcase(data: {
                     ref={(el) => (headingRefs.current[index] = el)}
                   >
                     <div
+                      // eslint-disable-next-line tailwindcss/no-custom-classname
                       className={`my-2 bg-gradient-to-br bg-clip-text text-xl font-medium text-transparent ${
                         isFocused
                           ? "from-orange-400 via-orange-500 to-orange-600"
@@ -287,6 +288,7 @@ export default function ScrollBasedShowcase(data: {
               alt=""
               width={500}
               height={300}
+              // eslint-disable-next-line tailwindcss/no-custom-classname
               className="w-100 absolute right-0 rounded-lg transition-all duration-1000 ease-in-out"
               style={{
                 opacity: activeIds.length ? 1 : 0,

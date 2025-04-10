@@ -69,6 +69,7 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
           <TocDesktopHeader>Table of Contents</TocDesktopHeader>
           <TocTitleList
             ref={tocWrapperRef}
+            // eslint-disable-next-line tailwindcss/no-arbitrary-value
             className="max-h-[70vh] overflow-y-auto p-4 2xl:max-h-[75vh]"
           >
             <ReactMarkdown

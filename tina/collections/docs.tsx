@@ -166,6 +166,7 @@ export const docsCollection = {
               name: "query",
               label: "Query",
               description:
+                // eslint-disable-next-line prettier/prettier
                 "Paste GraphQL query here. \"#\" are auto-inserted as spacing placeholders and should not be used.",
               ui: {
                 /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
@@ -179,6 +180,7 @@ export const docsCollection = {
               name: "response",
               label: "Response",
               description:
+                // eslint-disable-next-line prettier/prettier
                 "Paste GraphQL response data here. \"#\" are auto-inserted as spacing placeholders and should not be used.",
               ui: {
                 /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */

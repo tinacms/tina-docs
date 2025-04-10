@@ -10,7 +10,9 @@ export default function NotFound() {
             <h2 className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text font-tuner text-6xl text-transparent">
               Sorry, Friend.
             </h2>
+            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
             <hr className="my-8 block h-[7px] w-full border-none bg-[url('/svg/hr.svg')] bg-[length:auto_100%] bg-no-repeat" />
+            {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
             <p className="to-blue-1000 -mb-1 block bg-gradient-to-br from-blue-700 via-blue-900 bg-clip-text text-lg text-transparent lg:text-xl lg:leading-normal">
               We couldn&apos;t find what you were looking for.
             </p>
@@ -27,6 +29,7 @@ export default function NotFound() {
             </Link>
           </div>
         </div>
+        {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
         <div className="mx-auto max-w-[65vw] md:max-w-none">
           <div className="relative aspect-square overflow-hidden">
             <Image

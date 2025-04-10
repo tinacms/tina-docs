@@ -16,6 +16,7 @@ export const LeftHandSideParentContainer = ({
       >
         TinaDocs
       </h1>
+      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className="h-[76%] overflow-x-hidden overflow-y-scroll pl-4 2xl:max-h-[75vh] 2xl:pl-0">
         <DocsNavigationList navItems={tableOfContents} />
       </div>

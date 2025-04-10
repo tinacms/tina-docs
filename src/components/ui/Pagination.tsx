@@ -24,6 +24,7 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
             style={{ backgroundColor: "#FAFAFA" }}
           >
             <span className="pl-10 text-sm uppercase opacity-50">Previous</span>
+            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
             <h5 className="pl m-0 flex items-center text-base leading-[1.3] text-blue-800 transition-all duration-150 ease-out group-hover:text-orange-500 md:text-xl">
               <NextImage
                 src="/svg/right-arrow.svg"
@@ -46,6 +47,7 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
             <span className="pr-6 text-sm uppercase opacity-50 md:pr-10">
               Next
             </span>
+            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
             <h5 className="m-0 flex items-center justify-end text-base leading-[1.3] text-blue-800 transition-all duration-150 ease-out group-hover:text-orange-500 md:text-xl">
               {nextPage.title}
               <NextImage

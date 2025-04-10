@@ -1,7 +1,7 @@
 import client from "@/tina/__generated__/client";
 import data from "@/content/siteConfig.json";
 
-export async function getDocsNav(preview?: boolean, previewData?: any) {
+export async function getDocsNav(preview?: boolean) {
   const docsToCData = await client.queries.docsTableOfContents({
     relativePath: "DocsTableOfContents.json",
   });

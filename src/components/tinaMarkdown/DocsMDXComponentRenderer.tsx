@@ -70,7 +70,7 @@ export const DocsMDXComponentRenderer: Components<{
   Codesandbox: { embedSrc: string; title: string };
   Diagram: { alt: string; src: string };
   WideImage: { alt: string; src: string };
-  CustomFieldComponentDemo: {};
+  CustomFieldComponentDemo: unknown;
   CloudinaryVideo: { src: string };
   Button: { link: string; label: string };
   ImageAndText: { docText: string; image: string; heading?: string };
@@ -131,6 +131,7 @@ export const DocsMDXComponentRenderer: Components<{
 
     return (
       <div
+        // eslint-disable-next-line tailwindcss/no-arbitrary-value
         className={`mb-2 max-w-full overflow-hidden rounded-lg bg-white/40 shadow-sm transition-[width] duration-300 ease-in-out ${
           isExpanded ? "w-full" : "w-80 delay-700"
         }`}
@@ -153,6 +154,7 @@ export const DocsMDXComponentRenderer: Components<{
         </div>
 
         <div
+          // eslint-disable-next-line tailwindcss/no-arbitrary-value
           className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
             isExpanded
               ? "max-h-[2000px] opacity-100 delay-500"
@@ -496,9 +498,11 @@ export const DocsMDXComponentRenderer: Components<{
 
         {props.property?.some((property) => property.required) && (
           <div className=" mx-6 mt-6 flex items-start gap-3 rounded-md bg-blue-50 p-4">
+            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
             <InformationCircleIconComponent className="mt-0.5 size-5 shrink-0 text-[#3B82F6]" />
             <p className="text-sm text-gray-700">
               All properties marked as{" "}
+              {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
               <span className="font-medium text-[#FF5533]">REQUIRED</span> must
               be specified for the field to work properly.
             </p>
@@ -814,6 +818,7 @@ export const DocsMDXComponentRenderer: Components<{
   Button: ({ link, label }) => (
     <div className="my-6 flex w-full justify-start">
       <a
+        // eslint-disable-next-line tailwindcss/no-arbitrary-value, tailwindcss/no-custom-classname
         className="focus:shadow-outline flex items-center gap-1 whitespace-nowrap rounded-full border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600 px-6 pb-[10px] pt-[12px] font-tuner text-base font-medium leading-tight text-white transition duration-150 ease-out hover:-translate-x-px hover:-translate-y-px hover:text-gray-50 focus:outline-none active:translate-x-px active:translate-y-px"
         href={link}
         target="_blank"
@@ -899,6 +904,7 @@ function FormatHeaders({
         {" "}
         {children}
         <FiLink
+          // eslint-disable-next-line tailwindcss/no-custom-classname
           className={`${linkColor[level]} group-hover:animate-wiggle absolute ml-1 opacity-0 transition-opacity duration-200 group-hover:opacity-80`}
           style={{
             display: "inline-block",

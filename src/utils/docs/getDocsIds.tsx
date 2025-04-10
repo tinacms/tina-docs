@@ -8,5 +8,5 @@ export const getDocId = (label) => {
     .replace(/^\s*"|"\s*$/g, "-")
     .replace(/^-*|-*$/g, "")
     .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9\-]/g, "");
+    .replace(/[^a-z0-9\\-]/g, "");
 };

@@ -45,9 +45,11 @@ export default function DocumentPageClient({ props }) {
 
   return (
     <div className="relative my-6 flex items-start justify-center lg:my-16">
+      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className={`grid w-full max-w-[2000px] px-3 lg:px-16 ${gridClass}`}>
         {/* LEFT COLUMN */}
         <div
+          // eslint-disable-next-line tailwindcss/no-arbitrary-value
           className={`sticky top-32 block h-[calc(100vh)] ${
             isScreenSmallerThan840 ? "hidden" : "block"
           }`}
@@ -87,6 +89,7 @@ export default function DocumentPageClient({ props }) {
         {/* RIGHT COLUMN */}
         {documentationData?.tocIsHidden ? null : (
           <div
+            // eslint-disable-next-line tailwindcss/no-arbitrary-value
             className={`sticky top-32 block h-[calc(100vh)] ${
               isScreenSmallerThan1200 ? "hidden" : "block"
             }`}

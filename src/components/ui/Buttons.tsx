@@ -98,6 +98,7 @@ export const FlushButton = ({
     <Link
       href={link}
       passHref
+      // eslint-disable-next-line tailwindcss/no-custom-classname
       className={`${baseClasses} ${
         colorClasses[color] ? colorClasses[color] : colorClasses["seafoam"]
       } ${"hover:inner-link border-none bg-none p-2 hover:translate-x-0 hover:translate-y-0 hover:shadow-none"} ${className}`}

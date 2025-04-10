@@ -21,6 +21,7 @@ export async function generateMetadata() {
       },
     };
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error generating metadata:", error);
     return notFound();
   }
@@ -52,6 +53,7 @@ export default async function DocsPage() {
       />
     );
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
     return notFound();
   }
