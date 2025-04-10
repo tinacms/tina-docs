@@ -234,10 +234,10 @@ export const DocsMDXComponentRenderer: Components<{
       };
 
       return (
-        <span className="block my-4">
-          <span className="block relative w-full max-w-xl mx-auto">
+        <span className="flex flex-col gap-2 my-4">
+          <span className="relative w-full max-w-xl mx-auto">
             <span 
-              className="block relative rounded-xl overflow-hidden" 
+              className="relative rounded-xl overflow-hidden" 
               style={{ 
                 aspectRatio: `${dimensions.width}/${dimensions.height}`,
                 maxHeight: '600px',
@@ -259,7 +259,7 @@ export const DocsMDXComponentRenderer: Components<{
             </span>
           </span>
           {props?.caption && (
-            <span className="block text-sm font-tuner text-gray-500 mt-2">
+            <span className="text-sm font-tuner text-gray-500">
               Figure: {props.caption}
             </span>
           )}
