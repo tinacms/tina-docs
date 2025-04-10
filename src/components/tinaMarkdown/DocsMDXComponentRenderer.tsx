@@ -833,9 +833,7 @@ function FormatHeaders({ children, level }: { children?: React.ReactNode, level:
     children?.props?.content?.map((content: any) => content.text).join('') ?? children
   );
 
-  const currentUrl =
-    typeof window !== 'undefined' ? window.location.pathname : '';
-  const linkHref = `${currentUrl}#${id}`;
+  const linkHref = `#${id}`;
 
   const styles = {
     1: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-4xl !mt-16 mb-4',
