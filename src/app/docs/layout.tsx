@@ -1,6 +1,6 @@
-import React from 'react';
-import DocsLayoutClient from './toc-wrapper';
-import { getDocsNav } from '@/utils/docs/getDocumentNavigation';
+import React from "react";
+import DocsLayoutClient from "./toc-wrapper";
+import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
 
 export default async function DocsLayout({
   children,

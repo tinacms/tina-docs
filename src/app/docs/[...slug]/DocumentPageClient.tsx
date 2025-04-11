@@ -34,7 +34,10 @@ export default function DocumentPageClient({ props }) {
 
   return (
     <div
-      className={`grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]`}
+      // eslint-disable-next-line tailwindcss/no-arbitrary-value
+      className={
+        "grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]"
+      }
     >
       {/* MIDDLE COLUMN */}
       <div
@@ -43,7 +46,7 @@ export default function DocumentPageClient({ props }) {
         }`}
       >
         <div>
-          <div className="pt-4 font-tuner text-4xl bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
+          <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text pt-4 font-tuner text-4xl text-transparent">
             {documentationData?.title}
           </div>
         </div>
@@ -57,7 +60,7 @@ export default function DocumentPageClient({ props }) {
           />
         </div>
         {formattedDate && (
-          <span className="text-slate-500 text-md">
+          <span className="text-md text-slate-500">
             {" "}
             Last Edited: {formattedDate}
           </span>
@@ -66,7 +69,8 @@ export default function DocumentPageClient({ props }) {
       </div>
       {/* RIGHT COLUMN */}
       {documentationData?.tocIsHidden ? null : (
-        <div className={`sticky top-32 h-[calc(100vh)] hidden xl:block mx-8`}>
+        // eslint-disable-next-line tailwindcss/no-arbitrary-value
+        <div className={"sticky top-32 mx-8 hidden h-[calc(100vh)] xl:block"}>
           <ToC tocItems={pageTableOfContents} activeids={activeIds} />
         </div>
       )}

@@ -1,5 +1,4 @@
 import client from "@/tina/__generated__/client";
-import { getExcerpt } from "@/utils/docs/getExcerpt";
 import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
@@ -47,7 +46,7 @@ export default async function DocsPage({
     });
 
     const pageTableOfContents = getTableOfContents(
-      documentData?.data.docs.body
+      documentData?.data.docs.body,
     );
 
     return (

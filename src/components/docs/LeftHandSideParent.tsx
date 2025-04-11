@@ -10,9 +10,10 @@ export const LeftHandSideParentContainer = ({
   header: any;
 }) => {
   return (
-    <div className="rounded-2xl shadow-xl w-full bg-white/50 h-5/6">
+    <div className="h-5/6 w-full rounded-2xl bg-white/50 shadow-xl">
       {header}
-      <div className="overflow-y-scroll overflow-x-hidden h-[76%] 2xl:max-h-[75vh] pl-4 2xl:pl-0">
+      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+      <div className="h-[76%] overflow-x-hidden overflow-y-scroll pl-4 2xl:max-h-[75vh] 2xl:pl-0">
         <DocsNavigationList navItems={tableOfContents} />
       </div>
     </div>

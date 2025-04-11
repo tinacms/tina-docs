@@ -4,7 +4,7 @@ import { DocsNavigationList } from "./DocsNavigationList";
 
 const DirectoryOverflow = ({ tocData }) => {
   return (
-    <div className="absolute z-20 bg-white mt-4 rounded-lg w-full p-6 shadow-xl animate-fade-down animate-duration-300 overflow-y-scroll h-96">
+    <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-xl">
       <DocsNavigationList navItems={tocData} />
     </div>
   );
