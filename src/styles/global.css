@@ -1,14 +1,18 @@
-@config "../../tailwind.config.js";
-@import "tailwindcss";
+/* Tailwind imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Custom font-face declaration */
 @font-face {
-    font-family: 'tuner-medium';
-    src: url('/fonts/tuner-medium.woff2') format('woff2'),
-      url('/fonts/tuner-medium.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
+  font-family: 'tuner-medium';
+  src: url('/fonts/tuner-medium.woff2') format('woff2'),
+       url('/fonts/tuner-medium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
+/* CSS custom properties (variables) */
 :root {
-  --primary-color: #f97316
+  --primary-color: #f97316;
 }

@@ -1,34 +1,34 @@
 import MonacoCodeEditor from "./MonacoCodeEditor";
 
 export const RecipeBlock = {
-  name: 'recipeBlock',
-  label: '<⭐> Recipe Block',
+  name: "recipeBlock",
+  label: "<⭐> Recipe Block",
   ui: {
-    previewSrc: '/img/blocks/recipe.png',
+    previewSrc: "/img/blocks/recipe.png",
   },
   fields: [
     {
-      name: 'title',
-      label: 'Heading Title',
-      type: 'string',
+      name: "title",
+      label: "Heading Title",
+      type: "string",
     },
     {
-      name: 'description',
-      label: 'Description',
-      type: 'string',
+      name: "description",
+      label: "Description",
+      type: "string",
     },
     {
-      type: 'string',
-      name: 'code',
-      label: 'Code',
+      type: "string",
+      name: "code",
+      label: "Code",
       ui: {
         component: MonacoCodeEditor,
       },
     },
     {
-      name: 'instruction',
-      label: 'Instruction',
-      type: 'object',
+      name: "instruction",
+      label: "Instruction",
+      type: "object",
       list: true,
       ui: {
         itemProps: (item) => {
@@ -37,28 +37,28 @@ export const RecipeBlock = {
       },
       fields: [
         {
-          name: 'header',
-          label: 'Header',
-          type: 'string',
+          name: "header",
+          label: "Header",
+          type: "string",
         },
         {
-          name: 'itemDescription',
-          label: 'Item Description',
-          type: 'string',
+          name: "itemDescription",
+          label: "Item Description",
+          type: "string",
         },
         {
-          name: 'codeLineStart',
-          label: 'Code Line Start',
-          type: 'number',
+          name: "codeLineStart",
+          label: "Code Line Start",
+          type: "number",
           description:
-            'Enter negative values to highlight from 0 to your end number',
+            "Enter negative values to highlight from 0 to your end number",
         },
         {
-          name: 'codeLineEnd',
-          label: 'Code Line End',
-          type: 'number',
+          name: "codeLineEnd",
+          label: "Code Line End",
+          type: "number",
           description:
-            'Highlighting will not work if end number is greater than start number',
+            "Highlighting will not work if end number is greater than start number",
         },
       ],
     },

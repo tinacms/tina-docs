@@ -1,9 +1,9 @@
-import { BiArrowBack } from 'react-icons/bi';
-import { tinaField } from 'tinacms/dist/react';
-import { sanitizeLabel } from '@/utils/sanitizeLabel';
-import { FlushButton, LinkButton } from '@/components/ui/Buttons';
+import { BiArrowBack } from "react-icons/bi";
+import { tinaField } from "tinacms/dist/react";
+import { sanitizeLabel } from "@/utils/sanitizeLabel";
+import { FlushButton, LinkButton } from "@/components/ui/Buttons";
 
-export const Actions = ({ items, align = 'left', flush = false }) => {
+export const Actions = ({ items, align = "left", flush = false }) => {
   const isList = true;
   const ActionButton = flush ? FlushButton : LinkButton;
 
@@ -11,14 +11,14 @@ export const Actions = ({ items, align = 'left', flush = false }) => {
     <>
       <div
         className={[
-          'items-center',
+          "items-center",
           isList
-            ? 'flex flex-col sm:flex-row md:flex-row lg:flex-row'
-            : 'flex flex-row',
-          align === 'center' && 'actionGroupCenter',
+            ? "flex flex-col sm:flex-row md:flex-row lg:flex-row"
+            : "flex flex-row",
+          align === "center" && "actionGroupCenter",
         ]
           .filter(Boolean)
-          .join(' ')}
+          .join(" ")}
       >
         {items &&
           items.map((item) => {
@@ -26,20 +26,21 @@ export const Actions = ({ items, align = 'left', flush = false }) => {
             {
               const externalUrlPattern = /^((http|https|ftp):\/\/)/;
               const external = externalUrlPattern.test(url);
-              const link = url || '#';
+              const link = url || "#";
               return (
                 <ActionButton
                   key={label}
                   id={sanitizeLabel(label)}
-                  size={item.size ? item.size : 'medium'}
+                  size={item.size ? item.size : "medium"}
                   link={link}
-                  target={external ? '_blank' : '_self'}
+                  target={external ? "_blank" : "_self"}
                   color={variant}
-                  data-tina-field={tinaField(item, 'label')}
+                  data-tina-field={tinaField(item, "label")}
                 >
                   {label}
                   {icon && (
-                    <BiArrowBack className="h-[1.125em] w-auto opacity-70 ml-2 -mr-1 -mt-1 rotate-180" />
+                    // eslint-disable-next-line tailwindcss/no-arbitrary-value
+                    <BiArrowBack className="-mr-1 -mt-1 ml-2 h-[1.125em] w-auto rotate-180 opacity-70" />
                   )}
                 </ActionButton>
               );

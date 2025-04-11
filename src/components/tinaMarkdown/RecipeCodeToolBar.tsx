@@ -9,19 +9,19 @@ export const CodeToolbar = ({
   onCopy: () => void;
   tooltipVisible: boolean;
 }) => (
-  <div className="code-toolbar bg-gray-800 text-white px-4 py-2 lg:rounded-t-xl text-sm font-semibold flex justify-between items-center">
-    <span className="font-tuner">{lang || 'Unknown'}</span>
-    <div className="flex items-center ml-4 space-x-4 relative overflow-visible">
+  <div className="code-toolbar flex items-center justify-between bg-gray-800 px-4 py-2 text-sm font-semibold text-white lg:rounded-t-xl">
+    <span className="font-tuner">{lang || "Unknown"}</span>
+    <div className="relative ml-4 flex items-center space-x-4 overflow-visible">
       <button
         onClick={onCopy}
-        className={`flex items-center px-2 py-1 bg-gray-800  rounded-md text-sm transition-colors duration-200 space-x-1 relative ${
+        className={`relative flex items-center space-x-1 rounded-md  bg-gray-800 px-2 py-1 text-sm transition-colors duration-200 ${
           tooltipVisible
-            ? 'text-white bg-gray-700 rounded-md ml-1'
-            : 'hover:bg-gray-700 text-white'
+            ? "ml-1 rounded-md bg-gray-700 text-white"
+            : "text-white hover:bg-gray-700"
         }`}
       >
-        {!tooltipVisible && <MdOutlineContentCopy className="w-4 h-4" />}
-        <span>{!tooltipVisible ? 'Copy' : 'Copied!'}</span>
+        {!tooltipVisible && <MdOutlineContentCopy className="size-4" />}
+        <span>{!tooltipVisible ? "Copy" : "Copied!"}</span>
       </button>
     </div>
   </div>

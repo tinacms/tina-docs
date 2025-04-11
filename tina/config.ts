@@ -1,7 +1,5 @@
-import { Collection, defineConfig } from "tinacms";
-import { docsCollection } from "./collections/docs";
+import { defineConfig } from "tinacms";
 import { schema } from "./schema";
-
 
 export const config = defineConfig({
   schema,
