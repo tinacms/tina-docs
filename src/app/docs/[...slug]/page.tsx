@@ -1,9 +1,9 @@
 import client from "@/tina/__generated__/client";
-import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
 import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
 import { notFound } from "next/navigation";
+import { TinaClient } from "../../tina-client";
 import DocumentPageClient from "./DocumentPageClient";
 
 export async function generateStaticParams() {
@@ -41,29 +41,25 @@ export default async function DocsPage({
   const slug = params.slug.join("/");
 
   try {
-    const [documentData, docsToCData] = await Promise.all([
-      client.queries.docs({ relativePath: `${slug}.mdx` }),
-      getDocsNav(),
-    ]);
+    const documentData = await client.queries.docs({
+      relativePath: `${slug}.mdx`,
+    });
 
     const pageTableOfContents = getTableOfContents(
       documentData?.data.docs.body,
     );
 
-    const props = {
-      query: documentData.query,
-      variables: documentData.variables,
-      data: documentData.data,
-      pageTableOfContents,
-      documentationData: documentData,
-      navigationDocsData: docsToCData,
-    };
-
     return (
-      <div>
-        {" "}
-        <DocumentPageClient props={props} />
-      </div>
+      <TinaClient
+        Component={DocumentPageClient}
+        props={{
+          query: documentData.query,
+          variables: documentData.variables,
+          data: documentData.data,
+          pageTableOfContents,
+          documentationData: documentData,
+        }}
+      />
     );
   } catch (e) {
     // eslint-disable-next-line no-console
