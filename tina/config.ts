@@ -26,14 +26,14 @@ export const config = defineConfig({
     publicFolder: "public", // The public asset folder for your framework
     outputFolder: "admin", // within the public folder
   },
-//   tinaioConfig: {
-//     frontendUrlOverride: 'http://localhost:3002',
-//     identityApiUrlOverride: 'https://isaaclombarddev-identity.tinajs.dev',
-//     contentApiUrlOverride: 'https://isaaclombarddev-content.tinajs.dev',
+  tinaioConfig: {
+    frontendUrlOverride: 'http://localhost:3002',
+    identityApiUrlOverride: 'https://isaaclombarddev-identity.tinajs.dev',
+    contentApiUrlOverride: 'https://isaaclombarddev-content.tinajs.dev',
 
-//     // Include next line only if you set DEPLOY_ASSETS_API to true for your instance...
-//     assetsApiUrlOverride: 'https://assets-api-local-isaaclombarddev.tinajs.dev'
-// },
+    // Include next line only if you set DEPLOY_ASSETS_API to true for your instance...
+    assetsApiUrlOverride: 'https://assets-api-local-isaaclombarddev.tinajs.dev'
+},
 });
 
 export default config;
