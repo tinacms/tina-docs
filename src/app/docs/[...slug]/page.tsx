@@ -1,10 +1,10 @@
+import client from "@/tina/__generated__/client";
+import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
+import getTableOfContents from "@/utils/docs/getPageTableOfContents";
+import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
 import { notFound } from "next/navigation";
-import client from "@/tina/__generated__/client";
 import DocumentPageClient from "./DocumentPageClient";
-import getTableOfContents from "@/utils/docs/getPageTableOfContents";
-import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
-import { getExcerpt } from "@/utils/docs/getExcerpt";
 
 export async function generateStaticParams() {
   try {
@@ -29,23 +29,8 @@ export async function generateMetadata({
   params: { slug: string[] };
 }) {
   const slug = params.slug?.join("/");
-  try {
-    const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
-    const excerpt = getExcerpt(data.docs.body, 140);
-
-    return {
-      title: `${data.docs.seo?.title || data.docs.title} | TinaCMS Docs`,
-      description: data.docs.seo?.description || `${excerpt} || TinaCMS Docs`,
-      openGraph: {
-        title: data.docs.title || "TinaCMS Docs",
-        description: data.docs.seo?.description || `${excerpt} || TinaCMS Docs`,
-      },
-    };
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error generating metadata:", error);
-    return notFound();
-  }
+  const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
+  return getSeo(data);
 }
 
 export default async function DocsPage({
