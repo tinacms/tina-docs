@@ -5,12 +5,12 @@ import { MdMenu } from 'react-icons/md';
 const DirectoryOverflow = ({ tocData }) => {
   return (
     <div className="absolute z-20 bg-white mt-4 rounded-lg w-full p-6 shadow-xl animate-fade-down animate-duration-300 overflow-y-scroll h-96">
-      <DocsNavigationList navItems={tocData.tocData} />
+      <DocsNavigationList navItems={tocData} />
     </div>
   );
 };
 
-const DirectoryOverflowButton = (tocData) => {
+const DirectoryOverflowButton = ({tocData}) => {
   const [isTableOfContentsOpen, setIsTableOfContentsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 

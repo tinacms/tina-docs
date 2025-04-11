@@ -1,15 +1,12 @@
 "use client";
 
 import { useTina } from "tinacms/dist/react";
-import { useScreenResizer } from "@/components/hooks/ScreenResizer";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/DocsMDXComponentRenderer";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import DocsPagination from "@/components/ui/Pagination";
-import MainDocsBodyHeader from "@/components/docs/MainDocsBodyHeader";
-import { useTocListener } from "@/utils/docs/tocListener";
+import { useTocListener } from "@/utils/docs/tocListener";    
 import ToC from "@/components/docs/PageToc";
-import { LeftHandSideParentContainer } from "@/components/docs/LeftHandSideParent";
 import TocOverflowButton from "@/components/docs/ToCOverflow";
 
 export default function DocumentPageClient({ props }) {
@@ -20,7 +17,7 @@ export default function DocumentPageClient({ props }) {
   });
 
   const documentationData = data.docs;
-  const { pageTableOfContents, navigationDocsData } = props;
+  const { pageTableOfContents } = props;
 
   const formattedDate = formatDate(documentationData?.last_edited);
   const previousPage = {
@@ -35,69 +32,44 @@ export default function DocumentPageClient({ props }) {
 
   const { activeIds, contentRef } = useTocListener(documentationData);
 
-  const isScreenSmallerThan1200 = useScreenResizer().isScreenSmallerThan1200;
-  const isScreenSmallerThan840 = useScreenResizer().isScreenSmallerThan840;
-  const gridClass = isScreenSmallerThan840
-    ? "grid-cols-1"
-    : isScreenSmallerThan1200 || documentationData?.tocIsHidden
-    ? "grid-cols-[1.25fr_3fr]"
-    : "grid-cols-[1.25fr_3fr_0.75fr]";
-
   return (
-    <div className="relative my-6 lg:my-16 flex justify-center items-start">
-      <div className={`lg:px-16 px-3 w-full max-w-[2000px] grid ${gridClass}`}>
-        {/* LEFT COLUMN */}
-        <div
-          className={`block sticky top-32 h-[calc(100vh)] ${
-            isScreenSmallerThan840 ? "hidden" : "block"
-          }`}
-        >
-          <LeftHandSideParentContainer
-            tableOfContents={navigationDocsData?.data}
-          />
+    <div
+      className={`grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]`}
+    >
+      {/* MIDDLE COLUMN */}
+      <div
+        className={`max-w-full overflow-hidden break-words ${
+          !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
+        }`}
+      >
+        <div>
+          <div className="pt-4 font-tuner text-4xl bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
+            {documentationData?.title}
+          </div>
         </div>
-        {/* MIDDLE COLUMN */}
-        <div className={`mx-8 max-w-full overflow-hidden break-words px-2 `}>
-          <MainDocsBodyHeader
-            DocumentTitle={documentationData?.title}
-            screenResizing={isScreenSmallerThan840}
-            NavigationDocsItems={navigationDocsData?.data}
-          />
-          {isScreenSmallerThan1200 && !documentationData?.tocIsHidden && (
-            <TocOverflowButton tocData={pageTableOfContents} />
-          )}
-          <div
-          ref={contentRef}
-          className="pb-6 leading-7 text-slate-800 max-w-full space-y-3 mt-6"
-        >
-          {' '}
+        <div className="block xl:hidden">
+          <TocOverflowButton tocData={pageTableOfContents} />
+        </div>
+        <div ref={contentRef}>
           <TinaMarkdown
             content={documentationData?.body}
             components={DocsMDXComponentRenderer}
           />
         </div>
-          {formattedDate && (
-            <span className="text-slate-500 text-md">
-              {" "}
-              Last Edited: {formattedDate}
-            </span>
-          )}
-          <DocsPagination prevPage={previousPage} nextPage={nextPage} />
-        </div>
-        {/* RIGHT COLUMN */}
-        {documentationData?.tocIsHidden ? null : (
-          <div
-            className={`block sticky top-32 h-[calc(100vh)] ${
-              isScreenSmallerThan1200 ? "hidden" : "block"
-            }`}
-          >
-            <ToC
-              tocItems={pageTableOfContents}
-              activeids={activeIds}
-            />
-          </div>
+        {formattedDate && (
+          <span className="text-slate-500 text-md">
+            {" "}
+            Last Edited: {formattedDate}
+          </span>
         )}
+        <DocsPagination prevPage={previousPage} nextPage={nextPage} />
       </div>
+      {/* RIGHT COLUMN */}
+      {documentationData?.tocIsHidden ? null : (
+        <div className={`sticky top-32 h-[calc(100vh)] hidden xl:block mx-8`}>
+          <ToC tocItems={pageTableOfContents} activeids={activeIds} />
+        </div>
+      )}
     </div>
   );
 }
