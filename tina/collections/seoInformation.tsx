@@ -1,6 +1,5 @@
 import { TextInputWithCount } from "../customFields/textInputWithCount";
 
-
 export const seoInformation = {
   type: "object",
   label: "SEO Values",

@@ -40,16 +40,19 @@ export const Prism = (props: {
             }}
           >
             {tokens.map((line, i) => {
-              const { key: lineKey, ...lineProps } = getLineProps({ line, key: i });
+              const { key: lineKey, ...lineProps } = getLineProps({
+                line,
+                key: i,
+              });
               return (
                 <div key={`prism-line-${lineKey}`} {...lineProps}>
                   {line.map((token, key) => {
-                    const { key: tokenKey, ...tokenProps } = getTokenProps({ token, key });
+                    const { key: tokenKey, ...tokenProps } = getTokenProps({
+                      token,
+                      key,
+                    });
                     return (
-                      <span
-                        key={`prism-token-${tokenKey}`}
-                        {...tokenProps}
-                      />
+                      <span key={`prism-token-${tokenKey}`} {...tokenProps} />
                     );
                   })}
                 </div>

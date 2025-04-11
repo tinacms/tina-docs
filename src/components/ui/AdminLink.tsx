@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
 import React from "react";
 import { useEffect } from "react";
-import { useEditState } from 'tinacms/dist/react';
+import { useEditState } from "tinacms/dist/react";
 import { RxCross1 } from "react-icons/rx";
-
 
 const AdminLink = () => {
   const { edit } = useEditState();
@@ -13,8 +12,8 @@ const AdminLink = () => {
   useEffect(() => {
     setShowAdminLink(
       !edit &&
-        JSON.parse((window.localStorage.getItem('tinacms-auth') as any) || '{}')
-          ?.access_token
+        JSON.parse((window.localStorage.getItem("tinacms-auth") as any) || "{}")
+          ?.access_token,
     );
   }, [edit]);
 
@@ -25,7 +24,7 @@ const AdminLink = () => {
   return (
     <>
       {showAdminLink && (
-        <div className="fixed top-4 right-4 flex items-center justify-between bg-blue-500 text-white px-3 py-1 rounded-full z-50">
+        <div className="fixed right-4 top-4 z-50 flex items-center justify-between rounded-full bg-blue-500 px-3 py-1 text-white">
           <a
             href={`/admin/index.html#/~${window.location.pathname}`}
             className="text-xs"
@@ -33,7 +32,7 @@ const AdminLink = () => {
             Edit This Page
           </a>
           <button onClick={handleDismiss} className="ml-2 text-sm">
-            <RxCross1/>
+            <RxCross1 />
           </button>
         </div>
       )}

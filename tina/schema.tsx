@@ -3,8 +3,8 @@ import { docsCollection } from "./collections/docs";
 import { docsTableOfContentsCollection } from "./collections/docsTableOfContents";
 
 export const schema = defineSchema({
-    collections: [
-        docsCollection as Collection,
-        docsTableOfContentsCollection as Collection,
-    ]
-})
+  collections: [
+    docsCollection as Collection,
+    docsTableOfContentsCollection as Collection,
+  ],
+});

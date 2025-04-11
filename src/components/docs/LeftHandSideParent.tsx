@@ -1,11 +1,14 @@
-'use client';
+"use client";
 
-import { DocsNavigationList } from './DocsNavigationList';
+import { DocsNavigationList } from "./DocsNavigationList";
 
-
-
-export const LeftHandSideParentContainer = ({ tableOfContents, header }: { tableOfContents: any, header: any }) => {
-
+export const LeftHandSideParentContainer = ({
+  tableOfContents,
+  header,
+}: {
+  tableOfContents: any;
+  header: any;
+}) => {
   return (
     <div className="rounded-2xl shadow-xl w-full bg-white/50 h-5/6">
       {header}

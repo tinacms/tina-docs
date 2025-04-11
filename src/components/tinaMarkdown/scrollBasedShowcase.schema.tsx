@@ -1,27 +1,27 @@
-import { Template } from 'tinacms';
+import { Template } from "tinacms";
 
 const ScrollBasedShowcase: Template = {
-  label: 'Scroll Based Showcase',
-  name: 'scrollBasedShowcase',
+  label: "Scroll Based Showcase",
+  name: "scrollBasedShowcase",
   fields: [
     {
-      type: 'object',
-      label: 'Showcase Items',
-      name: 'showcaseItems',
+      type: "object",
+      label: "Showcase Items",
+      name: "showcaseItems",
       list: true,
       ui: {
         defaultItem: {
-          title: 'Title',
-          image: '/img/placeholder.png',
+          title: "Title",
+          image: "/img/placeholder.png",
           content: {
-            type: 'root',
+            type: "root",
             children: [
               {
-                type: 'p',
+                type: "p",
                 children: [
                   {
-                    type: 'text',
-                    text: 'Default Text. Edit me!',
+                    type: "text",
+                    text: "Default Text. Edit me!",
                   },
                 ],
               },
@@ -37,24 +37,24 @@ const ScrollBasedShowcase: Template = {
       },
       fields: [
         {
-          type: 'image',
-          label: 'Image',
-          name: 'image',
+          type: "image",
+          label: "Image",
+          name: "image",
         },
         {
-          type: 'string',
-          label: 'Title',
-          name: 'title',
+          type: "string",
+          label: "Title",
+          name: "title",
         },
         {
-          type: 'boolean',
-          label: 'Use as Subsection',
-          name: 'useAsSubsection',
+          type: "boolean",
+          label: "Use as Subsection",
+          name: "useAsSubsection",
         },
         {
-          type: 'rich-text',
-          label: 'Content',
-          name: 'content',
+          type: "rich-text",
+          label: "Content",
+          name: "content",
         },
       ],
     },

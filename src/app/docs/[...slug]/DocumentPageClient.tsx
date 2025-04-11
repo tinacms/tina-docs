@@ -1,13 +1,13 @@
 "use client";
 
-import { useTina } from "tinacms/dist/react";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/DocsMDXComponentRenderer";
-import { formatDate } from "@/utils/docs/getFormattedDate";
-import DocsPagination from "@/components/ui/Pagination";
-import { useTocListener } from "@/utils/docs/tocListener";    
 import ToC from "@/components/docs/PageToc";
 import TocOverflowButton from "@/components/docs/ToCOverflow";
+import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/DocsMDXComponentRenderer";
+import DocsPagination from "@/components/ui/Pagination";
+import { formatDate } from "@/utils/docs/getFormattedDate";
+import { useTocListener } from "@/utils/docs/tocListener";
+import { useTina } from "tinacms/dist/react";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
 
 export default function DocumentPageClient({ props }) {
   const { data } = useTina({

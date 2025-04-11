@@ -1,6 +1,6 @@
-import Link, { LinkProps } from 'next/link';
+import Link, { LinkProps } from "next/link";
 
-type ExtraProps = Omit<LinkProps, 'as' | 'href'>;
+type ExtraProps = Omit<LinkProps, "as" | "href">;
 
 interface DynamicLinkProps extends ExtraProps {
   href: string;
@@ -14,5 +14,3 @@ export const DynamicLink = ({ children, href, ...props }: DynamicLinkProps) => {
     </Link>
   );
 };
-
-

@@ -1,15 +1,15 @@
-import React from 'react'
-import Image from 'next/image'
-import { DynamicLink } from '../ui/DynamicLink'
+import React from "react";
+import Image from "next/image";
+import { DynamicLink } from "../ui/DynamicLink";
 
 interface NextPrevPageProps {
-  title: string
-  slug: string
+  title: string;
+  slug: string;
 }
 
 interface PaginationProps {
-  prevPage?: NextPrevPageProps
-  nextPage?: NextPrevPageProps
+  prevPage?: NextPrevPageProps;
+  nextPage?: NextPrevPageProps;
 }
 
 const NextImage = Image as any;
@@ -20,17 +20,18 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
       {prevPage && prevPage.slug && (
         <DynamicLink href={prevPage.slug} passHref>
           <div
-            className="block p-4 text-left relative transition-all group border border-gray-100 cursor-pointer"
-            style={{ backgroundColor: '#FAFAFA' }}
+            className="group relative block cursor-pointer border border-gray-100 p-4 text-left transition-all"
+            style={{ backgroundColor: "#FAFAFA" }}
           >
-            <span className="text-sm uppercase opacity-50 pl-10">Previous</span>
-            <h5 className="text-base md:text-xl leading-[1.3] m-0 pl transition-all ease-out duration-150 text-blue-800 group-hover:text-orange-500 flex items-center">
+            <span className="pl-10 text-sm uppercase opacity-50">Previous</span>
+            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+            <h5 className="pl m-0 flex items-center text-base leading-[1.3] text-blue-800 transition-all duration-150 ease-out group-hover:text-orange-500 md:text-xl">
               <NextImage
                 src="/svg/right-arrow.svg"
                 alt="Right arrow"
                 width={28}
                 height={28}
-                className="w-7 h-7 fill-gray-400 transition-all ease-out duration-150 rotate-180 group-hover:fill-orange-500 mr-2"
+                className="mr-2 size-7 rotate-180 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-orange-500"
               />
               {prevPage.title}
             </h5>
@@ -40,25 +41,28 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
       {nextPage && nextPage.slug && (
         <DynamicLink href={nextPage.slug} passHref>
           <div
-            className="col-start-2 block p-4 text-right relative transition-all group border border-gray-100 cursor-pointer"
-            style={{ backgroundColor: '#FAFAFA' }}
+            className="group relative col-start-2 block cursor-pointer border border-gray-100 p-4 text-right transition-all"
+            style={{ backgroundColor: "#FAFAFA" }}
           >
-            <span className="text-sm uppercase opacity-50 md:pr-10 pr-6">Next</span>
-            <h5 className="text-base md:text-xl leading-[1.3] m-0 transition-all ease-out duration-150 text-blue-800 group-hover:text-orange-500 flex items-center justify-end">
+            <span className="pr-6 text-sm uppercase opacity-50 md:pr-10">
+              Next
+            </span>
+            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+            <h5 className="m-0 flex items-center justify-end text-base leading-[1.3] text-blue-800 transition-all duration-150 ease-out group-hover:text-orange-500 md:text-xl">
               {nextPage.title}
               <NextImage
                 src="/svg/right-arrow.svg"
                 alt="Right arrow"
                 width={28}
                 height={28}
-                className="w-7 h-7 fill-gray-400 transition-all ease-out duration-150 group-hover:fill-orange-500 ml-2"
+                className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-orange-500"
               />
             </h5>
           </div>
         </DynamicLink>
       )}
     </div>
-  )
+  );
 }
 
-export default DocsPagination
+export default DocsPagination;

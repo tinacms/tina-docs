@@ -15,12 +15,11 @@ export const CustomColorToggle = ({ input }) => {
 
   return (
     <>
-      <label className="block font-semibold text-xs text-gray-700 mb-2">
+      <label className="mb-2 block text-xs font-semibold text-gray-700">
         Custom Background Selector
       </label>
       <div className="flex items-center pt-2">
-        
-        <label className="flex items-center cursor-pointer">
+        <label className="flex cursor-pointer items-center">
           <div className="relative shadow-lg">
             <input
               type="checkbox"
@@ -28,15 +27,15 @@ export const CustomColorToggle = ({ input }) => {
               onChange={handleCheckboxChange}
               className="sr-only"
             />
-        
+
             <div
-              className={`w-10 h-5 rounded-full shadow-inner transition-colors duration-200 ${
+              className={`h-5 w-10 rounded-full shadow-inner transition-colors duration-200 ${
                 disableColor ? "bg-green-500" : "bg-gray-300"
               }`}
             ></div>
-            
+
             <div
-              className={`absolute w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 left-0 top-0 ${
+              className={`absolute left-0 top-0 size-5 rounded-full bg-white shadow transition-transform duration-200 ${
                 disableColor ? "translate-x-full" : ""
               }`}
             ></div>
@@ -52,7 +51,7 @@ export const CustomColorToggle = ({ input }) => {
             value={colorValue}
             onChange={handleColorChange}
             disabled={disableColor}
-            className="w-10 h-10 border border-gray-300 rounded"
+            className="size-10 rounded border border-gray-300"
           />
         </div>
       </div>

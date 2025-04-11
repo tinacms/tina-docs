@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import mermaid from 'mermaid';
-import { useEffect, useRef } from 'react';
+import mermaid from "mermaid";
+import { useEffect, useRef } from "react";
 
 export default function MermaidElement({ value }) {
   const mermaidRef = useRef(null);
