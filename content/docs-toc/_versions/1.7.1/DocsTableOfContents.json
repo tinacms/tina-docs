@@ -1,1 +1,70 @@
-{}
+{
+  "supermenuGroup": [
+    {
+      "title": "Introduction",
+      "items": [
+        {
+          "title": "Overview",
+          "slug": "content/docs/_versions/1.7.1/index.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Using TinaDocs Starter",
+          "slug": "content/docs/_versions/1.7.1/introduction/using-tinadocs.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "FAQ",
+          "slug": "content/docs/_versions/1.7.1/introduction/faq.mdx",
+          "_template": "item"
+        }
+      ]
+    },
+    {
+      "title": "Core Concepts",
+      "items": [
+        {
+          "title": "Overview",
+          "slug": "content/docs/_versions/1.7.1/core-concepts/overview.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Data Fetching",
+          "slug": "content/docs/_versions/1.7.1/core-concepts/data-fetching.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Visual Editing",
+          "items": [
+            {
+              "title": "Overview",
+              "slug": "content/docs/_versions/1.7.1/core-concepts/visual-editing/overview.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "React",
+              "slug": "content/docs/_versions/1.7.1/core-concepts/visual-editing/react.mdx",
+              "_template": "item"
+            }
+          ],
+          "_template": "items"
+        },
+        {
+          "title": "Querying Content",
+          "slug": "content/docs/_versions/1.7.1/core-concepts/querying-content.mdx",
+          "_template": "item"
+        }
+      ]
+    },
+    {
+      "title": "The \"Tina\" Folder",
+      "items": [
+        {
+          "title": "Overview",
+          "slug": "content/docs/_versions/1.7.1/tina-folder/overview.mdx",
+          "_template": "item"
+        }
+      ]
+    }
+  ]
+}
