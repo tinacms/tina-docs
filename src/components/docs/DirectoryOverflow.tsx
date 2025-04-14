@@ -1,16 +1,16 @@
-import { DocsNavigationList } from "./DocsNavigationList";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdMenu } from "react-icons/md";
+import { DocsNavigationList } from "./DocsNavigationList";
 
 const DirectoryOverflow = ({ tocData }) => {
   return (
     <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-xl">
-      <DocsNavigationList navItems={tocData.tocData} />
+      <DocsNavigationList navItems={tocData} />
     </div>
   );
 };
 
-const DirectoryOverflowButton = (tocData) => {
+const DirectoryOverflowButton = ({ tocData }) => {
   const [isTableOfContentsOpen, setIsTableOfContentsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 

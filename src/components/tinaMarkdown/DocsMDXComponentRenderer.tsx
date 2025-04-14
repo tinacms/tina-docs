@@ -818,7 +818,7 @@ export const DocsMDXComponentRenderer: Components<{
   Button: ({ link, label }) => (
     <div className="my-6 flex w-full justify-start">
       <a
-        // eslint-disable-next-line tailwindcss/no-arbitrary-value, tailwindcss/no-custom-classname
+        // eslint-disable-next-line tailwindcss/no-arbitrary-value
         className="focus:shadow-outline flex items-center gap-1 whitespace-nowrap rounded-full border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600 px-6 pb-[10px] pt-[12px] font-tuner text-base font-medium leading-tight text-white transition duration-150 ease-out hover:-translate-x-px hover:-translate-y-px hover:text-gray-50 focus:outline-none active:translate-x-px active:translate-y-px"
         href={link}
         target="_blank"

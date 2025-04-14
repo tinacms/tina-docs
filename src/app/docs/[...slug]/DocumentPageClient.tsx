@@ -1,16 +1,13 @@
 "use client";
 
-import { useTina } from "tinacms/dist/react";
-import { useScreenResizer } from "@/components/hooks/ScreenResizer";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/DocsMDXComponentRenderer";
-import { formatDate } from "@/utils/docs/getFormattedDate";
-import DocsPagination from "@/components/ui/Pagination";
-import MainDocsBodyHeader from "@/components/docs/MainDocsBodyHeader";
-import { useTocListener } from "@/utils/docs/tocListener";
 import ToC from "@/components/docs/PageToc";
-import { LeftHandSideParentContainer } from "@/components/docs/LeftHandSideParent";
 import TocOverflowButton from "@/components/docs/ToCOverflow";
+import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/DocsMDXComponentRenderer";
+import DocsPagination from "@/components/ui/Pagination";
+import { formatDate } from "@/utils/docs/getFormattedDate";
+import { useTocListener } from "@/utils/docs/tocListener";
+import { useTina } from "tinacms/dist/react";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
 
 export default function DocumentPageClient({ props }) {
   const { data } = useTina({
@@ -20,7 +17,7 @@ export default function DocumentPageClient({ props }) {
   });
 
   const documentationData = data.docs;
-  const { pageTableOfContents, navigationDocsData } = props;
+  const { pageTableOfContents } = props;
 
   const formattedDate = formatDate(documentationData?.last_edited);
   const previousPage = {
@@ -35,69 +32,48 @@ export default function DocumentPageClient({ props }) {
 
   const { activeIds, contentRef } = useTocListener(documentationData);
 
-  const isScreenSmallerThan1200 = useScreenResizer().isScreenSmallerThan1200;
-  const isScreenSmallerThan840 = useScreenResizer().isScreenSmallerThan840;
-  const gridClass = isScreenSmallerThan840
-    ? "grid-cols-1"
-    : isScreenSmallerThan1200 || documentationData?.tocIsHidden
-      ? "grid-cols-[1.25fr_3fr]"
-      : "grid-cols-[1.25fr_3fr_0.75fr]";
-
   return (
-    <div className="relative my-6 flex items-start justify-center lg:my-16">
-      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-      <div className={`grid w-full max-w-[2000px] px-3 lg:px-16 ${gridClass}`}>
-        {/* LEFT COLUMN */}
-        <div
-          // eslint-disable-next-line tailwindcss/no-arbitrary-value
-          className={`sticky top-32 block h-[calc(100vh)] ${
-            isScreenSmallerThan840 ? "hidden" : "block"
-          }`}
-        >
-          <LeftHandSideParentContainer
-            tableOfContents={navigationDocsData?.data}
+    <div
+      // eslint-disable-next-line tailwindcss/no-arbitrary-value
+      className={
+        "grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]"
+      }
+    >
+      {/* MIDDLE COLUMN */}
+      <div
+        className={`max-w-full overflow-hidden break-words ${
+          !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
+        }`}
+      >
+        <div>
+          <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text pt-4 font-tuner text-4xl text-transparent">
+            {documentationData?.title}
+          </div>
+        </div>
+        <div className="block xl:hidden">
+          <TocOverflowButton tocData={pageTableOfContents} />
+        </div>
+        <div ref={contentRef}>
+          <TinaMarkdown
+            content={documentationData?.body}
+            components={DocsMDXComponentRenderer}
           />
         </div>
-        {/* MIDDLE COLUMN */}
-        <div className={"mx-8 max-w-full overflow-hidden break-words px-2 "}>
-          <MainDocsBodyHeader
-            DocumentTitle={documentationData?.title}
-            screenResizing={isScreenSmallerThan840}
-            NavigationDocsItems={navigationDocsData?.data}
-          />
-          {isScreenSmallerThan1200 && !documentationData?.tocIsHidden && (
-            <TocOverflowButton tocData={pageTableOfContents} />
-          )}
-          <div
-            ref={contentRef}
-            className="mt-6 max-w-full space-y-3 pb-6 leading-7 text-slate-800"
-          >
+        {formattedDate && (
+          <span className="text-md text-slate-500">
             {" "}
-            <TinaMarkdown
-              content={documentationData?.body}
-              components={DocsMDXComponentRenderer}
-            />
-          </div>
-          {formattedDate && (
-            <span className="text-md text-slate-500">
-              {" "}
-              Last Edited: {formattedDate}
-            </span>
-          )}
-          <DocsPagination prevPage={previousPage} nextPage={nextPage} />
-        </div>
-        {/* RIGHT COLUMN */}
-        {documentationData?.tocIsHidden ? null : (
-          <div
-            // eslint-disable-next-line tailwindcss/no-arbitrary-value
-            className={`sticky top-32 block h-[calc(100vh)] ${
-              isScreenSmallerThan1200 ? "hidden" : "block"
-            }`}
-          >
-            <ToC tocItems={pageTableOfContents} activeids={activeIds} />
-          </div>
+            Last Edited: {formattedDate}
+          </span>
         )}
+        <DocsPagination prevPage={previousPage} nextPage={nextPage} />
       </div>
+      {/* RIGHT COLUMN */}
+      {documentationData?.tocIsHidden ? null : (
+        // eslint-disable-next-line tailwindcss/no-arbitrary-value
+        <div className={"sticky top-32 mx-8 hidden h-[calc(100vh)] xl:block"}>
+          <ToC tocItems={pageTableOfContents} activeids={activeIds} />
+        </div>
+      )}
     </div>
   );
 }
