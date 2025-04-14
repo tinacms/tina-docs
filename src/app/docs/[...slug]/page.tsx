@@ -26,7 +26,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }) {
   const dynamicParams = await params;
   const slug = dynamicParams?.slug?.join("/");
@@ -37,7 +37,7 @@ export async function generateMetadata({
 export default async function DocsPage({
   params,
 }: {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }) {
   const dynamicParams = await params;
   const slug = dynamicParams?.slug?.join("/");
