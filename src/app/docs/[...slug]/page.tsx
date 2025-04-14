@@ -26,9 +26,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }) {
-  const slug = params.slug?.join("/");
+  const dynamicParams = await params;
+  const slug = dynamicParams?.slug?.join("/");
   const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
   return getSeo(data);
 }
@@ -36,9 +37,10 @@ export async function generateMetadata({
 export default async function DocsPage({
   params,
 }: {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }) {
-  const slug = params.slug.join("/");
+  const dynamicParams = await params;
+  const slug = dynamicParams?.slug?.join("/");
 
   try {
     const documentData = await client.queries.docs({
