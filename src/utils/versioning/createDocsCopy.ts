@@ -6,7 +6,7 @@ const createDocsCopy = async (versionNumber: string) => {
   const targetDir = path.join(
     process.cwd(),
     "content/docs/_versions",
-    versionNumber
+    versionNumber,
   );
 
   // Create the target directory if it doesn't exist

@@ -2,16 +2,74 @@
 
 import { Breadcrumbs } from "@/components/docs/Breadcrumbs";
 import DirectoryOverflowButton from "@/components/docs/DirectoryOverflow";
-import React from "react";
+import { useVersion } from "@/components/docs/VersionContext";
+import VersionSelector from "@/components/docs/VersionSelector";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { LeftHandSideParentContainer } from "../../components/docs/LeftHandSideParent";
+
+type NavigationDataContextType = {
+  NavigationDocsData: any;
+  versionsData: any;
+};
+
+const NavigationDataContext = createContext<NavigationDataContextType>({
+  NavigationDocsData: {},
+});
+
+// Export a hook to access navigation data
+export const useNavigationData = () => useContext(NavigationDataContext);
 
 export default function DocsLayoutClient({
   children,
   NavigationDocsData,
+  versionsData,
 }: {
   children: React.ReactNode;
   NavigationDocsData: any;
+  versionsData: any;
 }) {
+  const { currentVersion, setCurrentVersion } = useVersion();
+
+  const getTocData = useCallback(
+    (version) => {
+      if (version === "Latest" || !version) {
+        return NavigationDocsData.filter(
+          (item) =>
+            !item.node._sys.breadcrumbs.some(
+              (breadcrumb) => breadcrumb === "_versions",
+            ),
+        )[0]?.node?.supermenuGroup;
+      }
+      return NavigationDocsData.filter((item) =>
+        item.node._sys.breadcrumbs.some((breadcrumb) => breadcrumb === version),
+      )[0]?.node?.supermenuGroup;
+    },
+    [NavigationDocsData],
+  );
+
+  const [tocData, setTocData] = useState(null);
+
+  useEffect(() => {
+    // Update currentVersion based on URL
+    const path = window.location.pathname;
+    if (path.includes("/_versions/")) {
+      const versionFromPath = path.split("/_versions/")[1].split("/")[0];
+      setCurrentVersion(versionFromPath);
+    } else {
+      setCurrentVersion("Latest");
+    }
+  }, [setCurrentVersion]);
+
+  useEffect(() => {
+    setTocData(getTocData(currentVersion));
+  }, [currentVersion, getTocData]);
+
   const headerComponent = (
     <div className="pl-6">
       <h1
@@ -21,6 +79,7 @@ export default function DocsLayoutClient({
       >
         TinaDocs
       </h1>
+      <VersionSelector versions={versionsData} />
     </div>
   );
 
@@ -36,7 +95,7 @@ export default function DocsLayoutClient({
         {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
         <div className={"sticky top-32 hidden h-[calc(100vh)] md:block"}>
           <LeftHandSideParentContainer
-            tableOfContents={NavigationDocsData.data}
+            tableOfContents={tocData}
             header={headerComponent}
           />
         </div>
@@ -44,11 +103,11 @@ export default function DocsLayoutClient({
         <div className="col-span-2 mx-8 px-2 md:col-span-1 xl:col-span-2">
           <div className="block md:hidden">
             <div className="relative">
-              <DirectoryOverflowButton tocData={NavigationDocsData.data} />
+              <DirectoryOverflowButton tocData={tocData} />
             </div>
           </div>
 
-          <Breadcrumbs navItems={NavigationDocsData.data} />
+          <Breadcrumbs navItems={tocData} />
           {children}
         </div>
       </div>

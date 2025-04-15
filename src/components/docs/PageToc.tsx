@@ -1,3 +1,6 @@
+/* eslint-disable tailwindcss/no-arbitrary-value */
+/* eslint-disable tailwindcss/no-custom-classname */
+
 "use client";
 
 import { getDocId } from "@/utils/docs/getDocsIds";
@@ -62,15 +65,15 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
   const tocMarkdown = generateMarkdown(tocItems);
 
   return (
-    <div className="mb-[-0.375rem] flex-0 flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">
+    <div className="flex-0 overflow-wrap-break-word -mb-1.5 w-[300px] flex-auto whitespace-normal break-words lg:sticky lg:top-32">
       <div
-        className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
+        className={`duration-400 block h-auto w-full leading-5 transition-all ease-out ${
           isOpen
-            ? "max-h-[1500px] transition-all duration-750 ease-in"
+            ? "duration-750 max-h-[1500px] transition-all ease-in"
             : "max-h-0 overflow-hidden"
         } lg:max-h-none`}
       >
-        <span className="hidden lg:block text-base text-[var(--color-secondary)] opacity-50 bg-transparent leading-none mb-[1.125rem]">
+        <span className="mb-[1.125rem] hidden bg-transparent text-base leading-none text-[var(--color-secondary)] opacity-50 lg:block">
           Table of Contents
         </span>
         <div
@@ -93,14 +96,12 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
           <ReactMarkdown
             components={{
               ul: ({ children }) => (
-                <ul className="space-y-1 pt-1 list-none p-0 m-0 flex flex-col flex-wrap">
+                <ul className="m-0 flex list-none flex-col flex-wrap space-y-1 p-0 pt-1">
                   {children}
                 </ul>
               ),
               li: ({ children }) => (
-                <li className="leading-relaxed m-0 py-[0.375rem]">
-                  {children}
-                </li>
+                <li className="m-0 py-1.5 leading-relaxed">{children}</li>
               ),
               a: ({ children, ...props }) => {
                 const isActive = activeids?.includes(

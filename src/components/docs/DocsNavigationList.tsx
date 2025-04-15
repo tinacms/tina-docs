@@ -1,3 +1,6 @@
+/* eslint-disable tailwindcss/no-arbitrary-value */
+/* eslint-disable tailwindcss/no-custom-classname */
+
 "use client";
 
 import { DynamicLink } from "@/components/ui/DynamicLink";
@@ -197,9 +200,9 @@ const NavLevel = ({
     <>
       <div
         ref={navLevelElem}
-        className={`relative flex last:mb-[0.375rem] ${
+        className={`relative flex last:mb-1.5 ${
           categoryData.status
-            ? "after:content-[attr(data-status)] after:inline-flex after:text-xs after:font-bold after:bg-[#f9ebe6] after:border after:border-[#edcdc4] after:w-fit after:px-[5px] after:py-[2px] after:rounded-[5px] after:tracking-[0.25px] after:text-[#ec4815] after:mr-[5px] after:ml-[5px] after:leading-none after:align-middle after:h-fit after:self-center"
+            ? "after:mx-[5px] after:inline-flex after:size-fit after:self-center after:rounded-[5px] after:border after:border-[#edcdc4] after:bg-[#f9ebe6] after:px-[5px] after:py-[2px] after:align-middle after:text-xs after:font-bold after:leading-none after:tracking-[0.25px] after:text-[#ec4815] after:content-[attr(data-status)]"
             : ""
         }`}
         data-status={categoryData.status?.toLowerCase()}
@@ -282,7 +285,7 @@ export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
 
   return (
     <div
-      className="overflow-y-auto overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin scrollbar-thumb-[rgba(0,0,0,0.3)] scrollbar-track-transparent scrollbar-thumb-rounded-[4px] 2xl:py-4 2xl:px-4 2xl:pb-8"
+      className="scrollbar-thin scrollbar-thumb-[rgba(0,0,0,0.3)] scrollbar-track-transparent scrollbar-thumb-rounded-[4px] -mr-px overflow-y-auto overflow-x-hidden px-0 py-2 pb-6 2xl:p-4 2xl:pb-8"
       ref={navListElem}
     >
       {navItems?.map((categoryData) => (

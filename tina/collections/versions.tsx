@@ -22,7 +22,7 @@ export const versionsCollection = {
         component: wrapFieldsWithMeta(({ input, form }) => {
           const field = <BaseTextField {...input} />;
           return form.getFieldState("createField")?.value ? (
-            <div className="opacity-60 cursor-not-allowed">
+            <div className="cursor-not-allowed opacity-60">
               <div className="pointer-events-none">{field}</div>
             </div>
           ) : (
@@ -49,10 +49,10 @@ export const versionsCollection = {
         component: () => {
           return (
             <>
-              <h4 className="font-sans text-xs font-semibold text-gray-700 whitespace-normal mt-8">
+              <h4 className="font-sans mt-8 whitespace-normal text-xs font-semibold text-gray-700">
                 Delete Version
               </h4>
-              <p className="block font-sans text-xs italic font-light text-gray-400 pt-0.5 whitespace-normal mb-2">
+              <p className="font-sans mb-2 block whitespace-normal pt-0.5 text-xs font-light italic text-gray-400">
                 To remove a version:
                 <br />
                 1. delete the file from this collection, and
@@ -64,11 +64,11 @@ export const versionsCollection = {
                 <span className="font-mono">content/docs-toc/_versions/</span>{" "}
                 sub-directories.
               </p>
-              <div className="border-gray-200 border my-8 mr-8 p-4 rounded-md bg-red-50/50 text-wrap">
-                <p className="font-sans text-xs font-semibold text-gray-700 whitespace-normal mb-2">
+              <div className="my-8 mr-8 text-wrap rounded-md border border-gray-200 bg-red-50/50 p-4">
+                <p className="font-sans mb-2 whitespace-normal text-xs font-semibold text-gray-700">
                   ⚠️ Caveats ⚠️
                 </p>
-                <p className="font-sans text-xs font-light text-gray-400 whitespace-normal">
+                <p className="font-sans whitespace-normal text-xs font-light text-gray-400">
                   This is one approach to managing versioned documentation,{" "}
                   <span className="font-semibold">
                     which keeps all versioned documentation accessible via

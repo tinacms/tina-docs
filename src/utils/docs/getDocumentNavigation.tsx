@@ -1,7 +1,13 @@
 import data from "@/content/siteConfig.json";
 import client from "@/tina/__generated__/client";
 
-export async function getDocsNav(preview?: boolean, version?: string) {
+export async function getDocsNav({
+  preview,
+  version,
+}: {
+  preview?: boolean;
+  version?: string;
+}) {
   const docsToCData = await client.queries.docsTableOfContents({
     relativePath: version
       ? `_versions/${version}/DocsTableOfContents.json`
@@ -30,7 +36,7 @@ const stripReferenceDownToSlug = (tableOfContentsSubset: any) => {
 
 export const formatTableofContentsData = (
   tableOfContentsData: any,
-  preview?: boolean
+  preview?: boolean,
 ) => {
   // NOTE: The original code expected a nested `data` property and a `_values` field.
   // Based on the logged structure, docsTableOfContents is already at the root.

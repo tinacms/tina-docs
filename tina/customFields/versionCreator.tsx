@@ -53,11 +53,12 @@ function VersionCreator(props) {
         setError("Version with this id already exists");
         setDisabled(true);
       } catch (err) {
+        console.log(err);
         setDisabled(false);
         setError(null);
       }
     },
-    [form, input]
+    [form, input],
   );
 
   //Controlling when to run validation
@@ -69,7 +70,7 @@ function VersionCreator(props) {
         setVersionNumber(values.versionNumber);
         checkExistingVersion(values.versionNumber);
       },
-      { values: true }
+      { values: true },
     );
     return () => unsubscribe();
   }, [form, checkExistingVersion, versionNumber]);
@@ -108,10 +109,10 @@ function VersionCreator(props) {
 
   return (
     <div className="my-8">
-      <h4 className="font-sans text-xs font-semibold text-gray-700 whitespace-normal">
+      <h4 className="font-sans whitespace-normal text-xs font-semibold text-gray-700">
         ⚙️ Version Autogeneration
       </h4>
-      <p className="block font-sans text-xs italic font-light text-gray-400 pt-0.5 whitespace-normal mb-2">
+      <p className="font-sans mb-2 block whitespace-normal pt-0.5 text-xs font-light italic text-gray-400">
         This will copy existing documentation content to the{" "}
         <span className="font-mono">
           content/docs/_versions/
@@ -134,23 +135,24 @@ function VersionCreator(props) {
         Create Version
       </button>
       {error && (
-        <p className="text-red-900/80 font-sans text-xs mt-2">💡 {error}</p>
+        <p className="font-sans mt-2 text-xs text-red-900/80">💡 {error}</p>
       )}
 
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4 text-wrap font-sans">
-            <h3 className="text-lg font-semibold text-gray-700 whitespace-normal">
+        //eslint-disable-next-line tailwindcss/no-arbitrary-value
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-50">
+          <div className="font-sans mx-4 w-full max-w-md text-wrap rounded-lg bg-white p-6 shadow-xl">
+            <h3 className="whitespace-normal text-lg font-semibold text-gray-700">
               Confirm Version Creation ⚠️
             </h3>
-            <p className="mb-4 text-red-900 text-sm">
+            <p className="mb-4 text-sm text-red-900">
               Are you sure you want to create version{" "}
               <span className="font-bold">
                 {form.getFieldState("versionNumber")?.value}
               </span>
               ?
             </p>
-            <p className="mb-4 text-gray-500 text-sm">
+            <p className="mb-4 text-sm text-gray-500">
               This will{" "}
               <span className="font-bold">
                 copy existing documentation content
@@ -178,13 +180,13 @@ function VersionCreator(props) {
               <button
                 onClick={createVersion}
                 className={`${BUTTON_STYLING} ${
-                  isLoading ? "opacity-50 cursor-not-allowed" : ""
+                  isLoading ? "cursor-not-allowed opacity-50" : ""
                 }`}
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <svg className="size-4 animate-spin" viewBox="0 0 24 24">
                       <circle
                         className="opacity-25"
                         cx="12"
@@ -211,19 +213,20 @@ function VersionCreator(props) {
         </div>
       )}
       {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4 text-wrap font-sans">
-            <h3 className="text-lg font-semibold text-gray-700 whitespace-normal">
+        //eslint-disable-next-line tailwindcss/no-arbitrary-value
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-50">
+          <div className="font-sans mx-4 w-full max-w-md text-wrap rounded-lg bg-white p-6 shadow-xl">
+            <h3 className="whitespace-normal text-lg font-semibold text-gray-700">
               Version Created Successfully! 🎉
             </h3>
-            <p className="mb-4 text-gray-700 text-sm">
+            <p className="mb-4 text-sm text-gray-700">
               Version{" "}
               <span className="font-bold">
                 {form.getFieldState("versionNumber")?.value}
               </span>{" "}
               has been created successfully.
             </p>
-            <p className="mb-4 text-gray-500 text-sm">
+            <p className="mb-4 text-sm text-gray-500">
               The version selector will automatically pick up the new version.
             </p>
             <div className="flex justify-end">

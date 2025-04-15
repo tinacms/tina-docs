@@ -1,6 +1,6 @@
+import { getEntireCollection } from "@/utils/fetchAllConnection";
 import React from "react";
 import DocsLayoutClient from "./toc-wrapper";
-import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
 
 export default async function DocsLayout({
   children,
@@ -8,11 +8,17 @@ export default async function DocsLayout({
   children: React.ReactNode;
 }) {
   // Fetch navigation data that will be shared across all docs pages
-  const navDocData = await getDocsNav();
+  const [navDocData, versionsData] = await Promise.all([
+    getEntireCollection("docsTableOfContentsConnection"),
+    getEntireCollection("versionsConnection"),
+  ]);
 
   return (
     //@ts-ignore
-    <DocsLayoutClient NavigationDocsData={navDocData}>
+    <DocsLayoutClient
+      NavigationDocsData={navDocData}
+      versionsData={versionsData}
+    >
       {children}
     </DocsLayoutClient>
   );
