@@ -1,15 +1,25 @@
-import client from "@/tina/__generated__/client";
-import { getEntireCollection } from "@/utils/fetchEntireCollection";
-import { addSubpathToSlug } from "@/utils/versioning/addSubpath";
+import fs from "fs-extra";
+import path from "path";
 
 //Creating table of contents copy
 export const createToc = async (versionNumber: string) => {
-  const tocRaw = await getEntireCollection("docsTableOfContentsConnection");
-  const docsToc = tocRaw.filter(
-    (edge) => !edge?.node?._sys.breadcrumbs.includes("_versions")
+  const sourceDir = path.join(process.cwd(), "content/docs-toc");
+  const targetDir = path.join(
+    process.cwd(),
+    "content/docs-toc/_versions",
+    versionNumber
   );
-  await createTocCopy(docsToc, versionNumber);
-  await client.queries.addVersionToc({
-    relativePath: "_versions/" + versionNumber + "/_version-index.json",
-  });
+
+  // Create the target directory if it doesn't exist
+  await fs.ensureDir(targetDir);
+
+  // Copy the DocsTableOfContents.json file
+  const sourceFile = path.join(sourceDir, "DocsTableOfContents.json");
+  const targetFile = path.join(targetDir, "DocsTableOfContents.json");
+
+  await fs.copy(sourceFile, targetFile);
+
+  // Create version index file
+  const versionIndexPath = path.join(targetDir, "_version-index.json");
+  await fs.writeFile(versionIndexPath, "{}");
 };

@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { BaseTextField, useCMS, wrapFieldsWithMeta } from "tinacms";
-import client from "../__generated__/client";
+import React from "react";
+import { BaseTextField, wrapFieldsWithMeta } from "tinacms";
 import VersionCreator from "../customFields/versionCreator";
 export const versionsCollection = {
   name: "versions",
