@@ -3,14 +3,12 @@ import { getEntireCollection } from "../generic/fetchEntireCollection";
 
 const createDocsCopy = async (docs: any[], versionNumber: string) => {
   for (const doc of docs) {
-    let docCreated = false;
     const docPath =
       "_versions/" +
       versionNumber +
       "/" +
       doc?.node?._sys.breadcrumbs.join("/") +
       ".mdx";
-    while (!docCreated) {
       try {
         await client.queries.addVersionDocFiles({
           relativePath: docPath,
@@ -24,16 +22,9 @@ const createDocsCopy = async (docs: any[], versionNumber: string) => {
           next: doc?.node?.next?.id,
           previous: doc?.node?.previous?.id,
         });
-        const newDoc = await client.queries.docs({
-          relativePath: docPath,
-        });
-        if (newDoc) {
-          docCreated = true;
-        }
       } catch (err) {
         console.log("err", err);
       }
-    }
   }
 };
 
