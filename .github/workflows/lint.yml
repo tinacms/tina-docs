@@ -1,12 +1,12 @@
-name: Lint
+name: Lint and Check
 
 on:
   pull_request:
     branches: [main]
 
 jobs:
-  lint:
-    name: Run Biome Lint
+  lint-and-check:
+    name: Run Biome Lint and Check
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +26,6 @@ jobs:
 
       - name: Run Biome Lint
         run: pnpm lint
+
+      - name: Run Biome Check
+        run: pnpm check
