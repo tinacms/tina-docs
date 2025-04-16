@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdMenu } from "react-icons/md";
 
 const TocOverflow = ({ tocData }) => {
@@ -52,6 +52,14 @@ const TocOverflowButton = (tocData) => {
           <div
             className="cursor-pointer rounded-lg border-slate-400 bg-gradient-to-r from-white/50 to-white/30 px-4 py-2 shadow-lg"
             onClick={() => setIsTableOfContentsOpen(!isTableOfContentsOpen)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsTableOfContentsOpen(!isTableOfContentsOpen);
+              }
+            }}
+            role="button"
+            tabIndex={0}
           >
             <span className="flex items-center space-x-2">
               <MdMenu size={20} className="text-orange-500" />
