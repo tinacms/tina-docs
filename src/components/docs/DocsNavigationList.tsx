@@ -161,7 +161,7 @@ const NavLevel = ({
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
       hasNestedSlug(categoryData.items, path) ||
-      level === 0,
+      level === 0
   );
 
   const selected =

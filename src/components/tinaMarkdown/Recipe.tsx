@@ -10,7 +10,7 @@ export const RecipeBlock = ({ data }) => {
 
   const [highlightLines, setHighlightLines] = useState("");
   const [clickedInstruction, setClickedInstruction] = useState<number | null>(
-    null,
+    null
   );
   //LHSheight is the height used for the instructions block when the screen is >= 1024px
   const [LHSheight, setLHSheight] = useState<string | null>(null);
@@ -43,7 +43,7 @@ export const RecipeBlock = ({ data }) => {
   const handleInstructionClick = (
     index: number,
     codeLineStart?: number,
-    codeLineEnd?: number,
+    codeLineEnd?: number
   ) => {
     setHighlightLines(`${codeLineStart}-${codeLineEnd}`);
     setClickedInstruction(index === clickedInstruction ? null : index);
@@ -147,7 +147,7 @@ export const RecipeBlock = ({ data }) => {
                   handleInstructionClick(
                     idx,
                     inst.codeLineStart,
-                    inst.codeLineEnd,
+                    inst.codeLineEnd
                   )
                 }
               >

@@ -44,7 +44,7 @@ export default async function DocsPage({
     });
 
     const pageTableOfContents = getTableOfContents(
-      documentData?.data.docs.body,
+      documentData?.data.docs.body
     );
 
     return (

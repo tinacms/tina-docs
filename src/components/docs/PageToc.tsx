@@ -66,7 +66,7 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
   const tocMarkdown = generateMarkdown(tocItems);
 
   return (
-    <div className="mb-[-0.375rem] flex-0 flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">
+    <div className="mb-[-0.375rem] flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">
       <div
         className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
           isOpen

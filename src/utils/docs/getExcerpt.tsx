@@ -1,6 +1,6 @@
 export const getExcerpt = (
   body: { children: any[] },
-  excerptLength: number,
+  excerptLength: number
 ) => {
   return body.children
     .filter((c) => c.type === "p")

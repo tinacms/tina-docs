@@ -22,7 +22,7 @@ function getUrlFromSlug(slug: any): string {
 const getNestedBreadcrumbs = (
   listItems: any[],
   pagePath: string,
-  breadcrumbs: any[] = [],
+  breadcrumbs: any[] = []
 ) => {
   for (const listItem of Array.isArray(listItems) ? listItems : []) {
     // Get the target URL from the slug (or href) property
@@ -35,7 +35,7 @@ const getNestedBreadcrumbs = (
     const nestedBreadcrumbs = getNestedBreadcrumbs(
       listItem.items,
       pagePath,
-      breadcrumbs,
+      breadcrumbs
     );
     if (nestedBreadcrumbs.length) {
       return [listItem, ...nestedBreadcrumbs];

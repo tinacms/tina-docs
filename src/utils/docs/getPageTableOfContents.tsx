@@ -1,5 +1,5 @@
 export default function getTableOfContents(
-  markdown: any,
+  markdown: any
 ): { type: string; text: string }[] {
   const toc: { type: string; text: string }[] = [];
 

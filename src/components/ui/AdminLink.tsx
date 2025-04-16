@@ -13,7 +13,7 @@ const AdminLink = () => {
     setShowAdminLink(
       !edit &&
         JSON.parse((window.localStorage.getItem("tinacms-auth") as any) || "{}")
-          ?.access_token,
+          ?.access_token
     );
   }, [edit]);
 

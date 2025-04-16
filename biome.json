@@ -1,8 +1,20 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "files": {
+    "maxSize": 10485760,
+    "ignore": [
+      ".next/**",
+      "node_modules/**",
+      "dist/**",
+      "public/**",
+      "content/**",
+      "coverage/**",
+      "tina/__generated__/**"
+    ]
+  },
   "formatter": {
     "enabled": true,
-    "useEditorconfig": true,
+    "useEditorconfig": false,
     "formatWithErrors": true,
     "indentStyle": "space",
     "indentWidth": 2,
@@ -43,22 +55,13 @@
         "useOptionalChain": "error",
         "noBannedTypes": "off"
       }
-    },
-    "ignore": [
-      ".next/**",
-      "node_modules/**",
-      "dist/**",
-      "public/**",
-      "content/**",
-      "coverage/**",
-      "tina/__generated__/**"
-    ]
+    }
   },
   "javascript": {
     "formatter": {
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
+      "trailingCommas": "es5",
       "semicolons": "always",
       "arrowParentheses": "always",
       "bracketSameLine": false,
