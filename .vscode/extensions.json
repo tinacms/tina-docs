@@ -2,6 +2,8 @@
   "recommendations": [
     "bradlc.vscode-tailwindcss",
     "biomejs.biome",
-    "graphql.vscode-graphql"
+    "graphql.vscode-graphql",
+    "dbaeumer.vscode-eslint",
+    "biomejs.biome-vscode"
   ]
 }
