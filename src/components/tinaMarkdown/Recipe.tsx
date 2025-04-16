@@ -10,7 +10,7 @@ export const RecipeBlock = ({ data }) => {
 
   const [highlightLines, setHighlightLines] = useState("");
   const [clickedInstruction, setClickedInstruction] = useState<number | null>(
-    null,
+    null
   );
   //LHSheight is the height used for the instructions block when the screen is >= 1024px
   const [LHSheight, setLHSheight] = useState<string | null>(null);
@@ -43,7 +43,7 @@ export const RecipeBlock = ({ data }) => {
   const handleInstructionClick = (
     index: number,
     codeLineStart?: number,
-    codeLineEnd?: number,
+    codeLineEnd?: number
   ) => {
     setHighlightLines(`${codeLineStart}-${codeLineEnd}`);
     setClickedInstruction(index === clickedInstruction ? null : index);
@@ -90,10 +90,13 @@ export const RecipeBlock = ({ data }) => {
   const checkIfScrollable = () => {
     if (typeof window !== "undefined" && window.innerWidth < 1024) {
       return (
-        calculateInstructionsHeight() >= Number.parseInt(smAndMbHeight || "0", 10)
+        calculateInstructionsHeight() >=
+        Number.parseInt(smAndMbHeight || "0", 10)
       );
     }
-      return calculateInstructionsHeight() > Number.parseInt(LHSheight || "0", 10);
+    return (
+      calculateInstructionsHeight() > Number.parseInt(LHSheight || "0", 10)
+    );
   };
 
   return (
@@ -122,7 +125,9 @@ export const RecipeBlock = ({ data }) => {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl" />
             <FaChevronCircleDown
               onClick={handleDownArrowClick}
-              className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${checkIfScrollable() ? "" : "hidden"}`}
+              className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${
+                checkIfScrollable() ? "" : "hidden"
+              }`}
             />
           </div>
 
@@ -132,7 +137,7 @@ export const RecipeBlock = ({ data }) => {
           >
             {instruction?.map((inst, idx) => (
               <div
-                key={idx}
+                key={`instruction-${idx}`}
                 ref={(el) => (instructionRefs.current[idx] = el)}
                 className={`instruction-item cursor-pointer border-y border-gray-700 bg-gray-800 p-4 text-white 
                 ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
@@ -140,7 +145,7 @@ export const RecipeBlock = ({ data }) => {
                   handleInstructionClick(
                     idx,
                     inst.codeLineStart,
-                    inst.codeLineEnd,
+                    inst.codeLineEnd
                   )
                 }
               >

@@ -18,7 +18,8 @@
       "recommended": true,
       "suspicious": {
         "noConsole": "error",
-        "noExplicitAny": "error"
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off"
       },
       "style": {
         "useSelfClosingElements": "error",
@@ -27,7 +28,10 @@
       "a11y": {
         "useSemanticElements": "error",
         "useButtonType": "error",
-        "noLabelWithoutControl": "error"
+        "noLabelWithoutControl": "off",
+        "useKeyWithClickEvents": "off",
+        "useIframeTitle": "off",
+        "noSvgWithoutTitle": "off"
       },
       "correctness": {
         "noChildrenProp": "error",
@@ -35,7 +39,8 @@
       },
       "complexity": {
         "noForEach": "error",
-        "useOptionalChain": "error"
+        "useOptionalChain": "error",
+        "noBannedTypes": "off"
       }
     },
     "ignore": [

@@ -10,7 +10,7 @@ interface TocProps {
 }
 
 export const generateMarkdown = (
-  tocItems: Array<{ type: string; text: string }>,
+  tocItems: Array<{ type: string; text: string }>
 ) => {
   return tocItems
     .map((item) => {
@@ -28,10 +28,14 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
   useEffect(() => {
     const close = () => setIsOpen(false);
     const allLinks = document.querySelectorAll("a");
-    allLinks.forEach((a) => a.addEventListener("click", close));
+    for (const a of Array.from(allLinks)) {
+      a.addEventListener("click", close);
+    }
 
     return () => {
-      allLinks.forEach((a) => a.removeEventListener("click", close));
+      for (const a of Array.from(allLinks)) {
+        a.removeEventListener("click", close);
+      }
     };
   }, []);
 
@@ -104,7 +108,7 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
               ),
               a: ({ children, ...props }) => {
                 const isActive = activeids?.includes(
-                  props.href?.slice(1) || "",
+                  props.href?.slice(1) || ""
                 );
                 return (
                   <a

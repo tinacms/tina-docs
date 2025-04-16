@@ -202,6 +202,7 @@ export const DocsMDXComponentRenderer: Components<{
       <div>
         <hr />
         <button
+          type="button"
           className="flex w-full items-start justify-between text-left text-gray-900"
           onClick={handleToggle}
         >
@@ -373,11 +374,12 @@ export const DocsMDXComponentRenderer: Components<{
       return (
         <div className=" group my-4 overflow-hidden">
           <button
+            type="button"
             onClick={() =>
               setOpenGroups(
                 openGroups.includes(groupName)
                   ? openGroups.filter((group) => group !== groupName)
-                  : [...openGroups, groupName],
+                  : [...openGroups, groupName]
               )
             }
             className="flex w-full items-center justify-between bg-transparent bg-gradient-to-b from-blue-100/20 to-blue-50/20 px-6 py-4 text-left transition-colors hover:bg-blue-200/10"
@@ -444,14 +446,14 @@ export const DocsMDXComponentRenderer: Components<{
                 result.push(
                   <React.Fragment key={`group-${result.length}`}>
                     {group(currentGroup, currentGroupProperties)}
-                  </React.Fragment>,
+                  </React.Fragment>
                 );
                 currentGroup = null;
                 currentGroupProperties = [];
               } else {
                 if (index !== 0) {
                   result.push(
-                    <hr className="m-auto h-0.5 w-4/5 rounded-lg bg-gray-200" />,
+                    <hr className="m-auto h-0.5 w-4/5 rounded-lg bg-gray-200" />
                   );
                 }
               }
@@ -460,7 +462,7 @@ export const DocsMDXComponentRenderer: Components<{
               result.push(
                 <React.Fragment key={`ind-${index}`}>
                   {propertyItem(property)}
-                </React.Fragment>,
+                </React.Fragment>
               );
             }
             // If property has a groupName
@@ -476,7 +478,7 @@ export const DocsMDXComponentRenderer: Components<{
                   result.push(
                     <React.Fragment key={`group-${result.length}`}>
                       {group(currentGroup, currentGroupProperties)}
-                    </React.Fragment>,
+                    </React.Fragment>
                   );
                 }
 
@@ -492,7 +494,7 @@ export const DocsMDXComponentRenderer: Components<{
             result.push(
               <React.Fragment key={`group-${result.length}`}>
                 {group(currentGroup, currentGroupProperties)}
-              </React.Fragment>,
+              </React.Fragment>
             );
           }
 
@@ -747,6 +749,7 @@ export const DocsMDXComponentRenderer: Components<{
       return (
         <div className="word-break white-space margin-0 relative overflow-x-hidden !rounded-xl pb-3">
           <button
+            type="button"
             onClick={handleCopy}
             className="absolute right-3 top-4 z-10 flex size-6 items-center justify-center rounded text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50"
           >
@@ -822,7 +825,8 @@ export const DocsMDXComponentRenderer: Components<{
         // eslint-disable-next-line tailwindcss/no-arbitrary-value
         className="focus:shadow-outline flex items-center gap-1 whitespace-nowrap rounded-full border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600 px-6 pb-[10px] pt-[12px] font-tuner text-base font-medium leading-tight text-white transition duration-150 ease-out hover:-translate-x-px hover:-translate-y-px hover:text-gray-50 focus:outline-none active:translate-x-px active:translate-y-px"
         href={link}
-        target="_blank" rel="noreferrer"
+        target="_blank"
+        rel="noreferrer"
       >
         {label} <BiRightArrowAlt className="-mt-1 h-5 w-auto opacity-70" />
       </a>
@@ -840,7 +844,7 @@ function FormatHeaders({
   const HeadingTag = `h${level}` as any;
   const id = getDocId(
     children?.props?.content?.map((content: any) => content.text).join("") ??
-      children,
+      children
   );
 
   const linkHref = `#${id}`;

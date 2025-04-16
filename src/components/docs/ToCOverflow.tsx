@@ -58,8 +58,6 @@ const TocOverflowButton = (tocData) => {
                 setIsTableOfContentsOpen(!isTableOfContentsOpen);
               }
             }}
-            role="button"
-            tabIndex={0}
           >
             <span className="flex items-center space-x-2">
               <MdMenu size={20} className="text-orange-500" />
