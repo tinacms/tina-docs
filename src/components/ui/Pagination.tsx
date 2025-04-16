@@ -17,7 +17,7 @@ const NextImage = Image as any;
 export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
   return (
     <div className="mt-8 grid grid-cols-2 gap-4">
-      {prevPage && prevPage.slug && (
+      {prevPage?.slug && (
         <DynamicLink href={prevPage.slug} passHref>
           <div
             className="group relative block cursor-pointer border border-gray-100 p-4 text-left transition-all"
@@ -38,7 +38,7 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
           </div>
         </DynamicLink>
       )}
-      {nextPage && nextPage.slug && (
+      {nextPage?.slug && (
         <DynamicLink href={nextPage.slug} passHref>
           <div
             className="group relative col-start-2 block cursor-pointer border border-gray-100 p-4 text-right transition-all"

@@ -92,9 +92,8 @@ export const RecipeBlock = ({ data }) => {
       return (
         calculateInstructionsHeight() >= Number.parseInt(smAndMbHeight || "0", 10)
       );
-    } else {
-      return calculateInstructionsHeight() > Number.parseInt(LHSheight || "0", 10);
     }
+      return calculateInstructionsHeight() > Number.parseInt(LHSheight || "0", 10);
   };
 
   return (
@@ -120,7 +119,7 @@ export const RecipeBlock = ({ data }) => {
           }}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl"></div>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl" />
             <FaChevronCircleDown
               onClick={handleDownArrowClick}
               className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${checkIfScrollable() ? "" : "hidden"}`}

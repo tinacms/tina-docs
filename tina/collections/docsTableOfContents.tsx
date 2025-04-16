@@ -20,7 +20,7 @@ export const docsTableOfContentsCollection = {
       list: true,
       ui: {
         itemProps: (item) => ({
-          label: "🗂️ " + (item?.title ?? "Unnamed Menu Group"),
+          label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
         }),
       },
       fields: [

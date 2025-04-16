@@ -67,7 +67,7 @@ function getUrl(input: any): string {
   }
 
   if (!url.startsWith("/")) {
-    url = "/" + url;
+    url = `/${url}`;
   }
   return url;
 }
@@ -131,7 +131,7 @@ const NavTitle: React.FC<NavTitleProps> = ({
   );
 };
 
-const hasNestedSlug = (navItems: any[] = [], slug: string) => {
+const hasNestedSlug = (navItems: any[], slug: string) => {
   for (const item of navItems) {
     if (matchActualTarget(getUrl(item.slug || item.href), slug)) {
       return true;
@@ -236,7 +236,7 @@ const NavLevel = ({
       </div>
       {categoryData.items && (
         <>
-          <div className="mb-1.5"></div>
+          <div className="mb-1.5" />
           <AnimateHeight
             duration={TRANSITION_DURATION}
             height={expanded ? "auto" : 0}

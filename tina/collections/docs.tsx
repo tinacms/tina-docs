@@ -171,8 +171,8 @@ export const docsCollection = {
               ui: {
                 /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
                 component: "textarea",
-                format: (val?: string) => val && val.replaceAll("#", " "),
-                parse: (val?: string) => val && val.replaceAll(" ", "#"),
+                format: (val?: string) => val?.replaceAll("#", " "),
+                parse: (val?: string) => val?.replaceAll(" ", "#"),
               },
             },
             {
@@ -185,8 +185,8 @@ export const docsCollection = {
               ui: {
                 /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
                 component: "textarea",
-                format: (val?: string) => val && val.replaceAll("#", " "),
-                parse: (val?: string) => val && val.replaceAll(" ", "#"),
+                format: (val?: string) => val?.replaceAll("#", " "),
+                parse: (val?: string) => val?.replaceAll(" ", "#"),
               },
             },
             {
