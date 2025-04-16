@@ -516,7 +516,7 @@ export const DocsMDXComponentRenderer: Components<{
   },
   table: (props) => {
     // Navigate through the nested structure to find the actual table content
-    // @ts-ignore
+    // @ts-ignore - Linter is wrong about the actual structure
     const tableRows = props?.children?.props?.children || [];
 
     return (
