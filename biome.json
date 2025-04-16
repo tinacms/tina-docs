@@ -50,7 +50,8 @@
       "dist/**",
       "public/**",
       "content/**",
-      "coverage/**"
+      "coverage/**",
+      "tina/__generated__/**"
     ]
   },
   "javascript": {
