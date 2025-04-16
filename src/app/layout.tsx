@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import "@/styles/global.css";
 import { SiteLayout } from "@/components/SiteLayout";
 import AdminLink from "@/components/ui/AdminLink";

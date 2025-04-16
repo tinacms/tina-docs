@@ -2,8 +2,8 @@
 
 import React from "react";
 import { useEffect } from "react";
-import { useEditState } from "tinacms/dist/react";
 import { RxCross1 } from "react-icons/rx";
+import { useEditState } from "tinacms/dist/react";
 
 const AdminLink = () => {
   const { edit } = useEditState();
@@ -13,7 +13,7 @@ const AdminLink = () => {
     setShowAdminLink(
       !edit &&
         JSON.parse((window.localStorage.getItem("tinacms-auth") as any) || "{}")
-          ?.access_token,
+          ?.access_token
     );
   }, [edit]);
 
@@ -31,7 +31,11 @@ const AdminLink = () => {
           >
             Edit This Page
           </a>
-          <button onClick={handleDismiss} className="ml-2 text-sm">
+          <button
+            type="button"
+            onClick={handleDismiss}
+            className="ml-2 text-sm"
+          >
             <RxCross1 />
           </button>
         </div>

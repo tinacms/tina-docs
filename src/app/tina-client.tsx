@@ -1,17 +1,20 @@
 "use client";
 
+import type React from "react";
 import { useTina } from "tinacms/dist/react";
-import React from "react";
 
 export type UseTinaProps = {
   query: string;
-  variables: object;
-  data: object;
+  variables: Record<string, unknown>;
+  data: Record<string, unknown>;
 };
 
 export type TinaClientProps<T> = {
   props: UseTinaProps & T;
-  Component: React.FC<{ tinaProps: { data: object }; props: T }>;
+  Component: React.FC<{
+    tinaProps: { data: Record<string, unknown> };
+    props: T;
+  }>;
 };
 
 export function TinaClient<T>({ props, Component }: TinaClientProps<T>) {

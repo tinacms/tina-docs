@@ -32,13 +32,13 @@ export const CustomColorToggle = ({ input }) => {
               className={`h-5 w-10 rounded-full shadow-inner transition-colors duration-200 ${
                 disableColor ? "bg-green-500" : "bg-gray-300"
               }`}
-            ></div>
+            />
 
             <div
               className={`absolute left-0 top-0 size-5 rounded-full bg-white shadow transition-transform duration-200 ${
                 disableColor ? "translate-x-full" : ""
               }`}
-            ></div>
+            />
           </div>
           <span className="ml-3 text-gray-700">
             Tick to use Default Background Color

@@ -10,7 +10,7 @@ interface TocProps {
 }
 
 export const generateMarkdown = (
-  tocItems: Array<{ type: string; text: string }>,
+  tocItems: Array<{ type: string; text: string }>
 ) => {
   return tocItems
     .map((item) => {
@@ -28,10 +28,14 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
   useEffect(() => {
     const close = () => setIsOpen(false);
     const allLinks = document.querySelectorAll("a");
-    allLinks.forEach((a) => a.addEventListener("click", close));
+    for (const a of Array.from(allLinks)) {
+      a.addEventListener("click", close);
+    }
 
     return () => {
-      allLinks.forEach((a) => a.removeEventListener("click", close));
+      for (const a of Array.from(allLinks)) {
+        a.removeEventListener("click", close);
+      }
     };
   }, []);
 
@@ -62,7 +66,7 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
   const tocMarkdown = generateMarkdown(tocItems);
 
   return (
-    <div className="mb-[-0.375rem] flex-0 flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">
+    <div className="mb-[-0.375rem] flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">
       <div
         className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
           isOpen
@@ -104,7 +108,7 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
               ),
               a: ({ children, ...props }) => {
                 const isActive = activeids?.includes(
-                  props.href?.slice(1) || "",
+                  props.href?.slice(1) || ""
                 );
                 return (
                   <a

@@ -7,7 +7,7 @@ import recipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
 import scrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
 import youtubeTemplate from "@/tina/templates/markdown-embeds/youtube.template";
 import { Template } from "tinacms";
-import { seoInformation } from "./seoInformation";
+import { seoInformation } from "./seo-information";
 
 export const docsCollection = {
   name: "docs",

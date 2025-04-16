@@ -1,9 +1,9 @@
 "use client";
 
+import { matchActualTarget } from "@/utils/docs/urls";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa";
-import { matchActualTarget } from "@/utils/docs/urls";
 
 export interface DocsNavProps {
   navItems: any;
@@ -22,9 +22,9 @@ function getUrlFromSlug(slug: any): string {
 const getNestedBreadcrumbs = (
   listItems: any[],
   pagePath: string,
-  breadcrumbs: any[] = [],
+  breadcrumbs: any[] = []
 ) => {
-  for (const listItem of listItems || []) {
+  for (const listItem of Array.isArray(listItems) ? listItems : []) {
     // Get the target URL from the slug (or href) property
     const target = listItem.slug || listItem.href;
     const targetUrl = getUrlFromSlug(target);
@@ -35,7 +35,7 @@ const getNestedBreadcrumbs = (
     const nestedBreadcrumbs = getNestedBreadcrumbs(
       listItem.items,
       pagePath,
-      breadcrumbs,
+      breadcrumbs
     );
     if (nestedBreadcrumbs.length) {
       return [listItem, ...nestedBreadcrumbs];

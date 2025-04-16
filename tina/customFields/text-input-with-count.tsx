@@ -1,7 +1,7 @@
 import React from "react";
 import { wrapFieldsWithMeta } from "tinacms";
 
-export const TextInputWithCount = (max: number, isTextArea: boolean = false) =>
+export const TextInputWithCount = (max: number, isTextArea = false) =>
   wrapFieldsWithMeta(({ input }) => (
     <div className="flex flex-col gap-2">
       {isTextArea ? (

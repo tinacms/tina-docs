@@ -23,7 +23,7 @@ export const CardGrid = (data: {
           </h2>
 
           <p className="text-gray-700">{card.description}</p>
-          <div className="flex-1"></div>
+          <div className="flex-1" />
           {card.linkText && (
             <Actions
               items={[

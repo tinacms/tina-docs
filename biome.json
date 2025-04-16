@@ -1,0 +1,73 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "files": {
+    "maxSize": 10485760,
+    "ignore": [
+      ".next/**",
+      "node_modules/**",
+      "dist/**",
+      "public/**",
+      "content/**",
+      "coverage/**",
+      "tina/__generated__/**"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "useEditorconfig": false,
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80,
+    "attributePosition": "auto",
+    "bracketSpacing": true
+  },
+  "organizeImports": { "enabled": true },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noConsole": "error",
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off"
+      },
+      "style": {
+        "useSelfClosingElements": "error",
+        "useTemplate": "error",
+        "noParameterAssign": "off"
+      },
+      "a11y": {
+        "useSemanticElements": "error",
+        "useButtonType": "error",
+        "noLabelWithoutControl": "off",
+        "useKeyWithClickEvents": "off",
+        "useIframeTitle": "off",
+        "noSvgWithoutTitle": "off"
+      },
+      "correctness": {
+        "noChildrenProp": "off",
+        "useExhaustiveDependencies": "error"
+      },
+      "complexity": {
+        "noForEach": "error",
+        "useOptionalChain": "error",
+        "noBannedTypes": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "es5",
+      "semicolons": "always",
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "quoteStyle": "double",
+      "attributePosition": "auto",
+      "bracketSpacing": true
+    }
+  }
+}

@@ -1,5 +1,5 @@
 export default function getTableOfContents(
-  markdown: any,
+  markdown: any
 ): { type: string; text: string }[] {
   const toc: { type: string; text: string }[] = [];
 
@@ -11,7 +11,7 @@ export default function getTableOfContents(
       ? markdown.children
       : [];
 
-  nodes.forEach((item) => {
+  for (const item of nodes) {
     if (
       (item.type === "h2" || item.type === "h3") &&
       Array.isArray(item.children)
@@ -21,7 +21,7 @@ export default function getTableOfContents(
         .join("");
       toc.push({ type: item.type, text: headerText });
     }
-  });
+  }
 
   return toc;
 }

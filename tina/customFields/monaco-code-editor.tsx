@@ -1,10 +1,11 @@
 import debounce from "lodash/debounce";
-import { useEffect, useRef, useState } from "react";
+import type { editor } from "monaco-editor";
+import React, { useEffect, useRef, useState } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
 
 const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const monacoInstance = useRef(null);
+  const monacoInstance = useRef<editor.IStandaloneCodeEditor | null>(null);
   const [localValue, setLocalValue] = useState(input.value || "");
 
   const updateTinaValue = debounce((value) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function useScreenResizer() {
   const [isScreenSmallerThan1200, setIsScreenSmallerThan1200] = useState(false);

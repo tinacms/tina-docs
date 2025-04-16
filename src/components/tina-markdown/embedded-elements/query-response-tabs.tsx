@@ -14,7 +14,7 @@ export const QueryResponseTabs = ({ ...props }) => {
       style={{
         backgroundColor: "rgb(1, 22, 39)",
       }}
-    ></div>
+    />
   );
   const underlineStyling =
     "transition-[width] absolute h-1 bottom-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg";
@@ -30,24 +30,22 @@ export const QueryResponseTabs = ({ ...props }) => {
         }}
       >
         <button
+          type="button"
           onClick={() => setIsQuery(true)}
           className={buttonStyling + (isQuery ? "" : activeButtonStyling)}
           disabled={isQuery}
         >
           Query
-          <div
-            className={underlineStyling + (isQuery ? " w-full" : " w-0")}
-          ></div>
+          <div className={underlineStyling + (isQuery ? " w-full" : " w-0")} />
         </button>
         <button
+          type="button"
           onClick={() => setIsQuery(false)}
           className={buttonStyling + (isQuery ? activeButtonStyling : "")}
           disabled={!isQuery}
         >
           Response
-          <div
-            className={underlineStyling + (isQuery ? " w-0" : " w-full")}
-          ></div>
+          <div className={underlineStyling + (isQuery ? " w-0" : " w-full")} />
         </button>
       </div>
       <div className="grid h-fit w-full grid-cols-1">

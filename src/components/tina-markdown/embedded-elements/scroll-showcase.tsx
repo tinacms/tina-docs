@@ -54,11 +54,11 @@ export default function ScrollBasedShowcase(data: {
     const activeTocListener = createListener(
       componentRef,
       headings,
-      setActiveIds,
+      setActiveIds
     );
     window.addEventListener("scroll", activeTocListener);
     return () => window.removeEventListener("scroll", activeTocListener);
-  }, [headings, windowSize]);
+  }, [headings]);
 
   /** Update active image when activeIds change */
   useEffect(() => {
@@ -101,7 +101,9 @@ export default function ScrollBasedShowcase(data: {
                   <div
                     id={itemId}
                     className="pointer-events-none"
-                    ref={(el) => (headingRefs.current[index] = el)}
+                    ref={(element) => {
+                      headingRefs.current[index] = element;
+                    }}
                   >
                     <div
                       // eslint-disable-next-line tailwindcss/no-custom-classname
@@ -118,7 +120,9 @@ export default function ScrollBasedShowcase(data: {
                   <div
                     id={itemId}
                     className="pointer-events-none"
-                    ref={(el) => (headingRefs.current[index] = el)}
+                    ref={(element) => {
+                      headingRefs.current[index] = element;
+                    }}
                   >
                     <h2
                       className={`mb-3  mt-4 bg-gradient-to-br bg-clip-text text-3xl text-transparent ${
@@ -181,7 +185,7 @@ export default function ScrollBasedShowcase(data: {
                       ? activeImg.current?.scrollHeight || 0
                       : (activeImg.current?.scrollHeight || 0) / 1.2) +
                     ((activeIds.length - 1) * 32 || 0),
-                  0,
+                  0
                 ),
               }}
             />

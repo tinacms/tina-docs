@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import type React from "react";
 
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   color?: "white" | "blue" | "orange" | "seafoam" | "ghost" | "ghostBlue";
@@ -17,18 +17,10 @@ const baseClasses =
 const raisedButtonClasses = "hover:shadow active:shadow-none";
 
 const colorClasses = {
-  seafoam:
-    raisedButtonClasses +
-    " text-orange-600 hover:text-orange-500 border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150",
-  blue:
-    raisedButtonClasses +
-    " text-white hover:text-gray-50 border border-blue-400 bg-gradient-to-br from-blue-300 via-blue-400 to-blue-600",
-  orange:
-    raisedButtonClasses +
-    " text-white hover:text-gray-50 border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600",
-  white:
-    raisedButtonClasses +
-    " text-orange-500 hover:text-orange-400 border border-gray-100/60 bg-gradient-to-br from-white to-gray-50",
+  seafoam: `${raisedButtonClasses} text-orange-600 hover:text-orange-500 border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150`,
+  blue: `${raisedButtonClasses} text-white hover:text-gray-50 border border-blue-400 bg-gradient-to-br from-blue-300 via-blue-400 to-blue-600`,
+  orange: `${raisedButtonClasses} text-white hover:text-gray-50 border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600`,
+  white: `${raisedButtonClasses} text-orange-500 hover:text-orange-400 border border-gray-100/60 bg-gradient-to-br from-white to-gray-50`,
   ghost: "text-orange-500 hover:text-orange-400",
   orangeWithBorder:
     "text-orange-500 hover:text-orange-400 border border-orange-500 bg-white",
@@ -52,9 +44,9 @@ export const Button = ({
   return (
     <button
       className={`${baseClasses} ${
-        colorClasses[color] ? colorClasses[color] : colorClasses["seafoam"]
+        colorClasses[color] ? colorClasses[color] : colorClasses.seafoam
       } ${
-        sizeClasses[size] ? sizeClasses[size] : sizeClasses["medium"]
+        sizeClasses[size] ? sizeClasses[size] : sizeClasses.medium
       } ${className}`}
       {...props}
     >
@@ -76,9 +68,9 @@ export const LinkButton = ({
       href={link}
       passHref
       className={`${baseClasses} ${
-        colorClasses[color] ? colorClasses[color] : colorClasses["seafoam"]
+        colorClasses[color] ? colorClasses[color] : colorClasses.seafoam
       } ${
-        sizeClasses[size] ? sizeClasses[size] : sizeClasses["medium"]
+        sizeClasses[size] ? sizeClasses[size] : sizeClasses.medium
       } ${className}`}
       {...props}
     >
@@ -100,7 +92,7 @@ export const FlushButton = ({
       passHref
       // eslint-disable-next-line tailwindcss/no-custom-classname
       className={`${baseClasses} ${
-        colorClasses[color] ? colorClasses[color] : colorClasses["seafoam"]
+        colorClasses[color] ? colorClasses[color] : colorClasses.seafoam
       } ${"hover:inner-link border-none bg-none p-2 hover:translate-x-0 hover:translate-y-0 hover:shadow-none"} ${className}`}
       {...props}
     >
@@ -119,9 +111,9 @@ export const ModalButton = ({
   return (
     <button
       className={`${baseClasses} ${
-        colorClasses[color] ? colorClasses[color] : colorClasses["seafoam"]
+        colorClasses[color] ? colorClasses[color] : colorClasses.seafoam
       } ${
-        sizeClasses[size] ? sizeClasses[size] : sizeClasses["medium"]
+        sizeClasses[size] ? sizeClasses[size] : sizeClasses.medium
       } ${className}`}
       {...props}
     >
