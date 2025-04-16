@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint:
-    name: Run Biome Check
+    name: Run Biome Lint
     runs-on: ubuntu-latest
 
     steps:
