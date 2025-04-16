@@ -1,21 +1,24 @@
-import React, { useState, useRef, useEffect } from "react";
+import {
+  CheckIcon,
+  ChevronRightIcon,
+  ClipboardIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  LightBulbIcon,
+} from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
-import { CardGrid } from "../blocks/CardGrid";
-import { GraphQLQueryResponseTabs } from "../docs/GraphQLTabs";
+import React, { useEffect, useRef, useState } from "react";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
 import { Components, TinaMarkdown } from "tinacms/dist/rich-text";
 import { getDocId } from "../../utils/docs/getDocsIds";
+import { CardGrid } from "../blocks/CardGrid";
+import { GraphQLQueryResponseTabs } from "../docs/GraphQLTabs";
 import { Prism } from "../styles/Prism";
-import ScrollBasedShowcase from "./scrollBasedShowcase";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { LightBulbIcon } from "@heroicons/react/24/outline";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import MermaidElement from "./mermaid";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import RecipeBlock from "./Recipe";
+import ScrollBasedShowcase from "./scrollBasedShowcase";
 
 // Casting fixes to address TS errors
 const NextImage = Image as unknown as React.FC<any>;
@@ -257,7 +260,7 @@ export const DocsMDXComponentRenderer: Components<{
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
                 style={{ objectFit: "contain" }}
-                onLoadingComplete={handleImageLoad}
+                onLoad={handleImageLoad}
                 priority
               />
             </span>
@@ -522,7 +525,6 @@ export const DocsMDXComponentRenderer: Components<{
           <tbody>
             {tableRows.map((row, rowIndex) => {
               // Each row has its own props.children array containing cells
-              // @ts-ignore - Linter is wrong about the actual structure
               const cells = row?.props?.children || [];
               const CellComponent = rowIndex === 0 ? "th" : "td";
 
@@ -543,7 +545,6 @@ export const DocsMDXComponentRenderer: Components<{
                             : ""
                         } ${cellIndex === 0 ? "max-w-xs break-words" : ""}`}
                       >
-                        {/* @ts-ignore - Linter is wrong about the actual structure */}
                         {cell?.props?.children}
                         <TinaMarkdown
                           content={cell?.props?.content as any}

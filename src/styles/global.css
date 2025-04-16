@@ -1,13 +1,13 @@
 /* Tailwind imports */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.js";
 
 /* Custom font-face declaration */
 @font-face {
-  font-family: 'tuner-medium';
-  src: url('/fonts/tuner-medium.woff2') format('woff2'),
-       url('/fonts/tuner-medium.woff') format('woff');
+  font-family: "tuner-medium";
+  src:
+    url("/fonts/tuner-medium.woff2") format("woff2"),
+    url("/fonts/tuner-medium.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
