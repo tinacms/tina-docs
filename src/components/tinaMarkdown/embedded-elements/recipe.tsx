@@ -1,10 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaChevronCircleDown } from "react-icons/fa";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { customHighlightCSS } from "./RecipeCSS";
-import CodeBlockWithHighlightLines from "./RecipeCodeBlockWithHighlight";
+import { customHighlightCSS } from "./recipe.constants";
+import CodeBlockWithHighlightLines from "./recipe.helpers";
 
-export const RecipeBlock = ({ data }) => {
+export const RecipeBlock = (data: {
+  title?: string;
+  description?: string;
+  codeblock?: any;
+  code?: string;
+  instruction?: any;
+}) => {
   const { title, description, codeblock, code, instruction } = data;
 
   const [highlightLines, setHighlightLines] = useState("");
@@ -97,7 +103,7 @@ export const RecipeBlock = ({ data }) => {
   };
 
   return (
-    <div className="recipe-block-container relative w-full">
+    <div className="recipe-block-container relative w-full text-white">
       <div className="title-description px-10">
         <h2 className="font-tuner text-2xl text-orange-500">
           {title || "Default Title"}

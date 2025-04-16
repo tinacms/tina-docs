@@ -1,8 +1,6 @@
-import { Template } from "tinacms";
-
-const ScrollBasedShowcase: Template = {
-  label: "Scroll Based Showcase",
-  name: "scrollBasedShowcase",
+const scrollShowcaseTemplate = {
+  label: "Scroll Showcase",
+  name: "scrollShowcase",
   fields: [
     {
       type: "object",
@@ -61,4 +59,4 @@ const ScrollBasedShowcase: Template = {
   ],
 };
 
-export default ScrollBasedShowcase;
+export default scrollShowcaseTemplate;

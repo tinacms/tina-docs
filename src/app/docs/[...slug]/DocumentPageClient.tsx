@@ -2,7 +2,7 @@
 
 import ToC from "@/components/docs/PageToc";
 import TocOverflowButton from "@/components/docs/ToCOverflow";
-import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/DocsMDXComponentRenderer";
+import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/markdown-component-mapping";
 import DocsPagination from "@/components/ui/Pagination";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";

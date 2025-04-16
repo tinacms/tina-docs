@@ -1,11 +1,8 @@
-import MonacoCodeEditor from "./MonacoCodeEditor";
+import MonacoCodeEditor from "@/tina/customFields/monaco-code-editor";
 
-export const RecipeBlock = {
-  name: "recipeBlock",
-  label: "<⭐> Recipe Block",
-  ui: {
-    previewSrc: "/img/blocks/recipe.png",
-  },
+export const recipeTemplate = {
+  name: "recipe",
+  label: "Code Accordion (Recipe)",
   fields: [
     {
       name: "title",
@@ -64,3 +61,5 @@ export const RecipeBlock = {
     },
   ],
 };
+
+export default recipeTemplate;

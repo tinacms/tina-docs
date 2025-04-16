@@ -1,8 +1,12 @@
-import { seoInformation } from "./seoInformation";
+import accordionTemplate from "@/tina/templates/markdown-embeds/accordion.template";
+import apiReferenceTemplate from "@/tina/templates/markdown-embeds/api-reference.template";
+import cardGridTemplate from "@/tina/templates/markdown-embeds/card-grid.template";
+import queryResponseTabsTemplate from "@/tina/templates/markdown-embeds/query-response-tabs.template";
+import recipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
+import scrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
 import { Template } from "tinacms";
-import { CardGridSchema } from "@/components/tinaMarkdown/CardGrid.schema";
-import ScrollBasedShowcase from "@/components/tinaMarkdown/scrollBasedShowcase.schema";
-import { RecipeBlock } from "@/components/tinaMarkdown/Recipe.template";
+import youtubeTemplate from "../templates/markdown-embeds/youtube.template";
+import { seoInformation } from "./seoInformation";
 
 export const docsCollection = {
   name: "docs",
@@ -64,151 +68,13 @@ export const docsCollection = {
       label: "Body",
       isBody: true,
       templates: [
-        ScrollBasedShowcase as Template,
-        CardGridSchema,
-        RecipeBlock as Template,
-        {
-          name: "apiReference",
-          label: "API Reference",
-          fields: [
-            {
-              type: "string",
-              name: "title",
-              label: "Title",
-            },
-            {
-              type: "object",
-              name: "property",
-              label: "Property",
-              list: true,
-              ui: {
-                itemProps: (item) => {
-                  return {
-                    label: item.groupName
-                      ? `📂 ${item.groupName} | ${item.name}`
-                      : item.name,
-                  };
-                },
-              },
-              fields: [
-                {
-                  type: "string",
-                  name: "groupName",
-                  label: "Group Name",
-                  description:
-                    "Adjacent properties with the same group name will be grouped together",
-                },
-                {
-                  type: "string",
-                  name: "name",
-                  label: "Name",
-                },
-                {
-                  type: "rich-text",
-                  name: "description",
-                  label: "Description",
-                },
-                {
-                  type: "string",
-                  name: "type",
-                  label: "Type",
-                },
-                {
-                  type: "string",
-                  name: "default",
-                  label: "Default",
-                },
-                {
-                  type: "boolean",
-                  name: "required",
-                  label: "Required",
-                },
-                {
-                  type: "boolean",
-                  name: "experimental",
-                  label: "Experimental",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "Youtube",
-          label: "Youtube Embed",
-          fields: [
-            {
-              type: "string",
-              name: "embedSrc",
-              label: "Embed URL",
-              description:
-                "⚠︎ Only YouTube embed URLs work - they look like this https://www.youtube.com/embed/Yoh2c5RUTiY",
-            },
-            {
-              type: "string",
-              name: "caption",
-              label: "Caption",
-              description: "The caption of the video",
-            },
-            {
-              type: "string",
-              name: "minutes",
-              label: "Minutes",
-              description: "The duration of the video in minutes",
-            },
-          ],
-        },
-        {
-          name: "GraphQLCodeBlock",
-          label: "GraphQL Code Block",
-          fields: [
-            {
-              type: "string",
-              name: "query",
-              label: "Query",
-              description:
-                // eslint-disable-next-line prettier/prettier
-                "Paste GraphQL query here. \"#\" are auto-inserted as spacing placeholders and should not be used.",
-              ui: {
-                /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
-                component: "textarea",
-                format: (val?: string) => val && val.replaceAll("#", " "),
-                parse: (val?: string) => val && val.replaceAll(" ", "#"),
-              },
-            },
-            {
-              type: "string",
-              name: "response",
-              label: "Response",
-              description:
-                // eslint-disable-next-line prettier/prettier
-                "Paste GraphQL response data here. \"#\" are auto-inserted as spacing placeholders and should not be used.",
-              ui: {
-                /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
-                component: "textarea",
-                format: (val?: string) => val && val.replaceAll("#", " "),
-                parse: (val?: string) => val && val.replaceAll(" ", "#"),
-              },
-            },
-            {
-              type: "boolean",
-              name: "preselectResponse",
-              label: "Select Response by Default",
-              description: "Select the response tab by default",
-            },
-            {
-              type: "string",
-              name: "customQueryName",
-              label: "Custom Query Name",
-              description: "Replaces 'Query' in the tab name",
-            },
-            {
-              type: "string",
-              name: "customResponseName",
-              label: "Custom Response Name",
-              description: "Replaces 'Response' in the tab name",
-            },
-          ],
-        },
+        scrollShowcaseTemplate as Template,
+        cardGridTemplate as Template,
+        recipeTemplate as Template,
+        accordionTemplate as Template,
+        apiReferenceTemplate as Template,
+        youtubeTemplate as Template,
+        queryResponseTabsTemplate as Template,
         {
           name: "WarningCallout",
           label: "Warning Callout",
@@ -261,30 +127,7 @@ export const docsCollection = {
             },
           ],
         },
-        {
-          name: "ImageAndText",
-          label: "Image and Text",
-          fields: [
-            {
-              name: "heading",
-              label: "Heading",
-              type: "string",
-              description:
-                "The heading text that will be displayed in the collapsed state",
-            },
-            {
-              name: "docText",
-              label: "docText",
-              isBody: true,
-              type: "rich-text",
-            },
-            {
-              name: "image",
-              label: "image",
-              type: "image",
-            },
-          ],
-        },
+
         {
           name: "SummaryTab",
           label: "Summary Tab",

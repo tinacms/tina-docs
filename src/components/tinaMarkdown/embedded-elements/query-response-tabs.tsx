@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Prism } from "../styles/Prism";
+import { Prism } from "../../styles/Prism";
 
-export const GraphQLQueryResponseTabs = ({ ...props }) => {
+export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);
 
   const buttonStyling =
