@@ -1,11 +1,12 @@
 import accordionTemplate from "@/tina/templates/markdown-embeds/accordion.template";
 import apiReferenceTemplate from "@/tina/templates/markdown-embeds/api-reference.template";
+import calloutTemplate from "@/tina/templates/markdown-embeds/callout.template";
 import cardGridTemplate from "@/tina/templates/markdown-embeds/card-grid.template";
 import queryResponseTabsTemplate from "@/tina/templates/markdown-embeds/query-response-tabs.template";
 import recipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
 import scrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
+import youtubeTemplate from "@/tina/templates/markdown-embeds/youtube.template";
 import { Template } from "tinacms";
-import youtubeTemplate from "../templates/markdown-embeds/youtube.template";
 import { seoInformation } from "./seoInformation";
 
 export const docsCollection = {
@@ -66,6 +67,21 @@ export const docsCollection = {
       type: "rich-text",
       name: "body",
       label: "Body",
+      toolbarOverride: [
+        "heading",
+        "link",
+        "image",
+        "quote",
+        "ul",
+        "ol",
+        "bold",
+        "italic",
+        "code",
+        "codeBlock",
+        "mermaid",
+        "table",
+        "embed",
+      ],
       isBody: true,
       templates: [
         scrollShowcaseTemplate as Template,
@@ -75,78 +91,7 @@ export const docsCollection = {
         apiReferenceTemplate as Template,
         youtubeTemplate as Template,
         queryResponseTabsTemplate as Template,
-        {
-          name: "WarningCallout",
-          label: "Warning Callout",
-          fields: [
-            {
-              name: "body",
-              label: "Body",
-              type: "rich-text",
-            },
-          ],
-        },
-        {
-          name: "Iframe",
-          label: "Embeded an Iframe",
-          fields: [
-            { name: "iframeSrc", type: "string" },
-            {
-              name: "height",
-              type: "number",
-              label: "Height",
-              description: "The hight of the iframe (in px) ",
-            },
-          ],
-        },
-        {
-          name: "CloudinaryVideo",
-          label: "Cloudinary Video",
-          fields: [
-            {
-              type: "string",
-              name: "src",
-              label: "Cloudinary URL",
-              description: "Full URL with no file extension",
-            },
-          ],
-        },
-        {
-          name: "WebmEmbed",
-          label: "Webm Embed",
-          fields: [
-            {
-              type: "string",
-              name: "embedSrc",
-              label: "Embed SRC",
-            },
-            {
-              type: "string",
-              name: "width",
-              label: "width",
-            },
-          ],
-        },
-
-        {
-          name: "SummaryTab",
-          label: "Summary Tab",
-          fields: [
-            {
-              name: "heading",
-              label: "Heading",
-              type: "string",
-              description:
-                "DO NOT USE THIS TEMPLATE WHILST YOU SEE THIS MESSAGE //TODO: #1967",
-            },
-            {
-              name: "text",
-              label: "text",
-              isBody: true,
-              type: "rich-text",
-            },
-          ],
-        },
+        calloutTemplate as Template,
       ],
     },
   ],
