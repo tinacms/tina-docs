@@ -3,7 +3,7 @@
 import { Breadcrumbs } from "@/components/docs/Breadcrumbs";
 import DirectoryOverflowButton from "@/components/docs/DirectoryOverflow";
 import { LeftHandSideParentContainer } from "@/components/docs/LeftHandSideParent";
-import React from "react";
+import type React from "react";
 
 type DocsLayoutClientProps = {
   NavigationDocsData: any;

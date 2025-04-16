@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaChevronCircleDown } from "react-icons/fa";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { customHighlightCSS } from "./RecipeCSS";
@@ -89,10 +90,10 @@ export const RecipeBlock = ({ data }) => {
   const checkIfScrollable = () => {
     if (typeof window !== "undefined" && window.innerWidth < 1024) {
       return (
-        calculateInstructionsHeight() >= parseInt(smAndMbHeight || "0", 10)
+        calculateInstructionsHeight() >= Number.parseInt(smAndMbHeight || "0", 10)
       );
     } else {
-      return calculateInstructionsHeight() > parseInt(LHSheight || "0", 10);
+      return calculateInstructionsHeight() > Number.parseInt(LHSheight || "0", 10);
     }
   };
 

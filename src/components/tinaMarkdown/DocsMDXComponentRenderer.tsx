@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
-import { Components, TinaMarkdown } from "tinacms/dist/rich-text";
+import { type Components, TinaMarkdown } from "tinacms/dist/rich-text";
 import { getDocId } from "../../utils/docs/getDocsIds";
 import { CardGrid } from "../blocks/CardGrid";
 import { GraphQLQueryResponseTabs } from "../docs/GraphQLTabs";
@@ -822,7 +822,7 @@ export const DocsMDXComponentRenderer: Components<{
         // eslint-disable-next-line tailwindcss/no-arbitrary-value
         className="focus:shadow-outline flex items-center gap-1 whitespace-nowrap rounded-full border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600 px-6 pb-[10px] pt-[12px] font-tuner text-base font-medium leading-tight text-white transition duration-150 ease-out hover:-translate-x-px hover:-translate-y-px hover:text-gray-50 focus:outline-none active:translate-x-px active:translate-y-px"
         href={link}
-        target="_blank"
+        target="_blank" rel="noreferrer"
       >
         {label} <BiRightArrowAlt className="-mt-1 h-5 w-auto opacity-70" />
       </a>
