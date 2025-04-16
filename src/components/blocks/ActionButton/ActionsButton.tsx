@@ -20,32 +20,31 @@ export const Actions = ({ items, align = "left", flush = false }) => {
           .filter(Boolean)
           .join(" ")}
       >
-        {items &&
-          items.map((item) => {
-            const { variant, label, icon, url } = item;
-            {
-              const externalUrlPattern = /^((http|https|ftp):\/\/)/;
-              const external = externalUrlPattern.test(url);
-              const link = url || "#";
-              return (
-                <ActionButton
-                  key={label}
-                  id={sanitizeLabel(label)}
-                  size={item.size ? item.size : "medium"}
-                  link={link}
-                  target={external ? "_blank" : "_self"}
-                  color={variant}
-                  data-tina-field={tinaField(item, "label")}
-                >
-                  {label}
-                  {icon && (
-                    // eslint-disable-next-line tailwindcss/no-arbitrary-value
-                    <BiArrowBack className="-mr-1 -mt-1 ml-2 h-[1.125em] w-auto rotate-180 opacity-70" />
-                  )}
-                </ActionButton>
-              );
-            }
-          })}
+        {items?.map((item) => {
+          const { variant, label, icon, url } = item;
+          {
+            const externalUrlPattern = /^((http|https|ftp):\/\/)/;
+            const external = externalUrlPattern.test(url);
+            const link = url || "#";
+            return (
+              <ActionButton
+                key={label}
+                id={sanitizeLabel(label)}
+                size={item.size ? item.size : "medium"}
+                link={link}
+                target={external ? "_blank" : "_self"}
+                color={variant}
+                data-tina-field={tinaField(item, "label")}
+              >
+                {label}
+                {icon && (
+                  // eslint-disable-next-line tailwindcss/no-arbitrary-value
+                  <BiArrowBack className="-mr-1 -mt-1 ml-2 h-[1.125em] w-auto rotate-180 opacity-70" />
+                )}
+              </ActionButton>
+            );
+          }
+        })}
       </div>
       <style jsx>{`
         .or-text {

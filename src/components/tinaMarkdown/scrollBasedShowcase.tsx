@@ -5,8 +5,8 @@ import Image from "next/image";
 
 /** Minimal inline docAndBlogComponents for headings only */
 const docAndBlogComponents = {
-  h2: (props: any) => <h2 {...props} />,
-  h3: (props: any) => <h3 {...props} />,
+  h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => <h2 {...props} />,
+  h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => <h3 {...props} />,
 };
 
 /** UseWindowSize Hook */

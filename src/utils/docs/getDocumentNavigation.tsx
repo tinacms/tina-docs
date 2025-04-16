@@ -17,7 +17,7 @@ const stripReferenceDownToSlug = (tableOfContentsSubset: any) => {
       } else {
         //Handles the docs homepage case, as the only docs page with a unique (i.e. no) slug, otherwise reformat
         array[index].slug =
-          array[index].slug == `content${data.docsHomepage}.mdx`
+          array[index].slug === `content${data.docsHomepage}.mdx`
             ? "/docs"
             : obj.slug.replace(/^content\/|\.mdx$/g, "/");
       }

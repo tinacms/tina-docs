@@ -1,5 +1,17 @@
+"use client";
+
+type MarkdownNode = {
+  type: string;
+  children?: MarkdownNode[];
+  text?: string;
+};
+
+type MarkdownContent = {
+  children?: MarkdownNode[];
+};
+
 export default function getTableOfContents(
-  markdown: any,
+  markdown: MarkdownContent | MarkdownNode[],
 ): { type: string; text: string }[] {
   const toc: { type: string; text: string }[] = [];
 
