@@ -39,7 +39,7 @@ const CodeBlockWithHighlightLines = ({
         setTooltipVisible(true);
         setTimeout(() => setTooltipVisible(false), 1500);
       },
-      (err) => {}
+      (err) => {},
     );
   };
 

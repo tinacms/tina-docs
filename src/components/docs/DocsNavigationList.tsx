@@ -117,8 +117,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-    ? "childSelected"
-    : "default";
+      ? "childSelected"
+      : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -161,7 +161,7 @@ const NavLevel = ({
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
       hasNestedSlug(categoryData.items, path) ||
-      level === 0
+      level === 0,
   );
 
   const selected =

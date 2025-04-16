@@ -17,14 +17,10 @@ const baseClasses =
 const raisedButtonClasses = "hover:shadow active:shadow-none";
 
 const colorClasses = {
-  seafoam:
-    `${raisedButtonClasses} text-orange-600 hover:text-orange-500 border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150`,
-  blue:
-    `${raisedButtonClasses} text-white hover:text-gray-50 border border-blue-400 bg-gradient-to-br from-blue-300 via-blue-400 to-blue-600`,
-  orange:
-    `${raisedButtonClasses} text-white hover:text-gray-50 border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600`,
-  white:
-    `${raisedButtonClasses} text-orange-500 hover:text-orange-400 border border-gray-100/60 bg-gradient-to-br from-white to-gray-50`,
+  seafoam: `${raisedButtonClasses} text-orange-600 hover:text-orange-500 border border-seafoam-150 bg-gradient-to-br from-seafoam-50 to-seafoam-150`,
+  blue: `${raisedButtonClasses} text-white hover:text-gray-50 border border-blue-400 bg-gradient-to-br from-blue-300 via-blue-400 to-blue-600`,
+  orange: `${raisedButtonClasses} text-white hover:text-gray-50 border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600`,
+  white: `${raisedButtonClasses} text-orange-500 hover:text-orange-400 border border-gray-100/60 bg-gradient-to-br from-white to-gray-50`,
   ghost: "text-orange-500 hover:text-orange-400",
   orangeWithBorder:
     "text-orange-500 hover:text-orange-400 border border-orange-500 bg-white",

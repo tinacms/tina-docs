@@ -1,7 +1,7 @@
+import { FlushButton, LinkButton } from "@/components/ui/Buttons";
+import { sanitizeLabel } from "@/utils/sanitizeLabel";
 import { BiArrowBack } from "react-icons/bi";
 import { tinaField } from "tinacms/dist/react";
-import { sanitizeLabel } from "@/utils/sanitizeLabel";
-import { FlushButton, LinkButton } from "@/components/ui/Buttons";
 
 export const Actions = ({ items, align = "left", flush = false }) => {
   const isList = true;

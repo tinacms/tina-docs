@@ -36,9 +36,7 @@ export const GraphQLQueryResponseTabs = ({ ...props }) => {
           disabled={isQuery}
         >
           Query
-          <div
-            className={underlineStyling + (isQuery ? " w-full" : " w-0")}
-          />
+          <div className={underlineStyling + (isQuery ? " w-full" : " w-0")} />
         </button>
         <button
           type="button"
@@ -47,9 +45,7 @@ export const GraphQLQueryResponseTabs = ({ ...props }) => {
           disabled={!isQuery}
         >
           Response
-          <div
-            className={underlineStyling + (isQuery ? " w-0" : " w-full")}
-          />
+          <div className={underlineStyling + (isQuery ? " w-0" : " w-full")} />
         </button>
       </div>
       <div className="grid h-fit w-full grid-cols-1">

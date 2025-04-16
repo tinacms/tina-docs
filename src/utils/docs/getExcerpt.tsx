@@ -13,7 +13,8 @@ export const getExcerpt = (
           .reduce((text, child) => {
             if (child.type === "text") {
               return text + (text ? " " : "") + child.text;
-            }if (child.type === "a") {
+            }
+            if (child.type === "a") {
               return (
                 text +
                 (text ? " " : "") +
