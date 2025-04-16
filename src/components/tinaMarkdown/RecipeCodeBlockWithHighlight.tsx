@@ -30,7 +30,7 @@ const CodeBlockWithHighlightLines = ({
       preRef.current.setAttribute("data-line", highlightLines);
       Prism.highlightAllUnder(preRef.current);
     }
-  }, [highlightLines, value, children]);
+  }, [highlightLines]);
 
   const copyToClipboard = () => {
     const codeToCopy = typeof children === "string" ? children : value || "";
@@ -39,8 +39,7 @@ const CodeBlockWithHighlightLines = ({
         setTooltipVisible(true);
         setTimeout(() => setTooltipVisible(false), 1500);
       },
-      (err) => {
-      }
+      (err) => {}
     );
   };
 

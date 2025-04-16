@@ -59,7 +59,7 @@ export function useTocListener(data: any) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [data]);
+  }, []);
 
   return { contentRef, activeIds };
 }

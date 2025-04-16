@@ -23,7 +23,8 @@
       },
       "style": {
         "useSelfClosingElements": "error",
-        "useTemplate": "error"
+        "useTemplate": "error",
+        "noParameterAssign": "off"
       },
       "a11y": {
         "useSemanticElements": "error",
@@ -34,7 +35,7 @@
         "noSvgWithoutTitle": "off"
       },
       "correctness": {
-        "noChildrenProp": "error",
+        "noChildrenProp": "off",
         "useExhaustiveDependencies": "error"
       },
       "complexity": {

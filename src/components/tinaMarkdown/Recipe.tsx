@@ -29,7 +29,7 @@ export const RecipeBlock = ({ data }) => {
     return () => {
       document.head.removeChild(style);
     };
-  }, [highlightLines]);
+  }, []);
 
   useEffect(() => {
     setLHSheight(`${codeblockRef.current?.offsetHeight}`);
@@ -138,7 +138,9 @@ export const RecipeBlock = ({ data }) => {
             {instruction?.map((inst, idx) => (
               <div
                 key={`instruction-${idx}`}
-                ref={(el) => (instructionRefs.current[idx] = el)}
+                ref={(element) => {
+                  instructionRefs.current[idx] = element;
+                }}
                 className={`instruction-item cursor-pointer border-y border-gray-700 bg-gray-800 p-4 text-white 
                 ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
                 onClick={() =>

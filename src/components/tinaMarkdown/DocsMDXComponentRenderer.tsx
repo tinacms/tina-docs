@@ -7,7 +7,7 @@ import {
   LightBulbIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
@@ -867,13 +867,7 @@ function FormatHeaders({
     6: "text-gray-500",
   };
 
-  const handleHeaderClick = (event) => {
-    event.preventDefault();
-    scrollToElement(id);
-    window.history.pushState(null, "", linkHref);
-  };
-
-  const scrollToElement = (elementId) => {
+  const scrollToElement = useCallback((elementId) => {
     const element = document.getElementById(elementId);
     if (element) {
       const offset = 130; //offset in pixels
@@ -886,7 +880,7 @@ function FormatHeaders({
         behavior: "smooth",
       });
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (window.location.hash) {
@@ -894,7 +888,14 @@ function FormatHeaders({
       scrollToElement(hash);
     }
     //this is used for when you get sent a link with a hash (i.e link to a header)
-  }, []);
+  }, [scrollToElement]); // Include scrollToElement in dependencies
+
+  const handleHeaderClick = (event) => {
+    event.preventDefault();
+    const id = event.currentTarget.getAttribute("href").substring(1);
+    scrollToElement(id);
+    window.history.pushState(null, "", `#${id}`);
+  };
 
   return (
     <HeadingTag
