@@ -17,8 +17,6 @@ export async function generateStaticParams() {
         return { slug: path.split("/") };
       });
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
     notFound();
   }
 }
@@ -46,7 +44,7 @@ export default async function DocsPage({
     });
 
     const pageTableOfContents = getTableOfContents(
-      documentData?.data.docs.body,
+      documentData?.data.docs.body
     );
 
     return (
@@ -62,8 +60,6 @@ export default async function DocsPage({
       />
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(e);
     return notFound();
   }
 }

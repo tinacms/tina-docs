@@ -1,5 +1,5 @@
 import { seoInformation } from "./seoInformation";
-import { Template } from "tinacms";
+import type { Template } from "tinacms";
 import { CardGridSchema } from "@/components/tinaMarkdown/CardGrid.schema";
 import ScrollBasedShowcase from "@/components/tinaMarkdown/scrollBasedShowcase.schema";
 import { RecipeBlock } from "@/components/tinaMarkdown/Recipe.template";
@@ -167,12 +167,12 @@ export const docsCollection = {
               label: "Query",
               description:
                 // eslint-disable-next-line prettier/prettier
-                "Paste GraphQL query here. \"#\" are auto-inserted as spacing placeholders and should not be used.",
+                'Paste GraphQL query here. "#" are auto-inserted as spacing placeholders and should not be used.',
               ui: {
                 /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
                 component: "textarea",
-                format: (val?: string) => val && val.replaceAll("#", " "),
-                parse: (val?: string) => val && val.replaceAll(" ", "#"),
+                format: (val?: string) => val?.replaceAll("#", " "),
+                parse: (val?: string) => val?.replaceAll(" ", "#"),
               },
             },
             {
@@ -181,12 +181,12 @@ export const docsCollection = {
               label: "Response",
               description:
                 // eslint-disable-next-line prettier/prettier
-                "Paste GraphQL response data here. \"#\" are auto-inserted as spacing placeholders and should not be used.",
+                'Paste GraphQL response data here. "#" are auto-inserted as spacing placeholders and should not be used.',
               ui: {
                 /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
                 component: "textarea",
-                format: (val?: string) => val && val.replaceAll("#", " "),
-                parse: (val?: string) => val && val.replaceAll(" ", "#"),
+                format: (val?: string) => val?.replaceAll("#", " "),
+                parse: (val?: string) => val?.replaceAll(" ", "#"),
               },
             },
             {

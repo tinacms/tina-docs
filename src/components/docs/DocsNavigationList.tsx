@@ -67,7 +67,7 @@ function getUrl(input: any): string {
   }
 
   if (!url.startsWith("/")) {
-    url = "/" + url;
+    url = `/${url}`;
   }
   return url;
 }
@@ -131,8 +131,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   );
 };
 
-const hasNestedSlug = (navItems: any[] = [], slug: string) => {
-  for (const item of navItems) {
+const hasNestedSlug = (navItems: any[], slug: string) => {
+  for (const item of Array.isArray(navItems) ? navItems : []) {
     if (matchActualTarget(getUrl(item.slug || item.href), slug)) {
       return true;
     }
@@ -161,7 +161,7 @@ const NavLevel = ({
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
       hasNestedSlug(categoryData.items, path) ||
-      level === 0,
+      level === 0
   );
 
   const selected =
@@ -236,7 +236,7 @@ const NavLevel = ({
       </div>
       {categoryData.items && (
         <>
-          <div className="mb-1.5"></div>
+          <div className="mb-1.5" />
           <AnimateHeight
             duration={TRANSITION_DURATION}
             height={expanded ? "auto" : 0}
@@ -260,7 +260,9 @@ const NavLevel = ({
             >
               {(categoryData.items || []).map((item) => (
                 <div
-                  key={`child-container-${item.slug ? getUrl(item.slug) + level : item.title + level}`}
+                  key={`child-container-${
+                    item.slug ? getUrl(item.slug) + level : item.title + level
+                  }`}
                 >
                   <NavLevel
                     navListElem={navListElem}
@@ -285,13 +287,16 @@ export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
       className="overflow-y-auto overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin scrollbar-thumb-[rgba(0,0,0,0.3)] scrollbar-track-transparent scrollbar-thumb-rounded-[4px] 2xl:py-4 2xl:px-4 2xl:pb-8"
       ref={navListElem}
     >
-      {navItems?.map((categoryData) => (
-        <div
-          key={`mobile-${categoryData.slug ? getUrl(categoryData.slug) : categoryData.title}`}
-        >
-          <NavLevel navListElem={navListElem} categoryData={categoryData} />
-        </div>
-      ))}
+      {navItems.length > 0 &&
+        navItems?.map((categoryData) => (
+          <div
+            key={`mobile-${
+              categoryData.slug ? getUrl(categoryData.slug) : categoryData.title
+            }`}
+          >
+            <NavLevel navListElem={navListElem} categoryData={categoryData} />
+          </div>
+        ))}
     </div>
   );
 };

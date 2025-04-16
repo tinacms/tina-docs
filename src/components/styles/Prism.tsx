@@ -1,7 +1,7 @@
 import {
   Highlight,
-  Language,
-  RenderProps,
+  type Language,
+  type RenderProps,
   Prism as rootPrism,
   themes,
 } from "prism-react-renderer";

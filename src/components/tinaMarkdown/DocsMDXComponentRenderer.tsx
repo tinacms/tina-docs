@@ -7,17 +7,17 @@ import {
   LightBulbIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
-import { Components, TinaMarkdown } from "tinacms/dist/rich-text";
+import { type Components, TinaMarkdown } from "tinacms/dist/rich-text";
 import { getDocId } from "../../utils/docs/getDocsIds";
 import { CardGrid } from "../blocks/CardGrid";
 import { GraphQLQueryResponseTabs } from "../docs/GraphQLTabs";
 import { Prism } from "../styles/Prism";
-import MermaidElement from "./mermaid";
 import RecipeBlock from "./Recipe";
+import MermaidElement from "./mermaid";
 import ScrollBasedShowcase from "./scrollBasedShowcase";
 
 // Casting fixes to address TS errors
@@ -200,8 +200,9 @@ export const DocsMDXComponentRenderer: Components<{
 
     return (
       <div>
-        <hr></hr>
+        <hr />
         <button
+          type="button"
           className="flex w-full items-start justify-between text-left text-gray-900"
           onClick={handleToggle}
         >
@@ -373,11 +374,12 @@ export const DocsMDXComponentRenderer: Components<{
       return (
         <div className=" group my-4 overflow-hidden">
           <button
+            type="button"
             onClick={() =>
               setOpenGroups(
                 openGroups.includes(groupName)
                   ? openGroups.filter((group) => group !== groupName)
-                  : [...openGroups, groupName],
+                  : [...openGroups, groupName]
               )
             }
             className="flex w-full items-center justify-between bg-transparent bg-gradient-to-b from-blue-100/20 to-blue-50/20 px-6 py-4 text-left transition-colors hover:bg-blue-200/10"
@@ -406,7 +408,7 @@ export const DocsMDXComponentRenderer: Components<{
                       <hr className="m-auto -my-0.5 h-0.5 w-4/5 rounded-lg bg-gray-200" />
                     )}
                     <div className="mx-2 border-l-2 border-solid border-orange-400">
-                      <React.Fragment>{propertyItem(property)}</React.Fragment>
+                      {propertyItem(property)}
                     </div>
                   </div>
                 );
@@ -444,14 +446,14 @@ export const DocsMDXComponentRenderer: Components<{
                 result.push(
                   <React.Fragment key={`group-${result.length}`}>
                     {group(currentGroup, currentGroupProperties)}
-                  </React.Fragment>,
+                  </React.Fragment>
                 );
                 currentGroup = null;
                 currentGroupProperties = [];
               } else {
                 if (index !== 0) {
                   result.push(
-                    <hr className="m-auto h-0.5 w-4/5 rounded-lg bg-gray-200" />,
+                    <hr className="m-auto h-0.5 w-4/5 rounded-lg bg-gray-200" />
                   );
                 }
               }
@@ -460,7 +462,7 @@ export const DocsMDXComponentRenderer: Components<{
               result.push(
                 <React.Fragment key={`ind-${index}`}>
                   {propertyItem(property)}
-                </React.Fragment>,
+                </React.Fragment>
               );
             }
             // If property has a groupName
@@ -476,7 +478,7 @@ export const DocsMDXComponentRenderer: Components<{
                   result.push(
                     <React.Fragment key={`group-${result.length}`}>
                       {group(currentGroup, currentGroupProperties)}
-                    </React.Fragment>,
+                    </React.Fragment>
                   );
                 }
 
@@ -492,7 +494,7 @@ export const DocsMDXComponentRenderer: Components<{
             result.push(
               <React.Fragment key={`group-${result.length}`}>
                 {group(currentGroup, currentGroupProperties)}
-              </React.Fragment>,
+              </React.Fragment>
             );
           }
 
@@ -586,7 +588,7 @@ export const DocsMDXComponentRenderer: Components<{
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen={true}
-        ></iframe>
+        />
       </div>
       {caption && (
         <div className="font-tuner text-sm text-gray-500">
@@ -678,7 +680,7 @@ export const DocsMDXComponentRenderer: Components<{
             viewBox="0 0 448 512"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path>
+            <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z" />
           </svg>
         </a>
       </div>
@@ -699,7 +701,7 @@ export const DocsMDXComponentRenderer: Components<{
         allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
         sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
         className="wide"
-      ></iframe>
+      />
     </div>
   ),
   Diagram: ({ alt, src }) => (
@@ -747,6 +749,7 @@ export const DocsMDXComponentRenderer: Components<{
       return (
         <div className="word-break white-space margin-0 relative overflow-x-hidden !rounded-xl pb-3">
           <button
+            type="button"
             onClick={handleCopy}
             className="absolute right-3 top-4 z-10 flex size-6 items-center justify-center rounded text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50"
           >
@@ -812,8 +815,8 @@ export const DocsMDXComponentRenderer: Components<{
   ),
   CloudinaryVideo: ({ src }) => (
     <video className="video my-6" autoPlay loop muted playsInline>
-      <source src={src + ".webm"} type="video/webm" />
-      <source src={src + ".mp4"} type="video/mp4" />
+      <source src={`${src}.webm`} type="video/webm" />
+      <source src={`${src}.mp4`} type="video/mp4" />
     </video>
   ),
   Button: ({ link, label }) => (
@@ -823,6 +826,7 @@ export const DocsMDXComponentRenderer: Components<{
         className="focus:shadow-outline flex items-center gap-1 whitespace-nowrap rounded-full border border-orange-600 bg-gradient-to-br from-orange-400 to-orange-600 px-6 pb-[10px] pt-[12px] font-tuner text-base font-medium leading-tight text-white transition duration-150 ease-out hover:-translate-x-px hover:-translate-y-px hover:text-gray-50 focus:outline-none active:translate-x-px active:translate-y-px"
         href={link}
         target="_blank"
+        rel="noreferrer"
       >
         {label} <BiRightArrowAlt className="-mt-1 h-5 w-auto opacity-70" />
       </a>
@@ -840,7 +844,7 @@ function FormatHeaders({
   const HeadingTag = `h${level}` as any;
   const id = getDocId(
     children?.props?.content?.map((content: any) => content.text).join("") ??
-      children,
+      children
   );
 
   const linkHref = `#${id}`;
@@ -863,13 +867,7 @@ function FormatHeaders({
     6: "text-gray-500",
   };
 
-  const handleHeaderClick = (event) => {
-    event.preventDefault();
-    scrollToElement(id);
-    window.history.pushState(null, "", linkHref);
-  };
-
-  const scrollToElement = (elementId) => {
+  const scrollToElement = useCallback((elementId) => {
     const element = document.getElementById(elementId);
     if (element) {
       const offset = 130; //offset in pixels
@@ -882,7 +880,7 @@ function FormatHeaders({
         behavior: "smooth",
       });
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (window.location.hash) {
@@ -890,7 +888,14 @@ function FormatHeaders({
       scrollToElement(hash);
     }
     //this is used for when you get sent a link with a hash (i.e link to a header)
-  }, []);
+  }, [scrollToElement]); // Include scrollToElement in dependencies
+
+  const handleHeaderClick = (event) => {
+    event.preventDefault();
+    const id = event.currentTarget.getAttribute("href").substring(1);
+    scrollToElement(id);
+    window.history.pushState(null, "", `#${id}`);
+  };
 
   return (
     <HeadingTag

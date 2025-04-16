@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
 import Image from "next/image";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
 
 /** Minimal inline docAndBlogComponents for headings only */
 const docAndBlogComponents = {
-  h2: (props: any) => <h2 {...props} />,
-  h3: (props: any) => <h3 {...props} />,
+  h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => <h2 {...props} />,
+  h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => <h3 {...props} />,
 };
 
 /** UseWindowSize Hook */
@@ -38,7 +39,7 @@ function createListener(
   headings: Item[],
   // Callback to update active IDs - param name in type is just for documentation
 
-  setActiveIds: (activeIds: string[]) => void,
+  setActiveIds: (activeIds: string[]) => void
 ) {
   let tick = false;
   const THROTTLE_INTERVAL = 100;
@@ -72,13 +73,13 @@ function createListener(
       scrollPos / componentRef.current.scrollHeight;
 
     const activeHeadingCandidates = relativePositionHeadingMap.filter(
-      (heading) => relativeScrollPosition >= heading.relativePagePosition,
+      (heading) => relativeScrollPosition >= heading.relativePagePosition
     );
 
     const activeHeading =
       activeHeadingCandidates.length > 0
         ? activeHeadingCandidates.reduce((prev, current) =>
-            (prev.offset || 0) > (current.offset || 0) ? prev : current,
+            (prev.offset || 0) > (current.offset || 0) ? prev : current
           )
         : (headings[0] ?? {});
 
@@ -92,7 +93,7 @@ function createListener(
       const activeHeadingParent =
         activeHeadingParentCandidates.length > 0
           ? activeHeadingParentCandidates.reduce((prev, current) =>
-              (prev.offset || 0) > (current.offset || 0) ? prev : current,
+              (prev.offset || 0) > (current.offset || 0) ? prev : current
             )
           : null;
 
@@ -172,11 +173,11 @@ export default function ScrollBasedShowcase(data: {
     const activeTocListener = createListener(
       componentRef,
       headings,
-      setActiveIds,
+      setActiveIds
     );
     window.addEventListener("scroll", activeTocListener);
     return () => window.removeEventListener("scroll", activeTocListener);
-  }, [headings, windowSize]);
+  }, [headings]);
 
   /** Update active image when activeIds change */
   useEffect(() => {
@@ -219,7 +220,9 @@ export default function ScrollBasedShowcase(data: {
                   <div
                     id={itemId}
                     className="pointer-events-none"
-                    ref={(el) => (headingRefs.current[index] = el)}
+                    ref={(element) => {
+                      headingRefs.current[index] = element;
+                    }}
                   >
                     <div
                       // eslint-disable-next-line tailwindcss/no-custom-classname
@@ -236,7 +239,9 @@ export default function ScrollBasedShowcase(data: {
                   <div
                     id={itemId}
                     className="pointer-events-none"
-                    ref={(el) => (headingRefs.current[index] = el)}
+                    ref={(element) => {
+                      headingRefs.current[index] = element;
+                    }}
                   >
                     <h2
                       className={`mb-3  mt-4 bg-gradient-to-br bg-clip-text text-3xl text-transparent ${
@@ -302,7 +307,7 @@ export default function ScrollBasedShowcase(data: {
                       ? activeImg.current?.scrollHeight || 0
                       : (activeImg.current?.scrollHeight || 0) / 1.2) +
                     ((activeIds.length - 1) * 32 || 0),
-                  0,
+                  0
                 ),
               }}
             />

@@ -1,5 +1,6 @@
 import Prism from "prismjs";
-import React, { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
@@ -29,7 +30,7 @@ const CodeBlockWithHighlightLines = ({
       preRef.current.setAttribute("data-line", highlightLines);
       Prism.highlightAllUnder(preRef.current);
     }
-  }, [highlightLines, value, children]);
+  }, [highlightLines]);
 
   const copyToClipboard = () => {
     const codeToCopy = typeof children === "string" ? children : value || "";
@@ -38,10 +39,7 @@ const CodeBlockWithHighlightLines = ({
         setTooltipVisible(true);
         setTimeout(() => setTooltipVisible(false), 1500);
       },
-      (err) => {
-        // eslint-disable-next-line no-console
-        console.error("Failed to copy code:", err);
-      },
+      (err) => {}
     );
   };
 
