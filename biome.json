@@ -3,7 +3,7 @@
   "formatter": {
     "enabled": true,
     "useEditorconfig": true,
-    "formatWithErrors": false,
+    "formatWithErrors": true,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
@@ -11,30 +11,31 @@
     "attributePosition": "auto",
     "bracketSpacing": true
   },
-  "organizeImports": { "enabled": false },
+  "organizeImports": { "enabled": true },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noConsole": "off",
-        "noExplicitAny": "warn"
+        "noConsole": "error",
+        "noExplicitAny": "error"
       },
       "style": {
-        "useSelfClosingElements": "off"
+        "useSelfClosingElements": "error",
+        "useTemplate": "error"
       },
       "a11y": {
-        "useSemanticElements": "off",
-        "useButtonType": "warn",
-        "noLabelWithoutControl": "warn"
+        "useSemanticElements": "error",
+        "useButtonType": "error",
+        "noLabelWithoutControl": "error"
       },
       "correctness": {
-        "noChildrenProp": "warn",
-        "useExhaustiveDependencies": "warn"
+        "noChildrenProp": "error",
+        "useExhaustiveDependencies": "error"
       },
       "complexity": {
-        "noForEach": "warn",
-        "useOptionalChain": "warn"
+        "noForEach": "error",
+        "useOptionalChain": "error"
       }
     },
     "ignore": [
@@ -51,7 +52,7 @@
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
       "trailingCommas": "all",
-      "semicolons": "asNeeded",
+      "semicolons": "always",
       "arrowParentheses": "always",
       "bracketSameLine": false,
       "quoteStyle": "single",
