@@ -35,9 +35,9 @@ function getUrlFromSlug(slug: string | NavItemSlug | undefined): string {
 const getNestedBreadcrumbs = (
   listItems: NavItem[],
   pagePath: string,
-  breadcrumbs: NavItem[] = [],
+  breadcrumbs: NavItem[] = []
 ): NavItem[] => {
-  for (const listItem of listItems || []) {
+  for (const listItem of Array.isArray(listItems) ? listItems : []) {
     // Get the target URL from the slug (or href) property
     const target = listItem.slug || listItem.href;
     const targetUrl = getUrlFromSlug(target);
@@ -48,7 +48,7 @@ const getNestedBreadcrumbs = (
     const nestedBreadcrumbs = getNestedBreadcrumbs(
       listItem.items || [],
       pagePath,
-      breadcrumbs,
+      breadcrumbs
     );
     if (nestedBreadcrumbs.length) {
       return [listItem, ...nestedBreadcrumbs];

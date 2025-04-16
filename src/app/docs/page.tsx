@@ -1,7 +1,6 @@
 import client from "@/tina/__generated__/client";
 import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
-import { notFound } from "next/navigation";
 import { TinaClient } from "../tina-client";
 import DocumentPageClient from "./[...slug]/DocumentPageClient";
 
@@ -14,27 +13,23 @@ export async function generateMetadata() {
 export default async function DocsPage() {
   const defaultSlug = "index";
 
-  try {
-    const documentData = await client.queries.docs({
-      relativePath: `${defaultSlug}.mdx`,
-    });
+  const documentData = await client.queries.docs({
+    relativePath: `${defaultSlug}.mdx`,
+  });
 
-    const docData = documentData.data.docs;
-    const pageTableOfContents = getTableOfContents(docData.body.children);
+  const docData = documentData.data.docs;
+  const pageTableOfContents = getTableOfContents(docData.body.children);
 
-    return (
-      <TinaClient
-        Component={DocumentPageClient}
-        props={{
-          query: documentData.query,
-          variables: documentData.variables,
-          data: documentData.data,
-          pageTableOfContents,
-          documentationData: docData,
-        }}
-      />
-    );
-  } catch (error) {
-    return notFound();
-  }
+  return (
+    <TinaClient
+      Component={DocumentPageClient}
+      props={{
+        query: documentData.query,
+        variables: documentData.variables,
+        data: documentData.data,
+        pageTableOfContents,
+        documentationData: docData,
+      }}
+    />
+  );
 }

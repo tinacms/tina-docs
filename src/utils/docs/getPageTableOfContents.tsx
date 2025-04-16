@@ -1,17 +1,5 @@
-"use client";
-
-type MarkdownNode = {
-  type: string;
-  children?: MarkdownNode[];
-  text?: string;
-};
-
-type MarkdownContent = {
-  children?: MarkdownNode[];
-};
-
 export default function getTableOfContents(
-  markdown: MarkdownContent | MarkdownNode[]
+  markdown: any
 ): { type: string; text: string }[] {
   const toc: { type: string; text: string }[] = [];
 
@@ -23,7 +11,7 @@ export default function getTableOfContents(
     ? markdown.children
     : [];
 
-  for (const item of nodes) {
+  nodes.forEach((item) => {
     if (
       (item.type === "h2" || item.type === "h3") &&
       Array.isArray(item.children)
@@ -33,7 +21,7 @@ export default function getTableOfContents(
         .join("");
       toc.push({ type: item.type, text: headerText });
     }
-  }
+  });
 
   return toc;
 }
