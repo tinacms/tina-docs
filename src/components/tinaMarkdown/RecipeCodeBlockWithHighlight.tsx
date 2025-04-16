@@ -40,9 +40,7 @@ const CodeBlockWithHighlightLines = ({
         setTimeout(() => setTooltipVisible(false), 1500);
       },
       (err) => {
-        // eslint-disable-next-line no-console
-        console.error("Failed to copy code:", err);
-      },
+      }
     );
   };
 

@@ -200,7 +200,7 @@ export const DocsMDXComponentRenderer: Components<{
 
     return (
       <div>
-        <hr></hr>
+        <hr />
         <button
           className="flex w-full items-start justify-between text-left text-gray-900"
           onClick={handleToggle}
@@ -406,7 +406,7 @@ export const DocsMDXComponentRenderer: Components<{
                       <hr className="m-auto -my-0.5 h-0.5 w-4/5 rounded-lg bg-gray-200" />
                     )}
                     <div className="mx-2 border-l-2 border-solid border-orange-400">
-                      <React.Fragment>{propertyItem(property)}</React.Fragment>
+                      {propertyItem(property)}
                     </div>
                   </div>
                 );
@@ -586,7 +586,7 @@ export const DocsMDXComponentRenderer: Components<{
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen={true}
-        ></iframe>
+        />
       </div>
       {caption && (
         <div className="font-tuner text-sm text-gray-500">
@@ -678,7 +678,7 @@ export const DocsMDXComponentRenderer: Components<{
             viewBox="0 0 448 512"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path>
+            <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z" />
           </svg>
         </a>
       </div>
@@ -699,7 +699,7 @@ export const DocsMDXComponentRenderer: Components<{
         allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
         sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
         className="wide"
-      ></iframe>
+      />
     </div>
   ),
   Diagram: ({ alt, src }) => (
@@ -812,8 +812,8 @@ export const DocsMDXComponentRenderer: Components<{
   ),
   CloudinaryVideo: ({ src }) => (
     <video className="video my-6" autoPlay loop muted playsInline>
-      <source src={src + ".webm"} type="video/webm" />
-      <source src={src + ".mp4"} type="video/mp4" />
+      <source src={`${src}.webm`} type="video/webm" />
+      <source src={`${src}.mp4`} type="video/mp4" />
     </video>
   ),
   Button: ({ link, label }) => (
