@@ -4,7 +4,7 @@ import {
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { DocsMDXComponentRenderer } from "../markdown-component-mapping";
+import MarkdownComponentMapping from "../markdown-component-mapping";
 
 const ApiReference = (data: {
   title: string;
@@ -44,7 +44,7 @@ const ApiReference = (data: {
           <div className="w-full md:w-2/3">
             <TinaMarkdown
               content={property.description as any}
-              components={DocsMDXComponentRenderer}
+              components={MarkdownComponentMapping}
             />
             {property.default && (
               <div className="text-md text-slate-900">
@@ -67,6 +67,7 @@ const ApiReference = (data: {
     return (
       <div className=" group my-4 overflow-hidden">
         <button
+          type="button"
           onClick={() =>
             setOpenGroups(
               openGroups.includes(groupName)
@@ -100,7 +101,7 @@ const ApiReference = (data: {
                     <hr className="m-auto -my-0.5 h-0.5 w-4/5 rounded-lg bg-gray-200" />
                   )}
                   <div className="mx-2 border-l-2 border-solid border-orange-400">
-                    <React.Fragment>{propertyItem(property)}</React.Fragment>
+                    {propertyItem(property)}
                   </div>
                 </div>
               );

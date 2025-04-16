@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { DocsMDXComponentRenderer } from "../markdown-component-mapping";
+import MarkdownComponentMapping from "../markdown-component-mapping";
 import HeaderFormat from "../standard-elements/header-format";
 
 const Accordion = (data: {
@@ -52,7 +52,7 @@ const Accordion = (data: {
         <div className="p-4">
           <TinaMarkdown
             content={data.docText as any}
-            components={DocsMDXComponentRenderer}
+            components={MarkdownComponentMapping}
           />
         </div>
         {data.image && (

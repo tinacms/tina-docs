@@ -13,7 +13,7 @@ export default function Youtube(data: {
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen={true}
-        ></iframe>
+        />
       </div>
       {caption && (
         <div className="font-tuner text-sm text-gray-500">

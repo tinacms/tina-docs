@@ -1,11 +1,11 @@
-import { Components } from "tinacms/dist/rich-text";
+import type { Components } from "tinacms/dist/rich-text";
 import { CardGrid } from "../blocks/CardGrid";
 import Accordion from "./embedded-elements/accordion";
 import ApiReference from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
-import ScrollBasedShowcase from "./embedded-elements/scroll-showcase";
+import ScrollShowcase from "./embedded-elements/scroll-showcase";
 import Youtube from "./embedded-elements/youtube";
 import { CodeBlock } from "./standard-elements/code-block";
 import HeaderFormat from "./standard-elements/header-format";
@@ -46,7 +46,7 @@ type ComponentMapping = {
       codeLineEnd?: number;
     }[];
   };
-  scrollBasedShowcase: {
+  scrollShowcase: {
     showcaseItems: {
       image: string;
       title: string;
@@ -69,9 +69,9 @@ type ComponentMapping = {
   };
 };
 
-export const DocsMDXComponentRenderer: Components<ComponentMapping> = {
+export const MarkdownComponentMapping: Components<ComponentMapping> = {
   // Our embeds we can inject via MDX
-  scrollBasedShowcase: (props) => <ScrollBasedShowcase {...props} />,
+  scrollShowcase: (props) => <ScrollShowcase {...props} />,
   cardGrid: (props) => <CardGrid {...props} />,
   recipeBlock: (props) => <RecipeBlock {...props} />,
   accordion: (props) => <Accordion {...props} />,
@@ -111,4 +111,4 @@ export const DocsMDXComponentRenderer: Components<ComponentMapping> = {
   code_block: (props) => <CodeBlock {...props} />,
 };
 
-export default DocsMDXComponentRenderer;
+export default MarkdownComponentMapping;

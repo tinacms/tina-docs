@@ -1,7 +1,11 @@
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { createListener, Item, useWindowSize } from "./scroll-showcase.helpers";
+import {
+  createListener,
+  type Item,
+  useWindowSize,
+} from "./scroll-showcase.helpers";
 
 /** Main Component */
 export default function ScrollBasedShowcase(data: {

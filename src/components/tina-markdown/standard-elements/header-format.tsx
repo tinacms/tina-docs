@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { FiLink } from "react-icons/fi";
 import { getDocId } from "../../../utils/docs/getDocsIds";
 
@@ -44,10 +44,11 @@ export default function HeaderFormat({
     window.history.pushState(null, "", linkHref);
   };
 
-  const scrollToElement = (elementId) => {
-    const element = document.getElementById(elementId);
-    if (element) {
-      const offset = 130; //offset in pixels
+  const scrollToElement = useCallback(
+    (elementId) => {
+      const element = document.getElementById(elementId);
+      if (element) {
+        const offset = 130; //offset in pixels
       const elementPosition =
         element.getBoundingClientRect().top + window.scrollY;
       const offsetPosition = elementPosition - offset;
@@ -56,8 +57,10 @@ export default function HeaderFormat({
         top: offsetPosition,
         behavior: "smooth",
       });
-    }
-  };
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     if (window.location.hash) {
@@ -65,7 +68,7 @@ export default function HeaderFormat({
       scrollToElement(hash);
     }
     //this is used for when you get sent a link with a hash (i.e link to a header)
-  }, []);
+  }, [scrollToElement]);
 
   return (
     <HeadingTag

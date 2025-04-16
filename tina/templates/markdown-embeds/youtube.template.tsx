@@ -1,5 +1,5 @@
 export const youtubeTemplate = {
-  name: "Youtube",
+  name: "youtube",
   label: "Youtube Video",
   fields: [
     {

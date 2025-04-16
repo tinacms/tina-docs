@@ -21,6 +21,7 @@ const CodeToolbar = ({
     <span className="font-tuner">{lang || "Unknown"}</span>
     <div className="relative ml-4 flex items-center space-x-4 overflow-visible">
       <button
+        type="button"
         onClick={onCopy}
         className={`relative flex items-center space-x-1 rounded-md  bg-gray-800 px-2 py-1 text-sm transition-colors duration-200 ${
           tooltipVisible

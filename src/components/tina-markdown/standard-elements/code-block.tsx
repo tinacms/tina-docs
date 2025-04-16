@@ -14,6 +14,7 @@ export const CodeBlock = ({ children, value, lang }) => {
   return (
     <div className="word-break white-space margin-0 relative overflow-x-hidden !rounded-xl pb-3">
       <button
+        type="button"
         onClick={handleCopy}
         className="absolute right-3 top-4 z-10 flex size-6 items-center justify-center rounded text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50"
       >
