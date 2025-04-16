@@ -1,25 +1,26 @@
-import fs from "fs-extra";
-import path from "path";
+const createTocCopy = async (versionNumber: string) => {
+  try {
+    const response = await fetch("/api/versioning", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        versionNumber,
+        operation: "createToc",
+      }),
+    });
 
-//Creating table of contents copy
-export const createToc = async (versionNumber: string) => {
-  const sourceDir = path.join(process.cwd(), "content/docs-toc");
-  const targetDir = path.join(
-    process.cwd(),
-    "content/docs-toc/_versions",
-    versionNumber,
-  );
-
-  // Create the target directory if it doesn't exist
-  await fs.ensureDir(targetDir);
-
-  // Copy the DocsTableOfContents.json file
-  const sourceFile = path.join(sourceDir, "DocsTableOfContents.json");
-  const targetFile = path.join(targetDir, "DocsTableOfContents.json");
-
-  await fs.copy(sourceFile, targetFile);
-
-  // Create version index file
-  const versionIndexPath = path.join(targetDir, "_version-index.json");
-  await fs.writeFile(versionIndexPath, "{}");
+    if (!response.ok) {
+      throw new Error("Failed to create TOC copy");
+    }
+  } catch (error) {
+    console.error("Error creating TOC copy:", error);
+    throw error;
+  }
 };
+
+//Creating TOC copy
+export default async function createToc(versionNumber: string) {
+  await createTocCopy(versionNumber);
+}

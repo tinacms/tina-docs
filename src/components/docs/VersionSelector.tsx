@@ -4,7 +4,7 @@ import { FaChevronRight } from "react-icons/fa";
 import { useVersion } from "./VersionContext";
 
 export default function VersionSelectHeader(props) {
-  const { versions, title, currentVersion } = props;
+  const { versions, currentVersion } = props;
   const { setCurrentVersion } = useVersion();
 
   //-1 for latest, otherwise the index of the version
@@ -32,15 +32,8 @@ export default function VersionSelectHeader(props) {
     }
   };
 
-  return (
-    <div className="pl-6">
-      <h1
-        className={
-          "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text pb-4 pt-6 font-tuner text-4xl text-transparent"
-        }
-      >
-        {title}
-      </h1>
+  return versions.length > 1 ? (
+    <>
       <div className="relative max-w-32">
         <div
           className="flex cursor-pointer items-center justify-center rounded-lg bg-white px-4 py-1 text-center text-stone-600 shadow-md"
@@ -83,6 +76,6 @@ export default function VersionSelectHeader(props) {
           </div>
         )}
       </div>
-    </div>
-  );
+    </>
+  ) : null;
 }

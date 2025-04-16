@@ -1,6 +1,6 @@
-import { createDocs } from "@/utils/versioning/createDocsCopy";
+import createDocs from "@/utils/versioning/createDocsCopy";
 import { createToc } from "@/utils/versioning/createTocCopy";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useCMS } from "tinacms";
 import client from "../__generated__/client";
 
