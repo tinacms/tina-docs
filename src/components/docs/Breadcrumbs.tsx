@@ -1,29 +1,16 @@
 "use client";
 
-import { matchActualTarget } from "@/utils/docs/urls";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa";
-
-interface NavItemSlug {
-  id: string;
-}
-
-interface NavItem {
-  title?: string;
-  category?: string;
-  slug?: string | NavItemSlug;
-  href?: string;
-  items?: NavItem[];
-}
+import { matchActualTarget } from "@/utils/docs/urls";
 
 export interface DocsNavProps {
-  navItems: NavItem[];
+  navItems: any;
 }
 
-// Helper function to extract a URL string from a slug object (or return it if it's already a string)
-function getUrlFromSlug(slug: string | NavItemSlug | undefined): string {
+// Helper function to extract a URL string from a slug object (or return it if it’s already a string)
+function getUrlFromSlug(slug: any): string {
   if (typeof slug === "string") return slug;
   if (slug && typeof slug === "object" && slug.id) {
     // Transform the id (e.g. "content/docs/introduction/index.mdx") into a URL (e.g. "/docs/introduction/index")
@@ -33,10 +20,10 @@ function getUrlFromSlug(slug: string | NavItemSlug | undefined): string {
 }
 
 const getNestedBreadcrumbs = (
-  listItems: NavItem[],
+  listItems: any[],
   pagePath: string,
-  breadcrumbs: NavItem[] = []
-): NavItem[] => {
+  breadcrumbs: any[] = []
+) => {
   for (const listItem of Array.isArray(listItems) ? listItems : []) {
     // Get the target URL from the slug (or href) property
     const target = listItem.slug || listItem.href;
@@ -46,7 +33,7 @@ const getNestedBreadcrumbs = (
       return [listItem];
     }
     const nestedBreadcrumbs = getNestedBreadcrumbs(
-      listItem.items || [],
+      listItem.items,
       pagePath,
       breadcrumbs
     );
@@ -57,45 +44,31 @@ const getNestedBreadcrumbs = (
   return [];
 };
 
-export const Breadcrumbs = ({ navItems }: DocsNavProps) => {
+export function Breadcrumbs({ navItems }: DocsNavProps) {
   const pathname = usePathname();
-
-  // Get the breadcrumb items for the current page
-  const breadcrumbs = getNestedBreadcrumbs(navItems, pathname);
+  const breadcrumbs = getNestedBreadcrumbs(navItems, pathname) || [];
 
   return (
-    <nav
-      className="mb-4 flex items-center text-sm text-gray-500"
-      aria-label="Breadcrumb"
-    >
-      <ol className="flex items-center space-x-2">
-        {breadcrumbs.map((item, index) => {
-          const isLast = index === breadcrumbs.length - 1;
-          const target = item.href || getUrlFromSlug(item.slug);
-
-          return (
-            <li key={target} className="flex items-center">
-              {index > 0 && (
-                <FaChevronRight
-                  className="mx-2 h-3 w-3 text-gray-400"
-                  aria-hidden="true"
-                />
-              )}
-              {isLast ? (
-                <span className="text-gray-900">{item.title}</span>
-              ) : (
-                <Link
-                  href={target}
-                  className="hover:text-gray-700"
-                  aria-current={isLast ? "page" : undefined}
-                >
-                  {item.title}
-                </Link>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-    </nav>
+    <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
+      {breadcrumbs.map((breadcrumb, i) => {
+        const url = getUrlFromSlug(breadcrumb.slug);
+        return (
+          <li key={`breadcrumb-${url}-${i}`} className="m-0 flex items-center">
+            {i !== 0 && (
+              <FaChevronRight
+                className="mx-2 text-gray-400"
+                aria-hidden="true"
+              />
+            )}
+            <a
+              href={url}
+              className="text-sm uppercase text-gray-500 transition-opacity duration-150 hover:text-orange-500"
+            >
+              {breadcrumb.title || breadcrumb.category}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
   );
-};
+}

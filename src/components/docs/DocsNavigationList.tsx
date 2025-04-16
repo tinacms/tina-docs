@@ -132,7 +132,7 @@ const NavTitle: React.FC<NavTitleProps> = ({
 };
 
 const hasNestedSlug = (navItems: any[], slug: string) => {
-  for (const item of navItems) {
+  for (const item of Array.isArray(navItems) ? navItems : []) {
     if (matchActualTarget(getUrl(item.slug || item.href), slug)) {
       return true;
     }

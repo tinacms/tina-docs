@@ -3,20 +3,10 @@
 import { Breadcrumbs } from "@/components/docs/Breadcrumbs";
 import DirectoryOverflowButton from "@/components/docs/DirectoryOverflow";
 import { LeftHandSideParentContainer } from "@/components/docs/LeftHandSideParent";
-import type React from "react";
-import type { NavItem } from "@/components/docs/Breadcrumbs";
-
-interface TocWrapperProps {
-  children: React.ReactNode;
-  items: {
-    title: string;
-    url: string;
-    items?: TocWrapperProps['items'];
-  }[];
-}
+import React from "react";
 
 type DocsLayoutClientProps = {
-  NavigationDocsData: NavItem[];
+  NavigationDocsData: any;
 } & React.PropsWithChildren;
 
 export default function DocsLayoutClient({
@@ -47,7 +37,7 @@ export default function DocsLayoutClient({
         {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
         <div className={"sticky top-32 hidden h-[calc(100vh)] md:block"}>
           <LeftHandSideParentContainer
-            tableOfContents={NavigationDocsData}
+            tableOfContents={NavigationDocsData.data}
             header={headerComponent}
           />
         </div>
@@ -55,11 +45,11 @@ export default function DocsLayoutClient({
         <div className="col-span-2 mx-8 px-2 md:col-span-1 xl:col-span-2">
           <div className="block md:hidden">
             <div className="relative">
-              <DirectoryOverflowButton tocData={NavigationDocsData} />
+              <DirectoryOverflowButton tocData={NavigationDocsData.data} />
             </div>
           </div>
 
-          <Breadcrumbs navItems={NavigationDocsData} />
+          <Breadcrumbs navItems={NavigationDocsData.data} />
           {children}
         </div>
       </div>
