@@ -84,7 +84,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   h1: (props) => <HeaderFormat level={1} {...props} />,
   h2: (props) => <HeaderFormat level={2} {...props} />,
   h3: (props) => <HeaderFormat level={3} {...props} />,
-  h4: (props) => <HeaderFormat level={5} {...props} />,
+  h4: (props) => <HeaderFormat level={4} {...props} />,
   h5: (props) => <HeaderFormat level={5} {...props} />,
   h6: (props) => <HeaderFormat level={6} {...props} />,
   ul: (props) => <ul className="my-4 ml-2 list-disc" {...props} />,
