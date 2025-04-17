@@ -1,10 +1,12 @@
 import { type Collection, defineSchema } from "tinacms";
-import { docsCollection } from "./collections/docs";
-import { docsTableOfContentsCollection } from "./collections/docsTableOfContents";
+import DocsCollection from "./collections/docs";
+import DocsTableOfContentsCollection from "./collections/docs-table-of-contents";
+import GlobalSiteConfiguration from "./collections/site-config";
 
 export const schema = defineSchema({
   collections: [
-    docsCollection as Collection,
-    docsTableOfContentsCollection as Collection,
+    DocsCollection as Collection,
+    DocsTableOfContentsCollection as Collection,
+    GlobalSiteConfiguration as Collection,
   ],
 });

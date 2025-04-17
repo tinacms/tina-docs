@@ -1,7 +1,7 @@
-import { itemTemplate } from "../templates/toc-item.template";
-import { submenuTemplate } from "../templates/toc-sub-item.template";
+import ItemTemplate from "../templates/toc-item.template";
+import SubmenuTemplate from "../templates/toc-sub-item.template";
 
-export const docsTableOfContentsCollection = {
+export const DocsTableOfContentsCollection = {
   name: "docsTableOfContents",
   label: "Docs - Table of Contents",
   path: "content/docs-toc",
@@ -30,9 +30,11 @@ export const docsTableOfContentsCollection = {
           label: "Page or Submenu",
           type: "object",
           list: true,
-          templates: [submenuTemplate, itemTemplate],
+          templates: [SubmenuTemplate, ItemTemplate],
         },
       ],
     },
   ],
 };
+
+export default DocsTableOfContentsCollection;

@@ -1,0 +1,11 @@
+{
+  "errorConfig": {
+    "errorPageTitle": "Sorry!",
+    "errorLinks": [
+      {
+        "linkText": "Docs Landing Page",
+        "linkUrl": "/docs"
+      }
+    ]
+  }
+}

@@ -1,10 +1,10 @@
-import { seoInformation } from "./seoInformation";
+import SeoInformation from "./seo-information";
 import type { Template } from "tinacms";
 import { CardGridSchema } from "@/components/tinaMarkdown/CardGrid.schema";
 import ScrollBasedShowcase from "@/components/tinaMarkdown/scrollBasedShowcase.schema";
 import { RecipeBlock } from "@/components/tinaMarkdown/Recipe.template";
 
-export const docsCollection = {
+export const DocsCollection = {
   name: "docs",
   label: "Docs",
   path: "content/docs",
@@ -25,7 +25,7 @@ export const docsCollection = {
     },
   },
   fields: [
-    seoInformation,
+    SeoInformation,
     {
       name: "title",
       label: "Title",
@@ -308,3 +308,5 @@ export const docsCollection = {
     },
   ],
 };
+
+export default DocsCollection;

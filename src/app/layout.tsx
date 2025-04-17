@@ -2,6 +2,7 @@ import type React from "react";
 import "@/styles/global.css";
 import { SiteLayout } from "@/components/SiteLayout";
 import AdminLink from "@/components/ui/AdminLink";
+import ErrorButton from "./errorButton";
 
 export default function RootLayout({
   children = null, //default value for cms
@@ -16,6 +17,7 @@ export default function RootLayout({
       </head>
       <body>
         <AdminLink />
+        <ErrorButton />
         <SiteLayout>{children}</SiteLayout>
       </body>
     </html>

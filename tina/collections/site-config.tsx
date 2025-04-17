@@ -1,15 +1,13 @@
 import { CustomColorToggle } from "@/components/ui/CustomColorToggle";
 
-export const globalSiteConfiguration = {
+export const GlobalSiteConfiguration = {
   name: "globalSiteConfiguration",
   label: "Global Site Configuration",
   ui: {
-    allowedActions: {
-      create: false,
-      delete: false,
-    },
+    global: true,
   },
-  path: "content/siteConfig",
+  path: "content/site-config",
+  format: "json",
   fields: [
     {
       name: "docsConfig",
@@ -124,7 +122,7 @@ export const globalSiteConfiguration = {
             },
           ],
         },
-    
+
         {
           name: "customColorToggle",
           label: "Custom Color Toggle",
@@ -162,6 +160,8 @@ export const globalSiteConfiguration = {
       name: "errorConfig",
       label: "Error Config",
       type: "object",
+      description:
+        "This is the configuration for the error pages (404, 500, etc), you can add links to the error pages to help the user navigate back to your website.",
       fields: [
         {
           name: "errorPageTitle",
@@ -190,3 +190,5 @@ export const globalSiteConfiguration = {
     },
   ],
 };
+
+export default GlobalSiteConfiguration;
