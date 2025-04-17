@@ -23,6 +23,7 @@
       "@/hooks/*": ["./src/hooks/*"],
       "@/types/*": ["./src/types/*"],
       "@/config/*": ["./src/config/*"],
+      "@/app/*": ["./src/app/*"],
       "@/tina/*": ["./tina/*"]
     },
     "plugins": [
