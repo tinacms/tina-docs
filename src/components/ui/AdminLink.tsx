@@ -1,8 +1,8 @@
 "use client";
 
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { useEffect } from "react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useEditState } from "tinacms/dist/react";
 
 const AdminLink = () => {

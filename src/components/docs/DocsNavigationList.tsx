@@ -2,10 +2,10 @@
 
 import { DynamicLink } from "@/components/ui/DynamicLink";
 import { matchActualTarget } from "@/utils/docs/urls";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import React from "react";
 import AnimateHeight from "react-animate-height";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 // Constants for common values
 const TRANSITION_DURATION = 300;

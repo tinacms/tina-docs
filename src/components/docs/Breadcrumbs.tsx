@@ -1,9 +1,9 @@
 "use client";
 
 import { matchActualTarget } from "@/utils/docs/urls";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export interface DocsNavProps {
   navItems: any;

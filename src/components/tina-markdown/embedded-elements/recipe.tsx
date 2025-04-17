@@ -1,6 +1,6 @@
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { customHighlightCSS } from "./recipe.constants";
 import CodeBlockWithHighlightLines from "./recipe.helpers";
