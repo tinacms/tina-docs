@@ -1,10 +1,10 @@
-import { itemTemplate } from "../templates/toc-item.template";
 import { submenuTemplate } from "../templates/submenu.template";
+import { itemTemplate } from "../templates/toc-item.template";
 
-export const docsTableOfContentsCollection = {
-  name: "docsTableOfContents",
-  label: "Docs - Table of Contents",
-  path: "content/docs-toc",
+export const docsNavigationBarCollection = {
+  name: "navigationBar",
+  label: "Docs - Navigation Bar",
+  path: "content/navigation-bar",
   format: "json",
   ui: {
     allowedActions: {
