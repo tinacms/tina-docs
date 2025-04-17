@@ -56,7 +56,7 @@ export function Breadcrumbs({ navItems }: DocsNavProps) {
           <li key={`breadcrumb-${url}-${i}`} className="m-0 flex items-center">
             {i !== 0 && (
               <ChevronRightIcon
-                className="mx-2 text-gray-400"
+                className="mx-2 text-gray-400 size-5"
                 aria-hidden="true"
               />
             )}
