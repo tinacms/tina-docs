@@ -4,22 +4,17 @@ import client from "@/tina/__generated__/client";
 import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
-import { notFound } from "next/navigation";
 import Document from ".";
 
 export async function generateStaticParams() {
-  try {
-    const contentDir = "./content/docs/";
-    const files = await fg(`${contentDir}**/*.mdx`);
-    return files
-      .filter((file) => !file.endsWith("index.mdx"))
-      .map((file) => {
-        const path = file.substring(contentDir.length, file.length - 4); // Remove "./content/docs/" and ".mdx"
-        return { slug: path.split("/") };
-      });
-  } catch (error) {
-    notFound();
-  }
+  const contentDir = "./content/docs/";
+  const files = await fg(`${contentDir}**/*.mdx`);
+  return files
+    .filter((file) => !file.endsWith("index.mdx"))
+    .map((file) => {
+      const path = file.substring(contentDir.length, file.length - 4); // Remove "./content/docs/" and ".mdx"
+      return { slug: path.split("/") };
+    });
 }
 
 export async function generateMetadata({
