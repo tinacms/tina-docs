@@ -4,9 +4,9 @@ export default async function NotFound() {
   return (
     <ErrorWrapper
       errorConfig={{
-        errorPageTitle: "Sorry, Friend!",
+        title: "Sorry, Friend!",
         description: "We couldn't find what you were looking for.",
-        errorLinks: [
+        links: [
           {
             linkText: "Return to docs",
             linkUrl: "/docs",

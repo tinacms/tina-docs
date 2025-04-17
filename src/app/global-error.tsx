@@ -19,9 +19,9 @@ export default function GlobalError({
       <body>
         <ErrorWrapper
           errorConfig={{
-            errorPageTitle: "Sorry, Friend!",
+            title: "Sorry, Friend!",
             description: "Something went wrong!",
-            errorLinks: [
+            links: [
               {
                 linkText: "Return to docs",
                 linkUrl: "/docs",

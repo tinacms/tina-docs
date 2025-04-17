@@ -8,8 +8,8 @@ const ErrorWrapper = ({
 }: {
   errorConfig: {
     description: string;
-    errorPageTitle: string;
-    errorLinks: { linkText: string; linkUrl: string }[];
+    title: string;
+    links: { linkText: string; linkUrl: string }[];
   };
 }) => {
   return (
@@ -18,7 +18,7 @@ const ErrorWrapper = ({
         <div className="flex flex-col items-center text-center">
           <div className="mb-7">
             <h2 className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text font-tuner text-6xl text-transparent">
-              {errorConfig?.errorPageTitle ?? "Sorry, Friend."}
+              {errorConfig?.title ?? "Sorry, Friend."}
             </h2>
             {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
             <hr className="my-8 block h-[7px] w-full border-none bg-[url('/svg/hr.svg')] bg-[length:auto_100%] bg-no-repeat" />
@@ -29,7 +29,7 @@ const ErrorWrapper = ({
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
-            {errorConfig?.errorLinks?.map(
+            {errorConfig?.links?.map(
               (link) =>
                 (link?.linkUrl || link?.linkUrl === "") && (
                   <Link
