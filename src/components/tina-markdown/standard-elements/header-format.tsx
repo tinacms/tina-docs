@@ -15,7 +15,7 @@ export default function HeaderFormat({
       ? children.props.content.map((content: any) => content.text).join("")
       : typeof children === "string"
         ? children
-        : "",
+        : ""
   );
 
   const linkHref = `#${id}`;
@@ -44,11 +44,10 @@ export default function HeaderFormat({
     window.history.pushState(null, "", linkHref);
   };
 
-  const scrollToElement = useCallback(
-    (elementId) => {
-      const element = document.getElementById(elementId);
-      if (element) {
-        const offset = 130; //offset in pixels
+  const scrollToElement = useCallback((elementId) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      const offset = 130; //offset in pixels
       const elementPosition =
         element.getBoundingClientRect().top + window.scrollY;
       const offsetPosition = elementPosition - offset;
@@ -57,10 +56,8 @@ export default function HeaderFormat({
         top: offsetPosition,
         behavior: "smooth",
       });
-      }
-    },
-    [],
-  );
+    }
+  }, []);
 
   useEffect(() => {
     if (window.location.hash) {

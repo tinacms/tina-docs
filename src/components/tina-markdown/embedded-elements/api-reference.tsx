@@ -72,7 +72,7 @@ const ApiReference = (data: {
             setOpenGroups(
               openGroups.includes(groupName)
                 ? openGroups.filter((group) => group !== groupName)
-                : [...openGroups, groupName],
+                : [...openGroups, groupName]
             )
           }
           className="flex w-full items-center justify-between bg-transparent bg-gradient-to-b from-blue-100/20 to-blue-50/20 px-6 py-4 text-left transition-colors hover:bg-blue-200/10"
@@ -137,14 +137,14 @@ const ApiReference = (data: {
               result.push(
                 <React.Fragment key={`group-${result.length}`}>
                   {group(currentGroup, currentGroupProperties)}
-                </React.Fragment>,
+                </React.Fragment>
               );
               currentGroup = null;
               currentGroupProperties = [];
             } else {
               if (index !== 0) {
                 result.push(
-                  <hr className="m-auto h-0.5 w-4/5 rounded-lg bg-gray-200" />,
+                  <hr className="m-auto h-0.5 w-4/5 rounded-lg bg-gray-200" />
                 );
               }
             }
@@ -153,7 +153,7 @@ const ApiReference = (data: {
             result.push(
               <React.Fragment key={`ind-${index}`}>
                 {propertyItem(property)}
-              </React.Fragment>,
+              </React.Fragment>
             );
           }
           // If property has a groupName
@@ -169,7 +169,7 @@ const ApiReference = (data: {
                 result.push(
                   <React.Fragment key={`group-${result.length}`}>
                     {group(currentGroup, currentGroupProperties)}
-                  </React.Fragment>,
+                  </React.Fragment>
                 );
               }
 
@@ -185,7 +185,7 @@ const ApiReference = (data: {
           result.push(
             <React.Fragment key={`group-${result.length}`}>
               {group(currentGroup, currentGroupProperties)}
-            </React.Fragment>,
+            </React.Fragment>
           );
         }
 

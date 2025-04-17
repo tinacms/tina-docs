@@ -38,7 +38,7 @@ export function createListener(
   headings: Item[],
   // Callback to update active IDs - param name in type is just for documentation
 
-  setActiveIds: (activeIds: string[]) => void,
+  setActiveIds: (activeIds: string[]) => void
 ) {
   let tick = false;
   const THROTTLE_INTERVAL = 100;
@@ -72,13 +72,13 @@ export function createListener(
       scrollPos / componentRef.current.scrollHeight;
 
     const activeHeadingCandidates = relativePositionHeadingMap.filter(
-      (heading) => relativeScrollPosition >= heading.relativePagePosition,
+      (heading) => relativeScrollPosition >= heading.relativePagePosition
     );
 
     const activeHeading =
       activeHeadingCandidates.length > 0
         ? activeHeadingCandidates.reduce((prev, current) =>
-            (prev.offset || 0) > (current.offset || 0) ? prev : current,
+            (prev.offset || 0) > (current.offset || 0) ? prev : current
           )
         : (headings[0] ?? {});
 
@@ -92,7 +92,7 @@ export function createListener(
       const activeHeadingParent =
         activeHeadingParentCandidates.length > 0
           ? activeHeadingParentCandidates.reduce((prev, current) =>
-              (prev.offset || 0) > (current.offset || 0) ? prev : current,
+              (prev.offset || 0) > (current.offset || 0) ? prev : current
             )
           : null;
 
