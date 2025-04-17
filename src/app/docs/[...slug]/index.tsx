@@ -6,15 +6,10 @@ import MarkdownComponentMapping from "@/components/tina-markdown/markdown-compon
 import DocsPagination from "@/components/ui/Pagination";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
-import { useTina } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
-export default function Document({ props }) {
-  const { data } = useTina({
-    query: props.query,
-    variables: props.variables,
-    data: props.data,
-  });
+export default function Document({ props, tinaProps }) {
+  const { data } = tinaProps;
 
   const documentationData = data.docs;
   const { pageTableOfContents } = props;
