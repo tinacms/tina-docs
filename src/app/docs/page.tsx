@@ -1,8 +1,9 @@
 import { TinaClient } from "@/app/tina-client";
+import { fetchTinaData } from "@/src/services/tina/fetch-tina-data";
 import client from "@/tina/__generated__/client";
 import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
-import DocumentPageClient from "./[...slug]";
+import Document from "./[...slug]";
 
 export async function generateMetadata() {
   const slug = "index";
@@ -10,19 +11,27 @@ export async function generateMetadata() {
   return getSeo(data);
 }
 
-export default async function DocsPage() {
+async function getData() {
   const defaultSlug = "index";
+  const documentData = await fetchTinaData(client.queries.docs, defaultSlug);
 
-  const documentData = await client.queries.docs({
-    relativePath: `${defaultSlug}.mdx`,
-  });
+  const pageTableOfContents = getTableOfContents(
+    documentData.data.docs.body.children
+  );
 
-  const docData = documentData.data.docs;
-  const pageTableOfContents = getTableOfContents(docData.body.children);
+  return {
+    documentData,
+    pageTableOfContents,
+    docData: documentData.data.docs,
+  };
+}
+
+export default async function DocsPage() {
+  const { documentData, pageTableOfContents, docData } = await getData();
 
   return (
     <TinaClient
-      Component={DocumentPageClient}
+      Component={Document}
       props={{
         query: documentData.query,
         variables: documentData.variables,

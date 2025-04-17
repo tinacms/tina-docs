@@ -9,7 +9,7 @@ import { useTocListener } from "@/utils/docs/tocListener";
 import { useTina } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
-export default function DocumentPageClient({ props }) {
+export default function Document({ props }) {
   const { data } = useTina({
     query: props.query,
     variables: props.variables,
@@ -33,11 +33,7 @@ export default function DocumentPageClient({ props }) {
   const { activeIds, contentRef } = useTocListener(documentationData);
 
   return (
-    <div
-      className={
-        "grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]"
-      }
-    >
+    <div className="grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]">
       {/* MIDDLE COLUMN */}
       <div
         className={`max-w-full overflow-hidden break-words ${
