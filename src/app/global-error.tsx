@@ -19,20 +19,20 @@ export default function GlobalError({
       </head>
       <body>
         <SiteLayout>
-        <ErrorWrapper
-          errorConfig={{
-            title: "Sorry, Friend!",
-            description: "Something went wrong!",
-            links: [
-              {
-                linkText: "Return to docs",
-                linkUrl: "/docs",
-              },
-              {
-                linkText: "Try again",
-                linkUrl: "",
-              },
-            ],
+          <ErrorWrapper
+            errorConfig={{
+              title: "Sorry, Friend!",
+              description: "Something went wrong!",
+              links: [
+                {
+                  linkText: "Return to docs",
+                  linkUrl: "/docs",
+                },
+                {
+                  linkText: "Try again",
+                  linkUrl: "",
+                },
+              ],
             }}
           />
         </SiteLayout>
