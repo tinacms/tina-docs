@@ -1,5 +1,5 @@
 import ItemTemplate from "../templates/toc-item.template";
-import SubmenuTemplate from "../templates/toc-sub-item.template";
+import SubmenuTemplate from "../templates/submenu.template";
 
 export const DocsTableOfContentsCollection = {
   name: "docsTableOfContents",
