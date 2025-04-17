@@ -1,6 +1,6 @@
 import { FlushButton, LinkButton } from "@/components/ui/Buttons";
 import { sanitizeLabel } from "@/utils/sanitizeLabel";
-import { BiArrowBack } from "react-icons/bi";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { tinaField } from "tinacms/dist/react";
 
 export const Actions = ({ items, align = "left", flush = false }) => {
@@ -39,7 +39,7 @@ export const Actions = ({ items, align = "left", flush = false }) => {
                 {label}
                 {icon && (
                   // eslint-disable-next-line tailwindcss/no-arbitrary-value
-                  <BiArrowBack className="-mr-1 -mt-1 ml-2 h-[1.125em] w-auto rotate-180 opacity-70" />
+                  <ArrowLeftIcon className="-mr-1 -mt-1 ml-2 h-[1.125em] w-auto rotate-180 opacity-70" />
                 )}
               </ActionButton>
             );

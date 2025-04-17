@@ -1,10 +1,17 @@
 import { Actions } from "../blocks/ActionButton/ActionsButton";
 
-export const CardGrid = ({ props }) => {
+export const CardGrid = (data: {
+  cards: {
+    title: string;
+    description: string;
+    link: string;
+    linkText: string;
+  }[];
+}) => {
   return (
     // eslint-disable-next-line tailwindcss/no-custom-classname
     <div className="border-seafoam-300 my-8 grid grid-cols-1 rounded-lg border shadow-lg md:grid-cols-2">
-      {props.cards?.map((card, index) => (
+      {data.cards?.map((card, index) => (
         <a
           key={index}
           href={card.link}

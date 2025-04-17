@@ -2,10 +2,10 @@
 
 import { DynamicLink } from "@/components/ui/DynamicLink";
 import { matchActualTarget } from "@/utils/docs/urls";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import React from "react";
 import AnimateHeight from "react-animate-height";
-import { BiChevronRight } from "react-icons/bi";
 
 // Constants for common values
 const TRANSITION_DURATION = 300;
@@ -221,7 +221,7 @@ const NavLevel = ({
           >
             <span className=" -mr-2 pr-2">{categoryData.title}</span>
             {categoryData.items && !selected && (
-              <BiChevronRight
+              <ChevronRightIcon
                 className={`${
                   level < 1
                     ? `${TEXT_COLORS.orangeLight} group-hover:${TEXT_COLORS.orangeHover}`

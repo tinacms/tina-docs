@@ -1,5 +1,5 @@
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
-import { MdMenu } from "react-icons/md";
 import { DocsNavigationList } from "./DocsNavigationList";
 
 const DirectoryOverflow = ({ tocData }) => {
@@ -43,7 +43,7 @@ const DirectoryOverflowButton = ({ tocData }) => {
         }}
       >
         <span className="flex items-center space-x-2 py-1">
-          <MdMenu size={20} className="text-orange-500" />
+          <Bars3Icon className="size-5 text-orange-500" />
           <span className="text-slate-600">Topics</span>
         </span>
       </div>

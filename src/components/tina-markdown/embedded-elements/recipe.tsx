@@ -1,11 +1,17 @@
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { FaChevronCircleDown } from "react-icons/fa";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { customHighlightCSS } from "./RecipeCSS";
-import CodeBlockWithHighlightLines from "./RecipeCodeBlockWithHighlight";
+import { customHighlightCSS } from "./recipe.constants";
+import CodeBlockWithHighlightLines from "./recipe.helpers";
 
-export const RecipeBlock = ({ data }) => {
+export const RecipeBlock = (data: {
+  title?: string;
+  description?: string;
+  codeblock?: any;
+  code?: string;
+  instruction?: any;
+}) => {
   const { title, description, codeblock, code, instruction } = data;
 
   const [highlightLines, setHighlightLines] = useState("");
@@ -100,7 +106,7 @@ export const RecipeBlock = ({ data }) => {
   };
 
   return (
-    <div className="recipe-block-container relative w-full">
+    <div className="recipe-block-container relative w-full text-white">
       <div className="title-description px-10">
         <h2 className="font-tuner text-2xl text-orange-500">
           {title || "Default Title"}
@@ -123,7 +129,7 @@ export const RecipeBlock = ({ data }) => {
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl" />
-            <FaChevronCircleDown
+            <ChevronDownIcon
               onClick={handleDownArrowClick}
               className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${
                 checkIfScrollable() ? "" : "hidden"
