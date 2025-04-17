@@ -60,7 +60,7 @@ const TocOverflowButton = (tocData) => {
             }}
           >
             <span className="flex items-center space-x-2">
-              <Bars3Icon className="h-5 w-5 text-orange-500" />
+              <Bars3Icon className="size-5 text-orange-500" />
               <span className="py-1 text-slate-600">Table of Contents</span>
             </span>
           </div>

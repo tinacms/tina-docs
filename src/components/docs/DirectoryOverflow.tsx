@@ -43,7 +43,7 @@ const DirectoryOverflowButton = ({ tocData }) => {
         }}
       >
         <span className="flex items-center space-x-2 py-1">
-          <Bars3Icon className="h-5 w-5 text-orange-500" />
+          <Bars3Icon className="size-5 text-orange-500" />
           <span className="text-slate-600">Topics</span>
         </span>
       </div>

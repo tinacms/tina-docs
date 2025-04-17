@@ -36,7 +36,7 @@ const AdminLink = () => {
             onClick={handleDismiss}
             className="ml-2 text-sm"
           >
-            <XMarkIcon className="h-4 w-4" />
+            <XMarkIcon className="size-4" />
           </button>
         </div>
       )}
