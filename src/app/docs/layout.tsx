@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@/src/components/docs/Breadcrumbs";
-import DirectoryOverflowButton from "@/src/components/docs/DirectoryOverflow";
+import { NavigationDropdown } from "@/src/components/docs/NavigationDropdown";
 import { NavigationSideBar } from "@/src/components/docs/NavigationSideBar";
 import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
 import type React from "react";
@@ -17,6 +17,7 @@ export default async function DocsLayout({
   return (
     <div className="relative my-6 flex items-start justify-center lg:mb-16 xl:mt-16">
       <div className="grid w-full max-w-[2000px] grid-cols-1 px-3 md:grid-cols-[1.25fr_3fr] md:px-8 xl:grid-cols-[1.25fr_3fr_0.75fr] xl:px-16">
+        {/* DESKTOP NAVIGATION SIDEBAR */}
         <aside className={"sticky top-32 hidden h-[calc(100vh)] md:block"}>
           <NavigationSideBar
             tableOfContents={navigationDocsData.data}
@@ -25,9 +26,10 @@ export default async function DocsLayout({
         </aside>
         {/* CONTENT COLUMN */}
         <main className="col-span-2 mx-8 px-2 md:col-span-1 xl:col-span-2">
+          {/* MOBILE NAVIGATION DROPDOWN */}
           <div className="block md:hidden">
             <div className="relative">
-              <DirectoryOverflowButton tocData={navigationDocsData.data} />
+              <NavigationDropdown tocData={navigationDocsData.data} />
             </div>
           </div>
 

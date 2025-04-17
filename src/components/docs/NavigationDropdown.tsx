@@ -4,7 +4,7 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import { DocsNavigationList } from "./DocsNavigationList";
 
-const DirectoryOverflow = ({ tocData }) => {
+const NavigationDropdownContent = ({ tocData }) => {
   return (
     <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-xl">
       <DocsNavigationList navItems={tocData} />
@@ -12,7 +12,7 @@ const DirectoryOverflow = ({ tocData }) => {
   );
 };
 
-const DirectoryOverflowButton = ({ tocData }) => {
+export const NavigationDropdown = ({ tocData }) => {
   const [isTableOfContentsOpen, setIsTableOfContentsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,11 +51,9 @@ const DirectoryOverflowButton = ({ tocData }) => {
       </div>
       {isTableOfContentsOpen && (
         <div className="relative w-full">
-          <DirectoryOverflow tocData={tocData} />
+          <NavigationDropdownContent tocData={tocData} />
         </div>
       )}
     </div>
   );
 };
-
-export default DirectoryOverflowButton;
