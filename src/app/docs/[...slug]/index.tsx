@@ -1,9 +1,9 @@
 "use client";
 
-import ToC from "@/components/docs/PageToc";
-import TocOverflowButton from "@/components/docs/ToCOverflow";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
-import DocsPagination from "@/components/ui/Pagination";
+import { Pagination } from "@/components/ui/Pagination";
+import { TableOfContents } from "@/src/components/docs/TableOfContents";
+import { TableOfContentsDropdown } from "@/src/components/docs/TableOfContentsDropdown";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -29,7 +29,6 @@ export default function Document({ props, tinaProps }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]">
-      {/* MIDDLE COLUMN */}
       <div
         className={`max-w-full overflow-hidden break-words ${
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
@@ -40,9 +39,11 @@ export default function Document({ props, tinaProps }) {
             {documentationData?.title}
           </div>
         </div>
+        {/* MOBILE TABLE OF CONTENTS */}
         <div className="block xl:hidden">
-          <TocOverflowButton tocData={pageTableOfContents} />
+          <TableOfContentsDropdown tocData={pageTableOfContents} />
         </div>
+        {/* CONTENT */}
         <div ref={contentRef}>
           <TinaMarkdown
             content={documentationData?.body}
@@ -55,12 +56,15 @@ export default function Document({ props, tinaProps }) {
             Last Edited: {formattedDate}
           </span>
         )}
-        <DocsPagination prevPage={previousPage} nextPage={nextPage} />
+        <Pagination prevPage={previousPage} nextPage={nextPage} />
       </div>
-      {/* RIGHT COLUMN */}
+      {/* DESKTOP TABLE OF CONTENTS */}
       {documentationData?.tocIsHidden ? null : (
         <div className={"sticky top-32 mx-8 hidden h-[calc(100vh)] xl:block"}>
-          <ToC tocItems={pageTableOfContents} activeids={activeIds} />
+          <TableOfContents
+            tocItems={pageTableOfContents}
+            activeids={activeIds}
+          />
         </div>
       )}
     </div>

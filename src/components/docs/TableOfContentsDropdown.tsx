@@ -25,7 +25,7 @@ const TocOverflow = ({ tocData }) => {
   );
 };
 
-const TocOverflowButton = (tocData) => {
+export const TableOfContentsDropdown = ({ tocData }) => {
   const [isTableOfContentsOpen, setIsTableOfContentsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -47,7 +47,7 @@ const TocOverflowButton = (tocData) => {
 
   return (
     <div>
-      {tocData.tocData.length !== 0 && (
+      {tocData.tocData?.length !== 0 && (
         <div className="w-full py-6" ref={containerRef}>
           <div
             className="cursor-pointer rounded-lg border-slate-400 bg-gradient-to-r from-white/50 to-white/30 px-4 py-2 shadow-lg"
@@ -74,5 +74,3 @@ const TocOverflowButton = (tocData) => {
     </div>
   );
 };
-
-export default TocOverflowButton;

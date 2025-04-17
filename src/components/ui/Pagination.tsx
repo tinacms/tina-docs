@@ -14,7 +14,7 @@ interface PaginationProps {
 
 const NextImage = Image as any;
 
-export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
+export function Pagination({ prevPage, nextPage }: PaginationProps) {
   return (
     <div className="mt-8 grid grid-cols-2 gap-4">
       {prevPage?.slug && (
@@ -64,5 +64,3 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
     </div>
   );
 }
-
-export default DocsPagination;
