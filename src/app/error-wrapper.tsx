@@ -27,7 +27,7 @@ const ErrorWrapper = async ({ description }: { description: string }) => {
           <div className="flex flex-wrap gap-4">
             {errorConfig?.errorLinks?.map((link) => (
               link?.linkUrl && (
-                <Link href={link.linkUrl} passHref>
+                <Link href={link.linkUrl} passHref className="text-slate-500 shadow-sm hover:shadow-md outline outline-slate-200 hover:text-slate-700 rounded-md p-2 bg-white/50 hover:bg-white/90">
                   <div>{link.linkText ?? "External Link 🔗"}</div>
                 </Link>
               )
