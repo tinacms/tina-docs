@@ -1,6 +1,7 @@
 "use client"; // Error boundaries must be Client Components
 import ErrorWrapper from "./error-wrapper";
 import "@/styles/global.css";
+import { SiteLayout } from "../components/SiteLayout";
 
 export default function GlobalError({
   error,
@@ -17,6 +18,7 @@ export default function GlobalError({
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
       </head>
       <body>
+        <SiteLayout>
         <ErrorWrapper
           errorConfig={{
             title: "Sorry, Friend!",
@@ -31,8 +33,9 @@ export default function GlobalError({
                 linkUrl: "",
               },
             ],
-          }}
-        />
+            }}
+          />
+        </SiteLayout>
       </body>
     </html>
   );
