@@ -2,14 +2,13 @@ import type React from "react";
 import "@/styles/global.css";
 import { SiteLayout } from "@/components/SiteLayout";
 import AdminLink from "@/components/ui/AdminLink";
+import ErrorButton from "./errorButton";
 
 export default function RootLayout({
   children = null, //default value for cms
 }: {
   children: React.ReactNode;
 }) {
-
-  throw new Error("Global Error Test - This should show the error page");
   return (
     <html lang="en">
       <head>
@@ -19,6 +18,7 @@ export default function RootLayout({
       <body>
         <AdminLink />
         <SiteLayout>{children}</SiteLayout>
+        <ErrorButton />
       </body>
     </html>
   );
