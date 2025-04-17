@@ -29,13 +29,13 @@ export default function HeaderFormat({
     6: "text-gray-500 text-base font-normal mt-2 mb-1",
   };
 
-  const linkColor = {
-    1: "text-orange-500",
-    2: "text-orange-500",
-    3: "text-blue-900",
-    4: "text-orange-500",
-    5: "text-orange-500",
-    6: "text-gray-500",
+  const linkStyle = {
+    1: "text-orange-500 size-8",
+    2: "text-orange-500 size-8",
+    3: "text-blue-900 size-6",
+    4: "text-orange-500 size-6",
+    5: "text-orange-500 size-4",
+    6: "text-gray-500 size-4",
   };
 
   const handleHeaderClick = (event) => {
@@ -81,7 +81,7 @@ export default function HeaderFormat({
         {children}
         <LinkIcon
           // eslint-disable-next-line tailwindcss/no-custom-classname
-          className={`${linkColor[level]} group-hover:animate-wiggle absolute ml-1 opacity-0 transition-opacity duration-200 group-hover:opacity-80`}
+          className={`${linkStyle[level]} group-hover:animate-wiggle absolute ml-1 opacity-0 transition-opacity duration-200 group-hover:opacity-80`}
           style={{
             display: "inline-block",
             marginTop: "0.25rem",
