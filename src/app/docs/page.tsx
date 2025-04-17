@@ -2,7 +2,7 @@ import { TinaClient } from "@/app/tina-client";
 import client from "@/tina/__generated__/client";
 import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
-import DocumentPageClient from "./[...slug]/DocumentPageClient";
+import DocumentPageClient from "./[...slug]";
 
 export async function generateMetadata() {
   const slug = "index";

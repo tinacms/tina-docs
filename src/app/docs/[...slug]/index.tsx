@@ -34,7 +34,6 @@ export default function DocumentPageClient({ props }) {
 
   return (
     <div
-      // eslint-disable-next-line tailwindcss/no-arbitrary-value
       className={
         "grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]"
       }

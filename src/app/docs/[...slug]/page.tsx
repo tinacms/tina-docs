@@ -3,8 +3,8 @@ import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
 import { notFound } from "next/navigation";
+import DocumentPageClient from ".";
 import { TinaClient } from "../../tina-client";
-import DocumentPageClient from "./DocumentPageClient";
 
 export async function generateStaticParams() {
   try {
