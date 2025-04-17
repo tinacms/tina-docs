@@ -1,4 +1,4 @@
-import { TextInputWithCount } from "../customFields/textInputWithCount";
+import { TextInputWithCount } from "../customFields/text-input-with-count";
 
 export const SeoInformation = {
   type: "object",

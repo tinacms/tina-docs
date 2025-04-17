@@ -1,8 +1,8 @@
 "use client";
 
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { useEffect } from "react";
-import { RxCross1 } from "react-icons/rx";
 import { useEditState } from "tinacms/dist/react";
 
 const AdminLink = () => {
@@ -36,7 +36,7 @@ const AdminLink = () => {
             onClick={handleDismiss}
             className="ml-2 text-sm"
           >
-            <RxCross1 />
+            <XMarkIcon className="size-4" />
           </button>
         </div>
       )}

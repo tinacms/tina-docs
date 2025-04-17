@@ -2,7 +2,7 @@
 
 import ToC from "@/components/docs/PageToc";
 import TocOverflowButton from "@/components/docs/ToCOverflow";
-import { DocsMDXComponentRenderer } from "@/components/tinaMarkdown/DocsMDXComponentRenderer";
+import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import DocsPagination from "@/components/ui/Pagination";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
@@ -56,7 +56,7 @@ export default function DocumentPageClient({ props }) {
         <div ref={contentRef}>
           <TinaMarkdown
             content={documentationData?.body}
-            components={DocsMDXComponentRenderer}
+            components={MarkdownComponentMapping}
           />
         </div>
         {formattedDate && (

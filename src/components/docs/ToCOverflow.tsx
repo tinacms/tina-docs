@@ -1,6 +1,6 @@
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { MdMenu } from "react-icons/md";
 
 const TocOverflow = ({ tocData }) => {
   return (
@@ -60,7 +60,7 @@ const TocOverflowButton = (tocData) => {
             }}
           >
             <span className="flex items-center space-x-2">
-              <MdMenu size={20} className="text-orange-500" />
+              <Bars3Icon className="size-5 text-orange-500" />
               <span className="py-1 text-slate-600">Table of Contents</span>
             </span>
           </div>

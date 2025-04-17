@@ -1,4 +1,4 @@
-export const CardGridSchema = {
+export const CardGridTemplate = {
   name: "cardGrid",
   label: "Card Grid",
   fields: [
@@ -35,3 +35,5 @@ export const CardGridSchema = {
     },
   ],
 };
+
+export default CardGridTemplate;
