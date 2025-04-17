@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { FiLink } from "react-icons/fi";
+import { LinkIcon } from "@heroicons/react/24/outline";
 import { getDocId } from "../../../utils/docs/getDocsIds";
 
 export default function HeaderFormat({
@@ -79,7 +79,7 @@ export default function HeaderFormat({
       >
         {" "}
         {children}
-        <FiLink
+        <LinkIcon
           // eslint-disable-next-line tailwindcss/no-custom-classname
           className={`${linkColor[level]} group-hover:animate-wiggle absolute ml-1 opacity-0 transition-opacity duration-200 group-hover:opacity-80`}
           style={{

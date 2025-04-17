@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 import HeaderFormat from "../standard-elements/header-format";
@@ -33,9 +33,9 @@ const Accordion = (data: {
         </HeaderFormat>
         <div>
           {isExpanded ? (
-            <FaMinus className="size-3 text-blue-800" />
+            <MinusIcon className="size-3 text-blue-800" />
           ) : (
-            <FaPlus className="size-3 text-gray-500" />
+            <PlusIcon className="size-3 text-gray-500" />
           )}
         </div>
       </div>

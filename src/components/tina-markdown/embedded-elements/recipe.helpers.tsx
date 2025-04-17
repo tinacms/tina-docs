@@ -6,7 +6,7 @@ import "prismjs/plugins/line-highlight/prism-line-highlight";
 import "prismjs/plugins/line-highlight/prism-line-highlight.css";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-import { MdOutlineContentCopy } from "react-icons/md";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
 const CodeToolbar = ({
   lang,
@@ -29,7 +29,7 @@ const CodeToolbar = ({
             : "text-white hover:bg-gray-700"
         }`}
       >
-        {!tooltipVisible && <MdOutlineContentCopy className="size-4" />}
+        {!tooltipVisible && <DocumentDuplicateIcon className="size-4" />}
         <span>{!tooltipVisible ? "Copy" : "Copied!"}</span>
       </button>
     </div>
