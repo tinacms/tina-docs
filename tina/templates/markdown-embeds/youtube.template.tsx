@@ -1,4 +1,4 @@
-export const youtubeTemplate = {
+export const YoutubeTemplate = {
   name: "youtube",
   label: "Youtube Video",
   fields: [
@@ -24,4 +24,4 @@ export const youtubeTemplate = {
   ],
 };
 
-export default youtubeTemplate;
+export default YoutubeTemplate;

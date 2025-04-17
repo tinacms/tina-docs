@@ -1,4 +1,4 @@
-const scrollShowcaseTemplate = {
+export const ScrollShowcaseTemplate = {
   label: "Scroll Showcase",
   name: "scrollShowcase",
   fields: [
@@ -59,4 +59,4 @@ const scrollShowcaseTemplate = {
   ],
 };
 
-export default scrollShowcaseTemplate;
+export default ScrollShowcaseTemplate;

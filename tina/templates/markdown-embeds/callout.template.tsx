@@ -1,4 +1,4 @@
-export const calloutTemplate = {
+export const CalloutTemplate = {
   name: "WarningCallout",
   label: "Warning Callout",
   fields: [
@@ -10,4 +10,4 @@ export const calloutTemplate = {
   ],
 };
 
-export default calloutTemplate;
+export default CalloutTemplate;

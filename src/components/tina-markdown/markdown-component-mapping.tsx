@@ -14,15 +14,15 @@ import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
 
 type ComponentMapping = {
-  youtube: { embedSrc: string; caption?: string; minutes?: string };
-  queryResponseTabs: {
+  Youtube: { embedSrc: string; caption?: string; minutes?: string };
+  QueryResponseTabs: {
     query: string;
     response: string;
     preselectResponse: boolean;
     customQueryName?: string;
     customResponseName?: string;
   };
-  apiReference: {
+  ApiReference: {
     title: string;
     property: {
       groupName: string;
@@ -33,9 +33,9 @@ type ComponentMapping = {
       required: boolean;
     }[];
   };
-  warningCallout: { body: string };
-  accordion: { docText: string; image: string; heading?: string };
-  recipeBlock: {
+  WarningCallout: { body: string };
+  Accordion: { docText: string; image: string; heading?: string };
+  RecipeBlock: {
     title?: string;
     description?: string;
     codeblock?: any;
@@ -46,7 +46,7 @@ type ComponentMapping = {
       codeLineEnd?: number;
     }[];
   };
-  scrollShowcase: {
+  ScrollShowcase: {
     showcaseItems: {
       image: string;
       title: string;
@@ -54,7 +54,7 @@ type ComponentMapping = {
       content: string;
     }[];
   };
-  cardGrid: {
+  CardGrid: {
     cards: {
       title: string;
       description: string;
@@ -71,14 +71,14 @@ type ComponentMapping = {
 
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
   // Our embeds we can inject via MDX
-  scrollShowcase: (props) => <ScrollShowcase {...props} />,
-  cardGrid: (props) => <CardGrid {...props} />,
-  recipeBlock: (props) => <RecipeBlock {...props} />,
-  accordion: (props) => <Accordion {...props} />,
-  apiReference: (props) => <ApiReference {...props} />,
-  youtube: (props) => <Youtube {...props} />,
-  queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
-  warningCallout: (props) => <Callout {...props} variant="warning" />,
+  ScrollShowcase: (props) => <ScrollShowcase {...props} />,
+  CardGrid: (props) => <CardGrid {...props} />,
+  RecipeBlock: (props) => <RecipeBlock {...props} />,
+  Accordion: (props) => <Accordion {...props} />,
+  ApiReference: (props) => <ApiReference {...props} />,
+  Youtube: (props) => <Youtube {...props} />,
+  QueryResponseTabs: (props) => <QueryResponseTabs {...props} />,
+  WarningCallout: (props) => <Callout {...props} variant="warning" />,
 
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,

@@ -1,11 +1,11 @@
-import accordionTemplate from "@/tina/templates/markdown-embeds/accordion.template";
-import apiReferenceTemplate from "@/tina/templates/markdown-embeds/api-reference.template";
-import calloutTemplate from "@/tina/templates/markdown-embeds/callout.template";
-import cardGridTemplate from "@/tina/templates/markdown-embeds/card-grid.template";
-import queryResponseTabsTemplate from "@/tina/templates/markdown-embeds/query-response-tabs.template";
-import recipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
-import scrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
-import youtubeTemplate from "@/tina/templates/markdown-embeds/youtube.template";
+import AccordionTemplate from "@/tina/templates/markdown-embeds/accordion.template";
+import ApiReferenceTemplate from "@/tina/templates/markdown-embeds/api-reference.template";
+import CalloutTemplate from "@/tina/templates/markdown-embeds/callout.template";
+import CardGridTemplate from "@/tina/templates/markdown-embeds/card-grid.template";
+import QueryResponseTabsTemplate from "@/tina/templates/markdown-embeds/query-response-tabs.template";
+import RecipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
+import ScrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
+import YoutubeTemplate from "@/tina/templates/markdown-embeds/youtube.template";
 import type { Template } from "tinacms";
 import { seoInformation } from "./seo-information";
 
@@ -84,14 +84,14 @@ export const docsCollection = {
       ],
       isBody: true,
       templates: [
-        scrollShowcaseTemplate as Template,
-        cardGridTemplate as Template,
-        recipeTemplate as Template,
-        accordionTemplate as Template,
-        apiReferenceTemplate as Template,
-        youtubeTemplate as Template,
-        queryResponseTabsTemplate as Template,
-        calloutTemplate as Template,
+        ScrollShowcaseTemplate as Template,
+        CardGridTemplate as Template,
+        RecipeTemplate as Template,
+        AccordionTemplate as Template,
+        ApiReferenceTemplate as Template,
+        YoutubeTemplate as Template,
+        QueryResponseTabsTemplate as Template,
+        CalloutTemplate as Template,
       ],
     },
   ],

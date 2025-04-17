@@ -1,4 +1,4 @@
-export const apiReferenceTemplate = {
+export const ApiReferenceTemplate = {
   name: "apiReference",
   label: "API Reference",
   fields: [
@@ -64,4 +64,4 @@ export const apiReferenceTemplate = {
   ],
 };
 
-export default apiReferenceTemplate;
+export default ApiReferenceTemplate;

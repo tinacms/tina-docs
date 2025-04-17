@@ -1,6 +1,6 @@
 import MonacoCodeEditor from "@/tina/customFields/monaco-code-editor";
 
-export const recipeTemplate = {
+export const RecipeTemplate = {
   name: "recipe",
   label: "Code Accordion (Recipe)",
   fields: [
@@ -62,4 +62,4 @@ export const recipeTemplate = {
   ],
 };
 
-export default recipeTemplate;
+export default RecipeTemplate;

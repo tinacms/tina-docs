@@ -1,4 +1,4 @@
-export const queryResponseTabsTemplate = {
+export const QueryResponseTabsTemplate = {
   name: "queryResponseTabs",
   label: "Query Response Tabs",
   fields: [
@@ -49,4 +49,4 @@ export const queryResponseTabsTemplate = {
   ],
 };
 
-export default queryResponseTabsTemplate;
+export default QueryResponseTabsTemplate;
