@@ -64,7 +64,6 @@ export default function Document({ props }) {
       </div>
       {/* RIGHT COLUMN */}
       {documentationData?.tocIsHidden ? null : (
-        // eslint-disable-next-line tailwindcss/no-arbitrary-value
         <div className={"sticky top-32 mx-8 hidden h-[calc(100vh)] xl:block"}>
           <ToC tocItems={pageTableOfContents} activeids={activeIds} />
         </div>
