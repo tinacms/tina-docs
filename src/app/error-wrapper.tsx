@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
 import client from "@/tina/__generated__/client";
+import Image from "next/image";
+import Link from "next/link";
 
 const ErrorWrapper = async ({ description }: { description: string }) => {
   const { data } = await client.queries.globalSiteConfiguration({
@@ -25,13 +25,18 @@ const ErrorWrapper = async ({ description }: { description: string }) => {
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
-            {errorConfig?.errorLinks?.map((link) => (
-              link?.linkUrl && (
-                <Link href={link.linkUrl} passHref className="text-slate-500 shadow-sm hover:shadow-md outline outline-slate-200 hover:text-slate-700 rounded-md p-2 bg-white/50 hover:bg-white/90">
-                  <div>{link.linkText ?? "External Link 🔗"}</div>
-                </Link>
-              )
-            ))}
+            {errorConfig?.errorLinks?.map(
+              (link) =>
+                link?.linkUrl && (
+                  <Link
+                    href={link.linkUrl}
+                    passHref
+                    className="text-slate-500 shadow-sm hover:shadow-md outline outline-slate-200 hover:text-slate-700 rounded-md p-2 bg-white/50 hover:bg-white/90"
+                  >
+                    <div>{link.linkText ?? "External Link 🔗"}</div>
+                  </Link>
+                )
+            )}
           </div>
         </div>
         {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
