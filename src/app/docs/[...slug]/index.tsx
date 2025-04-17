@@ -6,6 +6,7 @@ import { TableOfContents } from "@/src/components/docs/TableOfContents";
 import { TableOfContentsDropdown } from "@/src/components/docs/TableOfContentsDropdown";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
+import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
 export default function Document({ props, tinaProps }) {
@@ -34,17 +35,21 @@ export default function Document({ props, tinaProps }) {
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
-        <div>
-          <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text pt-4 font-tuner text-4xl text-transparent">
-            {documentationData?.title}
-          </div>
+        <div
+          className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text pt-4 font-tuner text-4xl text-transparent"
+          data-tina-field={tinaField(documentationData, "title")}
+        >
+          {documentationData?.title}
         </div>
         {/* MOBILE TABLE OF CONTENTS */}
         <div className="block xl:hidden">
           <TableOfContentsDropdown tocData={pageTableOfContents} />
         </div>
         {/* CONTENT */}
-        <div ref={contentRef}>
+        <div
+          ref={contentRef}
+          data-tina-field={tinaField(documentationData, "body")}
+        >
           <TinaMarkdown
             content={documentationData?.body}
             components={MarkdownComponentMapping}
