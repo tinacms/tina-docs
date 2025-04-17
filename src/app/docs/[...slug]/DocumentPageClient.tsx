@@ -8,6 +8,7 @@ import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
 import { useTina } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { useState } from "react";
 
 export default function DocumentPageClient({ props }) {
   const { data } = useTina({
@@ -32,6 +33,14 @@ export default function DocumentPageClient({ props }) {
 
   const { activeIds, contentRef } = useTocListener(documentationData);
 
+  const fakeError = () => {
+    console.log('Throwing a fake error!')
+    throw new Error('Whoops!')
+  }
+
+  const [condition, setCondition] = useState(false);
+
+
   return (
     <div
       // eslint-disable-next-line tailwindcss/no-arbitrary-value
@@ -45,6 +54,13 @@ export default function DocumentPageClient({ props }) {
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
+        <button onClick={() => setCondition(!condition)}>Click me</button>
+        {condition && (
+  <>
+    <DocumentPageClient props={props} />
+    <div className={fakeError()} />
+  </>
+)}
         <div>
           <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text pt-4 font-tuner text-4xl text-transparent">
             {documentationData?.title}

@@ -161,7 +161,7 @@ export const GlobalSiteConfiguration = {
       label: "Error Config",
       type: "object",
       description:
-        "This is the configuration for the error pages (404, 500, etc), you can add links to the error pages to help the user navigate back to your website.",
+        "This is the configuration for the 404 error page, you can add links to the error page to help the user navigate back to your website.",
       fields: [
         {
           name: "errorPageTitle",

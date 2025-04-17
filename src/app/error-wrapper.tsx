@@ -1,13 +1,9 @@
-import client from "@/tina/__generated__/client";
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 
-const ErrorWrapper = async ({ description }: { description: string }) => {
-  const { data } = await client.queries.globalSiteConfiguration({
-    relativePath: "global-site-configuration.json",
-  });
-
-  const { errorConfig } = data.globalSiteConfiguration;
+const ErrorWrapper = ({ description, errorConfig }: { description: string, errorConfig: any }) => {
 
   return (
     <div className="container mx-auto flex h-screen items-center justify-center">

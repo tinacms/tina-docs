@@ -12,14 +12,20 @@ export default function GlobalError({
     // global-error must include html and body tags
     <html lang="en">
       <body>
-        <ErrorWrapper description="Something went wrong!" />
-        <button
-          type="button"
-          onClick={() => reset()}
-          className="text-slate-500 shadow-sm hover:shadow-md outline outline-slate-200 hover:text-slate-700 rounded-md p-2 bg-white/50 hover:bg-white/90"
-        >
-          Try again
-        </button>
+        <ErrorWrapper description="Something went wrong!" errorConfig={{
+            errorPageTitle: "Internal Server Error",
+            errorLinks: [
+                {
+                    linkText: "Return to docs",
+                    linkUrl: "/docs"
+                },
+                {
+                    linkText: "Try again",
+                    linkUrl: ""
+                }
+            ]
+        }} />
+        
       </body>
     </html>
   );
