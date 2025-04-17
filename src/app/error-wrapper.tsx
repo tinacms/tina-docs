@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
 
-const ErrorWrapper = ({ description, errorConfig }: { description: string, errorConfig: any }) => {
-    
-
+const ErrorWrapper = ({
+  errorConfig,
+}: {
+  errorConfig: {
+    description: string;
+    errorPageTitle: string;
+    errorLinks: { linkText: string; linkUrl: string }[];
+  };
+}) => {
   return (
     <div className="container mx-auto flex h-screen items-center justify-center">
       <div className="grid grid-cols-1 items-center gap-8 py-24 md:grid-cols-2">
@@ -18,7 +24,8 @@ const ErrorWrapper = ({ description, errorConfig }: { description: string, error
             <hr className="my-8 block h-[7px] w-full border-none bg-[url('/svg/hr.svg')] bg-[length:auto_100%] bg-no-repeat" />
             {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
             <p className="to-blue-1000 -mb-1 block bg-gradient-to-br from-blue-700 to-blue-900 bg-clip-text text-lg text-transparent lg:text-xl lg:leading-normal">
-              {description ?? "We couldn't find what you were looking for."}
+              {errorConfig?.description ??
+                "We couldn't find what you were looking for."}
             </p>
           </div>
           <div className="flex flex-wrap gap-4">

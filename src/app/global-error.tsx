@@ -17,20 +17,22 @@ export default function GlobalError({
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
       </head>
       <body>
-        <ErrorWrapper description="Something went wrong!" errorConfig={{
-            errorPageTitle: "Internal Server Error",
+        <ErrorWrapper
+          errorConfig={{
+            errorPageTitle: "Sorry, Friend!",
+            description: "Something went wrong!",
             errorLinks: [
-                {
-                    linkText: "Return to docs",
-                    linkUrl: "/docs"
-                },
-                {
-                    linkText: "Try again",
-                    linkUrl: ""
-                }
-            ]
-        }} />
-        
+              {
+                linkText: "Return to docs",
+                linkUrl: "/docs",
+              },
+              {
+                linkText: "Try again",
+                linkUrl: "",
+              },
+            ],
+          }}
+        />
       </body>
     </html>
   );

@@ -19,4 +19,4 @@ export default function ErrorButton() {
       Test Global Error
     </button>
   );
-} 
+}
