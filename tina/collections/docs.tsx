@@ -7,9 +7,9 @@ import RecipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
 import ScrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
 import YoutubeTemplate from "@/tina/templates/markdown-embeds/youtube.template";
 import type { Template } from "tinacms";
-import { seoInformation } from "./seo-information";
+import SeoInformation from "./seo-information";
 
-export const docsCollection = {
+export const DocsCollection = {
   name: "docs",
   label: "Docs",
   path: "content/docs",
@@ -30,7 +30,7 @@ export const docsCollection = {
     },
   },
   fields: [
-    seoInformation,
+    SeoInformation,
     {
       name: "title",
       label: "Title",
@@ -96,3 +96,5 @@ export const docsCollection = {
     },
   ],
 };
+
+export default DocsCollection;
