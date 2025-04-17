@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const ErrorWrapper = ({ description, errorConfig }: { description: string, errorConfig: any }) => {
+    
 
   return (
     <div className="container mx-auto flex h-screen items-center justify-center">
@@ -17,13 +18,13 @@ const ErrorWrapper = ({ description, errorConfig }: { description: string, error
             <hr className="my-8 block h-[7px] w-full border-none bg-[url('/svg/hr.svg')] bg-[length:auto_100%] bg-no-repeat" />
             {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
             <p className="to-blue-1000 -mb-1 block bg-gradient-to-br from-blue-700 to-blue-900 bg-clip-text text-lg text-transparent lg:text-xl lg:leading-normal">
-              {description}
+              {description ?? "We couldn't find what you were looking for."}
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
             {errorConfig?.errorLinks?.map(
               (link) =>
-                link?.linkUrl && (
+                (link?.linkUrl || link?.linkUrl === "") && (
                   <Link
                     href={link.linkUrl}
                     passHref

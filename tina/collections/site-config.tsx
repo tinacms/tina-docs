@@ -156,38 +156,6 @@ export const GlobalSiteConfiguration = {
         },
       ],
     },
-    {
-      name: "errorConfig",
-      label: "Error Config",
-      type: "object",
-      description:
-        "This is the configuration for the 404 error page, you can add links to the error page to help the user navigate back to your website.",
-      fields: [
-        {
-          name: "errorPageTitle",
-          label: "Error Page Title",
-          type: "string",
-        },
-        {
-          name: "errorLinks",
-          label: "Error Links",
-          type: "object",
-          list: true,
-          fields: [
-            {
-              name: "linkText",
-              label: "Link Text",
-              type: "string",
-            },
-            {
-              name: "linkUrl",
-              label: "Link URL",
-              type: "string",
-            },
-          ],
-        },
-      ],
-    },
   ],
 };
 
