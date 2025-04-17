@@ -5,6 +5,10 @@ export const GlobalSiteConfiguration = {
   label: "Global Site Configuration",
   ui: {
     global: true,
+    allowedActions: {
+      create: false,
+      delete: false,
+    },
   },
   path: "content/site-config",
   format: "json",
