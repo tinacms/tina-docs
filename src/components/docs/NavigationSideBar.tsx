@@ -2,7 +2,7 @@
 
 import { DocsNavigationList } from "./DocsNavigationList";
 
-export const LeftHandSideBarContainer = ({
+export const NavigationSideBar = ({
   tableOfContents,
   header,
 }: {

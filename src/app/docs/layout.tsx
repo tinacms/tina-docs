@@ -1,6 +1,6 @@
 import { Breadcrumbs } from "@/src/components/docs/Breadcrumbs";
 import DirectoryOverflowButton from "@/src/components/docs/DirectoryOverflow";
-import { LeftHandSideBarContainer } from "@/src/components/docs/LeftHandSideParent";
+import { NavigationSideBar } from "@/src/components/docs/NavigationSideBar";
 import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
 import type React from "react";
 
@@ -30,9 +30,8 @@ export default async function DocsLayout({
           "grid w-full max-w-[2000px] grid-cols-1 px-3 md:grid-cols-[1.25fr_3fr] md:px-8 xl:grid-cols-[1.25fr_3fr_0.75fr] xl:px-16"
         }
       >
-        {/* LEFT SIDEBAR COLUMN */}
         <div className={"sticky top-32 hidden h-[calc(100vh)] md:block"}>
-          <LeftHandSideBarContainer
+          <NavigationSideBar
             tableOfContents={NavigationDocsData.data}
             header={headerComponent}
           />
