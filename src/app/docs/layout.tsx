@@ -20,7 +20,7 @@ export default async function DocsLayout({
           <NavigationSideBar tableOfContents={navigationDocsData.data} />
         </aside>
         {/* CONTENT COLUMN */}
-        <main className="col-span-2 mx-8 px-2 md:col-span-1 xl:col-span-2">
+        <main className="col-span-2 mx-8 px-2 md:col-span-1 xl:col-span-2 xl:top-12 relative sm:top-22">
           {/* MOBILE NAVIGATION DROPDOWN */}
           <div className="block md:hidden">
             <div className="relative">
