@@ -1,7 +1,6 @@
 import { TinaClient } from "@/app/tina-client";
 import { fetchTinaData } from "@/src/services/tina/fetch-tina-data";
 import client from "@/tina/__generated__/client";
-import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
 import Document from ".";
@@ -28,13 +27,8 @@ export async function generateMetadata({
 }
 
 async function getData(slug: string) {
-  const documentData = await fetchTinaData(client.queries.docs, slug);
-  const pageTableOfContents = getTableOfContents(documentData?.data.docs.body);
-
-  return {
-    documentData,
-    pageTableOfContents,
-  };
+  const data = await fetchTinaData(client.queries.docs, slug);
+  return data;
 }
 
 export default async function DocsPage({
@@ -43,17 +37,15 @@ export default async function DocsPage({
   params: { slug: string[] };
 }) {
   const slug = params.slug.join("/");
-  const { documentData, pageTableOfContents } = await getData(slug);
+  const data = await getData(slug);
 
   return (
     <TinaClient
       Component={Document}
       props={{
-        query: documentData.query,
-        variables: documentData.variables,
-        data: documentData.data,
-        pageTableOfContents,
-        documentationData: documentData,
+        query: data.query,
+        variables: data.variables,
+        data: data.data,
       }}
     />
   );
