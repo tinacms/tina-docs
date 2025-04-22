@@ -1,6 +1,5 @@
 import type React from "react";
 import "@/styles/global.css";
-import { SiteLayout } from "@/src/components/site-layout";
 import AdminLink from "@/src/components/ui/admin-link";
 
 export default function RootLayout({
@@ -16,7 +15,9 @@ export default function RootLayout({
       </head>
       <body>
         <AdminLink />
-        <SiteLayout>{children}</SiteLayout>
+        <div className="blob-bg font-sans flex min-h-screen flex-col bg-blob-bg bg-[length:100%_100%] bg-fixed bg-top">
+          <div className="flex flex-1 flex-col">{children}</div>
+        </div>
       </body>
     </html>
   );
