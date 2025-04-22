@@ -117,8 +117,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -279,7 +279,7 @@ const NavLevel = ({
   );
 };
 
-export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
+export const DocsNavigationItems = ({ navItems }: DocsNavProps) => {
   const navListElem = React.useRef(null);
 
   return (

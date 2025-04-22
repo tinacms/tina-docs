@@ -1,7 +1,7 @@
 "use client";
 
 import { tinaField } from "tinacms/dist/react";
-import { DocsNavigationList } from "./DocsNavigationList";
+import { DocsNavigationItems } from "./NavigationItems";
 
 export const NavigationSideBar = ({
   tableOfContents,
@@ -15,7 +15,7 @@ export const NavigationSideBar = ({
     >
       <Title title={tableOfContents?.title} />
       <div className="h-[76%] overflow-y-auto overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">
-        <DocsNavigationList navItems={tableOfContents} />
+        <DocsNavigationItems navItems={tableOfContents} />
       </div>
     </div>
   );
