@@ -8,7 +8,7 @@ import {
 } from "./scroll-showcase.helpers";
 
 /** Main Component */
-export default function ScrollBasedShowcase(data: {
+export function ScrollBasedShowcase(data: {
   showcaseItems: {
     title: string;
     image: string;

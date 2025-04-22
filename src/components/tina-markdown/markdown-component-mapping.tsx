@@ -5,7 +5,7 @@ import ApiReference from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
-import ScrollShowcase from "./embedded-elements/scroll-showcase";
+import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import Youtube from "./embedded-elements/youtube";
 import { CodeBlock } from "./standard-elements/code-block";
 import HeaderFormat from "./standard-elements/header-format";
@@ -46,7 +46,7 @@ type ComponentMapping = {
       codeLineEnd?: number;
     }[];
   };
-  ScrollShowcase: {
+  scrollShowcase: {
     showcaseItems: {
       image: string;
       title: string;
@@ -71,7 +71,7 @@ type ComponentMapping = {
 
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
   // Our embeds we can inject via MDX
-  ScrollShowcase: (props) => <ScrollShowcase {...props} />,
+  scrollShowcase: (props) => <ScrollBasedShowcase {...props} />,
   CardGrid: (props) => <CardGrid {...props} />,
   RecipeBlock: (props) => <RecipeBlock {...props} />,
   Accordion: (props) => <Accordion {...props} />,
