@@ -15,14 +15,14 @@ import Table from "./standard-elements/table";
 
 type ComponentMapping = {
   youtube: { embedSrc: string; caption?: string; minutes?: string };
-  QueryResponseTabs: {
+  queryResponseTabs: {
     query: string;
     response: string;
     preselectResponse: boolean;
     customQueryName?: string;
     customResponseName?: string;
   };
-  ApiReference: {
+  apiReference: {
     title: string;
     property: {
       groupName: string;
@@ -34,8 +34,8 @@ type ComponentMapping = {
     }[];
   };
   WarningCallout: { body: string };
-  Accordion: { docText: string; image: string; heading?: string };
-  RecipeBlock: {
+  accordion: { docText: string; image: string; heading?: string };
+  recipe: {
     title?: string;
     description?: string;
     codeblock?: any;
@@ -54,7 +54,7 @@ type ComponentMapping = {
       content: string;
     }[];
   };
-  CardGrid: {
+  cardGrid: {
     cards: {
       title: string;
       description: string;
@@ -72,12 +72,12 @@ type ComponentMapping = {
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
   // Our embeds we can inject via MDX
   scrollShowcase: (props) => <ScrollBasedShowcase {...props} />,
-  CardGrid: (props) => <CardGrid {...props} />,
-  RecipeBlock: (props) => <RecipeBlock {...props} />,
-  Accordion: (props) => <Accordion {...props} />,
-  ApiReference: (props) => <ApiReference {...props} />,
+  cardGrid: (props) => <CardGrid {...props} />,
+  recipe: (props) => <RecipeBlock {...props} />,
+  accordion: (props) => <Accordion {...props} />,
+  apiReference: (props) => <ApiReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
-  QueryResponseTabs: (props) => <QueryResponseTabs {...props} />,
+  queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
   WarningCallout: (props) => <Callout {...props} variant="warning" />,
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,
