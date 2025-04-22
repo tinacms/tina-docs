@@ -14,7 +14,7 @@ import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
 
 type ComponentMapping = {
-  Youtube: { embedSrc: string; caption?: string; minutes?: string };
+  youtube: { embedSrc: string; caption?: string; minutes?: string };
   QueryResponseTabs: {
     query: string;
     response: string;
@@ -76,7 +76,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   RecipeBlock: (props) => <RecipeBlock {...props} />,
   Accordion: (props) => <Accordion {...props} />,
   ApiReference: (props) => <ApiReference {...props} />,
-  Youtube: (props) => <Youtube {...props} />,
+  youtube: (props) => <Youtube {...props} />,
   QueryResponseTabs: (props) => <QueryResponseTabs {...props} />,
   WarningCallout: (props) => <Callout {...props} variant="warning" />,
   // Our default markdown components
