@@ -14,9 +14,6 @@ importers:
       '@monaco-editor/react':
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.52.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@tailwindcss/postcss':
-        specifier: ^4.1.4
-        version: 4.1.4
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -60,6 +57,9 @@ importers:
       '@biomejs/biome':
         specifier: ^1.9.4
         version: 1.9.4
+      '@tailwindcss/postcss':
+        specifier: ^4.1.4
+        version: 4.1.4
       '@tinacms/cli':
         specifier: ^1.8.1
         version: 1.9.5(@codemirror/language@6.11.0)(@types/node@22.14.0)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.29.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.37.0)(scheduler@0.25.0)(sucrase@3.35.0)
