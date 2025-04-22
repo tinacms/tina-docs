@@ -1,6 +1,6 @@
 "use client";
 
-import { DocsNavigationItems } from "./NavigationItems";
+import { DocsNavigationItems } from "./navigation-items";
 
 export const NavigationSideBar = ({
   tableOfContents,

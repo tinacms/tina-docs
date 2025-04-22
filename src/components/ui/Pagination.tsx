@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { DynamicLink } from "../ui/DynamicLink";
+import { DynamicLink } from "./dynamic-link";
 
 interface NextPrevPageProps {
   title: string;

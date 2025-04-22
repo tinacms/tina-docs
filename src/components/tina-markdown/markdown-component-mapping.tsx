@@ -1,5 +1,5 @@
 import type { Components } from "tinacms/dist/rich-text";
-import { CardGrid } from "../blocks/CardGrid";
+import { CardGrid } from "../blocks/card-grid";
 import Accordion from "./embedded-elements/accordion";
 import ApiReference from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
