@@ -26,6 +26,7 @@ export default function Document({ props, tinaProps }) {
     title: documentationData?.next?.title,
   };
 
+  // Table of Contents Listener to Highlight Active Section
   const { activeIds, contentRef } = useTocListener(documentationData);
 
   return (

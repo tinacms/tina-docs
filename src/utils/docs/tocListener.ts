@@ -32,10 +32,15 @@ export function createTocListener(
 
   return function onScroll(): void {
     const scrollPos = window.scrollY + window.innerHeight / 4; // Adjust for active detection
+    const documentHeight = document.documentElement.scrollHeight;
     const activeIds: string[] = [];
 
+    // If we're near the bottom of the page, include the last headings
+    const isNearBottom =
+      window.scrollY + window.innerHeight >= documentHeight - 50;
+
     for (const heading of headings) {
-      if (heading.offset && scrollPos >= heading.offset) {
+      if (heading.offset && (scrollPos >= heading.offset || isNearBottom)) {
         activeIds.push(heading.id ?? "");
       }
     }
