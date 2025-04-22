@@ -7,26 +7,26 @@ interface Heading {
 }
 
 function createHeadings(
-  contentRef: React.RefObject<HTMLDivElement | null>,
+  contentRef: React.RefObject<HTMLDivElement | null>
 ): Heading[] {
   const headings: Heading[] = [];
   const htmlElements = contentRef.current?.querySelectorAll(
-    "h1, h2, h3, h4, h5, h6",
+    "h1, h2, h3, h4, h5, h6"
   );
 
-  htmlElements?.forEach((heading: HTMLHeadingElement) => {
+  for (const heading of htmlElements ?? []) {
     headings.push({
       id: heading.id,
       offset: heading.offsetTop,
       level: heading.tagName,
     });
-  });
+  }
   return headings;
 }
 
 export function createTocListener(
   contentRef: React.RefObject<HTMLDivElement | null>,
-  setActiveIds: (activeIds: string[]) => void,
+  setActiveIds: (activeIds: string[]) => void
 ): () => void {
   const headings = createHeadings(contentRef);
 
@@ -34,11 +34,11 @@ export function createTocListener(
     const scrollPos = window.scrollY + window.innerHeight / 4; // Adjust for active detection
     const activeIds: string[] = [];
 
-    headings.forEach((heading) => {
+    for (const heading of headings) {
       if (heading.offset && scrollPos >= heading.offset) {
         activeIds.push(heading.id ?? "");
       }
-    });
+    }
 
     setActiveIds(activeIds);
   };
@@ -59,7 +59,7 @@ export function useTocListener(data: any) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [data]);
+  }, []);
 
   return { contentRef, activeIds };
 }

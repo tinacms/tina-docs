@@ -1,6 +1,6 @@
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-import { MdMenu } from "react-icons/md";
+import { useEffect, useRef, useState } from "react";
 
 const TocOverflow = ({ tocData }) => {
   return (
@@ -52,9 +52,15 @@ const TocOverflowButton = (tocData) => {
           <div
             className="cursor-pointer rounded-lg border-slate-400 bg-gradient-to-r from-white/50 to-white/30 px-4 py-2 shadow-lg"
             onClick={() => setIsTableOfContentsOpen(!isTableOfContentsOpen)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsTableOfContentsOpen(!isTableOfContentsOpen);
+              }
+            }}
           >
             <span className="flex items-center space-x-2">
-              <MdMenu size={20} className="text-orange-500" />
+              <Bars3Icon className="size-5 text-orange-500" />
               <span className="py-1 text-slate-600">Table of Contents</span>
             </span>
           </div>

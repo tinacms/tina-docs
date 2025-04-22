@@ -1,4 +1,4 @@
-import { Template } from "tinacms";
+import type { Template } from "tinacms";
 import { itemTemplate } from "./toc-item.template";
 
 const uiAndLabelling: any = {
@@ -6,7 +6,7 @@ const uiAndLabelling: any = {
   name: "items",
   ui: {
     itemProps: (item) => {
-      return { label: "🗂️ " + (item?.title ?? "Unnamed Menu Group") };
+      return { label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}` };
     },
   },
 };

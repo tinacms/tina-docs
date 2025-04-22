@@ -2,16 +2,17 @@
 
 import { Breadcrumbs } from "@/components/docs/Breadcrumbs";
 import DirectoryOverflowButton from "@/components/docs/DirectoryOverflow";
-import React from "react";
-import { LeftHandSideParentContainer } from "../../components/docs/LeftHandSideParent";
+import { LeftHandSideParentContainer } from "@/components/docs/LeftHandSideParent";
+import type React from "react";
+
+type DocsLayoutClientProps = {
+  NavigationDocsData: any;
+} & React.PropsWithChildren;
 
 export default function DocsLayoutClient({
-  children,
   NavigationDocsData,
-}: {
-  children: React.ReactNode;
-  NavigationDocsData: any;
-}) {
+  children,
+}: DocsLayoutClientProps) {
   const headerComponent = (
     <div className="pl-6">
       <h1

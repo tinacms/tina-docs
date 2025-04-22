@@ -1,15 +1,15 @@
 "use client";
 
+import { matchActualTarget } from "@/utils/docs/urls";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { FaChevronRight } from "react-icons/fa";
-import { matchActualTarget } from "@/utils/docs/urls";
 
 export interface DocsNavProps {
   navItems: any;
 }
 
-// Helper function to extract a URL string from a slug object (or return it if it’s already a string)
+// Helper function to extract a URL string from a slug object (or return it if it's already a string)
 function getUrlFromSlug(slug: any): string {
   if (typeof slug === "string") return slug;
   if (slug && typeof slug === "object" && slug.id) {
@@ -22,9 +22,9 @@ function getUrlFromSlug(slug: any): string {
 const getNestedBreadcrumbs = (
   listItems: any[],
   pagePath: string,
-  breadcrumbs: any[] = [],
+  breadcrumbs: any[] = []
 ) => {
-  for (const listItem of listItems || []) {
+  for (const listItem of Array.isArray(listItems) ? listItems : []) {
     // Get the target URL from the slug (or href) property
     const target = listItem.slug || listItem.href;
     const targetUrl = getUrlFromSlug(target);
@@ -35,7 +35,7 @@ const getNestedBreadcrumbs = (
     const nestedBreadcrumbs = getNestedBreadcrumbs(
       listItem.items,
       pagePath,
-      breadcrumbs,
+      breadcrumbs
     );
     if (nestedBreadcrumbs.length) {
       return [listItem, ...nestedBreadcrumbs];
@@ -55,8 +55,8 @@ export function Breadcrumbs({ navItems }: DocsNavProps) {
         return (
           <li key={`breadcrumb-${url}-${i}`} className="m-0 flex items-center">
             {i !== 0 && (
-              <FaChevronRight
-                className="mx-2 text-gray-400"
+              <ChevronRightIcon
+                className="mx-2 text-gray-400 size-5"
                 aria-hidden="true"
               />
             )}

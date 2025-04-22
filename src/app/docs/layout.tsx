@@ -1,6 +1,6 @@
-import React from "react";
-import DocsLayoutClient from "./toc-wrapper";
 import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
+import type React from "react";
+import DocsLayoutClient from "./toc-wrapper";
 
 export default async function DocsLayout({
   children,
@@ -9,9 +9,7 @@ export default async function DocsLayout({
 }) {
   // Fetch navigation data that will be shared across all docs pages
   const navDocData = await getDocsNav();
-
   return (
-    //@ts-ignore
     <DocsLayoutClient NavigationDocsData={navDocData}>
       {children}
     </DocsLayoutClient>

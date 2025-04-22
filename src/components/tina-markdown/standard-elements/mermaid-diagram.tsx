@@ -3,7 +3,8 @@
 import mermaid from "mermaid";
 import { useEffect, useRef } from "react";
 
-export default function MermaidElement({ value }) {
+export default function MermaidDiagram(data: { value?: string }) {
+  const { value } = data;
   const mermaidRef = useRef(null);
 
   useEffect(() => {

@@ -1,12 +1,50 @@
 "use client";
 
-import React from "react";
-import styled, { css } from "styled-components";
-import { usePathname } from "next/navigation";
-import { matchActualTarget } from "@/utils/docs/urls";
 import { DynamicLink } from "@/components/ui/DynamicLink";
-import { BiChevronRight } from "react-icons/bi";
+import { matchActualTarget } from "@/utils/docs/urls";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { usePathname } from "next/navigation";
+import React from "react";
 import AnimateHeight from "react-animate-height";
+
+// Constants for common values
+const TRANSITION_DURATION = 300;
+const PADDING_LEVELS = {
+  default: {
+    left: "0.675rem",
+    top: "0.125rem",
+    bottom: "0.125rem",
+  },
+  level0: {
+    left: "0.75rem",
+    top: "0.25rem",
+    bottom: "0.125rem",
+  },
+};
+
+const TEXT_COLORS = {
+  default: "text-gray-800",
+  selected: "text-blue-500",
+  childSelected: "text-gray-800",
+  orange: "text-orange-500",
+  orangeLight: "text-orange-100",
+  orangeHover: "text-orange-300",
+  blueLight: "text-blue-200",
+  blueHover: "text-blue-400",
+};
+
+const FONT_SIZES = {
+  xl: "text-xl",
+  base: "text-base",
+  small: "text-[15px]",
+};
+
+const FONT_WEIGHTS = {
+  light: "font-tuner-light",
+  normal: "font-sans",
+  medium: "font-[500]",
+  bold: "font-bold",
+};
 
 function getUrl(input: any): string {
   let url = "";
@@ -29,7 +67,7 @@ function getUrl(input: any): string {
   }
 
   if (!url.startsWith("/")) {
-    url = "/" + url;
+    url = `/${url}`;
   }
   return url;
 }
@@ -53,22 +91,25 @@ const NavTitle: React.FC<NavTitleProps> = ({
   childSelected,
   ...props
 }: NavTitleProps) => {
+  const baseStyles =
+    "group flex cursor-pointer items-center gap-1 pb-0.5 pl-4 leading-tight transition duration-150 ease-out hover:opacity-100";
+
   const headerLevelClasses = {
-    0: "opacity-100 font-tuner-light text-orange-500 text-xl pt-2",
+    0: `${FONT_WEIGHTS.light} ${TEXT_COLORS.orange} ${FONT_SIZES.xl} pt-2 opacity-100`,
     1: {
-      default: "text-base font-sans pt-1 text-gray-800",
-      selected: "text-base font-sans pt-1 font-bold text-blue-500",
-      childSelected: "text-base font-sans pt-1 font-[500] text-gray-800",
+      default: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${TEXT_COLORS.default}`,
+      selected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.bold} ${TEXT_COLORS.selected}`,
+      childSelected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} ${TEXT_COLORS.childSelected}`,
     },
     2: {
-      default: "text-[15px] font-sans opacity-80 pt-0.5 text-gray-700",
-      selected: "text-[15px] font-sans pt-0.5 font-bold text-blue-500",
-      childSelected: "text-[15px] font-sans pt-1 font-[500] text-gray-800",
+      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 ${TEXT_COLORS.default}`,
+      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} ${TEXT_COLORS.selected}`,
+      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} ${TEXT_COLORS.childSelected}`,
     },
     3: {
-      default: "text-[15px] font-sans opacity-80 pt-0.5 text-gray-700",
-      selected: "text-[15px] font-sans pt-0.5 font-bold text-blue-500",
-      childSelected: "text-[15px] font-sans pt-1 font-[500] text-gray-800",
+      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 ${TEXT_COLORS.default}`,
+      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} ${TEXT_COLORS.selected}`,
+      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} ${TEXT_COLORS.childSelected}`,
     },
   };
 
@@ -84,17 +125,14 @@ const NavTitle: React.FC<NavTitleProps> = ({
       : headerLevelClasses[headerLevel][selectedClass];
 
   return (
-    <div
-      className={`group flex cursor-pointer items-center gap-1 pb-0.5 pl-4 leading-tight transition duration-150 ease-out hover:opacity-100 ${classes}`}
-      {...props}
-    >
+    <div className={`${baseStyles} ${classes}`} {...props}>
       {children}
     </div>
   );
 };
 
-const hasNestedSlug = (navItems: any[] = [], slug: string) => {
-  for (const item of navItems) {
+const hasNestedSlug = (navItems: any[], slug: string) => {
+  for (const item of Array.isArray(navItems) ? navItems : []) {
     if (matchActualTarget(getUrl(item.slug || item.href), slug)) {
       return true;
     }
@@ -117,13 +155,13 @@ const NavLevel = ({
   level?: number;
 }) => {
   const navLevelElem = React.useRef(null);
-  const pathname = usePathname(); // Replace useRouter with usePathname
-  const path = pathname || ""; // Get current path
+  const pathname = usePathname();
+  const path = pathname || "";
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
       hasNestedSlug(categoryData.items, path) ||
-      level === 0,
+      level === 0
   );
 
   const selected =
@@ -157,7 +195,15 @@ const NavLevel = ({
 
   return (
     <>
-      <NavLabelContainer ref={navLevelElem} status={categoryData.status}>
+      <div
+        ref={navLevelElem}
+        className={`relative flex last:mb-[0.375rem] ${
+          categoryData.status
+            ? "after:content-[attr(data-status)] after:inline-flex after:text-xs after:font-bold after:bg-[#f9ebe6] after:border after:border-[#edcdc4] after:w-fit after:px-[5px] after:py-[2px] after:rounded-[5px] after:tracking-[0.25px] after:text-[#ec4815] after:mr-[5px] after:ml-[5px] after:leading-none after:align-middle after:h-fit after:self-center"
+            : ""
+        }`}
+        data-status={categoryData.status?.toLowerCase()}
+      >
         {categoryData.slug ? (
           <DynamicLink href={getUrl(categoryData.slug)} passHref>
             <NavTitle level={level} selected={selected && !childSelected}>
@@ -175,27 +221,48 @@ const NavLevel = ({
           >
             <span className=" -mr-2 pr-2">{categoryData.title}</span>
             {categoryData.items && !selected && (
-              <BiChevronRight
+              <ChevronRightIcon
                 className={`${
                   level < 1
-                    ? "text-orange-100 group-hover:text-orange-300"
-                    : "text-blue-200 group-hover:text-blue-400"
-                } -my-2 h-auto w-5 transition duration-300 ease-out group-hover:rotate-90 ${
+                    ? `${TEXT_COLORS.orangeLight} group-hover:${TEXT_COLORS.orangeHover}`
+                    : `${TEXT_COLORS.blueLight} group-hover:${TEXT_COLORS.blueHover}`
+                } -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
                   expanded ? "rotate-90" : ""
                 }`}
               />
             )}
           </NavTitle>
         )}
-      </NavLabelContainer>
+      </div>
       {categoryData.items && (
         <>
-          <div className="mb-1.5"></div>
-          <AnimateHeight duration={300} height={expanded ? "auto" : 0}>
-            <NavLevelChildContainer level={level}>
+          <div className="mb-1.5" />
+          <AnimateHeight
+            duration={TRANSITION_DURATION}
+            height={expanded ? "auto" : 0}
+          >
+            <div
+              className="relative block"
+              style={{
+                paddingLeft:
+                  level === 0
+                    ? PADDING_LEVELS.level0.left
+                    : PADDING_LEVELS.default.left,
+                paddingTop:
+                  level === 0
+                    ? PADDING_LEVELS.level0.top
+                    : PADDING_LEVELS.default.top,
+                paddingBottom:
+                  level === 0
+                    ? PADDING_LEVELS.level0.bottom
+                    : PADDING_LEVELS.default.bottom,
+              }}
+            >
               {(categoryData.items || []).map((item) => (
                 <div
-                  key={`child-container-${item.slug ? getUrl(item.slug) + level : item.title + level}`}
+                  key={`child-container-${
+                    item.slug ? getUrl(item.slug) + level : item.title + level
+                  }`}
                 >
                   <NavLevel
                     navListElem={navListElem}
@@ -204,7 +271,7 @@ const NavLevel = ({
                   />
                 </div>
               ))}
-            </NavLevelChildContainer>
+            </div>
           </AnimateHeight>
         </>
       )}
@@ -212,96 +279,24 @@ const NavLevel = ({
   );
 };
 
-interface NavLevelChildContainerProps {
-  level: number;
-}
-
-const NavLevelChildContainer = styled.div<NavLevelChildContainerProps>`
-  position: relative;
-  display: block;
-  padding-left: 0.675rem;
-  padding-top: 0.125rem;
-  padding-bottom: 0.125rem;
-
-  ${(props: any) =>
-    props.level === 0 &&
-    css`
-      padding-left: 0.75rem;
-      padding-top: 0.25rem;
-      padding-bottom: 0.125rem;
-    `}
-`;
-
-const NavLabelContainer = styled.div<{ status: string }>`
-  position: relative;
-  display: flex;
-
-  &:last-child {
-    margin-bottom: 0.375rem;
-  }
-
-  ${(props: { status: string }) =>
-    props.status &&
-    css`
-      a::after {
-        display: -ms-inline-flexbox;
-        content: "${props.status.toLowerCase()}";
-        text-transform: capitalize;
-        font-size: 12px;
-        font-weight: bold;
-        background-color: #f9ebe6;
-        border: 1px solid #edcdc4;
-        width: fit-content;
-        padding: 2px 5px;
-        border-radius: 5px;
-        letter-spacing: 0.25px;
-        color: #ec4815;
-        margin-right: 5px;
-        margin-left: 5px;
-        line-height: 1;
-        vertical-align: middle;
-        height: fit-content;
-        align-self: center;
-      }
-    `}
-`;
-
 export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
   const navListElem = React.useRef(null);
 
   return (
-    <DocsNavigationContainer ref={navListElem}>
-      {navItems?.map((categoryData) => (
-        <div
-          key={`mobile-${categoryData.slug ? getUrl(categoryData.slug) : categoryData.title}`}
-        >
-          <NavLevel navListElem={navListElem} categoryData={categoryData} />
-        </div>
-      ))}
-    </DocsNavigationContainer>
+    <div
+      className="overflow-y-auto overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin scrollbar-thumb-[rgba(0,0,0,0.3)] scrollbar-track-transparent scrollbar-thumb-rounded-[4px] 2xl:py-4 2xl:px-4 2xl:pb-8"
+      ref={navListElem}
+    >
+      {navItems.length > 0 &&
+        navItems?.map((categoryData) => (
+          <div
+            key={`mobile-${
+              categoryData.slug ? getUrl(categoryData.slug) : categoryData.title
+            }`}
+          >
+            <NavLevel navListElem={navListElem} categoryData={categoryData} />
+          </div>
+        ))}
+    </div>
   );
 };
-
-const DocsNavigationContainer = styled.div`
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 0.5rem 0 1.5rem 0;
-  margin-right: -1px;
-
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-  }
-
-  @media (min-width: 1600px) {
-    padding: 1rem 1rem 2rem 1rem;
-  }
-`;

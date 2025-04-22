@@ -1,9 +1,9 @@
 "use client";
 
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { useEffect } from "react";
 import { useEditState } from "tinacms/dist/react";
-import { RxCross1 } from "react-icons/rx";
 
 const AdminLink = () => {
   const { edit } = useEditState();
@@ -13,7 +13,7 @@ const AdminLink = () => {
     setShowAdminLink(
       !edit &&
         JSON.parse((window.localStorage.getItem("tinacms-auth") as any) || "{}")
-          ?.access_token,
+          ?.access_token
     );
   }, [edit]);
 
@@ -31,8 +31,12 @@ const AdminLink = () => {
           >
             Edit This Page
           </a>
-          <button onClick={handleDismiss} className="ml-2 text-sm">
-            <RxCross1 />
+          <button
+            type="button"
+            onClick={handleDismiss}
+            className="ml-2 text-sm"
+          >
+            <XMarkIcon className="size-4" />
           </button>
         </div>
       )}

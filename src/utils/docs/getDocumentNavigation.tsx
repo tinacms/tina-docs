@@ -1,5 +1,5 @@
-import client from "@/tina/__generated__/client";
 import data from "@/content/siteConfig.json";
+import client from "@/tina/__generated__/client";
 
 export async function getDocsNav(preview?: boolean) {
   const docsToCData = await client.queries.docsTableOfContents({
@@ -17,7 +17,7 @@ const stripReferenceDownToSlug = (tableOfContentsSubset: any) => {
       } else {
         //Handles the docs homepage case, as the only docs page with a unique (i.e. no) slug, otherwise reformat
         array[index].slug =
-          array[index].slug == `content${data.docsHomepage}.mdx`
+          array[index].slug === `content${data.docsHomepage}.mdx`
             ? "/docs"
             : obj.slug.replace(/^content\/|\.mdx$/g, "/");
       }
@@ -28,7 +28,7 @@ const stripReferenceDownToSlug = (tableOfContentsSubset: any) => {
 
 export const formatTableofContentsData = (
   tableOfContentsData: any,
-  preview?: boolean,
+  preview?: boolean
 ) => {
   // NOTE: The original code expected a nested `data` property and a `_values` field.
   // Based on the logged structure, docsTableOfContents is already at the root.

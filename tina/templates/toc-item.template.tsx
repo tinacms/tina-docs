@@ -1,11 +1,11 @@
-import { Template } from "tinacms";
+import type { Template } from "tinacms";
 
 export const itemTemplate: Template = {
   label: "Item",
   name: "item",
   ui: {
     itemProps: (item) => {
-      return { label: "🔗 " + (item?.title ?? "Unnamed Menu Item") };
+      return { label: `🔗 ${item?.title ?? "Unnamed Menu Item"}` };
     },
   },
   fields: [

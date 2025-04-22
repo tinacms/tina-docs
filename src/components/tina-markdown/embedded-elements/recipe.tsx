@@ -1,15 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FaChevronCircleDown } from "react-icons/fa";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { customHighlightCSS } from "./RecipeCSS";
-import CodeBlockWithHighlightLines from "./RecipeCodeBlockWithHighlight";
+import { customHighlightCSS } from "./recipe.constants";
+import CodeBlockWithHighlightLines from "./recipe.helpers";
 
-export const RecipeBlock = ({ data }) => {
+export const RecipeBlock = (data: {
+  title?: string;
+  description?: string;
+  codeblock?: any;
+  code?: string;
+  instruction?: any;
+}) => {
   const { title, description, codeblock, code, instruction } = data;
 
   const [highlightLines, setHighlightLines] = useState("");
   const [clickedInstruction, setClickedInstruction] = useState<number | null>(
-    null,
+    null
   );
   //LHSheight is the height used for the instructions block when the screen is >= 1024px
   const [LHSheight, setLHSheight] = useState<string | null>(null);
@@ -28,7 +35,7 @@ export const RecipeBlock = ({ data }) => {
     return () => {
       document.head.removeChild(style);
     };
-  }, [highlightLines]);
+  }, []);
 
   useEffect(() => {
     setLHSheight(`${codeblockRef.current?.offsetHeight}`);
@@ -42,7 +49,7 @@ export const RecipeBlock = ({ data }) => {
   const handleInstructionClick = (
     index: number,
     codeLineStart?: number,
-    codeLineEnd?: number,
+    codeLineEnd?: number
   ) => {
     setHighlightLines(`${codeLineStart}-${codeLineEnd}`);
     setClickedInstruction(index === clickedInstruction ? null : index);
@@ -89,15 +96,17 @@ export const RecipeBlock = ({ data }) => {
   const checkIfScrollable = () => {
     if (typeof window !== "undefined" && window.innerWidth < 1024) {
       return (
-        calculateInstructionsHeight() >= parseInt(smAndMbHeight || "0", 10)
+        calculateInstructionsHeight() >=
+        Number.parseInt(smAndMbHeight || "0", 10)
       );
-    } else {
-      return calculateInstructionsHeight() > parseInt(LHSheight || "0", 10);
     }
+    return (
+      calculateInstructionsHeight() > Number.parseInt(LHSheight || "0", 10)
+    );
   };
 
   return (
-    <div className="recipe-block-container relative w-full">
+    <div className="recipe-block-container relative w-full text-white">
       <div className="title-description px-10">
         <h2 className="font-tuner text-2xl text-orange-500">
           {title || "Default Title"}
@@ -119,10 +128,12 @@ export const RecipeBlock = ({ data }) => {
           }}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl"></div>
-            <FaChevronCircleDown
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl" />
+            <ChevronDownIcon
               onClick={handleDownArrowClick}
-              className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${checkIfScrollable() ? "" : "hidden"}`}
+              className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${
+                checkIfScrollable() ? "" : "hidden"
+              }`}
             />
           </div>
 
@@ -132,15 +143,17 @@ export const RecipeBlock = ({ data }) => {
           >
             {instruction?.map((inst, idx) => (
               <div
-                key={idx}
-                ref={(el) => (instructionRefs.current[idx] = el)}
+                key={`instruction-${idx}`}
+                ref={(element) => {
+                  instructionRefs.current[idx] = element;
+                }}
                 className={`instruction-item cursor-pointer border-y border-gray-700 bg-gray-800 p-4 text-white 
                 ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
                 onClick={() =>
                   handleInstructionClick(
                     idx,
                     inst.codeLineStart,
-                    inst.codeLineEnd,
+                    inst.codeLineEnd
                   )
                 }
               >

@@ -1,5 +1,5 @@
 import { itemTemplate } from "../templates/toc-item.template";
-import { submenuTemplate } from "../templates/toc-sub-item.template";
+import { submenuTemplate } from "../templates/submenu.template";
 
 export const docsTableOfContentsCollection = {
   name: "docsTableOfContents",
@@ -20,7 +20,7 @@ export const docsTableOfContentsCollection = {
       list: true,
       ui: {
         itemProps: (item) => ({
-          label: "🗂️ " + (item?.title ?? "Unnamed Menu Group"),
+          label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
         }),
       },
       fields: [
