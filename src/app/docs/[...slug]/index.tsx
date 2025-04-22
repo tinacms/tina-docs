@@ -3,11 +3,11 @@
 import { TableOfContents } from "@/components/docs/table-of-contents";
 import { TableOfContentsDropdown } from "@/components/docs/table-of-contents-dropdown";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
-import { Pagination } from "@/components/ui/pagination";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { Pagination } from "../../../components/ui/pagination";
 
 export default function Document({ props, tinaProps }) {
   const { data } = tinaProps;
