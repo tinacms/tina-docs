@@ -1,8 +1,8 @@
 ---
 title: FAQ
-last_edited: '2025-01-07T23:28:52.036Z'
-next: ''
-previous: ''
+last_edited: '2025-04-22T06:53:41.329Z'
+next: content/docs/core-concepts/querying-content.mdx
+previous: content/docs/core-concepts/querying-content.mdx
 ---
 
 ## What is TinaCloud?
@@ -88,7 +88,11 @@ When developers are developing locally, it's often convenient to load/save conte
 
 When in local-mode, you **will not** need to login to enter edit-mode.
 
-<WarningCallout body="Note: Local-mode is meant for developing locally, and will not work when your site is hosted on production. When in local-mode, Tina tries to hit `http://localhost:4001`, which isn't available at runtime on your production site (and neither is the underlying filesystem content)." />
+<WarningCallout
+  body={<>
+    Note: Local-mode is meant for developing locally, and will not work when your site is hosted on production. When in local-mode, Tina tries to hit \`http\://localhost:4001\`, which isn't available at runtime on your production site (and neither is the underlying filesystem content).
+  </>}
+/>
 
 ### Prod-Mode
 
@@ -181,7 +185,7 @@ If you receive an error like `The specified branch, 'my-branch-name', has not be
 2. Verify that the correct branch has been specified in the config properties passed to defineConfig in `tina/config.ts`. Note, that this value may be set as an environment variable in your CI build process.
 3. Verify that the branch exists in the GitHub repository.
 4. You can force a reindexing of a particular branch by making a whitespace change to the `tina/tina-lock.json` file in that branch, commit the change, and push it to GitHub. This will initiate indexing for the branch and (after a few minutes) the error should be resolved.
-5. Ensure that the Tina project is located in the root directory 
+5. Ensure that the Tina project is located in the root directory
 
 ### How do I resolve `There was a problem saving your document` errors?
 
@@ -253,6 +257,5 @@ Double check you aren't trying to access a document that doesn't exist.
 #### Popup blocker prevents Vercel from installing their GitHub app
 
 After choosing which starter template to deploy and being redirected to Vercel, a popup for Vercel to add their GitHub app may fail to open. Look in the bottom left corner for a toast message saying "The popup to install the GitHub App could not be opened.".
-
 
 To fix, check your browser's address bar for blocked popups, allow them, and retry.
