@@ -1,5 +1,5 @@
+import { Prism } from "@/components/styles/prism";
 import { useState } from "react";
-import { Prism } from "../../styles/prism";
 
 export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);

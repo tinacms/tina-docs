@@ -24,7 +24,8 @@
       "@/types/*": ["./src/types/*"],
       "@/config/*": ["./src/config/*"],
       "@/app/*": ["./src/app/*"],
-      "@/tina/*": ["./tina/*"]
+      "@/tina/*": ["./tina/*"],
+      "@/src/*": ["./src/*"]
     },
     "plugins": [
       {

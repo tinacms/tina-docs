@@ -1,4 +1,4 @@
-import { Actions } from "./ActionButton/actions-button";
+import { Actions } from "./action-button/actions-button";
 
 export const CardGrid = (data: {
   cards: {
