@@ -3,7 +3,7 @@ import { itemTemplate } from "../templates/toc-item.template";
 
 export const docsNavigationBarCollection = {
   name: "navigationBar",
-  label: "Docs - Navigation Bar",
+  label: "Navigation Bar",
   path: "content/navigation-bar",
   format: "json",
   ui: {
