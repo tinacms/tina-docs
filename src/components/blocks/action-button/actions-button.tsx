@@ -1,4 +1,4 @@
-import { FlushButton, LinkButton } from "@/src/components/ui/buttons";
+import { FlushButton, LinkButton } from "@/src/components/ui/zbuttons";
 import { sanitizeLabel } from "@/utils/sanitizeLabel";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { tinaField } from "tinacms/dist/react";
