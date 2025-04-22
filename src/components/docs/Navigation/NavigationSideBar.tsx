@@ -15,7 +15,7 @@ export const NavigationSideBar = ({
     >
       <Title title={tableOfContents?.title} />
       <div className="h-[76%] overflow-y-auto overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">
-        <DocsNavigationItems navItems={tableOfContents} />
+        <DocsNavigationItems navItems={tableOfContents.list} />
       </div>
     </div>
   );

@@ -40,7 +40,10 @@ export const formatTableofContentsData = (
   });
 
   return {
-    data: exposedTOCData,
+    data: {
+      title: tableOfContentsData.navigationBar.title,
+      list: exposedTOCData,
+    },
     sha: "",
     fileRelativePath: "content/toc-doc.json",
     preview: !!preview,
