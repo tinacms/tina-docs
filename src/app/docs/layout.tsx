@@ -1,6 +1,6 @@
-import { Breadcrumbs } from "@/src/components/docs/Breadcrumbs";
-import { NavigationDropdown } from "@/src/components/docs/Navigation/NavigationDropdown";
-import { NavigationSideBar } from "@/src/components/docs/Navigation/NavigationSideBar";
+import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
+import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
+import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
 import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
 import type React from "react";
 

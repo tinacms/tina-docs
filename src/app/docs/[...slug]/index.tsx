@@ -1,9 +1,9 @@
 "use client";
 
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
-import { Pagination } from "@/components/ui/Pagination";
-import { TableOfContents } from "@/src/components/docs/TableOfContents";
-import { TableOfContentsDropdown } from "@/src/components/docs/TableOfContentsDropdown";
+import { TableOfContents } from "@/src/components/docs/table-of-contents";
+import { TableOfContentsDropdown } from "@/src/components/docs/table-of-contents-dropdown";
+import { Pagination } from "@/src/components/ui/pagination";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
 import { tinaField } from "tinacms/dist/react";

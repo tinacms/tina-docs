@@ -1,7 +1,7 @@
 import type React from "react";
 import "@/styles/global.css";
-import { SiteLayout } from "@/components/SiteLayout";
-import AdminLink from "@/components/ui/AdminLink";
+import { SiteLayout } from "@/src/components/site-layout";
+import AdminLink from "@/src/components/ui/admin-link";
 
 export default function RootLayout({
   children = null, //default value for cms
