@@ -15,3 +15,7 @@
 :root {
   --primary-color: #f97316;
 }
+
+.tina-gradient {
+  @apply bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent
+}

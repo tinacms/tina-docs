@@ -18,7 +18,7 @@ export const CardGrid = (data: {
           // eslint-disable-next-line tailwindcss/no-custom-classname
           className="hover:bg-seafoam-100 group flex flex-col justify-between rounded-lg bg-transparent p-6 transition-all duration-150 ease-out"
         >
-          <h2 className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text font-tuner  text-2xl font-bold leading-snug text-transparent transition-all duration-150 ease-out group-hover:from-blue-700 group-hover:via-blue-600 group-hover:to-blue-500">
+          <h2 className="tina-gradient bg-clip-text font-tuner  text-2xl font-bold leading-snug text-transparent transition-all duration-150 ease-out group-hover:from-blue-700 group-hover:via-blue-600 group-hover:to-blue-500">
             {card.title}
           </h2>
 

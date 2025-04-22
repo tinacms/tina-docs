@@ -14,18 +14,18 @@ export default function HeaderFormat({
     React.isValidElement(children) && children.props?.content
       ? children.props.content.map((content: any) => content.text).join("")
       : typeof children === "string"
-        ? children
-        : ""
+      ? children
+      : ""
   );
 
   const linkHref = `#${id}`;
 
   const styles = {
-    1: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-4xl !mt-16 mb-4",
-    2: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-3xl !mt-12 mb-2",
+    1: "tina-gradient bg-clip-text text-transparent text-4xl !mt-16 mb-4",
+    2: "tina-gradient bg-clip-text text-transparent text-3xl !mt-12 mb-2",
     3: "bg-gradient-to-br from-blue-800 via-blue-900 to-blue-100 bg-clip-text text-transparent text-xl font-medium !mt-8 mb-2 !important",
-    4: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-xl font-medium !mt-2 mb-2",
-    5: "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent text-lg font-medium !mt-2 mb-1",
+    4: "tina-gradient bg-clip-text text-transparent text-xl font-medium !mt-2 mb-2",
+    5: "tina-gradient bg-clip-text text-transparent text-lg font-medium !mt-2 mb-1",
     6: "text-gray-500 text-base font-normal mt-2 mb-1",
   };
 
