@@ -14,6 +14,11 @@ export const docsNavigationBarCollection = {
   },
   fields: [
     {
+      name: "title",
+      label: "Title",
+      type: "string",
+    },
+    {
       name: "supermenuGroup",
       label: "Supermenu Group",
       type: "object",
