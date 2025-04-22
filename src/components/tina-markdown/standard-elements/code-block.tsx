@@ -1,4 +1,4 @@
-import { Prism } from "@/src/components/styles/zprism";
+import { Prism } from "@/src/components/styles/prism";
 import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
 import React from "react";
 

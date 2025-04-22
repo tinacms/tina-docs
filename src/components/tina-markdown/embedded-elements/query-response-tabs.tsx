@@ -1,4 +1,4 @@
-import { Prism } from "@/src/components/styles/zprism";
+import { Prism } from "@/src/components/styles/prism";
 import { useState } from "react";
 
 export const QueryResponseTabs = ({ ...props }) => {

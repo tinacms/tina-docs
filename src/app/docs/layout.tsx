@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@/src/components/docs/zbreadcrumbs";
+import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
 import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
