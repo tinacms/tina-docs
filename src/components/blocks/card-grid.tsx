@@ -9,13 +9,11 @@ export const CardGrid = (data: {
   }[];
 }) => {
   return (
-    // eslint-disable-next-line tailwindcss/no-custom-classname
     <div className="border-seafoam-300 my-8 grid grid-cols-1 rounded-lg border shadow-lg md:grid-cols-2">
       {data.cards?.map((card, index) => (
         <a
           key={index}
           href={card.link}
-          // eslint-disable-next-line tailwindcss/no-custom-classname
           className="hover:bg-seafoam-100 group flex flex-col justify-between rounded-lg bg-transparent p-6 transition-all duration-150 ease-out"
         >
           <h2 className="tina-gradient bg-clip-text font-tuner  text-2xl font-bold leading-snug text-transparent transition-all duration-150 ease-out group-hover:from-blue-700 group-hover:via-blue-600 group-hover:to-blue-500">

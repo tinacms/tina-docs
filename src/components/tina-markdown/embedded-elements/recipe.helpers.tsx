@@ -90,7 +90,6 @@ const CodeBlockWithHighlightLines = ({
           wordBreak: "break-word",
         }}
       >
-        {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
         <code className={`language-${lang}`}>{value || children}</code>
       </pre>
     </div>

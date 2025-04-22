@@ -80,7 +80,6 @@ export default function HeaderFormat({
         {" "}
         {children}
         <LinkIcon
-          // eslint-disable-next-line tailwindcss/no-custom-classname
           className={`${linkStyle[level]} group-hover:animate-wiggle absolute ml-1 opacity-0 transition-opacity duration-200 group-hover:opacity-80`}
           style={{
             display: "inline-block",

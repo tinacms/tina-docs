@@ -38,7 +38,6 @@ export const Actions = ({ items, align = "left", flush = false }) => {
               >
                 {label}
                 {icon && (
-                  // eslint-disable-next-line tailwindcss/no-arbitrary-value
                   <ArrowLeftIcon className="-mr-1 -mt-1 ml-2 h-[1.125em] w-auto rotate-180 opacity-70" />
                 )}
               </ActionButton>
