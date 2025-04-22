@@ -16,7 +16,7 @@ export default async function DocsLayout({
     <div className="relative my-6 flex items-start justify-center lg:mb-16 xl:mt-16">
       <div className="grid w-full max-w-[2000px] grid-cols-1 px-3 md:grid-cols-[1.25fr_3fr] md:px-8 xl:grid-cols-[1.25fr_3fr_0.75fr] xl:px-16">
         {/* DESKTOP NAVIGATION SIDEBAR */}
-        <aside className={"sticky top-32 hidden h-[calc(100vh)] md:block"}>
+        <aside className={"sticky top-32 hidden md:block h-[calc(100vh-8rem)]"}>
           <NavigationSideBar tableOfContents={navigationDocsData.data} />
         </aside>
         {/* CONTENT COLUMN */}
