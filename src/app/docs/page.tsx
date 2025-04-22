@@ -1,5 +1,6 @@
 import { TinaClient } from "@/app/tina-client";
 import { fetchTinaData } from "@/src/services/tina/fetch-tina-data";
+import getTableOfContents from "@/src/utils/docs/getPageTableOfContents";
 import client from "@/tina/__generated__/client";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from "./[...slug]";
@@ -18,7 +19,7 @@ async function getData() {
 
 export default async function DocsPage() {
   const data = await getData();
-
+  const pageTableOfContents = getTableOfContents(data?.data.docs.body);
   return (
     <TinaClient
       Component={Document}
@@ -26,6 +27,8 @@ export default async function DocsPage() {
         query: data.query,
         variables: data.variables,
         data: data.data,
+        pageTableOfContents,
+        documentationData: data,
       }}
     />
   );
