@@ -9,7 +9,7 @@ import ScrollShowcase from "./embedded-elements/scroll-showcase";
 import Youtube from "./embedded-elements/youtube";
 import { CodeBlock } from "./standard-elements/code-block";
 import HeaderFormat from "./standard-elements/header-format";
-import Image from "./standard-elements/image";
+import { ImageComponent } from "./standard-elements/image";
 import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
 
@@ -79,7 +79,6 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   Youtube: (props) => <Youtube {...props} />,
   QueryResponseTabs: (props) => <QueryResponseTabs {...props} />,
   WarningCallout: (props) => <Callout {...props} variant="warning" />,
-
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,
   h2: (props) => <HeaderFormat level={2} {...props} />,
@@ -106,7 +105,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
     />
   ),
   mermaid: (props) => <MermaidElement {...props} />,
-  img: (props) => <Image {...props} />,
+  img: (props) => <ImageComponent {...props} />,
   table: (props) => <Table {...props} />,
   code_block: (props) => <CodeBlock {...props} />,
 };
