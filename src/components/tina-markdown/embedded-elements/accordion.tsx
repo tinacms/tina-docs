@@ -19,7 +19,6 @@ const Accordion = (data: {
 
   return (
     <div
-      // eslint-disable-next-line tailwindcss/no-arbitrary-value
       className={`mb-2 max-w-full overflow-hidden rounded-lg bg-white/40 shadow-sm transition-[width] duration-300 ease-in-out ${
         isExpanded ? "w-full" : "w-80 delay-700"
       }`}
@@ -41,7 +40,6 @@ const Accordion = (data: {
       </div>
 
       <div
-        // eslint-disable-next-line tailwindcss/no-arbitrary-value
         className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
           isExpanded
             ? "max-h-[2000px] opacity-100 delay-500"

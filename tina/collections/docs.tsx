@@ -9,7 +9,7 @@ import YoutubeTemplate from "@/tina/templates/markdown-embeds/youtube.template";
 import type { Template } from "tinacms";
 import SeoInformation from "./seo-information";
 
-export const DocsCollection = {
+export const docsCollection = {
   name: "docs",
   label: "Docs",
   path: "content/docs",
@@ -97,4 +97,4 @@ export const DocsCollection = {
   ],
 };
 
-export default DocsCollection;
+export default docsCollection;

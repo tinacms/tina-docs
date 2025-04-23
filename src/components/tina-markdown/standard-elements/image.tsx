@@ -1,6 +1,7 @@
+import Image from "next/image";
 import { useState } from "react";
 
-const Image = (props) => {
+export const ImageComponent = (props) => {
   const [dimensions, setDimensions] = useState({ width: 16, height: 9 });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,5 +48,3 @@ const Image = (props) => {
     </span>
   );
 };
-
-export default Image;

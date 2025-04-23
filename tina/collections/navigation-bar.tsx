@@ -1,10 +1,10 @@
-import ItemTemplate from "../templates/toc-item.template";
-import SubmenuTemplate from "../templates/submenu.template";
+import submenuTemplate from "../templates/submenu.template";
+import itemTemplate from "../templates/toc-item.template";
 
-export const DocsTableOfContentsCollection = {
-  name: "docsTableOfContents",
-  label: "Docs - Table of Contents",
-  path: "content/docs-toc",
+export const docsNavigationBarCollection = {
+  name: "navigationBar",
+  label: "Navigation Bar",
+  path: "content/navigation-bar",
   format: "json",
   ui: {
     allowedActions: {
@@ -13,6 +13,11 @@ export const DocsTableOfContentsCollection = {
     },
   },
   fields: [
+    {
+      name: "title",
+      label: "Title",
+      type: "string",
+    },
     {
       name: "supermenuGroup",
       label: "Supermenu Group",
@@ -30,11 +35,11 @@ export const DocsTableOfContentsCollection = {
           label: "Page or Submenu",
           type: "object",
           list: true,
-          templates: [SubmenuTemplate, ItemTemplate],
+          templates: [submenuTemplate, itemTemplate],
         },
       ],
     },
   ],
 };
 
-export default DocsTableOfContentsCollection;
+export default docsNavigationBarCollection;

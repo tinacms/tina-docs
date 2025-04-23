@@ -21,7 +21,7 @@ export const generateMarkdown = (
     .join("\n");
 };
 
-const ToC = ({ tocItems, activeids }: TocProps) => {
+export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -134,5 +134,3 @@ const ToC = ({ tocItems, activeids }: TocProps) => {
     </div>
   );
 };
-
-export default ToC;

@@ -1,6 +1,6 @@
 import type { Template } from "tinacms";
 
-export const ItemTemplate: Template = {
+export const itemTemplate: Template = {
   label: "Item",
   name: "item",
   ui: {
@@ -14,4 +14,4 @@ export const ItemTemplate: Template = {
   ],
 };
 
-export default ItemTemplate;
+export default itemTemplate;

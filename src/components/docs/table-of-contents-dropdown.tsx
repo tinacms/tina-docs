@@ -2,7 +2,7 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-const TocOverflow = ({ tocData }) => {
+const TableOfContentsItems = ({ tocData }) => {
   return (
     <div className="animate-fade-down animate-duration-300 absolute z-10 mt-4 max-h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-lg">
       {tocData.tocData.map((item, index) => {
@@ -25,7 +25,7 @@ const TocOverflow = ({ tocData }) => {
   );
 };
 
-const TocOverflowButton = (tocData) => {
+export const TableOfContentsDropdown = ({ tocData }) => {
   const [isTableOfContentsOpen, setIsTableOfContentsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -47,7 +47,7 @@ const TocOverflowButton = (tocData) => {
 
   return (
     <div>
-      {tocData.tocData.length !== 0 && (
+      {tocData?.tocData?.length !== 0 && (
         <div className="w-full py-6" ref={containerRef}>
           <div
             className="cursor-pointer rounded-lg border-slate-400 bg-gradient-to-r from-white/50 to-white/30 px-4 py-2 shadow-lg"
@@ -66,7 +66,7 @@ const TocOverflowButton = (tocData) => {
           </div>
           {isTableOfContentsOpen && (
             <div className="relative w-full">
-              <TocOverflow tocData={tocData} />
+              <TableOfContentsItems tocData={tocData} />
             </div>
           )}
         </div>
@@ -74,5 +74,3 @@ const TocOverflowButton = (tocData) => {
     </div>
   );
 };
-
-export default TocOverflowButton;

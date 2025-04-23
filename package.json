@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "tinacms dev -c \"next dev\"",
-    "build": "tinacms build && next build",
+    "dev": "tinacms dev -c \"next dev --turbopack\"",
+    "build": "tinacms build && next build --turbopack",
     "build-local": "tinacms build --local --skip-indexing --skip-cloud-checks && next build",
     "start": "tinacms build && next start",
     "lint": "biome lint .",
@@ -15,12 +15,11 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
-    "@tailwindcss/postcss": "^4.1.4",
     "fast-glob": "^3.3.3",
     "lodash": "^4.17.21",
     "mermaid": "^11.6.0",
     "monaco-editor": "^0.52.2",
-    "next": "^14.2.28",
+    "next": "^15.3.0",
     "prism-react-renderer": "^2.4.1",
     "prismjs": "^1.29.0",
     "react": "^18.3.1",
@@ -32,6 +31,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@tailwindcss/postcss": "^4.1.4",
     "@tinacms/cli": "^1.8.1",
     "@types/node": "^22.10.1",
     "autoprefixer": "^10.4.17",

@@ -9,7 +9,8 @@
       "public/**",
       "content/**",
       "coverage/**",
-      "tina/__generated__/**"
+      "tina/__generated__/**",
+      "src/styles/**"
     ]
   },
   "formatter": {

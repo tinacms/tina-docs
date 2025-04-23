@@ -1,20 +1,16 @@
 "use client";
 
-import ToC from "@/components/docs/PageToc";
-import TocOverflowButton from "@/components/docs/ToCOverflow";
+import { TableOfContents } from "@/components/docs/table-of-contents";
+import { TableOfContentsDropdown } from "@/components/docs/table-of-contents-dropdown";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
-import DocsPagination from "@/components/ui/Pagination";
+import { Pagination } from "@/src/components/ui/pagination";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
-import { useTina } from "tinacms/dist/react";
+import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
-export default function DocumentPageClient({ props }) {
-  const { data } = useTina({
-    query: props.query,
-    variables: props.variables,
-    data: props.data,
-  });
+export default function Document({ props, tinaProps }) {
+  const { data } = tinaProps;
 
   const documentationData = data.docs;
   const { pageTableOfContents } = props;
@@ -30,30 +26,31 @@ export default function DocumentPageClient({ props }) {
     title: documentationData?.next?.title,
   };
 
+  // Table of Contents Listener to Highlight Active Section
   const { activeIds, contentRef } = useTocListener(documentationData);
 
   return (
-    <div
-      // eslint-disable-next-line tailwindcss/no-arbitrary-value
-      className={
-        "grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]"
-      }
-    >
-      {/* MIDDLE COLUMN */}
+    <div className="grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]">
       <div
         className={`max-w-full overflow-hidden break-words ${
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
-        <div>
-          <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text pt-4 font-tuner text-4xl text-transparent">
-            {documentationData?.title}
-          </div>
+        <div
+          className="tina-gradient pt-4 font-tuner text-4xl"
+          data-tina-field={tinaField(documentationData, "title")}
+        >
+          {documentationData?.title}
         </div>
+        {/* MOBILE TABLE OF CONTENTS */}
         <div className="block xl:hidden">
-          <TocOverflowButton tocData={pageTableOfContents} />
+          <TableOfContentsDropdown tocData={pageTableOfContents} />
         </div>
-        <div ref={contentRef}>
+        {/* CONTENT */}
+        <div
+          ref={contentRef}
+          data-tina-field={tinaField(documentationData, "body")}
+        >
           <TinaMarkdown
             content={documentationData?.body}
             components={MarkdownComponentMapping}
@@ -65,13 +62,15 @@ export default function DocumentPageClient({ props }) {
             Last Edited: {formattedDate}
           </span>
         )}
-        <DocsPagination prevPage={previousPage} nextPage={nextPage} />
+        <Pagination prevPage={previousPage} nextPage={nextPage} />
       </div>
-      {/* RIGHT COLUMN */}
+      {/* DESKTOP TABLE OF CONTENTS */}
       {documentationData?.tocIsHidden ? null : (
-        // eslint-disable-next-line tailwindcss/no-arbitrary-value
         <div className={"sticky top-32 mx-8 hidden h-[calc(100vh)] xl:block"}>
-          <ToC tocItems={pageTableOfContents} activeids={activeIds} />
+          <TableOfContents
+            tocItems={pageTableOfContents}
+            activeids={activeIds}
+          />
         </div>
       )}
     </div>

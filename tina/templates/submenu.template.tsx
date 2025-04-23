@@ -1,5 +1,5 @@
 import type { Template } from "tinacms";
-import { ItemTemplate } from "./toc-item.template";
+import itemTemplate from "./toc-item.template";
 
 const UIAndLabelling: any = {
   label: "Submenu",
@@ -11,7 +11,7 @@ const UIAndLabelling: any = {
   },
 };
 
-const ThirdLevelSubmenu: Template = {
+const thirdLevelSubmenu: Template = {
   ...UIAndLabelling,
   fields: [
     { name: "title", label: "Name", type: "string" },
@@ -20,12 +20,12 @@ const ThirdLevelSubmenu: Template = {
       label: "Submenu Items",
       type: "object",
       list: true,
-      templates: [ItemTemplate],
+      templates: [itemTemplate],
     },
   ],
 };
 
-const SecondLevelSubmenu: Template = {
+const secondLevelSubmenu: Template = {
   ...UIAndLabelling,
   fields: [
     { name: "title", label: "Name", type: "string" },
@@ -34,12 +34,12 @@ const SecondLevelSubmenu: Template = {
       label: "Submenu Items",
       type: "object",
       list: true,
-      templates: [ThirdLevelSubmenu, ItemTemplate],
+      templates: [thirdLevelSubmenu, itemTemplate],
     },
   ],
 };
 
-export const SubmenuTemplate: Template = {
+export const submenuTemplate: Template = {
   ...UIAndLabelling,
   fields: [
     { name: "title", label: "Name", type: "string" },
@@ -48,9 +48,9 @@ export const SubmenuTemplate: Template = {
       label: "Submenu Items",
       type: "object",
       list: true,
-      templates: [SecondLevelSubmenu, ItemTemplate],
+      templates: [secondLevelSubmenu, itemTemplate],
     },
   ],
 };
 
-export default SubmenuTemplate;
+export default submenuTemplate;

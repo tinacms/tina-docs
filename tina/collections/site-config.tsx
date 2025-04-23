@@ -1,4 +1,4 @@
-import { CustomColorToggle } from "@/components/ui/CustomColorToggle";
+import { CustomColorToggle } from "@/src/components/ui/custom-color-toggle";
 
 export const GlobalSiteConfiguration = {
   name: "globalSiteConfiguration",
