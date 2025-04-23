@@ -1,4 +1,5 @@
 {
+  "title": "TinaDocs",
   "supermenuGroup": [
     {
       "title": "Introduction",
@@ -44,10 +45,6 @@
             {
               "title": "React",
               "slug": "content/docs/core-concepts/visual-editing/react.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Setting up the Router",
               "_template": "item"
             }
           ],

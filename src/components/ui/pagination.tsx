@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { DynamicLink } from "../ui/DynamicLink";
+import { DynamicLink } from "./dynamic-link";
 
 interface NextPrevPageProps {
   title: string;
@@ -14,7 +14,7 @@ interface PaginationProps {
 
 const NextImage = Image as any;
 
-export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
+export function Pagination({ prevPage, nextPage }: PaginationProps) {
   return (
     <div className="mt-8 grid grid-cols-2 gap-4">
       {prevPage?.slug && (
@@ -24,7 +24,6 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
             style={{ backgroundColor: "#FAFAFA" }}
           >
             <span className="pl-10 text-sm uppercase opacity-50">Previous</span>
-            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
             <h5 className="pl m-0 flex items-center text-base leading-[1.3] text-blue-800 transition-all duration-150 ease-out group-hover:text-orange-500 md:text-xl">
               <NextImage
                 src="/svg/right-arrow.svg"
@@ -47,7 +46,6 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
             <span className="pr-6 text-sm uppercase opacity-50 md:pr-10">
               Next
             </span>
-            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
             <h5 className="m-0 flex items-center justify-end text-base leading-[1.3] text-blue-800 transition-all duration-150 ease-out group-hover:text-orange-500 md:text-xl">
               {nextPage.title}
               <NextImage
@@ -64,5 +62,3 @@ export function DocsPagination({ prevPage, nextPage }: PaginationProps) {
     </div>
   );
 }
-
-export default DocsPagination;

@@ -194,11 +194,9 @@ const ApiReference = (data: {
 
       {properties?.some((property) => property.required) && (
         <div className=" mx-6 mt-6 flex items-start gap-3 rounded-md bg-blue-50 p-4">
-          {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
           <InformationCircleIcon className="mt-0.5 size-5 shrink-0 text-[#3B82F6]" />
           <p className="text-sm text-gray-700">
             All properties marked as{" "}
-            {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
             <span className="font-medium text-[#FF5533]">REQUIRED</span> must be
             specified for the field to work properly.
           </p>

@@ -3,7 +3,6 @@ import DocsMDXComponentRenderer from "../markdown-component-mapping";
 
 export const Table = (props) => {
   // Navigate through the nested structure to find the actual table content
-  // @ts-ignore - Linter is wrong about the actual structure
   const tableRows = props?.children?.props?.children || [];
 
   return (
@@ -12,7 +11,6 @@ export const Table = (props) => {
         <tbody>
           {tableRows.map((row, rowIndex) => {
             // Each row has its own props.children array containing cells
-            // @ts-ignore - Linter is wrong about the actual structure
             const cells = row?.props?.children || [];
             const CellComponent = rowIndex === 0 ? "th" : "td";
 
@@ -31,7 +29,6 @@ export const Table = (props) => {
                           : ""
                       } ${cellIndex === 0 ? "max-w-xs break-words" : ""}`}
                     >
-                      {/* @ts-ignore - Linter is wrong about the actual structure */}
                       {cell?.props?.children}
                       <TinaMarkdown
                         content={cell?.props?.content as any}

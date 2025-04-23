@@ -1,6 +1,6 @@
+import { Prism } from "@/src/components/styles/prism";
 import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { Prism } from "../../styles/Prism";
 
 export const CodeBlock = ({ children, value, lang }) => {
   const [hasCopied, setHasCopied] = React.useState(false);

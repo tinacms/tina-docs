@@ -1,6 +1,6 @@
 "use client";
 
-import { DynamicLink } from "@/components/ui/DynamicLink";
+import { DynamicLink } from "@/src/components/ui/dynamic-link";
 import { matchActualTarget } from "@/utils/docs/urls";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
@@ -279,7 +279,7 @@ const NavLevel = ({
   );
 };
 
-export const DocsNavigationList = ({ navItems }: DocsNavProps) => {
+export const DocsNavigationItems = ({ navItems }: DocsNavProps) => {
   const navListElem = React.useRef(null);
 
   return (

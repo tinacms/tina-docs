@@ -1,24 +1,19 @@
+import { TinaClient } from "@/app/tina-client";
+import { fetchTinaData } from "@/src/services/tina/fetch-tina-data";
+import getTableOfContents from "@/src/utils/docs/getPageTableOfContents";
 import client from "@/tina/__generated__/client";
-import getTableOfContents from "@/utils/docs/getPageTableOfContents";
 import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
-import { notFound } from "next/navigation";
-import { TinaClient } from "../../tina-client";
-import DocumentPageClient from "./DocumentPageClient";
-
+import Document from ".";
 export async function generateStaticParams() {
-  try {
-    const contentDir = "./content/docs/";
-    const files = await fg(`${contentDir}**/*.mdx`);
-    return files
-      .filter((file) => !file.endsWith("index.mdx"))
-      .map((file) => {
-        const path = file.substring(contentDir.length, file.length - 4); // Remove "./content/docs/" and ".mdx"
-        return { slug: path.split("/") };
-      });
-  } catch (error) {
-    notFound();
-  }
+  const contentDir = "./content/docs/";
+  const files = await fg(`${contentDir}**/*.mdx`);
+  return files
+    .filter((file) => !file.endsWith("index.mdx"))
+    .map((file) => {
+      const path = file.substring(contentDir.length, file.length - 4); // Remove "./content/docs/" and ".mdx"
+      return { slug: path.split("/") };
+    });
 }
 
 export async function generateMetadata({
@@ -32,6 +27,11 @@ export async function generateMetadata({
   return getSeo(data);
 }
 
+async function getData(slug: string) {
+  const data = await fetchTinaData(client.queries.docs, slug);
+  return data;
+}
+
 export default async function DocsPage({
   params,
 }: {
@@ -39,29 +39,19 @@ export default async function DocsPage({
 }) {
   const dynamicParams = await params;
   const slug = dynamicParams?.slug?.join("/");
+  const data = await getData(slug);
+  const pageTableOfContents = getTableOfContents(data?.data.docs.body);
 
-  try {
-    const documentData = await client.queries.docs({
-      relativePath: `${slug}.mdx`,
-    });
-
-    const pageTableOfContents = getTableOfContents(
-      documentData?.data.docs.body
-    );
-
-    return (
-      <TinaClient
-        Component={DocumentPageClient}
-        props={{
-          query: documentData.query,
-          variables: documentData.variables,
-          data: documentData.data,
-          pageTableOfContents,
-          documentationData: documentData,
-        }}
-      />
-    );
-  } catch (e) {
-    return notFound();
-  }
+  return (
+    <TinaClient
+      Component={Document}
+      props={{
+        query: data.query,
+        variables: data.variables,
+        data: data.data,
+        pageTableOfContents,
+        documentationData: data,
+      }}
+    />
+  );
 }

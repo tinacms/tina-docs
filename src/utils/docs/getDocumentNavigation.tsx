@@ -2,8 +2,8 @@ import data from "@/content/siteConfig.json";
 import client from "@/tina/__generated__/client";
 
 export async function getDocsNav(preview?: boolean) {
-  const docsToCData = await client.queries.docsTableOfContents({
-    relativePath: "DocsTableOfContents.json",
+  const docsToCData = await client.queries.navigationBar({
+    relativePath: "DocsNavigationBar.json",
   });
 
   return formatTableofContentsData(docsToCData.data, preview);
@@ -33,14 +33,17 @@ export const formatTableofContentsData = (
   // NOTE: The original code expected a nested `data` property and a `_values` field.
   // Based on the logged structure, docsTableOfContents is already at the root.
   // Therefore, we access supermenuGroup directly.
-  const exposedTOCData = tableOfContentsData.docsTableOfContents.supermenuGroup;
+  const exposedTOCData = tableOfContentsData.navigationBar.supermenuGroup;
 
   exposedTOCData.forEach((obj: any, index: number, array: any[]) => {
     array[index].items = stripReferenceDownToSlug(obj.items);
   });
 
   return {
-    data: exposedTOCData,
+    data: {
+      title: tableOfContentsData.navigationBar.title,
+      items: exposedTOCData,
+    },
     sha: "",
     fileRelativePath: "content/toc-doc.json",
     preview: !!preview,

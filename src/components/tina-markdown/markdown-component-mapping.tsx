@@ -1,28 +1,28 @@
 import type { Components } from "tinacms/dist/rich-text";
-import { CardGrid } from "../blocks/CardGrid";
+import { CardGrid } from "../blocks/card-grid";
 import Accordion from "./embedded-elements/accordion";
 import ApiReference from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
-import ScrollShowcase from "./embedded-elements/scroll-showcase";
+import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import Youtube from "./embedded-elements/youtube";
 import { CodeBlock } from "./standard-elements/code-block";
 import HeaderFormat from "./standard-elements/header-format";
-import Image from "./standard-elements/image";
+import { ImageComponent } from "./standard-elements/image";
 import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
 
 type ComponentMapping = {
-  Youtube: { embedSrc: string; caption?: string; minutes?: string };
-  QueryResponseTabs: {
+  youtube: { embedSrc: string; caption?: string; minutes?: string };
+  queryResponseTabs: {
     query: string;
     response: string;
     preselectResponse: boolean;
     customQueryName?: string;
     customResponseName?: string;
   };
-  ApiReference: {
+  apiReference: {
     title: string;
     property: {
       groupName: string;
@@ -34,8 +34,8 @@ type ComponentMapping = {
     }[];
   };
   WarningCallout: { body: string };
-  Accordion: { docText: string; image: string; heading?: string };
-  RecipeBlock: {
+  accordion: { docText: string; image: string; heading?: string };
+  recipe: {
     title?: string;
     description?: string;
     codeblock?: any;
@@ -46,7 +46,7 @@ type ComponentMapping = {
       codeLineEnd?: number;
     }[];
   };
-  ScrollShowcase: {
+  scrollShowcase: {
     showcaseItems: {
       image: string;
       title: string;
@@ -54,7 +54,7 @@ type ComponentMapping = {
       content: string;
     }[];
   };
-  CardGrid: {
+  cardGrid: {
     cards: {
       title: string;
       description: string;
@@ -71,15 +71,14 @@ type ComponentMapping = {
 
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
   // Our embeds we can inject via MDX
-  ScrollShowcase: (props) => <ScrollShowcase {...props} />,
-  CardGrid: (props) => <CardGrid {...props} />,
-  RecipeBlock: (props) => <RecipeBlock {...props} />,
-  Accordion: (props) => <Accordion {...props} />,
-  ApiReference: (props) => <ApiReference {...props} />,
-  Youtube: (props) => <Youtube {...props} />,
-  QueryResponseTabs: (props) => <QueryResponseTabs {...props} />,
+  scrollShowcase: (props) => <ScrollBasedShowcase {...props} />,
+  cardGrid: (props) => <CardGrid {...props} />,
+  recipe: (props) => <RecipeBlock {...props} />,
+  accordion: (props) => <Accordion {...props} />,
+  apiReference: (props) => <ApiReference {...props} />,
+  youtube: (props) => <Youtube {...props} />,
+  queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
   WarningCallout: (props) => <Callout {...props} variant="warning" />,
-
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,
   h2: (props) => <HeaderFormat level={2} {...props} />,
@@ -106,7 +105,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
     />
   ),
   mermaid: (props) => <MermaidElement {...props} />,
-  img: (props) => <Image {...props} />,
+  img: (props) => <ImageComponent {...props} />,
   table: (props) => <Table {...props} />,
   code_block: (props) => <CodeBlock {...props} />,
 };
