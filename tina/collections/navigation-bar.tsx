@@ -1,5 +1,5 @@
-import { submenuTemplate } from "../templates/submenu.template";
-import { itemTemplate } from "../templates/toc-item.template";
+import submenuTemplate from "../templates/submenu.template";
+import itemTemplate from "../templates/toc-item.template";
 
 export const docsNavigationBarCollection = {
   name: "navigationBar",
@@ -41,3 +41,5 @@ export const docsNavigationBarCollection = {
     },
   ],
 };
+
+export default docsNavigationBarCollection;
