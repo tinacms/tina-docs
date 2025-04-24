@@ -11,32 +11,23 @@ export default function GlobalError({
   reset: () => void;
 }) {
   return (
-    // global-error must include html and body tags
-    <html lang="en">
-      <head>
-        <meta name="theme-color" content="#E6FAF8" />
-        <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
-      </head>
-      <body>
-        <RootLayout>
-          <ErrorWrapper
-            errorConfig={{
-              title: "Sorry, Friend!",
-              description: "Something went wrong!",
-              links: [
-                {
-                  linkText: "Return to docs",
-                  linkUrl: "/docs",
-                },
-                {
-                  linkText: "Try again",
-                  linkUrl: "",
-                },
-              ],
-            }}
-          />
-        </RootLayout>
-      </body>
-    </html>
+    <RootLayout>
+      <ErrorWrapper
+        errorConfig={{
+          title: "Sorry, Friend!",
+          description: "Something went wrong!",
+          links: [
+            {
+              linkText: "Return to docs",
+              linkUrl: "/docs",
+            },
+            {
+              linkText: "Try again",
+              linkUrl: "",
+            },
+          ],
+        }}
+      />
+    </RootLayout>
   );
 }
