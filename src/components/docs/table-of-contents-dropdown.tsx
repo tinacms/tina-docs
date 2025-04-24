@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 const TableOfContentsItems = ({ tocData }) => {
   return (
     <div className="animate-fade-down animate-duration-300 absolute z-10 mt-4 max-h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-lg">
-      {tocData.tocData.map((item, index) => {
+      {tocData?.tocData?.map((item, index) => {
         const textIndentation =
           item.type === "h3" ? "ml-4" : item.type === "h4" ? "ml-8" : "";
 
