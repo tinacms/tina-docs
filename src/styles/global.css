@@ -19,3 +19,16 @@
 .tina-gradient {
   @apply bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent
 }
+
+@theme {
+  --color-ochre-400: #FF724B;
+  --color-ochre-500: #D13F13;
+  --color-ochre-600: #FE642C;
+  --color-ochre-700: #EC4815;
+  --color-ochre-800: #C73D15;
+  --color-seafoam-light: #EEFDF9;
+  --color-seafoam: #CFFAFE;
+  --color-disabled-gray: #6B7280;
+  --color-grayblue: #17518C;
+  --color-deepblue: #1D2C6C;
+}
