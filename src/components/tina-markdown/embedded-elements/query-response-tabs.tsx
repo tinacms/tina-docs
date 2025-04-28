@@ -4,6 +4,8 @@ import { useState } from "react";
 export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);
 
+  console.log(props);
+
   const buttonStyling =
     "flex justify-center relative leading-tight text-white mx-6 pt-[12px] pb-[10px] text-base font-medium transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 font-tuner whitespace-nowrap px-2";
   const activeButtonStyling =
@@ -24,7 +26,7 @@ export const QueryResponseTabs = ({ ...props }) => {
   return (
     <div className="mb-1">
       <div
-        className="relative top-3 z-10 flex w-full rounded-t-md border-b border-b-orange-400/30 py-0 pt-1"
+        className="relative top-3 z-10 flex w-full rounded-t-xl border-b border-b-orange-400/30 py-0 pt-1"
         style={{
           backgroundColor: "rgb(1, 22, 39)",
         }}
@@ -35,7 +37,7 @@ export const QueryResponseTabs = ({ ...props }) => {
           className={buttonStyling + (isQuery ? "" : activeButtonStyling)}
           disabled={isQuery}
         >
-          Query
+          {props.customQueryName || "Query"}
           <div className={underlineStyling + (isQuery ? " w-full" : " w-0")} />
         </button>
         <button
@@ -44,7 +46,7 @@ export const QueryResponseTabs = ({ ...props }) => {
           className={buttonStyling + (isQuery ? activeButtonStyling : "")}
           disabled={!isQuery}
         >
-          Response
+          {props.customResponseName || "Response"}
           <div className={underlineStyling + (isQuery ? " w-0" : " w-full")} />
         </button>
       </div>
