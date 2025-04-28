@@ -33,7 +33,8 @@ type ComponentMapping = {
       required: boolean;
     }[];
   };
-  WarningCallout: { body: string };
+  Callout: { body: string; variant: string };
+
   accordion: { docText: string; image: string; heading?: string };
   recipe: {
     title?: string;
@@ -78,7 +79,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   apiReference: (props) => <ApiReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
   queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
-  WarningCallout: (props) => <Callout {...props} variant="warning" />,
+  Callout: (props) => <Callout {...props} variant={props?.variant} />,
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,
   h2: (props) => <HeaderFormat level={2} {...props} />,
