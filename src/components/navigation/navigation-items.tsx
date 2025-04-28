@@ -1,88 +1,20 @@
 "use client";
 
 import { DynamicLink } from "@/src/components/ui/dynamic-link";
+import { getUrl } from "@/src/utils/get-url";
 import { matchActualTarget } from "@/utils/docs/urls";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import React from "react";
 import AnimateHeight from "react-animate-height";
-
-// Constants for common values
-const TRANSITION_DURATION = 300;
-const PADDING_LEVELS = {
-  default: {
-    left: "0.675rem",
-    top: "0.125rem",
-    bottom: "0.125rem",
-  },
-  level0: {
-    left: "0.75rem",
-    top: "0.25rem",
-    bottom: "0.125rem",
-  },
-};
-
-const TEXT_COLORS = {
-  default: "text-gray-800",
-  selected: "text-blue-500",
-  childSelected: "text-gray-800",
-  orange: "text-orange-500",
-  orangeLight: "text-orange-100",
-  orangeHover: "text-orange-300",
-  blueLight: "text-blue-200",
-  blueHover: "text-blue-400",
-};
-
-const FONT_SIZES = {
-  xl: "text-xl",
-  base: "text-base",
-  small: "text-[15px]",
-};
-
-const FONT_WEIGHTS = {
-  light: "font-tuner-light",
-  normal: "font-sans",
-  medium: "font-[500]",
-  bold: "font-bold",
-};
-
-function getUrl(input: any): string {
-  let url = "";
-  if (typeof input === "string") {
-    url = input;
-  } else if (input && typeof input === "object") {
-    if (input.id && typeof input.id === "string") {
-      url = input.id;
-    }
-  }
-
-  if (url.startsWith("content")) {
-    url = url.replace(/^content/, "");
-  }
-
-  url = url.replace(/\.(mdx|md)$/, "");
-
-  if (url === "/docs/index") {
-    url = "/docs";
-  }
-
-  if (!url.startsWith("/")) {
-    url = `/${url}`;
-  }
-  return url;
-}
-
-export interface DocsNavProps {
-  navItems: any;
-}
-
-interface NavTitleProps {
-  level: number;
-  selected: boolean;
-  childSelected?: boolean;
-  children: React.ReactNode | React.ReactNode[];
-  onClick?: () => void;
-}
+import {
+  FONT_SIZES,
+  FONT_WEIGHTS,
+  PADDING_LEVELS,
+  TEXT_COLORS,
+  TRANSITION_DURATION,
+} from "./constants";
+import type { DocsNavProps, NavTitleProps } from "./type";
 
 const NavTitle: React.FC<NavTitleProps> = ({
   children,
@@ -117,8 +49,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
