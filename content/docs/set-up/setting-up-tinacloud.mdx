@@ -1,0 +1,71 @@
+---
+title: Setting Up TinaCloud
+last_edited: '2025-04-28T00:44:47.699Z'
+next: ''
+previous: ''
+---
+
+TinaCloud connects your website to GitHub via an indexed datalayer, allowing editors to make changes directly through your site's interface.
+
+You can also set this up yourself with custom database, git and auth logic.
+
+**If using GitHub, we recommend going with TinaCloud**. To read more about TinaCloud, see the [TinaCloud documentation](https://tina.io/docs/tina-cloud/introduction).
+
+## Create Your TinaCloud account
+
+1. Go to [https://app.tina.io/signin](https://app.tina.io/signin).
+2. Click "Authenticate with GitHub".
+3. Sign in with your GitHub account.
+4. Authorise Tina.
+
+You should now be redirected to the TinaCloud dashboard.
+
+## Creating a Project in TinaCloud
+
+1. **Authorize GitHub**: When setting up a project, you'll need to authenticate with GitHub. A popup window will ask for permission to give Tina.io access to your GitHub repositories.
+2. **Choose Your Repository**: After GitHub authorization, select the repository that contains your site's content. If you don't see your repository in the list, you may need to reconfigure your Tina.io permissions in GitHub.
+3. **Configure the Project**: Set up the following properties:
+   * **Project Name**: This appears when users log in to the project
+   * **Site URL(s)**: Enter both your local URL (e.g., `http://localhost:3000`) and production URL (e.g., `https://yourdomain.com`)
+   * **Glob Patterns**: If you're using dynamic preview deployments, you can enter patterns like `https://<PROJECT-NAME>-*-<ACCOUNT-OWNER>.vercel.app`
+
+## Connecting Your Project to the Editor
+
+Once your project is created, you'll need to connect it to your site:
+
+1. **Run the Backend Init Command**:
+
+```bash
+   npx @tinacms/cli init backend
+```
+
+This command will:
+
+* Prompt for your Client ID (found in the "Overview" tab of your project)
+* Prompt for a Read Only Token (found in the "Tokens" tab)
+* Populate your `.env` file with the necessary environment variables
+
+1. **Update Your Configuration**: Ensure your `tina/config.js` file correctly references the environment variables:
+
+```javascript
+   export default defineConfig({
+     token: process.env.TINA_TOKEN,
+     clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
+     branch: process.env.NEXT_PUBLIC_TINA_BRANCH || '',
+     // other config options...
+   })
+```
+
+> **Important**: These environment variables must also be set in your deployment workflow. See our [deployment guide](/docs/set-up/deploying-your-docs) for more information.
+
+By following these steps, your TinaCloud project will be connected to your repository, enabling content editing directly through your site's interface.
+
+## Using the Editor with TinaCloud
+
+Edits made via the TinaCloud (as opposed to the local) editor are automatically pushed to your Git repository.
+
+Access the local editors by running `pnpm run dev` in your terminal and going to `http://localhost:3000/admin/index.html`.
+
+Access the TinaCloud editor by going to `https://<DOMAIN>/admin/index.html` on your deployed site.
+
+You can also access the TinaCloud editor by running `pnpm run build`, then `pnpm run start`, and then going to `http://localhost:3000/admin/index.html`.
