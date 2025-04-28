@@ -14,4 +14,12 @@ export const itemTemplate: Template = {
   ],
 };
 
-export default itemTemplate;
+export const submenusLabel: Pick<Template, "label" | "name" | "ui"> = {
+  label: "Submenu",
+  name: "items",
+  ui: {
+    itemProps: (item) => ({
+      label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
+    }),
+  },
+};

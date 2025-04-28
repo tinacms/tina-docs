@@ -1,5 +1,5 @@
 import type { Template } from "tinacms";
-import itemTemplate from "./toc-item.template";
+import { itemTemplate } from "./navbar-ui.template";
 
 const UIAndLabelling: any = {
   label: "Submenu",
