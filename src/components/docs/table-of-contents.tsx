@@ -1,8 +1,9 @@
 "use client";
 
 import { getDocId } from "@/utils/docs/getDocsIds";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
+import { MdMenu } from "react-icons/md";
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
@@ -21,9 +22,15 @@ export const generateMarkdown = (
     .join("\n");
 };
 
+// Helper function to convert text to a valid HTML ID
+function getIdSyntax(text: string) {
+  return text.toLowerCase().replace(/ /g, "-");
+}
+
 export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     const close = () => setIsOpen(false);
@@ -42,9 +49,9 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
   useEffect(() => {
     if (tocWrapperRef.current && activeids?.length > 0) {
       const tocList = tocWrapperRef.current;
-
       const lastActiveId = activeids[activeids.length - 1];
       const activeLink = tocList.querySelector(`a[href="#${lastActiveId}"]`);
+      setActiveId(lastActiveId);
 
       if (activeLink) {
         const activeTop = (activeLink as HTMLElement).offsetTop;
@@ -59,11 +66,26 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
     }
   }, [activeids]);
 
+  //needed for the smooth scroll
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+
+      window.history.pushState(null, "", `#${id}`);
+    }
+  };
+
   if (!tocItems || tocItems.length === 0) {
     return null;
   }
-
-  const tocMarkdown = generateMarkdown(tocItems);
+  // console.log(activeId);
+  // console.log(tocItems);
+  // console.log(activeids);
 
   return (
     <div className="mb-[-0.375rem] flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">
@@ -74,12 +96,12 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
             : "max-h-0 overflow-hidden"
         } lg:max-h-none`}
       >
-        <span className="hidden lg:block text-base text-[var(--color-secondary)] opacity-50 bg-transparent leading-none mb-[1.125rem]">
-          Table of Contents
+        <span className=" hidden lg:flex gap-2 text-base text-[var(--color-secondary)] pb-1 bg-transparent leading-none">
+          On this page
         </span>
         <div
           ref={tocWrapperRef}
-          className="max-h-[70vh] overflow-y-auto p-4 2xl:max-h-[75vh]"
+          className="max-h-[70vh] overflow-y-auto px-1 py-2 2xl:max-h-[75vh]"
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
@@ -94,41 +116,26 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
             maskRepeat: "no-repeat",
           }}
         >
-          <ReactMarkdown
-            components={{
-              ul: ({ children }) => (
-                <ul className="space-y-1 pt-1 list-none p-0 m-0 flex flex-col flex-wrap">
-                  {children}
-                </ul>
-              ),
-              li: ({ children }) => (
-                <li className="leading-relaxed m-0 py-[0.375rem]">
-                  {children}
-                </li>
-              ),
-              a: ({ children, ...props }) => {
-                const isActive = activeids?.includes(
-                  props.href?.slice(1) || ""
-                );
-                return (
-                  <a
-                    {...props}
-                    className={`
-                      block rounded-md px-2 py-1 transition-colors duration-150 hover:bg-gray-50/75
-                      ${
-                        isActive
-                          ? "font-medium text-orange-500 no-underline"
-                          : "text-gray-600 hover:text-orange-500"
-                      }`}
-                  >
-                    {children}
-                  </a>
-                );
-              },
-            }}
-          >
-            {tocMarkdown}
-          </ReactMarkdown>
+          {tocItems.map((item) => (
+            <div className="flex gap-2 font-light group" key={getIdSyntax(item.text)}>
+              <div
+                className={`border-r border-1 border-gray-200 ${
+                  activeId === getIdSyntax(item.text) ? "border-orange-500" : "group-hover:border-neutral-500"
+                }`}
+              ></div>
+              <a
+                href={`#${getIdSyntax(item.text)}`}
+                onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
+                className={`${
+                  item.type === "h3" ? "pl-4" : "pl-2"
+                } py-1.5 text-gray-400 ${
+                  activeId === getIdSyntax(item.text) ? "text-orange-500" : "group-hover:text-black"
+                }`}
+              >
+                {item.text}
+              </a>
+            </div>
+          ))}
         </div>
       </div>
     </div>
