@@ -1,6 +1,6 @@
 ---
 title: Built-in Components
-last_edited: '2025-04-29T07:42:23.889Z'
+last_edited: '2025-04-29T08:03:26.022Z'
 tocIsHidden: true
 next: ''
 previous: ''
@@ -112,3 +112,23 @@ flowchart TD
 | Heading Labels... | ...Go Here   |
 | ----------------- | ------------ |
 | Put your...       | ...data here |
+
+### Accordians
+
+<accordion
+  heading="Full width accordian here... click on me"
+  docText={<>
+    Here's our pet llamas, arent they so cute?
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={true}
+/>
+
+<accordion
+  heading="Not full-width"
+  docText={<>
+    This content doesn't have any images
+  </>}
+  image=""
+  fullWidth={false}
+/>
