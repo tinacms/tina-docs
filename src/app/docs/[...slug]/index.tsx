@@ -30,7 +30,7 @@ export default function Document({ props, tinaProps }) {
   const { activeIds, contentRef } = useTocListener(documentationData);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[3fr_0.5fr] xl:grid-cols-[3fr_0.25fr]">
+    <div className="grid grid-cols-1 md:grid-cols-[3fr_0.25fr]">
       <div
         className={`max-w-full overflow-hidden break-words ${
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
