@@ -3,92 +3,37 @@ id: introduction
 seo:
   title: Example Title
   description: Example Description
-title: Tina Docs
-last_edited: '2025-04-29T02:21:41.656Z'
-next: content/docs/core-concepts/overview.mdx
+title: "Take Back your Docs \U0001F680"
+last_edited: '2025-04-24T04:40:43.546Z'
+tocIsHidden: false
+next: ''
 previous: ''
 ---
 
-## Introduction
+Most documentation builder platforms lock you into certain style patterns and rigid workflows that limit customization.
 
-<cardGrid
-  cards={[
-    {
-      title: "Card Title",
-      description: "Card Description",
-      link: "https://www.google.com",
-      linkText: "Search now"
-    },
-    {
-      title: "Card Title",
-      description: "Card Description",
-      link: "https://www.google.com",
-      linkText: "Search now"
-    },
-    { title: "Test", description: "some text" },
-    { title: "Test", description: "some more text" },
-    {
-      title: "This is a really long title.",
-      description:
-        "This is also a long bit of text just to check everything moves as expected."
-    },
-    { title: "Grid business.", description: "Grid business..." }
-  ]}
-/>
+**This starter package changes that.**
 
-<apiReference
-  property={[
-    {
-      name: "title",
-      type: "string",
-      default: "API Reference",
-      required: true,
-      experimental: true,
-      description: "This is some example text on how this works\n"
-    },
-    { groupName: "options", name: "format", type: "string", default: "table" },
-    {
-      groupName: "options",
-      name: "enableExperimental",
-      type: "boolean",
-      default: "false"
-    },
-    {
-      name: "description",
-      type: "string",
-      default: "API Reference",
-      description: "More example text.\n"
-    }
-  ]}
-/>
+Built with **TinaCMS**, it gives you full control over both your content and your UI—no more templates you can’t tweak or structures you’re stuck with.
 
-Tina is an open-source, Git-backed headless content management system (CMS) that empowers both developers and content creators to collaborate seamlessly on a single platform.
+![](/img/smashingmagazine-tinacms.gif)
 
-`test`.
+> Since TinaCMS has no proprietary data store, your content lives entirely in your GitHub repository—versioned, portable, and fully under your control.
 
-Tina enables developers to craft a custom visual editing experience perfectly tailored to their website or application while supporting a broad range of content types such as Markdown, MDX, and JSON.
+## What is TinaCMS?
 
-<youtube embedSrc="https://www.youtube.com/embed/zRkeKSZjlyw" />
+TinaCMS is a Git-backed CMS for developers. It lets you build a custom editing UI using React, with content stored in markdown or JSON and committed straight to Git. No database, no admin panel—just full control and instant versioning.
 
-## Advantages of Tina
+For more details, check out our documentation. If you have further questions, feel free to join our community on Discord.
 
-### Git-based content management
+## About the Starter Docs Package
 
-* Tina uses Git to provide a single source of truth for content and code, enhancing collaboration between developers and content editors.
-* Content changes are committed directly to your repository, ensuring version control and content history.
+This starter is a ready-to-use documentation site powered by TinaCMS. It includes:
 
-### Real-time visual editing
+* A minimal, clean UI with file-based routing.
+* Markdown content stored in your Git repo.
+* Live editing via Tina’s sidebar interface.
+* Pre-built components for code blocks, callouts, and navigation, and more.
+* Git-based version control out of the box.
 
-* Create and edit content directly in the context of your website or application with Tina's real-time visual editor.
-* Customizable content blocks allow content editors to assemble pages and manage content intuitively, similar to using a site builder.
-* The changes made by the editors can be previewed in real-time before publishing, ensuring the quality of the content.
-
-### Control over content
-
-* Tina's open-source model gives you complete control and ownership over your content.
-* Tina's (optional) self-hosted backend gives you piece of mind from vendor lock-in.
-
-### Scalability
-
-* **Performance at Scale:** Tina is designed for large-scale projects. Whether your site has hundreds or tens of thousands of pages, Tina ensures optimal performance.
-* **Powerful Query Capabilities:** With Tina's unique data layer, your Markdown content becomes as flexible and queryable as if it were in a database.
+It’s ideal for teams who want a fast, customizable way to build and maintain developer docs without sacrificing flexibility or control.

@@ -1,0 +1,207 @@
+---
+title: Updating the Data Model (TinaCMS Schema)
+last_edited: '2025-04-28T04:23:29.769Z'
+next: ''
+previous: ''
+---
+
+The TinaCMS schema defines the structure of your content, enabling you to create tailored content editing experiences. This guide will help you understand how to configure your schema to match your project's needs.
+
+## Schema Structure
+
+A Tina schema primarily consists of collections and their fields. The schema is defined in the `tina/config.ts` file:
+
+```tsx
+// tina/config.ts
+import { defineConfig } from 'tinacms'
+
+export default defineConfig({
+  // ... other config
+  schema: {
+    collections: [
+      // Your collections will be defined here
+    ],
+  },
+})
+```
+
+## Collections
+
+Collections represent groups of related content such as pages, blog posts, or products:
+
+```tsx
+{
+  name: 'post',
+  label: 'Blog Posts',
+  path: 'content/posts',
+  format: 'mdx', // or 'md', 'json', etc.
+  ui: {
+    // Optional UI configuration
+  },
+  fields: [
+    // Fields will be defined here
+  ],
+}
+```
+
+Key properties:
+- `name`: Unique identifier for the collection
+- `label`: Human-readable name displayed in the CMS
+- `path`: Directory where content files are stored
+- `format`: File format (mdx, md, json, yaml, etc.)
+- `fields`: Content structure definition
+
+## Fields
+
+Fields define the content structure within each collection:
+
+```tsx
+{
+  type: 'string',
+  name: 'title',
+  label: 'Post Title',
+  required: true,
+  isTitle: true,
+  description: 'The title of the blog post',
+}
+```
+
+### Common Field Types
+
+Tina supports various field types to represent different types of content:
+
+- `string`: Basic text input
+- `text`: Multi-line text input
+- `number`: Numeric input
+- `boolean`: True/false toggle
+- `datetime`: Date and time picker
+- `image`: Image selection with preview
+- `rich-text`: WYSIWYG editor with markdown support
+- `reference`: Reference to another document
+- `object`: Nested group of fields
+
+## Advanced Configuration
+
+### Field UI Configuration
+
+You can customize how fields appear in the editor:
+
+```tsx
+{
+  type: 'string',
+  name: 'category',
+  label: 'Category',
+  ui: {
+    component: 'select', // Use a select dropdown
+    options: ['Technology', 'Business', 'Design'],
+  },
+}
+```
+
+### Templates
+
+For collection items that can have different structures:
+
+```tsx
+{
+  name: 'page',
+  label: 'Pages',
+  path: 'content/pages',
+  templates: [
+    {
+      name: 'default',
+      label: 'Default Page',
+      fields: [/* default fields */],
+    },
+    {
+      name: 'landing',
+      label: 'Landing Page',
+      fields: [/* landing page specific fields */],
+    },
+  ],
+}
+```
+
+## Best Practices
+
+1. **Start Simple**: Begin with the essential fields and add complexity as needed
+2. **Use Clear Labels**: Provide clear, descriptive labels and field descriptions
+3. **Group Related Fields**: Use objects to group related fields together
+4. **Validate Content**: Add validation rules to ensure content quality
+5. **Consider the Editor Experience**: Think about how content creators will interact with your schema
+
+## Example: Blog Post Schema
+
+Here's a complete example of a blog post schema:
+
+```tsx
+{
+  name: 'post',
+  label: 'Blog Posts',
+  path: 'content/posts',
+  format: 'mdx',
+  fields: [
+    {
+      type: 'string',
+      name: 'title',
+      label: 'Title',
+      isTitle: true,
+      required: true,
+    },
+    {
+      type: 'datetime',
+      name: 'date',
+      label: 'Date Published',
+      required: true,
+    },
+    {
+      type: 'string',
+      name: 'excerpt',
+      label: 'Excerpt',
+      ui: {
+        component: 'textarea',
+      },
+    },
+    {
+      type: 'image',
+      name: 'featuredImage',
+      label: 'Featured Image',
+    },
+    {
+      type: 'object',
+      name: 'author',
+      label: 'Author',
+      fields: [
+        {
+          type: 'string',
+          name: 'name',
+          label: 'Name',
+        },
+        {
+          type: 'string',
+          name: 'avatar',
+          label: 'Avatar',
+          ui: {
+            component: 'image',
+          },
+        },
+      ],
+    },
+    {
+      type: 'string',
+      name: 'tags',
+      label: 'Tags',
+      list: true,
+    },
+    {
+      type: 'rich-text',
+      name: 'body',
+      label: 'Content',
+      isBody: true,
+    },
+  ],
+}
+```
+
+By thoughtfully designing your schema, you can create a content management experience that perfectly matches your project's needs while making it easy for content creators to work with your site.
+

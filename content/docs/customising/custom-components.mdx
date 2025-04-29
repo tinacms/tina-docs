@@ -1,0 +1,176 @@
+---
+title: Custom Components
+last_edited: '2025-04-28T04:29:17.298Z'
+next: ''
+previous: ''
+---
+
+Tina offers flexibility to extend its capabilities through custom components in two key areas: for users (page components) and adding custom React components as fields in the editor window.
+
+## Custom Page Components (Embeds)
+
+Custom page components let you extend your content with rich interactive elements that go beyond standard markdown. These components can be embedded within your content while still being editable through the Tina interface.
+
+We recommend using `.mdx` as the file format for collections which use Markdown with embeds.
+
+> This docs collection follows this structure.
+
+### Creating Embeds
+
+1. Define your component in your project:
+
+```tsx
+// components/tina-markdown/MyCustomEmbed.tsx
+import React from 'react'
+
+export interface MyCustomEmbedProps {
+  title: string
+  description: string
+  isHighlighted?: boolean
+}
+
+export default function MyCustomEmbed({ title, description, isHighlighted }: MyCustomEmbedProps) {
+  return (
+    <div className={`p-4 rounded-lg ${isHighlighted ? 'bg-blue-100' : 'bg-gray-100'}`}>
+      <h3 className="text-lg font-semibold">{title}</h3>
+      <p className="mt-2">{description}</p>
+    </div>
+  )
+}
+```
+
+2\. Register the component in your markdown components file:
+
+```tsx
+// components/tina-markdown/index.tsx
+import dynamic from 'next/dynamic'
+import type { MDXComponents } from 'mdx/types'
+import MyCustomEmbed from './MyCustomEmbed'
+
+export const components: MDXComponents = {
+  // ... other components
+  MyCustomEmbed,
+}
+```
+
+3\. Add the component to your collection schema:
+
+```tsx
+// tina/config.ts
+// ... imports
+export default defineConfig({
+  // ... other config
+  schema: {
+    collections: [
+      {
+        name: 'post',
+        label: 'Posts',
+        path: 'content/posts',
+        fields: [
+          // ... other fields
+          {
+            type: 'rich-text',
+            name: 'body',
+            label: 'Body',
+            templates: [
+              // ... other templates
+              {
+                name: 'MyCustomEmbed',
+                label: 'Custom Embed',
+                fields: [
+                  {
+                    name: 'title',
+                    label: 'Title',
+                    type: 'string',
+                    required: true,
+                  },
+                  {
+                    name: 'description',
+                    label: 'Description',
+                    type: 'string',
+                    required: true,
+                  },
+                  {
+                    name: 'isHighlighted',
+                    label: 'Highlight',
+                    type: 'boolean',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+})
+```
+
+Now users can insert your custom component through the Tina editor when editing content.
+
+## Custom Editor Fields
+
+You can extend Tina's editing capabilities by creating custom field components for the editing interface.
+
+### Creating Custom Fields
+
+1\. Create your custom field component:
+
+```tsx
+// components/tina-fields/ColorPickerField.tsx
+import React, { useState, useEffect } from 'react'
+import { wrapFieldsWithMeta } from 'tinacms'
+
+function ColorPickerField({ input, field }) {
+  return (
+    <div>
+      <label htmlFor={input.name}>{field.label || field.name}</label>
+      <input
+        type="color"
+        id={input.name}
+        {...input}
+        className="w-full h-10 cursor-pointer rounded"
+      />
+    </div>
+  )
+}
+
+export default wrapFieldsWithMeta(ColorPickerField)
+```
+
+2\. Register your custom field in your Tina config in the related field:
+
+```tsx
+// tina/config.ts
+import { defineConfig } from 'tinacms'
+import ColorPickerField from '../components/tina-fields/ColorPickerField'
+
+export default defineConfig({
+  // ... other config
+  schema: {
+    collections: [
+      {
+        name: 'post',
+        label: 'Posts',
+        path: 'content/posts',
+        fields: [
+          // ... other fields
+          {
+            type: 'string',
+            name: 'themeColor',
+            label: 'Theme Color',
+            description: 'Choose a theme color for this post',
+            ui: {
+              component: ColorPickerField,
+            }
+          },
+        ],
+      },
+    ],
+  },
+})
+```
+
+Your custom field will now be shown instead of the default field for that type.
+
+By leveraging these customization options, you can build a fully tailored content editing experience that meets your project's unique requirements.

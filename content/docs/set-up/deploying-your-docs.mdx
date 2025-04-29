@@ -1,0 +1,119 @@
+---
+title: Deploying Your Docs
+last_edited: '2025-04-28T01:13:51.404Z'
+next: ''
+previous: ''
+---
+
+Once you've set up your TinaDocs site locally and configured TinaCloud, the next step is deploying it to a hosting provider. This guide will walk you through the process, with a focus on deploying to Vercel.
+
+### Prerequisites
+
+Before deploying, ensure you have:
+
+1. A TinaCloud project set up (see [Setting Up TinaCloud](/docs/set-up/setting-up-tinacloud))
+2. Your repository fully configured with TinaCMS
+3. Environment variables for `NEXT_PUBLIC_TINA_CLIENT_ID` and `TINA_TOKEN`
+
+### Setting Up Environment Variables
+
+For your deployment to work correctly, you must set the following environment variables on your hosting provider:
+
+```javascript
+NEXT_PUBLIC_TINA_CLIENT_ID=<your-client-id>
+TINA_TOKEN=<your-read-only-token>
+```
+
+You can find these values in your TinaCloud dashboard:
+
+* Client ID: In the "Overview" tab of your project
+* Token: In the "Tokens" tab of your project
+
+### Configuring Your Build Command
+
+To ensure the TinaCMS admin interface is built alongside your site, your build command should run `tinacms build` before your site's build command:
+
+```bash
+tinacms build && next build
+```
+
+This creates the admin interface at `/admin/index.html` in your final build.
+
+### Deploying to Vercel (Recommended)
+
+Vercel is the recommended hosting provider for TinaDocs sites due to its seamless integration with Next.js.
+
+#### Step 1: Connect Your Repository
+
+1. Log in to [Vercel](https://vercel.com)
+2. Click "Add New Project"
+3. Connect your GitHub repository
+4. Select the repository containing your TinaDocs site
+
+#### Step 2: Configure Build Settings
+
+In the configuration screen:
+
+1. Leave the framework preset as "Next.js"
+2. Modify the build command if needed:
+   * If your package.json has a build script like `"build": "tinacms build && next build"`, you can leave the default setting
+   * Otherwise, set the build command to: `tinacms build && next build`
+
+![Vercel Build Settings](/img/vercel-build-settings.png)
+
+#### Step 3: Set Environment Variables
+
+Add your TinaCMS environment variables:
+
+1. Expand the "Environment Variables" section
+2. Add the following variables:
+   * `NEXT_PUBLIC_TINA_CLIENT_ID` = Your TinaCloud Client ID
+   * `TINA_TOKEN` = Your TinaCloud Read-Only Token
+3. Add any other environment variables your project requires
+
+#### Step 4: Deploy
+
+Click "Deploy" and Vercel will build and deploy your TinaDocs site.
+
+#### Step 5: Configure Branch Settings (Optional)
+
+For production branch settings:
+
+1. Go to your project settings in Vercel
+2. Navigate to "Git" section
+3. Configure your production branch (typically "main")
+
+### Other Deployment Options
+
+#### Netlify
+
+1. Connect your GitHub repository to Netlify
+2. Set the build command to: `tinacms build && next build`
+3. Set the publish directory to: `out` (for static export) or `.next` (for server rendering)
+4. Add the TinaCMS environment variables in the Netlify dashboard
+
+#### GitHub Pages
+
+1. Create a GitHub workflow file (`.github/workflows/deploy.yml`)
+2. Configure the workflow to set environment variables
+3. Use the `tinacms build && next build` command
+4. Set up GitHub Pages to deploy from your build output
+
+### Testing Your Deployment
+
+After deploying, verify that:
+
+1. Your site is accessible at your domain
+2. The TinaCMS admin interface works at `/admin/index.html`
+3. You can log in and make edits that are saved to your repository
+
+### Troubleshooting
+
+If you encounter issues:
+
+* **Admin page not found**: Ensure your build command includes `tinacms build`
+* **Authentication failures**: Check that your environment variables are correctly set
+* **Content not updating**: Verify your TinaCloud project has the correct site URL configured
+* **Branch issues**: Ensure your branch configuration in `tina/config.js` is correct
+
+For more details, visit the [official TinaCMS deployment documentation](https://tina.io/docs/tina-cloud/deployment-options/vercel).
