@@ -1,6 +1,6 @@
 ---
 title: Welcome to TinaDocs
-last_edited: '2025-04-29T00:18:31.072Z'
+last_edited: '2025-04-29T03:27:23.918Z'
 next: ''
 previous: ''
 ---
@@ -10,29 +10,22 @@ previous: ''
 TinaDocs is a documentation starter built with TinaCMS and NextJS. It's the most efficient way to
 build your own documentation site.
 
-<queryResponseTabs
-  query={<>
-    ```javascript
-    import { Button } from bla;
-    
-    function() {
-    }
-    ```
-  </>}
-  response={<>
-    ```javascript
-    import { Button } from bla;
-    
-    someFunction() {
-    aLongerFunction()
-    }
-    ```
-  </>}
-  customQueryName="React"
-  customResponseName="Angular"
-/>
-
 ## How to use it
+
+## MDX Components Included in this starter
+
+### Callouts
+
+Callouts are used to highlight specific blocks of content within your documentation.
+
+The types of callouts are:
+
+* Information
+* Warning
+* Error
+* Success
+* Idea
+* Locked
 
 <Callout
   variant="info"
@@ -74,4 +67,43 @@ build your own documentation site.
   body={<>
     Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
   </>}
+/>
+
+### Tabbed Content
+
+<queryResponseTabs
+  query={<>
+    ```javascript
+    someFunctionDocumentation{
+    console.log("myFunction")
+    }
+    ```
+  </>}
+  response={<>
+    ```graphql
+    Or even some GraphQL Request
+    ```
+  </>}
+/>
+
+### Accordians
+
+<accordion
+  heading="Our full width accordian"
+  docText={<>
+    Look at how cute our llamas are
+    
+    Rico (right) and Tina (left)
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={true}
+/>
+
+<accordion
+  heading="Our non-full width accrdian"
+  docText={<>
+    Nada
+  </>}
+  image=""
+  fullWidth={false}
 />
