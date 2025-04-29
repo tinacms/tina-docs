@@ -1,6 +1,6 @@
 ---
 title: Welcome to TinaDocs
-last_edited: '2025-04-28T07:38:02.668Z'
+last_edited: '2025-04-29T00:18:31.072Z'
 next: ''
 previous: ''
 ---
@@ -10,7 +10,27 @@ previous: ''
 TinaDocs is a documentation starter built with TinaCMS and NextJS. It's the most efficient way to
 build your own documentation site.
 
-<queryResponseTabs query="Testing#testing#testing" response="Testing#" />
+<queryResponseTabs
+  query={<>
+    ```javascript
+    import { Button } from bla;
+    
+    function() {
+    }
+    ```
+  </>}
+  response={<>
+    ```javascript
+    import { Button } from bla;
+    
+    someFunction() {
+    aLongerFunction()
+    }
+    ```
+  </>}
+  customQueryName="React"
+  customResponseName="Angular"
+/>
 
 ## How to use it
 

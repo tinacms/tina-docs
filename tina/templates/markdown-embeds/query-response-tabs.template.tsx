@@ -3,30 +3,14 @@ export const QueryResponseTabsTemplate = {
   label: "Query Response Tabs",
   fields: [
     {
-      type: "string",
+      type: "rich-text",
       name: "query",
       label: "Query",
-      description:
-        "Paste GraphQL query here. '#' are auto-inserted as spacing placeholders and should not be used.",
-      ui: {
-        /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
-        component: "textarea",
-        format: (val?: string) => val?.replaceAll("#", " "),
-        parse: (val?: string) => val?.replaceAll(" ", "#"),
-      },
     },
     {
-      type: "string",
+      type: "rich-text",
       name: "response",
       label: "Response",
-      description:
-        "Paste GraphQL response data here. '#' are auto-inserted as spacing placeholders and should not be used.",
-      ui: {
-        /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
-        component: "textarea",
-        format: (val?: string) => val?.replaceAll("#", " "),
-        parse: (val?: string) => val?.replaceAll(" ", "#"),
-      },
     },
     {
       type: "boolean",

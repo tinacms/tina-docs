@@ -20,6 +20,16 @@ module.exports = {
     fontFamily: {
       tuner: ["tuner-medium", ...defaultTheme.fontFamily.sans],
       "tuner-regular": ["tuner-regular", ...defaultTheme.fontFamily.sans],
+      mono: [
+        "ui-monospace",
+        "SFMono-Regular",
+        "Menlo",
+        "Monaco",
+        "Consolas",
+        "Liberation Mono",
+        "Courier New",
+        "monospace",
+      ],
     },
   },
   plugins: [],
