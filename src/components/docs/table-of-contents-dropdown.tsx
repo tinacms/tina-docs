@@ -61,7 +61,7 @@ export const TableOfContentsDropdown = ({ tocData }) => {
           >
             <span className="flex items-center space-x-2">
               <Bars3Icon className="size-5 text-orange-500" />
-              <span className="py-1 text-slate-600">Table of Contents</span>
+              <span className="py-1 text-slate-600">On this page</span>
             </span>
           </div>
           {isTableOfContentsOpen && (
