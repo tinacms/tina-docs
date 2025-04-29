@@ -70,7 +70,7 @@ const ApiReference = (data: {
             </div>
             {property.default && (
               <div className="text-neutral-light font-inter text-sm">
-                Default: <code clasName="font">{property.default}</code>
+                Default: <code>{property.default}</code>
               </div>
             )}
           </div>
