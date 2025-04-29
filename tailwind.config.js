@@ -9,6 +9,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      height: {
+        18: "72px",
+      },
+      text: {
+        "2xs": "10px",
+      },
       backgroundImage: {
         "blob-bg": blobBg,
       },

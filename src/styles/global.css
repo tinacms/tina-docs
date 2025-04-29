@@ -1,4 +1,4 @@
-/* Tailwind imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 
@@ -31,4 +31,8 @@
   --color-disabled-gray: #6B7280;
   --color-grayblue: #17518C;
   --color-deepblue: #1D2C6C;
+  --color-neutral: #111827;
+  --color-neutral-light: #6B7280;
+  --color-neutral-border: #D1D5DB;
+  --font-inter: "Inter", sans-serif;
 }

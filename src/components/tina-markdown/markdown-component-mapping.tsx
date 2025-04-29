@@ -90,7 +90,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   ul: (props) => <ul className="my-4 ml-2 list-disc" {...props} />,
   ol: (props) => <ol className="my-4 ml-2 list-decimal" {...props} />,
   li: (props) => <li className="mb-2 ml-8" {...props} />,
-  p: (props) => <p className="mb-2" {...props} />,
+  p: (props) => <p className="mb-2 font-inter" {...props} />,
   block_quote: (props) => <Callout body={props?.children} variant="info" />,
   a: (props) => (
     <a
