@@ -23,7 +23,7 @@ export const generateMarkdown = (
 };
 
 // Helper function to convert text to a valid HTML ID
-function getIdSyntax(text: string) {
+export function getIdSyntax(text: string) {
   return text.toLowerCase().replace(/ /g, "-");
 }
 
@@ -84,7 +84,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
     return null;
   }
   // console.log(activeId);
-  // console.log(tocItems);
+  console.log('tocItems', tocItems);
   // console.log(activeids);
 
   return (
