@@ -1,6 +1,14 @@
 export const AccordionTemplate = {
   name: "accordion",
   label: "Accordion",
+  ui: {
+    defaultItem: {
+      heading: "Click to expand",
+      docText: "",
+      image: "",
+      fullWidth: false,
+    },
+  },
   fields: [
     {
       name: "heading",
@@ -11,7 +19,7 @@ export const AccordionTemplate = {
     },
     {
       name: "docText",
-      label: "docText",
+      label: "Body Text",
       isBody: true,
       type: "rich-text",
     },
@@ -19,6 +27,11 @@ export const AccordionTemplate = {
       name: "image",
       label: "image",
       type: "image",
+    },
+    {
+      name: "fullWidth",
+      label: "Full Width",
+      type: "boolean",
     },
   ],
 };

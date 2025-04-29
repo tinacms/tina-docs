@@ -3,12 +3,18 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MarkdownComponentMapping from "../markdown-component-mapping";
-import HeaderFormat from "../standard-elements/header-format";
 
-const Accordion = (data: {
+
+const Accordion = ({
+  docText,
+  image,
+  heading,
+  fullWidth = false,
+}: {
   docText: string;
   image: string;
   heading?: string;
+  fullWidth?: boolean;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -18,48 +24,55 @@ const Accordion = (data: {
   };
 
   return (
-    <div
-      className={`mb-2 max-w-full overflow-hidden rounded-lg bg-white/40 shadow-sm transition-[width] duration-300 ease-in-out ${
-        isExpanded ? "w-full" : "w-80 delay-700"
-      }`}
+    <div className="flex flex-col gap-2 justify-center items-center">
+<div
+      className={`mb-2 max-w-full overflow-hidden rounded-lg bg-white/40 shadow-sm transition-[width] duration-300 ease-in-out ${fullWidth ? "w-full" : "w-3/4"}`}
     >
       <div
         className="flex cursor-pointer items-center justify-between px-4 py-1"
         onClick={toggleExpand}
       >
-        <HeaderFormat level={6}>
-          {data.heading || "Click to expand"}
-        </HeaderFormat>
+        <h4 className="text-black text-base font-tuner mt-2 mb-1">
+          {heading || "Click to expand"}
+        </h4>
         <div>
           {isExpanded ? (
-            <MinusIcon className="size-3 text-blue-800" />
+            <MinusIcon className="size-5 text-black" />
           ) : (
-            <PlusIcon className="size-3 text-gray-500" />
+            <PlusIcon className="size-5 text-black" />
           )}
         </div>
       </div>
 
       <div
-        className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
+        className={`grid gap-4 border-t border-gray-100 transition-all duration-300 ease-in-out ${
           isExpanded
-            ? "max-h-[2000px] opacity-100 delay-500"
+            ? "max-h-[2000px] opacity-100"
             : "max-h-0 overflow-hidden opacity-0"
-        } ${data.image ? "sm:grid-cols-2" : ""}`}
+        } ${image ? "sm:grid-cols-2" : ""}`}
         ref={contentRef}
       >
         <div className="p-4">
           <TinaMarkdown
-            content={data.docText as any}
+            content={docText as any}
             components={MarkdownComponentMapping}
           />
         </div>
-        {data.image && (
+        {image && (
           <div className="p-4">
-            <Image src={data.image} alt="image" className="w-full rounded-lg" />
+            <Image
+              src={image}
+              alt="image"
+              className="rounded-lg"
+              width={500}
+              height={500}
+            />
           </div>
         )}
       </div>
     </div>
+    </div>
+    
   );
 };
 

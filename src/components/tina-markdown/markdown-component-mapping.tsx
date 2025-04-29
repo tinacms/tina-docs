@@ -35,7 +35,7 @@ type ComponentMapping = {
   };
   Callout: { body: string; variant: string };
 
-  accordion: { docText: string; image: string; heading?: string };
+  accordion: { docText: string; image: string; heading?: string; fullWidth?: boolean };
   recipe: {
     title?: string;
     description?: string;
