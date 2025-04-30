@@ -2,7 +2,7 @@ import { DEFAULT_SEO } from "./metadata/defaultSeo";
 
 const isDev = process.env.NODE_ENV === "development";
 
-export const evnUrl = (url: string | URL | null | undefined) => {
+export const envUrl = (url: string | URL | null | undefined) => {
   if (!url) return "";
 
   if (isDev) {
