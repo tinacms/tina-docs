@@ -65,6 +65,7 @@ export const Settings = {
       name: "defaultOGImage",
       label: "Default OG Image",
       type: "image",
+      uploadDir: () => "og",
     },
     {
       name: "social",

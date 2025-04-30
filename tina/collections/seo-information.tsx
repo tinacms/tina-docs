@@ -39,6 +39,7 @@ export const SeoInformation = {
       type: "image",
       label: "Open Graph Image",
       name: "ogImage",
+      uploadDir: () => "og",
       description: "Default image if no image is provided",
     },
   ],
