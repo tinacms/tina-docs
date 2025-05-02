@@ -19,26 +19,22 @@ const TableOfContentsItems = ({ tocData }) => {
   console.log("tocData", tocData);
   return (
     <div className="animate-fade-down animate-duration-300 absolute z-10 mt-4 max-h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-lg">
-      {tocData?.map((item) => (
-        <div
-          className="flex gap-2 font-light group"
-          key={getIdSyntax(item.text)}
-        >
-          <div
-            className={`border-r border-1 border-gray-200 group-hover:border-neutral-500
-            `}
-          ></div>
-          <a
-            href={`#${getIdSyntax(item.text)}`}
-            onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
-            className={`${
-              item.type === "h3" ? "pl-4" : "pl-2"
-            } py-1.5 text-gray-400 group-hover:text-black`}
+      {tocData?.map((item, index) => {
+        const textIndentation =
+          item.type === "h3" ? "ml-4" : item.type === "h4" ? "ml-8" : "";
+
+        const linkHref = `#${item.text.replace(/\s+/g, "-").toLowerCase()}`;
+
+        return (
+          <Link
+            key={index}
+            href={linkHref}
+            className={`block pl-6 transition-colors hover:text-orange-500 ${textIndentation} pb-1`}
           >
             {item.text}
-          </a>
-        </div>
-      ))}
+          </Link>
+        );
+      })}
     </div>
   );
 };

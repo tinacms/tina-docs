@@ -1,68 +1,99 @@
 {
-  "title": "TinaDocs",
+  "title": "TinaDocs™",
   "supermenuGroup": [
     {
       "title": "Introduction",
       "items": [
         {
-          "title": "Overview",
+          "title": "Take Back your Docs",
           "slug": "content/docs/index.mdx",
           "_template": "item"
         },
         {
-          "title": "Using TinaDocs Starter",
-          "slug": "content/docs/introduction/using-tinadocs.mdx",
+          "title": "What's Included?",
+          "slug": "content/docs/introduction/whats-included.mdx",
           "_template": "item"
         },
         {
-          "title": "FAQ",
-          "slug": "content/docs/introduction/faq.mdx",
+          "title": "Built-in Components",
+          "slug": "content/docs/introduction/built-in-components.mdx",
           "_template": "item"
         }
       ]
     },
     {
-      "title": "Core Concepts",
+      "title": "Project Set-Up",
       "items": [
         {
-          "title": "Overview",
-          "slug": "content/docs/core-concepts/overview.mdx",
+          "title": "Setting Up Locally",
+          "slug": "content/docs/set-up/local-set-up.mdx",
           "_template": "item"
         },
         {
-          "title": "Data Fetching",
-          "slug": "content/docs/core-concepts/data-fetching.mdx",
+          "title": "Setting Up TinaCloud",
+          "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
           "_template": "item"
         },
         {
-          "title": "Visual Editing",
+          "title": "Self-Hosting Your Datalayer",
           "items": [
             {
-              "title": "Overview",
-              "slug": "content/docs/core-concepts/visual-editing/overview.mdx",
+              "title": "What is the Datalayer?",
+              "slug": "content/docs/set-up/self-hosting/what-is-the-datalayer.mdx",
               "_template": "item"
             },
             {
-              "title": "React",
-              "slug": "content/docs/core-concepts/visual-editing/react.mdx",
+              "title": "Configuring Your Own Datalayer",
+              "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
               "_template": "item"
             }
           ],
           "_template": "items"
         },
         {
-          "title": "Querying Content",
-          "slug": "content/docs/core-concepts/querying-content.mdx",
+          "title": "Deploying Your Docs",
+          "slug": "content/docs/set-up/deploying-your-docs.mdx",
           "_template": "item"
         }
       ]
     },
     {
-      "title": "The \"Tina\" Folder",
+      "title": "Customise Your Docs",
       "items": [
         {
-          "title": "Overview",
-          "slug": "content/docs/tina-folder/overview.mdx",
+          "title": "Editing Content",
+          "slug": "content/docs/customising/editing-content.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Theming and Styling",
+          "slug": "content/docs/customising/updating-the-styling.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Working with Tina",
+          "items": [
+            {
+              "title": "Learn TinaCMS",
+              "slug": "content/docs/customising/learn-tinacms.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Update the Data Model",
+              "slug": "content/docs/customising/schema.mdx",
+              "_template": "item"
+            }
+          ],
+          "_template": "items"
+        },
+        {
+          "title": "Custom Components",
+          "slug": "content/docs/customising/custom-components.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Technical References",
+          "slug": "content/docs/customising/technical-reference.mdx",
           "_template": "item"
         }
       ]

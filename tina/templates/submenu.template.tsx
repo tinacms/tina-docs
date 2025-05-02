@@ -1,7 +1,7 @@
 import type { Template } from "tinacms";
-import itemTemplate from "./toc-item.template";
+import { itemTemplate } from "./navbar-ui.template";
 
-const UIAndLabelling: any = {
+const createMenuTemplate = (templates: Template[]): Template => ({
   label: "Submenu",
   name: "items",
   ui: {
@@ -9,10 +9,6 @@ const UIAndLabelling: any = {
       return { label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}` };
     },
   },
-};
-
-const thirdLevelSubmenu: Template = {
-  ...UIAndLabelling,
   fields: [
     { name: "title", label: "Name", type: "string" },
     {
@@ -20,37 +16,19 @@ const thirdLevelSubmenu: Template = {
       label: "Submenu Items",
       type: "object",
       list: true,
-      templates: [itemTemplate],
+      templates,
     },
   ],
-};
+});
 
-const secondLevelSubmenu: Template = {
-  ...UIAndLabelling,
-  fields: [
-    { name: "title", label: "Name", type: "string" },
-    {
-      name: "items",
-      label: "Submenu Items",
-      type: "object",
-      list: true,
-      templates: [thirdLevelSubmenu, itemTemplate],
-    },
-  ],
-};
-
-export const submenuTemplate: Template = {
-  ...UIAndLabelling,
-  fields: [
-    { name: "title", label: "Name", type: "string" },
-    {
-      name: "items",
-      label: "Submenu Items",
-      type: "object",
-      list: true,
-      templates: [secondLevelSubmenu, itemTemplate],
-    },
-  ],
-};
+const thirdLevelSubmenu: Template = createMenuTemplate([itemTemplate]);
+const secondLevelSubmenu: Template = createMenuTemplate([
+  thirdLevelSubmenu,
+  itemTemplate,
+]);
+export const submenuTemplate: Template = createMenuTemplate([
+  secondLevelSubmenu,
+  itemTemplate,
+]);
 
 export default submenuTemplate;

@@ -51,7 +51,9 @@ export const NavigationDropdown = ({ tocData }) => {
       </div>
       {isTableOfContentsOpen && (
         <div className="relative w-full">
-          <NavigationDropdownContent tocData={tocData} />
+          <NavigationDropdownContent
+            tocData={Array.isArray(tocData.items) ? tocData.items : []}
+          />
         </div>
       )}
     </div>
