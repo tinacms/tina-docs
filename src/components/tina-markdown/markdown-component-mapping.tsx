@@ -1,7 +1,7 @@
 import type { Components } from "tinacms/dist/rich-text";
 import { CardGrid } from "./embedded-elements/card-grid";
 import Accordion from "./embedded-elements/accordion";
-import ApiReference from "./embedded-elements/api-reference";
+import TypeDefinition from "./embedded-elements/type-definition";
 import Callout from "./embedded-elements/callout";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
@@ -22,7 +22,7 @@ type ComponentMapping = {
     customQueryName?: string;
     customResponseName?: string;
   };
-  apiReference: {
+  typeDefinition: {
     title: string;
     property: {
       groupName: string;
@@ -35,7 +35,12 @@ type ComponentMapping = {
   };
   Callout: { body: string; variant: string };
 
-  accordion: { docText: string; image: string; heading?: string; fullWidth?: boolean };
+  accordion: {
+    docText: string;
+    image: string;
+    heading?: string;
+    fullWidth?: boolean;
+  };
   recipe: {
     title?: string;
     description?: string;
@@ -76,7 +81,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   cardGrid: (props) => <CardGrid {...props} />,
   recipe: (props) => <RecipeBlock {...props} />,
   accordion: (props) => <Accordion {...props} />,
-  apiReference: (props) => <ApiReference {...props} />,
+  typeDefinition: (props) => <TypeDefinition {...props} />,
   youtube: (props) => <Youtube {...props} />,
   queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
   Callout: (props) => <Callout {...props} variant={props?.variant} />,

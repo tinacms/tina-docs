@@ -1,5 +1,5 @@
 import AccordionTemplate from "@/tina/templates/markdown-embeds/accordion.template";
-import ApiReferenceTemplate from "@/tina/templates/markdown-embeds/api-reference.template";
+import TypeDefinitionTemplate from "@/tina/templates/markdown-embeds/type-definition.template";
 import CalloutTemplate from "@/tina/templates/markdown-embeds/callout.template";
 import CardGridTemplate from "@/tina/templates/markdown-embeds/card-grid.template";
 import QueryResponseTabsTemplate from "@/tina/templates/markdown-embeds/query-response-tabs.template";
@@ -90,7 +90,7 @@ export const docsCollection = {
         CardGridTemplate as Template,
         RecipeTemplate as Template,
         AccordionTemplate as Template,
-        ApiReferenceTemplate as Template,
+        TypeDefinitionTemplate as Template,
         YoutubeTemplate as Template,
         QueryResponseTabsTemplate as Template,
         CalloutTemplate as Template,
