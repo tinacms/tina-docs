@@ -1,10 +1,12 @@
 import { TinaClient } from "@/app/tina-client";
+import settings from "@/content/siteConfig.json";
 import { fetchTinaData } from "@/src/services/tina/fetch-tina-data";
 import getTableOfContents from "@/src/utils/docs/getPageTableOfContents";
 import client from "@/tina/__generated__/client";
 import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
 import Document from ".";
+
 export async function generateStaticParams() {
   const contentDir = "./content/docs/";
   const files = await fg(`${contentDir}**/*.mdx`);
@@ -24,6 +26,9 @@ export async function generateMetadata({
   const dynamicParams = await params;
   const slug = dynamicParams?.slug?.join("/");
   const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
+  if (data.docs.seo && !data.docs?.seo?.canonicalUrl) {
+    data.docs.seo.canonicalUrl = `${settings.siteUrl}/docs/${slug}`;
+  }
   return getSeo(data);
 }
 
