@@ -1,13 +1,22 @@
 import { TinaClient } from "@/app/tina-client";
+import settings from "@/content/siteConfig.json";
 import { fetchTinaData } from "@/src/services/tina/fetch-tina-data";
 import getTableOfContents from "@/src/utils/docs/getPageTableOfContents";
 import client from "@/tina/__generated__/client";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from "./[...slug]";
 
+const dev = process.env.NODE_ENV === "development";
+
 export async function generateMetadata() {
   const slug = "index";
   const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
+  if (data.docs.seo && !data.docs?.seo?.canonicalUrl) {
+    data.docs.seo.canonicalUrl = `${
+      dev ? "http://localhost:3000" : settings.siteUrl
+    }/docs`;
+  }
+
   return getSeo(data);
 }
 

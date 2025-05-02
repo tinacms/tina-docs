@@ -29,6 +29,19 @@ export const SeoInformation = {
         component: TextInputWithCount(150, true),
       },
     },
+    {
+      type: "string",
+      label: "Canonical URL",
+      name: "canonicalUrl",
+      description: "Default URL if no URL is provided",
+    },
+    {
+      type: "image",
+      label: "Open Graph Image",
+      name: "ogImage",
+      uploadDir: () => "og",
+      description: "Default image if no image is provided",
+    },
   ],
 };
 
