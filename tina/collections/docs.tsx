@@ -35,6 +35,8 @@ export const docsCollection = {
       name: "title",
       label: "Title",
       type: "string",
+      isTitle: true,
+      required: true,
     },
     {
       type: "string",
