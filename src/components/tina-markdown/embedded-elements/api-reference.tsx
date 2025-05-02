@@ -103,12 +103,14 @@ const ApiReference = (data: {
           }`}
         >
           <div>
-            {required && (
-              <p className="text-sm font-medium text-orange-500">REQUIRED</p>
-            )}
             <h3 className="text-md font-inter font-bold text-lg">
               {groupName || "Object"}
             </h3>
+            <div className="py-1">
+              {required && (
+                <p className="text-2xs font-bold text-orange-500">REQUIRED</p>
+              )}
+            </div>
           </div>
 
           <div className="transform transition-transform duration-300 ease-in-out">

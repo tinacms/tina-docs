@@ -1,10 +1,11 @@
 ---
-last_edited: '2025-04-27T23:35:42.910Z'
+title: Built-in Components
+last_edited: '2025-05-02T05:28:00.852Z'
+tocIsHidden: true
 next: ''
 previous: ''
-title: 'Built-in Components'
-tocIsHidden: true
 ---
+
 This page can be used as a reference to see what's possible with TinaCMS, and also what components come built in with TinaDocs.
 
 All components are built with React and Tailwind – pull down the repo to add additional components or modify existing component behaviour.
@@ -72,17 +73,33 @@ All components are built with React and Tailwind – pull down the repo to add a
 
 <accordion />
 
-### API Reference
-
 ## Technical Components
 
 ### Our "Recipe" - Code Accordion
 
 <recipe />
 
-### API Reference
+### Type Definitions
 
-<apiReference />
+<apiReference
+  property={[
+    {
+      groupName: "Options",
+      name: "format",
+      type: "string",
+      default: "table",
+      required: true
+    },
+    {
+      groupName: "Options",
+      name: "enableExperimental",
+      type: "boolean",
+      default: "false"
+    },
+    { name: "title", type: "string", default: "API Reference" },
+    { name: "description", type: "string", default: "API Reference" }
+  ]}
+/>
 
 ### Query-Response
 
