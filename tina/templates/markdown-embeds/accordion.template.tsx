@@ -4,8 +4,9 @@ export const AccordionTemplate = {
   ui: {
     defaultItem: {
       heading: "Click to expand",
+      //TODO: Need to configure this to be a rich text field
       docText: "",
-      image: "",
+      image: "/img/rico-replacement.jpg",
       fullWidth: false,
     },
   },

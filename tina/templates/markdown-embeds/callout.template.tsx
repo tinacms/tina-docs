@@ -1,6 +1,12 @@
 export const CalloutTemplate = {
   name: "Callout",
   label: "Callout",
+  ui: {
+    defaultItem: {
+      body: "This is a callout",
+      variant: "warning",
+    },
+  },
   fields: [
     {
       name: "body",
