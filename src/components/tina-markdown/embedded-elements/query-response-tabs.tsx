@@ -23,6 +23,8 @@ export const QueryResponseTabs = ({ ...props }) => {
   const [hasCopied, setHasCopied] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  console.log(props);
+
   useEffect(() => {
     const updateHeight = () => {
       if (contentRef.current) {
@@ -66,6 +68,13 @@ export const QueryResponseTabs = ({ ...props }) => {
 
   return (
     <div className="mb-1">
+      <style>{`
+        .query-response-pre pre,
+        .query-response-pre code {
+          white-space: pre !important;
+          tab-size: 2;
+        }
+      `}</style>
       <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-slate-900">
         {/* TOP SECTION w/ Buttons */}
         <div className="flex items-center border-b border-b-white/30 w-full">
@@ -124,18 +133,19 @@ export const QueryResponseTabs = ({ ...props }) => {
         >
           <div
             ref={contentRef}
-            className="font-light font-mono text-xs text-[#D5DEEB] relative"
+            className="font-light font-mono text-xs text-[#D5DEEB] relative query-response-pre"
             style={{
               fontFamily:
                 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
               fontWeight: 300,
+              whiteSpace: "pre",
             }}
           >
             {isQuery ? (
               <div className="p-2 relative">
                 <pre
                   className="language-javascript line-numbers"
-                  style={{ position: "relative" }}
+                  style={{ position: "relative", whiteSpace: "pre" }}
                 >
                   <code className="language-javascript">{props.query}</code>
                 </pre>
@@ -144,7 +154,7 @@ export const QueryResponseTabs = ({ ...props }) => {
               <div className="p-2 relative">
                 <pre
                   className="language-javascript line-numbers"
-                  style={{ position: "relative" }}
+                  style={{ position: "relative", whiteSpace: "pre" }}
                 >
                   <code className="language-javascript">{props.response}</code>
                 </pre>
