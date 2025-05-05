@@ -11,7 +11,6 @@ import "prismjs/plugins/line-highlight/prism-line-highlight.css";
 //Custom theming
 import "./code-block.helper.css";
 
-// Import icons from Heroicons React
 import {
   CheckIcon as CheckIconOutline,
   ClipboardIcon as ClipboardIconOutline,
