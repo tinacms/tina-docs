@@ -1,6 +1,6 @@
 ---
 title: Built-in Components
-last_edited: '2025-05-05T04:20:06.112Z'
+last_edited: '2025-05-05T04:34:27.742Z'
 tocIsHidden: true
 next: ''
 previous: ''
@@ -34,6 +34,54 @@ All components are built with React and Tailwind – pull down the repo to add a
       description: "Organise your thoughts. 🧠"
     }
   ]}
+/>
+
+### Scroll-Based Showcase
+
+<scrollShowcase
+  showcaseItems={[
+    {
+      title: "Your Website",
+      image: "/SCR-20250408-oknp.png",
+      content:
+        "With TinaCMS, the developer hosts the site where they like, using whichever framework they choose\n",
+      useAsSubsection: false
+    },
+    {
+      title: "TinaCloud",
+      image: "/SCR-20250407-kyks.png",
+      content:
+        "Out of the box, we provide an easy-to-use hosted version of the backend, called TinaCloud\n",
+      useAsSubsection: false
+    },
+    {
+      title: "Git-Backed Content",
+      image: "/img/rico-replacement.jpg",
+      content:
+        "All your content gets backed by git into JSON, Markdown or MDX Files\n",
+      useAsSubsection: false
+    }
+  ]}
+/>
+
+### Accordians
+
+<accordion
+  heading="Full width accordian here... click on me"
+  docText={<>
+    Here's our pet llamas, arent they so cute?
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={true}
+/>
+
+<accordion
+  heading="Not full-width"
+  docText={<>
+    This content doesn't have any images
+  </>}
+  image=""
+  fullWidth={false}
 />
 
 ## Technical Components
@@ -112,26 +160,6 @@ flowchart TD
 | Heading Labels... | ...Go Here   |
 | ----------------- | ------------ |
 | Put your...       | ...data here |
-
-### Accordians
-
-<accordion
-  heading="Full width accordian here... click on me"
-  docText={<>
-    Here's our pet llamas, arent they so cute?
-  </>}
-  image="/img/rico-replacement.jpg"
-  fullWidth={true}
-/>
-
-<accordion
-  heading="Not full-width"
-  docText={<>
-    This content doesn't have any images
-  </>}
-  image=""
-  fullWidth={false}
-/>
 
 ### Code Blocks
 
