@@ -83,9 +83,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
   if (!tocItems || tocItems.length === 0) {
     return null;
   }
-  // console.log(activeId);
-  console.log('tocItems', tocItems);
-  // console.log(activeids);
+  
 
   return (
     <div className="mb-[-0.375rem] flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">

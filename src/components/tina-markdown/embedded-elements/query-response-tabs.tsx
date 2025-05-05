@@ -22,7 +22,7 @@ export const QueryResponseTabs = ({ ...props }) => {
   const [hasCopied, setHasCopied] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  console.log(props);
+
 
   useEffect(() => {
     const updateHeight = () => {

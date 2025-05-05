@@ -16,7 +16,7 @@ const TableOfContentsItems = ({ tocData }) => {
       window.history.pushState(null, "", `#${id}`);
     }
   };
-  console.log("tocData", tocData);
+
   return (
     <div className="animate-fade-down animate-duration-300 absolute z-10 mt-4 max-h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-lg">
       {tocData?.map((item) => (
