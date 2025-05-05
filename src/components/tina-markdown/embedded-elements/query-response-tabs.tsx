@@ -21,34 +21,36 @@ export const QueryResponseTabs = ({ ...props }) => {
   const [height, setHeight] = useState(0);
   const [hasCopied, setHasCopied] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
-
-
+  const activeContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const updateHeight = () => {
       if (contentRef.current) {
-        setHeight(contentRef.current.scrollHeight);
+        contentRef.current.style.maxHeight = `${
+          activeContentRef.current?.scrollHeight || 0
+        }px`;
       }
     };
 
-    updateHeight();
-
     const resizeObserver = new ResizeObserver(updateHeight);
-    if (contentRef.current) {
-      resizeObserver.observe(contentRef.current);
+    if (activeContentRef.current) {
+      resizeObserver.observe(activeContentRef.current);
     }
+
+    // Initial height update
+    updateHeight();
 
     return () => {
       resizeObserver.disconnect();
     };
-  }, [isQuery]);
+  }, []); // No dependencies needed
 
-  // Highlight code when query/response changes
+  // Highlight code when mounted
   useEffect(() => {
     if (document) {
       Prism.highlightAll();
     }
-  }, [props.query, props.response, isQuery]);
+  }, []); // No dependencies needed
 
   // Handle the copy action
   const handleCopy = () => {

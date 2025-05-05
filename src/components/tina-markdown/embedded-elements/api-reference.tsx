@@ -14,12 +14,12 @@ const ApiReference = (data: {
   }[];
 }) => {
   const { property: properties } = data;
-  const [openGroups, setOpenGroups] = useState([]);
+  const [openGroups, setOpenGroups] = useState<string[]>([]);
   const groupRefs = useRef(new Map());
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
-      openGroups.forEach((groupName) => {
+      for (const groupName of openGroups) {
         const element = groupRefs.current.get(groupName);
         if (element) {
           const content = element.firstElementChild;
@@ -27,7 +27,7 @@ const ApiReference = (data: {
             element.style.height = `${content.offsetHeight}px`;
           }
         }
-      });
+      }
     });
 
     resizeObserver.observe(document.body);

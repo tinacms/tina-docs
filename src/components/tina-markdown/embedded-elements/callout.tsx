@@ -1,4 +1,4 @@
-import { TinaMarkdown, TinaMarkdownContent } from "tinacms/dist/rich-text";
+import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
 import { MarkdownComponentMapping } from "../markdown-component-mapping";
 import { MdLightbulb } from "react-icons/md";
 import { IoMdInformationCircle } from "react-icons/io";
@@ -15,7 +15,7 @@ const variants = {
   error: "border-x-red-400",
   idea: "border-x-teal-400",
   lock: "border-x-gray-400",
-  api: "border-x-orange-400"
+  api: "border-x-orange-400",
 };
 
 const icons = {
@@ -25,7 +25,7 @@ const icons = {
   error: RxCross2,
   idea: MdLightbulb,
   lock: MdLock,
-  api: LuChevronsLeftRight
+  api: LuChevronsLeftRight,
 };
 
 const iconColors = {
@@ -35,7 +35,7 @@ const iconColors = {
   error: "text-red-400",
   idea: "text-teal-400",
   lock: "text-gray-400",
-  api: "text-orange-400"
+  api: "text-orange-400",
 };
 
 const Callout = ({ body, variant = "warning" }) => {

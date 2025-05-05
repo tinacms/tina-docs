@@ -27,7 +27,7 @@ export const CardGrid = (data: {
                 <p className="font-tuner flex items-center">
                   <span className="relative bg-gradient-to-r from-grayblue/80 to-deepblue bg-clip-text text-transparent">
                     {card.linkText ?? "See more"}
-                    <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-gradient-to-r from-grayblue/80 to-deepblue group-hover:w-full transition-all duration-300 ease-in-out"></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-gradient-to-r from-grayblue/80 to-deepblue group-hover:w-full transition-all duration-300 ease-in-out" />
                   </span>
                   <span className="ml-1 text-deepblue"> ›</span>
                 </p>

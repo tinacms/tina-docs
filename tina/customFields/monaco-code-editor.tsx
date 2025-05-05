@@ -5,14 +5,11 @@ import debounce from "lodash/debounce";
 
 const MINIMUM_HEIGHT = 75;
 
-
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
 }) as any;
 
-
 if (typeof window !== "undefined") {
-
   import("@monaco-editor/react")
     .then(({ loader }) => {
       loader.config({
@@ -29,24 +26,20 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
   const [editorHeight, setEditorHeight] = useState(MINIMUM_HEIGHT);
   const editorRef = useRef<any>(null);
 
-  
   const updateTinaValue = debounce((newValue: string) => {
     input.onChange(newValue);
   }, 1);
 
-  
   useEffect(() => {
     if (input.value !== value) {
       setValue(input.value || "");
     }
-  }, [input.value]);
+  }, [input.value, value]);
 
-  
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor;
 
-  
-    if (monaco && monaco.languages && monaco.languages.typescript) {
+    if (monaco?.languages?.typescript) {
       monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
       monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
         noSemanticValidation: true,
@@ -54,14 +47,12 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
       });
     }
 
-  
     editor.onDidContentSizeChange(() => {
       const contentHeight = Math.max(editor.getContentHeight(), MINIMUM_HEIGHT);
       setEditorHeight(contentHeight);
       editor.layout();
     });
 
-  
     if (editorRef.current) {
       setTimeout(() => {
         try {
@@ -73,13 +64,11 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
     }
   };
 
-  
   const handleEditorChange = (newValue: string | undefined) => {
     setValue(newValue || "");
     updateTinaValue(newValue || "");
   };
 
-  
   const editorOptions = {
     scrollBeyondLastLine: false,
     tabSize: 2,

@@ -2,7 +2,8 @@
 
 import { getDocId } from "@/utils/docs/getDocsIds";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdMenu } from "react-icons/md";
 
 interface TocProps {
@@ -83,7 +84,6 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
   if (!tocItems || tocItems.length === 0) {
     return null;
   }
-  
 
   return (
     <div className="mb-[-0.375rem] flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">
@@ -115,10 +115,15 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
           }}
         >
           {tocItems.map((item) => (
-            <div className="flex gap-2 font-light group" key={getIdSyntax(item.text)}>
+            <div
+              className="flex gap-2 font-light group"
+              key={getIdSyntax(item.text)}
+            >
               <div
                 className={`border-r border-1 border-gray-200 ${
-                  activeId === getIdSyntax(item.text) ? "border-orange-500" : "group-hover:border-neutral-500"
+                  activeId === getIdSyntax(item.text)
+                    ? "border-orange-500"
+                    : "group-hover:border-neutral-500"
                 }`}
               />
               <a
@@ -127,7 +132,9 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
                 className={`${
                   item.type === "h3" ? "pl-4" : "pl-2"
                 } py-1.5 text-gray-400 ${
-                  activeId === getIdSyntax(item.text) ? "text-orange-500" : "group-hover:text-black"
+                  activeId === getIdSyntax(item.text)
+                    ? "text-orange-500"
+                    : "group-hover:text-black"
                 }`}
               >
                 {item.text}

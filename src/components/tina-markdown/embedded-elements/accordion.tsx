@@ -135,7 +135,7 @@ export const AccordionBlock = ({
       }`}
     >
       {accordionItems.map((item, index) => (
-        <div key={index} className={`w-full`}>
+        <div key={index} className="w-full">
           <div
             className="flex cursor-pointer items-center justify-between px-4 py-1"
             onClick={() => toggleExpand(index)}
