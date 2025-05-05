@@ -120,7 +120,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
                 className={`border-r border-1 border-gray-200 ${
                   activeId === getIdSyntax(item.text) ? "border-orange-500" : "group-hover:border-neutral-500"
                 }`}
-              ></div>
+              />
               <a
                 href={`#${getIdSyntax(item.text)}`}
                 onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
