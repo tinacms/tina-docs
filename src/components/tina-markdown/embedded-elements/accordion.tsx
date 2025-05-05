@@ -1,6 +1,6 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 

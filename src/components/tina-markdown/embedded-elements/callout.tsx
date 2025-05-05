@@ -1,12 +1,12 @@
-import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
-import { MarkdownComponentMapping } from "../markdown-component-mapping";
-import { MdLightbulb } from "react-icons/md";
 import { IoMdInformationCircle } from "react-icons/io";
 import { IoMdWarning } from "react-icons/io";
-import { RxCross2 } from "react-icons/rx";
+import { LuChevronsLeftRight } from "react-icons/lu";
+import { MdLightbulb } from "react-icons/md";
 import { MdLock } from "react-icons/md";
 import { MdOutlineCheck } from "react-icons/md";
-import { LuChevronsLeftRight } from "react-icons/lu";
+import { RxCross2 } from "react-icons/rx";
+import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
+import { MarkdownComponentMapping } from "../markdown-component-mapping";
 
 const variants = {
   warning: "border-x-yellow-400",

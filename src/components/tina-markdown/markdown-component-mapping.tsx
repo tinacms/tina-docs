@@ -1,8 +1,8 @@
 import type { Components } from "tinacms/dist/rich-text";
-import { CardGrid } from "./embedded-elements/card-grid";
 import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
 import ApiReference from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
+import { CardGrid } from "./embedded-elements/card-grid";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
@@ -35,7 +35,12 @@ type ComponentMapping = {
   };
   Callout: { body: string; variant: string };
 
-  accordion: { docText: string; image: string; heading?: string; fullWidth?: boolean };
+  accordion: {
+    docText: string;
+    image: string;
+    heading?: string;
+    fullWidth?: boolean;
+  };
   recipe: {
     title?: string;
     description?: string;

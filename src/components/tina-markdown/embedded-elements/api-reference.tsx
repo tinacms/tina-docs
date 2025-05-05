@@ -1,5 +1,5 @@
-import { RxPlus, RxMinus, RxInfoCircled } from "react-icons/rx";
 import React, { useState, useEffect, useRef } from "react";
+import { RxInfoCircled, RxMinus, RxPlus } from "react-icons/rx";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 

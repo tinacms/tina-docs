@@ -18,7 +18,9 @@ if (typeof window !== "undefined") {
         },
       });
     })
-    .catch((e) => console.error("Failed to load Monaco editor:", e));
+    .catch((e) => {
+      // Failed to load Monaco editor
+    });
 }
 
 const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
