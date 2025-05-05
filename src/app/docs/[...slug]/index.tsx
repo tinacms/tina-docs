@@ -43,9 +43,11 @@ export default function Document({ props, tinaProps }) {
           {documentationData?.title}
         </div>
         {/* MOBILE TABLE OF CONTENTS */}
-        <div className="block xl:hidden">
-          <TableOfContentsDropdown tocData={pageTableOfContents} />
-        </div>
+        {documentationData?.tocIsHidden ? null : (
+          <div className="block xl:hidden">
+            <TableOfContentsDropdown tocData={pageTableOfContents} />
+          </div>
+        )}
         {/* CONTENT */}
         <div
           ref={contentRef}

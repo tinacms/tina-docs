@@ -45,7 +45,7 @@ export const formatTableofContentsData = (
       items: exposedTOCData,
     },
     sha: "",
-    fileRelativePath: "content/toc-doc.json",
+    fileRelativePath: "content/navigation-bar/DocsNavigationBar.json",
     preview: !!preview,
   };
 };
