@@ -3,6 +3,12 @@ import MonacoCodeEditor from "@/tina/customFields/monaco-code-editor";
 export const QueryResponseTabsTemplate = {
   name: "queryResponseTabs",
   label: "Query Response Tabs",
+  ui: {
+    defaultItem: {
+      query: "const CONTENT_MANAGEMENT = 'Optimized';",
+      response: "const LLAMAS = '100';",
+    },
+  },
   fields: [
     {
       type: "string",
