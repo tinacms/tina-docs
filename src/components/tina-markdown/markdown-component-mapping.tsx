@@ -1,6 +1,6 @@
 import type { Components } from "tinacms/dist/rich-text";
 import { CardGrid } from "./embedded-elements/card-grid";
-import Accordion from "./embedded-elements/accordion";
+import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
 import ApiReference from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
@@ -68,6 +68,14 @@ type ComponentMapping = {
     lang: string;
     children: string;
   };
+  accordionBlock: {
+    accordionItems: {
+      docText: string;
+      image: string;
+      heading?: string;
+      fullWidth?: boolean;
+    }[];
+  };
 };
 
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
@@ -109,6 +117,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   img: (props) => <ImageComponent {...props} />,
   table: (props) => <Table {...props} />,
   code_block: (props) => <CodeBlock {...props} />,
+  accordionBlock: (props) => <AccordionBlock {...props} />,
 };
 
 export default MarkdownComponentMapping;

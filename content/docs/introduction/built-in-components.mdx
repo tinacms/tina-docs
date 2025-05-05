@@ -1,6 +1,6 @@
 ---
 title: Built-in Components
-last_edited: '2025-05-05T04:34:27.742Z'
+last_edited: '2025-05-05T05:18:11.609Z'
 tocIsHidden: true
 next: ''
 previous: ''
@@ -66,6 +66,8 @@ All components are built with React and Tailwind – pull down the repo to add a
 
 ### Accordians
 
+Choose between full-width accordions that are stand-alone
+
 <accordion
   heading="Full width accordian here... click on me"
   docText={<>
@@ -76,12 +78,58 @@ All components are built with React and Tailwind – pull down the repo to add a
 />
 
 <accordion
-  heading="Not full-width"
+  heading="Full width accordian here... click on me"
+  docText={<>
+    Here's our pet llamas, arent they so cute?
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={true}
+/>
+
+or blocked accordions that are all connected
+
+<accordionBlock
+  accordionItems={[
+    {
+      heading: "Full width accordian here... click on me",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    },
+    {
+      heading: "Full width accordian here... click on me",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    }
+  ]}
+  fullWidth={true}
+/>
+
+The same options apply for accordions that are not full-width
+
+<accordion
+  heading="Stand-alone"
   docText={<>
     This content doesn't have any images
   </>}
   image=""
   fullWidth={false}
+/>
+
+or
+
+<accordionBlock
+  accordionItems={[
+    {
+      heading: "A set of blocked",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    },
+    {
+      heading: "Accordion items",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    }
+  ]}
 />
 
 ## Technical Components
