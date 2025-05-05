@@ -58,7 +58,7 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
         try {
           editorRef.current.focus();
         } catch (e) {
-          console.error("Failed to focus editor:", e);
+          // Error focusing editor silently ignored
         }
       }, 100);
     }
