@@ -24,11 +24,12 @@ module.exports = {
 
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      // Basic Monaco Editor configuration
+      // Configure Monaco Editor for minimal build
       config.plugins.push(
         new MonacoWebpackPlugin({
           languages: ["javascript"],
           filename: "static/[name].worker.js",
+          features: ["!gotoSymbol"], // Disable heavy features
         })
       );
     }
