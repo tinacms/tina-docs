@@ -36,9 +36,11 @@
     "@tinacms/cli": "^1.8.1",
     "@types/node": "^22.10.1",
     "autoprefixer": "^10.4.17",
+    "monaco-editor-webpack-plugin": "^7.1.0",
     "postcss": "^8.4.35",
     "postcss-preset-env": "^9.3.0",
-    "tailwindcss": "^4.1.0"
+    "tailwindcss": "^4.1.0",
+    "worker-loader": "^3.0.8"
   },
   "packageManager": "pnpm@9.15.2"
 }

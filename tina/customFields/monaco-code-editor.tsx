@@ -1,55 +1,62 @@
-import debounce from "lodash/debounce";
-import type { editor } from "monaco-editor";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
+import dynamic from "next/dynamic";
+import debounce from "lodash/debounce";
+
+// Dynamically import Monaco Editor with no SSR to avoid hydration issues
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+}) as any;
 
 const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
-  const editorRef = useRef<HTMLDivElement | null>(null);
-  const monacoInstance = useRef<editor.IStandaloneCodeEditor | null>(null);
-  const [localValue, setLocalValue] = useState(input.value || "");
+  const [value, setValue] = useState(input.value || "");
 
-  const updateTinaValue = debounce((value) => {
-    input.onChange(value);
-  }, 300);
+  // Update Tina value with moderate debounce
+  const updateTinaValue = debounce((newValue) => {
+    input.onChange(newValue);
+  }, 1);
 
+  // Keep local state in sync with input
   useEffect(() => {
-    const loadMonaco = async () => {
-      const monaco = await import("monaco-editor");
-      if (editorRef.current && !monacoInstance.current) {
-        monacoInstance.current = monaco.editor.create(editorRef.current, {
-          value: localValue,
-          language: "javascript",
-          theme: "vs-dark",
-          automaticLayout: true,
-        });
-
-        monacoInstance.current.onDidChangeModelContent(() => {
-          const value = monacoInstance.current?.getValue() || "";
-          setLocalValue(value);
-          updateTinaValue(value);
-        });
-      }
-    };
-
-    if (typeof window !== "undefined") {
-      loadMonaco();
+    if (input.value !== value) {
+      setValue(input.value || "");
     }
+  }, [input.value]);
 
-    return () => {
-      monacoInstance.current?.dispose();
-    };
-  }, [localValue, updateTinaValue]);
+  // Handle editor changes
+  const handleEditorChange = (newValue: string | undefined) => {
+    const editorValue = newValue || "";
+    setValue(editorValue);
+    updateTinaValue(editorValue);
+  };
 
-  useEffect(() => {
-    if (monacoInstance.current && input.value !== localValue) {
-      monacoInstance.current.setValue(input.value || "");
-      setLocalValue(input.value || "");
-    }
-  }, [input.value, localValue]);
+  // Basic editor settings
+  const editorOptions = {
+    minimap: { enabled: false },
+    fontSize: 14,
+    lineNumbers: "on" as const,
+    scrollBeyondLastLine: false,
+    automaticLayout: true,
+  };
 
   return (
-    <div>
-      <div ref={editorRef} style={{ height: "400px", width: "100%" }} />
+    <div
+      style={{
+        height: "400px",
+        width: "100%",
+        border: "1px solid #ccc",
+        overflow: "hidden",
+      }}
+    >
+      <MonacoEditor
+        height="100%"
+        width="100%"
+        language="javascript"
+        theme="vs-dark"
+        value={value}
+        options={editorOptions}
+        onChange={handleEditorChange}
+      />
     </div>
   );
 });

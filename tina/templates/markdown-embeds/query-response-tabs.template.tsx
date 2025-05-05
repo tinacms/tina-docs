@@ -1,7 +1,17 @@
+import MonacoCodeEditor from "@/tina/customFields/monaco-code-editor";
+
 export const QueryResponseTabsTemplate = {
   name: "queryResponseTabs",
   label: "Query Response Tabs",
   fields: [
+    {
+      type: "string",
+      name: "code",
+      label: "Code",
+      ui: {
+        component: MonacoCodeEditor,
+      },
+    },
     {
       type: "rich-text",
       name: "query",

@@ -14,6 +14,8 @@ export const QueryResponseTabs = ({ ...props }) => {
   const [height, setHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  console.log(props);
+
   useEffect(() => {
     const updateHeight = () => {
       if (contentRef.current) {
@@ -129,7 +131,6 @@ export const QueryResponseTabsMarkdownRenderer: Components<{
           value={props.value}
           lang={props.lang || "text"}
           children={props.value}
-          showLineNumbers={true}
         />
       </div>
     );
