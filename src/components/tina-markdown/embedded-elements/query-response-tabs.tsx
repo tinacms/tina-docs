@@ -1,20 +1,22 @@
 import { useState, useRef, useEffect } from "react";
-import { Components, TinaMarkdown } from "tinacms/dist/rich-text";
-import { MarkdownComponentMapping } from "../markdown-component-mapping";
+
 import React from "react";
-import { ClipboardIcon } from "@heroicons/react/24/outline";
-import { CheckIcon } from "@heroicons/react/24/outline";
+
+// Import Prism core and language
 import Prism from "prismjs";
+// Import Prism plugins
+import "prismjs/components/prism-javascript";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-import CodeBlock from "../standard-elements/code-block";
+import "prismjs/plugins/line-highlight/prism-line-highlight";
+import "prismjs/plugins/line-highlight/prism-line-highlight.css";
+// Import custom theme
+import "./code-block.helper.css";
 
 export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);
   const [height, setHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  console.log(props);
 
   useEffect(() => {
     const updateHeight = () => {
@@ -34,6 +36,13 @@ export const QueryResponseTabs = ({ ...props }) => {
       resizeObserver.disconnect();
     };
   }, [isQuery]);
+
+  // Highlight code when query/response changes
+  useEffect(() => {
+    if (document) {
+      Prism.highlightAll();
+    }
+  }, [props.query, props.response, isQuery]);
 
   const buttonStyling =
     "flex justify-center cursor-pointer relative leading-tight text-white py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
@@ -85,7 +94,7 @@ export const QueryResponseTabs = ({ ...props }) => {
         >
           <div
             ref={contentRef}
-            className="font-light font-mono text-xs text-[#D5DEEB]"
+            className="font-light font-mono text-xs text-[#D5DEEB] relative"
             style={{
               fontFamily:
                 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
@@ -93,18 +102,22 @@ export const QueryResponseTabs = ({ ...props }) => {
             }}
           >
             {isQuery ? (
-              <div>
-                <TinaMarkdown
-                  content={props.query}
-                  components={QueryResponseTabsMarkdownRenderer}
-                />
+              <div className="p-2 relative">
+                <pre
+                  className="language-javascript line-numbers"
+                  style={{ position: "relative" }}
+                >
+                  <code className="language-javascript">{props.query}</code>
+                </pre>
               </div>
             ) : (
-              <div>
-                <TinaMarkdown
-                  content={props.response}
-                  components={QueryResponseTabsMarkdownRenderer}
-                />
+              <div className="p-2 relative">
+                <pre
+                  className="language-javascript line-numbers"
+                  style={{ position: "relative" }}
+                >
+                  <code className="language-javascript">{props.response}</code>
+                </pre>
               </div>
             )}
           </div>
@@ -112,27 +125,4 @@ export const QueryResponseTabs = ({ ...props }) => {
       </div>
     </div>
   );
-};
-
-export const QueryResponseTabsMarkdownRenderer: Components<{
-  code_block: {
-    value: string;
-    lang?: string;
-    showLineNumbers?: boolean;
-  };
-}> = {
-  code_block: (props) => {
-    if (!props?.value) {
-      return null;
-    }
-    return (
-      <div className="pt-2">
-        <CodeBlock
-          value={props.value}
-          lang={props.lang || "text"}
-          children={props.value}
-        />
-      </div>
-    );
-  },
 };

@@ -6,21 +6,19 @@ export const QueryResponseTabsTemplate = {
   fields: [
     {
       type: "string",
-      name: "code",
-      label: "Code",
+      name: "query",
+      label: "Query",
       ui: {
         component: MonacoCodeEditor,
       },
     },
     {
-      type: "rich-text",
-      name: "query",
-      label: "Query",
-    },
-    {
-      type: "rich-text",
+      type: "string",
       name: "response",
       label: "Response",
+      ui: {
+        component: MonacoCodeEditor,
+      },
     },
     {
       type: "boolean",
