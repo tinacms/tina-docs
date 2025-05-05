@@ -6,6 +6,7 @@ import { IoMdWarning } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { MdLock } from "react-icons/md";
 import { MdOutlineCheck } from "react-icons/md";
+import { LuChevronsLeftRight } from "react-icons/lu";
 
 const variants = {
   warning: "border-x-yellow-400",
@@ -14,6 +15,7 @@ const variants = {
   error: "border-x-red-400",
   idea: "border-x-teal-400",
   lock: "border-x-gray-400",
+  api: "border-x-orange-400"
 };
 
 const icons = {
@@ -23,6 +25,7 @@ const icons = {
   error: RxCross2,
   idea: MdLightbulb,
   lock: MdLock,
+  api: LuChevronsLeftRight
 };
 
 const iconColors = {
@@ -32,6 +35,7 @@ const iconColors = {
   error: "text-red-400",
   idea: "text-teal-400",
   lock: "text-gray-400",
+  api: "text-orange-400"
 };
 
 const Callout = ({ body, variant = "warning" }) => {

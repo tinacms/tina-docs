@@ -18,7 +18,7 @@ export const CalloutTemplate = {
       name: "variant",
       label: "Variant",
       type: "string",
-      options: ["warning", "info", "success", "error", "idea", "lock"],
+      options: ["warning", "info", "success", "error", "idea", "lock", "api"],
       defaultValue: "warning",
     },
   ],
