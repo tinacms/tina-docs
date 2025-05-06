@@ -38,7 +38,6 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
     
     if (sectionIndex >= 0) {
       const newActiveId = getDocId(tocItems[sectionIndex].text);
-      console.log("newActiveId", newActiveId);
       if (newActiveId !== scrollActiveId) {
         setScrollActiveId(newActiveId);
       }
