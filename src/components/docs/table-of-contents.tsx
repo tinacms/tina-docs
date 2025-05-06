@@ -125,7 +125,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
                     {children}
                   </a>
                 );
-              }
+              },
             }}
           >
             {tocMarkdown}
