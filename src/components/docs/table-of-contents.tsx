@@ -30,12 +30,12 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (tocItems.length === 0) return;
-    
+
     const sectionIndex = Math.min(
       Math.floor(latest * tocItems.length),
       tocItems.length - 2
     );
-    
+
     if (sectionIndex >= 0) {
       const newActiveId = getDocId(tocItems[sectionIndex].text);
       if (newActiveId !== scrollActiveId) {
@@ -110,7 +110,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
                 const isActiveFromIntersection = activeids?.includes(itemId);
                 const isActiveFromScroll = scrollActiveId === itemId;
                 const isActive = isActiveFromIntersection || isActiveFromScroll;
-                
+
                 return (
                   <a
                     {...props}
