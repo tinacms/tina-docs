@@ -1,9 +1,9 @@
 "use client";
 
 import { getDocId } from "@/utils/docs/getDocsIds";
+import { useMotionValueEvent, useScroll } from "motion/react";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import {useMotionValueEvent, useScroll} from "motion/react";
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
