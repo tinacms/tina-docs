@@ -3,6 +3,7 @@
 import { getDocId } from "@/utils/docs/getDocsIds";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import {useMotionValueEvent, useScroll} from "motion/react";
 
 interface TocProps {
   tocItems: Array<{ type: string; text: string }>;
@@ -24,6 +25,25 @@ export const generateMarkdown = (
 export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll();
+  const [scrollActiveId, setScrollActiveId] = useState<string | null>(null);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (tocItems.length === 0) return;
+    
+    const sectionIndex = Math.min(
+      Math.floor(latest * tocItems.length),
+      tocItems.length - 2
+    );
+    
+    if (sectionIndex >= 0) {
+      const newActiveId = getDocId(tocItems[sectionIndex].text);
+      console.log("newActiveId", newActiveId);
+      if (newActiveId !== scrollActiveId) {
+        setScrollActiveId(newActiveId);
+      }
+    }
+  });
 
   useEffect(() => {
     const close = () => setIsOpen(false);
@@ -38,26 +58,6 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
       }
     };
   }, []);
-
-  useEffect(() => {
-    if (tocWrapperRef.current && activeids?.length > 0) {
-      const tocList = tocWrapperRef.current;
-
-      const lastActiveId = activeids[activeids.length - 1];
-      const activeLink = tocList.querySelector(`a[href="#${lastActiveId}"]`);
-
-      if (activeLink) {
-        const activeTop = (activeLink as HTMLElement).offsetTop;
-        const activeHeight = (activeLink as HTMLElement).offsetHeight;
-        const listHeight = tocList.clientHeight;
-
-        tocList.scrollTo({
-          top: activeTop - listHeight / 2 + activeHeight / 2,
-          behavior: "smooth",
-        });
-      }
-    }
-  }, [activeids]);
 
   if (!tocItems || tocItems.length === 0) {
     return null;
@@ -107,9 +107,11 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
                 </li>
               ),
               a: ({ children, ...props }) => {
-                const isActive = activeids?.includes(
-                  props.href?.slice(1) || ""
-                );
+                const itemId = props.href?.slice(1) || "";
+                const isActiveFromIntersection = activeids?.includes(itemId);
+                const isActiveFromScroll = scrollActiveId === itemId;
+                const isActive = isActiveFromIntersection || isActiveFromScroll;
+                
                 return (
                   <a
                     {...props}
@@ -124,7 +126,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
                     {children}
                   </a>
                 );
-              },
+              }
             }}
           >
             {tocMarkdown}
