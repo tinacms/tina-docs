@@ -54,9 +54,6 @@ module.exports = {
         'neutral-text-secondary': 'var(--neutral-text-secondary)',
         'neutral-border': 'var(--neutral-border)',
 
-        // Fix typo in your original config
-        primary: 'var(--brand-primary)',
-        example: '#4f46e5',
       },
     },
     fontFamily: {
