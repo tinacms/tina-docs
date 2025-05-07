@@ -21,36 +21,37 @@ export const QueryResponseTabs = ({ ...props }) => {
   const [height, setHeight] = useState(0);
   const [hasCopied, setHasCopied] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
-  const activeContentRef = useRef<HTMLDivElement>(null);
+  const queryRef = useRef<HTMLDivElement>(null);
+  const responseRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const updateHeight = () => {
-      if (contentRef.current) {
-        contentRef.current.style.maxHeight = `${
-          activeContentRef.current?.scrollHeight || 0
-        }px`;
+      const activeRef = isQuery ? queryRef : responseRef;
+      if (activeRef.current) {
+        setHeight(activeRef.current.scrollHeight);
       }
     };
 
-    const resizeObserver = new ResizeObserver(updateHeight);
-    if (activeContentRef.current) {
-      resizeObserver.observe(activeContentRef.current);
-    }
-
-    // Initial height update
+    // Update height when tab changes
     updateHeight();
+
+    const resizeObserver = new ResizeObserver(updateHeight);
+    const activeRef = isQuery ? queryRef : responseRef;
+    if (activeRef.current) {
+      resizeObserver.observe(activeRef.current);
+    }
 
     return () => {
       resizeObserver.disconnect();
     };
-  }, []); // No dependencies needed
+  }, [isQuery]); // Add isQuery as dependency to update height when switching tabs
 
-  // Highlight code when mounted
+  // Highlight code when mounted and when tab changes
   useEffect(() => {
     if (document) {
       Prism.highlightAll();
     }
-  }, []); // No dependencies needed
+  }, [isQuery]); // Re-highlight when tab changes
 
   // Handle the copy action
   const handleCopy = () => {
@@ -143,7 +144,7 @@ export const QueryResponseTabs = ({ ...props }) => {
             }}
           >
             {isQuery ? (
-              <div className="p-2 relative">
+              <div ref={queryRef} className="relative -mt-2">
                 <pre
                   className="language-javascript line-numbers"
                   style={{ position: "relative", whiteSpace: "pre" }}
@@ -152,7 +153,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                 </pre>
               </div>
             ) : (
-              <div className="p-2 relative">
+              <div ref={responseRef} className="-mt-2 relative">
                 <pre
                   className="language-javascript line-numbers"
                   style={{ position: "relative", whiteSpace: "pre" }}
