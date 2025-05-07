@@ -16,7 +16,7 @@ export const CodeBlock = ({ children, value, lang }) => {
       <button
         type="button"
         onClick={handleCopy}
-        className="absolute right-3 top-2 z-10 flex size-6 items-center justify-center rounded text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50"
+        className="absolute right-1 top-2 z-10 flex size-6 items-center justify-center rounded text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50"
       >
         {hasCopied ? (
           <CheckIcon className="size-4" />
