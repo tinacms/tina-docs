@@ -28,6 +28,7 @@ export default function LightDarkSwitch() {
   return (
     <div className="brand-glass-gradient w-fit rounded-full p-1 shadow-xl">
       <button
+        type="button"
         className="flex items-center gap-4 cursor-pointer"
         onClick={toggleTheme}
       >

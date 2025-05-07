@@ -48,8 +48,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -155,8 +155,8 @@ const NavLevel = ({
               <ChevronRightIcon
                 className={`${
                   level < 1
-                    ? `text-brand-primary-light group-hover:text-brand-primary-hover`
-                    : `text-brand-secondary-light group-hover:text-brand-secondary-hover`
+                    ? "text-brand-primary-light group-hover:text-brand-primary-hover"
+                    : "text-brand-secondary-light group-hover:text-brand-secondary-hover"
                 } -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
                   expanded ? "rotate-90" : ""
                 }`}
