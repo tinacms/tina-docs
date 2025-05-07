@@ -1,8 +1,8 @@
 "use client";
 
-import { OnThisPage } from "@/src/components/docs/on-this-page";
 import { TableOfContentsDropdown } from "@/components/docs/table-of-contents-dropdown";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
+import { OnThisPage } from "@/src/components/docs/on-this-page";
 import { Pagination } from "@/src/components/ui/pagination";
 import { formatDate } from "@/utils/docs/getFormattedDate";
 import { useTocListener } from "@/utils/docs/tocListener";
@@ -70,11 +70,7 @@ export default function Document({ props, tinaProps }) {
       </div>
       {/* DESKTOP TABLE OF CONTENTS */}
       {documentationData?.tocIsHidden ? null : (
-        <div
-          className={
-            "sticky hidden xl:block  top-4 h-screen mx-4"
-          }
-        >
+        <div className={"sticky hidden xl:block  top-4 h-screen mx-4"}>
           <OnThisPage pageItems={pageTableOfContents} activeids={activeIds} />
         </div>
       )}
