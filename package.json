@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "tinacms dev -c \"next dev --turbopack\"",
-    "build": "tinacms build && next build --turbopack && npx pagefind --site out",
-    "build-local": "tinacms build --local --skip-indexing --skip-cloud-checks && next build && npx pagefind --site out",
+    "build": "tinacms build && next build --turbopack && npx pagefind --site out --config pagefind.json",
+    "build-local": "tinacms build --local --skip-indexing --skip-cloud-checks && next build && npx pagefind --site out --config pagefind.json",
     "start": "tinacms build && next start",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",

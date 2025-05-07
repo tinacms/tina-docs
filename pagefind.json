@@ -1,0 +1,14 @@
+{
+  "exclude_selectors": [
+    "nav",
+    "aside",
+    "header",
+    "footer",
+    ".navigation",
+    ".sidebar",
+    ".breadcrumbs"
+  ],
+  "force_language": "en",
+  "bundle_dir": "out/_pagefind",
+  "base_url": "/"
+}
