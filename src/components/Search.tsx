@@ -1,99 +1,42 @@
 "use client";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
-
-declare global {
-  interface Window {
-    pagefind: any;
-  }
-}
+import { useState } from "react";
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isPagefindLoaded, setIsPagefindLoaded] = useState(false);
-  const isDevelopment = process.env.NODE_ENV === "development";
-
-  useEffect(() => {
-    // Only load Pagefind in production
-    if (isDevelopment) {
-      return;
-    }
-
-    // Load Pagefind script
-    const loadPagefind = async () => {
-      try {
-        // Load the main Pagefind script
-        const script = document.createElement("script");
-        script.src = "/pagefind/pagefind.js";
-        script.type = "module";
-        script.async = true;
-
-        // Load the Pagefind UI script
-        const uiScript = document.createElement("script");
-        uiScript.src = "/pagefind/pagefind-ui.js";
-        uiScript.type = "module";
-        uiScript.async = true;
-
-        script.onload = () => {
-          setIsPagefindLoaded(true);
-        };
-
-        script.onerror = () => {
-          // biome-ignore lint/suspicious/noConsole: Development error logging
-          console.error("Failed to load Pagefind script");
-        };
-
-        document.body.appendChild(script);
-        document.body.appendChild(uiScript);
-
-        return () => {
-          if (document.body.contains(script)) {
-            document.body.removeChild(script);
-          }
-          if (document.body.contains(uiScript)) {
-            document.body.removeChild(uiScript);
-          }
-        };
-      } catch (error) {
-        // biome-ignore lint/suspicious/noConsole: Development error logging
-        console.error("Error loading Pagefind:", error);
-      }
-    };
-
-    loadPagefind();
-  }, [isDevelopment]);
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
 
-    if (!value.trim() || !isPagefindLoaded || isDevelopment) {
+    if (!value.trim()) {
       setResults([]);
       return;
     }
 
     setIsLoading(true);
     try {
-      const search = await window.pagefind.search(value);
+      // Dynamically import Pagefind ES module
+      const pagefindModule = await import("../../public/pagefind/pagefind.js");
+      const search = await pagefindModule.search(value);
+
       const searchResults = await Promise.all(
         search.results.map(async (result: any) => {
           const data = await result.data();
           return {
             url: result.url,
-            title: data.meta.title,
+            title: data.meta.title || "Untitled",
             excerpt: data.excerpt,
           };
         })
       );
       setResults(searchResults);
     } catch (error) {
-      if (isDevelopment) {
-        // biome-ignore lint/suspicious/noConsole: Development error logging
-        console.error("Search error:", error);
-      }
+      // biome-ignore lint/suspicious/noConsole: Development error logging
+      console.error("Search error:", error);
       setResults([]);
     } finally {
       setIsLoading(false);
@@ -107,13 +50,8 @@ export default function Search() {
           type="text"
           value={searchTerm}
           onChange={handleSearch}
-          placeholder={
-            isDevelopment
-              ? "Search will be available in production"
-              : "Search documentation..."
-          }
+          placeholder="Search documentation..."
           className="w-full px-4 py-2 pl-10 text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          disabled={isDevelopment}
         />
         <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
       </div>
@@ -125,7 +63,7 @@ export default function Search() {
       )}
 
       {!isLoading && results.length > 0 && (
-        <div className="absolute w-full mt-2 bg-white rounded-lg shadow-lg">
+        <div className="absolute w-full mt-2 bg-white rounded-lg shadow-lg z-50">
           {results.map((result, index) => (
             <a
               key={index}
