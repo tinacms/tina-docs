@@ -10,5 +10,7 @@
   ],
   "force_language": "en",
   "bundle_dir": "out/_pagefind",
-  "base_url": "/"
+  "base_url": "/",
+  "root_selector": "data-pagefind-body",
+  "verbose": true
 }

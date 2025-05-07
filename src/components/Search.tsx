@@ -26,7 +26,7 @@ export default function Search() {
     const loadPagefind = async () => {
       try {
         const script = document.createElement("script");
-        script.src = "/_pagefind/pagefind.js";
+        script.src = "/pagefind/pagefind.js";
         script.async = true;
 
         script.onload = () => {
