@@ -30,7 +30,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/_pagefind/:path*",
+        source: "/pagefind/:path*",
         headers: [
           {
             key: "Cache-Control",
@@ -42,10 +42,10 @@ const nextConfig = {
   },
 };
 
-// Create _pagefind directory in out folder if it doesn't exist
+// Create pagefind directory in out folder if it doesn't exist
 if (process.env.NODE_ENV === "production") {
   const outDir = path.join(process.cwd(), "out");
-  const pagefindDir = path.join(outDir, "_pagefind");
+  const pagefindDir = path.join(outDir, "pagefind");
 
   if (!fs.existsSync(outDir)) {
     fs.mkdirSync(outDir, { recursive: true });
