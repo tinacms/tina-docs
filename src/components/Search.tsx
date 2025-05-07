@@ -29,6 +29,10 @@ export default function Search() {
         const searchResults = await Promise.all(
           search.results.map(async (result: any) => {
             const data = await result.data();
+            // biome-ignore lint/suspicious/noConsole: <explanation>
+            console.log("🚀 ~ search.results.map ~ result:", result);
+            // biome-ignore lint/suspicious/noConsole: <explanation>
+            console.log("🚀 ~ search.results.map ~ data:", data);
             return {
               url: result.url,
               title: data.meta.title || "Untitled",
