@@ -62,7 +62,7 @@ const Callout = ({ body, variant = "warning", text }: CalloutProps) => {
 
   return (
     <blockquote
-      className={`relative my-4 overflow-hidden rounded-lg bg-neutral-surface border-l-4 ${variantClass} pl-4 pr-2 pt-2.5`}
+      className={`relative my-4 overflow-hidden rounded-lg bg-neutral-surface border-l-4 ${variantClass} pl-4 pr-2 pt-2.5 ${text ? 'p-2' : ''}`}
     >
       <div className="flex flex-col items-start gap-1 md:flex-row ">
         <div>
