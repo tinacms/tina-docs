@@ -14,8 +14,14 @@ export default function Search() {
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPagefindLoaded, setIsPagefindLoaded] = useState(false);
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   useEffect(() => {
+    // Only load Pagefind in production
+    if (isDevelopment) {
+      return;
+    }
+
     // Load Pagefind script
     const loadPagefind = async () => {
       try {
@@ -46,13 +52,13 @@ export default function Search() {
     };
 
     loadPagefind();
-  }, []);
+  }, [isDevelopment]);
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
 
-    if (!value.trim() || !isPagefindLoaded) {
+    if (!value.trim() || !isPagefindLoaded || isDevelopment) {
       setResults([]);
       return;
     }
@@ -72,7 +78,7 @@ export default function Search() {
       );
       setResults(searchResults);
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (isDevelopment) {
         // biome-ignore lint/suspicious/noConsole: Development error logging
         console.error("Search error:", error);
       }
@@ -89,8 +95,13 @@ export default function Search() {
           type="text"
           value={searchTerm}
           onChange={handleSearch}
-          placeholder="Search documentation..."
+          placeholder={
+            isDevelopment
+              ? "Search will be available in production"
+              : "Search documentation..."
+          }
           className="w-full px-4 py-2 pl-10 text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          disabled={isDevelopment}
         />
         <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
       </div>
