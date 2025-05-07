@@ -18,24 +18,28 @@ export default function Search() {
     }
 
     setIsLoading(true);
-    try {
-      // Dynamically import Pagefind ES module
-      const pagefindModule = await import("../../public/pagefind/pagefind.js");
-      const search = await pagefindModule.search(value);
 
-      const searchResults = await Promise.all(
-        search.results.map(async (result: any) => {
-          const data = await result.data();
-          return {
-            url: result.url,
-            title: data.meta.title || "Untitled",
-            excerpt: data.excerpt,
-          };
-        })
-      );
-      setResults(searchResults);
+    try {
+      if (typeof window !== "undefined") {
+        // Import Pagefind as an ES module from HTTP path
+        const pagefindModule = await import("/pagefind/pagefind.js");
+        const search = await pagefindModule.search(value);
+
+        const searchResults = await Promise.all(
+          search.results.map(async (result: any) => {
+            const data = await result.data();
+            return {
+              url: result.url,
+              title: data.meta.title || "Untitled",
+              excerpt: data.excerpt,
+            };
+          })
+        );
+
+        setResults(searchResults);
+      }
     } catch (error) {
-      // biome-ignore lint/suspicious/noConsole: Development error logging
+      // biome-ignore lint/suspicious/noConsole: <explanation>
       console.error("Search error:", error);
       setResults([]);
     } finally {
