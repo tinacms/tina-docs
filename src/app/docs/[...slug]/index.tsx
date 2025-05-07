@@ -32,7 +32,7 @@ export default function Document({ props, tinaProps }) {
   return (
     // 73.5% of 100% is ~ 55% of the screenwidth in parent div
     // 26.5% of 100% is ~ 20% of the screenwidth in parent div
-    <div className="grid grid-cols-1 md:grid-cols-[73.5%_26.5%]">
+    <div className="grid grid-cols-1 xl:grid-cols-[73.5%_26.5%] pr-4">
       <div
         className={`max-w-full overflow-hidden break-words  ${
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
