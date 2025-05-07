@@ -10,7 +10,7 @@ export const NavigationSideBar = ({
   tableOfContents: any;
 }) => {
   return (
-    <div className="w-full h-full rounded-2xl bg-white/50 shadow-xl">
+    <div className="w-full h-full rounded-2xl brand-glass-gradient shadow-xl">
       <div className="flex-col pl-6 items-center">
         <Title title={tableOfContents?.title} />
         <LightDarkSwitch />
@@ -25,7 +25,7 @@ export const NavigationSideBar = ({
 
 const Title = ({ title }: { title: string }) => (
   <div className="">
-    <h1 className="tina-gradient bg-clip-text pb-4 pt-6 font-tuner text-4xl text-transparent">
+    <h1 className="brand-primary-gradient bg-clip-text pb-4 pt-6 font-tuner text-4xl text-transparent">
       {title}
     </h1>
   </div>

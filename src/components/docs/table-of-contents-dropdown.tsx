@@ -67,7 +67,7 @@ export const TableOfContentsDropdown = ({ tocData }) => {
       {tocData?.tocData?.length !== 0 && (
         <div className="w-full py-6" ref={containerRef}>
           <div
-            className="cursor-pointer rounded-lg border-slate-400 bg-gradient-to-r from-white/50 to-white/30 px-4 py-2 shadow-lg"
+            className="cursor-pointer rounded-lg border-neutral-border brand-glass-gradient  px-4 py-2 shadow-lg"
             onClick={() => setIsTableOfContentsOpen(!isTableOfContentsOpen)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -77,8 +77,8 @@ export const TableOfContentsDropdown = ({ tocData }) => {
             }}
           >
             <span className="flex items-center space-x-2">
-              <Bars3Icon className="size-5 text-orange-500" />
-              <span className="py-1 text-slate-600">On this page</span>
+              <Bars3Icon className="size-5 text-brand-primary" />
+              <span className="py-1 text-neutral-text">On this page</span>
             </span>
           </div>
           {isTableOfContentsOpen && (

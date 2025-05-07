@@ -26,7 +26,7 @@ const Accordion = ({
     <div className="flex flex-col justify-center items-center">
       {/* Header */}
       <div
-        className={`mb-5 max-w-full overflow-hidden rounded-lg bg-white/40 shadow-lg transition-[width] duration-300 ease-in-out ${
+        className={`mb-5 max-w-full overflow-hidden rounded-lg brand-glass-gradient shadow-lg transition-[width] duration-300 ease-in-out ${
           fullWidth ? "w-full" : "w-3/4"
         }`}
       >
@@ -34,14 +34,14 @@ const Accordion = ({
           className="flex cursor-pointer items-center justify-between px-4 py-1"
           onClick={toggleExpand}
         >
-          <h4 className="text-black text-base font-tuner mt-2 mb-1">
+          <h4 className="text-neutral-text text-base font-tuner mt-2 mb-1">
             {heading || "Click to expand"}
           </h4>
           <div>
             {isExpanded ? (
-              <MinusIcon className="size-5 text-black" />
+              <MinusIcon className="size-5 text-neutral-text" />
             ) : (
-              <PlusIcon className="size-5 text-black" />
+              <PlusIcon className="size-5 text-neutral-text" />
             )}
           </div>
         </div>
@@ -130,7 +130,7 @@ export const AccordionBlock = ({
 
   return (
     <div
-      className={`mx-auto flex flex-col justify-center items-center rounded-lg bg-white/40 shadow-lg mb-5 ${
+      className={`mx-auto flex flex-col justify-center items-center rounded-lg brand-glass-gradient shadow-lg mb-5 ${
         fullWidth ? "w-full" : "w-3/4"
       }`}
     >
@@ -140,14 +140,14 @@ export const AccordionBlock = ({
             className="flex cursor-pointer items-center justify-between px-4 py-1"
             onClick={() => toggleExpand(index)}
           >
-            <h4 className="text-black text-base font-tuner mt-2 mb-1">
+            <h4 className="text-neutral-text text-base font-tuner mt-2 mb-1">
               {item.heading || "Click to expand"}
             </h4>
             <div>
               {isExpanded[index] ? (
-                <MinusIcon className="size-5 text-black" />
+                <MinusIcon className="size-5 text-neutral-text" />
               ) : (
-                <PlusIcon className="size-5 text-black" />
+                <PlusIcon className="size-5 text-neutral-text" />
               )}
             </div>
           </div>
@@ -180,7 +180,7 @@ export const AccordionBlock = ({
             )}
           </div>
           {index < accordionLength - 1 && (
-            <hr className="w-full h-0.5 text-black/50" />
+            <hr className="w-full h-0.5 text-neutral-text/50" />
           )}
         </div>
       ))}

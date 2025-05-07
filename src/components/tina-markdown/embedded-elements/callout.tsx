@@ -8,6 +8,15 @@ import { RxCross2 } from "react-icons/rx";
 import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
 import { MarkdownComponentMapping } from "../markdown-component-mapping";
 
+type CalloutVariant =
+  | "warning"
+  | "info"
+  | "success"
+  | "error"
+  | "idea"
+  | "lock"
+  | "api";
+
 const variants = {
   warning: "border-x-yellow-400",
   info: "border-x-blue-400",
@@ -16,7 +25,7 @@ const variants = {
   idea: "border-x-teal-400",
   lock: "border-x-gray-400",
   api: "border-x-orange-400",
-};
+} as const;
 
 const icons = {
   warning: IoMdWarning,
@@ -26,7 +35,7 @@ const icons = {
   idea: MdLightbulb,
   lock: MdLock,
   api: LuChevronsLeftRight,
-};
+} as const;
 
 const iconColors = {
   warning: "text-yellow-400",
@@ -36,19 +45,24 @@ const iconColors = {
   idea: "text-teal-400",
   lock: "text-gray-400",
   api: "text-orange-400",
-};
+} as const;
 
-const Callout = ({ body, variant = "warning" }) => {
+interface CalloutProps {
+  body?: TinaMarkdownContent;
+  variant?: CalloutVariant;
+  text?: any;
+}
+
+const Callout = ({ body, variant = "warning", text }: CalloutProps) => {
   const Icon = icons[variant] || icons.info;
   const variantClass = variants[variant] || variants.info;
   const iconColorClass = iconColors[variant] || iconColors.info;
 
+  
+
   return (
     <blockquote
-      style={{
-        backgroundColor: "var(--color-white)",
-      }}
-      className={`relative my-4 overflow-hidden rounded-lg shadow-sm border-l-4 ${variantClass} pl-4 pr-2 pt-2.5`}
+      className={`relative my-4 overflow-hidden rounded-lg bg-neutral-surface border-l-4 ${variantClass} pl-4 pr-2 pt-2.5`}
     >
       <div className="flex flex-col items-start gap-1 md:flex-row ">
         <div>
@@ -57,9 +71,9 @@ const Callout = ({ body, variant = "warning" }) => {
             size={36}
           />
         </div>
-        <div className="leading-6 text-neutral-700 font-light">
+        <div className="leading-6 text-neutral-text font-light">
           <TinaMarkdown
-            content={body as TinaMarkdownContent}
+            content={body as TinaMarkdownContent || text as TinaMarkdownContent}
             components={MarkdownComponentMapping}
           />
         </div>

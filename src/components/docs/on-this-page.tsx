@@ -94,7 +94,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
             : "max-h-0 overflow-hidden"
         } lg:max-h-none`}
       >
-        <span className=" hidden lg:flex gap-2 text-base text-[var(--color-secondary)] pb-1 bg-transparent leading-none">
+        <span className="hidden lg:flex gap-2 text-base pb-1 bg-transparent leading-none text-brand-primary">
           On this page
         </span>
         <div
@@ -120,21 +120,19 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
               key={getIdSyntax(item.text)}
             >
               <div
-                className={`border-r border-1 border-gray-200 ${
+                className={`border-r border-1  ${
                   activeId === getIdSyntax(item.text)
-                    ? "border-orange-500"
-                    : "group-hover:border-neutral-500"
+                    ? "border-brand-primary"
+                    : "border-neutral-border group-hover:border-neutral-500"
                 }`}
               />
               <a
                 href={`#${getIdSyntax(item.text)}`}
                 onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
-                className={`${
-                  item.type === "h3" ? "pl-4" : "pl-2"
-                } py-1.5 text-gray-500 ${
+                className={`${item.type === "h3" ? "pl-4" : "pl-2"} py-1.5  ${
                   activeId === getIdSyntax(item.text)
-                    ? "text-orange-500"
-                    : "group-hover:text-black"
+                    ? "text-brand-primary"
+                    : "group-hover:text-black text-neutral-text-secondary"
                 }`}
               >
                 {item.text}
