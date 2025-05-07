@@ -25,9 +25,17 @@ export default function Search() {
     // Load Pagefind script
     const loadPagefind = async () => {
       try {
+        // Load the main Pagefind script
         const script = document.createElement("script");
         script.src = "/pagefind/pagefind.js";
+        script.type = "module";
         script.async = true;
+
+        // Load the Pagefind UI script
+        const uiScript = document.createElement("script");
+        uiScript.src = "/pagefind/pagefind-ui.js";
+        uiScript.type = "module";
+        uiScript.async = true;
 
         script.onload = () => {
           setIsPagefindLoaded(true);
@@ -39,10 +47,14 @@ export default function Search() {
         };
 
         document.body.appendChild(script);
+        document.body.appendChild(uiScript);
 
         return () => {
           if (document.body.contains(script)) {
             document.body.removeChild(script);
+          }
+          if (document.body.contains(uiScript)) {
+            document.body.removeChild(uiScript);
           }
         };
       } catch (error) {
