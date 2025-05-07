@@ -113,18 +113,14 @@
 
 .brand-glass-gradient {
   background-image: linear-gradient(to bottom right, var(--glass-gradient-start), var(--glass-gradient-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
 }
 
 .brand-background-gradient {
-  background-image: linear-gradient(to bottom right, var(--background-primary-gradient-start), var(--background-primary-gradient-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  background-image: linear-gradient(to bottom right, var(--background-primary-gradient-start), var(--background-primary-gradient-end)); 
+}
+
+.neutral-surface-bg {
+  background-color: var(--neutral-surface);
 }
 
 
