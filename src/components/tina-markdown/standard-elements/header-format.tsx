@@ -17,7 +17,6 @@ export default function HeaderFormat({
       ? children
       : ""
   );
-
   const linkHref = `#${id}`;
 
   const styles = {
