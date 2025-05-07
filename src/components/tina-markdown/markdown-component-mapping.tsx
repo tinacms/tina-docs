@@ -40,7 +40,7 @@ type ComponentMapping = {
       required: boolean;
     }[];
   };
-  Callout: { body: string; variant: string };
+  Callout: { body: TinaMarkdownContent; variant: string };
 
   accordion: {
     docText: string;
@@ -90,6 +90,21 @@ type ComponentMapping = {
   };
 };
 
+type CalloutVariant =
+  | "warning"
+  | "info"
+  | "success"
+  | "error"
+  | "idea"
+  | "lock"
+  | "api";
+
+interface CalloutComponentProps {
+  variant?: CalloutVariant;
+  body?: TinaMarkdownContent;
+  text?: any;
+}
+
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
   // Our embeds we can inject via MDX
   scrollShowcase: (props) => <ScrollBasedShowcase {...props} />,
@@ -99,7 +114,9 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   apiReference: (props) => <ApiReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
   queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
-  Callout: (props) => <Callout {...props} variant={props?.variant} />,
+  Callout: (props: { body: TinaMarkdownContent; variant: string }) => (
+    <Callout {...props} variant={props.variant as CalloutVariant} />
+  ),
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,
   h2: (props) => <HeaderFormat level={2} {...props} />,
@@ -107,11 +124,17 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   h4: (props) => <HeaderFormat level={4} {...props} />,
   h5: (props) => <HeaderFormat level={5} {...props} />,
   h6: (props) => <HeaderFormat level={6} {...props} />,
-  ul: (props) => <ul className="my-4 ml-2 list-disc text-neutral-text" {...props} />,
-  ol: (props) => <ol className="my-4 ml-2 list-decimal text-neutral-text" {...props} />,
+  ul: (props) => (
+    <ul className="my-4 ml-2 list-disc text-neutral-text" {...props} />
+  ),
+  ol: (props) => (
+    <ol className="my-4 ml-2 list-decimal text-neutral-text" {...props} />
+  ),
   li: (props) => <li className="mb-2 ml-8 text-neutral-text" {...props} />,
   p: (props) => <p className="mb-2 font-inter text-neutral-text" {...props} />,
-  blockquote: (props) => <Callout text={props.children.props.content} variant="info" />,
+  blockquote: (props) => (
+    <Callout text={props.children.props.content} variant="info" />
+  ),
   a: (props) => (
     <a
       href={props?.url}
