@@ -40,6 +40,9 @@ const nextConfig = {
       },
     ];
   },
+
+  // Ensure trailing slashes for better static file handling
+  trailingSlash: true,
 };
 
 // Create pagefind directory in out folder if it doesn't exist
