@@ -13,7 +13,7 @@ export default async function DocsLayout({
   const navigationDocsData = await getDocsNav();
 
   return (
-    <div className="relative flex items-start justify-center max-w-[2000px] ">
+    <div className="relative flex items-start justify-center w-full max-w-[2000px] ">
       <div className="w-full grid grid-cols-[25%_75%] gap-4  p-4 ">
         {/* DESKTOP NAVIGATION SIDEBAR */}
         <aside
