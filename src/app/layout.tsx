@@ -16,7 +16,7 @@ export default function RootLayout({
       <body>
         <AdminLink />
         <div className="blob-bg font-sans flex min-h-screen flex-col bg-blob-bg bg-[length:100%_100%] bg-fixed bg-top">
-          <div className="flex flex-1 flex-col">{children}</div>
+          <div className="flex flex-1 flex-col items-center">{children}</div>
         </div>
       </body>
     </html>

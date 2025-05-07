@@ -6,8 +6,8 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { MdMenu } from "react-icons/md";
 
-interface TocProps {
-  tocItems: Array<{ type: string; text: string }>;
+interface OnThisPageProps {
+  pageItems: Array<{ type: string; text: string }>;
   activeids: string[];
 }
 
@@ -28,7 +28,7 @@ export function getIdSyntax(text: string) {
   return text.toLowerCase().replace(/ /g, "-");
 }
 
-export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
+export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -81,12 +81,12 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
     }
   };
 
-  if (!tocItems || tocItems.length === 0) {
+  if (!pageItems || pageItems.length === 0) {
     return null;
   }
 
   return (
-    <div className="mb-[-0.375rem] flex-auto w-[300px] break-words whitespace-normal overflow-wrap-break-word lg:sticky lg:top-32">
+    <div className="mb-[-0.375rem]  flex-auto break-words whitespace-normal overflow-wrap-break-word">
       <div
         className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
           isOpen
@@ -99,7 +99,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
         </span>
         <div
           ref={tocWrapperRef}
-          className="max-h-[70vh] overflow-y-auto px-1 py-2 2xl:max-h-[75vh]"
+          className="max-h-[70vh] py-2 2xl:max-h-[75vh]"
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
@@ -114,7 +114,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
             maskRepeat: "no-repeat",
           }}
         >
-          {tocItems.map((item) => (
+          {pageItems.map((item) => (
             <div
               className="flex gap-2 font-light group"
               key={getIdSyntax(item.text)}
@@ -131,7 +131,7 @@ export const TableOfContents = ({ tocItems, activeids }: TocProps) => {
                 onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
                 className={`${
                   item.type === "h3" ? "pl-4" : "pl-2"
-                } py-1.5 text-gray-400 ${
+                } py-1.5 text-gray-500 ${
                   activeId === getIdSyntax(item.text)
                     ? "text-orange-500"
                     : "group-hover:text-black"

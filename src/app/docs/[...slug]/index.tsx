@@ -1,6 +1,6 @@
 "use client";
 
-import { TableOfContents } from "@/components/docs/table-of-contents";
+import { OnThisPage } from "@/src/components/docs/on-this-page";
 import { TableOfContentsDropdown } from "@/components/docs/table-of-contents-dropdown";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { Pagination } from "@/src/components/ui/pagination";
@@ -30,9 +30,11 @@ export default function Document({ props, tinaProps }) {
   const { activeIds, contentRef } = useTocListener(documentationData);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[3fr_0.25fr]">
+    // 73.5% of 100% is ~ 55% of the screenwidth in parent div
+    // 26.5% of 100% is ~ 20% of the screenwidth in parent div
+    <div className="grid grid-cols-1 md:grid-cols-[73.5%_26.5%]">
       <div
-        className={`max-w-full overflow-hidden break-words ${
+        className={`max-w-full overflow-hidden break-words  ${
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
@@ -68,11 +70,12 @@ export default function Document({ props, tinaProps }) {
       </div>
       {/* DESKTOP TABLE OF CONTENTS */}
       {documentationData?.tocIsHidden ? null : (
-        <div className={"sticky top-32 mx-8 hidden h-[calc(100vh)] xl:block"}>
-          <TableOfContents
-            tocItems={pageTableOfContents}
-            activeids={activeIds}
-          />
+        <div
+          className={
+            "sticky hidden xl:block  top-4 h-screen mx-4"
+          }
+        >
+          <OnThisPage pageItems={pageTableOfContents} activeids={activeIds} />
         </div>
       )}
     </div>

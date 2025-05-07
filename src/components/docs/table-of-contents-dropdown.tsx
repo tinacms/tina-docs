@@ -1,7 +1,6 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { getIdSyntax } from "./table-of-contents";
+import { getIdSyntax } from "./on-this-page";
 
 const TableOfContentsItems = ({ tocData }) => {
   const handleLinkClick = (

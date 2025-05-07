@@ -8,9 +8,9 @@ export const NavigationSideBar = ({
   tableOfContents: any;
 }) => {
   return (
-    <div className="h-5/6 w-full rounded-2xl bg-white/50 shadow-xl">
+    <div className="w-full h-full rounded-2xl bg-white/50 shadow-xl">
       <Title title={tableOfContents?.title} />
-      <div className="h-[76%] overflow-y-auto overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">
+      <div className="overflow-y-auto overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">
         <DocsNavigationItems navItems={tableOfContents.items} />
       </div>
     </div>
