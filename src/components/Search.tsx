@@ -22,7 +22,7 @@ export default function Search() {
     try {
       if (typeof window !== "undefined") {
         const pagefindModule = await (window as any).eval(
-          `import("/pagefind/pagefind.js")`
+          `import("/public/pagefind/pagefind.js")`
         );
         const search = await pagefindModule.search(value);
 
@@ -40,6 +40,7 @@ export default function Search() {
         setResults(searchResults);
       }
     } catch (error) {
+      // biome-ignore lint/suspicious/noConsole: <explanation>
       console.error("Search error:", error);
       setResults([]);
     } finally {
