@@ -51,7 +51,7 @@ export const QueryResponseTabs = ({ ...props }) => {
     if (document) {
       Prism.highlightAll();
     }
-  }, []); 
+  }, []);
 
   // Handle the copy action
   const handleCopy = () => {
