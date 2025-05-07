@@ -1,10 +1,9 @@
 "use client";
 
 import { getDocId } from "@/utils/docs/getDocsIds";
-import Link from "next/link";
 import type React from "react";
+import { useMotionValueEvent, useScroll } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { MdMenu } from "react-icons/md";
 
 interface OnThisPageProps {
   pageItems: Array<{ type: string; text: string }>;
@@ -32,6 +31,27 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const { scrollYProgress } = useScroll();
+
+  console.log("pageItems", pageItems);
+
+  // Use this to update activeId based on scroll position
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (pageItems.length === 0) return;
+
+    const sectionIndex = Math.min(
+      Math.floor(latest * pageItems.length),
+      pageItems.length - 1
+    );
+
+    if (sectionIndex >= 0) {
+      // Get the ID of the current section
+      const currentSectionId = getIdSyntax(pageItems[sectionIndex].text);
+      
+      // Update activeId to the current section
+      setActiveId(currentSectionId);
+    }
+  });
 
   useEffect(() => {
     const close = () => setIsOpen(false);
