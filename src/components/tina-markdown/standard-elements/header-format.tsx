@@ -14,8 +14,8 @@ export default function HeaderFormat({
     React.isValidElement(children) && children.props?.content
       ? children.props.content.map((content: any) => content.text).join("")
       : typeof children === "string"
-      ? children
-      : ""
+        ? children
+        : ""
   );
   const linkHref = `#${id}`;
 
