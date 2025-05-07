@@ -1,31 +1,29 @@
+import MonacoCodeEditor from "@/tina/customFields/monaco-code-editor";
+
 export const QueryResponseTabsTemplate = {
   name: "queryResponseTabs",
   label: "Query Response Tabs",
+  ui: {
+    defaultItem: {
+      query: "const CONTENT_MANAGEMENT = 'Optimized';",
+      response: "const LLAMAS = '100';",
+    },
+  },
   fields: [
     {
       type: "string",
       name: "query",
       label: "Query",
-      description:
-        "Paste GraphQL query here. '#' are auto-inserted as spacing placeholders and should not be used.",
       ui: {
-        /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
-        component: "textarea",
-        format: (val?: string) => val?.replaceAll("#", " "),
-        parse: (val?: string) => val?.replaceAll(" ", "#"),
+        component: MonacoCodeEditor,
       },
     },
     {
       type: "string",
       name: "response",
       label: "Response",
-      description:
-        "Paste GraphQL response data here. '#' are auto-inserted as spacing placeholders and should not be used.",
       ui: {
-        /* TODO - remove as per https://github.com/tinacms/tina.io/issues/2047 */
-        component: "textarea",
-        format: (val?: string) => val?.replaceAll("#", " "),
-        parse: (val?: string) => val?.replaceAll(" ", "#"),
+        component: MonacoCodeEditor,
       },
     },
     {

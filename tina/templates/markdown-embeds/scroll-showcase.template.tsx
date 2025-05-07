@@ -10,7 +10,7 @@ export const ScrollShowcaseTemplate = {
       ui: {
         defaultItem: {
           title: "Title",
-          image: "/img/placeholder.png",
+          image: "/img/rico-replacement.jpg",
           content: {
             type: "root",
             children: [

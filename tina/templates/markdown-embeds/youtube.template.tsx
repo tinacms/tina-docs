@@ -1,6 +1,13 @@
 export const YoutubeTemplate = {
   name: "youtube",
   label: "Youtube Video",
+  ui: {
+    defaultItem: {
+      embedSrc: "https://www.youtube.com/embed/CsCQS7HIBv0?si=os9ona92O2VMOl-V",
+      caption: "Seth goes over the basics of using TinaCMS",
+      minutes: "2",
+    },
+  },
   fields: [
     {
       type: "string",

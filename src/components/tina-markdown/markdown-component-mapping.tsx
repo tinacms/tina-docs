@@ -1,8 +1,8 @@
 import type { Components } from "tinacms/dist/rich-text";
-import { CardGrid } from "../blocks/card-grid";
-import Accordion from "./embedded-elements/accordion";
+import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
 import ApiReference from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
+import { CardGrid } from "./embedded-elements/card-grid";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
@@ -33,8 +33,14 @@ type ComponentMapping = {
       required: boolean;
     }[];
   };
-  WarningCallout: { body: string };
-  accordion: { docText: string; image: string; heading?: string };
+  Callout: { body: string; variant: string };
+
+  accordion: {
+    docText: string;
+    image: string;
+    heading?: string;
+    fullWidth?: boolean;
+  };
   recipe: {
     title?: string;
     description?: string;
@@ -67,6 +73,14 @@ type ComponentMapping = {
     lang: string;
     children: string;
   };
+  accordionBlock: {
+    accordionItems: {
+      docText: string;
+      image: string;
+      heading?: string;
+      fullWidth?: boolean;
+    }[];
+  };
 };
 
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
@@ -78,7 +92,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   apiReference: (props) => <ApiReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
   queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
-  WarningCallout: (props) => <Callout {...props} variant="warning" />,
+  Callout: (props) => <Callout {...props} variant={props?.variant} />,
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,
   h2: (props) => <HeaderFormat level={2} {...props} />,
@@ -89,7 +103,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   ul: (props) => <ul className="my-4 ml-2 list-disc" {...props} />,
   ol: (props) => <ol className="my-4 ml-2 list-decimal" {...props} />,
   li: (props) => <li className="mb-2 ml-8" {...props} />,
-  p: (props) => <p className="mb-2" {...props} />,
+  p: (props) => <p className="mb-2 font-inter" {...props} />,
   block_quote: (props) => <Callout body={props?.children} variant="info" />,
   a: (props) => (
     <a
@@ -108,6 +122,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   img: (props) => <ImageComponent {...props} />,
   table: (props) => <Table {...props} />,
   code_block: (props) => <CodeBlock {...props} />,
+  accordionBlock: (props) => <AccordionBlock {...props} />,
 };
 
 export default MarkdownComponentMapping;

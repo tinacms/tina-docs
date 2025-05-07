@@ -1,53 +1,66 @@
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  InformationCircleIcon,
-  XCircleIcon,
-} from "@heroicons/react/24/outline";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
-import DocsMDXComponentRenderer from "../markdown-component-mapping";
+import { IoMdInformationCircle } from "react-icons/io";
+import { IoMdWarning } from "react-icons/io";
+import { LuChevronsLeftRight } from "react-icons/lu";
+import { MdLightbulb } from "react-icons/md";
+import { MdLock } from "react-icons/md";
+import { MdOutlineCheck } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
+import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
+import { MarkdownComponentMapping } from "../markdown-component-mapping";
 
 const variants = {
-  warning: "border-x-orange-400",
-  info: "border-x-teal-400",
+  warning: "border-x-yellow-400",
+  info: "border-x-blue-400",
   success: "border-x-green-400",
   error: "border-x-red-400",
+  idea: "border-x-teal-400",
+  lock: "border-x-gray-400",
+  api: "border-x-orange-400",
 };
 
 const icons = {
-  warning: ExclamationTriangleIcon,
-  info: InformationCircleIcon,
-  success: CheckCircleIcon,
-  error: XCircleIcon,
+  warning: IoMdWarning,
+  info: IoMdInformationCircle,
+  success: MdOutlineCheck,
+  error: RxCross2,
+  idea: MdLightbulb,
+  lock: MdLock,
+  api: LuChevronsLeftRight,
 };
 
 const iconColors = {
-  warning: "from-orange-400 to-orange-600",
-  info: "from-teal-400 to-teal-600",
-  success: "from-green-400 to-green-600",
-  error: "from-red-400 to-red-600",
+  warning: "text-yellow-400",
+  info: "text-blue-400",
+  success: "text-green-400",
+  error: "text-red-400",
+  idea: "text-teal-400",
+  lock: "text-gray-400",
+  api: "text-orange-400",
 };
 
-const Callout = ({ body, variant }) => {
-  const Icon = icons[variant];
-  const StyledIcon = (
-    <Icon
-      className={`mx-0 my-2 rounded-full bg-gradient-to-br ${iconColors[variant]} px-2 pb-1.5 pt-0.5 text-white md:mx-2 md:my-0`}
-    />
-  );
+const Callout = ({ body, variant = "warning" }) => {
+  const Icon = icons[variant] || icons.info;
+  const variantClass = variants[variant] || variants.info;
+  const iconColorClass = iconColors[variant] || iconColors.info;
+
   return (
     <blockquote
       style={{
         backgroundColor: "var(--color-white)",
       }}
-      className={`relative my-4 overflow-hidden rounded-r-lg border-l-4 ${variants[variant]} pb-4 pl-4 pr-2 pt-2 md:py-6`}
+      className={`relative my-4 overflow-hidden rounded-lg shadow-sm border-l-4 ${variantClass} pl-4 pr-2 pt-2.5`}
     >
-      <div className="flex flex-col items-start gap-2 md:flex-row md:items-center">
-        <div>{StyledIcon}</div>
-        <div className="leading-6">
+      <div className="flex flex-col items-start gap-1 md:flex-row ">
+        <div>
+          <Icon
+            className={`mx-0 my-2 pb-2 rounded-full ${iconColorClass} px-1.5 md:mx-2 md:my-0`}
+            size={36}
+          />
+        </div>
+        <div className="leading-6 text-neutral-700 font-light">
           <TinaMarkdown
-            content={body as any}
-            components={DocsMDXComponentRenderer}
+            content={body as TinaMarkdownContent}
+            components={MarkdownComponentMapping}
           />
         </div>
       </div>
