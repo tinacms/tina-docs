@@ -76,7 +76,13 @@ export default function Search() {
               className="block p-4 hover:bg-gray-50 border-b last:border-b-0"
             >
               <h3 className="font-medium text-blue-600">{result.title}</h3>
-              <p className="mt-1 text-sm text-gray-600">{result.excerpt}</p>
+              <p
+                className="mt-1 text-sm text-gray-600"
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+                dangerouslySetInnerHTML={{
+                  __html: result.excerpt || undefined,
+                }}
+              />
             </a>
           ))}
         </div>
