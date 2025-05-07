@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "tinacms dev -c \"next dev --turbopack\"",
-    "build": "tinacms build && next build --turbopack",
-    "build-local": "tinacms build --local --skip-indexing --skip-cloud-checks && next build",
+    "build": "tinacms build && next build --turbopack && npx pagefind --site out",
+    "build-local": "tinacms build --local --skip-indexing --skip-cloud-checks && next build && npx pagefind --site out",
     "start": "tinacms build && next start",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
@@ -35,6 +35,7 @@
     "@tinacms/cli": "^1.8.1",
     "@types/node": "^22.10.1",
     "autoprefixer": "^10.4.17",
+    "pagefind": "^1.3.0",
     "postcss": "^8.4.35",
     "postcss-preset-env": "^9.3.0",
     "tailwindcss": "^4.1.0"
