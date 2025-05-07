@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { IoSunny, IoMoon } from "react-icons/io5";
+import { IoMoon, IoSunny } from "react-icons/io5";
 
 export default function LightDarkSwitch() {
   const [isLight, setIsLight] = useState(true);

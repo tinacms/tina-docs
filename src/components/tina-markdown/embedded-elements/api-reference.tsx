@@ -51,7 +51,9 @@ const ApiReference = (data: {
             </div>
             <div className="py-1">
               {property.required && (
-                <p className="text-2xs font-bold text-brand-primary">REQUIRED</p>
+                <p className="text-2xs font-bold text-brand-primary">
+                  REQUIRED
+                </p>
               )}
               {property.experimental && (
                 <p className="text-2xs py-1 font-bold text-brand-tertiary-dark">
@@ -242,8 +244,8 @@ const ApiReference = (data: {
           <RxInfoCircled className="mt-0.5 size-5 shrink-0 text-brand-secondary" />
           <p className="text-sm text-neutral-text-secondary font-inter">
             All properties marked as{" "}
-            <span className="font-medium text-brand-primary">REQUIRED</span> must be
-            specified for the field to work properly.
+            <span className="font-medium text-brand-primary">REQUIRED</span>{" "}
+            must be specified for the field to work properly.
           </p>
         </div>
       )}
