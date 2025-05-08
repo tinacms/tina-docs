@@ -46,30 +46,32 @@ const ApiReference = (data: {
       >
         <div className="flex flex-col gap-2 md:gap-8 md:flex-row md:items-start">
           <div className="w-full md:w-1/3 md:min-w-30">
-            <div className="inline-block max-w-full break-normal font-inter font-bold text-lg">
+            <div className="inline-block max-w-full break-normal font-inter font-bold text-lg text-neutral-text">
               {property?.name?.replace(/([A-Z])/g, "\u200B$1")}
             </div>
             <div className="py-1">
               {property.required && (
-                <p className="text-2xs font-bold text-orange-500">REQUIRED</p>
+                <p className="text-2xs font-bold text-brand-primary">
+                  REQUIRED
+                </p>
               )}
               {property.experimental && (
-                <p className="text-2xs py-1 font-bold text-teal-700">
+                <p className="text-2xs py-1 font-bold text-brand-tertiary-dark">
                   EXPERIMENTAL
                 </p>
               )}
             </div>
           </div>
           <div className="w-full md:w-2/3">
-            <div className=" text-neutral font-inter">{property.type}</div>
-            <div className="text-neutral-light font-inter">
+            <div className=" text-neutral-text font-inter">{property.type}</div>
+            <div className="text-neutral-text-secondary font-inter">
               <TinaMarkdown
                 content={property.description as any}
                 components={MarkdownComponentMapping}
               />
             </div>
             {property.default && (
-              <div className="text-neutral-light font-inter text-sm">
+              <div className="text-neutral-text-secondary font-inter text-sm">
                 Default: <code>{property.default}</code>
               </div>
             )}
@@ -99,23 +101,23 @@ const ApiReference = (data: {
             )
           }
           className={`min-h-18 flex w-full items-center justify-between px-6 py-4 text-left ${
-            isOpen ? "bg-white shadow-lg mb-3" : ""
+            isOpen ? "shadow-lg mb-3" : ""
           }`}
         >
           <div>
             {required && (
-              <p className="text-sm font-medium text-orange-500">REQUIRED</p>
+              <p className="text-sm font-medium text-brand-primary">REQUIRED</p>
             )}
-            <h3 className="text-md font-inter font-bold text-lg">
+            <h3 className="text-md font-inter font-bold text-lg text-neutral-text">
               {groupName || "Object"}
             </h3>
           </div>
 
           <div className="transform transition-transform duration-300 ease-in-out">
             {isOpen ? (
-              <RxMinus className="size-5" />
+              <RxMinus className="size-5 text-neutral-text" />
             ) : (
-              <RxPlus className="size-5" />
+              <RxPlus className="size-5 text-neutral-text" />
             )}
           </div>
         </button>
@@ -157,7 +159,7 @@ const ApiReference = (data: {
   };
 
   return (
-    <div className="my-6 rounded-md bg-gradient-to-b from-white/50 to-white/75 shadow-lg">
+    <div className="my-6 rounded-md brand-glass-gradient shadow-lg">
       {/* Process properties in order, grouping only adjacent items with same groupName */}
       {(() => {
         if (!properties?.length) return null;
@@ -239,11 +241,11 @@ const ApiReference = (data: {
 
       {properties?.some((property) => property.required) && (
         <div className=" mx-4 flex items-start gap-3 rounded-md p-4">
-          <RxInfoCircled className="mt-0.5 size-5 shrink-0 text-[#3B82F6]" />
-          <p className="text-sm text-gray-700 font-inter">
+          <RxInfoCircled className="mt-0.5 size-5 shrink-0 text-brand-secondary" />
+          <p className="text-sm text-neutral-text-secondary font-inter">
             All properties marked as{" "}
-            <span className="font-medium text-[#FF5533]">REQUIRED</span> must be
-            specified for the field to work properly.
+            <span className="font-medium text-brand-primary">REQUIRED</span>{" "}
+            must be specified for the field to work properly.
           </p>
         </div>
       )}
