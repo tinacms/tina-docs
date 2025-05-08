@@ -10,6 +10,9 @@ interface SearchResultsProps {
   searchTerm: string;
 }
 
+const searchResultsContainer =
+  "absolute w-full mt-2 p-4 bg-white z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg left-1/2 -translate-x-1/2";
+
 export function SearchResults({
   results,
   isLoading,
@@ -17,8 +20,8 @@ export function SearchResults({
 }: SearchResultsProps) {
   if (isLoading) {
     return (
-      <div className="absolute w-full mt-2 p-4 bg-white rounded-lg shadow-lg z-10">
-        <h4 className="text-orange-700 text-bold">
+      <div className={searchResultsContainer}>
+        <h4 className="text-orange-500 font-bold my-2">
           Mustering all the Llamas...
         </h4>
       </div>
@@ -27,7 +30,7 @@ export function SearchResults({
 
   if (results.length > 0) {
     return (
-      <div className="absolute md:w-11/12 w-full mt-2 max-h-[50vh] overflow-y-auto bg-white rounded-lg shadow-lg z-10 left-1/2 -translate-x-1/2">
+      <div className={searchResultsContainer}>
         {results.map((result, index) => (
           <a
             key={index}
@@ -52,8 +55,8 @@ export function SearchResults({
 
   if (searchTerm.length > 0) {
     return (
-      <div className="absolute w-full mt-2 p-4 bg-white z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg left-1/2 -translate-x-1/2">
-        <div className="pt-4 px-4 text-md font-inter font-semibold text-gray-500 text-bold">
+      <div className={searchResultsContainer}>
+        <div className="py-2 px-4 text-md font-inter font-semibold text-gray-500 text-bold">
           No Llamas Found...
         </div>
       </div>
