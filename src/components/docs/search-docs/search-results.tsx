@@ -10,7 +10,7 @@ interface SearchResultsProps {
   searchTerm: string;
 }
 
-export default function SearchResults({
+export function SearchResults({
   results,
   isLoading,
   searchTerm,

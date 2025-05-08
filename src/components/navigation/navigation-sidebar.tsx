@@ -1,6 +1,6 @@
 "use client";
 
-import Search from "../Search";
+import Search from "../docs/search-docs/search";
 import { DocsNavigationItems } from "./navigation-items";
 
 export const NavigationSideBar = ({

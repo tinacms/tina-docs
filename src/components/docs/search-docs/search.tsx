@@ -2,7 +2,7 @@
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import SearchResults from "./SearchResults";
+import { SearchResults } from "./search-results";
 
 const isDev = process.env.NODE_ENV === "development";
 const pagefindPath = isDev ? "/pagefind" : "/public/pagefind";

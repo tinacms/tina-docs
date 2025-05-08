@@ -1,4 +1,3 @@
-import Search from "@/src/components/Search";
 import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
