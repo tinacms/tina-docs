@@ -2,6 +2,7 @@
 
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
+import Search from "../Search";
 import { DocsNavigationItems } from "./navigation-items";
 
 const NavigationDropdownContent = ({ tocData }) => {
@@ -56,6 +57,7 @@ export const NavigationDropdown = ({ tocData }) => {
           />
         </div>
       )}
+      <Search className="my-4" />
     </div>
   );
 };

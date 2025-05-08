@@ -6,7 +6,7 @@ import { useState } from "react";
 const isDev = process.env.NODE_ENV === "development";
 const pagefindPath = isDev ? "/pagefind" : "/public/pagefind";
 
-export default function Search() {
+export default function Search({ className }: { className?: string }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,12 +54,12 @@ export default function Search() {
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
-      <div className="relative mx-3">
+    <div className="relative w-full md:max-w-2xl mx-auto my-8 mb-4 mt-2">
+      <div className={`relative md:mx-3 ${className || ""}`}>
         <input
           type="text"
           value={searchTerm}
-          className="w-full p-2 pl-6 rounded-full border border-gray-300/20 bg-white/50 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all"
+          className="w-full p-2 pl-6 rounded-full border border-gray-300/20 bg-white/50 shadow-lg focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all"
           placeholder="Search documentation..."
           onChange={handleSearch}
         />
