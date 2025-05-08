@@ -3,6 +3,9 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
+const isDev = process.env.NODE_ENV === "development";
+const pagefindPath = isDev ? "/pagefind" : "/public/pagefind";
+
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<any[]>([]);
@@ -22,7 +25,7 @@ export default function Search() {
     try {
       if (typeof window !== "undefined") {
         const pagefindModule = await (window as any).eval(
-          `import("/public/pagefind/pagefind.js")`
+          `import("${pagefindPath}/pagefind.js")`
         );
         const search = await pagefindModule.search(value);
 
@@ -30,11 +33,9 @@ export default function Search() {
           search.results.map(async (result: any) => {
             const data = await result.data();
             // biome-ignore lint/suspicious/noConsole: <explanation>
-            console.log("🚀 ~ search.results.map ~ result:", result);
-            // biome-ignore lint/suspicious/noConsole: <explanation>
             console.log("🚀 ~ search.results.map ~ data:", data);
             return {
-              url: result.url,
+              url: data.raw_url,
               title: data.meta.title || "Untitled",
               excerpt: data.excerpt,
             };
@@ -54,15 +55,15 @@ export default function Search() {
 
   return (
     <div className="relative w-full max-w-2xl mx-auto">
-      <div className="relative">
+      <div className="relative mx-3">
         <input
           type="text"
           value={searchTerm}
-          onChange={handleSearch}
+          className="w-full p-2 pl-6 rounded-full border border-gray-300/20 bg-white/50 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all"
           placeholder="Search documentation..."
-          className="w-full px-4 py-2 pl-10 text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          onChange={handleSearch}
         />
-        <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+        <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-orange-600 h-5 w-5" />
       </div>
 
       {isLoading && (
