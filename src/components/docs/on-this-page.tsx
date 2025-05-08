@@ -3,7 +3,7 @@
 import { getDocId } from "@/utils/docs/getDocsIds";
 import type React from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface OnThisPageProps {
   pageItems: Array<{ type: string; text: string }>;
@@ -35,6 +35,13 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const { scrollYProgress } = useScroll();
+
+  useEffect(() => {
+    if (pageItems && pageItems.length > 0) {
+      const firstItemId = getIdSyntax(pageItems[0].text);
+      setActiveId(firstItemId);
+    }
+  }, [pageItems]);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (pageItems.length === 0 || isUserScrolling) return;
