@@ -32,8 +32,23 @@ export default function Search({ className }: { className?: string }) {
         const searchResults = await Promise.all(
           search.results.map(async (result: any) => {
             const data = await result.data();
-            // biome-ignore lint/suspicious/noConsole: <explanation>
-            console.log("🚀 ~ search.results.map ~ data:", data);
+
+            // Normalize and tokenize text for exact word matching
+            const searchTerm = value.toLowerCase();
+            const textToSearch = `${data.meta.title || ""} ${
+              data.excerpt
+            }`.toLowerCase();
+
+            const words = textToSearch.match(/\w+/g) || [];
+
+            // Look for any word that contains the search term starting at any position
+            const matchFound = words.some((word) => {
+              const index = word.indexOf(searchTerm);
+              return index !== -1 && word.slice(index).startsWith(searchTerm);
+            });
+
+            if (!matchFound) return null;
+
             return {
               url: data.raw_url,
               title: data.meta.title || "Untitled",
@@ -42,7 +57,10 @@ export default function Search({ className }: { className?: string }) {
           })
         );
 
-        setResults(searchResults);
+        // Remove null entries (non-matching results)
+        const filteredResults = searchResults.filter(Boolean);
+
+        setResults(filteredResults);
       }
     } catch (error) {
       // biome-ignore lint/suspicious/noConsole: <explanation>
