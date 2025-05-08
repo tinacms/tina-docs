@@ -86,7 +86,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   }
 
   return (
-    <div className="mb-[-0.375rem]  flex-auto break-words whitespace-normal overflow-wrap-break-word">
+    <div className="mb-[-0.375rem] flex-auto break-words whitespace-normal overflow-wrap-break-word pt-6">
       <div
         className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
           isOpen
@@ -130,7 +130,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
                 href={`#${getIdSyntax(item.text)}`}
                 onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
                 className={`${
-                  item.type === "h3" ? "pl-4" : "pl-2"
+                  item.type === "h3" ? "pl-7" : "pl-2"
                 } py-1.5 text-gray-500 ${
                   activeId === getIdSyntax(item.text)
                     ? "text-orange-500"
