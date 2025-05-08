@@ -31,13 +31,11 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
   const { scrollYProgress } = useScroll();
 
-  console.log("pageItems", pageItems);
-
-  // Use this to update activeId based on scroll position
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (pageItems.length === 0) return;
+    if (pageItems.length === 0 || isUserScrolling) return;
 
     const sectionIndex = Math.min(
       Math.floor(latest * pageItems.length),
@@ -45,49 +43,13 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
     );
 
     if (sectionIndex >= 0) {
-      // Get the ID of the current section
-      const currentSectionId = getIdSyntax(pageItems[sectionIndex].text);
-      
-      // Update activeId to the current section
-      setActiveId(currentSectionId);
+      const newActiveId = getIdSyntax(pageItems[sectionIndex].text);
+      setActiveId(newActiveId); 
     }
   });
 
-  useEffect(() => {
-    const close = () => setIsOpen(false);
-    const allLinks = document.querySelectorAll("a");
-    for (const a of Array.from(allLinks)) {
-      a.addEventListener("click", close);
-    }
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    return () => {
-      for (const a of Array.from(allLinks)) {
-        a.removeEventListener("click", close);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (tocWrapperRef.current && activeids?.length > 0) {
-      const tocList = tocWrapperRef.current;
-      const lastActiveId = activeids[activeids.length - 1];
-      const activeLink = tocList.querySelector(`a[href="#${lastActiveId}"]`);
-      setActiveId(lastActiveId);
-
-      if (activeLink) {
-        const activeTop = (activeLink as HTMLElement).offsetTop;
-        const activeHeight = (activeLink as HTMLElement).offsetHeight;
-        const listHeight = tocList.clientHeight;
-
-        tocList.scrollTo({
-          top: activeTop - listHeight / 2 + activeHeight / 2,
-          behavior: "smooth",
-        });
-      }
-    }
-  }, [activeids]);
-
-  //needed for the smooth scroll
   const handleLinkClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     id: string
@@ -96,8 +58,17 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
-
       window.history.pushState(null, "", `#${id}`);
+      setActiveId(id);
+      setIsUserScrolling(true);
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsUserScrolling(false);
+      }, 1000); 
     }
   };
 
