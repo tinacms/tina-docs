@@ -67,7 +67,7 @@ export default function Search({ className }: { className?: string }) {
       </div>
 
       {isLoading && (
-        <div className="absolute w-full mt-2 p-4 bg-white rounded-lg shadow-lg">
+        <div className="absolute w-full mt-2 p-4 bg-white rounded-lg shadow-lg z-10">
           <p className="text-gray-500">Searching...</p>
         </div>
       )}
