@@ -2,6 +2,7 @@
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import SearchResults from "./SearchResults";
 
 const isDev = process.env.NODE_ENV === "development";
 const pagefindPath = isDev ? "/pagefind" : "/public/pagefind";
@@ -43,8 +44,11 @@ export default function Search({ className }: { className?: string }) {
 
             // Look for any word that contains the search term starting at any position
             const matchFound = words.some((word) => {
-              const index = word.indexOf(searchTerm);
-              return index !== -1 && word.slice(index).startsWith(searchTerm);
+              const index = (word as string).indexOf(searchTerm);
+              return (
+                index !== -1 &&
+                (word as string).slice(index).startsWith(searchTerm)
+              );
             });
 
             if (!matchFound) return null;
@@ -84,43 +88,11 @@ export default function Search({ className }: { className?: string }) {
         <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-orange-600 h-5 w-5" />
       </div>
 
-      {isLoading && (
-        <div className="absolute w-full mt-2 p-4 bg-white rounded-lg shadow-lg z-10">
-          <h4 className="text-orange-700 text-bold">
-            Mustering all the Llamas...
-          </h4>
-        </div>
-      )}
-
-      {!isLoading && results.length > 0 && (
-        <div className="absolute md:w-11/12 w-full mt-2 max-h-[50vh] overflow-y-auto bg-white rounded-lg shadow-lg z-10 left-1/2 -translate-x-1/2">
-          {results.map((result, index) => (
-            <a
-              key={index}
-              href={result.url}
-              className="block p-4 border-b-1 border-b-gray-200 last:border-b-0 group"
-            >
-              <h3 className="font-medium text-blue-600 group-hover:text-orange-400">
-                {result.title}
-              </h3>
-              <p
-                className="mt-1 text-sm text-gray-600"
-                // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-                dangerouslySetInnerHTML={{
-                  __html: result.excerpt || undefined,
-                }}
-              />
-            </a>
-          ))}
-        </div>
-      )}
-      {results.length === 0 && !isLoading && searchTerm.length > 0 && (
-        <div className="absolute w-full mt-2 p-4 bg-white z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg left-1/2 -translate-x-1/2">
-          <div className="pt-4 px-4 text-md font-inter font-semibold text-gray-500 text-bold">
-            No Llamas Found...
-          </div>
-        </div>
-      )}
+      <SearchResults
+        results={results}
+        isLoading={isLoading}
+        searchTerm={searchTerm}
+      />
     </div>
   );
 }
