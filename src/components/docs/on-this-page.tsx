@@ -1,10 +1,9 @@
 "use client";
 
 import { getDocId } from "@/utils/docs/getDocsIds";
-import Link from "next/link";
+import { useMotionValueEvent, useScroll } from "motion/react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { MdMenu } from "react-icons/md";
 
 interface OnThisPageProps {
   pageItems: Array<{ type: string; text: string }>;
@@ -23,51 +22,43 @@ export const generateMarkdown = (
     .join("\n");
 };
 
-// Helper function to convert text to a valid HTML ID
 export function getIdSyntax(text: string) {
-  return text.toLowerCase().replace(/ /g, "-");
+  return text
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^a-z0-9\-]/g, "");
 }
 
 export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tocWrapperRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const { scrollYProgress } = useScroll();
 
   useEffect(() => {
-    const close = () => setIsOpen(false);
-    const allLinks = document.querySelectorAll("a");
-    for (const a of Array.from(allLinks)) {
-      a.addEventListener("click", close);
+    if (pageItems && pageItems.length > 0) {
+      const firstItemId = getIdSyntax(pageItems[0].text);
+      setActiveId(firstItemId);
     }
+  }, [pageItems]);
 
-    return () => {
-      for (const a of Array.from(allLinks)) {
-        a.removeEventListener("click", close);
-      }
-    };
-  }, []);
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (pageItems.length === 0 || isUserScrolling) return;
 
-  useEffect(() => {
-    if (tocWrapperRef.current && activeids?.length > 0) {
-      const tocList = tocWrapperRef.current;
-      const lastActiveId = activeids[activeids.length - 1];
-      const activeLink = tocList.querySelector(`a[href="#${lastActiveId}"]`);
-      setActiveId(lastActiveId);
+    const sectionIndex = Math.min(
+      Math.floor(latest * pageItems.length),
+      pageItems.length - 1
+    );
 
-      if (activeLink) {
-        const activeTop = (activeLink as HTMLElement).offsetTop;
-        const activeHeight = (activeLink as HTMLElement).offsetHeight;
-        const listHeight = tocList.clientHeight;
-
-        tocList.scrollTo({
-          top: activeTop - listHeight / 2 + activeHeight / 2,
-          behavior: "smooth",
-        });
-      }
+    if (sectionIndex >= 0) {
+      const newActiveId = getIdSyntax(pageItems[sectionIndex].text);
+      setActiveId(newActiveId);
     }
-  }, [activeids]);
+  });
 
-  //needed for the smooth scroll
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const handleLinkClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     id: string
@@ -76,8 +67,17 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
-
       window.history.pushState(null, "", `#${id}`);
+      setActiveId(id);
+      setIsUserScrolling(true);
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsUserScrolling(false);
+      }, 1000);
     }
   };
 
@@ -86,7 +86,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   }
 
   return (
-    <div className="mb-[-0.375rem]  flex-auto break-words whitespace-normal overflow-wrap-break-word">
+    <div className="mb-[-0.375rem] flex-auto break-words whitespace-normal overflow-wrap-break-word pt-6">
       <div
         className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
           isOpen
@@ -130,7 +130,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
                 href={`#${getIdSyntax(item.text)}`}
                 onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
                 className={`${
-                  item.type === "h3" ? "pl-4" : "pl-2"
+                  item.type === "h3" ? "pl-7" : "pl-2"
                 } py-1.5 text-gray-500 ${
                   activeId === getIdSyntax(item.text)
                     ? "text-orange-500"
