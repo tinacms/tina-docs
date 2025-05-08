@@ -53,7 +53,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
 
     if (sectionIndex >= 0) {
       const newActiveId = getIdSyntax(pageItems[sectionIndex].text);
-      setActiveId(newActiveId); 
+      setActiveId(newActiveId);
     }
   });
 
@@ -77,7 +77,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
 
       scrollTimeoutRef.current = setTimeout(() => {
         setIsUserScrolling(false);
-      }, 1000); 
+      }, 1000);
     }
   };
 
