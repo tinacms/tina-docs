@@ -78,9 +78,11 @@ export default function Search({ className }: { className?: string }) {
             <a
               key={index}
               href={result.url}
-              className="block p-4 hover:bg-gray-50 border-b last:border-b-0"
+              className="block p-4 border-b-1 border-b-gray-200 last:border-b-0 group"
             >
-              <h3 className="font-medium text-blue-600">{result.title}</h3>
+              <h3 className="font-medium text-blue-600 group-hover:text-orange-400">
+                {result.title}
+              </h3>
               <p
                 className="mt-1 text-sm text-gray-600"
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
