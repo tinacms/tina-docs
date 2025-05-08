@@ -68,7 +68,9 @@ export default function Search({ className }: { className?: string }) {
 
       {isLoading && (
         <div className="absolute w-full mt-2 p-4 bg-white rounded-lg shadow-lg z-10">
-          <p className="text-gray-500">Searching...</p>
+          <h4 className="text-orange-700 text-bold">
+            Mustering all the Llamas...
+          </h4>
         </div>
       )}
 
@@ -92,6 +94,13 @@ export default function Search({ className }: { className?: string }) {
               />
             </a>
           ))}
+        </div>
+      )}
+      {results.length === 0 && !isLoading && searchTerm.length > 0 && (
+        <div className="absolute w-full mt-2 p-4 bg-white z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg left-1/2 -translate-x-1/2">
+          <div className="pt-4 px-4 text-md font-inter font-semibold text-gray-500 text-bold">
+            No Llamas Found...
+          </div>
         </div>
       )}
     </div>
