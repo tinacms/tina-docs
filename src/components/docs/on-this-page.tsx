@@ -3,7 +3,7 @@
 import { getDocId } from "@/utils/docs/getDocsIds";
 import type React from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface OnThisPageProps {
   pageItems: Array<{ type: string; text: string }>;
@@ -22,9 +22,11 @@ export const generateMarkdown = (
     .join("\n");
 };
 
-// Helper function to convert text to a valid HTML ID
 export function getIdSyntax(text: string) {
-  return text.toLowerCase().replace(/ /g, "-");
+  return text
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^a-z0-9\-]/g, "");
 }
 
 export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
