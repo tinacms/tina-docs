@@ -54,7 +54,7 @@ export default function Search({ className }: { className?: string }) {
   };
 
   return (
-    <div className="relative w-full md:max-w-2xl mx-auto my-8 mb-4 mt-2">
+    <div className="relative w-full md:max-w-2xl mx-auto my-8 md:mb-4 md:mt-2">
       <div className={`relative md:mx-3 ${className || ""}`}>
         <input
           type="text"
@@ -73,7 +73,7 @@ export default function Search({ className }: { className?: string }) {
       )}
 
       {!isLoading && results.length > 0 && (
-        <div className="absolute w-full mt-2 bg-white rounded-lg shadow-lg z-50">
+        <div className="absolute md:w-11/12 w-full mt-2 max-h-[50vh] overflow-y-auto bg-white rounded-lg shadow-lg z-10 left-1/2 -translate-x-1/2">
           {results.map((result, index) => (
             <a
               key={index}

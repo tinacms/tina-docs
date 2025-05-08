@@ -57,7 +57,7 @@ export const NavigationDropdown = ({ tocData }) => {
           />
         </div>
       )}
-      <Search className="my-4" />
+      <Search />
     </div>
   );
 };
