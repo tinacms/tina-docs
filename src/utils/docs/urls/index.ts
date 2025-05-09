@@ -6,5 +6,5 @@ export {
   removeHash,
   removeQuery,
   removeTrailingSlash,
-  matchActualTarget
-} from './urlUtils';
+  matchActualTarget,
+} from "./urlUtils";

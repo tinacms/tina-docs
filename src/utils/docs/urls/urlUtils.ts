@@ -4,7 +4,7 @@
 
 /**
  * Converts a file path to a URL path
- * 
+ *
  * @param filepath - The file path to convert
  * @param base - Optional base path to remove from the file path
  * @returns URL-friendly path without file extension
@@ -14,7 +14,7 @@ export function fileToUrl(filepath: string, base: string | null): string {
   if (base) {
     filepath = filepath.split(`/${base}/`)[1];
   }
-  
+
   // Remove file extension and convert spaces to hyphens
   const index = filepath.lastIndexOf(".");
   return filepath.replace(/ /g, "-").slice(0, index).trim();
@@ -27,7 +27,7 @@ const everythingExceptTheTrailingSlash = /(.*)\/$/;
 
 /**
  * Creates a function that replaces parts of a URL based on a regex pattern
- * 
+ *
  * @param expr - Regular expression pattern with capture group
  * @returns Function that performs the replacement
  */
@@ -51,12 +51,14 @@ export const removeQuery = createReplacer(everythingBeforeTheQuery);
 /**
  * Removes trailing slash from a URL
  */
-export const removeTrailingSlash = createReplacer(everythingExceptTheTrailingSlash);
+export const removeTrailingSlash = createReplacer(
+  everythingExceptTheTrailingSlash
+);
 
 /**
  * Compares whether two URLs point to the same resource
  * Ignores differences in query parameters, hash fragments, and trailing slashes
- * 
+ *
  * @param url1 - First URL to compare
  * @param url2 - Second URL to compare
  * @returns True if the URLs point to the same resource

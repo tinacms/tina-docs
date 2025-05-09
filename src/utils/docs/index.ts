@@ -1,6 +1,6 @@
 /**
  * Documentation Utilities
- * 
+ *
  * This file exports all documentation-related utilities organized by category:
  * - formatting: Utilities for formatting text, dates, and excerpts
  * - navigation: Utilities for managing document navigation and table of contents
@@ -8,10 +8,10 @@
  */
 
 // Export all formatting utilities
-export * from './formatting';
+export * from "./formatting";
 
 // Export all navigation utilities
-export * from './navigation';
+export * from "./navigation";
 
 // Export all URL utilities
-export * from './urls';
+export * from "./urls";
