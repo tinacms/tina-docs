@@ -1,7 +1,7 @@
 import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
-import { getDocsNav } from "@/utils/docs/getDocumentNavigation";
+import { getDocsNavigation } from "@/utils/docs";
 import type React from "react";
 
 export default async function DocsLayout({
@@ -10,7 +10,7 @@ export default async function DocsLayout({
   children: React.ReactNode;
 }) {
   // Fetch navigation data that will be shared across all docs pages
-  const navigationDocsData = await getDocsNav();
+  const navigationDocsData = await getDocsNavigation();
 
   return (
     <div className="relative flex items-start justify-center w-full max-w-[2000px] ">

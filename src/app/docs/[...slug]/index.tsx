@@ -4,8 +4,7 @@ import { TableOfContentsDropdown } from "@/components/docs/table-of-contents-dro
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { OnThisPage } from "@/src/components/docs/on-this-page";
 import { Pagination } from "@/src/components/ui/pagination";
-import { formatDate } from "@/utils/docs/getFormattedDate";
-import { useTocListener } from "@/utils/docs/tocListener";
+import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 

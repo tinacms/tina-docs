@@ -1,6 +1,6 @@
 "use client";
 
-import { getDocId } from "@/utils/docs/getDocsIds";
+import { formatHeaderId } from "@/utils/docs";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
@@ -15,7 +15,7 @@ export const generateMarkdown = (
 ) => {
   return tocItems
     .map((item) => {
-      const anchor = getDocId(item.text);
+      const anchor = formatHeaderId(item.text);
       const prefix = item.type === "h3" ? "  " : "";
       return `${prefix}- [${item.text}](#${anchor})`;
     })

@@ -1,7 +1,7 @@
+import debounce from "lodash/debounce";
+import dynamic from "next/dynamic";
 import React, { useEffect, useState, useRef } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
-import dynamic from "next/dynamic";
-import debounce from "lodash/debounce";
 
 const MINIMUM_HEIGHT = 75;
 

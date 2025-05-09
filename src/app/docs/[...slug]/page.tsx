@@ -1,8 +1,8 @@
 import { TinaClient } from "@/app/tina-client";
 import settings from "@/content/siteConfig.json";
 import { fetchTinaData } from "@/src/services/tina/fetch-tina-data";
-import getTableOfContents from "@/src/utils/docs/getPageTableOfContents";
 import client from "@/tina/__generated__/client";
+import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
 import Document from ".";
