@@ -42,7 +42,7 @@ export function SearchResults({
             </h3>
             <p
               className="mt-1 text-sm text-gray-600"
-              // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: For Highlighting the search term, it is important to use dangerouslySetInnerHTML
               dangerouslySetInnerHTML={{
                 __html: result.excerpt || "",
               }}

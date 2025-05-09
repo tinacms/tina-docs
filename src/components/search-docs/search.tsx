@@ -38,7 +38,6 @@ export default function Search({ className }: { className?: string }) {
           search.results.map(async (result: any) => {
             const data = await result.data();
 
-            // Normalize and tokenize text for exact word matching
             const searchTerm = value.toLowerCase();
             const textToSearch = `${data.meta.title || ""} ${
               data.excerpt
@@ -46,7 +45,6 @@ export default function Search({ className }: { className?: string }) {
 
             const words = textToSearch.match(/\w+/g) || [];
 
-            // Look for any word that contains the search term starting at any position
             const matchFound = words.some((word) => {
               const index = (word as string).indexOf(searchTerm);
               return (
@@ -65,7 +63,6 @@ export default function Search({ className }: { className?: string }) {
           })
         );
 
-        // Remove null entries (non-matching results)
         const filteredResults = searchResults.filter(Boolean);
 
         setResults(filteredResults);
