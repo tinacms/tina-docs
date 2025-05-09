@@ -11,7 +11,7 @@ interface SearchResultsProps {
 }
 
 const searchResultsContainer =
-  "absolute w-full mt-2 p-4 z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg ml-2 left translate-x-1 overflow-y-auto bg-neutral-background-secondary";
+  "absolute mt-2 p-4 z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg md:ml-2 left translate-x-1 overflow-y-auto bg-neutral-background-tertiary";
 
 export function SearchResults({
   results,

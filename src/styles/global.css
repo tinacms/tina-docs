@@ -44,6 +44,7 @@
   --neutral-background: #F9FAFB;
   --neutral-surface: #FFFFFF;
   --neutral-background-secondary: #F3F4F6;
+  --neutral-background-tertiary: #FFFFFF;
   --neutral-text: #111827;
   --neutral-text-secondary: #6B7280;
   --neutral-border: #D1D5DB;
@@ -82,6 +83,7 @@
   --neutral-surface: #1A202C;
 
   --neutral-background-secondary: #1F2937;
+  --neutral-background-tertiary: #1A202C;
   --neutral-text: #F9FAFB;
   --neutral-text-secondary: #9CA3AF;
   --neutral-border: #4B5563;
