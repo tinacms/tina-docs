@@ -13,7 +13,7 @@ export function formatDate(dateString: string | null): string {
 
   const date = new Date(dateString);
 
-  if (isNaN(date.getTime())) return "";
+  if (Number.isNaN(date.getTime())) return "";
 
   return date.toLocaleDateString("en-US", {
     year: "numeric",
