@@ -1,8 +1,19 @@
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 
+const isStatic = process.env.EXPORT_MODE === "static";
+
 /** @type {import('next').NextConfig} */
+// biome-ignore lint/style/useConst: <explanation>
+let extraConfig = {};
+
+if (isStatic) {
+  extraConfig.output = "export";
+  extraConfig.images = {
+    unoptimized: true,
+  };
+}
 const nextConfig = {
-  output: "export",
+  ...extraConfig,
   async rewrites() {
     return [
       {

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tinacms dev -c \"next dev --turbopack\"",
-    "build": "tinacms build && next build && next export --outdir temp-out && npx pagefind --site temp-out --output-subdir public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose && rm -rf temp-out",
+    "build": "tinacms build && next build && cross-env EXPORT_MODE=static UNOPTIMIZED_IMAGES=true next build && npx pagefind --site out --output-subdir public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose",
     "build-local-pagefind": "next build && echo 'Next.js build complete' && npx pagefind --site out --output-subdir ../public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose",
     "start": "tinacms build && next start",
     "lint": "biome lint .",
@@ -37,6 +37,7 @@
     "@tinacms/cli": "^1.8.1",
     "@types/node": "^22.10.1",
     "autoprefixer": "^10.4.17",
+    "cross-env": "^7.0.3",
     "pagefind": "^1.3.0",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "postcss": "^8.4.35",
