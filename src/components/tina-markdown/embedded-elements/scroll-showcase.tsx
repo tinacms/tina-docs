@@ -102,8 +102,8 @@ export function ScrollBasedShowcase(data: {
                 className={`mt-0 transition-all duration-300 ease-in-out md:mt-8
                   ${
                     isFocused
-                      ? "text-gray-900  opacity-100"
-                      : "border-gray-300  text-gray-800 opacity-15"
+                      ? "text-neutral-text  opacity-100"
+                      : "border-neutral-border  text-neutral-text-secondary opacity-15"
                   }
                 `}
               >

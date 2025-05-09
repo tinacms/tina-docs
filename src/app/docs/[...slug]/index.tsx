@@ -38,7 +38,7 @@ export default function Document({ props, tinaProps }) {
         }`}
       >
         <div
-          className="tina-gradient pt-4 font-tuner text-4xl"
+          className="brand-primary-gradient pt-4 font-tuner text-4xl"
           data-tina-field={tinaField(documentationData, "title")}
         >
           {documentationData?.title}
