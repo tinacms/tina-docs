@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { getExcerpt } from "../docs/getExcerpt";
 import { envUrl } from "../env-url";
 import { DEFAULT_SEO } from "./defaultSeo";
+import { formatExcerpt } from "../docs";
 
 export const getSeo = (data: any): Metadata => {
-  const excerpt = getExcerpt(data.docs.body, 140);
+  const excerpt = formatExcerpt(data.docs.body, 140);
 
   const SEO = {
     title: data.docs.seo?.title || DEFAULT_SEO.title,
