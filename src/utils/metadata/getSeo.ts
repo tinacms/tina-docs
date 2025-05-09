@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { formatExcerpt } from "../docs";
 import { envUrl } from "../env-url";
 import { DEFAULT_SEO } from "./defaultSeo";
-import { formatExcerpt } from "../docs";
 
 export const getSeo = (data: any): Metadata => {
   const excerpt = formatExcerpt(data.docs.body, 140);

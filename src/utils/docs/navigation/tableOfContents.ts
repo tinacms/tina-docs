@@ -30,8 +30,8 @@ export function getTableOfContents(
   const nodes = Array.isArray(markdown)
     ? markdown
     : Array.isArray(markdown.children)
-    ? markdown.children
-    : [];
+      ? markdown.children
+      : [];
 
   for (const item of nodes) {
     if (

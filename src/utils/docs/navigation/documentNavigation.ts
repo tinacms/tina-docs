@@ -1,8 +1,8 @@
+import siteConfig from "@/content/siteConfig.json";
 /**
  * Utilities for managing document navigation structure
  */
 import client from "@/tina/__generated__/client";
-import siteConfig from "@/content/siteConfig.json";
 
 interface NavItem {
   _template?: string;
