@@ -78,6 +78,9 @@ importers:
       monaco-editor-webpack-plugin:
         specifier: ^7.1.0
         version: 7.1.0(monaco-editor@0.52.2)(webpack@5.99.7)
+      pagefind:
+        specifier: ^1.3.0
+        version: 1.3.0
       postcss:
         specifier: ^8.4.35
         version: 8.5.1
