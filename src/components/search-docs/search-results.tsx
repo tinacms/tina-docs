@@ -35,7 +35,7 @@ export function SearchResults({
           <a
             key={index}
             href={result.url}
-            className="block p-4 border-b-1 border-b-gray-200 last:border-b-0 group"
+            className="block p-2 border-b-1 border-b-gray-200 last:border-b-0 group"
           >
             <h3 className="font-medium text-blue-600 group-hover:text-orange-400">
               {result.title}
