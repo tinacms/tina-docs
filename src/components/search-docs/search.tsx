@@ -72,7 +72,7 @@ export default function Search({ className }: { className?: string }) {
             if (!matchFound) return null;
 
             return {
-              url: data.raw_url,
+              url: data.raw_url.split(".")[0],
               title: data.meta.title || "Untitled",
               excerpt: data.excerpt,
             };
