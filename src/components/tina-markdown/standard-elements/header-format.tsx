@@ -1,6 +1,6 @@
 import { LinkIcon } from "@heroicons/react/24/outline";
 import React, { useCallback, useEffect } from "react";
-import { getDocId } from "../../../utils/docs/getDocsIds";
+import { formatHeaderId } from "@/utils/docs";
 
 export default function HeaderFormat({
   children,
@@ -10,12 +10,12 @@ export default function HeaderFormat({
   level: number;
 }) {
   const HeadingTag = `h${level}` as any;
-  const id = getDocId(
+  const id = formatHeaderId(
     React.isValidElement(children) && children.props?.content
       ? children.props.content.map((content: any) => content.text).join("")
       : typeof children === "string"
-        ? children
-        : ""
+      ? children
+      : ""
   );
 
   const linkHref = `#${id}`;
