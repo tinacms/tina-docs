@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tinacms dev -c \"next dev --turbopack\"",
     "build": "tinacms build && next build && cross-env EXPORT_MODE=static next build && npx pagefind --site out --output-subdir public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose",
-    "build-local-pagefind": "tinacms build && next build && npx pagefind --site out --output-subdir ../public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose",
+    "build-local-pagefind": "tinacms build && cross-env EXPORT_MODE=static next build && npx pagefind --site out --output-subdir ../public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose",
     "start": "tinacms build && next start",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
