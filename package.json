@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "tinacms dev -c \"next dev --turbopack\"",
-    "build": "tinacms build && next build && npx pagefind --site out --output-subdir public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose",
+    "build": "tinacms build && next build && next export -o temp-out && npx pagefind --site temp-out --output-subdir public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose && rm -rf temp-out",
     "build-local-pagefind": "next build && echo 'Next.js build complete' && npx pagefind --site out --output-subdir ../public/pagefind --root-selector [data-pagefind-body] --exclude-selectors [role=navigation],nav,aside,header,footer,.navigation,.sidebar,.breadcrumbs --verbose",
-    "export": "tinacms build && EXPORT_MODE=static,UNOPTIMIZED_IMAGES=true next build",
     "start": "tinacms build && next start",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
