@@ -31,9 +31,13 @@ export default function Search({ className }: { className?: string }) {
 
     try {
       if (typeof window !== "undefined") {
-        // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
-        let pagefindModule;
+        let pagefindModule: any;
         try {
+          // Using eval to import pagefind.js is a workaround since the script isn't available during the build process.
+          // This also improves performance by loading the script only when needed, reducing initial page load time.
+          // A direct import would require committing the file with the codebase, which would change frequently
+          // with every content update.
+
           pagefindModule = await (window as any).eval(
             `import("${pagefindPath}/pagefind.js")`
           );
@@ -80,8 +84,6 @@ export default function Search({ className }: { className?: string }) {
         setResults(filteredResults);
       }
     } catch (error) {
-      // biome-ignore lint/suspicious/noConsole: <explanation>
-      console.error("Search error:", error);
       setError("An error occurred while searching. Please try again.");
       setResults([]);
     } finally {
