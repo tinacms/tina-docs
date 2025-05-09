@@ -3,7 +3,7 @@
 /**
  * Utilities for tracking active table of contents items during page scroll
  */
-import { RefObject, useEffect, useRef, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 interface Heading {
   id?: string;
