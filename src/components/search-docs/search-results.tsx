@@ -11,7 +11,7 @@ interface SearchResultsProps {
 }
 
 const searchResultsContainer =
-  "absolute w-full mt-2 p-4 bg-white z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg left-1/2 -translate-x-1/2 overflow-y-auto";
+  "absolute w-full mt-2 p-4 bg-white z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg ml-2 left translate-x-1 overflow-y-auto";
 
 export function SearchResults({
   results,
@@ -21,7 +21,7 @@ export function SearchResults({
   if (isLoading) {
     return (
       <div className={searchResultsContainer}>
-        <h4 className="text-orange-500 font-bold my-2">
+        <h4 className="text-brand-primary font-bold my-2">
           Mustering all the Llamas...
         </h4>
       </div>

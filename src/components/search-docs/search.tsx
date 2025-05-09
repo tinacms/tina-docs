@@ -93,7 +93,7 @@ export default function Search({ className }: { className?: string }) {
 
   return (
     <div className="relative w-full md:max-w-2xl mx-auto my-8 md:mb-4 md:mt-2">
-      <div className={`relative md:mx-3 ${className || ""}`}>
+      <div className={`relative md:mr-4 ${className || ""}`}>
         <input
           type="text"
           value={searchTerm}
@@ -104,7 +104,7 @@ export default function Search({ className }: { className?: string }) {
           onChange={handleSearch}
           disabled={error !== null}
         />
-        <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-orange-600 h-5 w-5" />
+        <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-primary h-5 w-5" />
       </div>
 
       {error && (
