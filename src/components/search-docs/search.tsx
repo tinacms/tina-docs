@@ -15,10 +15,12 @@ export default function Search({ className }: { className?: string }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
+    setError(null);
 
     if (!value.trim()) {
       setResults([]);
@@ -29,9 +31,19 @@ export default function Search({ className }: { className?: string }) {
 
     try {
       if (typeof window !== "undefined") {
-        const pagefindModule = await (window as any).eval(
-          `import("${pagefindPath}/pagefind.js")`
-        );
+        // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
+        let pagefindModule;
+        try {
+          pagefindModule = await (window as any).eval(
+            `import("${pagefindPath}/pagefind.js")`
+          );
+        } catch (importError) {
+          setError(
+            "Unable to load search functionality. For more information, please check this README: TODO:Link and refresh the page."
+          );
+          return;
+        }
+
         const search = await pagefindModule.search(value);
 
         const searchResults = await Promise.all(
@@ -70,6 +82,7 @@ export default function Search({ className }: { className?: string }) {
     } catch (error) {
       // biome-ignore lint/suspicious/noConsole: <explanation>
       console.error("Search error:", error);
+      setError("An error occurred while searching. Please try again.");
       setResults([]);
     } finally {
       setIsLoading(false);
@@ -82,18 +95,29 @@ export default function Search({ className }: { className?: string }) {
         <input
           type="text"
           value={searchTerm}
-          className="w-full p-2 pl-6 rounded-full border border-gray-300/20 bg-white/50 shadow-lg focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all"
+          className={`w-full p-2 pl-6 rounded-full border border-gray-300/20 bg-white/50 shadow-lg focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
+            error !== null ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           placeholder="Search documentation..."
           onChange={handleSearch}
+          disabled={error !== null}
         />
         <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-orange-600 h-5 w-5" />
       </div>
 
-      <SearchResults
-        results={results}
-        isLoading={isLoading}
-        searchTerm={searchTerm}
-      />
+      {error && (
+        <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm w-11/12 mx-auto">
+          {error}
+        </div>
+      )}
+
+      {!error && (
+        <SearchResults
+          results={results}
+          isLoading={isLoading}
+          searchTerm={searchTerm}
+        />
+      )}
     </div>
   );
 }
