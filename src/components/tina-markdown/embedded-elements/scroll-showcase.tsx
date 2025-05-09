@@ -1,5 +1,6 @@
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import {
   type Item,
@@ -18,9 +19,9 @@ export function ScrollBasedShowcase(data: {
 }) {
   const [headings, setHeadings] = useState<Item[]>([]);
   const componentRef = useRef<HTMLDivElement>(null);
-  const activeImg = useRef<HTMLImageElement>(null);
   const headingRefs = useRef<(HTMLHeadingElement | null)[]>([]);
   const [activeIds, setActiveIds] = useState<string[]>([]);
+  const [activeImageSrc, setActiveImageSrc] = useState<string>("");
 
   const windowSize = useWindowSize();
 
@@ -37,6 +38,11 @@ export function ScrollBasedShowcase(data: {
       tempHeadings.push(headingData);
     });
     setHeadings(tempHeadings);
+
+    // Set initial active image
+    if (tempHeadings.length > 0 && tempHeadings[0].src) {
+      setActiveImageSrc(tempHeadings[0].src);
+    }
   }, [data.showcaseItems]);
 
   /** Update heading offsets on resize */
@@ -54,9 +60,9 @@ export function ScrollBasedShowcase(data: {
 
   /** Throttled scroll event */
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !componentRef.current) return;
     const activeTocListener = createListener(
-      componentRef,
+      componentRef as React.RefObject<HTMLDivElement>,
       headings,
       setActiveIds
     );
@@ -68,8 +74,8 @@ export function ScrollBasedShowcase(data: {
   useEffect(() => {
     if (!activeIds.length) return;
     const heading = headings.find((h) => h.id === activeIds[0]);
-    if (activeImg.current) {
-      activeImg.current.src = heading?.src || "";
+    if (heading?.src) {
+      setActiveImageSrc(heading.src);
     }
   }, [activeIds, headings]);
 
@@ -79,10 +85,10 @@ export function ScrollBasedShowcase(data: {
       // doc-container replacements:
       className="relative mx-auto my-5 block w-full"
     >
-      <div className="relative flex min-h-screen">
+      <div className="relative flex ">
         <div
           id="main-content-container"
-          className="m-2 box-border flex min-h-full flex-1 flex-col justify-between px-2 pb-16 pt-8"
+          className="m-2 box-border flex min-h-full gap-20 flex-1 flex-col justify-between px-2 pb-16 pt-8"
         >
           {data.showcaseItems?.map((item, index) => {
             const itemId = `${item.title}-${index}`;
@@ -96,8 +102,8 @@ export function ScrollBasedShowcase(data: {
                 className={`mt-0 transition-all duration-300 ease-in-out md:mt-8
                   ${
                     isFocused
-                      ? "text-gray-900  opacity-100"
-                      : "border-gray-300  text-gray-800 opacity-15"
+                      ? "text-neutral-text  opacity-100"
+                      : "border-neutral-border  text-neutral-text-secondary opacity-15"
                   }
                 `}
               >
@@ -167,28 +173,19 @@ export function ScrollBasedShowcase(data: {
 
         {/* This image container is only displayed on md+ */}
         <div className="relative hidden w-full flex-1 overflow-hidden md:block">
-          {headings[0]?.src && (
+          {activeImageSrc && (
             <Image
-              ref={activeImg}
-              src={headings[0].src}
+              src={activeImageSrc}
               alt=""
               width={500}
               height={300}
               className="w-100 absolute right-0 rounded-lg transition-all duration-1000 ease-in-out"
               style={{
                 opacity: activeIds.length ? 1 : 0,
-                bottom: Math.max(
-                  (componentRef.current?.scrollHeight || 0) -
-                    (headings.filter((h) => activeIds.includes(h.id))[
-                      activeIds.length - 1
-                    ]?.offset || 0) -
-                    (activeIds.includes(headings[0]?.id) &&
-                    activeIds.length === 1
-                      ? activeImg.current?.scrollHeight || 0
-                      : (activeImg.current?.scrollHeight || 0) / 1.2) +
-                    ((activeIds.length - 1) * 32 || 0),
-                  0
-                ),
+                top:
+                  (headings.find((h) => h.id && activeIds.includes(h.id))
+                    ?.offset || 0) + 100,
+                transform: "translateY(-50%)",
               }}
             />
           )}

@@ -1,4 +1,4 @@
-/* Tailwind imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 
@@ -11,11 +11,142 @@
   font-style: normal;
 }
 
-/* CSS custom properties (variables) */
+/* TinaCMS Design Library */
 :root {
-  --primary-color: #f97316;
+  --brand-primary: #EC4815;
+  --brand-primary-hover: #D13F13;
+  --brand-primary-light: #FFEDE4;
+  --brand-primary-dark: #EC4815;
+
+  --brand-secondary: #0084FF;
+  --brand-secondary-hover: #0574E4;
+  --brand-secondary-light: #DCEEFF;
+  --brand-secondary-dark: #0D5DBD;
+
+  --brand-secondary-gradient-start: #4EABFE;
+  --brand-secondary-gradient-end: #0574E4;
+
+
+  --brand-tertiary: #93E9BE;
+  --brand-tertiary-hover: #6AC09A;
+  --brand-tertiary-light: #EEFDF9;
+  --brand-tertiary-dark: #68e9a8;
+
+  --brand-tertiary-gradient-start:  #9FE2BF;
+  --brand-tertiary-gradient-end: #6AC09A;
+
+  --glass-gradient-start: rgba(255, 255, 255, 0.1);
+  --glass-gradient-end: rgba(255, 255, 255, 0.4);
+
+  --background-primary-gradient-start: #E9FBF4;
+  --background-primary-gradient-end: #DCEEFF;
+
+  --neutral-background: #F9FAFB;
+  --neutral-surface: #FFFFFF;
+  --neutral-background-secondary: #F3F4F6;
+  --neutral-text: #111827;
+  --neutral-text-secondary: #6B7280;
+  --neutral-border: #D1D5DB;
+  
 }
+
+.dark{
+  --brand-primary: #FFAB8B;
+  --brand-primary-hover: #FFD3C1;
+  --brand-primary-light: #FFEDE4;
+  --brand-primary-dark: #FFD3C1;
+
+  --brand-secondary: #4EABFE;
+  --brand-secondary-hover: #85C5FE;
+  --brand-secondary-light: #0D5DBD;
+  --brand-secondary-dark: #B4DBFF;
+
+  --brand-secondary-gradient-start: #85C5FE;
+  --brand-secondary-gradient-end: #0574E4;
+
+  --brand-tertiary: #B4EFD9;
+  --brand-tertiary-hover: #CFF5E6;
+  --brand-tertiary-light: #EEFCF7;
+  --brand-tertiary-dark: #CFF5E6;
+
+  --brand-tertiary-gradient-start:  #CFF5E6;
+  --brand-tertiary-gradient-end: #6AC09A;
+
+  --glass-gradient-start: rgba(255, 255, 255, 0.03);
+  --glass-gradient-end: rgba(255, 255, 255, 0.23);
+
+  --background-primary-gradient-start: #1f2937;
+  --background-primary-gradient-end: #1D2C6C;
+
+  --neutral-background: #111827;
+  --neutral-surface: #1A202C;
+
+  --neutral-background-secondary: #1F2937;
+  --neutral-text: #F9FAFB;
+  --neutral-text-secondary: #9CA3AF;
+  --neutral-border: #4B5563;
+}
+
+.brand-primary-gradient {
+  background-image: linear-gradient(to bottom right, var(--brand-primary), var(--brand-primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-secondary-gradient {
+  background-image: linear-gradient(to bottom right, var(--brand-secondary), var(--brand-secondary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-tertiary-gradient {
+  background-image: linear-gradient(to bottom right, var(--brand-tertiary-gradient-start), var(--brand-tertiary-gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-glass-gradient {
+  background-image: linear-gradient(to bottom right, var(--glass-gradient-start), var(--glass-gradient-end));
+}
+
+.brand-background-gradient {
+  background-image: linear-gradient(to bottom right, var(--background-primary-gradient-start), var(--background-primary-gradient-end)); 
+}
+
+.neutral-surface-bg {
+  background-color: var(--neutral-surface);
+}
+
+
+
+
+
+
+
 
 .tina-gradient {
   @apply bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent
+}
+
+@theme {
+  --color-ochre-400: #FF724B;
+  --color-ochre-500: #D13F13;
+  --color-ochre-600: #FE642C;
+  --color-ochre-700: #EC4815;
+  --color-ochre-800: #C73D15;
+  --color-seafoam-light: #EEFDF9;
+  --color-seafoam: #CFFAFE;
+  --color-disabled-gray: #6B7280;
+  --color-grayblue: #17518C;
+  --color-deepblue: #1D2C6C;
+  --color-neutral: #111827;
+  --color-neutral-light: #6B7280;
+  --color-neutral-border: #D1D5DB;
+  --font-inter: "Inter", sans-serif;
 }

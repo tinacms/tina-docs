@@ -16,7 +16,7 @@ export default function Youtube(data: {
         />
       </div>
       {caption && (
-        <div className="font-tuner text-sm text-gray-500">
+        <div className="font-tuner text-sm text-neutral-text-secondary">
           Video: {caption} {minutes && `(${minutes} minutes)`}
         </div>
       )}

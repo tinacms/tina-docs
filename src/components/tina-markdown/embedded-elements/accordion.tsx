@@ -1,14 +1,19 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MarkdownComponentMapping from "../markdown-component-mapping";
-import HeaderFormat from "../standard-elements/header-format";
 
-const Accordion = (data: {
+const Accordion = ({
+  docText,
+  image,
+  heading,
+  fullWidth = false,
+}: {
   docText: string;
   image: string;
   heading?: string;
+  fullWidth?: boolean;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -18,49 +23,167 @@ const Accordion = (data: {
   };
 
   return (
-    <div
-      className={`mb-2 max-w-full overflow-hidden rounded-lg bg-white/40 shadow-sm transition-[width] duration-300 ease-in-out ${
-        isExpanded ? "w-full" : "w-80 delay-700"
-      }`}
-    >
+    <div className="flex flex-col justify-center items-center">
+      {/* Header */}
       <div
-        className="flex cursor-pointer items-center justify-between px-4 py-1"
-        onClick={toggleExpand}
+        className={`mb-5 max-w-full overflow-hidden rounded-lg brand-glass-gradient shadow-lg transition-[width] duration-300 ease-in-out ${
+          fullWidth ? "w-full" : "w-3/4"
+        }`}
       >
-        <HeaderFormat level={6}>
-          {data.heading || "Click to expand"}
-        </HeaderFormat>
-        <div>
-          {isExpanded ? (
-            <MinusIcon className="size-3 text-blue-800" />
-          ) : (
-            <PlusIcon className="size-3 text-gray-500" />
+        <div
+          className="flex cursor-pointer items-center justify-between px-4 py-1"
+          onClick={toggleExpand}
+        >
+          <h4 className="text-neutral-text text-base font-tuner mt-2 mb-1">
+            {heading || "Click to expand"}
+          </h4>
+          <div>
+            {isExpanded ? (
+              <MinusIcon className="size-5 text-neutral-text" />
+            ) : (
+              <PlusIcon className="size-5 text-neutral-text" />
+            )}
+          </div>
+        </div>
+        {/* Expandable content */}
+        <div
+          className={`grid gap-4 border-t border-gray-100 transition-all duration-300 ease-in-out ${
+            isExpanded
+              ? "max-h-[2000px] opacity-100"
+              : "max-h-0 overflow-hidden opacity-0"
+          } ${image ? "sm:grid-cols-2" : ""}`}
+          ref={contentRef}
+        >
+          <div className="p-4">
+            <TinaMarkdown
+              content={docText as any}
+              components={MarkdownComponentMapping}
+            />
+          </div>
+          {image && (
+            <div className="p-4">
+              <Image
+                src={image}
+                alt="image"
+                className="rounded-lg"
+                width={500}
+                height={500}
+              />
+            </div>
           )}
         </div>
-      </div>
-
-      <div
-        className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
-          isExpanded
-            ? "max-h-[2000px] opacity-100 delay-500"
-            : "max-h-0 overflow-hidden opacity-0"
-        } ${data.image ? "sm:grid-cols-2" : ""}`}
-        ref={contentRef}
-      >
-        <div className="p-4">
-          <TinaMarkdown
-            content={data.docText as any}
-            components={MarkdownComponentMapping}
-          />
-        </div>
-        {data.image && (
-          <div className="p-4">
-            <Image src={data.image} alt="image" className="w-full rounded-lg" />
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
 export default Accordion;
+
+export const AccordionBlock = ({
+  accordionItems,
+  fullWidth = false,
+}: {
+  fullWidth?: boolean;
+  accordionItems: {
+    docText: string;
+    image: string;
+    heading?: string;
+    fullWidth?: boolean;
+  }[];
+}) => {
+  const [isExpanded, setIsExpanded] = useState<boolean[]>(
+    accordionItems?.map(() => false) || []
+  );
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [accordionLength, setAccordionLength] = useState(
+    accordionItems?.length || 0
+  );
+
+  useEffect(() => {
+    setAccordionLength(accordionItems?.length || 0);
+    setIsExpanded((prev) => {
+      // Keep existing expanded states for items that still exist
+      // and initialize new ones as false
+      const newExpanded =
+        accordionItems?.map((_, i) => (i < prev.length ? prev[i] : false)) ||
+        [];
+      return newExpanded;
+    });
+  }, [accordionItems]);
+
+  const toggleExpand = (index: number) => {
+    setIsExpanded((prev) => {
+      const newIsExpanded = [...prev];
+      newIsExpanded[index] = !newIsExpanded[index];
+      return newIsExpanded;
+    });
+  };
+
+  // If accordionItems is undefined or empty, return empty div or loading state
+  if (!accordionItems || accordionItems.length === 0) {
+    return (
+      <div className="flex flex-col justify-center items-center rounded-lg bg-white/40 shadow-lg mb-5 p-4">
+        No accordion items
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`mx-auto flex flex-col justify-center items-center rounded-lg brand-glass-gradient shadow-lg mb-5 ${
+        fullWidth ? "w-full" : "w-3/4"
+      }`}
+    >
+      {accordionItems.map((item, index) => (
+        <div key={index} className="w-full">
+          <div
+            className="flex cursor-pointer items-center justify-between px-4 py-1"
+            onClick={() => toggleExpand(index)}
+          >
+            <h4 className="text-neutral-text text-base font-tuner mt-2 mb-1">
+              {item.heading || "Click to expand"}
+            </h4>
+            <div>
+              {isExpanded[index] ? (
+                <MinusIcon className="size-5 text-neutral-text" />
+              ) : (
+                <PlusIcon className="size-5 text-neutral-text" />
+              )}
+            </div>
+          </div>
+          <div
+            className={`grid gap-4 border-t border-gray-100 transition-all duration-300 ease-in-out ${
+              isExpanded[index]
+                ? "max-h-[2000px] opacity-100"
+                : "max-h-0 overflow-hidden opacity-0"
+            } ${item.image ? "sm:grid-cols-2" : ""}`}
+            ref={(el: HTMLDivElement | null) => {
+              contentRefs.current[index] = el;
+            }}
+          >
+            <div className="p-4">
+              <TinaMarkdown
+                content={item.docText as any}
+                components={MarkdownComponentMapping}
+              />
+            </div>
+            {item.image && (
+              <div className="p-4">
+                <Image
+                  src={item.image}
+                  alt="image"
+                  className="rounded-lg"
+                  width={500}
+                  height={500}
+                />
+              </div>
+            )}
+          </div>
+          {index < accordionLength - 1 && (
+            <hr className="w-full h-0.5 text-neutral-text/50" />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};

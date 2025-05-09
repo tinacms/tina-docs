@@ -1,3 +1,5 @@
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
@@ -18,6 +20,20 @@ const nextConfig = {
         permanent: true,
       },
     ];
+  },
+
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Configure Monaco Editor for minimal build
+      config.plugins.push(
+        new MonacoWebpackPlugin({
+          languages: ["javascript"],
+          filename: "static/[name].worker.js",
+          features: ["!gotoSymbol"], // Disable heavy features
+        })
+      );
+    }
+    return config;
   },
 };
 

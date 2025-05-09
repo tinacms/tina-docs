@@ -1,12 +1,34 @@
 export const CardGridTemplate = {
   name: "cardGrid",
   label: "Card Grid",
+  ui: {
+    defaultItem: {
+      cards: [
+        {
+          title: "Card Title",
+          description: "Card Description",
+          link: "https://www.google.com",
+          linkText: "Search now",
+        },
+      ],
+    },
+  },
   fields: [
     {
       name: "cards",
       label: "Cards",
       type: "object",
       list: true,
+      ui: {
+        defaultItem: () => {
+          return {
+            title: "Card Title",
+            description: "Card Description",
+            link: "https://www.google.com",
+            linkText: "Search now",
+          };
+        },
+      },
       fields: [
         {
           name: "title",
