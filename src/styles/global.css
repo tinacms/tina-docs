@@ -12,6 +12,8 @@
 }
 
 /* TinaCMS Design Library */
+
+/* DEFAULT THEME */
 :root {
   --brand-primary: #EC4815;
   --brand-primary-hover: #D13F13;
@@ -25,7 +27,6 @@
 
   --brand-secondary-gradient-start: #4EABFE;
   --brand-secondary-gradient-end: #0574E4;
-
 
   --brand-tertiary: #93E9BE;
   --brand-tertiary-hover: #6AC09A;
@@ -47,10 +48,9 @@
   --neutral-text: #111827;
   --neutral-text-secondary: #6B7280;
   --neutral-border: #D1D5DB;
-  
 }
 
-.dark{
+.dark {
   --brand-primary: #FFAB8B;
   --brand-primary-hover: #FFD3C1;
   --brand-primary-light: #FFEDE4;
@@ -80,13 +80,86 @@
 
   --neutral-background: #111827;
   --neutral-surface: #1A202C;
-
   --neutral-background-secondary: #1F2937;
   --neutral-text: #F9FAFB;
   --neutral-text-secondary: #9CA3AF;
   --neutral-border: #4B5563;
 }
 
+/* MUTED THEME */
+.theme-muted {
+  --brand-primary: #c6785a;
+  --brand-primary-hover: #b16347;
+  --brand-primary-light: #f7e6e0;
+  --brand-primary-dark: #9c4d33;
+
+  --brand-secondary: #7aa8cc;
+  --brand-secondary-hover: #6593b9;
+  --brand-secondary-light: #e4eff7;
+  --brand-secondary-dark: #3e709b;
+
+  --brand-secondary-gradient-start: #aacde6;
+  --brand-secondary-gradient-end: #6593b9;
+
+  --brand-tertiary: #a8d8c4;
+  --brand-tertiary-hover: #8fbfaa;
+  --brand-tertiary-light: #f1f9f6;
+  --brand-tertiary-dark: #6cae96;
+
+  --brand-tertiary-gradient-start: #bfe2d3;
+  --brand-tertiary-gradient-end: #8fbfaa;
+
+  --glass-gradient-start: rgba(255, 255, 255, 0.07);
+  --glass-gradient-end: rgba(255, 255, 255, 0.28);
+
+  --background-primary-gradient-start: #f5f7f9;
+  --background-primary-gradient-end: #e9f0f6;
+
+  --neutral-background: #f6f6f7;
+  --neutral-surface: #ffffff;
+  --neutral-background-secondary: #e7e8ea;
+  --neutral-text: #1d1e20;
+  --neutral-text-secondary: #6c7078;
+  --neutral-border: #cfd2d6;
+}
+
+.theme-muted.dark {
+  --brand-primary: #d39d8b;
+  --brand-primary-hover: #e7c4b8;
+  --brand-primary-light: #f2e3dd;
+  --brand-primary-dark: #a87361;
+
+  --brand-secondary: #a2c6e2;
+  --brand-secondary-hover: #b8d7ed;
+  --brand-secondary-light: #cde4f2;
+  --brand-secondary-dark: #7ba8c7;
+
+  --brand-secondary-gradient-start: #c0d9ee;
+  --brand-secondary-gradient-end: #7ba8c7;
+
+  --brand-tertiary: #c9e8dc;
+  --brand-tertiary-hover: #dff1ea;
+  --brand-tertiary-light: #eef8f4;
+  --brand-tertiary-dark: #a2c8bb;
+
+  --brand-tertiary-gradient-start: #dff1ea;
+  --brand-tertiary-gradient-end: #a2c8bb;
+
+  --glass-gradient-start: rgba(255, 255, 255, 0.03);
+  --glass-gradient-end: rgba(255, 255, 255, 0.2);
+
+  --background-primary-gradient-start: #1a1d22;
+  --background-primary-gradient-end: #2a313a;
+
+  --neutral-background: #1c1f24;
+  --neutral-surface: #23272f;
+  --neutral-background-secondary: #2a2e34;
+  --neutral-text: #f4f5f6;
+  --neutral-text-secondary: #b0b3b8;
+  --neutral-border: #3e444c;
+}
+
+/* Shared styles */
 .brand-primary-gradient {
   background-image: linear-gradient(to bottom right, var(--brand-primary), var(--brand-primary-dark));
   -webkit-background-clip: text;
@@ -122,6 +195,7 @@
 .neutral-surface-bg {
   background-color: var(--neutral-surface);
 }
+
 
 
 
