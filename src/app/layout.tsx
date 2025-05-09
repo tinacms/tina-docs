@@ -2,25 +2,14 @@ import '@/styles/global.css'
 import AdminLink from '@/src/components/ui/admin-link'
 import { TailwindIndicator } from '@/components/ui/tailwind-indicator'
 
-function getThemeFromFile() {
-  try {
-    const fs = require('fs')
-    const path = require('path')
-    const file = fs?.readFileSync(path.join(process.cwd(), '.theme.json'), 'utf-8')
-    return JSON.parse(file).theme || 'default'
-  } catch {
-    return 'default'
-  }
-}
-
 export default function RootLayout({
   children = null,
 }: {
   children: React.ReactNode
 }) {
-  const theme = getThemeFromFile()
+  const theme = process.env.NEXT_PUBLIC_TINA_THEME || 'default'
   console.log(theme);
-
+  
   return (
     <html lang="en" className={`theme-${theme} dark`}>
       <head>
