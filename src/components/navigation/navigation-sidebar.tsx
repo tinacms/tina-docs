@@ -13,8 +13,8 @@ export const NavigationSideBar = ({
     <div className="w-full h-full rounded-2xl brand-glass-gradient shadow-xl">
       <div className="flex-col pl-6 items-center">
         <Title title={tableOfContents?.title} />
-        <Search />
         <LightDarkSwitch />
+        <Search />
       </div>
 
       <div className="overflow-y-auto overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">

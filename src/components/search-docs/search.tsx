@@ -97,14 +97,14 @@ export default function Search({ className }: { className?: string }) {
         <input
           type="text"
           value={searchTerm}
-          className={`w-full p-2 pl-6 rounded-full border border-gray-300/20 bg-white/50 shadow-lg focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
+          className={`w-full text-neutral-text mt-2 p-2 pl-6 rounded-full bg-neutral-background-secondary shadow-lg focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
             error !== null ? "opacity-50 cursor-not-allowed" : ""
           }`}
           placeholder="Search documentation..."
           onChange={handleSearch}
           disabled={error !== null}
         />
-        <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-primary h-5 w-5" />
+        <MagnifyingGlassIcon className="mt-1 absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-primary h-5 w-5" />
       </div>
 
       {error && (

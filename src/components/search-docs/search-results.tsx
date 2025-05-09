@@ -11,7 +11,7 @@ interface SearchResultsProps {
 }
 
 const searchResultsContainer =
-  "absolute w-full mt-2 p-4 bg-white z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg ml-2 left translate-x-1 overflow-y-auto";
+  "absolute w-full mt-2 p-4 z-10 py-2 max-h-[45vh] md:w-11/12 mx-auto rounded-lg shadow-lg ml-2 left translate-x-1 overflow-y-auto bg-neutral-background-secondary";
 
 export function SearchResults({
   results,
@@ -37,11 +37,11 @@ export function SearchResults({
             href={result.url}
             className="block p-2 border-b-1 border-b-gray-200 last:border-b-0 group"
           >
-            <h3 className="font-medium text-blue-600 group-hover:text-orange-400">
+            <h3 className="font-medium text-brand-primary group-hover:text-orange-400">
               {result.title}
             </h3>
             <p
-              className="mt-1 text-sm text-gray-600"
+              className="mt-1 text-sm text-neutral-text"
               // biome-ignore lint/security/noDangerouslySetInnerHtml: For Highlighting the search term, it is important to use dangerouslySetInnerHTML
               dangerouslySetInnerHTML={{
                 __html: result.excerpt || "",
