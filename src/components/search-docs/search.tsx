@@ -43,7 +43,7 @@ export default function Search({ className }: { className?: string }) {
           );
         } catch (importError) {
           setError(
-            "Unable to load search functionality. For more information, please check this README: TODO:Link and refresh the page."
+            "Unable to load search functionality. For more information, please check this README: https://github.com/tinacms/tina-docs?tab=readme-ov-file#search-functionality and refresh the page."
           );
           return;
         }

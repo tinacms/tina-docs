@@ -12,6 +12,7 @@ if (isStatic) {
     unoptimized: true,
   };
 }
+
 const nextConfig = {
   ...extraConfig,
   async rewrites() {
