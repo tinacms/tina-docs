@@ -150,3 +150,10 @@
   --color-neutral-border: #D1D5DB;
   --font-inter: "Inter", sans-serif;
 }
+
+mark {
+  background-color: var(--brand-primary-light);
+  font-weight: bold;
+}
+
+
