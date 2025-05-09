@@ -16,8 +16,8 @@ interface TocItem {
 /**
  * Extracts header elements from markdown content to create a table of contents
  * Only includes h2 and h3 headings
- * 
- * @param markdown - The markdown content structure 
+ *
+ * @param markdown - The markdown content structure
  * @returns An array of heading objects with type and text properties
  */
 export function getTableOfContents(
@@ -30,8 +30,8 @@ export function getTableOfContents(
   const nodes = Array.isArray(markdown)
     ? markdown
     : Array.isArray(markdown.children)
-      ? markdown.children
-      : [];
+    ? markdown.children
+    : [];
 
   for (const item of nodes) {
     if (

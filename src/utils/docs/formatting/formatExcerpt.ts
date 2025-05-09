@@ -24,7 +24,7 @@ interface ContentBody {
 /**
  * Extracts an excerpt from markdown content
  * Creates a text-only summary from the first paragraphs up to the specified length
- * 
+ *
  * @param body - The markdown body content structure
  * @param excerptLength - Maximum length of the excerpt in characters
  * @returns A plain text excerpt of the content
@@ -52,12 +52,12 @@ export const formatExcerpt = (
           }
           return text;
         }, "");
-      
+
       // Add paragraph to excerpt with space separator
-      const updatedExcerpt = excerpt 
-        ? `${excerpt} ${paragraphText}` 
+      const updatedExcerpt = excerpt
+        ? `${excerpt} ${paragraphText}`
         : paragraphText;
-        
+
       // Truncate if the combined text is too long
       if (updatedExcerpt.length > excerptLength) {
         return `${updatedExcerpt.substring(0, excerptLength)}...`;

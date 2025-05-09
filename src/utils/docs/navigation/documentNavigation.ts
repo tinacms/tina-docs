@@ -30,7 +30,7 @@ interface FormattedNavigation {
 
 /**
  * Transforms document references into proper URL slugs
- * 
+ *
  * @param navItems - Array of navigation items to process
  * @returns Processed navigation items with transformed slugs
  */
@@ -54,11 +54,13 @@ const transformReferencesToSlugs = (navItems: NavItem[]): NavItem[] => {
 
 /**
  * Fetches and formats the documentation navigation structure
- * 
+ *
  * @param preview - Whether to fetch in preview mode
  * @returns Formatted navigation structure with proper slugs
  */
-export async function getDocsNavigation(preview?: boolean): Promise<FormattedNavigation> {
+export async function getDocsNavigation(
+  preview?: boolean
+): Promise<FormattedNavigation> {
   // Fetch navigation data from Tina
   const navigationData = await client.queries.navigationBar({
     relativePath: "DocsNavigationBar.json",
@@ -69,7 +71,7 @@ export async function getDocsNavigation(preview?: boolean): Promise<FormattedNav
 
 /**
  * Processes navigation data into a standardized structure
- * 
+ *
  * @param navigationData - Raw navigation data from Tina CMS
  * @param preview - Whether in preview mode
  * @returns Formatted navigation data with proper URL structures
@@ -88,7 +90,7 @@ export function formatNavigationData(
 
   return {
     data: {
-      title: navigationData.navigationBar.title || '',
+      title: navigationData.navigationBar.title || "",
       items: navGroups,
     },
     sha: "",
