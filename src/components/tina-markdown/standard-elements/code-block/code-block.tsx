@@ -51,15 +51,22 @@ export function CodeBlock({
     };
   }, [value, lang]);
 
-  console.log(lang);
-
   return (
-    <div className="relative w-full my-2 group">
-      <div className={`absolute top-0 right-0 z-10 px-2 py-1 text-xs font-mono text-[#d6deeb] transition-opacity duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none ${showCopyButton ? "" : "hidden"}`}>
+    <div className={`relative w-full my-2${showCopyButton ? " group" : ""}`}>
+      <div
+        className={`absolute top-0 right-0 z-10 px-2 py-1 text-xs font-mono text-[#d6deeb] transition-opacity duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none ${
+          showCopyButton ? "" : "hidden"
+        }`}
+      >
         {lang}
       </div>
-      <div className={`absolute top-0 right-0 z-10 mx-2 my-1 text-xs font-mono bg-[#222] transition-opacity duration-200 opacity-0 group-hover:opacity-100 cursor-pointer ${showCopyButton ? "" : "hidden"}`}>
+      <div
+        className={`absolute top-0 right-0 z-10 mx-2 my-1 text-xs font-mono bg-[#222] transition-opacity duration-200 opacity-0 group-hover:opacity-100 cursor-pointer ${
+          showCopyButton ? "" : "hidden"
+        }`}
+      >
         <button
+          type="button"
           onClick={() => {
             navigator.clipboard.writeText(value);
             setIsCopied(true);
@@ -67,14 +74,16 @@ export function CodeBlock({
           }}
           className="px-2 py-1 text-[#d6deeb] rounded transition cursor-pointer flex items-center gap-1"
         >
-          {isCopied ? <FaCheck size={12} /> : 'Copy'}
+          {isCopied ? <FaCheck size={12} /> : "Copy"}
         </button>
       </div>
+      {/*
+        biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki output is trusted and already escaped for XSS safety.
+      */}
       <div
         className="shiki w-full overflow-x-auto rounded-lg bg-[#011627] p-4 text-sm"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>
   );
-  
 }
