@@ -55,10 +55,10 @@ export function CodeBlock({
 
   return (
     <div className="relative w-full my-2 group">
-      <div className={`absolute top-0 right-0 z-10 px-2 py-1 text-xs font-mono text-[#d6deeb] transition-opacity duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none ${showCopyButton ? "opacity-100" : "opacity-0"}`}>
+      <div className={`absolute top-0 right-0 z-10 px-2 py-1 text-xs font-mono text-[#d6deeb] transition-opacity duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none ${showCopyButton ? "" : "hidden"}`}>
         {lang}
       </div>
-      <div className="absolute top-0 right-0 z-10 mx-2 my-1 text-xs font-mono bg-[#222] transition-opacity duration-200 opacity-0 group-hover:opacity-100 cursor-pointer">
+      <div className={`absolute top-0 right-0 z-10 mx-2 my-1 text-xs font-mono bg-[#222] transition-opacity duration-200 opacity-0 group-hover:opacity-100 cursor-pointer ${showCopyButton ? "" : "hidden"}`}>
         <button
           onClick={() => {
             navigator.clipboard.writeText(value);

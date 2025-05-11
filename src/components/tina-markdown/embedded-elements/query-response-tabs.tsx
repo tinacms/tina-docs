@@ -1,16 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-
 import React from "react";
-
-import Prism from "prismjs";
-import "prismjs/components/prism-javascript";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
-import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-import "prismjs/plugins/line-highlight/prism-line-highlight";
-import "prismjs/plugins/line-highlight/prism-line-highlight.css";
-//Custom theming
-import "./code-block.helper.css";
-
+import { CodeBlock } from "../standard-elements/code-block/code-block";
 import {
   CheckIcon as CheckIconOutline,
   ClipboardIcon as ClipboardIconOutline,
@@ -31,27 +21,16 @@ export const QueryResponseTabs = ({ ...props }) => {
         setHeight(activeRef.current.scrollHeight);
       }
     };
-
-    // Update height when tab changes
     updateHeight();
-
     const resizeObserver = new ResizeObserver(updateHeight);
     const activeRef = isQuery ? queryRef : responseRef;
     if (activeRef.current) {
       resizeObserver.observe(activeRef.current);
     }
-
     return () => {
       resizeObserver.disconnect();
     };
-  }, [isQuery]); // Add isQuery as dependency to update height when switching tabs
-
-  // Highlight code when mounted and when tab changes
-  useEffect(() => {
-    if (document) {
-      Prism.highlightAll();
-    }
-  }, []);
+  }, [isQuery]);
 
   // Handle the copy action
   const handleCopy = () => {
@@ -145,21 +124,19 @@ export const QueryResponseTabs = ({ ...props }) => {
           >
             {isQuery ? (
               <div ref={queryRef} className="relative -mt-2">
-                <pre
-                  className="language-javascript line-numbers"
-                  style={{ position: "relative", whiteSpace: "pre" }}
-                >
-                  <code className="language-javascript">{props.query}</code>
-                </pre>
+                <CodeBlock
+                  value={props.query}
+                  lang="javascript"
+                  showCopyButton={false}
+                />
               </div>
             ) : (
               <div ref={responseRef} className="-mt-2 relative">
-                <pre
-                  className="language-javascript line-numbers"
-                  style={{ position: "relative", whiteSpace: "pre" }}
-                >
-                  <code className="language-javascript">{props.response}</code>
-                </pre>
+                <CodeBlock
+                  value={props.response}
+                  lang="javascript"
+                  showCopyButton={false}
+                />
               </div>
             )}
           </div>
