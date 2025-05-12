@@ -12,6 +12,7 @@ import HeaderFormat from "./standard-elements/header-format";
 import { ImageComponent } from "./standard-elements/image";
 import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
+import Steps from "./embedded-elements/steps";
 
 type ComponentMapping = {
   youtube: { embedSrc: string; caption?: string; minutes?: string };
@@ -88,6 +89,11 @@ type ComponentMapping = {
       fullWidth?: boolean;
     }[];
   };
+  steps: {
+    stepBlock: {
+      description: string;
+    }[];
+  };
 };
 
 type CalloutVariant =
@@ -139,12 +145,12 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
     <a
       href={props?.url}
       {...props}
-      className="underline opacity-80 transition-all duration-200 ease-out hover:text-brand-primary text-neutral-text"
+      className="transition-all duration-200 ease-out text-brand-tertiary-text hover:text-brand-tertiary-hover"
     />
   ),
   code: (props) => (
     <code
-      className="rounded border-y-neutral-border brand-glass-gradient px-1 py-0.5 text-brand-primary"
+      className="rounded border-y-neutral-border shadow-lg bg-neutral-border px-1 py-0.5 text-brand-primary"
       {...props}
     />
   ),
@@ -153,6 +159,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   table: (props) => <Table {...props} />,
   code_block: (props) => <CodeBlock {...props} />,
   accordionBlock: (props) => <AccordionBlock {...props} />,
+  steps: (props) => <Steps {...props} />,
 };
 
 export default MarkdownComponentMapping;

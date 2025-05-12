@@ -8,6 +8,7 @@ import ScrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-show
 import YoutubeTemplate from "@/tina/templates/markdown-embeds/youtube.template";
 import type { Template } from "tinacms";
 import SeoInformation from "./seo-information";
+import { StepsTemplate } from "../templates/markdown-embeds/steps.template";
 
 export const docsCollection = {
   name: "docs",
@@ -95,6 +96,7 @@ export const docsCollection = {
         YoutubeTemplate as Template,
         QueryResponseTabsTemplate as Template,
         CalloutTemplate as Template,
+        StepsTemplate as Template,
       ],
     },
   ],
