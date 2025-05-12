@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import React from "react";
-import { CodeBlock } from "../standard-elements/code-block/code-block";
 import {
   CheckIcon as CheckIconOutline,
   ClipboardIcon as ClipboardIconOutline,
 } from "@heroicons/react/24/outline";
+import { useEffect, useRef, useState } from "react";
+import React from "react";
+import { CodeBlock } from "../standard-elements/code-block/code-block";
 
 export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);

@@ -15,11 +15,11 @@ pre.shiki {
 }
 
 .shiki .line.diff.add::before {
-    color: #3DD68C;
+    color: #3dd68c;
 }
 
 .shiki .line.diff.remove::before {
-    color: #CB7676;
+    color: #cb7676;
 }
 
 .shiki .line::before {

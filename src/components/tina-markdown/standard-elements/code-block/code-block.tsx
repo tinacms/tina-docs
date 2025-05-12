@@ -77,7 +77,7 @@ export function CodeBlock({
           {isCopied ? <FaCheck size={12} /> : "Copy"}
         </button>
       </div>
-    
+
       <div
         className="shiki w-full overflow-x-auto rounded-lg bg-[#011627] p-4 text-sm"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki output is trusted and already escaped for XSS safety.
