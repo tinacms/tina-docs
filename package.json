@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tinacms dev -c \"next dev --turbopack\"",
-    "build": "tinacms build && next build && npx pagefind --site .next --output-subdir .next/static/chunks/pages/pagefind",
+    "build": "tinacms build && next build && npx pagefind --site .next --output-subdir _next/static/chunks/pages/pagefind",
     "build-local-pagefind": "tinacms build && next build && npx pagefind --site .next --output-subdir ../public/pagefind",
     "start": "tinacms build && next start",
     "lint": "biome lint .",
