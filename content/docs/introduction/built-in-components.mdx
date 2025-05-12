@@ -1,12 +1,71 @@
 ---
 title: Built-in Components
-last_edited: '2025-05-12T05:39:50.157Z'
+last_edited: '2025-05-12T06:46:27.027Z'
 tocIsHidden: true
 next: ''
 previous: ''
 ---
 
 This page can be used as a reference to see what's possible with TinaCMS, and also what components come built in with TinaDocs.
+
+<apiReference
+  endpointName="/users/:id"
+  description="Retrieve a user by ID."
+  type="GET"
+  pathParameters={[
+    {
+      parameterName: "id",
+      parameterDescription: "The ID of the user",
+      required: true,
+      in: "path",
+      type: "string"
+    },
+    {
+      parameterName: "includePosts",
+      parameterDescription: "Whether to include the user's posts.",
+      in: "query",
+      type: "boolean"
+    }
+  ]}
+  responses={[
+    {
+      status: 200,
+      description: "User retrieved successfully",
+      responseBody: [
+        {
+          fieldName: "id",
+          type: "string",
+          description: "The user's unique identifier"
+        },
+        {
+          fieldName: "name",
+          type: "string",
+          description: "The user's full name."
+        },
+        {
+          fieldName: "profile",
+          type: "object",
+          description: "The user's profile details. ",
+          fields: [
+            { fieldName: "bio", type: "string", description: "Short biography" },
+            {
+              fieldName: "avatarUrl",
+              type: "string",
+              description: "Link to the user's avatar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      status: 400,
+      description: "User not found.",
+      responseBody: [
+        { fieldName: "error", type: "string", description: "Error message." }
+      ]
+    }
+  ]}
+/>
 
 All components are built with React and Tailwind – pull down the repo to add additional components or modify existing component behaviour.
 
@@ -138,31 +197,31 @@ or
 
 ### Type Reference
 
-<apiReference
+<typeReference
   property={[
-      {
-        groupName: "",
-        name: "objectId",
-        description: "This determines how the object will be accessed by Tina.\n",
-        type: "long",
-        required: true
-      },
-      { groupName: "Options", name: "format", type: "string", default: "table" },
-      {
-        groupName: "Options",
-        name: "enableExperimental",
-        type: "boolean",
-        default: "false"
-      },
-      { name: "title", type: "string", default: "API Reference" },
-      { name: "description", type: "string", default: "API Reference" },
-      {
-        name: "fluxCapacitor",
-        description: "Powers the DeLorian\n",
-        type: "Machine",
-        experimental: true
-      }
-    ]}
+    {
+      groupName: "",
+      name: "objectId",
+      description: "This determines how the object will be accessed by Tina.\n",
+      type: "long",
+      required: true
+    },
+    { groupName: "Options", name: "format", type: "string", default: "table" },
+    {
+      groupName: "Options",
+      name: "enableExperimental",
+      type: "boolean",
+      default: "false"
+    },
+    { name: "title", type: "string", default: "API Reference" },
+    { name: "description", type: "string", default: "API Reference" },
+    {
+      name: "fluxCapacitor",
+      description: "Powers the DeLorian\n",
+      type: "Machine",
+      experimental: true
+    }
+  ]}
 />
 
 ### Mermaid Diagrams
