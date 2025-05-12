@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tinacms dev -c \"next dev --turbopack\"",
     "build": "tinacms build && next build",
-    "postbuild": "npx pagefind --site .next --output-path public/_pagefind",
+    "postbuild": "npx pagefind --site .next --output-path _pagefind",
     "build-local-pagefind": "tinacms build && next build && npx pagefind --site .next --output-subdir ../public/pagefind",
     "start": "tinacms build && next start",
     "lint": "biome lint .",

@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV === "development";
 // The production path doesn't locate the pagefind-entry.json, as it's treated as its own route.
 // This workaround ensures the pagefind-entry.json can be found.
 // For development, the pagefind-entry.json must be located at the root of the project.
-const pagefindPath = isDev ? "/pagefind" : "/pagefind";
+const pagefindPath = isDev ? "/pagefind" : "/_pagefind";
 
 export function Search({ className }: { className?: string }) {
   const [searchTerm, setSearchTerm] = useState("");
