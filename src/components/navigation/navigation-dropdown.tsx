@@ -2,7 +2,7 @@
 
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
-import Search from "../search-docs/search";
+import { Search } from "../search-docs/search";
 import { DocsNavigationItems } from "./navigation-items";
 
 const NavigationDropdownContent = ({ tocData }) => {

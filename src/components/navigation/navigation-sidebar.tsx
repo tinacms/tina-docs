@@ -1,6 +1,6 @@
 "use client";
 
-import Search from "../search-docs/search";
+import { Search } from "../search-docs/search";
 import LightDarkSwitch from "../ui/light-dark-switch";
 import { DocsNavigationItems } from "./navigation-items";
 

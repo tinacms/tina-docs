@@ -11,7 +11,7 @@ const isDev = process.env.NODE_ENV === "development";
 // For development, the pagefind-entry.json must be located at the root of the project.
 const pagefindPath = isDev ? "/pagefind" : "/public/pagefind";
 
-export default function Search({ className }: { className?: string }) {
+export function Search({ className }: { className?: string }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
