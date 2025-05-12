@@ -3,7 +3,7 @@ import { RxInfoCircled, RxMinus, RxPlus } from "react-icons/rx";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 
-const ApiReference = (data: {
+const TypeReference = (data: {
   property: {
     groupName: string;
     name: string;
@@ -253,4 +253,4 @@ const ApiReference = (data: {
   );
 };
 
-export default ApiReference;
+export default TypeReference;

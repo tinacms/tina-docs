@@ -1,6 +1,6 @@
 import type { Components, TinaMarkdownContent } from "tinacms/dist/rich-text";
 import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
-import ApiReference from "./embedded-elements/api-reference";
+import TypeReference from "./embedded-elements/type-reference";
 import Callout from "./embedded-elements/callout";
 import { CardGrid } from "./embedded-elements/card-grid";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
@@ -30,7 +30,7 @@ type ComponentMapping = {
       };
     };
   };
-  apiReference: {
+  typeReference: {
     title: string;
     property: {
       groupName: string;
@@ -117,7 +117,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   cardGrid: (props) => <CardGrid {...props} />,
   recipe: (props) => <RecipeBlock {...props} />,
   accordion: (props) => <Accordion {...props} />,
-  apiReference: (props) => <ApiReference {...props} />,
+  typeReference: (props) => <TypeReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
   queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
   Callout: (props: { body: TinaMarkdownContent; variant: string }) => (

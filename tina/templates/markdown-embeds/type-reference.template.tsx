@@ -1,6 +1,6 @@
-export const ApiReferenceTemplate = {
-  name: "apiReference",
-  label: "API Reference",
+export const TypeReferenceTemplate = {
+  name: "typeReference",
+  label: "Type Reference",
   ui: {
     defaultItem: {
       property: [
@@ -87,4 +87,4 @@ export const ApiReferenceTemplate = {
   ],
 };
 
-export default ApiReferenceTemplate;
+export default TypeReferenceTemplate;
