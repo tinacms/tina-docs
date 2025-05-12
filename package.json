@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tinacms dev -c \"next dev --turbopack\"",
     "build": "tinacms build && next build",
-    "postbuild": "npx pagefind --site /vercel/path0 --output-path /vercel/path0/test/pagefind && ls -la",
+    "postbuild": "npx pagefind --site .next --output-path vercel_output/public/pagefind && ls -la vercel_output/public/pagefind",
     "build-local-pagefind": "tinacms build && next build && npx pagefind --site .next --output-subdir ../public/pagefind",
     "start": "tinacms build && next start",
     "lint": "biome lint .",
