@@ -13,6 +13,9 @@ import { ImageComponent } from "./standard-elements/image";
 import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
 import Steps from "./embedded-elements/steps";
+import ApiReference, {
+  ApiReferenceType,
+} from "./embedded-elements/api-reference";
 
 type ComponentMapping = {
   youtube: { embedSrc: string; caption?: string; minutes?: string };
@@ -94,6 +97,7 @@ type ComponentMapping = {
       description: string;
     }[];
   };
+  apiReference: ApiReferenceType;
 };
 
 type CalloutVariant =
@@ -160,6 +164,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   code_block: (props) => <CodeBlock {...props} />,
   accordionBlock: (props) => <AccordionBlock {...props} />,
   steps: (props) => <Steps {...props} />,
+  apiReference: (props: ApiReferenceType) => <ApiReference {...props} />,
 };
 
 export default MarkdownComponentMapping;
