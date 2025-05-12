@@ -14,7 +14,6 @@ if (isStatic) {
 }
 
 const nextConfig = {
-  ...extraConfig,
   async rewrites() {
     return [
       {
