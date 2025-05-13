@@ -34,6 +34,21 @@ Build the project:
 ```bash
 pnpm build
 ```
+## Search Functionality
+
+The search feature uses [Pagefind](https://pagefind.app/), an open-source library that indexes your site during the build process.  
+When the project is built, Pagefind re-indexes the content and places the search index in the `public/pagefind` directory.
+
+---
+
+## Run Search Indexing Locally
+
+To generate the Pagefind index in your local environment, run the following command:
+
+```bash
+pnpm build-local-pagefind
+```
+
 
 ## Learn More
 
