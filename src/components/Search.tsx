@@ -5,7 +5,7 @@ import { useState } from "react";
 import { SearchResults } from "./search-docs/search-results";
 
 const isDev = process.env.NODE_ENV === "development";
-const pagefindPath = isDev ? "/pagefind" : "/public/pagefind";
+const pagefindPath = isDev ? "/pagefind" : "/_next/static/pagefind";
 
 export default function Search({ className }: { className?: string }) {
   const [searchTerm, setSearchTerm] = useState("");
