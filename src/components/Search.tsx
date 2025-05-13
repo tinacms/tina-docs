@@ -25,6 +25,7 @@ export default function Search({ className }: { className?: string }) {
 
     try {
       if (typeof window !== "undefined") {
+        console.log("🚀 ~ handleSearch ~ pagefindPath:", pagefindPath);
         const pagefindModule = await (window as any).eval(
           `import("${pagefindPath}/pagefind.js")`
         );
