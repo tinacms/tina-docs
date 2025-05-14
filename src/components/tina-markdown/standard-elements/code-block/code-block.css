@@ -22,7 +22,6 @@ pre.shiki {
   color: #cb7676;
 }
 
-
 .shiki .line::before {
   counter-increment: line;
   content: counter(line);

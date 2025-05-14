@@ -122,7 +122,7 @@ export function ScrollBasedShowcase(data: {
                           : "from-gray-800 to-gray-700"
                       } !important`}
                     >
-                      {item.title} 
+                      {item.title}
                     </div>
                   </div>
                 ) : (
@@ -140,14 +140,16 @@ export function ScrollBasedShowcase(data: {
                           : "text-neutral-text-secondary"
                       }`}
                     >
-                      {item.title} 
+                      {item.title}
                     </h2>
                   </div>
                 )}
 
                 <ul
                   className={`list-none border-l-4 pl-4 transition-colors duration-500 ease-in-out ${
-                    isFocused ? "border-brand-primary" : "border-neutral-text-secondary"
+                    isFocused
+                      ? "border-brand-primary"
+                      : "border-neutral-text-secondary"
                   }`}
                 >
                   <li>
