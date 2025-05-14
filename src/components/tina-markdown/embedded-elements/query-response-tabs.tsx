@@ -43,7 +43,7 @@ export const QueryResponseTabs = ({ ...props }) => {
   const buttonStyling =
     "flex justify-center cursor-pointer relative leading-tight text-white py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
   const activeButtonStyling =
-    " hover:-translate-y-px active:translate-y-px hover:-translate-x-px active:translate-x-px hover:text-gray-50 opacity-50 hover:opacity-100";
+    " hover:text-gray-50 opacity-50 hover:opacity-100";
   const underlineStyling =
     "transition-[width] absolute h-0.25 -bottom-0.25 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg";
 
@@ -58,7 +58,7 @@ export const QueryResponseTabs = ({ ...props }) => {
       `}</style>
       <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-slate-900">
         {/* TOP SECTION w/ Buttons */}
-        <div className="flex items-center border-b border-b-white/30 w-full">
+        <div className="flex items-center border-b border-b-slate-700 w-full">
           <div className="flex flex-1">
             <button
               type="button"
