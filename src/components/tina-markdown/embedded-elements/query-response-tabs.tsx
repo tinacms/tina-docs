@@ -109,7 +109,7 @@ export const QueryResponseTabs = ({ ...props }) => {
 
         {/* BOTTOM SECTION w/ Query/Response */}
         <div
-          className="overflow-hidden transition-all duration-300 ease-in-out bg-[#1F2937] rounded-b-xl"
+          className="overflow-hidden transition-all duration-300 ease-in-out rounded-b-xl"
           style={{ height: `${height}px` }}
         >
           <div
