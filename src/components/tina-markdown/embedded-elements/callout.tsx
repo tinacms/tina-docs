@@ -18,13 +18,13 @@ type CalloutVariant =
   | "api";
 
 const variants = {
-  warning: "border-x-yellow-400",
-  info: "border-x-blue-400",
-  success: "border-x-green-400",
-  error: "border-x-red-400",
-  idea: "border-x-teal-400",
-  lock: "border-x-gray-400",
-  api: "border-x-orange-400",
+  warning: "border-x-amber-500",
+  info: "border-x-brand-secondary",
+  success: "border-x-green-600",
+  error: "border-x-red-500",
+  idea: "border-x-seafoam-600",
+  lock: "border-x-neutral-text-secondary",
+  api: "border-x-brand-primary",
 } as const;
 
 const icons = {
@@ -38,13 +38,13 @@ const icons = {
 } as const;
 
 const iconColors = {
-  warning: "text-yellow-400",
-  info: "text-blue-400",
-  success: "text-green-400",
-  error: "text-red-400",
-  idea: "text-teal-400",
-  lock: "text-gray-400",
-  api: "text-orange-400",
+  warning: "text-amber-500",
+  info: "text-brand-secondary",
+  success: "text-green-600",
+  error: "text-red-500",
+  idea: "text-seafoam-600",
+  lock: "text-neutral-text-secondary",
+  api: "text-brand-primary",
 } as const;
 
 interface CalloutProps {
@@ -60,18 +60,15 @@ const Callout = ({ body, variant = "warning", text }: CalloutProps) => {
 
   return (
     <blockquote
-      className={`relative my-4 overflow-hidden rounded-lg bg-neutral-surface border-l-4 ${variantClass} pl-4 pr-2 pt-2.5 ${
+      className={`relative overflow-hidden rounded-lg bg-neutral-surface border-l-4 my-4 shadow-sm ${variantClass} ${
         text ? "p-2" : ""
       }`}
     >
-      <div className="flex flex-col items-start gap-1 md:flex-row ">
-        <div>
-          <Icon
-            className={`mx-0 my-2 pb-2 rounded-full ${iconColorClass} px-1.5 md:mx-2 md:my-0`}
-            size={36}
-          />
+      <div className="flex items-start gap-3 px-4">
+        <div className="relative top-4 left-1">
+          <Icon className={`${iconColorClass}`} size={20} />
         </div>
-        <div className="leading-6 text-neutral-text font-light">
+        <div className="leading-6 text-neutral-text font-light pt-4 pb-2">
           <TinaMarkdown
             content={
               (body as TinaMarkdownContent) || (text as TinaMarkdownContent)
