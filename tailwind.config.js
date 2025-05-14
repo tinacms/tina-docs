@@ -29,7 +29,7 @@ module.exports = {
         "brand-secondary": "var(--brand-secondary)",
         "brand-secondary-hover": "var(--brand-secondary-hover)",
         "brand-secondary-light": "var(--brand-secondary-light)",
-        "brand-secondary-dark": "var(--brand-secondary-dark)",
+        "brand-secondary-text": "var(--brand-secondary-text)",
         "brand-secondary-gradient-start":
           "var(--brand-secondary-gradient-start)",
         "brand-secondary-gradient-end": "var(--brand-secondary-gradient-end)",
@@ -37,7 +37,7 @@ module.exports = {
         "brand-tertiary": "var(--brand-tertiary)",
         "brand-tertiary-hover": "var(--brand-tertiary-hover)",
         "brand-tertiary-light": "var(--brand-tertiary-light)",
-        "brand-tertiary-dark": "var(--brand-tertiary-dark)",
+        "brand-tertiary-text": "var(--brand-tertiary-text)",
         "brand-tertiary-gradient-start": "var(--brand-tertiary-gradient-start)",
         "brand-tertiary-gradient-end": "var(--brand-tertiary-gradient-end)",
 

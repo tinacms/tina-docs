@@ -1,6 +1,6 @@
 import type { Components, TinaMarkdownContent } from "tinacms/dist/rich-text";
 import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
-import ApiReference from "./embedded-elements/api-reference";
+import TypeReference from "./embedded-elements/type-reference";
 import Callout from "./embedded-elements/callout";
 import { CardGrid } from "./embedded-elements/card-grid";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
@@ -12,6 +12,10 @@ import HeaderFormat from "./standard-elements/header-format";
 import { ImageComponent } from "./standard-elements/image";
 import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
+import Steps from "./embedded-elements/steps";
+import ApiReference, {
+  ApiReferenceType,
+} from "./embedded-elements/api-reference";
 
 type ComponentMapping = {
   youtube: { embedSrc: string; caption?: string; minutes?: string };
@@ -29,7 +33,7 @@ type ComponentMapping = {
       };
     };
   };
-  apiReference: {
+  typeReference: {
     title: string;
     property: {
       groupName: string;
@@ -88,6 +92,12 @@ type ComponentMapping = {
       fullWidth?: boolean;
     }[];
   };
+  steps: {
+    stepBlock: {
+      description: string;
+    }[];
+  };
+  apiReference: ApiReferenceType;
 };
 
 type CalloutVariant =
@@ -111,7 +121,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   cardGrid: (props) => <CardGrid {...props} />,
   recipe: (props) => <RecipeBlock {...props} />,
   accordion: (props) => <Accordion {...props} />,
-  apiReference: (props) => <ApiReference {...props} />,
+  typeReference: (props) => <TypeReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
   queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
   Callout: (props: { body: TinaMarkdownContent; variant: string }) => (
@@ -139,12 +149,12 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
     <a
       href={props?.url}
       {...props}
-      className="underline opacity-80 transition-all duration-200 ease-out hover:text-brand-primary text-neutral-text"
+      className="transition-all duration-200 ease-out text-brand-tertiary-text hover:text-brand-tertiary-hover"
     />
   ),
   code: (props) => (
     <code
-      className="rounded border-y-neutral-border brand-glass-gradient px-1 py-0.5 text-brand-primary"
+      className="rounded border-y-neutral-border shadow-sm brand-glass-gradient px-1 py-0.5 text-brand-primary"
       {...props}
     />
   ),
@@ -153,6 +163,8 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   table: (props) => <Table {...props} />,
   code_block: (props) => <CodeBlock {...props} />,
   accordionBlock: (props) => <AccordionBlock {...props} />,
+  steps: (props) => <Steps {...props} />,
+  apiReference: (props: ApiReferenceType) => <ApiReference {...props} />,
 };
 
 export default MarkdownComponentMapping;

@@ -1,90 +1,103 @@
+//TODDO request body? 
 export const ApiReferenceTemplate = {
   name: "apiReference",
   label: "API Reference",
-  ui: {
-    defaultItem: {
-      property: [
+  fields: [
+    {
+      name: "endpointName",
+      label: "Endpoint Name",
+      type: "string",
+      description: "Such like /content/:collection",
+    },
+    {
+      name: "description",
+      label: "Description",
+      type: "string",
+    },
+    {
+      name: "type",
+      label: "Type",
+      type: "string",
+      options: ["GET", "POST", "PUT", "DELETE"],
+    },
+    {
+      name: "pathParameters",
+      label: "Path Parameters",
+      list: true,
+      type: "object",
+      fields: [
+        { name: "parameterName", label: "Parameter Name", type: "string" },
         {
-          groupName: "Options",
-          name: "format",
+          name: "parameterDescription",
+          label: "Parameter Description",
           type: "string",
-          default: "table",
+          ui: {
+            component: "textarea",
+          },
         },
         {
-          groupName: "Options",
-          name: "enableExperimental",
+          name: "required",
+          label: "Required",
           type: "boolean",
-          default: "false",
         },
         {
-          name: "title",
+          name: "in",
+          label: "In",
           type: "string",
-          default: "API Reference",
+          options: ["path", "query", "body"],
         },
         {
-          name: "description",
+          name: "type",
+          label: "Type",
           type: "string",
-          default: "API Reference",
+          options: ["string", "number", "boolean", "integer"],
         },
       ],
     },
-  },
-  fields: [
     {
-      type: "object",
-      name: "property",
-      label: "Property",
+      name: "responses",
+      label: "Responses",
       list: true,
-      ui: {
-        itemProps: (item) => {
-          return {
-            label: item.groupName
-              ? `📂 ${item.groupName} | ${item.name}`
-              : item.name,
-          };
-        },
-      },
+      type: "object",
       fields: [
+        { name: "status", label: "Status Code", type: "number" },
+        { name: "description", label: "Description", type: "string" },
         {
-          type: "string",
-          name: "groupName",
-          label: "Group Name",
-          description:
-            "Adjacent properties with the same group name will be grouped together",
-        },
-        {
-          type: "string",
-          name: "name",
-          label: "Name",
-        },
-        {
-          type: "rich-text",
-          name: "description",
-          label: "Description",
-        },
-        {
-          type: "string",
-          name: "type",
-          label: "Type",
-        },
-        {
-          type: "string",
-          name: "default",
-          label: "Default",
-        },
-        {
-          type: "boolean",
-          name: "required",
-          label: "Required",
-        },
-        {
-          type: "boolean",
-          name: "experimental",
-          label: "Experimental",
-        },
+            name: "responseBody",
+            label: "Response Body Schema",
+            type: "object",
+            list: true,
+            fields: [
+              { name: "fieldName", label: "Field Name", type: "string" },
+              {
+                name: "type",
+                label: "Type",
+                type: "string",
+                options: ["string", "number", "integer", "boolean", "array", "object"]
+              },
+              { name: "description", label: "Description", type: "string" },
+              {
+                name: "fields",
+                label: "Nested Fields (if type is object)",
+                type: "object",
+                list: true,
+                fields: [
+                  { name: "fieldName", label: "Field Name", type: "string" },
+                  {
+                    name: "type",
+                    label: "Type",
+                    type: "string",
+                    options: ["string", "number", "integer", "boolean", "array", "object"]
+                  },
+                  { name: "description", label: "Description", type: "string" }
+                ],
+                ui: {
+                  condition: (item) => item.type === "object"
+                }
+              }
+            ]
+          }
       ],
     },
   ],
 };
-
-export default ApiReferenceTemplate;

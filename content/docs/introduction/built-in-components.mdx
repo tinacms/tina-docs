@@ -1,6 +1,6 @@
 ---
 title: Built-in Components
-last_edited: '2025-05-11T23:14:26.154Z'
+last_edited: '2025-05-14T00:18:01.349Z'
 tocIsHidden: true
 next: ''
 previous: ''
@@ -9,6 +9,8 @@ previous: ''
 This page can be used as a reference to see what's possible with TinaCMS, and also what components come built in with TinaDocs.
 
 All components are built with React and Tailwind – pull down the repo to add additional components or modify existing component behaviour.
+
+Here is an example of a link, [organisation settings](https://google.com).
 
 ## Display Components
 
@@ -137,6 +139,67 @@ or
 ### API Reference
 
 <apiReference
+  endpointName="/users/:id"
+  description="Retrieve a user by ID."
+  type="GET"
+  pathParameters={[
+    {
+      parameterName: "id",
+      parameterDescription: "The ID of the user",
+      required: true,
+      in: "path",
+      type: "string"
+    },
+    {
+      parameterName: "includePosts",
+      parameterDescription: "Whether to include the user's posts.",
+      in: "query",
+      type: "boolean"
+    }
+  ]}
+  responses={[
+    {
+      status: 200,
+      description: "User retrieved successfully",
+      responseBody: [
+        {
+          fieldName: "id",
+          type: "string",
+          description: "The user's unique identifier"
+        },
+        {
+          fieldName: "name",
+          type: "string",
+          description: "The user's full name."
+        },
+        {
+          fieldName: "profile",
+          type: "object",
+          description: "The user's profile details. ",
+          fields: [
+            { fieldName: "bio", type: "string", description: "Short biography" },
+            {
+              fieldName: "avatarUrl",
+              type: "string",
+              description: "Link to the user's avatar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      status: 400,
+      description: "User not found.",
+      responseBody: [
+        { fieldName: "error", type: "string", description: "Error message." }
+      ]
+    }
+  ]}
+/>
+
+### Type Reference
+
+<typeReference
   property={[
     {
       groupName: "",
@@ -218,6 +281,10 @@ flowchart TD
 
 ### Code Blocks
 
+#### Inline Code
+
+We can enclose any text in back ticks to indicate inline code
+
 #### Singular Code Blocks
 
 Marked by surrounding code with three back ticks
@@ -228,13 +295,13 @@ export const myCodeBlockFunction() => {
 }   
 ```
 
-We have the power to highlight diffs, or just certain lines in our code 
+We have the power to highlight diffs, or just certain lines in our code
 
 ```javascript
 console.log('This is a negative diff') // [!code --]
 console.log('This is a positive diff') // [!code ++]
 console.log('This is a highlighted block') // [!code highlight]
-
+console.log('This is generic code')
 ```
 
 We must be careful when running the focused code with highlighted code!
@@ -254,4 +321,25 @@ console.log('More hidden code');
   }"
   query="We can use CodeBlocks to guide users
   or to just show off our cool code!"
+/>
+
+## Steps
+
+Want to show users how to do something:
+
+<steps
+  stepBlock={[
+    {
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    }
+  ]}
 />
