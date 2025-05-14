@@ -4,6 +4,7 @@ import DocsMDXComponentRenderer from "../markdown-component-mapping";
 export const Table = (props) => {
   // Navigate through the nested structure to find the actual table content
   const tableRows = props?.children?.props?.children || [];
+  const rowCount = tableRows.length;
 
   return (
     <div className="my-6 overflow-x-auto rounded-lg shadow-md">
@@ -17,17 +18,23 @@ export const Table = (props) => {
             return (
               <tr
                 key={`row-${rowIndex}`}
-                className={rowIndex % 2 === 0 ? "bg-white/5" : "bg-blue-500/5"}
+                className={"bg-neutral-background-secondary/50"}
               >
                 {cells.map((cell, cellIndex) => {
                   return (
                     <CellComponent
                       key={`cell-${rowIndex}-${cellIndex}`}
-                      className={`border border-orange-100 px-4 py-2 ${
+                      className={` px-4 pt-2 ${
                         rowIndex === 0
-                          ? "bg-white/50 text-left font-tuner font-normal text-orange-500"
+                          ? " text-left font-tuner bg-neutral-background  "
                           : ""
-                      } ${cellIndex === 0 ? "max-w-xs break-words" : ""}`}
+                      } ${cellIndex === 0 ? "max-w-xs break-words" : ""}
+                      ${
+                        rowIndex === 0 || rowIndex === rowCount - 1
+                          ? ""
+                          : "border-b border-neutral-border"
+                      }
+                      `}
                     >
                       {cell?.props?.children}
                       <TinaMarkdown
