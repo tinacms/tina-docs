@@ -31,7 +31,7 @@ export default async function DocsLayout({
           </div>
 
           <Breadcrumbs navItems={navigationDocsData.data} />
-          {children}
+          <div data-pagefind-body>{children}</div>
         </main>
       </div>
     </div>

@@ -40,6 +40,7 @@ export default function Document({ props, tinaProps }) {
         <div
           className="brand-primary-gradient pt-4 font-tuner text-4xl"
           data-tina-field={tinaField(documentationData, "title")}
+          data-pagefind-meta="title"
         >
           {documentationData?.title}
         </div>

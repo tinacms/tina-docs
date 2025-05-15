@@ -53,6 +53,7 @@ module.exports = {
         "neutral-background": "var(--neutral-background)",
         "neutral-surface": "var(--neutral-surface)",
         "neutral-background-secondary": "var(--neutral-background-secondary)",
+        "neutral-background-tertiary": "var(--neutral-background-tertiary)",
         "neutral-text": "var(--neutral-text)",
         "neutral-text-secondary": "var(--neutral-text-secondary)",
         "neutral-border": "var(--neutral-border)",
