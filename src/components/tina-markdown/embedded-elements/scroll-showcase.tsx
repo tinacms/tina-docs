@@ -134,10 +134,10 @@ export function ScrollBasedShowcase(data: {
                     }}
                   >
                     <h2
-                      className={`mb-3  mt-4 bg-gradient-to-br bg-clip-text text-3xl text-transparent ${
+                      className={`mb-3  mt-4  text-3xl ${
                         isFocused
-                          ? "from-orange-400 via-orange-500 to-orange-600"
-                          : "from-gray-800 to-gray-700"
+                          ? "brand-primary-gradient"
+                          : "text-neutral-text-secondary"
                       }`}
                     >
                       {item.title}
@@ -147,7 +147,9 @@ export function ScrollBasedShowcase(data: {
 
                 <ul
                   className={`list-none border-l-4 pl-4 transition-colors duration-500 ease-in-out ${
-                    isFocused ? "border-orange-400" : "border-gray-800"
+                    isFocused
+                      ? "border-brand-primary"
+                      : "border-neutral-text-secondary"
                   }`}
                 >
                   <li>
