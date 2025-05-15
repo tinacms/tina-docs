@@ -1,87 +1,145 @@
-import { Prism } from "@/src/components/styles/prism";
-import { useState } from "react";
+import {
+  CheckIcon as CheckIconOutline,
+  ClipboardIcon as ClipboardIconOutline,
+} from "@heroicons/react/24/outline";
+import { useEffect, useRef, useState } from "react";
+import React from "react";
+import { CodeBlock } from "../standard-elements/code-block/code-block";
 
 export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);
+  const [height, setHeight] = useState(0);
+  const [hasCopied, setHasCopied] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const queryRef = useRef<HTMLDivElement>(null);
+  const responseRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      const activeRef = isQuery ? queryRef : responseRef;
+      if (activeRef.current) {
+        setHeight(activeRef.current.scrollHeight);
+      }
+    };
+    updateHeight();
+    const resizeObserver = new ResizeObserver(updateHeight);
+    const activeRef = isQuery ? queryRef : responseRef;
+    if (activeRef.current) {
+      resizeObserver.observe(activeRef.current);
+    }
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [isQuery]);
+
+  // Handle the copy action
+  const handleCopy = () => {
+    const textToCopy = isQuery ? props.query : props.response;
+    navigator.clipboard.writeText(textToCopy || "");
+    setHasCopied(true);
+    setTimeout(() => setHasCopied(false), 2000);
+  };
 
   const buttonStyling =
-    "flex justify-center relative leading-tight text-white mx-6 pt-[12px] pb-[10px] text-base font-medium transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 font-tuner whitespace-nowrap px-2";
+    "flex justify-center cursor-pointer relative leading-tight text-white py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
   const activeButtonStyling =
-    " hover:-translate-y-px active:translate-y-px hover:-translate-x-px active:translate-x-px hover:text-gray-50 opacity-50 hover:opacity-100";
-  const overlay = (
-    <div
-      className="w-full grow rounded-md"
-      style={{
-        backgroundColor: "rgb(1, 22, 39)",
-      }}
-    />
-  );
+    " hover:text-gray-50 opacity-50 hover:opacity-100";
   const underlineStyling =
-    "transition-[width] absolute h-1 bottom-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg";
-  const containerStyling =
-    "w-full flex col-start-1 row-start-1 overflow-x-scroll flex-col";
+    "transition-[width] absolute h-0.25 -bottom-0.25 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg";
 
   return (
     <div className="mb-1">
-      <div
-        className="relative top-3 z-10 flex w-full rounded-t-md border-b border-b-orange-400/30 py-0 pt-1"
-        style={{
-          backgroundColor: "rgb(1, 22, 39)",
-        }}
-      >
-        <button
-          type="button"
-          onClick={() => setIsQuery(true)}
-          className={buttonStyling + (isQuery ? "" : activeButtonStyling)}
-          disabled={isQuery}
-        >
-          Query
-          <div className={underlineStyling + (isQuery ? " w-full" : " w-0")} />
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsQuery(false)}
-          className={buttonStyling + (isQuery ? activeButtonStyling : "")}
-          disabled={!isQuery}
-        >
-          Response
-          <div className={underlineStyling + (isQuery ? " w-0" : " w-full")} />
-        </button>
-      </div>
-      <div className="grid h-fit w-full grid-cols-1">
-        <div
-          className={`${containerStyling} rounded-b-xl`}
-          style={{
-            zIndex: isQuery ? 5 : 1,
-          }}
-        >
-          {/* 
-                    TECH DEBT: the replaceAll is a hack to get around TinaCMS limitations with nested rich-text.
-                    TODO (ignore for now) - remove as per https://github.com/tinacms/tina.io/issues/2047 
-                */}
-          <Prism
-            value={props.query?.replaceAll("#", " ") || ""}
-            lang={"graphql"}
-            theme="nightOwl"
-          />
-          {overlay}
+      <style>{`
+        .query-response-pre pre,
+        .query-response-pre code {
+          white-space: pre !important;
+          tab-size: 2;
+        }
+      `}</style>
+      <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-slate-900">
+        {/* TOP SECTION w/ Buttons */}
+        <div className="flex items-center border-b border-b-slate-700 w-full">
+          <div className="flex flex-1">
+            <button
+              type="button"
+              onClick={() => setIsQuery(true)}
+              className={buttonStyling + (isQuery ? "" : activeButtonStyling)}
+              disabled={isQuery}
+            >
+              {props.customQueryName || "Query"}
+              <div
+                className={underlineStyling + (isQuery ? " w-full" : " w-0")}
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsQuery(false)}
+              className={buttonStyling + (isQuery ? activeButtonStyling : "")}
+              disabled={!isQuery}
+            >
+              {props.customResponseName || "Response"}
+              <div
+                className={underlineStyling + (isQuery ? " w-0" : " w-full")}
+              />
+            </button>
+          </div>
+
+          {/* Copy Button */}
+          <div className="flex pr-4">
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="flex items-center gap-1.5 text-sm font-medium text-white/70 hover:text-white transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer"
+              title={`Copy ${isQuery ? "query" : "response"} code`}
+            >
+              {hasCopied ? (
+                <>
+                  <CheckIconOutline className="h-4 w-4" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <ClipboardIconOutline className="h-4 w-4" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* BOTTOM SECTION w/ Query/Response */}
         <div
-          className={`${containerStyling} rounded-b-xl`}
-          style={{
-            zIndex: isQuery ? 1 : 5,
-          }}
+          className="overflow-hidden transition-all duration-300 ease-in-out rounded-b-xl"
+          style={{ height: `${height}px` }}
         >
-          {/*
-                    TECH DEBT: the replaceAll is a hack to get around TinaCMS limitations with nested rich-text.
-                    TODO (ignore for now) - remove as per https://github.com/tinacms/tina.io/issues/2047 
-                 */}
-          <Prism
-            value={props.response?.replaceAll("#", " ") || ""}
-            lang={"json"}
-            theme="nightOwl"
-          />
-          {overlay}
+          <div
+            ref={contentRef}
+            className="font-light font-mono text-xs text-[#D5DEEB] relative query-response-pre"
+            style={{
+              fontFamily:
+                'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+              fontWeight: 300,
+              whiteSpace: "pre",
+            }}
+          >
+            {isQuery ? (
+              <div ref={queryRef} className="relative -mt-2">
+                <CodeBlock
+                  value={props.query}
+                  lang="javascript"
+                  showCopyButton={false}
+                />
+              </div>
+            ) : (
+              <div ref={responseRef} className="-mt-2 relative">
+                <CodeBlock
+                  value={props.response}
+                  lang="javascript"
+                  showCopyButton={false}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

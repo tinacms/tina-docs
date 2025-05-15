@@ -1,6 +1,6 @@
+import { formatHeaderId } from "@/utils/docs";
 import { LinkIcon } from "@heroicons/react/24/outline";
 import React, { useCallback, useEffect } from "react";
-import { getDocId } from "../../../utils/docs/getDocsIds";
 
 export default function HeaderFormat({
   children,
@@ -10,32 +10,31 @@ export default function HeaderFormat({
   level: number;
 }) {
   const HeadingTag = `h${level}` as any;
-  const id = getDocId(
+  const id = formatHeaderId(
     React.isValidElement(children) && children.props?.content
       ? children.props.content.map((content: any) => content.text).join("")
       : typeof children === "string"
         ? children
         : ""
   );
-
   const linkHref = `#${id}`;
 
   const styles = {
-    1: "tina-gradient bg-clip-text text-transparent text-4xl !mt-16 mb-4",
-    2: "tina-gradient bg-clip-text text-transparent text-3xl !mt-12 mb-2",
-    3: "bg-gradient-to-br from-blue-800 via-blue-900 to-blue-100 bg-clip-text text-transparent text-xl font-medium !mt-8 mb-2 !important",
-    4: "tina-gradient bg-clip-text text-transparent text-xl font-medium !mt-2 mb-2",
-    5: "tina-gradient bg-clip-text text-transparent text-lg font-medium !mt-2 mb-1",
-    6: "text-gray-500 text-base font-normal mt-2 mb-1",
+    1: "brand-primary-gradient  text-4xl !mt-16 mb-4",
+    2: "brand-primary-gradient  text-3xl !mt-12 mb-2",
+    3: "brand-secondary-gradient text-xl font-medium !mt-8 mb-2 !important",
+    4: "brand-primary-gradient  text-xl font-medium !mt-2 mb-2",
+    5: "brand-primary-gradient  text-lg font-medium !mt-2 mb-1",
+    6: "text-neutral-text-secondary text-base font-normal mt-2 mb-1",
   };
 
   const linkStyle = {
-    1: "text-orange-500 size-8",
-    2: "text-orange-500 size-8",
-    3: "text-blue-900 size-6",
-    4: "text-orange-500 size-6",
-    5: "text-orange-500 size-4",
-    6: "text-gray-500 size-4",
+    1: "text-brand-primary size-8",
+    2: "text-brand-primary size-8",
+    3: "text-brand-secondary size-6",
+    4: "text-brand-primary size-6",
+    5: "text-brand-primary size-4",
+    6: "text-neutral-text-secondary size-4",
   };
 
   const handleHeaderClick = (event) => {

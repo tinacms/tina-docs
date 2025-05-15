@@ -12,17 +12,6 @@ export const PADDING_LEVELS = {
   },
 };
 
-export const TEXT_COLORS = {
-  default: "text-gray-800",
-  selected: "text-blue-500",
-  childSelected: "text-gray-800",
-  orange: "text-orange-500",
-  orangeLight: "text-orange-100",
-  orangeHover: "text-orange-300",
-  blueLight: "text-blue-200",
-  blueHover: "text-blue-400",
-};
-
 export const FONT_SIZES = {
   xl: "text-xl",
   base: "text-base",

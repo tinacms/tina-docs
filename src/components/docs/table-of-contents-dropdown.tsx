@@ -1,26 +1,43 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { getIdSyntax } from "./on-this-page";
 
 const TableOfContentsItems = ({ tocData }) => {
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+
+      window.history.pushState(null, "", `#${id}`);
+    }
+  };
+
   return (
     <div className="animate-fade-down animate-duration-300 absolute z-10 mt-4 max-h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-lg">
-      {tocData?.map((item, index) => {
-        const textIndentation =
-          item.type === "h3" ? "ml-4" : item.type === "h4" ? "ml-8" : "";
-
-        const linkHref = `#${item.text.replace(/\s+/g, "-").toLowerCase()}`;
-
-        return (
-          <Link
-            key={index}
-            href={linkHref}
-            className={`block pl-6 transition-colors hover:text-orange-500 ${textIndentation} pb-1`}
+      {tocData?.map((item) => (
+        <div
+          className="flex gap-2 font-light group"
+          key={getIdSyntax(item.text)}
+        >
+          <div
+            className={`border-r border-1 border-gray-200 group-hover:border-neutral-500
+            `}
+          />
+          <a
+            href={`#${getIdSyntax(item.text)}`}
+            onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
+            className={`${
+              item.type === "h3" ? "pl-4" : "pl-2"
+            } py-1.5 text-gray-400 group-hover:text-black`}
           >
             {item.text}
-          </Link>
-        );
-      })}
+          </a>
+        </div>
+      ))}
     </div>
   );
 };
@@ -50,7 +67,7 @@ export const TableOfContentsDropdown = ({ tocData }) => {
       {tocData?.tocData?.length !== 0 && (
         <div className="w-full py-6" ref={containerRef}>
           <div
-            className="cursor-pointer rounded-lg border-slate-400 bg-gradient-to-r from-white/50 to-white/30 px-4 py-2 shadow-lg"
+            className="cursor-pointer rounded-lg border-neutral-border brand-glass-gradient  px-4 py-2 shadow-lg"
             onClick={() => setIsTableOfContentsOpen(!isTableOfContentsOpen)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -60,8 +77,8 @@ export const TableOfContentsDropdown = ({ tocData }) => {
             }}
           >
             <span className="flex items-center space-x-2">
-              <Bars3Icon className="size-5 text-orange-500" />
-              <span className="py-1 text-slate-600">Table of Contents</span>
+              <Bars3Icon className="size-5 text-brand-primary" />
+              <span className="py-1 text-neutral-text">On this page</span>
             </span>
           </div>
           {isTableOfContentsOpen && (

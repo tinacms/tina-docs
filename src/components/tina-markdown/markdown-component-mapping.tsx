@@ -1,13 +1,13 @@
-import type { Components } from "tinacms/dist/rich-text";
-import { CardGrid } from "../blocks/card-grid";
-import Accordion from "./embedded-elements/accordion";
+import type { Components, TinaMarkdownContent } from "tinacms/dist/rich-text";
+import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
 import ApiReference from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
+import { CardGrid } from "./embedded-elements/card-grid";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import Youtube from "./embedded-elements/youtube";
-import { CodeBlock } from "./standard-elements/code-block";
+import { CodeBlock } from "./standard-elements/code-block/code-block";
 import HeaderFormat from "./standard-elements/header-format";
 import { ImageComponent } from "./standard-elements/image";
 import MermaidElement from "./standard-elements/mermaid-diagram";
@@ -22,6 +22,13 @@ type ComponentMapping = {
     customQueryName?: string;
     customResponseName?: string;
   };
+  blockquote: {
+    children: {
+      props: {
+        content: TinaMarkdownContent;
+      };
+    };
+  };
   apiReference: {
     title: string;
     property: {
@@ -33,8 +40,14 @@ type ComponentMapping = {
       required: boolean;
     }[];
   };
-  WarningCallout: { body: string };
-  accordion: { docText: string; image: string; heading?: string };
+  Callout: { body: TinaMarkdownContent; variant: string };
+
+  accordion: {
+    docText: string;
+    image: string;
+    heading?: string;
+    fullWidth?: boolean;
+  };
   recipe: {
     title?: string;
     description?: string;
@@ -67,7 +80,30 @@ type ComponentMapping = {
     lang: string;
     children: string;
   };
+  accordionBlock: {
+    accordionItems: {
+      docText: string;
+      image: string;
+      heading?: string;
+      fullWidth?: boolean;
+    }[];
+  };
 };
+
+type CalloutVariant =
+  | "warning"
+  | "info"
+  | "success"
+  | "error"
+  | "idea"
+  | "lock"
+  | "api";
+
+interface CalloutComponentProps {
+  variant?: CalloutVariant;
+  body?: TinaMarkdownContent;
+  text?: any;
+}
 
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
   // Our embeds we can inject via MDX
@@ -78,7 +114,9 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   apiReference: (props) => <ApiReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
   queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
-  WarningCallout: (props) => <Callout {...props} variant="warning" />,
+  Callout: (props: { body: TinaMarkdownContent; variant: string }) => (
+    <Callout {...props} variant={props.variant as CalloutVariant} />
+  ),
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,
   h2: (props) => <HeaderFormat level={2} {...props} />,
@@ -86,21 +124,27 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   h4: (props) => <HeaderFormat level={4} {...props} />,
   h5: (props) => <HeaderFormat level={5} {...props} />,
   h6: (props) => <HeaderFormat level={6} {...props} />,
-  ul: (props) => <ul className="my-4 ml-2 list-disc" {...props} />,
-  ol: (props) => <ol className="my-4 ml-2 list-decimal" {...props} />,
-  li: (props) => <li className="mb-2 ml-8" {...props} />,
-  p: (props) => <p className="mb-2" {...props} />,
-  block_quote: (props) => <Callout body={props?.children} variant="info" />,
+  ul: (props) => (
+    <ul className="my-4 ml-2 list-disc text-neutral-text" {...props} />
+  ),
+  ol: (props) => (
+    <ol className="my-4 ml-2 list-decimal text-neutral-text" {...props} />
+  ),
+  li: (props) => <li className="mb-2 ml-8 text-neutral-text" {...props} />,
+  p: (props) => <p className="mb-2 font-inter text-neutral-text" {...props} />,
+  blockquote: (props) => (
+    <Callout text={props.children.props.content} variant="info" />
+  ),
   a: (props) => (
     <a
       href={props?.url}
       {...props}
-      className="underline opacity-80 transition-all duration-200 ease-out hover:text-orange-500"
+      className="underline opacity-80 transition-all duration-200 ease-out hover:text-brand-primary text-neutral-text"
     />
   ),
   code: (props) => (
     <code
-      className="rounded border-y-stone-600 bg-white/50 px-1 py-0.5 text-orange-500"
+      className="rounded border-y-neutral-border brand-glass-gradient px-1 py-0.5 text-brand-primary"
       {...props}
     />
   ),
@@ -108,6 +152,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   img: (props) => <ImageComponent {...props} />,
   table: (props) => <Table {...props} />,
   code_block: (props) => <CodeBlock {...props} />,
+  accordionBlock: (props) => <AccordionBlock {...props} />,
 };
 
 export default MarkdownComponentMapping;

@@ -1,12 +1,35 @@
 export const ApiReferenceTemplate = {
   name: "apiReference",
   label: "API Reference",
-  fields: [
-    {
-      type: "string",
-      name: "title",
-      label: "Title",
+  ui: {
+    defaultItem: {
+      property: [
+        {
+          groupName: "Options",
+          name: "format",
+          type: "string",
+          default: "table",
+        },
+        {
+          groupName: "Options",
+          name: "enableExperimental",
+          type: "boolean",
+          default: "false",
+        },
+        {
+          name: "title",
+          type: "string",
+          default: "API Reference",
+        },
+        {
+          name: "description",
+          type: "string",
+          default: "API Reference",
+        },
+      ],
     },
+  },
+  fields: [
     {
       type: "object",
       name: "property",

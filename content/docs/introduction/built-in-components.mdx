@@ -1,48 +1,16 @@
 ---
-last_edited: '2025-04-27T23:35:42.910Z'
+title: Built-in Components
+last_edited: '2025-05-14T01:44:29.554Z'
+tocIsHidden: true
 next: ''
 previous: ''
-title: 'Built-in Components'
-tocIsHidden: true
 ---
+
 This page can be used as a reference to see what's possible with TinaCMS, and also what components come built in with TinaDocs.
 
 All components are built with React and Tailwind – pull down the repo to add additional components or modify existing component behaviour.
 
 ## Display Components
-
-### Scroll Responsive Highlights
-
-<scrollShowcase
-  showcaseItems={[
-    {
-      title: "Highlights on Scroll",
-      image: "",
-      content:
-        "This component highlights based on your page position, with a clean list view for mobile.\n",
-      useAsSubsection: false
-    },
-    {
-      title: "Leveraging MDX",
-      image: "",
-      content:
-        "MDX is a markdown format which includes injection of custom components... Think JSX/TSX for markdown!\n",
-      useAsSubsection: false
-    },
-    {
-      title: "... and React",
-      image: "",
-      content: "Define your custom components in your code with React.\n",
-      useAsSubsection: true
-    },
-    {
-      title: "Landing-page-perfect",
-      image: "",
-      content: "This one works great for the first page of your documentation.\n",
-      useAsSubsection: false
-    }
-  ]}
-/>
 
 ### Card Grids
 
@@ -52,8 +20,8 @@ All components are built with React and Tailwind – pull down the repo to add a
       title: "Modular Cards",
       description:
         "Each card can be set to a link, or used to display information.",
-      link: "",
-      linkText: ""
+      link: "https://google.com",
+      linkText: "Read more..."
     },
     { title: "Grid Layout", description: "Classic index page material. 🗄️" },
     {
@@ -68,25 +36,132 @@ All components are built with React and Tailwind – pull down the repo to add a
   ]}
 />
 
-### Basic Accordion
+### Scroll-Based Showcase
 
-<accordion />
+<scrollShowcase
+  showcaseItems={[
+    {
+      title: "Your Website",
+      image: "/SCR-20250408-oknp.png",
+      content:
+        "With TinaCMS, the developer hosts the site where they like, using whichever framework they choose\n",
+      useAsSubsection: false
+    },
+    {
+      title: "TinaCloud",
+      image: "/SCR-20250407-kyks.png",
+      content:
+        "Out of the box, we provide an easy-to-use hosted version of the backend, called TinaCloud\n",
+      useAsSubsection: false
+    },
+    {
+      title: "Git-Backed Content",
+      image: "/img/rico-replacement.jpg",
+      content:
+        "All your content gets backed by git into JSON, Markdown or MDX Files\n",
+      useAsSubsection: false
+    }
+  ]}
+/>
 
-### API Reference
+### Accordians
+
+Choose between full-width accordions that are stand-alone
+
+<accordion
+  heading="A bunch of g's"
+  docText={<>
+    A bunch of g's
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={true}
+/>
+
+<accordion
+  heading="Full width accordian here... click on me"
+  docText={<>
+    Here's our pet llamas, arent they so cute?
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={true}
+/>
+
+or blocked accordions that are all connected
+
+<accordionBlock
+  accordionItems={[
+    {
+      heading: "Full width accordian here... click on me",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    },
+    {
+      heading: "Full width accordian here... click on me",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    }
+  ]}
+  fullWidth={true}
+/>
+
+The same options apply for accordions that are not full-width
+
+<accordion
+  heading="Stand-alone"
+  docText={<>
+    This content doesn't have any images
+  </>}
+  image=""
+  fullWidth={false}
+/>
+
+or
+
+<accordionBlock
+  accordionItems={[
+    {
+      heading: "A set of blocked",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    },
+    {
+      heading: "Accordion items",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    }
+  ]}
+/>
 
 ## Technical Components
 
-### Our "Recipe" - Code Accordion
-
-<recipe />
-
 ### API Reference
 
-<apiReference />
-
-### Query-Response
-
-<queryResponseTabs />
+<apiReference
+  property={[
+    {
+      groupName: "",
+      name: "objectId",
+      description: "This determines how the object will be accessed by Tina.\n",
+      type: "long",
+      required: true
+    },
+    { groupName: "Options", name: "format", type: "string", default: "table" },
+    {
+      groupName: "Options",
+      name: "enableExperimental",
+      type: "boolean",
+      default: "false"
+    },
+    { name: "title", type: "string", default: "API Reference" },
+    { name: "description", type: "string", default: "API Reference" },
+    {
+      name: "fluxCapacitor",
+      description: "Powers the DeLorian\n",
+      type: "Machine",
+      experimental: true
+    }
+  ]}
+/>
 
 ### Mermaid Diagrams
 
@@ -100,41 +175,105 @@ flowchart TD
     --> id4(Learn about mermaid diagrams - mermaid.js.org)
 ```
 
-### Code Blocks
-
-```javascript
-We use Prism under the hood
-  for 
-language specific code highlights 🖍️
-```
-
 ## Markdown Basics
 
 ### YouTube Embed
 
-<youtube />
+<youtube embedSrc="https://www.youtube.com/embed/CsCQS7HIBv0?si=os9ona92O2VMOl-V" caption="Seth goes over the basics of using Tina" minutes="2" />
 
 ### A Few Callouts
 
-<WarningCallout />
+<Callout
+  body={<>
+    Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
+  </>}
+/>
 
-### BlockQuotes
+<Callout
+  body={<>
+    For good examples...
+  </>}
+  variant="success"
+/>
 
-> Less opinionated than the callouts 🏴.
+<Callout
+  body={<>
+    ... and for bad! 😱
+  </>}
+  variant="error"
+/>
 
-### Images![](/img/rico-replacement.jpg)
+<Callout
+  body={<>
+    We can even write notes about using `https://api.example.com/v1`
+  </>}
+  variant="api"
+/>
 
-### Lists
+<Callout
+  body={<>
+    Idea
+  </>}
+  variant="idea"
+/>
 
-1. Numbered lists...
-2. ...\\
+<Callout
+  body={<>
+    lock
+  </>}
+  variant="lock"
+/>
 
-or
-
-* ...dot points to capture key information
+<Callout
+  body={<>
+    info
+  </>}
+  variant="info"
+/>
 
 ### Tables
 
-| Heading Labels... | ...Go Here   |
-| ----------------- | ------------ |
-| Put your...       | ...data here |
+| First Name | Surname | Country   |
+| ---------- | ------- | --------- |
+| Joshu      | Berman  | Australia |
+| Micaela    | Blank   | Australia |
+
+### Code Blocks
+
+#### Singular Code Blocks
+
+Marked by surrounding code with three back ticks
+
+```javascript
+export const myCodeBlockFunction() => {
+  console.log('Powered by Shiki');
+}   
+```
+
+We have the power to highlight diffs, or just certain lines in our code
+
+```javascript
+console.log('This is a negative diff') // [!code --]
+console.log('This is a positive diff') // [!code ++]
+console.log('This is a highlighted block') // [!code highlight]
+
+```
+
+We must be careful when running the focused code with highlighted code!
+
+```javascript
+console.log('Junk Code');
+console.log('Focused Code'); // [!code focus]
+console.log('More hidden code');
+```
+
+#### Tabbed Code Blocks
+
+<queryResponseTabs
+  response="const myExampleFunction(){
+  console.log(&#x22;from myExampleFunction&#x22;)
+  return (&#x22;MyLlama&#x22;)
+  }"
+  query="We can use CodeBlocks to guide users
+  or to just show off our cool code!"
+/>

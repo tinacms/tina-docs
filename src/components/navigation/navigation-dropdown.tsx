@@ -2,6 +2,7 @@
 
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
+import { Search } from "../search-docs/search";
 import { DocsNavigationItems } from "./navigation-items";
 
 const NavigationDropdownContent = ({ tocData }) => {
@@ -35,7 +36,7 @@ export const NavigationDropdown = ({ tocData }) => {
   return (
     <div className="w-full pb-6" ref={containerRef}>
       <div
-        className="cursor-pointer rounded-lg border-slate-400 bg-gradient-to-r from-white/50 to-white/30 px-4 py-2 shadow-lg"
+        className="cursor-pointer rounded-lg border-neutral-border brand-glass-gradient px-4 py-2 shadow-lg"
         onClick={() => setIsTableOfContentsOpen(!isTableOfContentsOpen)}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -45,8 +46,8 @@ export const NavigationDropdown = ({ tocData }) => {
         }}
       >
         <span className="flex items-center space-x-2 py-1">
-          <Bars3Icon className="size-5 text-orange-500" />
-          <span className="text-slate-600">Topics</span>
+          <Bars3Icon className="size-5 text-brand-primary" />
+          <span className="text-neutral-text">Topics</span>
         </span>
       </div>
       {isTableOfContentsOpen && (
@@ -56,6 +57,7 @@ export const NavigationDropdown = ({ tocData }) => {
           />
         </div>
       )}
+      <Search />
     </div>
   );
 };

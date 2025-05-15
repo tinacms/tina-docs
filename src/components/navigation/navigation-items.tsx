@@ -11,7 +11,6 @@ import {
   FONT_SIZES,
   FONT_WEIGHTS,
   PADDING_LEVELS,
-  TEXT_COLORS,
   TRANSITION_DURATION,
 } from "./constants";
 import type { DocsNavProps, NavTitleProps } from "./type";
@@ -27,21 +26,21 @@ const NavTitle: React.FC<NavTitleProps> = ({
     "group flex cursor-pointer items-center gap-1 pb-0.5 pl-4 leading-tight transition duration-150 ease-out hover:opacity-100";
 
   const headerLevelClasses = {
-    0: `${FONT_WEIGHTS.light} ${TEXT_COLORS.orange} ${FONT_SIZES.xl} pt-2 opacity-100`,
+    0: `${FONT_WEIGHTS.light} text-brand-primary ${FONT_SIZES.xl} pt-2 opacity-100`,
     1: {
-      default: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${TEXT_COLORS.default}`,
-      selected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.bold} ${TEXT_COLORS.selected}`,
-      childSelected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} ${TEXT_COLORS.childSelected}`,
+      default: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 text-neutral-text`,
+      selected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.bold} text-brand-secondary`,
+      childSelected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} text-neutral-text`,
     },
     2: {
-      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 ${TEXT_COLORS.default}`,
-      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} ${TEXT_COLORS.selected}`,
-      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} ${TEXT_COLORS.childSelected}`,
+      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 text-neutral-text`,
+      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} text-brand-secondary`,
+      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} text-neutral-text`,
     },
     3: {
-      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 ${TEXT_COLORS.default}`,
-      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} ${TEXT_COLORS.selected}`,
-      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} ${TEXT_COLORS.childSelected}`,
+      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 text-neutral-text`,
+      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} text-brand-secondary`,
+      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} text-neutral-text`,
     },
   };
 
@@ -156,8 +155,8 @@ const NavLevel = ({
               <ChevronRightIcon
                 className={`${
                   level < 1
-                    ? `${TEXT_COLORS.orangeLight} group-hover:${TEXT_COLORS.orangeHover}`
-                    : `${TEXT_COLORS.blueLight} group-hover:${TEXT_COLORS.blueHover}`
+                    ? "text-brand-primary-light group-hover:text-brand-primary-hover"
+                    : "text-brand-secondary-light group-hover:text-brand-secondary-hover"
                 } -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
                   expanded ? "rotate-90" : ""
                 }`}
