@@ -1,4 +1,4 @@
-import { AIExportButton } from "@/src/components/copy-page-dropdown";
+import { CopyPageDropdown } from "@/src/components/copy-page-dropdown";
 import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
@@ -33,7 +33,6 @@ export default async function DocsLayout({
 
           <Breadcrumbs navItems={navigationDocsData.data} />
           <div data-pagefind-body id="doc-content">
-            <AIExportButton />
             {children}
           </div>
         </main>

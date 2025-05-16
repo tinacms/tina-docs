@@ -13,11 +13,11 @@ import { Copy, FileCode, ChevronDown } from "lucide-react";
 import { SiOpenai } from "react-icons/si";
 import { FaCommentDots } from "react-icons/fa";
 
-interface AIExportButtonProps {
+interface CopyPageDropdownProps {
   title?: string;
 }
 
-export const AIExportButton: React.FC<AIExportButtonProps> = ({
+export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   title = "Documentation Page",
 }) => {
   const [copied, setCopied] = useState(false);
