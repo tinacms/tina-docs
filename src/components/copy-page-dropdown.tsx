@@ -143,7 +143,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
 
         <DropdownMenuContent className="bg-white rounded-2xl shadow-xl mt-2 border-0 border-gray-200 w-72 z-50 p-1 focus-visible:outline-0 hover:outline-0">
           <DropdownMenuItem
-            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
+            className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
             onClick={handleCopy}
           >
             <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
@@ -158,7 +158,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleViewAsMarkdown}
-            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
+            className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
           >
             <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
               <FileCode className="w-4 h-4 text-gray-600" />
@@ -171,7 +171,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
+            className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
             onClick={() =>
               openWithLink(
                 (mdUrl) =>
@@ -192,7 +192,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
+            className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
             onClick={() =>
               openWithLink(
                 (mdUrl) =>
