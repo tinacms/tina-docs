@@ -26,10 +26,18 @@ export async function generateMetadata({
   const dynamicParams = await params;
   const slug = dynamicParams?.slug?.join("/");
   const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
-  if (data.docs.seo && !data.docs?.seo?.canonicalUrl) {
-    data.docs.seo.canonicalUrl = `${settings.siteUrl}/docs/${slug}`;
+
+  if ((data.docs.seo && !data.docs?.seo?.canonicalUrl) || !data.docs.seo) {
+    data.docs.seo = {
+      __typename: "DocsSeo",
+      canonicalUrl: `${settings.siteUrl}/docs/${slug}`,
+    };
   }
-  return getSeo(data);
+
+  return getSeo(data.docs.seo, {
+    pageTitle: data.docs.title,
+    body: data.docs.body,
+  });
 }
 
 async function getData(slug: string) {

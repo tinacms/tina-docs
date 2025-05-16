@@ -70,7 +70,11 @@ export function Search({ className }: { className?: string }) {
             if (!matchFound) return null;
 
             return {
-              url: data.raw_url.split(".")[0],
+              url: data.raw_url
+                .replace(/^\/server\/app/, "")
+                .replace(/\.html$/, "")
+                .replace(/\/+/g, "/")
+                .trim(),
               title: data.meta.title || "Untitled",
               excerpt: data.excerpt,
             };

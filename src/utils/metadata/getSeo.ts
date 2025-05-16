@@ -3,28 +3,28 @@ import { formatExcerpt } from "../docs";
 import { envUrl } from "../env-url";
 import { DEFAULT_SEO } from "./defaultSeo";
 
-export const getSeo = (data: any): Metadata => {
-  const excerpt = formatExcerpt(data.docs.body, 140);
+interface DefaultProps {
+  pageTitle: string;
+  body: any;
+}
+
+export const getSeo = (seo: any, data?: DefaultProps): Metadata => {
+  const excerpt = data ? formatExcerpt(data.body, 140) : "";
 
   const SEO = {
-    title: data.docs.seo?.title || DEFAULT_SEO.title,
-    description:
-      data.docs.seo?.description || `${excerpt} || ${DEFAULT_SEO.description}`,
+    title: seo?.title || `${data?.pageTitle} | TinaCMS`,
+    description: seo?.description || `${excerpt}`,
     alternates: {
-      canonical: envUrl(data.docs.seo?.canonicalUrl),
+      canonical: envUrl(seo?.canonicalUrl),
     },
     openGraph: {
-      title: data.docs.title || DEFAULT_SEO.title,
-      url: envUrl(data.docs.seo?.canonicalUrl),
-      description:
-        data.docs.seo?.description ||
-        `${excerpt} || ${DEFAULT_SEO.description}`,
+      title: seo?.title || `${data?.pageTitle} | TinaCMS`,
+      url: envUrl(seo?.canonicalUrl),
+      description: seo?.description || `${excerpt}`,
       images: [
         {
           ...DEFAULT_SEO.openGraph?.images?.[0],
-          url:
-            data.docs.seo?.ogImage ||
-            envUrl(DEFAULT_SEO.openGraph?.images?.[0]?.url),
+          url: seo?.ogImage || envUrl(DEFAULT_SEO.openGraph?.images?.[0]?.url),
         },
       ],
     },

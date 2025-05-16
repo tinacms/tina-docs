@@ -17,7 +17,10 @@ export async function generateMetadata() {
     }/docs`;
   }
 
-  return getSeo(data);
+  return getSeo(data.docs.seo, {
+    pageTitle: data.docs.title,
+    body: data.docs.body,
+  });
 }
 
 async function getData() {

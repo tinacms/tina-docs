@@ -10,6 +10,7 @@
       "content/**",
       "coverage/**",
       "tina/__generated__/**",
+      "tina/tina-lock.json",
       "src/styles/**"
     ]
   },
