@@ -24,6 +24,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Biome Lint & Format
-        run: pnpm check src/ tina/
+      - name: Run Biome Lint & Formatter
+        run: pnpm lint src/ tina/
 
