@@ -129,7 +129,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
       <DropdownMenu onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild className="border-gray-200">
           <button
-            className="px-3 border border-gray-200 hover:bg-gray-50 rounded-r-xl cursor-pointer rounded-l-none"
+            className="px-3 border border-gray-200 hover:bg-gray-50 rounded-r-xl cursor-pointer rounded-l-none outline-none focus:outline-none focus-visible:outline-none"
             type="button"
             onClick={handleToggle}
           >
@@ -143,14 +143,14 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
 
         <DropdownMenuContent className="bg-white rounded-2xl shadow-xl mt-2 border-0 border-gray-200 w-72 z-50 p-1 focus-visible:outline-0 hover:outline-0">
           <DropdownMenuItem
-            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
             onClick={handleCopy}
           >
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white">
+            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
               <ClipboardList className="w-4 h-4 text-gray-600" />
             </span>
             <span className="flex flex-col">
-              <span className="font-bold">Copy page</span>
+              <span className="font-medium">Copy page</span>
               <span className="text-xs text-gray-500">
                 Copy page as Markdown for LLMs
               </span>
@@ -158,20 +158,20 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleViewAsMarkdown}
-            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
           >
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white">
+            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
               <FileText className="w-4 h-4 text-gray-600" />
             </span>
             <span className="flex flex-col">
-              <span className="font-bold">View as Markdown</span>
+              <span className="font-medium">View as Markdown</span>
               <span className="text-xs text-gray-500">
                 View this page as plain text
               </span>
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
             onClick={() =>
               openWithLink(
                 (mdUrl) =>
@@ -181,18 +181,18 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
               )
             }
           >
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white">
+            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
               <Bot className="w-4 h-4 text-gray-600" />
             </span>
             <span className="flex flex-col">
-              <span className="font-bold">Open in ChatGPT</span>
+              <span className="font-medium">Open in ChatGPT</span>
               <span className="text-xs text-gray-500">
                 Ask questions about this page
               </span>
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
             onClick={() =>
               openWithLink(
                 (mdUrl) =>
@@ -202,11 +202,11 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
               )
             }
           >
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white">
+            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
               <FileText className="w-4 h-4 text-gray-600" />
             </span>
             <span className="flex flex-col">
-              <span className="font-bold">Open in Claude</span>
+              <span className="font-medium">Open in Claude</span>
               <span className="text-xs text-gray-500">
                 Ask questions about this page
               </span>
