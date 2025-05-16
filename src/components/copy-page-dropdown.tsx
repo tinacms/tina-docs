@@ -143,21 +143,35 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
 
         <DropdownMenuContent className="bg-white rounded-2xl shadow-xl mt-2 border-0 border-gray-200 w-72 z-50 p-1 focus-visible:outline-0 hover:outline-0">
           <DropdownMenuItem
+            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
             onClick={handleCopy}
-            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
           >
-            <ClipboardList className="w-4 h-4 text-gray-600" />
-            Copy page as Markdown for LLMs
+            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white">
+              <ClipboardList className="w-4 h-4 text-gray-600" />
+            </span>
+            <span className="flex flex-col">
+              <span className="font-bold">Copy page</span>
+              <span className="text-xs text-gray-500">
+                Copy page as Markdown for LLMs
+              </span>
+            </span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleViewAsMarkdown}
-            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
           >
-            <FileText className="w-4 h-4 text-gray-600" />
-            View as Markdown
+            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white">
+              <FileText className="w-4 h-4 text-gray-600" />
+            </span>
+            <span className="flex flex-col">
+              <span className="font-bold">View as Markdown</span>
+              <span className="text-xs text-gray-500">
+                View this page as plain text
+              </span>
+            </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
             onClick={() =>
               openWithLink(
                 (mdUrl) =>
@@ -167,11 +181,18 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
               )
             }
           >
-            <Bot className="w-4 h-4 text-gray-600" />
-            Open in ChatGPT (with .md link)
+            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white">
+              <Bot className="w-4 h-4 text-gray-600" />
+            </span>
+            <span className="flex flex-col">
+              <span className="font-bold">Open in ChatGPT</span>
+              <span className="text-xs text-gray-500">
+                Ask questions about this page
+              </span>
+            </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+            className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
             onClick={() =>
               openWithLink(
                 (mdUrl) =>
@@ -181,8 +202,15 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
               )
             }
           >
-            <FileText className="w-4 h-4 text-gray-600" />
-            Open in Claude (with .md link)
+            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white">
+              <FileText className="w-4 h-4 text-gray-600" />
+            </span>
+            <span className="flex flex-col">
+              <span className="font-bold">Open in Claude</span>
+              <span className="text-xs text-gray-500">
+                Ask questions about this page
+              </span>
+            </span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
