@@ -63,6 +63,43 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
     }
   };
 
+  // Utility to generate and upload markdown, returns the .md URL
+  const generateAndGetMdUrl = async () => {
+    let url = mdUrl;
+    if (!url) {
+      const md = htmlToMd(htmlContent);
+      let pathName = window.location.pathname.replace(/^\//, "");
+      if (!pathName) pathName = "index";
+      const filename = `${pathName}.md`;
+
+      const res = await fetch("/api/export-md", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: md, filename }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        url = window.location.origin + data.url;
+        setMdUrl(url);
+      } else {
+        alert("Failed to export markdown");
+        return null;
+      }
+    }
+    return url;
+  };
+
+  // Generic function to open a service with the .md link
+  const openWithLink = async (
+    serviceUrlTemplate: (mdUrl: string) => string
+  ) => {
+    const url = await generateAndGetMdUrl();
+    if (!url) return;
+    const finalUrl = serviceUrlTemplate(url);
+    window.open(finalUrl, "_blank", "noopener,noreferrer");
+  };
+
   useEffect(() => {
     if (copied) {
       const timeout = setTimeout(() => setCopied(false), 4000);
@@ -121,70 +158,28 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
-            onClick={async () => {
-              let url = mdUrl;
-              if (!url) {
-                // Generate the markdown file
-                const md = htmlToMd(htmlContent);
-                let pathName = window.location.pathname.replace(/^\//, "");
-                if (!pathName) pathName = "index";
-                const filename = `${pathName}.md`;
-
-                const res = await fetch("/api/export-md", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ content: md, filename }),
-                });
-
-                if (res.ok) {
-                  const data = await res.json();
-                  url = window.location.origin + data.url;
-                  setMdUrl(url);
-                } else {
-                  alert("Failed to export markdown");
-                  return;
-                }
-              }
-              const chatUrl = `https://chat.openai.com/?hints=search&q=Read%20from%20${encodeURIComponent(
-                url
-              )}%20so%20I%20can%20ask%20questions%20about%20it.`;
-              window.open(chatUrl, "_blank", "noopener,noreferrer");
-            }}
+            onClick={() =>
+              openWithLink(
+                (mdUrl) =>
+                  `https://chat.openai.com/?hints=search&q=Read%20from%20${encodeURIComponent(
+                    mdUrl
+                  )}%20so%20I%20can%20ask%20questions%20about%20it.`
+              )
+            }
           >
             <Bot className="w-4 h-4 text-gray-600" />
             Open in ChatGPT (with .md link)
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
-            onClick={async () => {
-              let url = mdUrl;
-              if (!url) {
-                // Generate the markdown file
-                const md = htmlToMd(htmlContent);
-                let pathName = window.location.pathname.replace(/^\//, "");
-                if (!pathName) pathName = "index";
-                const filename = `${pathName}.md`;
-
-                const res = await fetch("/api/export-md", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ content: md, filename }),
-                });
-
-                if (res.ok) {
-                  const data = await res.json();
-                  url = window.location.origin + data.url;
-                  setMdUrl(url);
-                } else {
-                  alert("Failed to export markdown");
-                  return;
-                }
-              }
-              const claudeUrl = `https://claude.ai/?q=Read%20from%20${encodeURIComponent(
-                url
-              )}%20so%20I%20can%20ask%20questions%20about%20it.`;
-              window.open(claudeUrl, "_blank", "noopener,noreferrer");
-            }}
+            onClick={() =>
+              openWithLink(
+                (mdUrl) =>
+                  `https://claude.ai/?q=Read%20from%20${encodeURIComponent(
+                    mdUrl
+                  )}%20so%20I%20can%20ask%20questions%20about%20it.`
+              )
+            }
           >
             <FileText className="w-4 h-4 text-gray-600" />
             Open in Claude (with .md link)
