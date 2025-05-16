@@ -110,7 +110,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   }, [copied]);
 
   return (
-    <div className="inline-flex rounded-xl overflow-hidden bg-white border-gray-200 font-medium text-gray-300 ">
+    <div className="inline-flex rounded-xl overflow-hidden ml-auto border-gray-200 font-medium text-gray-300 lg:mb-0 mb-4">
       {/* Left button: Copy page */}
       <button
         onClick={handleCopy}
@@ -129,7 +129,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 
       {/* Right dropdown arrow */}
       <DropdownMenu onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild className="border-gray-200">
+        <DropdownMenuTrigger asChild className="border-gray-20 bg-white">
           <button
             className="px-3 border border-gray-200 hover:bg-gray-50 rounded-r-xl cursor-pointer rounded-l-none outline-none focus:outline-none focus-visible:outline-none"
             type="button"

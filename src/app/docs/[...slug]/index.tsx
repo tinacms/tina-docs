@@ -38,7 +38,7 @@ export default function Document({ props, tinaProps }) {
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
-        <div className="flex items-center justify-between w-full">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between w-full gap-2">
           <h1
             className="brand-primary-gradient pt-4 font-tuner text-4xl"
             data-tina-field={tinaField(documentationData, "title")}
@@ -46,7 +46,7 @@ export default function Document({ props, tinaProps }) {
           >
             {documentationData?.title}
           </h1>
-          <CopyPageDropdown />
+          <CopyPageDropdown className="self-end mb-2 md:mb-0" />
         </div>
         {/* MOBILE TABLE OF CONTENTS */}
         {documentationData?.tocIsHidden ? null : (
