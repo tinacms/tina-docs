@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import htmlToMd from "html-to-md";
 
-import { ClipboardList, Bot, FileText, ChevronDown } from "lucide-react";
+import { Copy, FileCode, Bot, ChevronDown } from "lucide-react";
 
 interface AIExportButtonProps {
   title?: string;
@@ -121,7 +121,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
     cursor-pointer`}
         type="button"
       >
-        <ClipboardList className="w-4 h-4" />
+        <Copy className="w-4 h-4" />
         <span>{copied ? "Copied!" : "Copy page"}</span>
       </button>
 
@@ -147,11 +147,11 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             onClick={handleCopy}
           >
             <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <ClipboardList className="w-4 h-4 text-gray-600" />
+              <Copy className="w-4 h-4 text-gray-600" />
             </span>
             <span className="flex flex-col">
               <span className="font-medium">Copy page</span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 font-light">
                 Copy page as Markdown for LLMs
               </span>
             </span>
@@ -161,11 +161,11 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             className="flex items-start gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
           >
             <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <FileText className="w-4 h-4 text-gray-600" />
+              <FileCode className="w-4 h-4 text-gray-600" />
             </span>
             <span className="flex flex-col">
               <span className="font-medium">View as Markdown</span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 font-light">
                 View this page as plain text
               </span>
             </span>
@@ -186,7 +186,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             </span>
             <span className="flex flex-col">
               <span className="font-medium">Open in ChatGPT</span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 font-light">
                 Ask questions about this page
               </span>
             </span>
@@ -203,11 +203,11 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             }
           >
             <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <FileText className="w-4 h-4 text-gray-600" />
+              <FileCode className="w-4 h-4 text-gray-600" />
             </span>
             <span className="flex flex-col">
               <span className="font-medium">Open in Claude</span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 font-light">
                 Ask questions about this page
               </span>
             </span>
