@@ -21,7 +21,9 @@ module.exports = {
       },
     ];
   },
-
+  turbopack: {
+    resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       // Configure Monaco Editor for minimal build
