@@ -8,8 +8,8 @@
     "postbuild": "npx pagefind --site .next --output-path .next/static/pagefind",
     "build-local-pagefind": "tinacms build && next build && npx pagefind --site .next --output-subdir ../public/pagefind",
     "start": "tinacms build && next start",
-    "lint": "biome check src/",
-    "lint:fix": "biome check src/ --fix"
+    "lint": "biome check src/ tina/",
+    "lint:fix": "biome check src/ tina/ --fix"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
