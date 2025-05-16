@@ -16,8 +16,12 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
+    "@radix-ui/react-dropdown-menu": "^2.1.14",
+    "copy-to-clipboard": "^3.3.3",
     "fast-glob": "^3.3.3",
+    "html-to-md": "^0.8.8",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.510.0",
     "mermaid": "^11.6.0",
     "monaco-editor": "^0.52.2",
     "motion": "^12.10.0",
@@ -32,6 +36,7 @@
     "rehype-pretty-code": "^0.14.1",
     "shiki": "^3.4.0",
     "tinacms": "^2.6.1",
+    "turndown": "^7.2.0",
     "typescript": "5.5.2"
   },
   "devDependencies": {

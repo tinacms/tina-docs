@@ -37,13 +37,13 @@ export default function Document({ props, tinaProps }) {
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
-        <div
+        <h1
           className="brand-primary-gradient pt-4 font-tuner text-4xl"
           data-tina-field={tinaField(documentationData, "title")}
           data-pagefind-meta="title"
         >
           {documentationData?.title}
-        </div>
+        </h1>
         {/* MOBILE TABLE OF CONTENTS */}
         {documentationData?.tocIsHidden ? null : (
           <div className="block xl:hidden">
