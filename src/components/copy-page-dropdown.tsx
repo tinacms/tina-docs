@@ -9,7 +9,9 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import htmlToMd from "html-to-md";
 
-import { Copy, FileCode, Bot, ChevronDown } from "lucide-react";
+import { Copy, FileCode, ChevronDown } from "lucide-react";
+import { SiOpenai } from "react-icons/si";
+import { FaCommentDots } from "react-icons/fa";
 
 interface AIExportButtonProps {
   title?: string;
@@ -182,7 +184,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             }
           >
             <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <Bot className="w-4 h-4 text-gray-600" />
+              <SiOpenai className="w-4 h-4" />
             </span>
             <span className="flex flex-col">
               <span className="font-medium">Open in ChatGPT</span>
@@ -203,7 +205,7 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             }
           >
             <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <FileCode className="w-4 h-4 text-gray-600" />
+              <FaCommentDots className="w-4 h-4" />
             </span>
             <span className="flex flex-col">
               <span className="font-medium">Open in Claude</span>
