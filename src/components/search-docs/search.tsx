@@ -70,7 +70,7 @@ export function Search({ className }: { className?: string }) {
             if (!matchFound) return null;
 
             return {
-              url: data.url
+              url: data.raw_url
                 .replace(/^\/server\/app/, "")
                 .replace(/\.html$/, "")
                 .replace(/\/+/g, "/")
