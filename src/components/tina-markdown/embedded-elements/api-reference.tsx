@@ -1,254 +1,763 @@
-import React, { useState, useEffect, useRef } from "react";
-import { RxInfoCircled, RxMinus, RxPlus } from "react-icons/rx";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
-import MarkdownComponentMapping from "../markdown-component-mapping";
+import React, { useEffect, useState, useContext, createContext } from "react";
+import { client } from "@/tina/__generated__/client";
 
-const ApiReference = (data: {
-  property: {
-    groupName: string;
-    name: string;
-    description: string;
-    type: string;
-    default: string;
-    required: boolean;
-  }[];
-}) => {
-  const { property: properties } = data;
-  const [openGroups, setOpenGroups] = useState<string[]>([]);
-  const groupRefs = useRef(new Map());
+// Context to share schema definitions across components
+const SchemaContext = createContext<any>({});
 
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(() => {
-      for (const groupName of openGroups) {
-        const element = groupRefs.current.get(groupName);
-        if (element) {
-          const content = element.firstElementChild;
-          if (content) {
-            element.style.height = `${content.offsetHeight}px`;
-          }
-        }
+// Interface for endpoint details
+interface Endpoint {
+  path: string;
+  method: string;
+  summary: string;
+  description?: string;
+  operationId?: string;
+  parameters?: any[];
+  responses?: Record<string, any>;
+  tags?: string[];
+  requestBody?: any;
+}
+
+// Interface for parsed Swagger/OpenAPI details
+interface SchemaDetails {
+  title?: string;
+  version?: string;
+  endpoints: Endpoint[];
+}
+
+// Helper to resolve $ref references
+const resolveReference = (ref: string, definitions: any): any => {
+  if (!ref || typeof ref !== "string" || !ref.startsWith("#/")) {
+    return null;
+  }
+
+  // Extract the path from the reference
+  const path = ref.substring(2).split("/");
+
+  // Navigate through the definitions object
+  let result = definitions;
+  for (const segment of path) {
+    if (!result || !result[segment]) {
+      return null;
+    }
+    result = result[segment];
+  }
+
+  return result;
+};
+
+// Component to display an example value for a schema
+const SchemaExample = ({ schema }: { schema: any }) => {
+  const definitions = useContext(SchemaContext);
+
+  const generateExample = (schema: any, depth = 0): any => {
+    if (depth > 3) return "..."; // Limit recursion depth
+
+    // Handle $ref
+    if (schema.$ref) {
+      const refSchema = resolveReference(schema.$ref, definitions);
+      if (refSchema) {
+        return generateExample(refSchema, depth);
       }
-    });
+      return `<${schema.$ref.split("/").pop()}>`;
+    }
 
-    resizeObserver.observe(document.body);
+    // Handle different types
+    switch (schema.type) {
+      case "string":
+        return schema.example || schema.default || "string";
+      case "integer":
+      case "number":
+        return schema.example || schema.default || 0;
+      case "boolean":
+        return schema.example || schema.default || false;
+      case "array":
+        if (schema.items) {
+          const itemExample = generateExample(schema.items, depth + 1);
+          return [itemExample];
+        }
+        return [];
+      case "object":
+        if (schema.properties) {
+          const obj: any = {};
+          Object.entries(schema.properties).forEach(
+            ([key, prop]: [string, any]) => {
+              obj[key] = generateExample(prop, depth + 1);
+            }
+          );
+          return obj;
+        }
+        return {};
+      default:
+        if (schema.properties) {
+          // Object without explicit type
+          const obj: any = {};
+          Object.entries(schema.properties).forEach(
+            ([key, prop]: [string, any]) => {
+              obj[key] = generateExample(prop, depth + 1);
+            }
+          );
+          return obj;
+        }
+        return null;
+    }
+  };
 
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [openGroups]);
+  const example = generateExample(schema);
 
-  const propertyItem = (property, isLast = false) => {
+  return (
+    <div className="mt-2 p-3 bg-gray-50 rounded-md">
+      <div className="text-xs text-gray-500 mb-1">Example:</div>
+      <pre className="text-sm overflow-auto p-2 bg-gray-800 text-gray-100 rounded">
+        {JSON.stringify(example, null, 2)}
+      </pre>
+    </div>
+  );
+};
+
+// Type rendering component for recursively displaying schema structures
+const SchemaType = ({
+  schema,
+  depth = 0,
+  isNested = false,
+  name = "",
+  showExampleButton = false,
+  onToggleExample = () => {},
+}: {
+  schema: any;
+  depth?: number;
+  isNested?: boolean;
+  name?: string;
+  showExampleButton?: boolean;
+  onToggleExample?: () => void;
+}) => {
+  const [isExpanded, setIsExpanded] = useState(depth < 2); // Auto-expand first two levels
+  const definitions = useContext(SchemaContext);
+
+  // Handle null schema
+  if (!schema) return <span className="text-gray-500">-</span>;
+
+  // Handle reference schemas
+  if (schema.$ref) {
+    const refPath = schema.$ref;
+    const refName = refPath.split("/").pop();
+    const refSchema = resolveReference(refPath, definitions);
+
     return (
-      <div
-        className={`space-y-4 px-6 py-3 min-h-18 ${
-          !isLast ? "border-b border-neutral-border" : ""
-        }`}
-      >
-        <div className="flex flex-col gap-2 md:gap-8 md:flex-row md:items-start">
-          <div className="w-full md:w-1/3 md:min-w-30">
-            <div className="inline-block max-w-full break-normal font-inter font-bold text-lg text-neutral-text">
-              {property?.name?.replace(/([A-Z])/g, "\u200B$1")}
-            </div>
-            <div className="py-1">
-              {property.required && (
-                <p className="text-2xs font-bold text-brand-primary">
-                  REQUIRED
-                </p>
-              )}
-              {property.experimental && (
-                <p className="text-2xs py-1 font-bold text-brand-tertiary-dark">
-                  EXPERIMENTAL
-                </p>
-              )}
-            </div>
+      <div className={`${isNested ? "ml-4" : ""}`}>
+        <div className="flex items-center">
+          <button
+            className="mr-2 w-5 h-5 rounded-sm flex items-center justify-center border border-gray-300 hover:bg-gray-100 focus:outline-none"
+            onClick={() => setIsExpanded(!isExpanded)}
+            aria-label={isExpanded ? "Collapse" : "Expand"}
+          >
+            {isExpanded ? "−" : "+"}
+          </button>
+          <span className="text-purple-600 font-medium">{refName}</span>
+          {showExampleButton && (
+            <button
+              className="ml-2 text-xs text-blue-600 hover:underline focus:outline-none"
+              onClick={onToggleExample}
+            >
+              Show example
+            </button>
+          )}
+        </div>
+
+        {isExpanded && refSchema && (
+          <div className="mt-1 border-l-2 border-gray-200 pl-4">
+            <SchemaType schema={refSchema} depth={depth + 1} isNested={true} />
           </div>
-          <div className="w-full md:w-2/3">
-            <div className=" text-neutral-text font-inter">{property.type}</div>
-            <div className="text-neutral-text-secondary font-inter">
-              <TinaMarkdown
-                content={property.description as any}
-                components={MarkdownComponentMapping}
+        )}
+      </div>
+    );
+  }
+
+  // Get type or infer it from properties
+  let type =
+    schema.type ||
+    (schema.properties ? "object" : schema.items ? "array" : "unknown");
+
+  // If it's a simple type with no nested objects
+  if (
+    ["string", "number", "integer", "boolean"].includes(type) &&
+    !schema.properties &&
+    !schema.items
+  ) {
+    return (
+      <div className={`${isNested ? "ml-4" : ""}`}>
+        <div className="flex items-center">
+          <span className="text-blue-600 font-mono">{type}</span>
+          {schema.format && (
+            <span className="text-gray-500 ml-1">({schema.format})</span>
+          )}
+          {schema.enum && (
+            <span className="text-gray-600 ml-1">
+              enum: [{schema.enum.map((val: any) => `"${val}"`).join(", ")}]
+            </span>
+          )}
+          {schema.default !== undefined && (
+            <span className="text-gray-600 ml-1">
+              default:{" "}
+              {typeof schema.default === "string"
+                ? `"${schema.default}"`
+                : JSON.stringify(schema.default)}
+            </span>
+          )}
+          {showExampleButton && (
+            <button
+              className="ml-2 text-xs text-blue-600 hover:underline focus:outline-none"
+              onClick={onToggleExample}
+            >
+              Show example
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Complex objects and arrays
+  return (
+    <div className={`${isNested ? "ml-4" : ""}`}>
+      <div className="flex items-center">
+        <button
+          className="mr-2 w-5 h-5 rounded-sm flex items-center justify-center border border-gray-300 hover:bg-gray-100 focus:outline-none"
+          onClick={() => setIsExpanded(!isExpanded)}
+          aria-label={isExpanded ? "Collapse" : "Expand"}
+        >
+          {isExpanded ? "−" : "+"}
+        </button>
+
+        <span className="text-blue-600 font-mono">{type}</span>
+        {name && <span className="ml-2 font-medium">{name}</span>}
+
+        {!isExpanded && type === "object" && schema.properties && (
+          <span className="text-gray-500 ml-2">
+            {`{${Object.keys(schema.properties).join(", ")}}`}
+          </span>
+        )}
+
+        {!isExpanded && type === "array" && schema.items && (
+          <span className="text-gray-500 ml-2">
+            {`[${
+              schema.items.type || (schema.items.properties ? "object" : "any")
+            }]`}
+          </span>
+        )}
+
+        {showExampleButton && (
+          <button
+            className="ml-2 text-xs text-blue-600 hover:underline focus:outline-none"
+            onClick={onToggleExample}
+          >
+            Show example
+          </button>
+        )}
+      </div>
+
+      {isExpanded && (
+        <div className="mt-1 border-l-2 border-gray-200 pl-4">
+          {type === "object" && schema.properties && (
+            <div>
+              {Object.entries(schema.properties).map(
+                ([propName, propSchema]: [string, any]) => (
+                  <div key={propName} className="mt-2">
+                    <div className="flex items-start">
+                      <span className="text-gray-800 font-medium mr-2">
+                        {propName}
+                      </span>
+                      {schema.required?.includes(propName) && (
+                        <span className="text-red-500 text-xs font-medium">
+                          required
+                        </span>
+                      )}
+                    </div>
+                    <SchemaType
+                      schema={propSchema}
+                      depth={depth + 1}
+                      isNested={true}
+                      name={propName}
+                    />
+                  </div>
+                )
+              )}
+              {!Object.keys(schema.properties).length && (
+                <span className="text-gray-500 italic">Empty object</span>
+              )}
+            </div>
+          )}
+
+          {type === "array" && schema.items && (
+            <div className="mt-1">
+              <div className="text-gray-800 font-medium mb-1">Array items:</div>
+              <SchemaType
+                schema={schema.items}
+                depth={depth + 1}
+                isNested={true}
               />
             </div>
-            {property.default && (
-              <div className="text-neutral-text-secondary font-inter text-sm">
-                Default: <code>{property.default}</code>
+          )}
+
+          {/* Additional properties */}
+          {schema.additionalProperties && (
+            <div className="mt-2">
+              <div className="text-gray-800 font-medium">
+                Additional properties:
               </div>
-            )}
+              <SchemaType
+                schema={
+                  typeof schema.additionalProperties === "boolean"
+                    ? { type: "any" }
+                    : schema.additionalProperties
+                }
+                depth={depth + 1}
+                isNested={true}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Component to render a schema section with example toggle
+const SchemaSection = ({ schema, title }: { schema: any; title?: string }) => {
+  const [showExample, setShowExample] = useState(false);
+
+  const toggleExample = () => {
+    setShowExample(!showExample);
+  };
+
+  if (!schema) return null;
+
+  return (
+    <div className="mb-3">
+      {title && (
+        <div className="text-sm font-medium text-gray-700 mb-2">{title}</div>
+      )}
+      <SchemaType
+        schema={schema}
+        showExampleButton={true}
+        onToggleExample={toggleExample}
+      />
+      {showExample && <SchemaExample schema={schema} />}
+    </div>
+  );
+};
+
+// Component to render a response
+const ResponseContent = ({ response }: { response: any }) => {
+  // Get schema from different possible locations in OpenAPI spec
+  const schema =
+    response.content?.["application/json"]?.schema ||
+    response.schema ||
+    response;
+
+  if (!schema) return <div className="text-gray-500">No schema defined</div>;
+
+  return (
+    <div className="mt-2">
+      <SchemaSection schema={schema} />
+    </div>
+  );
+};
+
+const ApiReference = (data: any) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [schemaDetails, setSchemaDetails] = useState<SchemaDetails | null>(
+    null
+  );
+  const [selectedEndpoint, setSelectedEndpoint] = useState<Endpoint | null>(
+    null
+  );
+  const [schemaDefinitions, setSchemaDefinitions] = useState<any>({});
+  const [rawSchema, setRawSchema] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchAndParseSchema = async () => {
+      try {
+        setLoading(true);
+
+        // Parse the combined schema and endpoint value
+        let schemaPath = "";
+        let endpointSelector = "";
+
+        if (data.schemaFile && typeof data.schemaFile === "string") {
+          const parts = data.schemaFile.split("|");
+          schemaPath = parts[0];
+          if (parts.length > 1) {
+            endpointSelector = parts[1];
+          }
+        }
+
+        if (!schemaPath) {
+          setError("No schema file specified");
+          setLoading(false);
+          return;
+        }
+
+        // Fetch the schema file
+        const result = await client.queries.apiSchema({
+          relativePath: schemaPath,
+        });
+
+        if (!result?.data?.apiSchema?.apiSchema) {
+          setError(`Could not load schema: ${schemaPath}`);
+          setLoading(false);
+          return;
+        }
+
+        // Parse the schema JSON
+        const schemaJson = JSON.parse(result.data.apiSchema.apiSchema);
+        setRawSchema(schemaJson);
+
+        // Store schema definitions for references
+        const definitions = {
+          definitions: schemaJson.definitions || {},
+          components: schemaJson.components || {},
+          // For OpenAPI 3.0
+          schemas:
+            (schemaJson.components && schemaJson.components.schemas) || {},
+        };
+        setSchemaDefinitions(definitions);
+
+        // Process the schema to extract endpoints
+        const endpoints: Endpoint[] = [];
+        if (schemaJson.paths) {
+          Object.keys(schemaJson.paths).forEach((path) => {
+            const pathObj = schemaJson.paths[path];
+            Object.keys(pathObj).forEach((method) => {
+              if (method === "parameters") return; // Skip path-level parameters
+
+              const operation = pathObj[method];
+
+              // Handle request body for OpenAPI 3.0 or Swagger 2.0
+              const requestBody =
+                operation.requestBody ||
+                (operation.parameters?.some((p: any) => p.in === "body") && {
+                  content: {
+                    "application/json": {
+                      schema:
+                        operation.parameters.find((p: any) => p.in === "body")
+                          ?.schema || {},
+                    },
+                  },
+                });
+
+              // Filter out body parameters if we have a request body
+              const parameters = [
+                ...(pathObj.parameters || []), // Include path-level parameters
+                ...(operation.parameters || []),
+              ].filter((p) => {
+                // If we have a request body from a body parameter, filter out that parameter
+                if (requestBody && p.in === "body") {
+                  return false;
+                }
+                return true;
+              });
+
+              endpoints.push({
+                path,
+                method: method.toUpperCase(),
+                summary: operation.summary || `${method.toUpperCase()} ${path}`,
+                description: operation.description,
+                operationId: operation.operationId,
+                parameters,
+                responses: operation.responses,
+                requestBody,
+                tags: operation.tags,
+              });
+            });
+          });
+        }
+
+        // Set the schema details
+        setSchemaDetails({
+          title: schemaJson.info?.title || "API Documentation",
+          version: schemaJson.info?.version,
+          endpoints,
+        });
+
+        // Find the selected endpoint if specified
+        if (endpointSelector) {
+          const [method, ...pathParts] = endpointSelector.split(":");
+          const path = pathParts.join(":"); // Rejoin in case path had colons
+
+          const endpoint = endpoints.find(
+            (e) => e.method === method && e.path === path
+          );
+
+          setSelectedEndpoint(endpoint || null);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading API schema:", error);
+        setError("An error occurred while loading the API schema");
+        setLoading(false);
+      }
+    };
+
+    fetchAndParseSchema();
+  }, [data.schemaFile]);
+
+  if (loading) {
+    return (
+      <div className="p-4 border border-gray-200 rounded-md">
+        <div className="animate-pulse flex space-x-4">
+          <div className="flex-1 space-y-4 py-1">
+            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            </div>
           </div>
         </div>
       </div>
     );
-  };
+  }
 
-  const group = (groupName, groupProperties, isLast = false) => {
-    const required = groupProperties.some((property) => property.required);
-    const isOpen = openGroups.includes(groupName);
+  if (error) {
+    return (
+      <div className="p-4 border border-red-200 bg-red-50 rounded-md text-red-700">
+        <h3 className="font-medium">Error</h3>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
+  if (!schemaDetails) {
+    return (
+      <div className="p-4 border border-yellow-200 bg-yellow-50 rounded-md text-yellow-700">
+        <h3 className="font-medium">No API Schema</h3>
+        <p>Could not load API schema details.</p>
+      </div>
+    );
+  }
+
+  // Render a single endpoint
+  const renderEndpoint = (endpoint: Endpoint) => {
     return (
       <div
-        className={`group overflow-hidden ${
-          !isLast ? "border-b border-neutral-border" : ""
-        } ${isOpen ? "md:pb-0 pb-3" : ""}`}
+        key={`${endpoint.method}-${endpoint.path}`}
+        className="mb-8 border border-gray-200 rounded-md overflow-hidden"
       >
-        <button
-          type="button"
-          onClick={() =>
-            setOpenGroups(
-              isOpen
-                ? openGroups.filter((group) => group !== groupName)
-                : [...openGroups, groupName]
-            )
-          }
-          className={`min-h-18 flex w-full items-center justify-between px-6 py-4 text-left ${
-            isOpen ? "shadow-lg mb-3" : ""
+        <div
+          className={`p-4 flex items-center gap-4 ${
+            endpoint.method === "GET"
+              ? "bg-blue-50 border-b border-blue-200"
+              : endpoint.method === "POST"
+              ? "bg-green-50 border-b border-green-200"
+              : endpoint.method === "PUT"
+              ? "bg-yellow-50 border-b border-yellow-200"
+              : endpoint.method === "DELETE"
+              ? "bg-red-50 border-b border-red-200"
+              : "bg-gray-50 border-b border-gray-200"
           }`}
         >
-          <div>
-            {required && (
-              <p className="text-sm font-medium text-brand-primary">REQUIRED</p>
-            )}
-            <h3 className="text-md font-inter font-bold text-lg text-neutral-text">
-              {groupName || "Object"}
-            </h3>
-          </div>
-
-          <div className="transform transition-transform duration-300 ease-in-out">
-            {isOpen ? (
-              <RxMinus className="size-5 text-neutral-text" />
-            ) : (
-              <RxPlus className="size-5 text-neutral-text" />
-            )}
-          </div>
-        </button>
-        <div
-          ref={(el) => {
-            if (el) {
-              groupRefs.current.set(groupName, el);
-              const content = el.firstElementChild;
-              if (content) {
-                el.style.height = isOpen ? `${content.offsetHeight}px` : "0px";
-              }
-            }
-          }}
-          className="overflow-hidden transition-[height] duration-300 ease-in-out"
-        >
-          <div
-            className={`transform transition-[transform,opacity] duration-300 ease-in-out ${
-              isOpen
-                ? "translate-y-0 opacity-100"
-                : "-translate-y-full opacity-0"
+          <span
+            className={`px-3 py-1 rounded-md text-sm font-bold ${
+              endpoint.method === "GET"
+                ? "bg-blue-100 text-blue-800"
+                : endpoint.method === "POST"
+                ? "bg-green-100 text-green-800"
+                : endpoint.method === "PUT"
+                ? "bg-yellow-100 text-yellow-800"
+                : endpoint.method === "DELETE"
+                ? "bg-red-100 text-red-800"
+                : "bg-gray-100 text-gray-800"
             }`}
           >
-            <div className="px-6">
-              {groupProperties.map((property, index) => {
-                return (
-                  <div key={`property-${index}`}>
-                    {propertyItem(
-                      property,
-                      index === groupProperties.length - 1
-                    )}
-                  </div>
-                );
-              })}
+            {endpoint.method}
+          </span>
+          <span className="font-mono text-sm">{endpoint.path}</span>
+        </div>
+
+        <div className="p-4">
+          {endpoint.summary && (
+            <h3 className="text-lg font-semibold mb-2">{endpoint.summary}</h3>
+          )}
+
+          {endpoint.description && (
+            <div className="mb-4 text-gray-700 prose">
+              {endpoint.description}
             </div>
-          </div>
+          )}
+
+          {/* Parameters section - only show if there are non-body parameters */}
+          {endpoint.parameters && endpoint.parameters.length > 0 && (
+            <div className="mb-6">
+              <h4 className="text-lg font-medium mb-3">Parameters</h4>
+              <div className="space-y-4">
+                {endpoint.parameters.map((param: any, index: number) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-md p-4"
+                  >
+                    <div className="flex items-center mb-2">
+                      <span className="font-medium mr-2">{param.name}</span>
+                      <span
+                        className={`px-2 py-0.5 text-xs rounded-full ${
+                          param.required
+                            ? "bg-red-100 text-red-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {param.required ? "required" : "optional"}
+                      </span>
+                      <span className="ml-2 px-2 py-0.5 bg-purple-100 text-purple-800 text-xs rounded-full">
+                        {param.in}
+                      </span>
+                    </div>
+
+                    {param.description && (
+                      <p className="text-gray-600 mb-3 text-sm">
+                        {param.description}
+                      </p>
+                    )}
+
+                    <div>
+                      <span className="text-sm font-medium text-gray-700">
+                        Type:
+                      </span>
+                      <SchemaContext.Provider value={schemaDefinitions}>
+                        <SchemaSection schema={param.schema || param} />
+                      </SchemaContext.Provider>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Request Body section */}
+          {endpoint.requestBody && (
+            <div className="mb-6">
+              <h4 className="text-lg font-medium mb-3">Request Body</h4>
+              <div className="border border-gray-200 rounded-md p-4">
+                {endpoint.requestBody.description && (
+                  <p className="text-gray-600 mb-3">
+                    {endpoint.requestBody.description}
+                  </p>
+                )}
+
+                {endpoint.requestBody.required && (
+                  <div className="mb-3">
+                    <span className="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-800">
+                      required
+                    </span>
+                  </div>
+                )}
+
+                {endpoint.requestBody.content &&
+                  Object.keys(endpoint.requestBody.content).map(
+                    (contentType) => (
+                      <div key={contentType} className="mb-3">
+                        <div className="text-sm font-medium text-gray-700 mb-2">
+                          {contentType}:
+                        </div>
+                        <SchemaContext.Provider value={schemaDefinitions}>
+                          <SchemaSection
+                            schema={
+                              endpoint.requestBody.content[contentType].schema
+                            }
+                            title={contentType}
+                          />
+                        </SchemaContext.Provider>
+                      </div>
+                    )
+                  )}
+
+                {!endpoint.requestBody.content &&
+                  endpoint.requestBody.schema && (
+                    <SchemaContext.Provider value={schemaDefinitions}>
+                      <SchemaSection schema={endpoint.requestBody.schema} />
+                    </SchemaContext.Provider>
+                  )}
+              </div>
+            </div>
+          )}
+
+          {/* Responses section */}
+          {endpoint.responses && Object.keys(endpoint.responses).length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-lg font-medium mb-3">Responses</h4>
+              <div className="space-y-4">
+                {Object.entries(endpoint.responses).map(
+                  ([code, response]: [string, any]) => (
+                    <div
+                      key={code}
+                      className="border border-gray-200 rounded-md overflow-hidden"
+                    >
+                      <div
+                        className={`p-3 ${
+                          code.startsWith("2")
+                            ? "bg-green-50 border-b border-green-200"
+                            : code.startsWith("4") || code.startsWith("5")
+                            ? "bg-red-50 border-b border-red-200"
+                            : "bg-gray-50 border-b border-gray-200"
+                        }`}
+                      >
+                        <span
+                          className={`font-medium ${
+                            code.startsWith("2")
+                              ? "text-green-800"
+                              : code.startsWith("4") || code.startsWith("5")
+                              ? "text-red-800"
+                              : "text-gray-800"
+                          }`}
+                        >
+                          {code}
+                        </span>
+                        {response.description && (
+                          <span className="ml-2 text-gray-700">
+                            {response.description}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="p-3">
+                        <SchemaContext.Provider value={schemaDefinitions}>
+                          <ResponseContent response={response} />
+                        </SchemaContext.Provider>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
   };
 
   return (
-    <div className="my-6 rounded-md brand-glass-gradient shadow-lg">
-      {/* Process properties in order, grouping only adjacent items with same groupName */}
-      {(() => {
-        if (!properties?.length) return null;
+    <div className="api-reference">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold mb-1">{schemaDetails.title}</h2>
+        {schemaDetails.version && (
+          <div className="text-sm text-gray-500">
+            API Version: {schemaDetails.version}
+          </div>
+        )}
+      </div>
 
-        const result: any[] = [];
-        let currentGroup: string | null = null;
-        let currentGroupProperties: any[] = [];
-
-        // Process each property in original order
-        properties.forEach((property, index) => {
-          const lastPropertyBorder =
-            index === properties.length - 1 &&
-            !properties.some((p) => p.required);
-          const lastGroupBorder =
-            index === properties.length && !properties.some((p) => p.required);
-
-          // If property has no groupName, render it individually
-          if (!property.groupName) {
-            // If we were building a group, finalize it
-            if (currentGroup) {
-              result.push(
-                <React.Fragment key={`group-${result.length}`}>
-                  {group(currentGroup, currentGroupProperties, lastGroupBorder)}
-                </React.Fragment>
-              );
-              currentGroup = null;
-              currentGroupProperties = [];
-            }
-            // Add the individual property
-            result.push(
-              <React.Fragment key={`ind-${index}`}>
-                {propertyItem(property, lastPropertyBorder)}
-              </React.Fragment>
-            );
-          }
-          // If property has a groupName
-          else {
-            // If it's the same group as we're currently building, add to it
-            if (currentGroup === property.groupName) {
-              currentGroupProperties.push(property);
-            }
-            // If it's a different group or first group
-            else {
-              // Finalize previous group if it exists
-              if (currentGroup) {
-                result.push(
-                  <React.Fragment key={`group-${result.length}`}>
-                    {group(
-                      currentGroup,
-                      currentGroupProperties,
-                      lastGroupBorder
-                    )}
-                  </React.Fragment>
-                );
-              }
-
-              // Start a new group
-              currentGroup = property.groupName;
-              currentGroupProperties = [property];
-            }
-          }
-        });
-
-        // Don't forget to add the last group if we were building one
-        if (currentGroup) {
-          result.push(
-            <React.Fragment key={`group-${result.length}`}>
-              {group(
-                currentGroup,
-                currentGroupProperties,
-                true && !properties.some((p) => p.required)
-              )}
-            </React.Fragment>
-          );
-        }
-
-        return result;
-      })()}
-
-      {properties?.some((property) => property.required) && (
-        <div className=" mx-4 flex items-start gap-3 rounded-md p-4">
-          <RxInfoCircled className="mt-0.5 size-5 shrink-0 text-brand-secondary" />
-          <p className="text-sm text-neutral-text-secondary font-inter">
-            All properties marked as{" "}
-            <span className="font-medium text-brand-primary">REQUIRED</span>{" "}
-            must be specified for the field to work properly.
-          </p>
-        </div>
-      )}
+      <SchemaContext.Provider value={schemaDefinitions}>
+        {selectedEndpoint ? (
+          // Show only the selected endpoint
+          renderEndpoint(selectedEndpoint)
+        ) : (
+          // Show all endpoints
+          <div>
+            {schemaDetails.endpoints.map((endpoint) =>
+              renderEndpoint(endpoint)
+            )}
+          </div>
+        )}
+      </SchemaContext.Provider>
     </div>
   );
 };
