@@ -41,6 +41,28 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
     setOpen((prev) => !prev);
   };
 
+  const handleViewAsMarkdown = async () => {
+    const md = htmlToMd(htmlContent);
+
+    // Get the current path, remove leading slash, and add .md
+    let pathName = window.location.pathname.replace(/^\//, ""); // e.g. docs/guide/intro
+    if (!pathName) pathName = "index"; // fallback for homepage
+    const filename = `${pathName}.md`;
+
+    const res = await fetch("/api/export-md", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: md, filename }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      window.open(data.url, "_blank");
+    } else {
+      alert("Failed to export markdown");
+    }
+  };
+
   useEffect(() => {
     if (copied) {
       const timeout = setTimeout(() => setCopied(false), 4000);
@@ -90,22 +112,27 @@ export const AIExportButton: React.FC<AIExportButtonProps> = ({
             <ClipboardList className="w-4 h-4 text-gray-600" />
             Copy page as Markdown for LLMs
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 cursor-not-allowed rounded-md">
-            <FileText className="w-4 h-4 text-gray-400" />
-            View as Markdown (Coming Soon)
+          <DropdownMenuItem
+            onClick={handleViewAsMarkdown}
+            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+          >
+            <FileText className="w-4 h-4 text-gray-600" />
+            View as Markdown
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md">
-            <a
-              href={`https://chat.openai.com/?hints=search&q=Read%20from%20${encodeURIComponent(
-                window.location.href
-              )}%20so%20I%20can%20ask%20questions%20about%20it.`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 w-full"
-            >
-              <Bot className="w-4 h-4 text-gray-600" />
-              Open in ChatGPT (Manual Paste)
-            </a>
+          <DropdownMenuItem
+            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md"
+            onClick={() => {
+              window.open(
+                `https://chat.openai.com/?hints=search&q=Read%20from%20${encodeURIComponent(
+                  window.location.href
+                )}%20so%20I%20can%20ask%20questions%20about%20it.`,
+                "_blank",
+                "noopener,noreferrer"
+              );
+            }}
+          >
+            <Bot className="w-4 h-4 text-gray-600" />
+            Open in ChatGPT (Manual Paste)
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
