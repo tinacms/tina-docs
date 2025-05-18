@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
   const dir = path.join("/tmp", "exports");
   const filePath = path.join(dir, filename);
 
-  // Ensure the directory exists
-  await mkdir(dir, { recursive: true });
+  // Ensure all parent directories exist
+  await mkdir(path.dirname(filePath), { recursive: true });
 
   await writeFile(filePath, content, "utf8");
   return NextResponse.json({ url: `/exports/${filename}` });
