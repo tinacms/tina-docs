@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: { path: string[] } }
-) {
+type Props = {
+  params: {
+    path: string[];
+  };
+};
+
+export async function GET(request: NextRequest, { params }: Props) {
   try {
-    const filePath = path.join("/tmp/exports", ...context.params.path);
+    const filePath = path.join("/tmp/exports", ...params.path);
     const content = await readFile(filePath, "utf-8");
 
     // Set appropriate headers for markdown files
