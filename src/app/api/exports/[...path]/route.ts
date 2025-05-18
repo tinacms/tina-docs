@@ -4,10 +4,10 @@ import path from "path";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: { path: string[] } }
 ) {
   try {
-    const filePath = path.join("/tmp/exports", ...params.path);
+    const filePath = path.join("/tmp/exports", ...context.params.path);
     const content = await readFile(filePath, "utf-8");
 
     // Set appropriate headers for markdown files
