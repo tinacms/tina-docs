@@ -2,13 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
 
-type Props = {
-  params: {
-    path: string[];
-  };
-};
-
-export async function GET(request: NextRequest, { params }: Props) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { path: string[] } }
+): Promise<NextResponse> {
   try {
     const filePath = path.join("/tmp/exports", ...params.path);
     const content = await readFile(filePath, "utf-8");
