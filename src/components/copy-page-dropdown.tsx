@@ -46,7 +46,13 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       alert("Failed to export markdown");
       return;
     }
-    return htmlElement;
+    const clonedElement = htmlElement.cloneNode(true) as HTMLElement;
+    const elementsToRemove = clonedElement.querySelectorAll(
+      "[data-exclude-from-md]"
+    );
+    elementsToRemove.forEach((element) => element.remove());
+
+    return clonedElement;
   };
 
   const handleViewAsMarkdown = async () => {
