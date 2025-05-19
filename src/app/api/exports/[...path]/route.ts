@@ -7,19 +7,18 @@ export async function GET(
   { params }: { params: { path: string[] } }
 ): Promise<NextResponse> {
   try {
-    const { path: pathSegments } = params;
-    const filePath = path.join("/tmp/exports", ...pathSegments);
+    const filePath = path.join("/tmp/exports", ...params.path);
     console.log("🚀 ~ filePath:", filePath);
+
     const content = await readFile(filePath, "utf-8");
 
-    // Set appropriate headers for markdown files
-    const headers = new Headers();
-    headers.set("Content-Type", "text/markdown");
-
     return new NextResponse(content, {
-      headers,
+      headers: {
+        "Content-Type": "text/markdown",
+      },
     });
   } catch (error) {
+    console.error("File read error:", error);
     return new NextResponse("File not found", { status: 404 });
   }
 }
