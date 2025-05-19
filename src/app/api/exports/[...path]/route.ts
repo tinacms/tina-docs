@@ -1,5 +1,5 @@
-import path from "path";
-import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
