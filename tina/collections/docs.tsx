@@ -93,7 +93,7 @@ export const docsCollection = {
         RecipeTemplate as Template,
         AccordionTemplate as Template,
         AccordionBlockTemplate as Template,
-        ApiReferenceTemplate as Template,
+        ApiReferenceTemplate as any,
         YoutubeTemplate as Template,
         QueryResponseTabsTemplate as Template,
         CalloutTemplate as Template,
