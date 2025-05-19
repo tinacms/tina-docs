@@ -196,7 +196,7 @@ const SchemaType = ({
                 ([propName, propSchema]) => (
                   <SchemaType
                     key={propName}
-                    schema={propSchema}
+                    schema={propSchema as any}
                     name={propName}
                     depth={depth + 1}
                     isNested={true}
