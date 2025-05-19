@@ -30,7 +30,8 @@ interface Endpoint {
 }
 
 // Custom field for selecting an API schema file
-const SchemaSelector = wrapFieldsWithMeta(({ input, field }) => {
+const SchemaSelector = wrapFieldsWithMeta((props: any) => {
+  const { input, field } = props;
   const [schemas, setSchemas] = useState<SchemaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [schemaDetails, setSchemaDetails] = useState<SchemaDetails | null>(
