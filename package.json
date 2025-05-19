@@ -18,7 +18,7 @@
     "lodash": "^4.17.21",
     "mermaid": "^11.6.0",
     "monaco-editor": "^0.52.2",
-    "motion": "^12.11.3",
+    "motion": "^12.12.1",
     "next": "^15.3.2",
     "prism-react-renderer": "^2.4.1",
     "prismjs": "^1.30.0",
