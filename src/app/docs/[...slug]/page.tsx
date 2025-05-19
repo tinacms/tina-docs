@@ -7,6 +7,11 @@ import { getSeo } from "@/utils/metadata/getSeo";
 import fg from "fast-glob";
 import Document from ".";
 
+const siteUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : settings.siteUrl;
+
 export async function generateStaticParams() {
   const contentDir = "./content/docs/";
   const files = await fg(`${contentDir}**/*.mdx`);
@@ -27,11 +32,13 @@ export async function generateMetadata({
   const slug = dynamicParams?.slug?.join("/");
   const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
 
-  if ((data.docs.seo && !data.docs?.seo?.canonicalUrl) || !data.docs.seo) {
+  if (!data.docs.seo) {
     data.docs.seo = {
       __typename: "DocsSeo",
-      canonicalUrl: `${settings.siteUrl}/docs/${slug}`,
+      canonicalUrl: `${siteUrl}/docs/${slug}`,
     };
+  } else if (!data.docs.seo?.canonicalUrl) {
+    data.docs.seo.canonicalUrl = `${siteUrl}/docs/${slug}`;
   }
 
   return getSeo(data.docs.seo, {

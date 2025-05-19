@@ -6,15 +6,21 @@ import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from "./[...slug]";
 
-const dev = process.env.NODE_ENV === "development";
+const siteUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : settings.siteUrl;
 
 export async function generateMetadata() {
   const slug = "index";
   const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
-  if (data.docs.seo && !data.docs?.seo?.canonicalUrl) {
-    data.docs.seo.canonicalUrl = `${
-      dev ? "http://localhost:3000" : settings.siteUrl
-    }/docs`;
+  if (!data.docs.seo) {
+    data.docs.seo = {
+      __typename: "DocsSeo",
+      canonicalUrl: `${siteUrl}/docs`,
+    };
+  } else if (!data.docs.seo?.canonicalUrl) {
+    data.docs.seo.canonicalUrl = `${siteUrl}/docs`;
   }
 
   return getSeo(data.docs.seo, {
