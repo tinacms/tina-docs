@@ -97,6 +97,16 @@
           "_template": "item"
         }
       ]
+    },
+    {
+      "title": "API",
+      "items": [
+        {
+          "title": "API",
+          "slug": "content/docs/API-References.mdx",
+          "_template": "item"
+        }
+      ]
     }
   ]
 }
