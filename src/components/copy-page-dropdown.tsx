@@ -27,8 +27,19 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   const [htmlContent, setHtmlContent] = useState<string>("");
 
   useEffect(() => {
-    // Move window-dependent code to useEffect
-    setHtmlContent(document.getElementById("doc-content")?.innerHTML || "");
+    const docContent = document.getElementById("doc-content");
+    if (docContent) {
+      // Create a clone to avoid modifying the original DOM
+      const contentClone = docContent.cloneNode(true) as HTMLElement;
+
+      // Remove elements marked with data-exclude-from-md
+      const elementsToRemove = contentClone.querySelectorAll(
+        "[data-exclude-from-md]"
+      );
+      elementsToRemove.forEach((el) => el.remove());
+
+      setHtmlContent(contentClone.innerHTML);
+    }
   }, []);
 
   const handleCopy = async () => {
@@ -116,7 +127,10 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   }
 
   return (
-    <div className="inline-flex rounded-xl overflow-hidden ml-auto border-gray-200 font-medium text-gray-300 lg:mb-0 mb-4">
+    <div
+      className="inline-flex rounded-xl overflow-hidden ml-auto border-gray-200 font-medium text-gray-300 lg:mb-0 mb-4"
+      data-exclude-from-md
+    >
       {/* Left button: Copy page */}
       <button
         onClick={handleCopy}
