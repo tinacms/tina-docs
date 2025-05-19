@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 
+const isDev = process.env.NODE_ENV === "development";
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     // Extract path segments from the URL pathname
@@ -11,7 +12,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const exportIndex = segments.indexOf("exports");
     const pathSegments = segments.slice(exportIndex + 1);
 
-    const filePath = path.join("/tmp/exports", ...pathSegments);
+    const filePath = path.join(
+      isDev ? "public" : "/tmp",
+      "exports",
+      ...pathSegments
+    );
 
     const content = await readFile(filePath, "utf-8");
 
