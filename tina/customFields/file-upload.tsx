@@ -1,5 +1,21 @@
 import * as React from "react";
 import * as dropzone from "react-dropzone";
+// import type { FieldProps } from "tinacms/dist/forms";
+// Try default import from tinacms
+// import FieldProps from "tinacms";
+
+// Fallback: restore the original TinaFieldProps interface if FieldProps cannot be imported
+interface TinaFieldProps {
+  input: {
+    value: string;
+    onChange: (value: string) => void;
+  };
+  field: {
+    name: string;
+    label?: string;
+    description?: string;
+  };
+}
 
 const { useDropzone } = dropzone;
 
@@ -245,19 +261,6 @@ const DeleteFileButton = ({
     </button>
   );
 };
-
-// Define interface for Tina field props
-interface TinaFieldProps {
-  input: {
-    value: string;
-    onChange: (value: string) => void;
-  };
-  field: {
-    name: string;
-    label?: string;
-    description?: string;
-  };
-}
 
 // JSON File Upload component
 export const JsonFileUploadComponent = ({ input, field }: TinaFieldProps) => {
