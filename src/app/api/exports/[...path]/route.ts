@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { path: string[] } }
-): Promise<NextResponse> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const filePath = path.join("/tmp/exports", ...params.path);
+    // Extract path segments from the URL pathname
+    const url = new URL(request.url);
+    const segments = url.pathname.split("/").filter(Boolean);
+
+    // Find the index of "exports" and get the rest as path segments
+    const exportIndex = segments.indexOf("exports");
+    const pathSegments = segments.slice(exportIndex + 1);
+
+    const filePath = path.join("/tmp/exports", ...pathSegments);
     console.log("🚀 ~ filePath:", filePath);
 
     const content = await readFile(filePath, "utf-8");
