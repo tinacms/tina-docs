@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import copy from "copy-to-clipboard";
 import {
   DropdownMenu,
