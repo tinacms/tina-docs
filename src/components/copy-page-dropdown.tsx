@@ -24,12 +24,12 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
   const [mdUrl, setMdUrl] = useState<string | null>(null);
+  const [htmlContent, setHtmlContent] = useState<string>("");
 
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const htmlContent = document.getElementById("doc-content")?.innerHTML || "";
+  useEffect(() => {
+    // Move window-dependent code to useEffect
+    setHtmlContent(document.getElementById("doc-content")?.innerHTML || "");
+  }, []);
 
   const handleCopy = async () => {
     const md = htmlToMd(htmlContent);
@@ -109,6 +109,11 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       return () => clearTimeout(timeout);
     }
   }, [copied]);
+
+  // Return null on server-side
+  if (typeof window === "undefined") {
+    return null;
+  }
 
   return (
     <div className="inline-flex rounded-xl overflow-hidden ml-auto border-gray-200 font-medium text-gray-300 lg:mb-0 mb-4">
