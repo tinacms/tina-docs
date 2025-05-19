@@ -7,7 +7,9 @@ export async function GET(
   { params }: { params: { path: string[] } }
 ): Promise<NextResponse> {
   try {
-    const filePath = path.join("/tmp/exports", ...params.path);
+    const { path: pathSegments } = params;
+    const filePath = path.join("/tmp/exports", ...pathSegments);
+    console.log("🚀 ~ filePath:", filePath);
     const content = await readFile(filePath, "utf-8");
 
     // Set appropriate headers for markdown files
