@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@shikijs/transformers": "^3.4.1",
+    "@shikijs/transformers": "^3.4.2",
     "@tailwindcss/postcss": "^4.1.6",
     "@tinacms/cli": "^1.9.7",
     "@types/node": "^22.15.18",
