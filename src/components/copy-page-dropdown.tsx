@@ -24,26 +24,9 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
   const [mdUrl, setMdUrl] = useState<string | null>(null);
-  const [htmlContent, setHtmlContent] = useState<string>("");
-
-  useEffect(() => {
-    const docContent = document.getElementById("doc-content");
-    if (docContent) {
-      // Create a clone to avoid modifying the original DOM
-      const contentClone = docContent.cloneNode(true) as HTMLElement;
-
-      // Remove elements marked with data-exclude-from-md
-      const elementsToRemove = contentClone.querySelectorAll(
-        "[data-exclude-from-md]"
-      );
-      elementsToRemove.forEach((el) => el.remove());
-
-      setHtmlContent(contentClone.innerHTML);
-    }
-  }, []);
 
   const handleCopy = async () => {
-    const md = htmlToMd(htmlContent);
+    const md = htmlToMd(getHtml()?.innerHTML || "");
     const currentUrl = window.location.href;
     const encodedUrl = encodeURIComponent(currentUrl);
     const chatUrl = `https://chat.openai.com/?hints=search&q=Read%20from%20${encodedUrl}%20so%20I%20can%20ask%20questions%20about%20it.`;
@@ -56,8 +39,19 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
     setOpen((prev) => !prev);
   };
 
+  const getHtml = () => {
+    const htmlElement = document.getElementById("doc-content");
+
+    if (!htmlElement) {
+      alert("Failed to export markdown");
+      return;
+    }
+    return htmlElement;
+  };
+
   const handleViewAsMarkdown = async () => {
-    const md = htmlToMd(htmlContent);
+    const md = htmlToMd(getHtml()?.innerHTML || "");
+    // Use the markdown string as needed
     let pathName = window.location.pathname.replace(/^\//, ""); // e.g. docs/guide/intro
     if (!pathName) pathName = "index"; // fallback for homepage
     const filename = `${pathName}.md`;
@@ -81,7 +75,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   const generateAndGetMdUrl = async () => {
     let url = mdUrl;
     if (!url) {
-      const md = htmlToMd(htmlContent);
+      const md = htmlToMd(getHtml()?.innerHTML || "");
       let pathName = window.location.pathname.replace(/^\//, "");
       if (!pathName) pathName = "index";
       const filename = `${pathName}.md`;
