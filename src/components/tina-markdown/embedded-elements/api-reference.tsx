@@ -194,13 +194,14 @@ const SchemaType = ({
             <div className="mt-1 pl-4">
               {Object.entries(refSchema.properties).map(
                 ([propName, propSchema]) => (
-                  <SchemaType
-                    key={propName}
-                    schema={propSchema as any}
-                    name={propName}
-                    depth={depth + 1}
-                    isNested={true}
-                  />
+                  <div key={propName}>
+                    <SchemaType
+                      schema={propSchema as any}
+                      name={propName}
+                      depth={depth + 1}
+                      isNested={true}
+                    />
+                  </div>
                 )
               )}
             </div>
