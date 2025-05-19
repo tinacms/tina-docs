@@ -159,6 +159,78 @@
   --neutral-border: #3e444c;
 }
 
+.theme-neutral {
+  --brand-primary: #EC4815;
+  --brand-primary-hover: #D13F13;
+  --brand-primary-light: #FFEDE4;
+  --brand-primary-dark: #EC4815;
+
+  --brand-secondary: #0084FF;
+  --brand-secondary-hover: #0574E4;
+  --brand-secondary-light: #DCEEFF;
+  --brand-secondary-dark: #0D5DBD;
+
+  --brand-secondary-gradient-start: #4EABFE;
+  --brand-secondary-gradient-end: #0574E4;
+
+  --brand-tertiary: #93E9BE;
+  --brand-tertiary-hover: #6AC09A;
+  --brand-tertiary-light: #EEFDF9;
+  --brand-tertiary-dark: #68e9a8;
+
+  --brand-tertiary-gradient-start:  #9FE2BF;
+  --brand-tertiary-gradient-end: #6AC09A;
+
+  --glass-gradient-start: rgba(255, 255, 255, 0.1);
+  --glass-gradient-end: rgba(255, 255, 255, 0.4);
+
+  --background-primary-gradient-start: #F8FAFC;
+  --background-primary-gradient-end: #F8FAFC;
+
+  --neutral-background: #F9FAFB;
+  --neutral-surface: #FFFFFF;
+  --neutral-background-secondary: #F3F4F6;
+  --neutral-text: #111827;
+  --neutral-text-secondary: #6B7280;
+  --neutral-border: #D1D5DB;
+}
+
+.theme-neutral.dark {
+  --brand-primary: #FFAB8B;
+  --brand-primary-hover: #FFD3C1;
+  --brand-primary-light: #FFEDE4;
+  --brand-primary-dark: #FFD3C1;
+
+  --brand-secondary: #4EABFE;
+  --brand-secondary-hover: #85C5FE;
+  --brand-secondary-light: #0D5DBD;
+  --brand-secondary-dark: #B4DBFF;
+
+  --brand-secondary-gradient-start: #85C5FE;
+  --brand-secondary-gradient-end: #0574E4;
+
+  --brand-tertiary: #B4EFD9;
+  --brand-tertiary-hover: #CFF5E6;
+  --brand-tertiary-light: #EEFCF7;
+  --brand-tertiary-dark: #CFF5E6;
+
+  --brand-tertiary-gradient-start:  #CFF5E6;
+  --brand-tertiary-gradient-end: #6AC09A;
+
+  --glass-gradient-start: rgba(255, 255, 255, 0.03);
+  --glass-gradient-end: rgba(255, 255, 255, 0.23);
+
+  --background-primary-gradient-start: #0f172a;
+  --background-primary-gradient-end: #0f172a;
+
+  --neutral-background: #111827;
+  --neutral-surface: #1A202C;
+  --neutral-background-secondary: #1F2937;
+  --neutral-text: #F9FAFB;
+  --neutral-text-secondary: #9CA3AF;
+  --neutral-border: #4B5563;
+}
+
 /* Shared styles */
 .brand-primary-gradient {
   background-image: linear-gradient(to bottom right, var(--brand-primary), var(--brand-primary-dark));
