@@ -1,18 +1,18 @@
 "use client";
-import type React from "react";
-import { useState, useEffect } from "react";
-import copy from "copy-to-clipboard";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import copy from "copy-to-clipboard";
 import htmlToMd from "html-to-md";
+import type React from "react";
+import { useEffect, useState } from "react";
 
-import { Copy, FileCode, ChevronDown } from "lucide-react";
-import { SiOpenai } from "react-icons/si";
+import { ChevronDown, Copy, FileCode } from "lucide-react";
 import { FaCommentDots } from "react-icons/fa";
+import { SiOpenai } from "react-icons/si";
 
 interface CopyPageDropdownProps {
   title?: string;
