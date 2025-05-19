@@ -227,32 +227,44 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           </select>
 
           {input.value && (
-            <div className="mt-3 p-3 bg-blue-50 text-blue-600 rounded text-sm">
-              <div className="font-medium mb-1">
+            <div className="mt-3 p-3 bg-blue-50 text-blue-600 rounded text-sm w-full max-w-full">
+              <div className="font-medium mb-1 truncate">
                 Selected schema:{" "}
-                {
-                  schemas.find(
-                    (s) => s.relativePath === input.value.split("|")[0]
-                  )?._sys.filename
-                }
+                <span className="truncate">
+                  {
+                    schemas.find(
+                      (s) => s.relativePath === input.value.split("|")[0]
+                    )?._sys.filename
+                  }
+                </span>
               </div>
 
               {loadingDetails ? (
                 <div className="text-blue-500">Loading schema details...</div>
               ) : schemaDetails ? (
                 <>
-                  <div className="grid grid-cols-3 gap-2 mt-2">
-                    <div className="bg-blue-100 p-2 rounded">
-                      <div className="text-xs text-blue-500">API Name</div>
-                      <div className="font-medium">{schemaDetails.title}</div>
+                  <div className="grid grid-cols-3 gap-2 mt-2 w-full max-w-full">
+                    <div className="bg-blue-100 p-2 rounded w-full max-w-full">
+                      <div className="text-xs text-blue-500 truncate">
+                        API Name
+                      </div>
+                      <div className="font-medium truncate">
+                        {schemaDetails.title}
+                      </div>
                     </div>
-                    <div className="bg-blue-100 p-2 rounded">
-                      <div className="text-xs text-blue-500">Version</div>
-                      <div className="font-medium">{schemaDetails.version}</div>
+                    <div className="bg-blue-100 p-2 rounded w-full max-w-full">
+                      <div className="text-xs text-blue-500 truncate">
+                        Version
+                      </div>
+                      <div className="font-medium truncate">
+                        {schemaDetails.version}
+                      </div>
                     </div>
-                    <div className="bg-blue-100 p-2 rounded">
-                      <div className="text-xs text-blue-500">Endpoints</div>
-                      <div className="font-medium">
+                    <div className="bg-blue-100 p-2 rounded w-full max-w-full">
+                      <div className="text-xs text-blue-500 truncate">
+                        Endpoints
+                      </div>
+                      <div className="font-medium truncate">
                         {schemaDetails.endpointCount}
                       </div>
                     </div>
@@ -260,7 +272,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
 
                   {/* Endpoint selector */}
                   {schemaDetails.endpoints.length > 0 && (
-                    <div className="mt-4">
+                    <div className="mt-4 w-full max-w-full">
                       <label className="block text-blue-700 font-medium mb-1">
                         Select Endpoint (Optional)
                       </label>
@@ -276,6 +288,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                             <option
                               key={createEndpointId(endpoint)}
                               value={createEndpointId(endpoint)}
+                              className="truncate"
                             >
                               {endpoint.method} {endpoint.path}{" "}
                               {endpoint.summary ? `- ${endpoint.summary}` : ""}
@@ -284,8 +297,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                       </select>
 
                       {selectedEndpoint && (
-                        <div className="mt-2 bg-blue-100 p-2 rounded">
-                          <div className="font-medium">
+                        <div className="mt-2 bg-blue-100 p-2 rounded w-full max-w-full">
+                          <div className="font-medium truncate">
                             Selected endpoint: {selectedEndpoint.split(":")[0]}{" "}
                             {selectedEndpoint.split(":")[1]}
                           </div>
