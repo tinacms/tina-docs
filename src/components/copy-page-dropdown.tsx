@@ -114,12 +114,8 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       {/* Left button: Copy page */}
       <button
         onClick={handleCopy}
-        className={`flex flex-row items-center gap-1 rounded-l-xl px-3 text-gray-700 dark:text-gray-300 py-1 border border-gray-200 dark:border-white/[0.07] bg-background-light dark:bg-background-dark hover:bg-gray-600/5 dark:hover:bg-gray-200/5 border-r-0
-    ${
-      copied
-        ? "bg-green-100 text-green-800"
-        : "bg-white text-gray-400 hover:bg-gray-200 active:bg-gray-300"
-    }
+        className={`flex flex-row items-center  gap-1 rounded-l-xl px-3 text-gray-700 dark:text-gray-300 py-1 border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-200/5 border-r-0
+    ${copied ? "bg-green-100 text-green-800" : "text-gray-400"}
     cursor-pointer`}
         type="button"
       >
@@ -131,7 +127,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       <DropdownMenu onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild className="border-gray-20 bg-white">
           <button
-            className="px-3 border border-gray-200 hover:bg-gray-50 rounded-r-xl cursor-pointer rounded-l-none outline-none focus:outline-none focus-visible:outline-none"
+            className="px-3 border border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-200/5 rounded-r-xl cursor-pointer rounded-l-none outline-none focus:outline-none focus-visible:outline-none"
             type="button"
             onClick={handleToggle}
           >
