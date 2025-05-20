@@ -156,7 +156,7 @@ const SchemaType = ({
     return (
       <div className={`${isNested ? "ml-4" : ""}`}>
         <div
-          className="flex items-center w-full cursor-pointer"
+          className="flex items-center w-full cursor-pointer group"
           onClick={() => setIsExpanded(!isExpanded)}
           aria-label={isExpanded ? "Collapse" : "Expand"}
           tabIndex={0}
@@ -165,7 +165,7 @@ const SchemaType = ({
             if (e.key === "Enter" || e.key === " ") setIsExpanded(!isExpanded);
           }}
         >
-          <span className={`font-mono text-neutral-text`}>{refName}</span>
+          <span className={`font-mono text-neutral-text group-hover:underline`}>{refName}</span>
           {refSchema && refSchema.type && (
             <span className="ml-2 text-xs font-mono text-neutral-text px-2 py-0.5 rounded">
               {refSchema.type}
