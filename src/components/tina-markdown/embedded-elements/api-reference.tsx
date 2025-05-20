@@ -165,7 +165,9 @@ const SchemaType = ({
             if (e.key === "Enter" || e.key === " ") setIsExpanded(!isExpanded);
           }}
         >
-          <span className={`font-mono text-neutral-text group-hover:underline`}>{refName}</span>
+          <span className={`font-mono text-neutral-text group-hover:underline`}>
+            {refName}
+          </span>
           {refSchema && refSchema.type && (
             <span className="ml-2 text-xs font-mono text-neutral-text px-2 py-0.5 rounded">
               {refSchema.type}
@@ -265,7 +267,7 @@ const SchemaType = ({
           schema.items &&
           !(schema.items.properties || schema.items.$ref)
             ? ""
-            : " cursor-pointer"
+            : " cursor-pointer group"
         }`}
         onClick={() => {
           if (
@@ -315,7 +317,7 @@ const SchemaType = ({
       >
         {name && (
           <span
-            className={`mr-2 font-mono ${
+            className={`mr-2 font-mono group-hover:underline ${
               isErrorSchema || hasErrorFields ? "text-red-600" : ""
             }`}
           >
