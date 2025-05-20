@@ -797,7 +797,7 @@ const ApiReference = (data: any) => {
       <div key={endpoint.path + endpoint.method} className="mb-12">
         <div className={`p-4 flex items-center gap-4`}>
           <span
-            className={`px-3 py-1 rounded-md text-sm font-bold ${
+            className={`px-3 py-1 rounded-md text-sm shadow-lg font-bold ${
               endpoint.method === "GET"
                 ? "bg-[#B4EFD9] text-green-800"
                 : endpoint.method === "POST"
