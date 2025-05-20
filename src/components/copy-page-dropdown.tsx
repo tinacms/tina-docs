@@ -104,12 +104,12 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   return (
     <div
       className="inline-flex ml-auto rounded-xl overflow-hidden border-gray-200 font-medium text-gray-300 mb-4 lg:mb-0"
-      data-exclude-from-md
+      data-exclude-from-md=""
     >
       {/* Primary copy button */}
       <button
         onClick={handleCopyPage}
-        className={`flex items-center gap-1 rounded-l-xl px-3 py-1 border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-200/5 border-r-0 ${
+        className={`cursor-pointer flex items-center gap-1 rounded-l-xl px-3 py-1 border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-200/5 border-r-0 ${
           copied ? "bg-green-100 text-green-800" : "text-gray-600"
         }`}
         type="button"
@@ -123,7 +123,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
         <DropdownMenuTrigger asChild>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="px-3 border border-gray-200 bg-white rounded-r-xl hover:bg-gray-50 dark:hover:bg-gray-200/5 outline-none"
+            className="cursor-pointer px-3 border border-gray-200 bg-white rounded-r-xl hover:bg-gray-50 dark:hover:bg-gray-200/5 outline-none"
             type="button"
           >
             <ChevronDown
