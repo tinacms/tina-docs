@@ -1144,7 +1144,7 @@ const ApiReference = (data: any) => {
   return (
     <div className="api-reference">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-1">{schemaDetails.title}</h2>
+        <h2 className="text-lg mb-1">{schemaDetails.title}</h2>
         {schemaDetails.version && (
           <div className="text-sm text-gray-500">
             API Version: {schemaDetails.version}
