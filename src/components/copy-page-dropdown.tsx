@@ -6,9 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import React, { useEffect, useState } from "react";
 import copy from "copy-to-clipboard";
 import htmlToMd from "html-to-md";
-import React, { useEffect, useState } from "react";
 import { ChevronDown, Copy, FileCode } from "lucide-react";
 import { FaCommentDots } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
@@ -23,16 +23,28 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   const [copied, setCopied] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [markdownUrl, setMarkdownUrl] = useState<string | null>(null);
+  const [hasMounted, setHasMounted] = useState(false);
 
-  // Retrieve sanitized HTML from the page
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (copied) {
+      const timeout = setTimeout(() => setCopied(false), 4000);
+      return () => clearTimeout(timeout);
+    }
+  }, [copied]);
+
   const getCleanHtmlContent = (): HTMLElement | null => {
-    const sourceElement = document.getElementById("doc-content");
-    if (!sourceElement) {
+    const element = document.getElementById("doc-content");
+    if (!element) {
       alert("Unable to locate content for export.");
       return null;
     }
 
-    const clone = sourceElement.cloneNode(true) as HTMLElement;
+    const clone = element.cloneNode(true) as HTMLElement;
     clone
       .querySelectorAll("[data-exclude-from-md]")
       .forEach((el) => el.remove());
@@ -48,9 +60,9 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
     const htmlContent = getCleanHtmlContent()?.innerHTML || "";
     const markdown = convertToMarkdown(htmlContent);
     const referenceSection = `\n\n---\nAsk questions about this page:\n- [Open in ChatGPT](https://chat.openai.com/chat)\n- [Open in Claude](https://claude.ai/)`;
-    const markdownBlob = `${title}\n\n${markdown}${referenceSection}`;
+    const finalContent = `${title}\n\n${markdown}${referenceSection}`;
 
-    copy(markdownBlob);
+    copy(finalContent);
     setCopied(true);
   };
 
@@ -92,19 +104,12 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
     if (url) window.open(generateUrl(url), "_blank", "noopener,noreferrer");
   };
 
-  useEffect(() => {
-    if (copied) {
-      const timeout = setTimeout(() => setCopied(false), 4000);
-      return () => clearTimeout(timeout);
-    }
-  }, [copied]);
-
-  if (typeof window === "undefined") return null;
+  if (!hasMounted) return null;
 
   return (
     <div
       className="inline-flex ml-auto rounded-xl overflow-hidden border-gray-200 font-medium text-gray-300 mb-4 lg:mb-0"
-      data-exclude-from-md=""
+      data-exclude-from-md
     >
       {/* Primary copy button */}
       <button
@@ -118,11 +123,10 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
         <span>{copied ? "Copied!" : "Copy page"}</span>
       </button>
 
-      {/* Dropdown trigger */}
+      {/* Dropdown */}
       <DropdownMenu onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <button
-            onClick={() => setIsOpen(!isOpen)}
             className="cursor-pointer px-3 border border-gray-200 bg-white rounded-r-xl hover:bg-gray-50 dark:hover:bg-gray-200/5 outline-none"
             type="button"
           >
@@ -134,7 +138,6 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
           </button>
         </DropdownMenuTrigger>
 
-        {/* Dropdown content */}
         <DropdownMenuContent className="z-50 mt-2 w-72 rounded-2xl p-1 shadow-xl bg-white">
           {[
             {
