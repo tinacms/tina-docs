@@ -111,7 +111,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 
   return (
     <div
-      className="inline-flex ml-auto rounded-lg overflow-hidden mb-4 lg:mb-0 bg-white "
+      className="inline-flex rounded-lg overflow-hidden mb-4 lg:mb-0 bg-white item-center"
       data-exclude-from-md
     >
       {/* Primary copy button */}
@@ -120,7 +120,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
         className={`cursor-pointer flex items-center px-1.5 py-0.5 ${
           copied
             ? "bg-brand-tertiary text-brand-tertiary-dark-dark"
-            : "text-brand-secondary-dark-dark-dark hover:bg-brand-secondary-light"
+            : "text-brand-secondary-dark-dark hover:bg-brand-secondary-light"
         }`}
         type="button"
       >
@@ -145,14 +145,18 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
             type="button"
           >
             <MdArrowDropDown
-              className={`w-4 h-4 text-brand-secondary-dark transition-transform duration-200 ${
+              className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 ${
                 isOpen ? "rotate-180" : "rotate-0"
               }`}
             />
           </button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="z-50 mt-2 w-72 rounded-lg bg-white">
+        <DropdownMenuContent
+          className="z-50 mt-2 w-72 rounded-lg bg-white"
+          sideOffset={0}
+          align="end"
+        >
           {[
             {
               icon: <Copy className="w-4 h-4 text-neutral-text-secondary" />,
