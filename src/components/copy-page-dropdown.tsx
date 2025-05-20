@@ -13,6 +13,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { FaCommentDots } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
+import { MdArrowDropDown, MdCheck, MdContentCopy } from "react-icons/md";
 
 interface CopyPageDropdownProps {
   title?: string;
@@ -110,52 +111,67 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 
   return (
     <div
-      className="inline-flex ml-auto rounded-xl overflow-hidden border-gray-200 font-medium text-gray-300 mb-4 lg:mb-0"
+      className="inline-flex ml-auto rounded-lg overflow-hidden mb-4 lg:mb-0 bg-white "
       data-exclude-from-md
     >
       {/* Primary copy button */}
       <button
         onClick={handleCopyPage}
-        className={`cursor-pointer flex items-center gap-1 rounded-l-xl px-3 py-1 border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-200/5 border-r-0 ${
-          copied ? "bg-green-100 text-green-800" : "text-gray-600"
+        className={`cursor-pointer flex items-center px-1.5 py-0.5 ${
+          copied
+            ? "bg-brand-tertiary text-brand-tertiary-dark-dark"
+            : "text-brand-secondary-dark hover:bg-brand-secondary-light"
         }`}
         type="button"
       >
-        <Copy className="w-4 h-4" />
-        <span>{copied ? "Copied!" : "Copy page"}</span>
+        <span>
+          {copied ? (
+            <span className="flex items-center gap-2">
+              <MdCheck className="w-4 h-4" /> Copied
+            </span>
+          ) : (
+            <span className="flex items-center gap-2">
+              <MdContentCopy className="w-4 h-4" /> Copy
+            </span>
+          )}
+        </span>
       </button>
 
       {/* Dropdown */}
       <DropdownMenu onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <button
-            className="cursor-pointer px-3 border border-gray-200 bg-white rounded-r-xl hover:bg-gray-50 dark:hover:bg-gray-200/5 outline-none"
+            className="cursor-pointer px-3 rounded-r-lg hover:bg-brand-secondary-light"
             type="button"
           >
-            <ChevronDown
-              className={`w-4 h-4 text-gray-600 transition-transform duration-200 ${
+            <MdArrowDropDown
+              className={`w-4 h-4 text-brand-secondary-dark transition-transform duration-200 ${
                 isOpen ? "rotate-180" : "rotate-0"
               }`}
             />
           </button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="z-50 mt-2 w-72 rounded-2xl p-1 shadow-xl bg-white">
+        <DropdownMenuContent className="z-50 mt-2 w-72 rounded-lg bg-white">
           {[
             {
-              icon: <Copy className="w-4 h-4 text-gray-600" />,
+              icon: <Copy className="w-4 h-4 text-neutral-text-secondary" />,
               label: "Copy page",
               description: "Copy page as Markdown for LLMs",
               onClick: handleCopyPage,
             },
             {
-              icon: <FileCode className="w-4 h-4 text-gray-600" />,
+              icon: (
+                <FileCode className="w-4 h-4 text-neutral-text-secondary" />
+              ),
               label: "View as Markdown",
               description: "View this page as plain text",
               onClick: handleViewMarkdown,
             },
             {
-              icon: <SiOpenai className="w-4 h-4" />,
+              icon: (
+                <SiOpenai className="w-4 h-4 text-neutral-text-secondary" />
+              ),
               label: "Open in ChatGPT",
               description: "Ask questions about this page",
               onClick: () =>
@@ -167,7 +183,9 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
                 ),
             },
             {
-              icon: <FaCommentDots className="w-4 h-4" />,
+              icon: (
+                <FaCommentDots className="w-4 h-4 text-neutral-text-secondary" />
+              ),
               label: "Open in Claude",
               description: "Ask questions about this page",
               onClick: () =>
@@ -181,15 +199,15 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
           ].map(({ icon, label, description, onClick }) => (
             <DropdownMenuItem
               key={label}
-              className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md cursor-pointer"
+              className="flex items-start gap-3 p-2 text-sm text-neutral hover:bg-gray-100 rounded-lg cursor-pointer"
               onClick={onClick}
             >
-              <span className="flex items-center justify-center w-8 h-8 bg-white border border-gray-200 rounded-md">
+              <span className="flex items-center justify-center w-8 h-8 border-2 border-neutral-border rounded-md">
                 {icon}
               </span>
               <span className="flex flex-col">
                 <span className="font-medium">{label}</span>
-                <span className="text-xs text-gray-500 font-light">
+                <span className="text-xs text-neutral-text-secondary font-light">
                   {description}
                 </span>
               </span>
