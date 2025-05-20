@@ -487,7 +487,7 @@ const SchemaSection = ({
   if (!schema) return null;
 
   return (
-    <div className="mb-3">
+    <div className="mb-3 ">
       {title && (
         <div
           className={`text-sm font-medium mb-2 ${
@@ -799,13 +799,13 @@ const ApiReference = (data: any) => {
           <span
             className={`px-3 py-1 rounded-md text-sm font-bold ${
               endpoint.method === "GET"
-                ? "bg-[#B4EFD9] "
+                ? "bg-[#B4EFD9] text-green-800"
                 : endpoint.method === "POST"
-                ? "bg-[#B4DBFF] "
+                ? "bg-[#B4DBFF] text-blue-800"
                 : endpoint.method === "PUT"
-                ? "bg-[#FEF3C7] "
+                ? "bg-[#FEF3C7] text-yellow-800"
                 : endpoint.method === "DELETE"
-                ? "bg-[#FEE2E2] "
+                ? "bg-[#FEE2E2] text-red-800"
                 : "bg-gray-50 "
             }`}
           >
@@ -879,7 +879,10 @@ const ApiReference = (data: any) => {
                 {endpoint.requestBody.content &&
                   Object.entries(endpoint.requestBody.content).map(
                     ([contentType, contentObj]: [string, any]) => (
-                      <div key={contentType} className="mb-3">
+                      <div
+                        key={contentType}
+                        className="mb-3 p-3 rounded-lg shadow-lg"
+                      >
                         <SchemaContext.Provider value={schemaDefinitions}>
                           <SchemaSection
                             schema={
@@ -933,13 +936,11 @@ const ApiReference = (data: any) => {
                     return (
                       <div
                         key={code}
-                        className=" rounded-md overflow-hidden shadow-lg"
+                        className=" rounded-md overflow-hidden brand-glass-gradient shadow-lg"
                       >
                         <div
-                          className={`p-3 brand-glass-gradient ${
-                            hasExpandableContent
-                              ? "cursor-pointer hover:bg-opacity-80 transition-colors"
-                              : ""
+                          className={`p-3  ${
+                            hasExpandableContent ? "cursor-pointer" : ""
                           }`}
                           onClick={
                             hasExpandableContent
