@@ -1,4 +1,5 @@
 "use client";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +8,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import copy from "copy-to-clipboard";
 import htmlToMd from "html-to-md";
-import type React from "react";
-import { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import { ChevronDown, Copy, FileCode } from "lucide-react";
 import { FaCommentDots } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
@@ -22,101 +21,77 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   title = "Documentation Page",
 }) => {
   const [copied, setCopied] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [mdUrl, setMdUrl] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [markdownUrl, setMarkdownUrl] = useState<string | null>(null);
 
-  const handleCopy = async () => {
-    const md = htmlToMd(getHtml()?.innerHTML || "");
-    const filteredMd = md.replace(/<button>Copy<\/button>\n?/g, "");
-    const currentUrl = window.location.href;
-    const encodedUrl = encodeURIComponent(currentUrl);
-    const chatUrl = `https://chat.openai.com/?hints=search&q=Read%20from%20${encodedUrl}%20so%20I%20can%20ask%20questions%20about%20it.`;
-    const annotated = `${title}\n\n${filteredMd}\n\n---\nAsk questions about this page:\n- [Open in ChatGPT](https://chat.openai.com/chat)\n- [Open in Claude](https://claude.ai/)`;
-    copy(annotated);
+  // Retrieve sanitized HTML from the page
+  const getCleanHtmlContent = (): HTMLElement | null => {
+    const sourceElement = document.getElementById("doc-content");
+    if (!sourceElement) {
+      alert("Unable to locate content for export.");
+      return null;
+    }
+
+    const clone = sourceElement.cloneNode(true) as HTMLElement;
+    clone
+      .querySelectorAll("[data-exclude-from-md]")
+      .forEach((el) => el.remove());
+    return clone;
+  };
+
+  const convertToMarkdown = (html: string): string => {
+    const rawMd = htmlToMd(html);
+    return rawMd.replace(/<button>Copy<\/button>\n?/g, "");
+  };
+
+  const handleCopyPage = () => {
+    const htmlContent = getCleanHtmlContent()?.innerHTML || "";
+    const markdown = convertToMarkdown(htmlContent);
+
+    const currentUrl = encodeURIComponent(window.location.href);
+    const referenceSection = `\n\n---\nAsk questions about this page:\n- [Open in ChatGPT](https://chat.openai.com/chat)\n- [Open in Claude](https://claude.ai/)`;
+    const markdownBlob = `${title}\n\n${markdown}${referenceSection}`;
+
+    copy(markdownBlob);
     setCopied(true);
   };
 
-  const handleToggle = () => {
-    setOpen((prev) => !prev);
-  };
+  const exportMarkdownAndOpen = async (): Promise<string | null> => {
+    if (markdownUrl) return markdownUrl;
 
-  const getHtml = () => {
-    const htmlElement = document.getElementById("doc-content");
+    const htmlContent = getCleanHtmlContent()?.innerHTML || "";
+    const markdown = convertToMarkdown(htmlContent);
+    const pathname = window.location.pathname.replace(/^\//, "") || "index";
+    const filename = `${pathname}.md`;
 
-    if (!htmlElement) {
-      alert("Failed to export markdown");
-      return;
-    }
-
-    const clonedElement = htmlElement.cloneNode(true) as HTMLElement;
-
-    // Remove all elements marked with data-exclude-from-md
-    const elementsToRemove = clonedElement.querySelectorAll(
-      "[data-exclude-from-md]"
-    );
-    elementsToRemove.forEach((element) => element.remove());
-
-    return clonedElement;
-  };
-
-  const handleViewAsMarkdown = async () => {
-    const md = htmlToMd(getHtml()?.innerHTML || "");
-    const filteredMd = md.replace(/<button>Copy<\/button>\n\n?/g, "");
-    // Use the markdown string as needed
-    let pathName = window.location.pathname.replace(/^\//, ""); // e.g. docs/guide/intro
-    if (!pathName) pathName = "index"; // fallback for homepage
-    const filename = `${pathName}.md`;
-
-    const res = await fetch("/api/export-md", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: filteredMd, filename }),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      setMdUrl(window.location.origin + data.url);
-      window.open(data.url, "_blank");
-    } else {
-      alert("Failed to export markdown");
-    }
-  };
-
-  // Utility to generate and upload markdown, returns the .md URL
-  const generateAndGetMdUrl = async () => {
-    let url = mdUrl;
-    if (!url) {
-      const md = htmlToMd(getHtml()?.innerHTML || "");
-      let pathName = window.location.pathname.replace(/^\//, "");
-      if (!pathName) pathName = "index";
-      const filename = `${pathName}.md`;
-
+    try {
       const res = await fetch("/api/export-md", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: md, filename }),
+        body: JSON.stringify({ content: markdown, filename }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        url = window.location.origin + data.url;
-        setMdUrl(url);
-      } else {
-        alert("Failed to export markdown");
-        return null;
-      }
+      if (!res.ok) throw new Error("Export failed");
+
+      const data = await res.json();
+      const fullUrl = `${window.location.origin}${data.url}`;
+      setMarkdownUrl(fullUrl);
+      return fullUrl;
+    } catch (err) {
+      console.error(err);
+      alert("Failed to export Markdown.");
+      return null;
     }
-    return url;
   };
 
-  // Generic function to open a service with the .md link
-  const openWithLink = async (
-    serviceUrlTemplate: (mdUrl: string) => string
-  ) => {
-    const url = await generateAndGetMdUrl();
-    if (!url) return;
-    const finalUrl = serviceUrlTemplate(url);
-    window.open(finalUrl, "_blank", "noopener,noreferrer");
+  const handleViewMarkdown = async () => {
+    const url = await exportMarkdownAndOpen();
+    if (url) window.open(url, "_blank");
+  };
+
+  const openInLLM = async (generateUrl: (url: string) => string) => {
+    const url = await exportMarkdownAndOpen();
+    if (url) window.open(generateUrl(url), "_blank", "noopener,noreferrer");
   };
 
   useEffect(() => {
@@ -126,115 +101,97 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
     }
   }, [copied]);
 
-  // Return null on server-side
-  if (typeof window === "undefined") {
-    return null;
-  }
+  if (typeof window === "undefined") return null;
 
   return (
     <div
-      className="inline-flex rounded-xl overflow-hidden ml-auto border-gray-200 font-medium text-gray-300 lg:mb-0 mb-4"
+      className="inline-flex ml-auto rounded-xl overflow-hidden border-gray-200 font-medium text-gray-300 mb-4 lg:mb-0"
       data-exclude-from-md
     >
-      {/* Left button: Copy page */}
+      {/* Primary copy button */}
       <button
-        onClick={handleCopy}
-        className={`flex flex-row items-center  gap-1 rounded-l-xl px-3 text-gray-700 dark:text-gray-300 py-1 border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-200/5 border-r-0
-    ${copied ? "bg-green-100 text-green-800" : "text-gray-400"}
-    cursor-pointer`}
+        onClick={handleCopyPage}
+        className={`flex items-center gap-1 rounded-l-xl px-3 py-1 border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-200/5 border-r-0 ${
+          copied ? "bg-green-100 text-green-800" : "text-gray-400"
+        }`}
         type="button"
       >
         <Copy className="w-4 h-4" />
         <span>{copied ? "Copied!" : "Copy page"}</span>
       </button>
 
-      {/* Right dropdown arrow */}
-      <DropdownMenu onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild className="border-gray-20 bg-white">
+      {/* Dropdown trigger */}
+      <DropdownMenu onOpenChange={setIsOpen}>
+        <DropdownMenuTrigger asChild>
           <button
-            className="px-3 border border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-200/5 rounded-r-xl cursor-pointer rounded-l-none outline-none focus:outline-none focus-visible:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+            className="px-3 border border-gray-200 bg-white rounded-r-xl hover:bg-gray-50 dark:hover:bg-gray-200/5 outline-none"
             type="button"
-            onClick={handleToggle}
           >
             <ChevronDown
-              className={`w-4 h-4 text-gray-600 transform transition-transform duration-200 ${
-                open ? "rotate-180" : "rotate-0"
+              className={`w-4 h-4 text-gray-600 transition-transform duration-200 ${
+                isOpen ? "rotate-180" : "rotate-0"
               }`}
             />
           </button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="bg-white rounded-2xl shadow-xl mt-2 border-0 border-gray-200 w-72 z-50 p-1 focus-visible:outline-0 hover:outline-0">
-          <DropdownMenuItem
-            className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
-            onClick={handleCopy}
-          >
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <Copy className="w-4 h-4 text-gray-600" />
-            </span>
-            <span className="flex flex-col">
-              <span className="font-medium">Copy page</span>
-              <span className="text-xs text-gray-500 font-light">
-                Copy page as Markdown for LLMs
+        {/* Dropdown content */}
+        <DropdownMenuContent className="z-50 mt-2 w-72 rounded-2xl p-1 shadow-xl bg-white">
+          {[
+            {
+              icon: <Copy className="w-4 h-4 text-gray-600" />,
+              label: "Copy page",
+              description: "Copy page as Markdown for LLMs",
+              onClick: handleCopyPage,
+            },
+            {
+              icon: <FileCode className="w-4 h-4 text-gray-600" />,
+              label: "View as Markdown",
+              description: "View this page as plain text",
+              onClick: handleViewMarkdown,
+            },
+            {
+              icon: <SiOpenai className="w-4 h-4" />,
+              label: "Open in ChatGPT",
+              description: "Ask questions about this page",
+              onClick: () =>
+                openInLLM(
+                  (url) =>
+                    `https://chat.openai.com/?hints=search&q=Read%20from%20${encodeURIComponent(
+                      url
+                    )}%20so%20I%20can%20ask%20questions%20about%20it.`
+                ),
+            },
+            {
+              icon: <FaCommentDots className="w-4 h-4" />,
+              label: "Open in Claude",
+              description: "Ask questions about this page",
+              onClick: () =>
+                openInLLM(
+                  (url) =>
+                    `https://claude.ai/?q=Read%20from%20${encodeURIComponent(
+                      url
+                    )}%20so%20I%20can%20ask%20questions%20about%20it.`
+                ),
+            },
+          ].map(({ icon, label, description, onClick }) => (
+            <DropdownMenuItem
+              key={label}
+              className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md cursor-pointer"
+              onClick={onClick}
+            >
+              <span className="flex items-center justify-center w-8 h-8 bg-white border border-gray-200 rounded-md">
+                {icon}
               </span>
-            </span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={handleViewAsMarkdown}
-            className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
-          >
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <FileCode className="w-4 h-4 text-gray-600" />
-            </span>
-            <span className="flex flex-col">
-              <span className="font-medium">View as Markdown</span>
-              <span className="text-xs text-gray-500 font-light">
-                View this page as plain text
+              <span className="flex flex-col">
+                <span className="font-medium">{label}</span>
+                <span className="text-xs text-gray-500 font-light">
+                  {description}
+                </span>
               </span>
-            </span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
-            onClick={() =>
-              openWithLink(
-                (mdUrl) =>
-                  `https://chat.openai.com/?hints=search&q=Read%20from%20${encodeURIComponent(
-                    mdUrl
-                  )}%20so%20I%20can%20ask%20questions%20about%20it.`
-              )
-            }
-          >
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <SiOpenai className="w-4 h-4" />
-            </span>
-            <span className="flex flex-col">
-              <span className="font-medium">Open in ChatGPT</span>
-              <span className="text-xs text-gray-500 font-light">
-                Ask questions about this page
-              </span>
-            </span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex items-start gap-3 p-2 text-sm text-gray-800 hover:bg-gray-100 cursor-pointer rounded-md outline-none focus:outline-none"
-            onClick={() =>
-              openWithLink(
-                (mdUrl) =>
-                  `https://claude.ai/?q=Read%20from%20${encodeURIComponent(
-                    mdUrl
-                  )}%20so%20I%20can%20ask%20questions%20about%20it.`
-              )
-            }
-          >
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-200 rounded-md bg-white focus-visible:outline-none focus:outline-none">
-              <FaCommentDots className="w-4 h-4" />
-            </span>
-            <span className="flex flex-col">
-              <span className="font-medium">Open in Claude</span>
-              <span className="text-xs text-gray-500 font-light">
-                Ask questions about this page
-              </span>
-            </span>
-          </DropdownMenuItem>
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
