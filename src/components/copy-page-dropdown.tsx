@@ -6,10 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import React, { useEffect, useState } from "react";
 import copy from "copy-to-clipboard";
 import htmlToMd from "html-to-md";
 import { ChevronDown, Copy, FileCode } from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { FaCommentDots } from "react-icons/fa";
 import { SiOpenai } from "react-icons/si";
 
