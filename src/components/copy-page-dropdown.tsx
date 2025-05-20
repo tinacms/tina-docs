@@ -47,8 +47,6 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   const handleCopyPage = () => {
     const htmlContent = getCleanHtmlContent()?.innerHTML || "";
     const markdown = convertToMarkdown(htmlContent);
-
-    const currentUrl = encodeURIComponent(window.location.href);
     const referenceSection = `\n\n---\nAsk questions about this page:\n- [Open in ChatGPT](https://chat.openai.com/chat)\n- [Open in Claude](https://claude.ai/)`;
     const markdownBlob = `${title}\n\n${markdown}${referenceSection}`;
 
@@ -112,7 +110,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       <button
         onClick={handleCopyPage}
         className={`flex items-center gap-1 rounded-l-xl px-3 py-1 border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-200/5 border-r-0 ${
-          copied ? "bg-green-100 text-green-800" : "text-gray-400"
+          copied ? "bg-green-100 text-green-800" : "text-gray-600"
         }`}
         type="button"
       >
