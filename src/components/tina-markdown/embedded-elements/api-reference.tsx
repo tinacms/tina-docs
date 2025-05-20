@@ -531,6 +531,55 @@ const SchemaSection = ({
   );
 };
 
+// Add TabbedSchemaSection for top-level objects
+const TabbedSchemaSection = ({
+  schema,
+  title,
+  isErrorSchema = false,
+}: {
+  schema: any;
+  title?: string;
+  isErrorSchema?: boolean;
+}) => {
+  const [tab, setTab] = useState<"schema" | "example">("schema");
+
+  return (
+    <div>
+      <div className="flex border-b mb-2">
+        <button
+          className={`px-4 py-2 font-medium ${
+            tab === "schema"
+              ? "border-b-2 border-blue-500 text-blue-700"
+              : "text-gray-500"
+          }`}
+          onClick={() => setTab("schema")}
+        >
+          Schema
+        </button>
+        <button
+          className={`px-4 py-2 font-medium ${
+            tab === "example"
+              ? "border-b-2 border-blue-500 text-blue-700"
+              : "text-gray-500"
+          }`}
+          onClick={() => setTab("example")}
+        >
+          Example
+        </button>
+      </div>
+      {tab === "schema" ? (
+        <SchemaType
+          schema={schema}
+          showExampleButton={false}
+          isErrorSchema={isErrorSchema}
+        />
+      ) : (
+        <SchemaExample schema={schema} />
+      )}
+    </div>
+  );
+};
+
 // Component to render a response
 const ResponseContent = ({
   response,
@@ -579,7 +628,7 @@ const ResponseContent = ({
                   {contentType}:
                 </div>
                 {contentObj.schema ? (
-                  <SchemaSection
+                  <TabbedSchemaSection
                     schema={contentObj.schema}
                     isErrorSchema={isError}
                   />
@@ -607,7 +656,7 @@ const ResponseContent = ({
 
     return (
       <div className="mt-2">
-        <SchemaSection schema={schema} isErrorSchema={isError} />
+        <TabbedSchemaSection schema={schema} isErrorSchema={isError} />
       </div>
     );
   }
@@ -904,7 +953,7 @@ const ApiReference = (data: any) => {
                     ([contentType, contentObj]: [string, any]) => (
                       <div key={contentType} className="rounded-lg">
                         <SchemaContext.Provider value={schemaDefinitions}>
-                          <SchemaSection
+                          <TabbedSchemaSection
                             schema={
                               endpoint.requestBody.content[contentType].schema
                             }
@@ -918,7 +967,7 @@ const ApiReference = (data: any) => {
                 {!endpoint.requestBody.content &&
                   endpoint.requestBody.schema && (
                     <SchemaContext.Provider value={schemaDefinitions}>
-                      <SchemaSection
+                      <TabbedSchemaSection
                         schema={endpoint.requestBody.schema}
                         isErrorSchema={false}
                       />
