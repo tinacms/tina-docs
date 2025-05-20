@@ -818,7 +818,7 @@ const ApiReference = (data: any) => {
   const renderEndpoint = (endpoint: Endpoint) => {
     return (
       <div key={endpoint.path + endpoint.method} className="mb-12">
-        <div className={`p-4 flex items-center gap-4`}>
+        <div className={`py-4 flex items-center gap-4`}>
           <span
             className={`px-3 py-1 rounded-md text-sm shadow-lg font-bold ${
               endpoint.method === "GET"
@@ -839,7 +839,7 @@ const ApiReference = (data: any) => {
           </span>
         </div>
 
-        <div className="p-4">
+        <div className="">
           {/* Parameters section - only show if there are non-body parameters */}
           {endpoint.parameters && endpoint.parameters.length > 0 && (
             <div className="mb-6">
