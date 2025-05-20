@@ -911,18 +911,27 @@ const ApiReference = (data: any) => {
           )}
 
           {/* Responses section */}
-          {endpoint.responses && Object.keys(endpoint.responses).length > 0 && (
-            <div className="mb-4">
-              <h4 className="text-2xl font-bold text-brand-primary mb-3">
-                Responses
-              </h4>
-              <hr className="border-t border-gray-200 mb-4" />
-              <div className="space-y-4">
-                {Object.entries(endpoint.responses || {})
-                  .filter(
-                    ([code]) => !code.startsWith("4") && !code.startsWith("5")
-                  )
-                  .map(([code, response]: [string, any]) => {
+          <div className="mb-4">
+            <h4 className="text-2xl font-bold text-brand-primary mb-3">
+              Responses
+            </h4>
+            <hr className="border-t border-gray-200 mb-4" />
+            {(() => {
+              const nonErrorResponses = Object.entries(
+                endpoint.responses || {}
+              ).filter(
+                ([code]) => !code.startsWith("4") && !code.startsWith("5")
+              );
+              if (nonErrorResponses.length === 0) {
+                return (
+                  <div className="text-neutral-text italic">
+                    No responses defined for this endpoint.
+                  </div>
+                );
+              }
+              return (
+                <div className="space-y-4">
+                  {nonErrorResponses.map(([code, response]: [string, any]) => {
                     const isErrorResponse =
                       code.startsWith("4") || code.startsWith("5");
                     const responseKey = `${endpoint.method}-${endpoint.path}-${code}`;
@@ -1010,9 +1019,10 @@ const ApiReference = (data: any) => {
                       </div>
                     );
                   })}
-              </div>
-            </div>
-          )}
+                </div>
+              );
+            })()}
+          </div>
 
           {/* Errors section for 4XX and 5XX */}
           {Object.entries(endpoint.responses || {}).some(
