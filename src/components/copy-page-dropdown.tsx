@@ -12,8 +12,8 @@ import { ChevronDown, Copy, FileCode } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { FaCommentDots } from "react-icons/fa";
-import { SiOpenai } from "react-icons/si";
 import { MdArrowDropDown, MdCheck, MdContentCopy } from "react-icons/md";
+import { SiOpenai } from "react-icons/si";
 
 interface CopyPageDropdownProps {
   title?: string;
