@@ -332,6 +332,18 @@ const SchemaType = ({
             }]`}
           </span>
         )}
+        {/* For top-level arrays, show the button immediately after the type */}
+        {showExampleButton && depth === 0 && type === "array" && (
+          <button
+            className="ml-2 text-xs text-neutral-text hover:underline focus:outline-none"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleExample();
+            }}
+          >
+            JSON Schema Example
+          </button>
+        )}
         {type === "array" &&
           schema.items &&
           (schema.items.properties || schema.items.$ref) && (
@@ -339,12 +351,21 @@ const SchemaType = ({
               {isExpanded ? "−" : "+"}
             </span>
           )}
-        {!isExpanded && type === "object" && schema.properties && (
-          <span className="text-gray-500 ml-2">
-            {`{${Object.keys(schema.properties).join(", ")}}`}
-          </span>
+        {/* For top-level objects and $ref, keep button at the end as before */}
+        {showExampleButton && depth === 0 && type !== "array" && (
+          <button
+            className="ml-auto text-xs text-neutral-text hover:underline focus:outline-none"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleExample();
+            }}
+            style={{ marginLeft: "auto" }}
+          >
+            JSON Schema Example
+          </button>
         )}
-        {showExampleButton && (
+        {/* For nested, keep inline */}
+        {showExampleButton && depth !== 0 && (
           <button
             className="ml-2 text-xs text-blue-600 hover:underline focus:outline-none"
             onClick={(e) => {
@@ -489,7 +510,7 @@ const SchemaSection = ({
   if (!schema) return null;
 
   return (
-    <div className="mb-3 ">
+    <div>
       {title && (
         <div
           className={`text-sm font-medium mb-2 ${
@@ -871,9 +892,9 @@ const ApiReference = (data: any) => {
                 )}
               </div>
               <hr className="border-t border-gray-200 mb-4" />
-              <div className="rounded-md pl-3 pr-5">
+              <div className="rounded-md p-3 brand-glass-gradient shadow-lg items-center">
                 {endpoint.requestBody.description && (
-                  <p className="text-neutral-text mb-3">
+                  <p className="text-neutral-text">
                     {endpoint.requestBody.description}
                   </p>
                 )}
@@ -881,10 +902,7 @@ const ApiReference = (data: any) => {
                 {endpoint.requestBody.content &&
                   Object.entries(endpoint.requestBody.content).map(
                     ([contentType, contentObj]: [string, any]) => (
-                      <div
-                        key={contentType}
-                        className="mb-3 p-3 rounded-lg shadow-lg"
-                      >
+                      <div key={contentType} className="rounded-lg">
                         <SchemaContext.Provider value={schemaDefinitions}>
                           <SchemaSection
                             schema={
@@ -980,7 +998,7 @@ const ApiReference = (data: any) => {
                                   ? "bg-[#B4EFD9] text-green-800 font-bold"
                                   : isErrorResponse
                                   ? "bg-red-100 text-red-800"
-                                  : "bg-gray-100 text-gray-800"
+                                  : "bg-gray-200 text-gray-800 font-tuner text-center"
                               }`}
                             >
                               {code}

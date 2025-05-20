@@ -199,7 +199,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-full overflow-x-hidden">
       <label className="block font-medium text-gray-700 mb-1">
         {field.label || "Select API Schema"}
       </label>
@@ -212,25 +212,29 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           No API schema files found. Please upload one in the Content Manager.
         </div>
       ) : (
-        <div>
+        <div className="max-w-full w-full overflow-x-hidden">
           <select
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 max-w-full overflow-x-hidden"
             value={input.value.split("|")[0]} // Just use the schema part
             onChange={(e) => handleSchemaChange(e.target.value)}
           >
             <option value="">Select a schema</option>
             {schemas.map((schema) => (
-              <option key={schema.id} value={schema.relativePath}>
+              <option
+                key={schema.id}
+                value={schema.relativePath}
+                className="break-words whitespace-normal max-w-full"
+              >
                 {schema._sys.filename}
               </option>
             ))}
           </select>
 
           {input.value && (
-            <div className="mt-3 p-3 bg-blue-50 text-blue-600 rounded text-sm w-full max-w-full">
-              <div className="font-medium mb-1 truncate">
+            <div className="mt-3 p-3 bg-blue-50 text-blue-600 rounded text-sm w-full max-w-full overflow-x-hidden">
+              <div className="font-medium mb-1 truncate break-words whitespace-normal max-w-full">
                 Selected schema:{" "}
-                <span className="truncate">
+                <span className="truncate break-words whitespace-normal max-w-full">
                   {
                     schemas.find(
                       (s) => s.relativePath === input.value.split("|")[0]
@@ -244,27 +248,27 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
               ) : schemaDetails ? (
                 <>
                   <div className="grid grid-cols-3 gap-2 mt-2 w-full max-w-full">
-                    <div className="bg-blue-100 p-2 rounded w-full max-w-full">
-                      <div className="text-xs text-blue-500 truncate">
+                    <div className="bg-blue-100 p-2 rounded w-full max-w-full break-words whitespace-normal">
+                      <div className="text-xs text-blue-500 truncate break-words whitespace-normal max-w-full">
                         API Name
                       </div>
-                      <div className="font-medium truncate">
+                      <div className="font-medium truncate break-words whitespace-normal max-w-full">
                         {schemaDetails.title}
                       </div>
                     </div>
-                    <div className="bg-blue-100 p-2 rounded w-full max-w-full">
-                      <div className="text-xs text-blue-500 truncate">
+                    <div className="bg-blue-100 p-2 rounded w-full max-w-full break-words whitespace-normal">
+                      <div className="text-xs text-blue-500 truncate break-words whitespace-normal max-w-full">
                         Version
                       </div>
-                      <div className="font-medium truncate">
+                      <div className="font-medium truncate break-words whitespace-normal max-w-full">
                         {schemaDetails.version}
                       </div>
                     </div>
-                    <div className="bg-blue-100 p-2 rounded w-full max-w-full">
-                      <div className="text-xs text-blue-500 truncate">
+                    <div className="bg-blue-100 p-2 rounded w-full max-w-full break-words whitespace-normal">
+                      <div className="text-xs text-blue-500 truncate break-words whitespace-normal max-w-full">
                         Endpoints
                       </div>
-                      <div className="font-medium truncate">
+                      <div className="font-medium truncate break-words whitespace-normal max-w-full">
                         {schemaDetails.endpointCount}
                       </div>
                     </div>
@@ -272,12 +276,12 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
 
                   {/* Endpoint selector */}
                   {schemaDetails.endpoints.length > 0 && (
-                    <div className="mt-4 w-full max-w-full">
+                    <div className="mt-4 w-full max-w-full overflow-x-hidden">
                       <label className="block text-blue-700 font-medium mb-1">
                         Select Endpoint (Optional)
                       </label>
                       <select
-                        className="w-full p-2 border border-blue-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white text-blue-800"
+                        className="w-full p-2 border border-blue-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white text-blue-800 max-w-full overflow-x-hidden"
                         value={selectedEndpoint}
                         onChange={(e) => handleEndpointChange(e.target.value)}
                       >
@@ -288,7 +292,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                             <option
                               key={createEndpointId(endpoint)}
                               value={createEndpointId(endpoint)}
-                              className="truncate"
+                              className="truncate break-words whitespace-normal max-w-full"
                             >
                               {endpoint.method} {endpoint.path}{" "}
                               {endpoint.summary ? `- ${endpoint.summary}` : ""}
@@ -297,8 +301,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                       </select>
 
                       {selectedEndpoint && (
-                        <div className="mt-2 bg-blue-100 p-2 rounded w-full max-w-full">
-                          <div className="font-medium truncate">
+                        <div className="mt-2 bg-blue-100 p-2 rounded w-full max-w-full break-words whitespace-normal">
+                          <div className="font-medium truncate break-words whitespace-normal max-w-full">
                             Selected endpoint: {selectedEndpoint.split(":")[0]}{" "}
                             {selectedEndpoint.split(":")[1]}
                           </div>
@@ -317,10 +321,12 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
         </div>
       )}
       {field.description && (
-        <p className="mt-1 text-sm text-gray-500">{field.description}</p>
+        <p className="mt-1 text-sm text-gray-500 break-words whitespace-normal max-w-full">
+          {field.description}
+        </p>
       )}
 
-      <div className="mt-4 p-3 bg-gray-50 text-gray-600 rounded-md text-sm">
+      <div className="mt-4 p-3 bg-gray-50 text-gray-600 rounded-md text-sm break-words whitespace-normal max-w-full">
         <p>
           <strong>Note:</strong> To add more schema files, go to the Content
           Manager and add files to the API Schema collection.
