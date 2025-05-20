@@ -46,9 +46,10 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
     }
 
     const clone = element.cloneNode(true) as HTMLElement;
-    clone
-      .querySelectorAll("[data-exclude-from-md]")
-      .forEach((el) => el.remove());
+    const elementsToRemove = clone.querySelectorAll("[data-exclude-from-md]");
+    for (const el of elementsToRemove) {
+      el.remove();
+    }
     return clone;
   };
 
@@ -60,7 +61,8 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
   const handleCopyPage = () => {
     const htmlContent = getCleanHtmlContent()?.innerHTML || "";
     const markdown = convertToMarkdown(htmlContent);
-    const referenceSection = `\n\n---\nAsk questions about this page:\n- [Open in ChatGPT](https://chat.openai.com/chat)\n- [Open in Claude](https://claude.ai/)`;
+    const referenceSection =
+      "\n\n---\nAsk questions about this page:\n- [Open in ChatGPT](https://chat.openai.com/chat)\n- [Open in Claude](https://claude.ai/)";
     const finalContent = `${title}\n\n${markdown}${referenceSection}`;
 
     copy(finalContent);
@@ -89,7 +91,6 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       setMarkdownUrl(fullUrl);
       return fullUrl;
     } catch (err) {
-      console.error(err);
       alert("Failed to export Markdown.");
       return null;
     }
