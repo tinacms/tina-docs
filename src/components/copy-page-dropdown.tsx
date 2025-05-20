@@ -27,10 +27,11 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 
   const handleCopy = async () => {
     const md = htmlToMd(getHtml()?.innerHTML || "");
+    const filteredMd = md.replace(/<button>Copy<\/button>\n?/g, "");
     const currentUrl = window.location.href;
     const encodedUrl = encodeURIComponent(currentUrl);
     const chatUrl = `https://chat.openai.com/?hints=search&q=Read%20from%20${encodedUrl}%20so%20I%20can%20ask%20questions%20about%20it.`;
-    const annotated = `${title}\n\n${md}\n\n---\nAsk questions about this page:\n- [Open in ChatGPT](https://chat.openai.com/chat)\n- [Open in Claude](https://claude.ai/)`;
+    const annotated = `${title}\n\n${filteredMd}\n\n---\nAsk questions about this page:\n- [Open in ChatGPT](https://chat.openai.com/chat)\n- [Open in Claude](https://claude.ai/)`;
     copy(annotated);
     setCopied(true);
   };
@@ -46,7 +47,10 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       alert("Failed to export markdown");
       return;
     }
+
     const clonedElement = htmlElement.cloneNode(true) as HTMLElement;
+
+    // Remove all elements marked with data-exclude-from-md
     const elementsToRemove = clonedElement.querySelectorAll(
       "[data-exclude-from-md]"
     );
@@ -57,6 +61,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 
   const handleViewAsMarkdown = async () => {
     const md = htmlToMd(getHtml()?.innerHTML || "");
+    const filteredMd = md.replace(/<button>Copy<\/button>\n\n?/g, "");
     // Use the markdown string as needed
     let pathName = window.location.pathname.replace(/^\//, ""); // e.g. docs/guide/intro
     if (!pathName) pathName = "index"; // fallback for homepage
@@ -65,7 +70,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
     const res = await fetch("/api/export-md", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: md, filename }),
+      body: JSON.stringify({ content: filteredMd, filename }),
     });
 
     if (res.ok) {
