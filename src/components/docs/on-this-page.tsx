@@ -86,7 +86,10 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   }
 
   return (
-    <div className="mb-[-0.375rem] flex-auto break-words whitespace-normal overflow-wrap-break-word pt-6">
+    <div
+      className="mb-[-0.375rem] flex-auto break-words whitespace-normal overflow-wrap-break-word pt-6"
+      data-exclude-from-md
+    >
       <div
         className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
           isOpen
