@@ -332,7 +332,6 @@ export const JsonFileUploadComponent = ({ input, field }: TinaFieldProps) => {
             setJsonPreview(preview);
 
             // Log for debugging
-            console.log("Swagger parsed:", swaggerData);
 
             setLoading(false);
           } catch (parseError) {

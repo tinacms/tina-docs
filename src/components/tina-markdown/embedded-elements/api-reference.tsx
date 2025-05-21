@@ -885,7 +885,6 @@ const ApiReference = (data: any) => {
 
   // Render a single endpoint
   const renderEndpoint = (endpoint: Endpoint) => {
-    console.log(endpoint);
     return (
       <div
         key={endpoint.path + endpoint.method}
