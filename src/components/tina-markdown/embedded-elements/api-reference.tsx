@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, createContext } from "react";
 import { client } from "@/tina/__generated__/client";
 import { CodeBlock } from "@/components/tina-markdown/standard-elements/code-block/code-block";
 import { FaChevronRight } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 import type { IconBaseProps } from "react-icons";
 
 // Context to share schema definitions across components
@@ -181,7 +182,7 @@ const SchemaType = ({
           }}
         >
           <span className="flex items-end">
-            <span className="text-neutral-text group-hover:underline ">
+            <span className="ml-4 text-neutral-text group-hover:underline ">
               {refName}
             </span>
             {refSchema && refSchema.type && (
@@ -192,7 +193,7 @@ const SchemaType = ({
           </span>
           {showExampleButton && (
             <button
-              className="ml-4 text-xs text-neutral-text-secondary hover:underline focus:outline-none"
+              className="ml-4 text-xs text-neutral-text-secondary hover:underline"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleExample();
@@ -311,10 +312,10 @@ const SchemaType = ({
         }
       >
         <div className="flex items-center">
-          <div className="flex items-center gap-2">
+          <div className="flex items-end gap-2">
             {name && (
               <span
-                className={`group-hover:underline ${
+                className={`ml-4 group-hover:underline ${
                   isErrorSchema || hasErrorFields ? "text-red-600" : ""
                 }`}
               >
@@ -322,7 +323,7 @@ const SchemaType = ({
               </span>
             )}
             {type === "array" && schema.items && (
-              <span className="text-neutral-text-secondary font-mono text-xs">
+              <span className="text-neutral-text-secondary pb-0.5 font-mono text-xs">
                 {schema.items && (schema.items.properties || schema.items.$ref)
                   ? "array [object]"
                   : `array [${
@@ -337,7 +338,12 @@ const SchemaType = ({
                 object
               </span>
             )}
-            {isExpandable && <ChevronIcon isExpanded={isExpanded} />}
+
+            {isExpandable && (
+              <div className="pb-1">
+                <ChevronIcon isExpanded={isExpanded} />
+              </div>
+            )}
           </div>
         </div>
         {showExampleButton && depth === 0 && type === "array" && (
@@ -553,7 +559,7 @@ const TabbedSchemaSection = ({
       <div className="relative flex border-b-[0.5px] border-neutral-border mb-3">
         <button
           ref={schemaTabRef}
-          className={`px-4 py-2 font-medium cursor-pointer ${
+          className={`px-4 py-1 font-medium cursor-pointer ${
             tab === "schema"
               ? "text-brand-secondary"
               : "text-neutral-text-secondary"
@@ -564,7 +570,7 @@ const TabbedSchemaSection = ({
         </button>
         <button
           ref={jsonTabRef}
-          className={`px-4 py-2 font-medium cursor-pointer ${
+          className={`px-4 py-1 font-medium cursor-pointer ${
             tab === "example"
               ? "text-brand-secondary"
               : "text-neutral-text-secondary"
@@ -673,6 +679,76 @@ const ResponseContent = ({
   }
 };
 
+const RequestBodyDropdown = ({
+  value,
+  onChange,
+}: {
+  value: "schema" | "example";
+  onChange: (v: "schema" | "example") => void;
+}) => {
+  const [open, setOpen] = useState(false);
+  const Icon = FaChevronDown as React.ComponentType<IconBaseProps>;
+  return (
+    <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className="border-[0.25px] border-neutral-border rounded px-2 text-sm bg-white hover:bg-gray-50  min-w-[100px] flex items-center justify-between gap-2"
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((o) => !o);
+        }}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        {value === "schema" ? "Schema" : "JSON"}
+        <span className="text-xs">
+          <Icon />
+        </span>
+      </button>
+      {open && (
+        <div
+          className="absolute mt-1 w-full bg-white border border-neutral-border rounded-sm shadow-lg z-[9999]"
+          style={{ position: "absolute", zIndex: 9999 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div role="listbox" tabIndex={-1} onBlur={() => setOpen(false)}>
+            <button
+              className={`block w-full text-left px-4 py-2 text-sm ${
+                value === "schema"
+                  ? "bg-gray-100 text-brand-secondary"
+                  : "text-neutral-text"
+              } hover:bg-gray-50`}
+              onClick={() => {
+                onChange("schema");
+                setOpen(false);
+              }}
+              role="option"
+              aria-selected={value === "schema"}
+            >
+              Schema
+            </button>
+            <button
+              className={`block w-full text-left px-4 py-2 text-sm ${
+                value === "example"
+                  ? "bg-gray-100 text-brand-secondary"
+                  : "text-neutral-text"
+              } hover:bg-gray-50`}
+              onClick={() => {
+                onChange("example");
+                setOpen(false);
+              }}
+              role="option"
+              aria-selected={value === "example"}
+            >
+              JSON
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ApiReference = (data: any) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -687,6 +763,13 @@ const ApiReference = (data: any) => {
   const [expandedResponses, setExpandedResponses] = useState<
     Map<string, boolean>
   >(new Map());
+  const [requestBodyView, setRequestBodyView] = useState<"schema" | "example">(
+    "schema"
+  );
+  const [responseView, setResponseView] = useState<
+    Record<string, "schema" | "example">
+  >({});
+  const [openDropdownKey, setOpenDropdownKey] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAndParseSchema = async () => {
@@ -880,7 +963,7 @@ const ApiReference = (data: any) => {
     return (
       <div
         key={endpoint.path + endpoint.method}
-        className="mb-12 bg-gradient-to-br from-white/40 to-white/70 p-2 rounded-lg shadow-sm"
+        className="mb-12 bg-gradient-to-br from-white/40 to-white/70 p-4 rounded-lg shadow-sm"
       >
         <div className="flex flex-col gap-2 pb-6">
           <div className={`flex items-center gap-4`}>
@@ -911,8 +994,8 @@ const ApiReference = (data: any) => {
         <div className="">
           {/* Parameters section - only show if there are non-body parameters */}
           {endpoint.parameters && endpoint.parameters.length > 0 && (
-            <div className="mb-6">
-              <h4 className="text-2xl text-neutral-text  mb-3">
+            <div className="mb-8">
+              <h4 className="text-xl text-neutral-text  mb-2">
                 Path Parameters
               </h4>
 
@@ -949,57 +1032,80 @@ const ApiReference = (data: any) => {
 
           {/* Request Body section */}
           {endpoint.requestBody && (
-            <div className="mb-6">
-              <div className="flex items-center mb-3">
-                <h4 className="text-2xl text-neutral-text mr-3">
-                  Request Body
-                </h4>
-                {endpoint.requestBody.required && (
-                  <span className="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-800">
-                    required
-                  </span>
-                )}
+            <div className="mb-8">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <h4 className="text-xl text-neutral-text">Request Body</h4>
+                <RequestBodyDropdown
+                  value={requestBodyView}
+                  onChange={setRequestBodyView}
+                />
               </div>
-
-              <div className="rounded-md p-3 brand-glass-gradient shadow-lg items-center">
-                {endpoint.requestBody.description && (
-                  <p className="text-neutral-text">
-                    {endpoint.requestBody.description}
-                  </p>
+              {endpoint.requestBody.description && (
+                <p className="text-neutral-text mb-2">
+                  {endpoint.requestBody.description}
+                </p>
+              )}
+              <div>
+                {requestBodyView === "schema" ? (
+                  <SchemaType
+                    schema={
+                      endpoint.requestBody.content
+                        ? (
+                            Object.values(
+                              endpoint.requestBody.content
+                            )[0] as any
+                          ).schema
+                        : endpoint.requestBody.schema
+                    }
+                    showExampleButton={false}
+                    isErrorSchema={false}
+                    name={(() => {
+                      console.log("the reqBody", endpoint.requestBody);
+                      const schema = endpoint.requestBody.content
+                        ? (
+                            Object.values(
+                              endpoint.requestBody.content
+                            )[0] as any
+                          ).schema
+                        : endpoint.requestBody.schema;
+                      if (schema?.type === "array") {
+                        if (
+                          schema.items?.type === "object" ||
+                          schema.items?.properties
+                        ) {
+                          return "Array of object";
+                        }
+                        return `Array of object`;
+                      }
+                      return undefined;
+                    })()}
+                  />
+                ) : (
+                  <CodeBlock
+                    value={JSON.stringify(
+                      generateExample(
+                        endpoint.requestBody.content
+                          ? (
+                              Object.values(
+                                endpoint.requestBody.content
+                              )[0] as any
+                            ).schema
+                          : endpoint.requestBody.schema,
+                        schemaDefinitions
+                      ),
+                      null,
+                      2
+                    )}
+                    lang="json"
+                  />
                 )}
-
-                {endpoint.requestBody.content &&
-                  Object.entries(endpoint.requestBody.content).map(
-                    ([contentType, contentObj]: [string, any]) => (
-                      <div key={contentType} className="rounded-lg">
-                        <SchemaContext.Provider value={schemaDefinitions}>
-                          <TabbedSchemaSection
-                            schema={
-                              endpoint.requestBody.content[contentType].schema
-                            }
-                            isErrorSchema={false}
-                          />
-                        </SchemaContext.Provider>
-                      </div>
-                    )
-                  )}
-
-                {!endpoint.requestBody.content &&
-                  endpoint.requestBody.schema && (
-                    <SchemaContext.Provider value={schemaDefinitions}>
-                      <TabbedSchemaSection
-                        schema={endpoint.requestBody.schema}
-                        isErrorSchema={false}
-                      />
-                    </SchemaContext.Provider>
-                  )}
               </div>
             </div>
           )}
 
           {/* Responses section */}
-          <div className="mb-6">
-            <h4 className="text-2xl text-neutral-text mb-3">Responses</h4>
+          <div className="mb-8">
+            <h4 className="text-xl text-neutral-text mb-2">Responses</h4>
 
             {(() => {
               const nonErrorResponses = Object.entries(
@@ -1009,7 +1115,7 @@ const ApiReference = (data: any) => {
               );
               if (nonErrorResponses.length === 0) {
                 return (
-                  <div className="text-neutral-text-secondary text-sm">
+                  <div className="pl-3 text-neutral-text-secondary text-sm">
                     No responses defined for this endpoint.
                   </div>
                 );
@@ -1029,8 +1135,15 @@ const ApiReference = (data: any) => {
                           Object.keys(response).some(
                             (k) => k !== "description"
                           )));
+                    // Add dropdown state for this response
+                    const view = responseView[responseKey] || "schema";
+                    const setView = (v: "schema" | "example") =>
+                      setResponseView((prev) => ({
+                        ...prev,
+                        [responseKey]: v,
+                      }));
                     return (
-                      <div key={code} className=" overflow-hidden">
+                      <div key={code}>
                         <div
                           className={`p-3  ${
                             hasExpandableContent ? "cursor-pointer" : ""
@@ -1055,52 +1168,100 @@ const ApiReference = (data: any) => {
                               : undefined
                           }
                         >
-                          <div className="flex items-center w-full">
-                            <span
-                              className={`px-2 py-0.5 rounded-md inline-block ${
-                                code.startsWith("2")
-                                  ? "bg-[#B4EFD9] text-green-800 font-bold"
-                                  : isErrorResponse
-                                  ? "bg-red-100 text-red-800"
-                                  : "bg-gray-200 text-gray-800 font-tuner text-center"
-                              }`}
-                            >
-                              {code}
-                            </span>
-                            {response.description && (
+                          <div className="flex items-center w-full justify-between gap-2">
+                            <div className="flex items-center gap-2">
                               <span
-                                className={`ml-2 text-neutral-text flex items-center gap-2`}
+                                className={`px-2 py-0.5 rounded-md inline-block ${
+                                  code.startsWith("2")
+                                    ? "bg-[#B4EFD9] text-green-800 font-bold"
+                                    : isErrorResponse
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-gray-200 text-gray-800 font-tuner text-center"
+                                }`}
                               >
-                                {response.description}
-                                {hasExpandableContent && (
-                                  <ChevronIcon
-                                    isExpanded={
-                                      expandedResponses.get(responseKey) ||
-                                      false
-                                    }
-                                  />
-                                )}
+                                {code}
                               </span>
-                            )}
-                            {!response.description && hasExpandableContent && (
-                              <ChevronIcon
-                                isExpanded={
-                                  expandedResponses.get(responseKey) || false
-                                }
-                              />
+                              {response.description && (
+                                <span
+                                  className={`ml-2 text-neutral-text flex items-center gap-2`}
+                                >
+                                  {response.description}
+                                </span>
+                              )}
+                              {hasExpandableContent && (
+                                <ChevronIcon
+                                  isExpanded={
+                                    expandedResponses.get(responseKey) || false
+                                  }
+                                />
+                              )}
+                            </div>
+                            {hasExpandableContent && (
+                              <div className="ml-auto relative">
+                                <RequestBodyDropdown
+                                  value={view}
+                                  onChange={setView}
+                                />
+                              </div>
                             )}
                           </div>
                         </div>
-
                         {/* Show schema details only when expanded */}
                         {hasExpandableContent &&
                           expandedResponses.get(responseKey) && (
                             <div className="pb-3 px-3">
                               <SchemaContext.Provider value={schemaDefinitions}>
-                                <ResponseContent
-                                  response={response}
-                                  isErrorResponse={isErrorResponse}
-                                />
+                                {view === "schema" ? (
+                                  <SchemaType
+                                    schema={(() => {
+                                      if (
+                                        response.content &&
+                                        Object.keys(response.content).length > 0
+                                      ) {
+                                        const firstContent = Object.values(
+                                          response.content
+                                        )[0] as any;
+                                        return firstContent.schema;
+                                      }
+                                      if (response.schema) {
+                                        return response.schema;
+                                      }
+                                      return {};
+                                    })()}
+                                    showExampleButton={false}
+                                    isErrorSchema={isErrorResponse}
+                                  />
+                                ) : (
+                                  <CodeBlock
+                                    value={JSON.stringify(
+                                      (() => {
+                                        if (
+                                          response.content &&
+                                          Object.keys(response.content).length >
+                                            0
+                                        ) {
+                                          const firstContent = Object.values(
+                                            response.content
+                                          )[0] as any;
+                                          return generateExample(
+                                            firstContent.schema,
+                                            schemaDefinitions
+                                          );
+                                        }
+                                        if (response.schema) {
+                                          return generateExample(
+                                            response.schema,
+                                            schemaDefinitions
+                                          );
+                                        }
+                                        return {};
+                                      })(),
+                                      null,
+                                      2
+                                    )}
+                                    lang="json"
+                                  />
+                                )}
                               </SchemaContext.Provider>
                             </div>
                           )}
@@ -1116,8 +1277,8 @@ const ApiReference = (data: any) => {
           {Object.entries(endpoint.responses || {}).some(
             ([code]) => code.startsWith("4") || code.startsWith("5")
           ) && (
-            <div className="mt-8">
-              <h4 className="text-2xl text-neutral-text mb-3">Errors</h4>
+            <div className="mb-8">
+              <h4 className="text-xl text-neutral-text mb-2">Errors</h4>
 
               <div>
                 {Object.entries(endpoint.responses || {})
@@ -1136,10 +1297,17 @@ const ApiReference = (data: any) => {
                           Object.keys(response).some(
                             (k) => k !== "description"
                           )));
+                    // Add dropdown state for this response
+                    const view = responseView[responseKey] || "schema";
+                    const setView = (v: "schema" | "example") =>
+                      setResponseView((prev) => ({
+                        ...prev,
+                        [responseKey]: v,
+                      }));
                     return (
-                      <div key={code} className=" overflow-hidden ">
+                      <div key={code}>
                         <div
-                          className={`p-3  ${
+                          className={`px-3 py-1 ${
                             hasExpandableContent
                               ? "cursor-pointer hover:bg-opacity-80 transition-colors"
                               : ""
@@ -1174,12 +1342,20 @@ const ApiReference = (data: any) => {
                               </span>
                             )}
                             {hasExpandableContent && (
-                              <span
-                                className="ml-auto text-2xl font-bold select-none pointer-events-none flex items-center"
-                                style={{ minWidth: 28 }}
-                              >
-                                {expandedResponses.get(responseKey) ? "−" : "+"}
-                              </span>
+                              <div className="flex items-center gap-2 ml-2">
+                                <RequestBodyDropdown
+                                  value={view}
+                                  onChange={setView}
+                                />
+                                <span
+                                  className="ml-auto text-2xl font-bold select-none pointer-events-none flex items-center"
+                                  style={{ minWidth: 28 }}
+                                >
+                                  {expandedResponses.get(responseKey)
+                                    ? "−"
+                                    : "+"}
+                                </span>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -1188,10 +1364,57 @@ const ApiReference = (data: any) => {
                           expandedResponses.get(responseKey) && (
                             <div className="p-3">
                               <SchemaContext.Provider value={schemaDefinitions}>
-                                <ResponseContent
-                                  response={response}
-                                  isErrorResponse={isErrorResponse}
-                                />
+                                {view === "schema" ? (
+                                  <SchemaType
+                                    schema={(() => {
+                                      if (
+                                        response.content &&
+                                        Object.keys(response.content).length > 0
+                                      ) {
+                                        const firstContent = Object.values(
+                                          response.content
+                                        )[0] as any;
+                                        return firstContent.schema;
+                                      }
+                                      if (response.schema) {
+                                        return response.schema;
+                                      }
+                                      return {};
+                                    })()}
+                                    showExampleButton={false}
+                                    isErrorSchema={isErrorResponse}
+                                  />
+                                ) : (
+                                  <CodeBlock
+                                    value={JSON.stringify(
+                                      (() => {
+                                        if (
+                                          response.content &&
+                                          Object.keys(response.content).length >
+                                            0
+                                        ) {
+                                          const firstContent = Object.values(
+                                            response.content
+                                          )[0] as any;
+                                          return generateExample(
+                                            firstContent.schema,
+                                            schemaDefinitions
+                                          );
+                                        }
+                                        if (response.schema) {
+                                          return generateExample(
+                                            response.schema,
+                                            schemaDefinitions
+                                          );
+                                        }
+                                        return {};
+                                      })(),
+                                      null,
+                                      2
+                                    )}
+                                    lang="json"
+                                  />
+                                )}
                               </SchemaContext.Provider>
                             </div>
                           )}
