@@ -231,15 +231,15 @@ const JsonFilePreview = ({
 const LoadingIndicator = () => (
   <div className="p-6 w-full flex flex-col justify-center items-center">
     <div className="flex space-x-1">
-      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" />
       <div
         className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
         style={{ animationDelay: "0.2s" }}
-      ></div>
+      />
       <div
         className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
         style={{ animationDelay: "0.4s" }}
-      ></div>
+      />
     </div>
   </div>
 );
@@ -252,6 +252,7 @@ const DeleteFileButton = ({
 }) => {
   return (
     <button
+      type="button"
       className="flex-none bg-white bg-opacity-80 hover:bg-opacity-100 shadow-sm p-1 rounded-full border border-gray-200"
       onClick={onClick}
     >
@@ -284,7 +285,7 @@ export const JsonFileUploadComponent = ({ input, field }: TinaFieldProps) => {
           );
         }
       } catch (error) {
-        console.error("Error parsing existing JSON data:", error);
+        // Handle error silently
       }
     }
   }, [input.value]);
@@ -333,16 +334,19 @@ export const JsonFileUploadComponent = ({ input, field }: TinaFieldProps) => {
 
             setLoading(false);
           } catch (parseError) {
-            console.error("Error handling JSON:", parseError);
-            alert(
-              "Error parsing JSON file. Please ensure it is a valid Swagger/OpenAPI JSON."
-            );
-            setLoading(false);
+            try {
+              const parseError = new Error("Error handling JSON");
+              alert(
+                "Error parsing JSON file. Please ensure it is a valid Swagger/OpenAPI JSON."
+              );
+              setLoading(false);
+            } catch (error) {
+              setLoading(false);
+            }
           }
         };
 
         reader.onerror = () => {
-          console.error("Error reading file");
           setLoading(false);
         };
 
@@ -433,6 +437,7 @@ export const JsonFileUploadComponent = ({ input, field }: TinaFieldProps) => {
           )
         ) : (
           <button
+            type="button"
             className="outline-none relative hover:bg-gray-50 w-full"
             onClick={handleBrowseClick}
           >

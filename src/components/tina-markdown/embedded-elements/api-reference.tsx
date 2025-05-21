@@ -82,22 +82,18 @@ const generateExample = (schema: any, definitions: any, depth = 0): any => {
     case "object":
       if (schema.properties) {
         const obj: any = {};
-        Object.entries(schema.properties).forEach(
-          ([key, prop]: [string, any]) => {
-            obj[key] = generateExample(prop, definitions, depth + 1);
-          }
-        );
+        for (const [key, prop] of Object.entries(schema.properties)) {
+          obj[key] = generateExample(prop, definitions, depth + 1);
+        }
         return obj;
       }
       return {};
     default:
       if (schema.properties) {
         const obj: any = {};
-        Object.entries(schema.properties).forEach(
-          ([key, prop]: [string, any]) => {
-            obj[key] = generateExample(prop, definitions, depth + 1);
-          }
-        );
+        for (const [key, prop] of Object.entries(schema.properties)) {
+          obj[key] = generateExample(prop, definitions, depth + 1);
+        }
         return obj;
       }
       return null;
@@ -185,7 +181,7 @@ const SchemaType = ({
             <span className="text-neutral-text group-hover:underline ">
               {refName}
             </span>
-            {refSchema && refSchema.type && (
+            {refSchema?.type && (
               <span className="ml-2 text-xs font-mono text-neutral-text-secondary px-2 pb-0.5 rounded">
                 {refSchema.type}
               </span>
@@ -334,11 +330,7 @@ const SchemaType = ({
               <span className="text-neutral-text-secondary pb-0.5 font-mono text-xs">
                 {schema.items && (schema.items.properties || schema.items.$ref)
                   ? "array [object]"
-                  : `array [${
-                      schema.items && schema.items.type
-                        ? schema.items.type
-                        : "any"
-                    }]`}
+                  : `array [${schema.items?.type ? schema.items.type : "any"}]`}
               </span>
             )}
             {type === "object" && (
@@ -637,38 +629,18 @@ const RequestBodyDropdown = ({
           style={{ position: "absolute", zIndex: 9999 }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div role="listbox" tabIndex={-1} onBlur={() => setOpen(false)}>
-            <button
-              className={`block w-full text-left px-4 py-2 text-sm ${
-                value === "schema"
-                  ? "bg-gray-100 text-brand-secondary"
-                  : "text-neutral-text"
-              } hover:bg-gray-50`}
-              onClick={() => {
-                onChange("schema");
-                setOpen(false);
-              }}
-              role="option"
-              aria-selected={value === "schema"}
-            >
-              Schema
-            </button>
-            <button
-              className={`block w-full text-left px-4 py-2 text-sm ${
-                value === "example"
-                  ? "bg-gray-100 text-brand-secondary"
-                  : "text-neutral-text"
-              } hover:bg-gray-50`}
-              onClick={() => {
-                onChange("example");
-                setOpen(false);
-              }}
-              role="option"
-              aria-selected={value === "example"}
-            >
-              JSON
-            </button>
-          </div>
+          <select
+            tabIndex={-1}
+            onBlur={() => setOpen(false)}
+            value={value}
+            onChange={(e) => {
+              onChange(e.target.value as "schema" | "example");
+              setOpen(false);
+            }}
+          >
+            <option value="schema">Schema</option>
+            <option value="example">Example</option>
+          </select>
         </div>
       )}
     </div>

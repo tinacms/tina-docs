@@ -1,7 +1,7 @@
-import { wrapFieldsWithMeta } from "tinacms";
-import React, { useCallback, useState, useEffect } from "react";
-import { useTina, tinaField } from "tinacms/dist/react";
 import { client } from "@/tina/__generated__/client";
+import React, { useCallback, useState, useEffect } from "react";
+import { wrapFieldsWithMeta } from "tinacms";
+import { tinaField, useTina } from "tinacms/dist/react";
 
 // Define schema type to match the actual structure from the API
 interface SchemaFile {
