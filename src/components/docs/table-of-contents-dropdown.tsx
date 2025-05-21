@@ -63,7 +63,7 @@ export const TableOfContentsDropdown = ({ tocData }) => {
   }, []);
 
   return (
-    <div>
+    <div data-exclude-from-md>
       {tocData?.tocData?.length !== 0 && (
         <div className="w-full py-6" ref={containerRef}>
           <div

@@ -14,7 +14,10 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
+    "@radix-ui/react-dropdown-menu": "^2.1.14",
+    "copy-to-clipboard": "^3.3.3",
     "fast-glob": "^3.3.3",
+    "html-to-md": "^0.8.8",
     "lodash": "^4.17.21",
     "mermaid": "^11.6.0",
     "monaco-editor": "^0.52.2",
