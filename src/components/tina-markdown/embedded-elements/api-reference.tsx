@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
-import { client } from "@/tina/__generated__/client";
 import { CodeBlock } from "@/components/tina-markdown/standard-elements/code-block/code-block";
+import { client } from "@/tina/__generated__/client";
+import React, { useEffect, useState, useContext, createContext } from "react";
+import type { IconBaseProps } from "react-icons";
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
-import type { IconBaseProps } from "react-icons";
 
 // Context to share schema definitions across components
 const SchemaContext = createContext<any>({});
@@ -179,7 +179,11 @@ const SchemaType = ({
             }}
           >
             <span className="flex items-end">
-              <span className="text-neutral-text group-hover:underline">
+              <span
+                className={`group-hover:underline${
+                  isErrorSchema || probableErrorSchema ? " text-red-600" : ""
+                }${name === "Array of object" ? " ml-4" : ""}`}
+              >
                 {refName}
               </span>
               {refSchema?.type && (
@@ -319,14 +323,12 @@ const SchemaType = ({
         }
       >
         <div className="flex items-center">
-          <div className="flex items-end gap-2">
+          <div className="flex items-end gap-4">
             {name && (
               <span
-                className={
-                  "group-hover:underline " +
-                  (isErrorSchema || hasErrorFields ? "text-red-600" : "") +
-                  (name === "Array of object" ? " ml-4" : "")
-                }
+                className={`group-hover:underline${
+                  isErrorSchema || hasErrorFields ? " text-red-600" : ""
+                }${name === "Array of object" ? " ml-4" : ""}`}
               >
                 {name}
               </span>
@@ -391,10 +393,9 @@ const SchemaType = ({
       </div>
       {/* Animated expandable content */}
       <div
-        className={
-          "transition-all duration-300 overflow-hidden " +
-          (isExpanded ? "opacity-100" : "opacity-0")
-        }
+        className={`transition-all duration-300 overflow-hidden ${
+          isExpanded ? "opacity-100" : "opacity-0"
+        }`}
       >
         {isExpanded && (
           <div className="pl-4">
@@ -566,6 +567,7 @@ const TabbedSchemaSection = ({
     <div>
       <div className="relative flex border-b-[0.5px] border-neutral-border mb-3">
         <button
+          type="button"
           ref={schemaTabRef}
           className={`px-4 py-1 font-medium cursor-pointer ${
             tab === "schema"
@@ -577,6 +579,7 @@ const TabbedSchemaSection = ({
           Schema
         </button>
         <button
+          type="button"
           ref={jsonTabRef}
           className={`px-4 py-1 font-medium cursor-pointer ${
             tab === "example"
@@ -802,7 +805,6 @@ const ApiReference = (data: any) => {
 
         setLoading(false);
       } catch (error) {
-        console.error("Error loading API schema:", error);
         setError("An error occurred while loading the API schema");
         setLoading(false);
       }
@@ -880,7 +882,7 @@ const ApiReference = (data: any) => {
                   ? "bg-[#FEF3C7] text-yellow-800"
                   : endpoint.method === "DELETE"
                   ? "bg-[#FEE2E2] text-red-800"
-                  : "bg-gray-50 "
+                  : "bg-gray-50"
               }`}
             >
               {endpoint.method}
@@ -1067,14 +1069,13 @@ const ApiReference = (data: any) => {
                           <div className="flex items-center w-full justify-between gap-2">
                             <div className="flex items-center gap-2">
                               <span
-                                className={
-                                  "px-2 py-0.5 rounded-md inline-block " +
-                                  (code.startsWith("2")
+                                className={`px-2 py-0.5 rounded-md inline-block ${
+                                  code.startsWith("2")
                                     ? "bg-[#B4EFD9] text-green-800 font-bold"
                                     : isErrorResponse
                                     ? "bg-red-100 text-red-800"
-                                    : "bg-gray-200 text-gray-800 font-tuner text-center")
-                                }
+                                    : "bg-gray-200 text-gray-800 font-tuner text-center"
+                                }`}
                               >
                                 {code}
                               </span>
