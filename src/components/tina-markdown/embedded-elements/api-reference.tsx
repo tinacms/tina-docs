@@ -1172,7 +1172,7 @@ const ApiReference = (data: any) => {
   };
 
   return (
-    <div className="api-reference my-40">
+    <div className="api-reference mb-40">
       <SchemaContext.Provider value={schemaDefinitions}>
         {selectedEndpoint ? (
           // Show only the selected endpoint
