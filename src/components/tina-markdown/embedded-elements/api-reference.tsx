@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext, createContext } from "react";
 import { client } from "@/tina/__generated__/client";
-import { MdOutlineAdd, MdOutlineRemove } from "react-icons/md";
 import { CodeBlock } from "@/components/tina-markdown/standard-elements/code-block/code-block";
+import { FaChevronRight } from "react-icons/fa";
+import type { IconBaseProps } from "react-icons";
 
 // Context to share schema definitions across components
 const SchemaContext = createContext<any>({});
@@ -117,6 +118,19 @@ const SchemaExample = ({ schema }: { schema: any }) => {
   );
 };
 
+// Wrapper component for the chevron icon
+const ChevronIcon = ({ isExpanded }: { isExpanded: boolean }) => {
+  const Icon = FaChevronRight as React.ComponentType<IconBaseProps>;
+  return (
+    <Icon
+      className={`text-neutral-text transition-transform duration-200 ${
+        isExpanded ? "rotate-90" : ""
+      }`}
+      style={{ width: "10px", height: "10px" }}
+    />
+  );
+};
+
 // Type rendering component for recursively displaying schema structures
 const SchemaType = ({
   schema,
@@ -171,14 +185,14 @@ const SchemaType = ({
               {refName}
             </span>
             {refSchema && refSchema.type && (
-              <span className="ml-2 text-xs font-mono text-neutral-text px-2 pb-0.5 rounded">
+              <span className="ml-2 text-xs font-mono text-neutral-text-secondary px-2 pb-0.5 rounded">
                 {refSchema.type}
               </span>
             )}
           </span>
           {showExampleButton && (
             <button
-              className="ml-4 text-xs text-neutral-text hover:underline focus:outline-none"
+              className="ml-4 text-xs text-neutral-text-secondary hover:underline focus:outline-none"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleExample();
@@ -188,9 +202,11 @@ const SchemaType = ({
               JSON Schema Example
             </button>
           )}
-          <span className="ml-auto flex items-center text-2xl text-neutral-text">
-            {isExpanded ? "−" : "+"}
-          </span>
+          {refSchema && (
+            <span className="ml-2 flex items-center">
+              <ChevronIcon isExpanded={isExpanded} />
+            </span>
+          )}
         </div>
         {isExpanded &&
           refSchema &&
@@ -253,12 +269,12 @@ const SchemaType = ({
       <div className={`${isNested ? "ml-4" : ""}`}>
         <div className="flex items-end">
           {name && <span className="text-neutral-text mr-2">{name}</span>}
-          <span className="text-xs font-mono text-neutral-text px-2  pb-0.5 rounded">
+          <span className="text-xs font-mono text-neutral-text-secondary px-2  pb-0.5 rounded">
             {type}
             {schema.format ? ` (${schema.format})` : ""}
           </span>
           {schema.enum && (
-            <span className="ml-2 py-0.5 text-xs text-neutral-text font-mono">
+            <span className="ml-2 py-0.5 text-xs text-neutral-text-secondary font-mono">
               enum: [{schema.enum.map((v: any) => JSON.stringify(v)).join(", ")}
               ]
             </span>
@@ -294,30 +310,36 @@ const SchemaType = ({
             : undefined
         }
       >
-        {name && (
-          <span
-            className={`mr-2  group-hover:underline ${
-              isErrorSchema || hasErrorFields ? "text-red-600" : ""
-            }`}
-          >
-            {name}
-          </span>
-        )}
-        {type === "array" && schema.items && (
-          <span className="text-neutral-text font-mono text-xs ml-2">
-            {schema.items && (schema.items.properties || schema.items.$ref)
-              ? "array [object]"
-              : `array [${
-                  schema.items && schema.items.type ? schema.items.type : "any"
-                }]`}
-          </span>
-        )}
-        {isExpandable && (
-          <span className="ml-auto flex items-center text-2xl text-neutral-text">
-            {isExpanded ? "−" : "+"}
-          </span>
-        )}
-        {/* For top-level arrays, show the button immediately after the type */}
+        <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            {name && (
+              <span
+                className={`group-hover:underline ${
+                  isErrorSchema || hasErrorFields ? "text-red-600" : ""
+                }`}
+              >
+                {name}
+              </span>
+            )}
+            {type === "array" && schema.items && (
+              <span className="text-neutral-text-secondary font-mono text-xs">
+                {schema.items && (schema.items.properties || schema.items.$ref)
+                  ? "array [object]"
+                  : `array [${
+                      schema.items && schema.items.type
+                        ? schema.items.type
+                        : "any"
+                    }]`}
+              </span>
+            )}
+            {type === "object" && (
+              <span className="text-neutral-text-secondary font-mono text-xs">
+                object
+              </span>
+            )}
+            {isExpandable && <ChevronIcon isExpanded={isExpanded} />}
+          </div>
+        </div>
         {showExampleButton && depth === 0 && type === "array" && (
           <button
             className="ml-2 text-xs text-neutral-text hover:underline focus:outline-none"
@@ -329,7 +351,6 @@ const SchemaType = ({
             JSON Schema Example
           </button>
         )}
-        {/* For top-level objects and $ref, keep button at the end as before */}
         {showExampleButton && depth === 0 && type !== "array" && (
           <button
             className="ml-auto text-xs text-neutral-text hover:underline focus:outline-none"
@@ -342,7 +363,6 @@ const SchemaType = ({
             JSON Schema Example
           </button>
         )}
-        {/* For nested, keep inline */}
         {showExampleButton && depth !== 0 && (
           <button
             className="ml-2 text-xs text-blue-600 hover:underline focus:outline-none"
@@ -355,104 +375,110 @@ const SchemaType = ({
           </button>
         )}
       </div>
-      {isExpanded && (
-        <div className=" pl-4">
-          {type === "object" && schema.properties && (
-            <div>
-              {Object.entries(schema.properties).map(
-                ([propName, propSchema]: [string, any]) => {
-                  // Determine type and format
-                  let propType =
-                    propSchema.type ||
-                    (propSchema.properties
-                      ? "object"
-                      : propSchema.items
-                      ? "array"
-                      : "unknown");
-                  let format = propSchema.format;
-                  let isArray = propType === "array";
-                  let itemType = isArray
-                    ? propSchema.items?.type ||
-                      (propSchema.items?.properties ? "object" : "any")
-                    : null;
-                  let enumVals = propSchema.enum;
-                  const isObject =
-                    propType === "object" && propSchema.properties;
-                  return (
-                    <React.Fragment key={propName}>
-                      <div className="flex items-center mb-1">
-                        <span className="font-mono text-neutral-text mr-2">
-                          {propName}
-                        </span>
-                        <span className="text-xs font-mono text-neutral-text px-2 py-0.5 rounded">
-                          {isArray ? `[${itemType}]` : propType}
-                          {format ? ` (${format})` : ""}
-                        </span>
-                        {enumVals && (
-                          <span className="ml-2 text-xs text-neutral-text">
-                            enum: [
-                            {enumVals
-                              .map((v: any) => JSON.stringify(v))
-                              .join(", ")}
-                            ]
+      {/* Animated expandable content */}
+      <div
+        className={`transition-all duration-300 overflow-hidden ${
+          isExpanded ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ maxHeight: isExpanded ? 1000 : 0 }}
+      >
+        {isExpanded && (
+          <div className="pl-4">
+            {type === "object" && schema.properties && (
+              <div>
+                {Object.entries(schema.properties).map(
+                  ([propName, propSchema]: [string, any]) => {
+                    // Determine type and format
+                    let propType =
+                      propSchema.type ||
+                      (propSchema.properties
+                        ? "object"
+                        : propSchema.items
+                        ? "array"
+                        : "unknown");
+                    let format = propSchema.format;
+                    let isArray = propType === "array";
+                    let itemType = isArray
+                      ? propSchema.items?.type ||
+                        (propSchema.items?.properties ? "object" : "any")
+                      : null;
+                    let enumVals = propSchema.enum;
+                    const isObject =
+                      propType === "object" && propSchema.properties;
+                    return (
+                      <React.Fragment key={propName}>
+                        <div className="flex items-center mb-1">
+                          <span className="font-mono text-neutral-text mr-2">
+                            {propName}
                           </span>
+                          <span className="text-xs font-mono text-neutral-text px-2 py-0.5 rounded">
+                            {isArray ? `[${itemType}]` : propType}
+                            {format ? ` (${format})` : ""}
+                          </span>
+                          {enumVals && (
+                            <span className="ml-2 text-xs text-neutral-text">
+                              enum: [
+                              {enumVals
+                                .map((v: any) => JSON.stringify(v))
+                                .join(", ")}
+                              ]
+                            </span>
+                          )}
+                        </div>
+                        {propSchema.description && (
+                          <div className="text-sm text-neutral-text-secondary ml-2 mb-1">
+                            {propSchema.description}
+                          </div>
                         )}
-                      </div>
-                      {propSchema.description && (
-                        <div className="text-sm text-neutral-text-secondary ml-2 mb-1">
-                          {propSchema.description}
-                        </div>
-                      )}
-                      {/* Recursively render nested object or array of objects */}
-                      {isObject && (
-                        <div className="ml-4">
-                          <SchemaType
-                            schema={propSchema}
-                            depth={depth + 1}
-                            isNested={true}
-                            name={propName}
-                          />
-                        </div>
-                      )}
-                    </React.Fragment>
-                  );
-                }
-              )}
-              {!Object.keys(schema.properties).length && (
-                <span className="text-gray-500 italic">Empty object</span>
-              )}
-            </div>
-          )}
-          {isArrayOfObjects && (
-            <div>
-              <SchemaType
-                schema={schema.items}
-                depth={depth + 1}
-                isNested={true}
-                isErrorSchema={isErrorSchema}
-              />
-            </div>
-          )}
-          {/* Additional properties */}
-          {schema.additionalProperties && (
-            <div className="mt-2">
-              <div className="text-gray-800 font-medium">
-                Additional properties:
+                        {isObject && (
+                          <div className="ml-4">
+                            <SchemaType
+                              schema={propSchema}
+                              depth={depth + 1}
+                              isNested={true}
+                              name={propName}
+                            />
+                          </div>
+                        )}
+                      </React.Fragment>
+                    );
+                  }
+                )}
+                {!Object.keys(schema.properties).length && (
+                  <span className="text-gray-500 italic">Empty object</span>
+                )}
               </div>
-              <SchemaType
-                schema={
-                  typeof schema.additionalProperties === "boolean"
-                    ? { type: "any" }
-                    : schema.additionalProperties
-                }
-                depth={depth + 1}
-                isNested={true}
-                isErrorSchema={isErrorSchema}
-              />
-            </div>
-          )}
-        </div>
-      )}
+            )}
+            {isArrayOfObjects && (
+              <div>
+                <SchemaType
+                  schema={schema.items}
+                  depth={depth + 1}
+                  isNested={true}
+                  isErrorSchema={isErrorSchema}
+                />
+              </div>
+            )}
+            {schema.additionalProperties && (
+              <div className="mt-2">
+                <div className="text-gray-800 font-medium">
+                  Additional properties:
+                </div>
+                <SchemaType
+                  schema={
+                    typeof schema.additionalProperties === "boolean"
+                      ? { type: "any" }
+                      : schema.additionalProperties
+                  }
+                  depth={depth + 1}
+                  isNested={true}
+                  isErrorSchema={isErrorSchema}
+                />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -850,26 +876,35 @@ const ApiReference = (data: any) => {
 
   // Render a single endpoint
   const renderEndpoint = (endpoint: Endpoint) => {
+    console.log(endpoint);
     return (
-      <div key={endpoint.path + endpoint.method} className="mb-12">
-        <div className={`py-4 flex items-center gap-4`}>
-          <span
-            className={`px-3 py-1 rounded-md text-sm shadow-sm font-bold ${
-              endpoint.method === "GET"
-                ? "bg-[#B4EFD9] text-green-800"
-                : endpoint.method === "POST"
-                ? "bg-[#B4DBFF] text-blue-800"
-                : endpoint.method === "PUT"
-                ? "bg-[#FEF3C7] text-yellow-800"
-                : endpoint.method === "DELETE"
-                ? "bg-[#FEE2E2] text-red-800"
-                : "bg-gray-50 "
-            }`}
-          >
-            {endpoint.method}
-          </span>
-          <span className="font-mono text-neutral-text text-sm brand-glass-gradient shadow-sm rounded-lg px-2 py-1 ">
-            {endpoint.path}
+      <div
+        key={endpoint.path + endpoint.method}
+        className="mb-12 bg-gradient-to-br from-white/40 to-white/70 p-2 rounded-lg shadow-sm"
+      >
+        <div className="flex flex-col gap-2 pb-6">
+          <div className={`flex items-center gap-4`}>
+            <span
+              className={`px-3 py-1 rounded-md text-sm shadow-sm font-bold ${
+                endpoint.method === "GET"
+                  ? "bg-[#B4EFD9] text-green-800"
+                  : endpoint.method === "POST"
+                  ? "bg-[#B4DBFF] text-blue-800"
+                  : endpoint.method === "PUT"
+                  ? "bg-[#FEF3C7] text-yellow-800"
+                  : endpoint.method === "DELETE"
+                  ? "bg-[#FEE2E2] text-red-800"
+                  : "bg-gray-50 "
+              }`}
+            >
+              {endpoint.method}
+            </span>
+            <span className="font-mono text-neutral-text text-sm brand-glass-gradient shadow-sm rounded-lg px-2 py-1 ">
+              {endpoint.path}
+            </span>
+          </div>
+          <span className="text-neutral-text-secondary text-sm">
+            {endpoint?.description}
           </span>
         </div>
 
@@ -880,8 +915,8 @@ const ApiReference = (data: any) => {
               <h4 className="text-2xl text-neutral-text  mb-3">
                 Path Parameters
               </h4>
-              <hr className="border-t border-gray-200 mb-4" />
-              <div className="space-y-4">
+
+              <div className="space-y-4 pl-3">
                 {endpoint.parameters.map((param: any, index: number) => (
                   <div key={index}>
                     <div className="flex items-center mb-2">
@@ -925,7 +960,7 @@ const ApiReference = (data: any) => {
                   </span>
                 )}
               </div>
-              <hr className="border-t border-gray-200 mb-4" />
+
               <div className="rounded-md p-3 brand-glass-gradient shadow-lg items-center">
                 {endpoint.requestBody.description && (
                   <p className="text-neutral-text">
@@ -963,9 +998,9 @@ const ApiReference = (data: any) => {
           )}
 
           {/* Responses section */}
-          <div className="mb-4">
+          <div className="mb-6">
             <h4 className="text-2xl text-neutral-text mb-3">Responses</h4>
-            <hr className="border-t border-gray-200 mb-4" />
+
             {(() => {
               const nonErrorResponses = Object.entries(
                 endpoint.responses || {}
@@ -995,10 +1030,7 @@ const ApiReference = (data: any) => {
                             (k) => k !== "description"
                           )));
                     return (
-                      <div
-                        key={code}
-                        className=" rounded-md overflow-hidden brand-glass-gradient shadow-md"
-                      >
+                      <div key={code} className=" overflow-hidden">
                         <div
                           className={`p-3  ${
                             hasExpandableContent ? "cursor-pointer" : ""
@@ -1037,19 +1069,25 @@ const ApiReference = (data: any) => {
                             </span>
                             {response.description && (
                               <span
-                                className={`ml-2
-                                   text-neutral-text`}
+                                className={`ml-2 text-neutral-text flex items-center gap-2`}
                               >
                                 {response.description}
+                                {hasExpandableContent && (
+                                  <ChevronIcon
+                                    isExpanded={
+                                      expandedResponses.get(responseKey) ||
+                                      false
+                                    }
+                                  />
+                                )}
                               </span>
                             )}
-                            {hasExpandableContent && (
-                              <span
-                                className="ml-auto text-2xl select-none pointer-events-none flex items-center text-neutral-text"
-                                style={{ minWidth: 28 }}
-                              >
-                                {expandedResponses.get(responseKey) ? "−" : "+"}
-                              </span>
+                            {!response.description && hasExpandableContent && (
+                              <ChevronIcon
+                                isExpanded={
+                                  expandedResponses.get(responseKey) || false
+                                }
+                              />
                             )}
                           </div>
                         </div>
@@ -1057,7 +1095,7 @@ const ApiReference = (data: any) => {
                         {/* Show schema details only when expanded */}
                         {hasExpandableContent &&
                           expandedResponses.get(responseKey) && (
-                            <div className="p-3">
+                            <div className="pb-3 px-3">
                               <SchemaContext.Provider value={schemaDefinitions}>
                                 <ResponseContent
                                   response={response}
@@ -1080,13 +1118,13 @@ const ApiReference = (data: any) => {
           ) && (
             <div className="mt-8">
               <h4 className="text-2xl text-neutral-text mb-3">Errors</h4>
-              <hr className="border-t border-gray-200 mb-4" />
-              <div className="space-y-4">
+
+              <div>
                 {Object.entries(endpoint.responses || {})
                   .filter(
                     ([code]) => code.startsWith("4") || code.startsWith("5")
                   )
-                  .map(([code, response]: [string, any]) => {
+                  .map(([code, response]: [string, any], index: number) => {
                     const isErrorResponse = true;
                     const responseKey = `${endpoint.method}-${endpoint.path}-${code}`;
                     const hasExpandableContent =
@@ -1099,12 +1137,9 @@ const ApiReference = (data: any) => {
                             (k) => k !== "description"
                           )));
                     return (
-                      <div
-                        key={code}
-                        className=" rounded-md overflow-hidden shadow-md"
-                      >
+                      <div key={code} className=" overflow-hidden ">
                         <div
-                          className={`p-3 brand-glass-gradient ${
+                          className={`p-3  ${
                             hasExpandableContent
                               ? "cursor-pointer hover:bg-opacity-80 transition-colors"
                               : ""
