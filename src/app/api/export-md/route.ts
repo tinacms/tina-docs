@@ -7,7 +7,7 @@ const isDev = process.env.NODE_ENV === "development";
 export async function POST(req: NextRequest) {
   const { content, filename } = await req.json();
 
-  // ✅ Use /tmp instead of /public for vercel
+  // Use /tmp instead of /public for vercel
   const dir = path.join(isDev ? "public" : "/tmp", "exports");
   const filePath = path.join(dir, filename);
 
