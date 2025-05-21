@@ -8,11 +8,15 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import copy from "copy-to-clipboard";
 import htmlToMd from "html-to-md";
-import { ChevronDown, Copy, FileCode } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { FaCommentDots } from "react-icons/fa";
-import { MdArrowDropDown, MdCheck, MdContentCopy } from "react-icons/md";
+import {
+  MdArrowDropDown,
+  MdCheck,
+  MdContentCopy,
+  MdFilePresent,
+} from "react-icons/md";
 import { SiOpenai } from "react-icons/si";
 
 interface CopyPageDropdownProps {
@@ -159,14 +163,16 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
         >
           {[
             {
-              icon: <Copy className="w-4 h-4 text-neutral-text-secondary" />,
+              icon: (
+                <MdContentCopy className="w-4 h-4 text-neutral-text-secondary" />
+              ),
               label: "Copy page",
               description: "Copy page as Markdown for LLMs",
               onClick: handleCopyPage,
             },
             {
               icon: (
-                <FileCode className="w-4 h-4 text-neutral-text-secondary" />
+                <MdFilePresent className="w-4 h-4 text-neutral-text-secondary" />
               ),
               label: "View as Markdown",
               description: "View this page as plain text",
