@@ -56,7 +56,6 @@ export const parseSwaggerJson = (jsonString: string): SwaggerParseResult => {
 
     // Check if it's a valid Swagger/OpenAPI document
     if (!swagger.paths) {
-      console.error("Invalid Swagger JSON: Missing paths object");
       return {
         endpoints: [],
         info: null,
@@ -70,11 +69,11 @@ export const parseSwaggerJson = (jsonString: string): SwaggerParseResult => {
     // Extract endpoints from the paths object
     const endpoints: SwaggerEndpoint[] = [];
 
-    Object.keys(swagger.paths).forEach((path) => {
+    for (const path of Object.keys(swagger.paths)) {
       const pathItem = swagger.paths[path];
 
       // Process each HTTP method in the path (GET, POST, PUT, DELETE, etc.)
-      Object.keys(pathItem).forEach((method) => {
+      for (const method of Object.keys(pathItem)) {
         const operation = pathItem[method];
 
         // Create an endpoint object with relevant information
@@ -93,8 +92,8 @@ export const parseSwaggerJson = (jsonString: string): SwaggerParseResult => {
         };
 
         endpoints.push(endpoint);
-      });
-    });
+      }
+    }
 
     return {
       endpoints,
@@ -103,7 +102,6 @@ export const parseSwaggerJson = (jsonString: string): SwaggerParseResult => {
       error: null,
     };
   } catch (error) {
-    console.error("Error parsing Swagger JSON:", error);
     return { endpoints: [], info: null, error: error.message };
   }
 };
@@ -121,8 +119,8 @@ const FileIcon = (props: React.SVGProps<SVGSVGElement>) => (
     className="feather feather-file"
     {...props}
   >
-    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-    <polyline points="13 2 13 9 20 9"></polyline>
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+    <polyline points="13 2 13 9 20 9" />
   </svg>
 );
 
@@ -139,11 +137,11 @@ const JsonFileIcon = (props: React.SVGProps<SVGSVGElement>) => (
     className="feather feather-file-text"
     {...props}
   >
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-    <polyline points="14 2 14 8 20 8"></polyline>
-    <line x1="16" y1="13" x2="8" y2="13"></line>
-    <line x1="16" y1="17" x2="8" y2="17"></line>
-    <polyline points="10 9 9 9 8 9"></polyline>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+    <polyline points="10 9 9 9 8 9" />
   </svg>
 );
 
@@ -159,10 +157,10 @@ const FilePlusIcon = (props: React.SVGProps<SVGSVGElement>) => (
     className="feather feather-file-plus"
     {...props}
   >
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-    <polyline points="14 2 14 8 20 8"></polyline>
-    <line x1="12" y1="18" x2="12" y2="12"></line>
-    <line x1="9" y1="15" x2="15" y2="15"></line>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="12" y1="18" x2="12" y2="12" />
+    <line x1="9" y1="15" x2="15" y2="15" />
   </svg>
 );
 
@@ -178,10 +176,10 @@ const TrashIcon = (props: React.SVGProps<SVGSVGElement>) => (
     className="feather feather-trash-2"
     {...props}
   >
-    <polyline points="3 6 5 6 21 6"></polyline>
-    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-    <line x1="10" y1="11" x2="10" y2="17"></line>
-    <line x1="14" y1="11" x2="14" y2="17"></line>
+    <polyline points="3 6 5 6 21 6" />
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    <line x1="10" y1="11" x2="10" y2="17" />
+    <line x1="14" y1="11" x2="14" y2="17" />
   </svg>
 );
 

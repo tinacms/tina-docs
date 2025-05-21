@@ -1,8 +1,9 @@
 import { type Collection, defineSchema } from "tinacms";
+import API_Schema_Collection from "./collections/API-schema";
 import docsCollection from "./collections/docs";
 import docsNavigationBarCollection from "./collections/navigation-bar";
 import { Settings } from "./collections/settings";
-import API_Schema_Collection from "./collections/API-schema";
+
 export const schema = defineSchema({
   collections: [
     docsCollection as Collection,

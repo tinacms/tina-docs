@@ -64,9 +64,9 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
       // Extract endpoints
       const endpoints: Endpoint[] = [];
       if (parsed.paths) {
-        Object.keys(parsed.paths).forEach((path) => {
+        for (const path of Object.keys(parsed.paths)) {
           const pathObj = parsed.paths[path];
-          Object.keys(pathObj).forEach((method) => {
+          for (const method of Object.keys(pathObj)) {
             const operation = pathObj[method];
             endpoints.push({
               path,
@@ -74,8 +74,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
               summary: operation.summary || `${method.toUpperCase()} ${path}`,
               operationId: operation.operationId,
             });
-          });
-        });
+          }
+        }
       }
 
       return {
@@ -85,7 +85,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
         endpoints,
       };
     } catch (error) {
-      console.error("Error parsing Swagger JSON:", error);
       return {
         title: "Error Parsing Schema",
         version: "Unknown",
@@ -113,7 +112,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           (s) => s.relativePath === schemaPath
         );
 
-        if (selectedSchema && selectedSchema.apiSchema) {
+        if (selectedSchema?.apiSchema) {
           const details = parseSwaggerJson(selectedSchema.apiSchema);
           setSchemaDetails(details);
         } else {
@@ -128,7 +127,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           }
         }
       } catch (error) {
-        console.error("Error fetching schema details:", error);
         setSchemaDetails(null);
       } finally {
         setLoadingDetails(false);
@@ -151,8 +149,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           // Convert API response into our simpler SchemaFile interface
           const schemaFiles: SchemaFile[] = [];
 
-          result.data.apiSchemaConnection.edges.forEach((edge) => {
-            if (edge && edge.node) {
+          for (const edge of result.data.apiSchemaConnection.edges) {
+            if (edge?.node) {
               schemaFiles.push({
                 id: edge.node.id,
                 relativePath: edge.node._sys.relativePath,
@@ -162,7 +160,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                 },
               });
             }
-          });
+          }
 
           setSchemas(schemaFiles);
         } else {
@@ -171,7 +169,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching schema files:", error);
         setLoading(false);
       }
     };
