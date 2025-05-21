@@ -166,14 +166,16 @@ const SchemaType = ({
             if (e.key === "Enter" || e.key === " ") setIsExpanded(!isExpanded);
           }}
         >
-          <span className={`font-mono text-neutral-text group-hover:underline`}>
-            {refName}
-          </span>
-          {refSchema && refSchema.type && (
-            <span className="ml-2 text-xs font-mono text-neutral-text px-2 py-0.5 rounded">
-              {refSchema.type}
+          <span className="flex items-end">
+            <span className="text-neutral-text group-hover:underline ">
+              {refName}
             </span>
-          )}
+            {refSchema && refSchema.type && (
+              <span className="ml-2 text-xs font-mono text-neutral-text px-2 pb-0.5 rounded">
+                {refSchema.type}
+              </span>
+            )}
+          </span>
           {showExampleButton && (
             <button
               className="ml-4 text-xs text-neutral-text hover:underline focus:outline-none"
@@ -249,11 +251,9 @@ const SchemaType = ({
   if (!isExpandable) {
     return (
       <div className={`${isNested ? "ml-4" : ""}`}>
-        <div className="flex items-center mb-1">
-          {name && (
-            <span className="font-mono text-neutral-text mr-2">{name}</span>
-          )}
-          <span className="text-xs font-mono text-neutral-text px-2 py-0.5 rounded">
+        <div className="flex items-end">
+          {name && <span className="text-neutral-text mr-2">{name}</span>}
+          <span className="text-xs font-mono text-neutral-text px-2  pb-0.5 rounded">
             {type}
             {schema.format ? ` (${schema.format})` : ""}
           </span>
@@ -264,6 +264,11 @@ const SchemaType = ({
             </span>
           )}
         </div>
+        {schema.description && (
+          <div className="text-sm text-neutral-text-secondary mb-2">
+            {schema.description}
+          </div>
+        )}
       </div>
     );
   }
@@ -291,7 +296,7 @@ const SchemaType = ({
       >
         {name && (
           <span
-            className={`mr-2 font-mono group-hover:underline ${
+            className={`mr-2  group-hover:underline ${
               isErrorSchema || hasErrorFields ? "text-red-600" : ""
             }`}
           >
@@ -351,7 +356,7 @@ const SchemaType = ({
         )}
       </div>
       {isExpanded && (
-        <div className="mt-1 pl-4">
+        <div className=" pl-4">
           {type === "object" && schema.properties && (
             <div>
               {Object.entries(schema.properties).map(
@@ -393,6 +398,11 @@ const SchemaType = ({
                           </span>
                         )}
                       </div>
+                      {propSchema.description && (
+                        <div className="text-sm text-neutral-text-secondary ml-2 mb-1">
+                          {propSchema.description}
+                        </div>
+                      )}
                       {/* Recursively render nested object or array of objects */}
                       {isObject && (
                         <div className="ml-4">
@@ -414,7 +424,7 @@ const SchemaType = ({
             </div>
           )}
           {isArrayOfObjects && (
-            <div className="mt-1">
+            <div>
               <SchemaType
                 schema={schema.items}
                 depth={depth + 1}
@@ -529,7 +539,9 @@ const TabbedSchemaSection = ({
         <button
           ref={jsonTabRef}
           className={`px-4 py-2 font-medium cursor-pointer ${
-            tab === "example" ? "text-brand-secondary" : "text-neutral-text-secondary"
+            tab === "example"
+              ? "text-brand-secondary"
+              : "text-neutral-text-secondary"
           }`}
           onClick={() => setTab("example")}
         >
@@ -842,7 +854,7 @@ const ApiReference = (data: any) => {
       <div key={endpoint.path + endpoint.method} className="mb-12">
         <div className={`py-4 flex items-center gap-4`}>
           <span
-            className={`px-3 py-1 rounded-md text-sm shadow-lg font-bold ${
+            className={`px-3 py-1 rounded-md text-sm shadow-sm font-bold ${
               endpoint.method === "GET"
                 ? "bg-[#B4EFD9] text-green-800"
                 : endpoint.method === "POST"
@@ -856,7 +868,7 @@ const ApiReference = (data: any) => {
           >
             {endpoint.method}
           </span>
-          <span className="font-mono text-neutral-text text-sm brand-glass-gradient shadow-lg rounded-lg px-2 py-1 ">
+          <span className="font-mono text-neutral-text text-sm brand-glass-gradient shadow-sm rounded-lg px-2 py-1 ">
             {endpoint.path}
           </span>
         </div>
@@ -865,7 +877,7 @@ const ApiReference = (data: any) => {
           {/* Parameters section - only show if there are non-body parameters */}
           {endpoint.parameters && endpoint.parameters.length > 0 && (
             <div className="mb-6">
-              <h4 className="text-2xl font-bold text-brand-primary mb-3">
+              <h4 className="text-2xl text-neutral-text  mb-3">
                 Path Parameters
               </h4>
               <hr className="border-t border-gray-200 mb-4" />
@@ -873,7 +885,7 @@ const ApiReference = (data: any) => {
                 {endpoint.parameters.map((param: any, index: number) => (
                   <div key={index}>
                     <div className="flex items-center mb-2">
-                      <span className="font-bold text-neutral-text mr-2">
+                      <span className="text-neutral-text mr-2">
                         {param.name}
                       </span>
                       <span className="mr-2 px-2 py-0.5 brand-glass-gradient shadow-sm font-mono text-xs text-neutral-text rounded-md">
@@ -890,7 +902,7 @@ const ApiReference = (data: any) => {
                     </div>
 
                     {param.description && (
-                      <p className="text-neutral-text mb-3 text-sm">
+                      <p className="text-neutral-text-secondary mb-3 text-sm">
                         {param.description}
                       </p>
                     )}
@@ -904,7 +916,7 @@ const ApiReference = (data: any) => {
           {endpoint.requestBody && (
             <div className="mb-6">
               <div className="flex items-center mb-3">
-                <h4 className="text-2xl text-brand-primary font-tuner mr-3">
+                <h4 className="text-2xl text-neutral-text mr-3">
                   Request Body
                 </h4>
                 {endpoint.requestBody.required && (
@@ -952,9 +964,7 @@ const ApiReference = (data: any) => {
 
           {/* Responses section */}
           <div className="mb-4">
-            <h4 className="text-2xl font-bold text-brand-primary mb-3">
-              Responses
-            </h4>
+            <h4 className="text-2xl text-neutral-text mb-3">Responses</h4>
             <hr className="border-t border-gray-200 mb-4" />
             {(() => {
               const nonErrorResponses = Object.entries(
@@ -964,7 +974,7 @@ const ApiReference = (data: any) => {
               );
               if (nonErrorResponses.length === 0) {
                 return (
-                  <div className="text-neutral-text italic">
+                  <div className="text-neutral-text-secondary text-sm">
                     No responses defined for this endpoint.
                   </div>
                 );
@@ -987,7 +997,7 @@ const ApiReference = (data: any) => {
                     return (
                       <div
                         key={code}
-                        className=" rounded-md overflow-hidden brand-glass-gradient shadow-lg"
+                        className=" rounded-md overflow-hidden brand-glass-gradient shadow-md"
                       >
                         <div
                           className={`p-3  ${
@@ -1047,7 +1057,7 @@ const ApiReference = (data: any) => {
                         {/* Show schema details only when expanded */}
                         {hasExpandableContent &&
                           expandedResponses.get(responseKey) && (
-                            <div className="px-5 py-3">
+                            <div className="p-3">
                               <SchemaContext.Provider value={schemaDefinitions}>
                                 <ResponseContent
                                   response={response}
@@ -1069,9 +1079,7 @@ const ApiReference = (data: any) => {
             ([code]) => code.startsWith("4") || code.startsWith("5")
           ) && (
             <div className="mt-8">
-              <h4 className="text-2xl font-bold text-brand-primary mb-3">
-                Errors
-              </h4>
+              <h4 className="text-2xl text-neutral-text mb-3">Errors</h4>
               <hr className="border-t border-gray-200 mb-4" />
               <div className="space-y-4">
                 {Object.entries(endpoint.responses || {})
@@ -1093,7 +1101,7 @@ const ApiReference = (data: any) => {
                     return (
                       <div
                         key={code}
-                        className=" rounded-md overflow-hidden shadow-lg"
+                        className=" rounded-md overflow-hidden shadow-md"
                       >
                         <div
                           className={`p-3 brand-glass-gradient ${
@@ -1164,7 +1172,7 @@ const ApiReference = (data: any) => {
   };
 
   return (
-    <div className="api-reference">
+    <div className="api-reference my-40">
       <SchemaContext.Provider value={schemaDefinitions}>
         {selectedEndpoint ? (
           // Show only the selected endpoint
