@@ -153,7 +153,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="z-50 mt-2 w-72 rounded-lg bg-white"
+          className="z-50 mt-2 w-72 rounded-lg bg-white shadow-md"
           sideOffset={0}
           align="end"
         >
