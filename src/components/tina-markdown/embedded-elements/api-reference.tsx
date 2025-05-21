@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, createContext } from "react";
 import { client } from "@/tina/__generated__/client";
 import { MdOutlineAdd, MdOutlineRemove } from "react-icons/md";
+import { CodeBlock } from "@/components/tina-markdown/standard-elements/code-block/code-block";
 
 // Context to share schema definitions across components
 const SchemaContext = createContext<any>({});
@@ -48,64 +49,64 @@ const resolveReference = (ref: string, definitions: any): any => {
   return result;
 };
 
+// Move example generation logic to a helper function
+const generateExample = (schema: any, definitions: any, depth = 0): any => {
+  if (depth > 3) return "...";
+  if (schema.$ref) {
+    const refSchema = resolveReference(schema.$ref, definitions);
+    if (refSchema) {
+      return generateExample(refSchema, definitions, depth);
+    }
+    return `<${schema.$ref.split("/").pop()}>`;
+  }
+  switch (schema.type) {
+    case "string":
+      return schema.example || schema.default || "string";
+    case "integer":
+    case "number":
+      return schema.example || schema.default || 0;
+    case "boolean":
+      return schema.example || schema.default || false;
+    case "array":
+      if (schema.items) {
+        const itemExample = generateExample(
+          schema.items,
+          definitions,
+          depth + 1
+        );
+        return [itemExample];
+      }
+      return [];
+    case "object":
+      if (schema.properties) {
+        const obj: any = {};
+        Object.entries(schema.properties).forEach(
+          ([key, prop]: [string, any]) => {
+            obj[key] = generateExample(prop, definitions, depth + 1);
+          }
+        );
+        return obj;
+      }
+      return {};
+    default:
+      if (schema.properties) {
+        const obj: any = {};
+        Object.entries(schema.properties).forEach(
+          ([key, prop]: [string, any]) => {
+            obj[key] = generateExample(prop, definitions, depth + 1);
+          }
+        );
+        return obj;
+      }
+      return null;
+  }
+};
+
 // Component to display an example value for a schema
 const SchemaExample = ({ schema }: { schema: any }) => {
   const definitions = useContext(SchemaContext);
 
-  const generateExample = (schema: any, depth = 0): any => {
-    if (depth > 3) return "..."; // Limit recursion depth
-
-    // Handle $ref
-    if (schema.$ref) {
-      const refSchema = resolveReference(schema.$ref, definitions);
-      if (refSchema) {
-        return generateExample(refSchema, depth);
-      }
-      return `<${schema.$ref.split("/").pop()}>`;
-    }
-
-    // Handle different types
-    switch (schema.type) {
-      case "string":
-        return schema.example || schema.default || "string";
-      case "integer":
-      case "number":
-        return schema.example || schema.default || 0;
-      case "boolean":
-        return schema.example || schema.default || false;
-      case "array":
-        if (schema.items) {
-          const itemExample = generateExample(schema.items, depth + 1);
-          return [itemExample];
-        }
-        return [];
-      case "object":
-        if (schema.properties) {
-          const obj: any = {};
-          Object.entries(schema.properties).forEach(
-            ([key, prop]: [string, any]) => {
-              obj[key] = generateExample(prop, depth + 1);
-            }
-          );
-          return obj;
-        }
-        return {};
-      default:
-        if (schema.properties) {
-          // Object without explicit type
-          const obj: any = {};
-          Object.entries(schema.properties).forEach(
-            ([key, prop]: [string, any]) => {
-              obj[key] = generateExample(prop, depth + 1);
-            }
-          );
-          return obj;
-        }
-        return null;
-    }
-  };
-
-  const example = generateExample(schema);
+  const example = generateExample(schema, definitions);
 
   return (
     <div className="mt-2 p-3 rounded-md">
@@ -154,7 +155,7 @@ const SchemaType = ({
         refName.toLowerCase().includes("exception"));
 
     return (
-      <div className={`${isNested ? "ml-4" : ""}`}>
+      <div className={`ml-4`}>
         <div
           className="flex items-center w-full cursor-pointer group"
           onClick={() => setIsExpanded(!isExpanded)}
@@ -231,12 +232,21 @@ const SchemaType = ({
       schema.properties.errors ||
       schema.properties.detail);
 
-  // If it's a simple type with no nested objects
-  if (
-    ["string", "number", "integer", "boolean"].includes(type) &&
-    !schema.properties &&
-    !schema.items
-  ) {
+  // Complex objects and arrays
+  const isArrayOfObjects =
+    type === "array" &&
+    schema.items &&
+    (schema.items.properties || schema.items.$ref);
+
+  const isExpandable =
+    schema.$ref ||
+    (type === "object" &&
+      schema.properties &&
+      Object.keys(schema.properties).length > 0) ||
+    isArrayOfObjects;
+
+  // If not expandable, show primitive type info
+  if (!isExpandable) {
     return (
       <div className={`${isNested ? "ml-4" : ""}`}>
         <div className="flex items-center mb-1">
@@ -258,62 +268,26 @@ const SchemaType = ({
     );
   }
 
-  // Complex objects and arrays
   return (
     <div className={`${isNested ? "ml-4" : ""}`}>
       <div
         className={`flex items-center w-full${
-          type === "array" &&
-          schema.items &&
-          !(schema.items.properties || schema.items.$ref)
-            ? ""
-            : " cursor-pointer group"
+          isExpandable ? " cursor-pointer group" : ""
         }`}
-        onClick={() => {
-          if (
-            type === "array" &&
-            schema.items &&
-            (schema.items.properties || schema.items.$ref)
-          ) {
-            setIsExpanded(!isExpanded);
-          } else if (type !== "array") {
-            setIsExpanded(!isExpanded);
-          }
-        }}
+        onClick={isExpandable ? () => setIsExpanded(!isExpanded) : undefined}
         aria-label={
-          type === "array" &&
-          schema.items &&
-          !(schema.items.properties || schema.items.$ref)
-            ? undefined
-            : isExpanded
-            ? "Collapse"
-            : "Expand"
+          isExpandable ? (isExpanded ? "Collapse" : "Expand") : undefined
         }
-        tabIndex={
-          type === "array" &&
-          schema.items &&
-          !(schema.items.properties || schema.items.$ref)
-            ? -1
-            : 0
+        tabIndex={isExpandable ? 0 : -1}
+        role={isExpandable ? "button" : undefined}
+        onKeyPress={
+          isExpandable
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ")
+                  setIsExpanded(!isExpanded);
+              }
+            : undefined
         }
-        role={
-          type === "array" &&
-          schema.items &&
-          !(schema.items.properties || schema.items.$ref)
-            ? undefined
-            : "button"
-        }
-        onKeyPress={(e) => {
-          if (
-            type === "array" &&
-            schema.items &&
-            (schema.items.properties || schema.items.$ref)
-          ) {
-            if (e.key === "Enter" || e.key === " ") setIsExpanded(!isExpanded);
-          } else if (type !== "array") {
-            if (e.key === "Enter" || e.key === " ") setIsExpanded(!isExpanded);
-          }
-        }}
       >
         {name && (
           <span
@@ -326,10 +300,16 @@ const SchemaType = ({
         )}
         {type === "array" && schema.items && (
           <span className="text-neutral-text font-mono text-xs ml-2">
-            {`${type} [${
-              schema.items.type ||
-              (schema.items.properties || schema.items.$ref ? "object" : "any")
-            }]`}
+            {schema.items && (schema.items.properties || schema.items.$ref)
+              ? "array [object]"
+              : `array [${
+                  schema.items && schema.items.type ? schema.items.type : "any"
+                }]`}
+          </span>
+        )}
+        {isExpandable && (
+          <span className="ml-auto flex items-center text-2xl text-neutral-text">
+            {isExpanded ? "−" : "+"}
           </span>
         )}
         {/* For top-level arrays, show the button immediately after the type */}
@@ -344,13 +324,6 @@ const SchemaType = ({
             JSON Schema Example
           </button>
         )}
-        {type === "array" &&
-          schema.items &&
-          (schema.items.properties || schema.items.$ref) && (
-            <span className="ml-auto flex items-center text-2xl text-neutral-text">
-              {isExpanded ? "−" : "+"}
-            </span>
-          )}
         {/* For top-level objects and $ref, keep button at the end as before */}
         {showExampleButton && depth === 0 && type !== "array" && (
           <button
@@ -377,7 +350,6 @@ const SchemaType = ({
           </button>
         )}
       </div>
-
       {isExpanded && (
         <div className="mt-1 pl-4">
           {type === "object" && schema.properties && (
@@ -401,8 +373,6 @@ const SchemaType = ({
                   let enumVals = propSchema.enum;
                   const isObject =
                     propType === "object" && propSchema.properties;
-                  const isArrayOfObjects =
-                    isArray && propSchema.items && propSchema.items.properties;
                   return (
                     <React.Fragment key={propName}>
                       <div className="flex items-center mb-1">
@@ -434,16 +404,6 @@ const SchemaType = ({
                           />
                         </div>
                       )}
-                      {isArrayOfObjects && (
-                        <div className="ml-4">
-                          <SchemaType
-                            schema={propSchema.items}
-                            depth={depth + 1}
-                            isNested={true}
-                            name={propName}
-                          />
-                        </div>
-                      )}
                     </React.Fragment>
                   );
                 }
@@ -453,20 +413,16 @@ const SchemaType = ({
               )}
             </div>
           )}
-
-          {type === "array" &&
-            schema.items &&
-            (schema.items.properties || schema.items.$ref) && (
-              <div className="mt-1">
-                <SchemaType
-                  schema={schema.items}
-                  depth={depth + 1}
-                  isNested={true}
-                  isErrorSchema={isErrorSchema}
-                />
-              </div>
-            )}
-
+          {isArrayOfObjects && (
+            <div className="mt-1">
+              <SchemaType
+                schema={schema.items}
+                depth={depth + 1}
+                isNested={true}
+                isErrorSchema={isErrorSchema}
+              />
+            </div>
+          )}
           {/* Additional properties */}
           {schema.additionalProperties && (
             <div className="mt-2">
@@ -531,7 +487,7 @@ const SchemaSection = ({
   );
 };
 
-// Add TabbedSchemaSection for top-level objects
+// Update TabbedSchemaSection to use CodeBlock for the Example tab
 const TabbedSchemaSection = ({
   schema,
   title,
@@ -542,30 +498,47 @@ const TabbedSchemaSection = ({
   isErrorSchema?: boolean;
 }) => {
   const [tab, setTab] = useState<"schema" | "example">("schema");
+  const definitions = useContext(SchemaContext);
+  const example = generateExample(schema, definitions);
+  const schemaTabRef = React.useRef<HTMLButtonElement>(null);
+  const jsonTabRef = React.useRef<HTMLButtonElement>(null);
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+
+  useEffect(() => {
+    const activeRef = tab === "schema" ? schemaTabRef : jsonTabRef;
+    if (activeRef.current) {
+      const { offsetLeft, offsetWidth } = activeRef.current;
+      setIndicatorStyle({ left: offsetLeft, width: offsetWidth });
+    }
+  }, [tab]);
 
   return (
     <div>
-      <div className="flex border-b mb-2">
+      <div className="relative flex border-b-[0.5px] border-neutral-border mb-3">
         <button
-          className={`px-4 py-2 font-medium ${
+          ref={schemaTabRef}
+          className={`px-4 py-2 font-medium cursor-pointer ${
             tab === "schema"
-              ? "border-b-2 border-blue-500 text-blue-700"
-              : "text-gray-500"
+              ? "text-brand-secondary"
+              : "text-neutral-text-secondary"
           }`}
           onClick={() => setTab("schema")}
         >
           Schema
         </button>
         <button
-          className={`px-4 py-2 font-medium ${
-            tab === "example"
-              ? "border-b-2 border-blue-500 text-blue-700"
-              : "text-gray-500"
+          ref={jsonTabRef}
+          className={`px-4 py-2 font-medium cursor-pointer ${
+            tab === "example" ? "text-brand-secondary" : "text-neutral-text-secondary"
           }`}
           onClick={() => setTab("example")}
         >
-          Example
+          JSON
         </button>
+        <div
+          className="absolute bottom-0 h-[0.5px] bg-brand-secondary transition-all duration-200"
+          style={{ left: indicatorStyle.left, width: indicatorStyle.width }}
+        />
       </div>
       {tab === "schema" ? (
         <SchemaType
@@ -574,7 +547,7 @@ const TabbedSchemaSection = ({
           isErrorSchema={isErrorSchema}
         />
       ) : (
-        <SchemaExample schema={schema} />
+        <CodeBlock value={JSON.stringify(example, null, 2)} lang="json" />
       )}
     </div>
   );
@@ -1074,7 +1047,7 @@ const ApiReference = (data: any) => {
                         {/* Show schema details only when expanded */}
                         {hasExpandableContent &&
                           expandedResponses.get(responseKey) && (
-                            <div className="p-5">
+                            <div className="px-5 py-3">
                               <SchemaContext.Provider value={schemaDefinitions}>
                                 <ResponseContent
                                   response={response}
@@ -1192,15 +1165,6 @@ const ApiReference = (data: any) => {
 
   return (
     <div className="api-reference">
-      <div className="mb-6">
-        <h2 className="text-lg mb-1">{schemaDetails.title}</h2>
-        {schemaDetails.version && (
-          <div className="text-sm text-gray-500">
-            API Version: {schemaDetails.version}
-          </div>
-        )}
-      </div>
-
       <SchemaContext.Provider value={schemaDefinitions}>
         {selectedEndpoint ? (
           // Show only the selected endpoint
