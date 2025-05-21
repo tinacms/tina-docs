@@ -182,7 +182,7 @@ const SchemaType = ({
           }}
         >
           <span className="flex items-end">
-            <span className="ml-4 text-neutral-text group-hover:underline ">
+            <span className="text-neutral-text group-hover:underline ">
               {refName}
             </span>
             {refSchema && refSchema.type && (
@@ -269,7 +269,15 @@ const SchemaType = ({
     return (
       <div className={`${isNested ? "ml-4" : ""}`}>
         <div className="flex items-end">
-          {name && <span className="text-neutral-text mr-2">{name}</span>}
+          {name && (
+            <span
+              className={`text-neutral-text mr-2${
+                name === "Array of object" ? " ml-4" : ""
+              }`}
+            >
+              {name}
+            </span>
+          )}
           <span className="text-xs font-mono text-neutral-text-secondary px-2  pb-0.5 rounded">
             {type}
             {schema.format ? ` (${schema.format})` : ""}
@@ -315,9 +323,9 @@ const SchemaType = ({
           <div className="flex items-end gap-2">
             {name && (
               <span
-                className={`ml-4 group-hover:underline ${
+                className={`group-hover:underline ${
                   isErrorSchema || hasErrorFields ? "text-red-600" : ""
-                }`}
+                }${name === "Array of object" ? " ml-4" : ""}`}
               >
                 {name}
               </span>
@@ -692,7 +700,7 @@ const RequestBodyDropdown = ({
     <div className="relative inline-block text-left">
       <button
         type="button"
-        className="border-[0.25px] border-neutral-border rounded px-2 text-sm bg-white hover:bg-gray-50  min-w-[100px] flex items-center justify-between gap-2"
+        className="border-[0.25px] border-neutral-border rounded px-2 text-sm text-neutral-text-secondary bg-neutral-background min-w-[100px] flex items-center justify-between gap-2"
         onClick={(e) => {
           e.stopPropagation();
           setOpen((o) => !o);
@@ -1060,7 +1068,6 @@ const ApiReference = (data: any) => {
                     showExampleButton={false}
                     isErrorSchema={false}
                     name={(() => {
-                      console.log("the reqBody", endpoint.requestBody);
                       const schema = endpoint.requestBody.content
                         ? (
                             Object.values(
@@ -1069,12 +1076,6 @@ const ApiReference = (data: any) => {
                           ).schema
                         : endpoint.requestBody.schema;
                       if (schema?.type === "array") {
-                        if (
-                          schema.items?.type === "object" ||
-                          schema.items?.properties
-                        ) {
-                          return "Array of object";
-                        }
                         return `Array of object`;
                       }
                       return undefined;

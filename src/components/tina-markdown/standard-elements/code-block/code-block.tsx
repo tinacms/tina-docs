@@ -7,6 +7,7 @@ import {
   transformerNotationHighlight,
 } from "@shikijs/transformers";
 import { FaCheck } from "react-icons/fa";
+import { MdOutlineContentCopy } from "react-icons/md";
 export function CodeBlock({
   value,
   lang = "ts",
@@ -74,7 +75,7 @@ export function CodeBlock({
           }}
           className="px-2 py-1 text-[#d6deeb] rounded transition cursor-pointer flex items-center gap-1"
         >
-          {isCopied ? <FaCheck size={12} /> : "Copy"}
+          {isCopied ? <FaCheck size={12} /> : <MdOutlineContentCopy/>}
         </button>
       </div>
 
