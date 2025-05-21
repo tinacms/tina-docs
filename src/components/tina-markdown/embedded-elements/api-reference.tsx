@@ -166,7 +166,7 @@ const SchemaType = ({
         refName.toLowerCase().includes("exception"));
 
     return (
-      <div className={`ml-4`}>
+      <div className="ml-4">
         <div className="ml-4">
           <button
             type="button"
@@ -871,7 +871,7 @@ const ApiReference = (data: any) => {
         className="mb-12 bg-gradient-to-br from-white/40 to-white/70 p-4 rounded-lg shadow-sm"
       >
         <div className="flex flex-col gap-2 pb-6">
-          <div className={`flex items-center gap-4`}>
+          <div className="flex items-center gap-4">
             <span
               className={`px-3 py-1 rounded-md text-sm shadow-sm font-bold ${
                 endpoint.method === "GET"
