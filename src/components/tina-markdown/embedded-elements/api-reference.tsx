@@ -167,43 +167,46 @@ const SchemaType = ({
 
     return (
       <div className={`ml-4`}>
-        <div
-          className="flex items-center w-full cursor-pointer group"
-          onClick={() => setIsExpanded(!isExpanded)}
-          aria-label={isExpanded ? "Collapse" : "Expand"}
-          tabIndex={0}
-          role="button"
-          onKeyPress={(e) => {
-            if (e.key === "Enter" || e.key === " ") setIsExpanded(!isExpanded);
-          }}
-        >
-          <span className="flex items-end">
-            <span className="text-neutral-text group-hover:underline ">
-              {refName}
+        <div className="ml-4">
+          <button
+            type="button"
+            className="flex items-center w-full cursor-pointer group"
+            onClick={() => setIsExpanded(!isExpanded)}
+            aria-label={isExpanded ? "Collapse" : "Expand"}
+            onKeyPress={(e) => {
+              if (e.key === "Enter" || e.key === " ")
+                setIsExpanded(!isExpanded);
+            }}
+          >
+            <span className="flex items-end">
+              <span className="text-neutral-text group-hover:underline">
+                {refName}
+              </span>
+              {refSchema?.type && (
+                <span className="ml-2 text-xs font-mono text-neutral-text-secondary px-2 pb-0.5 rounded">
+                  {refSchema.type}
+                </span>
+              )}
             </span>
-            {refSchema?.type && (
-              <span className="ml-2 text-xs font-mono text-neutral-text-secondary px-2 pb-0.5 rounded">
-                {refSchema.type}
+            {showExampleButton && (
+              <button
+                type="button"
+                className="ml-4 text-xs text-neutral-text-secondary hover:underline"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleExample();
+                }}
+                tabIndex={-1}
+              >
+                JSON Schema Example
+              </button>
+            )}
+            {refSchema && (
+              <span className="ml-2 flex items-center">
+                <ChevronIcon isExpanded={isExpanded} />
               </span>
             )}
-          </span>
-          {showExampleButton && (
-            <button
-              className="ml-4 text-xs text-neutral-text-secondary hover:underline"
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleExample();
-              }}
-              tabIndex={-1}
-            >
-              JSON Schema Example
-            </button>
-          )}
-          {refSchema && (
-            <span className="ml-2 flex items-center">
-              <ChevronIcon isExpanded={isExpanded} />
-            </span>
-          )}
+          </button>
         </div>
         {isExpanded &&
           refSchema &&
@@ -234,7 +237,7 @@ const SchemaType = ({
   }
 
   // Get type or infer it from properties
-  let type =
+  const type =
     schema.type ||
     (schema.properties ? "object" : schema.items ? "array" : "unknown");
 
@@ -319,9 +322,11 @@ const SchemaType = ({
           <div className="flex items-end gap-2">
             {name && (
               <span
-                className={`group-hover:underline ${
-                  isErrorSchema || hasErrorFields ? "text-red-600" : ""
-                }${name === "Array of object" ? " ml-4" : ""}`}
+                className={
+                  "group-hover:underline " +
+                  (isErrorSchema || hasErrorFields ? "text-red-600" : "") +
+                  (name === "Array of object" ? " ml-4" : "")
+                }
               >
                 {name}
               </span>
@@ -348,6 +353,7 @@ const SchemaType = ({
         </div>
         {showExampleButton && depth === 0 && type === "array" && (
           <button
+            type="button"
             className="ml-2 text-xs text-neutral-text hover:underline focus:outline-none"
             onClick={(e) => {
               e.stopPropagation();
@@ -359,6 +365,7 @@ const SchemaType = ({
         )}
         {showExampleButton && depth === 0 && type !== "array" && (
           <button
+            type="button"
             className="ml-auto text-xs text-neutral-text hover:underline focus:outline-none"
             onClick={(e) => {
               e.stopPropagation();
@@ -371,6 +378,7 @@ const SchemaType = ({
         )}
         {showExampleButton && depth !== 0 && (
           <button
+            type="button"
             className="ml-2 text-xs text-blue-600 hover:underline focus:outline-none"
             onClick={(e) => {
               e.stopPropagation();
@@ -383,10 +391,10 @@ const SchemaType = ({
       </div>
       {/* Animated expandable content */}
       <div
-        className={`transition-all duration-300 overflow-hidden ${
-          isExpanded ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ maxHeight: isExpanded ? 1000 : 0 }}
+        className={
+          "transition-all duration-300 overflow-hidden " +
+          (isExpanded ? "opacity-100" : "opacity-0")
+        }
       >
         {isExpanded && (
           <div className="pl-4">
@@ -395,20 +403,20 @@ const SchemaType = ({
                 {Object.entries(schema.properties).map(
                   ([propName, propSchema]: [string, any]) => {
                     // Determine type and format
-                    let propType =
+                    const propType =
                       propSchema.type ||
                       (propSchema.properties
                         ? "object"
                         : propSchema.items
                         ? "array"
                         : "unknown");
-                    let format = propSchema.format;
-                    let isArray = propType === "array";
-                    let itemType = isArray
+                    const format = propSchema.format;
+                    const isArray = propType === "array";
+                    const itemType = isArray
                       ? propSchema.items?.type ||
                         (propSchema.items?.properties ? "object" : "any")
                       : null;
-                    let enumVals = propSchema.enum;
+                    const enumVals = propSchema.enum;
                     const isObject =
                       propType === "object" && propSchema.properties;
                     return (
@@ -712,18 +720,17 @@ const ApiReference = (data: any) => {
           definitions: schemaJson.definitions || {},
           components: schemaJson.components || {},
           // For OpenAPI 3.0
-          schemas:
-            (schemaJson.components && schemaJson.components.schemas) || {},
+          schemas: schemaJson.components?.schemas || {},
         };
         setSchemaDefinitions(definitions);
 
         // Process the schema to extract endpoints
         const endpoints: Endpoint[] = [];
         if (schemaJson.paths) {
-          Object.keys(schemaJson.paths).forEach((path) => {
+          for (const path of Object.keys(schemaJson.paths)) {
             const pathObj = schemaJson.paths[path];
-            Object.keys(pathObj).forEach((method) => {
-              if (method === "parameters") return; // Skip path-level parameters
+            for (const method of Object.keys(pathObj)) {
+              if (method === "parameters") continue; // Skip path-level parameters
 
               const operation = pathObj[method];
 
@@ -769,8 +776,8 @@ const ApiReference = (data: any) => {
                 tags: operation.tags,
                 security: operation.security,
               });
-            });
-          });
+            }
+          }
         }
 
         // Set the schema details
@@ -808,15 +815,14 @@ const ApiReference = (data: any) => {
   useEffect(() => {
     if (schemaDetails?.endpoints) {
       const initialExpandedState = new Map();
-      schemaDetails.endpoints.forEach((endpoint) => {
+      for (const endpoint of schemaDetails.endpoints) {
         if (endpoint.responses) {
-          Object.keys(endpoint.responses).forEach((code) => {
-            // Create a unique key for each endpoint-code pair
+          for (const code of Object.keys(endpoint.responses)) {
             const key = `${endpoint.method}-${endpoint.path}-${code}`;
             initialExpandedState.set(key, false);
-          });
+          }
         }
-      });
+      }
       setExpandedResponses(initialExpandedState);
     }
   }, [schemaDetails]);
@@ -826,10 +832,10 @@ const ApiReference = (data: any) => {
       <div className="p-4 border border-gray-200 rounded-md">
         <div className="animate-pulse flex space-x-4">
           <div className="flex-1 space-y-4 py-1">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-3/4" />
             <div className="space-y-2">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+              <div className="h-4 bg-gray-200 rounded" />
+              <div className="h-4 bg-gray-200 rounded w-5/6" />
             </div>
           </div>
         </div>
@@ -965,7 +971,7 @@ const ApiReference = (data: any) => {
                           ).schema
                         : endpoint.requestBody.schema;
                       if (schema?.type === "array") {
-                        return `Array of object`;
+                        return "Array of object";
                       }
                       return undefined;
                     })()}
@@ -1061,20 +1067,19 @@ const ApiReference = (data: any) => {
                           <div className="flex items-center w-full justify-between gap-2">
                             <div className="flex items-center gap-2">
                               <span
-                                className={`px-2 py-0.5 rounded-md inline-block ${
-                                  code.startsWith("2")
+                                className={
+                                  "px-2 py-0.5 rounded-md inline-block " +
+                                  (code.startsWith("2")
                                     ? "bg-[#B4EFD9] text-green-800 font-bold"
                                     : isErrorResponse
                                     ? "bg-red-100 text-red-800"
-                                    : "bg-gray-200 text-gray-800 font-tuner text-center"
-                                }`}
+                                    : "bg-gray-200 text-gray-800 font-tuner text-center")
+                                }
                               >
                                 {code}
                               </span>
                               {response.description && (
-                                <span
-                                  className={`ml-2 text-neutral-text flex items-center gap-2`}
-                                >
+                                <span className="ml-2 text-neutral-text flex items-center gap-2">
                                   {response.description}
                                 </span>
                               )}

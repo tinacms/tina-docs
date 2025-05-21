@@ -356,7 +356,6 @@ export const JsonFileUploadComponent = ({ input, field }: TinaFieldProps) => {
         setLoading(false);
       }
     } catch (error) {
-      console.error("Error handling file:", error);
       setLoading(false);
     }
   };
