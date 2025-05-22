@@ -409,8 +409,8 @@ const SchemaType = ({
                       (propSchema.properties
                         ? "object"
                         : propSchema.items
-                          ? "array"
-                          : "unknown");
+                        ? "array"
+                        : "unknown");
                     const format = propSchema.format;
                     const isArray = propType === "array";
                     const itemType = isArray
@@ -679,6 +679,16 @@ const ApiReference = (data: any) => {
     Record<string, "schema" | "example">
   >({});
   const [openDropdownKey, setOpenDropdownKey] = useState<string | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!loading && schemaDetails) {
+      // Force a reflow to ensure the animation triggers
+      requestAnimationFrame(() => {
+        setIsVisible(true);
+      });
+    }
+  }, [loading, schemaDetails]);
 
   useEffect(() => {
     const fetchAndParseSchema = async () => {
@@ -831,7 +841,7 @@ const ApiReference = (data: any) => {
 
   if (loading) {
     return (
-      <div className="p-4 border border-gray-200 rounded-md">
+      <div className="p-4">
         <div className="animate-pulse flex space-x-4">
           <div className="flex-1 space-y-4 py-1">
             <div className="h-4 bg-gray-200 rounded w-3/4" />
@@ -847,7 +857,7 @@ const ApiReference = (data: any) => {
 
   if (error) {
     return (
-      <div className="p-4 border border-red-200 bg-red-50 rounded-md text-red-700">
+      <div className="p-4 bg-red-50 rounded-md text-red-700">
         <h3 className="font-medium">Error</h3>
         <p>{error}</p>
       </div>
@@ -856,7 +866,7 @@ const ApiReference = (data: any) => {
 
   if (!schemaDetails) {
     return (
-      <div className="p-4 border border-yellow-200 bg-yellow-50 rounded-md text-yellow-700">
+      <div className="p-4 bg-yellow-50 rounded-md text-yellow-700">
         <h3 className="font-medium">No API Schema</h3>
         <p>Could not load API schema details.</p>
       </div>
@@ -877,12 +887,12 @@ const ApiReference = (data: any) => {
                 endpoint.method === "GET"
                   ? "bg-[#B4EFD9] text-green-800"
                   : endpoint.method === "POST"
-                    ? "bg-[#B4DBFF] text-blue-800"
-                    : endpoint.method === "PUT"
-                      ? "bg-[#FEF3C7] text-yellow-800"
-                      : endpoint.method === "DELETE"
-                        ? "bg-[#FEE2E2] text-red-800"
-                        : "bg-gray-50"
+                  ? "bg-[#B4DBFF] text-blue-800"
+                  : endpoint.method === "PUT"
+                  ? "bg-[#FEF3C7] text-yellow-800"
+                  : endpoint.method === "DELETE"
+                  ? "bg-[#FEE2E2] text-red-800"
+                  : "bg-gray-50"
               }`}
             >
               {endpoint.method}
@@ -1073,8 +1083,8 @@ const ApiReference = (data: any) => {
                                   code.startsWith("2")
                                     ? "bg-[#B4EFD9] text-green-800 font-bold"
                                     : isErrorResponse
-                                      ? "bg-red-100 text-red-800"
-                                      : "bg-gray-200 text-gray-800 font-tuner text-center"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-gray-200 text-gray-800 font-tuner text-center"
                                 }`}
                               >
                                 {code}
@@ -1326,7 +1336,11 @@ const ApiReference = (data: any) => {
   };
 
   return (
-    <div className="api-reference mb-40">
+    <div
+      className={`api-reference mb-40 transform transition-all duration-700 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+      }`}
+    >
       <SchemaContext.Provider value={schemaDefinitions}>
         {selectedEndpoint ? (
           // Show only the selected endpoint
