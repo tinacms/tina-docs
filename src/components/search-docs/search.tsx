@@ -60,10 +60,8 @@ export function Search({ className }: { className?: string }) {
             const words = textToSearch.match(/\w+/g) || [];
 
             const matchFound = searchTerms.every((term) =>
-              words.some((word) => word.includes(term))
+              words.some((word: string) => word.includes(term))
             );
-
-            if (!matchFound) return null;
 
             if (!matchFound) return null;
 
