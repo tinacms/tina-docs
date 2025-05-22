@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface SearchResult {
   url: string;
   title: string;
@@ -32,7 +34,7 @@ export function SearchResults({
     return (
       <div className={searchResultsContainer}>
         {results.map((result, index) => (
-          <a
+          <Link
             key={index}
             href={result.url}
             className="block p-2 border-b-1 border-b-gray-200 last:border-b-0 group"
@@ -47,7 +49,7 @@ export function SearchResults({
                 __html: result.excerpt || "",
               }}
             />
-          </a>
+          </Link>
         ))}
       </div>
     );

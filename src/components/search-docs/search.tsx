@@ -52,20 +52,16 @@ export function Search({ className }: { className?: string }) {
           search.results.map(async (result: any) => {
             const data = await result.data();
 
-            const searchTerm = value.toLowerCase();
+            const searchTerms = value.toLowerCase().match(/\w+/g) || [];
             const textToSearch = `${data.meta.title || ""} ${
               data.excerpt
             }`.toLowerCase();
 
             const words = textToSearch.match(/\w+/g) || [];
 
-            const matchFound = words.some((word) => {
-              const index = (word as string).indexOf(searchTerm);
-              return (
-                index !== -1 &&
-                (word as string).slice(index).startsWith(searchTerm)
-              );
-            });
+            const matchFound = searchTerms.every((term) =>
+              words.some((word: string) => word.includes(term))
+            );
 
             if (!matchFound) return null;
 
