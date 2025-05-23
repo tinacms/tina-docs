@@ -9,7 +9,7 @@ export const NavigationSideBar = ({
   tableOfContents: any;
 }) => {
   return (
-    <div className="w-full h-full rounded-2xl brand-glass-gradient shadow-xl">
+    <div className="w-full h-full rounded-2xl brand-glass-gradient border border-neutral-border-subtle shadow-xl">
       <div className="flex-col pl-6 items-center">
         <Title title={tableOfContents?.title} />
         <LightDarkSwitch />

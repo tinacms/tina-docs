@@ -19,7 +19,7 @@ export default function RootLayout({
       <body>
         <AdminLink />
         <TailwindIndicator />
-        <div className="font-sans flex min-h-screen flex-col brand-background-gradient">
+        <div className="font-sans flex min-h-screen flex-col bg-background-color">
           <div className="flex flex-1 flex-col items-center">{children}</div>
         </div>
       </body>

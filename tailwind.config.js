@@ -24,12 +24,15 @@ module.exports = {
         "brand-primary": "var(--brand-primary)",
         "brand-primary-hover": "var(--brand-primary-hover)",
         "brand-primary-light": "var(--brand-primary-light)",
-        "brand-primary-dark": "var(--brand-primary-dark)",
+        "brand-primary-text": "var(--brand-primary-text)",
+        "brand-primary-contrast": "var(--brand-primary-contrast)",
 
         "brand-secondary": "var(--brand-secondary)",
         "brand-secondary-hover": "var(--brand-secondary-hover)",
         "brand-secondary-light": "var(--brand-secondary-light)",
-        "brand-secondary-dark": "var(--brand-secondary-dark)",
+        "brand-secondary-text": "var(--brand-secondary-text)",
+        "brand-secondary-contrast": "var(--brand-secondary-contrast)",
+
         "brand-secondary-gradient-start":
           "var(--brand-secondary-gradient-start)",
         "brand-secondary-gradient-end": "var(--brand-secondary-gradient-end)",
@@ -37,7 +40,9 @@ module.exports = {
         "brand-tertiary": "var(--brand-tertiary)",
         "brand-tertiary-hover": "var(--brand-tertiary-hover)",
         "brand-tertiary-light": "var(--brand-tertiary-light)",
-        "brand-tertiary-dark": "var(--brand-tertiary-dark)",
+        "brand-tertiary-text": "var(--brand-tertiary-text)",
+        "brand-tertiary-contrast": "var(--brand-tertiary-contrast)",
+
         "brand-tertiary-gradient-start": "var(--brand-tertiary-gradient-start)",
         "brand-tertiary-gradient-end": "var(--brand-tertiary-gradient-end)",
 
@@ -49,6 +54,8 @@ module.exports = {
         "background-primary-gradient-end":
           "var(--background-primary-gradient-end)",
 
+        "background-color": "var(--background-color)",
+
         // Neutral system
         "neutral-background": "var(--neutral-background)",
         "neutral-surface": "var(--neutral-surface)",
@@ -56,6 +63,7 @@ module.exports = {
         "neutral-text": "var(--neutral-text)",
         "neutral-text-secondary": "var(--neutral-text-secondary)",
         "neutral-border": "var(--neutral-border)",
+        "neutral-border-subtle": "var(--neutral-border-subtle)",
       },
     },
     fontFamily: {
