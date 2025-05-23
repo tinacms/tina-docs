@@ -102,26 +102,6 @@ export default async function DocsLayout({
           </div>
         </div>
       </nav>
-      <div className="w-full grid grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[25%_75%] gap-4 p-4">
-        {/* DESKTOP NAVIGATION SIDEBAR */}
-        <aside className="sticky top-4 hidden md:block mr-4 h-[calc(100vh-2rem)]">
-          <NavigationSideBar tableOfContents={navigationDocsData.data} />
-        </aside>
-        {/* CONTENT COLUMN */}
-        <main className="">
-          {/* MOBILE NAVIGATION DROPDOWN */}
-          <div className="block md:hidden">
-            <div className="relative">
-              <NavigationDropdown tocData={navigationDocsData.data} />
-            </div>
-          </div>
-
-          <Breadcrumbs navItems={navigationDocsData.data} />
-          <div data-pagefind-body id="doc-content">
-            {children}
-          </div>
-        </main>
-      </div>
     </div>
   );
 }
