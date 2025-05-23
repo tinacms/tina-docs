@@ -1,15 +1,14 @@
-import '@/styles/global.css'
-import AdminLink from '@/src/components/ui/admin-link'
-import { TailwindIndicator } from '@/components/ui/tailwind-indicator'
+import "@/styles/global.css";
+import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
+import AdminLink from "@/src/components/ui/admin-link";
 
 export default function RootLayout({
   children = null,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const theme = process.env.NEXT_PUBLIC_TINA_THEME || 'default'
-  console.log(theme);
-  
+  const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
+
   return (
     <html lang="en" className={`theme-${theme} dark`}>
       <head>
@@ -24,5 +23,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  )
+  );
 }
