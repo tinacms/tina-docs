@@ -49,11 +49,6 @@ module.exports = {
         // Background gradients and glass
         "glass-gradient-start": "var(--glass-gradient-start)",
         "glass-gradient-end": "var(--glass-gradient-end)",
-        "background-primary-gradient-start":
-          "var(--background-primary-gradient-start)",
-        "background-primary-gradient-end":
-          "var(--background-primary-gradient-end)",
-
         "background-color": "var(--background-color)",
 
         // Neutral system
