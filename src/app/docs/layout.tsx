@@ -83,10 +83,10 @@ export default async function DocsLayout({
               <div className="w-full grid grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[25%_75%] gap-4 p-4">
                 {tabs.map((tab) => (
                   <Tabs.Content key={tab.id} value={tab.id}>
-                    {tab.content2}
                     <aside className="sticky top-4 hidden md:block mr-4 h-[calc(100vh-2rem)]">
                       <NavigationSideBar
-                        tableOfContents={navigationDocsData.data}
+                        title={tab?.label}
+                        tableOfContents={tab?.content}
                       />
                     </aside>
                   </Tabs.Content>
