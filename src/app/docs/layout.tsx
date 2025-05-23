@@ -6,7 +6,7 @@ import { TinaIcon } from "@/src/components/icons";
 import { getDocsNavigation } from "@/utils/docs";
 import type React from "react";
 import Link from "next/link";
-
+import * as Tabs from "@radix-ui/react-tabs";
 export default async function DocsLayout({
   children,
 }: {
@@ -52,7 +52,35 @@ export default async function DocsLayout({
               >
                 <TinaIcon className="h-10 w-auto fill-orange-500" />
               </Link>
-              <TabbedNavigation tabs={tabs} defaultTab="docs" />
+              <Tabs.Root
+                className="flex flex-col w-full"
+                defaultValue={tabs[0]?.id}
+              >
+                <Tabs.List
+                  className="flex border-b border-gray-200 dark:border-gray-700"
+                  aria-label="Navigation sections"
+                >
+                  {tabs.map((tab) => (
+                    <Tabs.Trigger
+                      key={tab.id}
+                      value={tab.id}
+                      className="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200
+              data-[state=active]:text-brand-primary
+              after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-brand-primary after:scale-x-0 after:transition-transform after:duration-200
+              data-[state=active]:after:scale-x-100"
+                    >
+                      {tab.label}
+                    </Tabs.Trigger>
+                  ))}
+                </Tabs.List>
+                {tabs.map((tab) => (
+                  <Tabs.Content
+                    key={tab.id}
+                    value={tab.id}
+                    className="flex-1 data-[state=inactive]:hidden data-[state=active]:animate-fadeIn"
+                  ></Tabs.Content>
+                ))}
+              </Tabs.Root>
             </div>
           </div>
         </div>
