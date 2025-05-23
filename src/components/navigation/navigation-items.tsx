@@ -14,6 +14,7 @@ import {
   TRANSITION_DURATION,
 } from "./constants";
 import type { DocsNavProps, NavTitleProps } from "./type";
+import { getIdSyntax } from "../docs/on-this-page";
 
 const NavTitle: React.FC<NavTitleProps> = ({
   children,
@@ -48,8 +49,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -220,13 +221,32 @@ export const DocsNavigationItems = ({ navItems }: DocsNavProps) => {
     >
       {navItems.length > 0 &&
         navItems?.map((categoryData) => (
-          <div
-            key={`mobile-${
-              categoryData.slug ? getUrl(categoryData.slug) : categoryData.title
-            }`}
-          >
-            <NavLevel navListElem={navListElem} categoryData={categoryData} />
-          </div>
+          <>
+            <div
+              className="flex gap-2 group"
+              key={getIdSyntax(categoryData.title)}
+            >
+              <div
+                className={` border-1 border-neutral-border  ${
+                  "1" === getIdSyntax(categoryData.title)
+                    ? "border-brand-primary"
+                    : "border-neutral-border group-hover:border-neutral-500"
+                }`}
+              />
+              <div
+                key={`mobile-${
+                  categoryData.slug
+                    ? getUrl(categoryData.slug)
+                    : categoryData.title
+                }`}
+              >
+                <NavLevel
+                  navListElem={navListElem}
+                  categoryData={categoryData}
+                />
+              </div>
+            </div>
+          </>
         ))}
     </div>
   );
