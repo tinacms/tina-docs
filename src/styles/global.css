@@ -38,6 +38,9 @@
   --glass-gradient-start: rgba(255, 255, 255, 0.1);
   --glass-gradient-end: rgba(255, 255, 255, 0.4);
 
+  --glass-hover-gradient-start: oklch(98.5% 0 0);
+  --glass-hover-gradient-end: oklch(95.6% 0.045 203.388);
+
   --background-primary-gradient-start: #E9FBF4;
   --background-primary-gradient-end: #DCEEFF;
 
@@ -75,6 +78,9 @@
 
   --glass-gradient-start: rgba(255, 255, 255, 0.03);
   --glass-gradient-end: rgba(255, 255, 255, 0.23);
+
+  --glass-hover-gradient-start: #155E7500;
+  --glass-hover-gradient-end: #155E7500;
 
   --background-primary-gradient-start: #1f2937;
   --background-primary-gradient-end: #1D2C6C;
@@ -115,6 +121,10 @@
 
 .brand-glass-gradient {
   background-image: linear-gradient(to bottom right, var(--glass-gradient-start), var(--glass-gradient-end));
+}
+
+.brand-glass-hover-gradient {
+  background-image: linear-gradient(to bottom right, var(--glass-hover-gradient-start), var(--glass-hover-gradient-end));
 }
 
 .brand-background-gradient {

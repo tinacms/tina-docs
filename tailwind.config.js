@@ -44,6 +44,8 @@ module.exports = {
         // Background gradients and glass
         "glass-gradient-start": "var(--glass-gradient-start)",
         "glass-gradient-end": "var(--glass-gradient-end)",
+        "glass-hover-gradient-start": "var(--glass-hover-gradient-start)",
+        "glass-hover-gradient-end": "var(--glass-hover-gradient-end)",
         "background-primary-gradient-start":
           "var(--background-primary-gradient-start)",
         "background-primary-gradient-end":
@@ -88,5 +90,14 @@ module.exports = {
       ],
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        ".brand-glass-hover-gradient": {
+          "background-image":
+            "linear-gradient(to bottom right, var(--glass-gradient-hover-start), var(--glass-gradient-hover-end))",
+        },
+      });
+    },
+  ],
 };
