@@ -16,7 +16,7 @@ export const docsNavigationBarCollection = {
     {
       name: "title",
       label: "Title",
-      type: "string",
+      type: "image",
     },
     {
       name: "supermenuGroup",

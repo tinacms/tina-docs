@@ -3,6 +3,7 @@
 import { Search } from "../search-docs/search";
 import LightDarkSwitch from "../ui/light-dark-switch";
 import { DocsNavigationItems } from "./navigation-items";
+import Image from "next/image";
 
 export const NavigationSideBar = ({
   tableOfContents,
@@ -12,7 +13,7 @@ export const NavigationSideBar = ({
   return (
     <div className="w-full h-full rounded-2xl brand-glass-gradient border border-neutral-border-subtle shadow-xl">
       <div className="flex-col pl-6 items-center">
-        <Title title={tableOfContents?.title} />
+        <Image src={tableOfContents?.title} alt={tableOfContents?.title} width={200} height={200} className='py-6 text-brand-primary'/>
         <LightDarkSwitch />
         <Search />
       </div>
@@ -24,10 +25,3 @@ export const NavigationSideBar = ({
   );
 };
 
-const Title = ({ title }: { title: string }) => (
-  <div className="">
-    <h1 className="brand-primary-gradient bg-clip-text pb-4 pt-6 font-tuner text-4xl text-transparent">
-      {title}
-    </h1>
-  </div>
-);
