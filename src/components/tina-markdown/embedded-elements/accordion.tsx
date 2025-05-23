@@ -26,15 +26,15 @@ const Accordion = ({
     <div className="flex flex-col justify-center items-center">
       {/* Header */}
       <div
-        className={`mb-5 max-w-full overflow-hidden rounded-lg brand-glass-gradient shadow-lg transition-[width] duration-300 ease-in-out ${
+        className={`mb-5 max-w-full overflow-hidden rounded-lg brand-glass-gradient shadow-md transition-[width] duration-300 ease-in-out ${
           fullWidth ? "w-full" : "w-3/4"
         }`}
       >
         <div
-          className="flex cursor-pointer items-center justify-between px-4 py-1"
+          className="flex cursor-pointer items-center justify-between px-6 py-6"
           onClick={toggleExpand}
         >
-          <h4 className="text-neutral-text text-base font-tuner mt-2 mb-1">
+          <h4 className="text-neutral-text text-base font-tuner mt-0.5">
             {heading || "Click to expand"}
           </h4>
           <div>
@@ -130,17 +130,17 @@ export const AccordionBlock = ({
 
   return (
     <div
-      className={`mx-auto flex flex-col justify-center items-center rounded-lg brand-glass-gradient shadow-lg mb-5 ${
+      className={`mx-auto flex flex-col justify-center items-center rounded-lg brand-glass-gradient shadow-md mb-5 ${
         fullWidth ? "w-full" : "w-3/4"
       }`}
     >
       {accordionItems.map((item, index) => (
         <div key={index} className="w-full">
           <div
-            className="flex cursor-pointer items-center justify-between px-4 py-1"
+            className="flex cursor-pointer items-center justify-between px-6 py-6"
             onClick={() => toggleExpand(index)}
           >
-            <h4 className="text-neutral-text text-base font-tuner mt-2 mb-1">
+            <h4 className="text-neutral-text text-base font-tuner mt-0.5">
               {item.heading || "Click to expand"}
             </h4>
             <div>
@@ -180,7 +180,7 @@ export const AccordionBlock = ({
             )}
           </div>
           {index < accordionLength - 1 && (
-            <hr className="w-full h-0.5 text-neutral-text/50" />
+            <hr className="w-full h-0.5 text-neutral-border" />
           )}
         </div>
       ))}

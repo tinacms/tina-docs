@@ -1,6 +1,6 @@
 ---
 title: Built-in Components
-last_edited: '2025-05-05T05:37:12.628Z'
+last_edited: '2025-05-16T07:22:00.868Z'
 tocIsHidden: true
 next: ''
 previous: ''
@@ -38,7 +38,6 @@ All components are built with React and Tailwind – pull down the repo to add a
 
 ### Scroll-Based Showcase
 
-
 <scrollShowcase
   showcaseItems={[
     {
@@ -70,9 +69,9 @@ All components are built with React and Tailwind – pull down the repo to add a
 Choose between full-width accordions that are stand-alone
 
 <accordion
-  heading="Full width accordian here... click on me"
+  heading="A bunch of g's"
   docText={<>
-    Here's our pet llamas, arent they so cute?
+    A bunch of g's
   </>}
   image="/img/rico-replacement.jpg"
   fullWidth={true}
@@ -137,33 +136,6 @@ or
 
 ### API Reference
 
-<apiReference
-  property={[
-    {
-      groupName: "",
-      name: "objectId",
-      description: "This determines how the object will be accessed by Tina.\n",
-      type: "long",
-      required: true
-    },
-    { groupName: "Options", name: "format", type: "string", default: "table" },
-    {
-      groupName: "Options",
-      name: "enableExperimental",
-      type: "boolean",
-      default: "false"
-    },
-    { name: "title", type: "string", default: "API Reference" },
-    { name: "description", type: "string", default: "API Reference" },
-    {
-      name: "fluxCapacitor",
-      description: "Powers the DeLorian\n",
-      type: "Machine",
-      experimental: true
-    }
-  ]}
-/>
-
 ### Mermaid Diagrams
 
 ```mermaid
@@ -186,7 +158,7 @@ flowchart TD
 
 <Callout
   body={<>
-    This is a warning
+    Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
   </>}
 />
 
@@ -211,11 +183,33 @@ flowchart TD
   variant="api"
 />
 
+<Callout
+  body={<>
+    Idea
+  </>}
+  variant="idea"
+/>
+
+<Callout
+  body={<>
+    lock
+  </>}
+  variant="lock"
+/>
+
+<Callout
+  body={<>
+    info
+  </>}
+  variant="info"
+/>
+
 ### Tables
 
-| Heading Labels... | ...Go Here   |
-| ----------------- | ------------ |
-| Put your...       | ...data here |
+| First Name | Surname | Country   |
+| ---------- | ------- | --------- |
+| Joshu      | Berman  | Australia |
+| Micaela    | Blank   | Australia |
 
 ### Code Blocks
 
@@ -224,9 +218,26 @@ flowchart TD
 Marked by surrounding code with three back ticks
 
 ```javascript
-Generic Code Block Here {
-  Powered by PrismJS
-}
+export const myCodeBlockFunction() => {
+  console.log('Powered by Shiki');
+}   
+```
+
+We have the power to highlight diffs, or just certain lines in our code
+
+```javascript
+console.log('This is a negative diff') // [!code --]
+console.log('This is a positive diff') // [!code ++]
+console.log('This is a highlighted block') // [!code highlight]
+
+```
+
+We must be careful when running the focused code with highlighted code!
+
+```javascript
+console.log('Junk Code');
+console.log('Focused Code'); // [!code focus]
+console.log('More hidden code');
 ```
 
 #### Tabbed Code Blocks
@@ -239,4 +250,3 @@ Generic Code Block Here {
   query="We can use CodeBlocks to guide users
   or to just show off our cool code!"
 />
-

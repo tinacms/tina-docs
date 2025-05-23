@@ -1,6 +1,6 @@
 "use client";
 
-import { getDocId } from "@/utils/docs/getDocsIds";
+import { formatHeaderId } from "@/utils/docs";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
@@ -15,7 +15,7 @@ export const generateMarkdown = (
 ) => {
   return tocItems
     .map((item) => {
-      const anchor = getDocId(item.text);
+      const anchor = formatHeaderId(item.text);
       const prefix = item.type === "h3" ? "  " : "";
       return `${prefix}- [${item.text}](#${anchor})`;
     })
@@ -86,7 +86,10 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
   }
 
   return (
-    <div className="mb-[-0.375rem] flex-auto break-words whitespace-normal overflow-wrap-break-word pt-6">
+    <div
+      className="mb-[-0.375rem] flex-auto break-words whitespace-normal overflow-wrap-break-word pt-6"
+      data-exclude-from-md
+    >
       <div
         className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
           isOpen

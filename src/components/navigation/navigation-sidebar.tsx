@@ -1,5 +1,6 @@
 "use client";
 
+import { Search } from "../search-docs/search";
 import LightDarkSwitch from "../ui/light-dark-switch";
 import { DocsNavigationItems } from "./navigation-items";
 
@@ -13,6 +14,7 @@ export const NavigationSideBar = ({
       <div className="flex-col pl-6 items-center">
         <Title title={tableOfContents?.title} />
         <LightDarkSwitch />
+        <Search />
       </div>
 
       <div className="overflow-y-auto overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">

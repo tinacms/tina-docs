@@ -1,11 +1,11 @@
 "use client";
 
+import { CopyPageDropdown } from "@/components/copy-page-dropdown";
 import { TableOfContentsDropdown } from "@/components/docs/table-of-contents-dropdown";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { OnThisPage } from "@/src/components/docs/on-this-page";
 import { Pagination } from "@/src/components/ui/pagination";
-import { formatDate } from "@/utils/docs/getFormattedDate";
-import { useTocListener } from "@/utils/docs/tocListener";
+import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
@@ -38,11 +38,15 @@ export default function Document({ props, tinaProps }) {
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
-        <div
-          className="brand-primary-gradient pt-4 font-tuner text-4xl"
-          data-tina-field={tinaField(documentationData, "title")}
-        >
-          {documentationData?.title}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between w-full gap-2">
+          <h1
+            className="brand-primary-gradient pt-4 font-tuner text-4xl"
+            data-tina-field={tinaField(documentationData, "title")}
+            data-pagefind-meta="title"
+          >
+            {documentationData?.title}
+          </h1>
+          <CopyPageDropdown className="self-end mb-2 md:mb-0" />
         </div>
         {/* MOBILE TABLE OF CONTENTS */}
         {documentationData?.tocIsHidden ? null : (

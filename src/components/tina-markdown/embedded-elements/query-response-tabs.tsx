@@ -1,20 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-
-import React from "react";
-
-import Prism from "prismjs";
-import "prismjs/components/prism-javascript";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
-import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-import "prismjs/plugins/line-highlight/prism-line-highlight";
-import "prismjs/plugins/line-highlight/prism-line-highlight.css";
-//Custom theming
-import "./code-block.helper.css";
-
 import {
   CheckIcon as CheckIconOutline,
   ClipboardIcon as ClipboardIconOutline,
 } from "@heroicons/react/24/outline";
+import { useEffect, useRef, useState } from "react";
+import React from "react";
+import { CodeBlock } from "../standard-elements/code-block/code-block";
 
 export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);
@@ -31,27 +21,16 @@ export const QueryResponseTabs = ({ ...props }) => {
         setHeight(activeRef.current.scrollHeight);
       }
     };
-
-    // Update height when tab changes
     updateHeight();
-
     const resizeObserver = new ResizeObserver(updateHeight);
     const activeRef = isQuery ? queryRef : responseRef;
     if (activeRef.current) {
       resizeObserver.observe(activeRef.current);
     }
-
     return () => {
       resizeObserver.disconnect();
     };
-  }, [isQuery]); // Add isQuery as dependency to update height when switching tabs
-
-  // Highlight code when mounted and when tab changes
-  useEffect(() => {
-    if (document) {
-      Prism.highlightAll();
-    }
-  }, []);
+  }, [isQuery]);
 
   // Handle the copy action
   const handleCopy = () => {
@@ -64,7 +43,7 @@ export const QueryResponseTabs = ({ ...props }) => {
   const buttonStyling =
     "flex justify-center cursor-pointer relative leading-tight text-white py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
   const activeButtonStyling =
-    " hover:-translate-y-px active:translate-y-px hover:-translate-x-px active:translate-x-px hover:text-gray-50 opacity-50 hover:opacity-100";
+    " hover:text-gray-50 opacity-50 hover:opacity-100";
   const underlineStyling =
     "transition-[width] absolute h-0.25 -bottom-0.25 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg";
 
@@ -79,7 +58,7 @@ export const QueryResponseTabs = ({ ...props }) => {
       `}</style>
       <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-slate-900">
         {/* TOP SECTION w/ Buttons */}
-        <div className="flex items-center border-b border-b-white/30 w-full">
+        <div className="flex items-center border-b border-b-slate-700 w-full">
           <div className="flex flex-1">
             <button
               type="button"
@@ -130,7 +109,7 @@ export const QueryResponseTabs = ({ ...props }) => {
 
         {/* BOTTOM SECTION w/ Query/Response */}
         <div
-          className="overflow-hidden transition-all duration-300 ease-in-out bg-[#1F2937] rounded-b-xl"
+          className="overflow-hidden transition-all duration-300 ease-in-out rounded-b-xl"
           style={{ height: `${height}px` }}
         >
           <div
@@ -145,21 +124,19 @@ export const QueryResponseTabs = ({ ...props }) => {
           >
             {isQuery ? (
               <div ref={queryRef} className="relative -mt-2">
-                <pre
-                  className="language-javascript line-numbers"
-                  style={{ position: "relative", whiteSpace: "pre" }}
-                >
-                  <code className="language-javascript">{props.query}</code>
-                </pre>
+                <CodeBlock
+                  value={props.query}
+                  lang="javascript"
+                  showCopyButton={false}
+                />
               </div>
             ) : (
               <div ref={responseRef} className="-mt-2 relative">
-                <pre
-                  className="language-javascript line-numbers"
-                  style={{ position: "relative", whiteSpace: "pre" }}
-                >
-                  <code className="language-javascript">{props.response}</code>
-                </pre>
+                <CodeBlock
+                  value={props.response}
+                  lang="javascript"
+                  showCopyButton={false}
+                />
               </div>
             )}
           </div>

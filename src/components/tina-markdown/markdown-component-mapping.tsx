@@ -7,7 +7,7 @@ import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import Youtube from "./embedded-elements/youtube";
-import { CodeBlock } from "./standard-elements/code-block";
+import { CodeBlock } from "./standard-elements/code-block/code-block";
 import HeaderFormat from "./standard-elements/header-format";
 import { ImageComponent } from "./standard-elements/image";
 import MermaidElement from "./standard-elements/mermaid-diagram";

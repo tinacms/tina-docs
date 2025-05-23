@@ -50,11 +50,14 @@ module.exports = {
         "glass-gradient-start": "var(--glass-gradient-start)",
         "glass-gradient-end": "var(--glass-gradient-end)",
         "background-color": "var(--background-color)",
+        "glass-hover-gradient-start": "var(--glass-hover-gradient-start)",
+        "glass-hover-gradient-end": "var(--glass-hover-gradient-end)",
 
         // Neutral system
         "neutral-background": "var(--neutral-background)",
         "neutral-surface": "var(--neutral-surface)",
         "neutral-background-secondary": "var(--neutral-background-secondary)",
+        "neutral-background-tertiary": "var(--neutral-background-tertiary)",
         "neutral-text": "var(--neutral-text)",
         "neutral-text-secondary": "var(--neutral-text-secondary)",
         "neutral-border": "var(--neutral-border)",
@@ -76,5 +79,14 @@ module.exports = {
       ],
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        ".brand-glass-hover-gradient": {
+          "background-image":
+            "linear-gradient(to bottom right, var(--glass-gradient-hover-start), var(--glass-gradient-hover-end))",
+        },
+      });
+    },
+  ],
 };

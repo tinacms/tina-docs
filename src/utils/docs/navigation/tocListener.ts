@@ -1,4 +1,9 @@
-import React from "react";
+"use client";
+
+/**
+ * Utilities for tracking active table of contents items during page scroll
+ */
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 interface Heading {
   id?: string;
@@ -6,8 +11,14 @@ interface Heading {
   level?: string;
 }
 
+/**
+ * Creates an array of heading elements from the content div
+ *
+ * @param contentRef - Reference to the content container element
+ * @returns Array of heading objects with id, offset, and level properties
+ */
 function createHeadings(
-  contentRef: React.RefObject<HTMLDivElement | null>
+  contentRef: RefObject<HTMLDivElement | null>
 ): Heading[] {
   const headings: Heading[] = [];
   const htmlElements = contentRef.current?.querySelectorAll(
@@ -24,8 +35,15 @@ function createHeadings(
   return headings;
 }
 
+/**
+ * Creates a scroll listener function that updates active ToC items
+ *
+ * @param contentRef - Reference to the content container element
+ * @param setActiveIds - Callback function to update active heading IDs
+ * @returns A scroll handler function
+ */
 export function createTocListener(
-  contentRef: React.RefObject<HTMLDivElement | null>,
+  contentRef: RefObject<HTMLDivElement | null>,
   setActiveIds: (activeIds: string[]) => void
 ): () => void {
   const headings = createHeadings(contentRef);
@@ -49,11 +67,17 @@ export function createTocListener(
   };
 }
 
-export function useTocListener(data: any) {
-  const [activeIds, setActiveIds] = React.useState<string[]>([]);
-  const contentRef = React.useRef<HTMLDivElement>(null);
+/**
+ * React hook for tracking active headings during page scroll
+ *
+ * @param data - Document data (optional, included for potential future use)
+ * @returns Object with content reference and active heading IDs
+ */
+export function useTocListener(data?: any) {
+  const [activeIds, setActiveIds] = useState<string[]>([]);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!contentRef.current) return;
     const tocListener = createTocListener(contentRef, setActiveIds);
     const handleScroll = () => tocListener(); // Define scroll handler

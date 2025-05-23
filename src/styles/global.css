@@ -54,6 +54,8 @@
   --neutral-border-subtle: #e2e8f0;
 
   --background-color: #e4f6f9;
+  --glass-hover-gradient-start: oklch(98.5% 0 0);
+  --glass-hover-gradient-end: oklch(95.6% 0.045 203.388);
 }
 
 .dark {
@@ -90,6 +92,7 @@
   --neutral-background: #0f172a;
   --neutral-surface: #1A202C;
   --neutral-background-secondary: #1F2937;
+  --neutral-background-tertiary: #1A202C;
   --neutral-text: #F9FAFB;
   --neutral-text-secondary: #9CA3AF;
   --neutral-border: #4B5563;
@@ -214,6 +217,14 @@
   background-image: linear-gradient(to bottom right, var(--glass-gradient-start), var(--glass-gradient-end));
 }
 
+.brand-glass-hover-gradient {
+  background-image: linear-gradient(to bottom right, var(--glass-hover-gradient-start), var(--glass-hover-gradient-end));
+}
+
+.brand-background-gradient {
+  background-image: linear-gradient(to bottom right, var(--background-primary-gradient-start), var(--background-primary-gradient-end)); 
+}
+
 .neutral-surface-bg {
   background-color: var(--neutral-surface);
 }
@@ -246,3 +257,10 @@
   --color-neutral-border: #D1D5DB;
   --font-inter: "Inter", sans-serif;
 }
+
+mark {
+  background-color: var(--brand-primary-light);
+  font-weight: bold;
+}
+
+
