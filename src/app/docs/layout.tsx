@@ -1,13 +1,13 @@
-import { CopyPageDropdown } from "@/src/components/copy-page-dropdown";
 import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
-import { TabbedNavigation } from "@/src/components/navigation/tabbed-navigation";
 import { TinaIcon } from "@/src/components/icons";
 import { getDocsNavigation } from "@/utils/docs";
 import type React from "react";
 import Link from "next/link";
 import * as Tabs from "@radix-ui/react-tabs";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
+import { Search } from "@/src/components/search-docs/search";
+import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
 
 export default async function DocsLayout({
   children,
@@ -50,10 +50,13 @@ export default async function DocsLayout({
       {/* Top Navbar */}
 
       <nav className="w-full">
-        <div className="py-2">
+        <div className="pb-2">
           <div>
-            <Tabs.Root defaultValue="1" className="flex flex-col w-full">
-              <div className="flex items-center justify-start font-semibold w-full border-b border-neutral-border py-3">
+            <Tabs.Root
+              defaultValue={tabs[0].id}
+              className="flex flex-col w-full"
+            >
+              <div className="flex items-center justify-start font-semibold w-full border-b border-neutral-border py-3 shadow">
                 <Link
                   href="/"
                   className="text-xl font-bold text-gray-800 dark:text-white"
@@ -71,6 +74,10 @@ export default async function DocsLayout({
                     </Tabs.Trigger>
                   ))}
                 </Tabs.List>
+                <div className="w-full flex justify-end mr-2">
+                  <LightDarkSwitch />
+                </div>
+                <Search />
               </div>
 
               <div className="w-full grid grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[25%_75%] gap-4 p-4">

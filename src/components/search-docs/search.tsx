@@ -90,7 +90,7 @@ export function Search({ className }: { className?: string }) {
   };
 
   return (
-    <div className="relative w-full md:max-w-2xl mx-auto my-8 md:mb-4 md:mt-2">
+    <div className="relative w-full md:max-w-sm ml-auto my-4 md:mb-4 md:mt-2">
       <div className={`relative md:mr-4 ${className || ""}`}>
         <input
           type="text"
