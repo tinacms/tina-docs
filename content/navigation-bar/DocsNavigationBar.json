@@ -5,13 +5,13 @@
       "title": "Introduction",
       "items": [
         {
-          "title": "Take Back your Docs",
-          "slug": "content/docs/index.mdx",
+          "title": "Welcome to TinaDocs",
+          "slug": "content/docs/introduction/whats-included.mdx",
           "_template": "item"
         },
         {
-          "title": "What's Included?",
-          "slug": "content/docs/introduction/whats-included.mdx",
+          "title": "Take Back your Docs",
+          "slug": "content/docs/index.mdx",
           "_template": "item"
         },
         {
