@@ -19,7 +19,7 @@ export const NavigationSideBar = ({
           src={
             resolvedTheme === "dark"
               ? tableOfContents?.darkModeLogo
-              : tableOfContents?.lightModeLogo 
+              : tableOfContents?.lightModeLogo
           }
           alt={
             resolvedTheme === "dark"
