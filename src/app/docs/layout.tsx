@@ -57,11 +57,11 @@ export default async function DocsLayout({
 
 const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
   return (
-    <div className="flex items-center justify-start font-semibold w-full border-b border-neutral-border py-3 shadow">
+    <div className="flex items-center justify-start font-semibold w-full lg:border-b border-neutral-border py-3 lg:shadow">
       <Link href="/" className="text-xl">
         <TinaLamaIcon className="h-10 w-auto fill-orange-600 mx-5" />
       </Link>
-      <Tabs.List className="flex">
+      <Tabs.List className="lg:flex hidden">
         {tabs.map((tab) => (
           <Tabs.Trigger
             key={tab.label}
@@ -75,7 +75,7 @@ const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
       <div className="w-full hidden md:flex justify-end mr-2">
         <LightDarkSwitch />
       </div>
-      <Search className="hidden md:block" />
+      <Search />
     </div>
   );
 };

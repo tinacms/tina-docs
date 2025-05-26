@@ -1,7 +1,6 @@
 "use client";
 
 import { CopyPageDropdown } from "@/components/copy-page-dropdown";
-import { TableOfContentsDropdown } from "@/components/docs/table-of-contents-dropdown";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { OnThisPage } from "@/src/components/docs/on-this-page";
 import { Pagination } from "@/src/components/ui/pagination";
