@@ -1,5 +1,5 @@
 "use client";
-import { MdArrowDropDown } from "react-icons/md";
+import { MdArrowDropDown, MdClose } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { DocsNavigationItems } from "./navigation-items";
@@ -11,7 +11,7 @@ export const MobileNavigationWrapper = ({ tocData }: { tocData: any }) => {
   const toggleDropdown = () => setIsOpen((prev) => !prev);
   const closeDropdown = () => setIsOpen(false);
 
-  // Ensure outside click always works
+  // Handle outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -34,6 +34,7 @@ export const MobileNavigationWrapper = ({ tocData }: { tocData: any }) => {
       {isOpen && (
         <NavigationDropdownContent
           tocData={Array.isArray(tocData.items) ? tocData.items : []}
+          onClose={closeDropdown}
         />
       )}
     </div>
@@ -49,7 +50,13 @@ export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
   );
 };
 
-export const NavigationDropdownContent = ({ tocData }) => {
+export const NavigationDropdownContent = ({
+  tocData,
+  onClose,
+}: {
+  tocData: any;
+  onClose: () => void;
+}) => {
   const [selectedValue, setSelectedValue] = useState("docs");
   const dropdownRef = useRef(null);
 
@@ -60,14 +67,13 @@ export const NavigationDropdownContent = ({ tocData }) => {
     { value: "logs", label: "Logs" },
   ];
 
-  // This handles click outside inside the dropdown itself (if needed later)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
         !(dropdownRef.current as any).contains(event.target)
       ) {
-        // no-op — parent handles closing
+        // No-op for now
       }
     };
 
@@ -78,7 +84,14 @@ export const NavigationDropdownContent = ({ tocData }) => {
   }, []);
 
   return (
-    <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 h-[100vh] max-h-[90vh] overflow-y-auto w-[75%] rounded-lg bg-white p-6 shadow-xl right-0 -top-4">
+    <div className="animate-fade-down animate-duration-300 fixed inset-0 z-20 h-screen w-[75%] overflow-y-auto bg-white p-6 shadow-xl right-0">
+      <div className="flex justify-end mb-4">
+        <MdClose
+          onClick={onClose}
+          className="text-2xl text-brand-primary cursor-pointer"
+        />
+      </div>
+
       <div className="relative w-full mb-4" ref={dropdownRef}>
         <select
           className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none"
@@ -93,6 +106,7 @@ export const NavigationDropdownContent = ({ tocData }) => {
         </select>
         <MdArrowDropDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-secondary-dark-dark pointer-events-none" />
       </div>
+
       {selectedValue === "docs" && <DocsNavigationItems navItems={tocData} />}
     </div>
   );
