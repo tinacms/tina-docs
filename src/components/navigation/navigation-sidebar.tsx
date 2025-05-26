@@ -18,7 +18,7 @@ export const NavigationSideBar = ({
         <Search />
       </div>
 
-      <div className="overflow-y-auto overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">
+      <div className="overflow-y-scroll overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">
         <DocsNavigationItems navItems={tableOfContents.items} />
       </div>
     </div>

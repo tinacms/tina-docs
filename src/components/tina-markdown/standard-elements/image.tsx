@@ -5,7 +5,11 @@ export const ImageComponent = (props) => {
   const [dimensions, setDimensions] = useState({ width: 16, height: 9 });
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleImageLoad = (img: HTMLImageElement) => {
+  console.log("Im loading these props", props);
+  console.log("props.url", props.url);
+
+  const handleImageLoad = (event) => {
+    const img = event.target as HTMLImageElement;
     if (img) {
       setDimensions({
         width: img.naturalWidth,
@@ -17,9 +21,9 @@ export const ImageComponent = (props) => {
 
   return (
     <span className="my-4 flex flex-col gap-2">
-      <span className="relative mx-auto w-full max-w-xl">
+      <span className="relative mx-auto w-full max-w-xl block">
         <span
-          className="relative overflow-hidden rounded-xl"
+          className="relative overflow-hidden rounded-xl block"
           style={{
             aspectRatio: `${dimensions.width}/${dimensions.height}`,
             maxHeight: "600px",
@@ -35,13 +39,13 @@ export const ImageComponent = (props) => {
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
             style={{ objectFit: "contain" }}
-            onLoadingComplete={handleImageLoad}
+            onLoad={handleImageLoad}
             priority
           />
         </span>
       </span>
       {props?.caption && (
-        <span className="font-tuner text-sm text-gray-500">
+        <span className="font-tuner text-sm text-gray-500 block">
           Figure: {props.caption}
         </span>
       )}

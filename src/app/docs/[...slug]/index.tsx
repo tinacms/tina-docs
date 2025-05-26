@@ -15,6 +15,8 @@ export default function Document({ props, tinaProps }) {
   const documentationData = data.docs;
   const { pageTableOfContents } = props;
 
+  console.log(documentationData?.body)
+
   const formattedDate = formatDate(documentationData?.last_edited);
   const previousPage = {
     slug: documentationData?.previous?.id.slice(7, -4),

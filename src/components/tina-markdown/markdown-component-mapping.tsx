@@ -128,9 +128,9 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
     <ul className="my-4 ml-2 list-disc font-light text-neutral-text" {...props} />
   ),
   ol: (props) => (
-    <ol className="my-4 ml-2 list-decima font-light  text-neutral-text" {...props} />
+    <ol className="my-4 ml-2 list-decimal font-light  text-neutral-text" {...props} />
   ),
-  li: (props) => <li className="mb-2 ml-8 font-light text-neutral-text" {...props} />,
+  li: (props) => <li className="mb-2 ml-8 font-light " {...props} />,
   p: (props) => <p className="my-3 font-light tracking-wider text-neutral-text" {...props} />,
   blockquote: (props) => (
     <Callout text={props.children.props.content} variant="info" />

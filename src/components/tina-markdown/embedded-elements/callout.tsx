@@ -65,7 +65,7 @@ const Callout = ({ body, variant = "warning", text }: CalloutProps) => {
       }`}
     >
       <div className="flex items-start gap-3 px-4">
-        <div className="relative top-4 left-1">
+        <div className="relative top-7 left-1">
           <Icon className={`${iconColorClass}`} size={20} />
         </div>
         <div className="leading-6 text-neutral-text font-light pt-4 pb-2">

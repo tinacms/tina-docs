@@ -5,73 +5,40 @@
       "title": "Introduction",
       "items": [
         {
-          "title": "Welcome to TinaDocs",
-          "slug": "content/docs/introduction/welcome-to-tinadocs.mdx",
           "_template": "item"
         },
         {
-          "title": "Take Back your Docs",
+          "title": "Welcome to TinaDocs",
           "slug": "content/docs/index.mdx",
           "_template": "item"
         },
         {
-          "title": "Built-in Components",
-          "slug": "content/docs/introduction/built-in-components.mdx",
+          "title": "Take Back your Docs",
+          "slug": "content/docs/introduction/take-back-your-docs.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Quickstart",
+          "slug": "content/docs/introduction/Quickstart.mdx",
           "_template": "item"
         }
       ]
     },
     {
-      "title": "Project Set-Up",
-      "items": [
-        {
-          "title": "Setting Up Locally",
-          "slug": "content/docs/set-up/local-set-up.mdx",
-          "_template": "item"
-        },
-        {
-          "title": "Setting Up TinaCloud",
-          "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
-          "_template": "item"
-        },
-        {
-          "title": "Self-Hosting Your Datalayer",
-          "items": [
-            {
-              "title": "What is the Datalayer?",
-              "slug": "content/docs/set-up/self-hosting/what-is-the-datalayer.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Configuring Your Own Datalayer",
-              "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
-              "_template": "item"
-            }
-          ],
-          "_template": "items"
-        },
-        {
-          "title": "Deploying Your Docs",
-          "slug": "content/docs/set-up/deploying-your-docs.mdx",
-          "_template": "item"
-        }
-      ]
-    },
-    {
-      "title": "Customise Your Docs",
+      "title": "TinaDocs & TinaCMS",
       "items": [
         {
           "title": "Editing Content",
-          "slug": "content/docs/customising/editing-content.mdx",
+          "slug": "content/docs/tinadocs-and-tinacms/editing-content.mdx",
           "_template": "item"
         },
         {
-          "title": "Theming and Styling",
-          "slug": "content/docs/customising/updating-the-styling.mdx",
+          "title": "Adding a New Document",
+          "slug": "content/docs/tinadocs-and-tinacms/Adding-a-new-Document.mdx",
           "_template": "item"
         },
         {
-          "title": "Working with Tina",
+          "title": "Learning more about TinaCMS",
           "items": [
             {
               "title": "Learn TinaCMS",
@@ -82,28 +49,140 @@
               "title": "Update the Data Model",
               "slug": "content/docs/customising/schema.mdx",
               "_template": "item"
+            },
+            {
+              "title": "Further Technical References",
+              "slug": "content/docs/customising/technical-reference.mdx",
+              "_template": "item"
             }
           ],
           "_template": "items"
         },
         {
-          "title": "Custom Components",
-          "slug": "content/docs/customising/custom-components.mdx",
+          "title": "The Datalayer",
+          "items": [
+            {
+              "title": "Overview",
+              "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/overview.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Setting up TinaCloud",
+              "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Configuring your own Datalayer",
+              "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
+              "_template": "item"
+            }
+          ],
+          "_template": "items"
+        }
+      ]
+    },
+    {
+      "title": "Components",
+      "items": [
+        {
+          "title": "Overview",
+          "slug": "content/docs/components/overview.mdx",
           "_template": "item"
         },
         {
-          "title": "Technical References",
-          "slug": "content/docs/customising/technical-reference.mdx",
+          "title": "Typography",
+          "slug": "content/docs/components/Typography.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Image and Embeds",
+          "slug": "content/docs/components/Images-and-Embeds.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Lists and Tables",
+          "slug": "content/docs/components/Lists-and-Tables.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Mermaid Diagrams",
+          "slug": "content/docs/components/Mermaid-Diagrams.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Code Blocks",
+          "slug": "content/docs/components/Code-Blocks.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Custom Components",
+          "items": [
+            {
+              "title": "Overview",
+              "slug": "content/docs/components/custom-components/Overview.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Accordions",
+              "slug": "content/docs/components/custom-components/Accordions.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Card Grid",
+              "slug": "content/docs/components/custom-components/Card-Grid.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Callouts",
+              "slug": "content/docs/components/custom-components/Callouts.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Tabbed Code Blocks",
+              "slug": "content/docs/components/custom-components/Tabbed-Codeblocks.mdx",
+              "_template": "item"
+            }
+          ],
+          "_template": "items"
+        }
+      ]
+    },
+    {
+      "title": "API Documentation",
+      "items": [
+        {
+          "title": "Overview",
+          "slug": "content/docs/api-documentation/Overview.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "API Reference Examples",
+          "slug": "content/docs/API-References.mdx",
           "_template": "item"
         }
       ]
     },
     {
-      "title": "API",
+      "title": "Customization & Themes",
       "items": [
         {
-          "title": "API",
-          "slug": "content/docs/API-References.mdx",
+          "title": "Overview",
+          "slug": "content/docs/customization-and-themes/Overview.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "Updating the Styling",
+          "slug": "content/docs/customising/updating-the-styling.mdx",
+          "_template": "item"
+        }
+      ]
+    },
+    {
+      "title": "Deployment",
+      "items": [
+        {
+          "title": "Deploying your Site",
+          "slug": "content/docs/set-up/deploying-your-docs.mdx",
           "_template": "item"
         }
       ]
