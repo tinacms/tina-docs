@@ -58,7 +58,7 @@ export default async function DocsLayout({
 
 const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
   return (
-    <div className="flex items-center justify-start font-semibold w-full lg:border-b border-neutral-border py-3 lg:shadow">
+    <div className="flex items-center justify-between md:justify-start font-semibold w-full lg:border-b border-neutral-border py-3 lg:shadow">
       <Link href="/" className="text-xl">
         <TinaLamaIcon className="h-10 w-auto fill-orange-600 mx-5" />
       </Link>
@@ -77,7 +77,7 @@ const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
         <LightDarkSwitch />
       </div>
       <Search />
-      <Bars3Icon className="size-12 mx-6 md:mr-6 md:ml-0 md:size-18 text-brand-primary lg:hidden" />
+      <Bars3Icon className="size-12 mx-5 md:mr-6 md:ml-0 md:size-18 text-brand-primary lg:hidden" />
     </div>
   );
 };

@@ -90,23 +90,23 @@ export function Search({ className }: { className?: string }) {
   };
 
   return (
-    <div className="relative w-full md:max-w-sm ml-auto my-4 md:mb-4 md:mt-2">
+    <div className="relative w-full md:max-w-sm ml-auto lg:my-4 lg:mb-4">
       <div className={`relative md:mr-4 ${className || ""}`}>
         <input
           type="text"
           value={searchTerm}
-          className={`w-full text-neutral-text mt-2 p-2 pl-6 rounded-full bg-neutral-background shadow-lg focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
+          className={`w-full text-neutral-text p-2 pl-6 rounded-full bg-neutral-background shadow-lg focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
             error !== null ? "opacity-50 cursor-not-allowed" : ""
           }`}
           placeholder="Search..."
           onChange={handleSearch}
           disabled={error !== null}
         />
-        <MagnifyingGlassIcon className="mt-1 absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-primary h-5 w-5" />
+        <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-primary h-5 w-5" />
       </div>
 
       {error && (
-        <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm w-11/12 mx-auto">
+        <div className="md:mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm w-11/12 mx-auto">
           {error}
         </div>
       )}
