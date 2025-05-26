@@ -61,14 +61,14 @@ export default async function DocsLayout({
                   href="/"
                   className="text-xl font-bold text-gray-800 dark:text-white"
                 >
-                  <TinaLamaIcon className="h-10 w-auto fill-orange-500 mx-4" />
+                  <TinaLamaIcon className="h-10 w-auto fill-orange-600 mx-5" />
                 </Link>
                 <Tabs.List className="flex">
                   {tabs.map((tab) => (
                     <Tabs.Trigger
                       key={tab.id}
                       value={tab.id}
-                      className="relative text-neutral-text mx-4 focus:text-brand-secondary-hover cursor-pointer"
+                      className="text-lg relative text-neutral-text mx-4 focus:text-brand-secondary-hover cursor-pointer font-bold"
                     >
                       {tab.label}
                     </Tabs.Trigger>
