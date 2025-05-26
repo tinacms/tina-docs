@@ -19,12 +19,12 @@ export const NavigationSideBar = ({
           src={
             resolvedTheme === "dark"
               ? tableOfContents?.darkModeLogo
-              : tableOfContents?.lightModeLogo || ""
+              : tableOfContents?.lightModeLogo 
           }
           alt={
             resolvedTheme === "dark"
               ? tableOfContents?.darkModeLogo
-              : tableOfContents?.lightModeLogo || ""
+              : tableOfContents?.lightModeLogo
           }
           width={200}
           height={200}
