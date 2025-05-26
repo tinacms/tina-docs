@@ -66,7 +66,7 @@ const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
           <Tabs.Trigger
             key={tab.label}
             value={tab.label}
-            className="text-lg relative text-neutral-text mx-4 focus:text-brand-secondary-hover cursor-pointer font-bold  data-[state=active]:text-blue-600 "
+            className="text-lg relative text-brand-secondary-contrast mx-4 focus:text-brand-secondary-hover cursor-pointer font-bold  data-[state=active]:text-blue-600 "
           >
             {tab.label}
           </Tabs.Trigger>
