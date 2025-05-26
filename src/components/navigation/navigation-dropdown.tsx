@@ -95,7 +95,7 @@ export const NavigationDropdownContent = ({
 
       <div className="relative w-full mb-4" ref={dropdownRef}>
         <button
-          className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between"
+          className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-0 focus:ring-none flex items-center justify-between"
           onClick={() => setIsOpen(!isOpen)}
         >
           <span>
