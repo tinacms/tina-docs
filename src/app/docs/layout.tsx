@@ -1,6 +1,5 @@
 import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
-import { TinaIcon } from "@/src/components/icons";
 import { getDocsNavigation } from "@/utils/docs";
 import type React from "react";
 import Link from "next/link";
@@ -8,7 +7,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
 import { Search } from "@/src/components/search-docs/search";
 import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
-import TinaLamaIcon from "@/src/icons/tina-icon.svg";
+import TinaLamaIcon from "@/src/components/icons/tina-icon.svg";
 
 export default async function DocsLayout({
   children,
