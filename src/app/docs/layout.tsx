@@ -76,8 +76,8 @@ const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
       <div className="w-full hidden md:flex justify-end mr-2">
         <LightDarkSwitch />
       </div>
-      <Search />
-      <Bars3Icon className="size-12 mx-5 md:mr-6 md:ml-0 md:size-18 text-brand-primary lg:hidden" />
+      <Search className="mr-5" />
+      <Bars3Icon className="size-12 mx-5 md:mr-6 md:ml-0 md:size-18 text-brand-primary hidden" />
     </div>
   );
 };

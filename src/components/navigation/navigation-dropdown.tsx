@@ -1,13 +1,29 @@
 "use client";
 
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { MdArrowDropDown } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { DocsNavigationItems } from "./navigation-items";
 
 const NavigationDropdownContent = ({ tocData }) => {
+  const [selectedValue, setSelectedValue] = useState("docs");
+
   return (
     <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-xl">
-      <DocsNavigationItems navItems={tocData} />
+      <div className="relative w-full mb-4">
+        <select
+          className="w-full p-2 rounded-md border border-neutral-border focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none"
+          value={selectedValue}
+          onChange={(e) => setSelectedValue(e.target.value)}
+        >
+          <option value="docs">Docs</option>
+          <option value="learn">Learn</option>
+          <option value="api">API</option>
+          <option value="logs">Logs</option>
+        </select>
+        <MdArrowDropDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-secondary-dark-dark pointer-events-none" />
+      </div>
+      {selectedValue === "docs" && <DocsNavigationItems navItems={tocData} />}
     </div>
   );
 };
