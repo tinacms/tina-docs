@@ -15,7 +15,6 @@ export default function Document({ props, tinaProps }) {
   const documentationData = data.docs;
   const { pageTableOfContents } = props;
 
-  console.log(documentationData?.body)
 
   const formattedDate = formatDate(documentationData?.last_edited);
   const previousPage = {
@@ -60,7 +59,7 @@ export default function Document({ props, tinaProps }) {
         <div
           ref={contentRef}
           data-tina-field={tinaField(documentationData, "body")}
-          className='pt-4'
+          className="pt-4"
         >
           <TinaMarkdown
             content={documentationData?.body}

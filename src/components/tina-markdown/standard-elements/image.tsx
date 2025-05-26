@@ -5,9 +5,6 @@ export const ImageComponent = (props) => {
   const [dimensions, setDimensions] = useState({ width: 16, height: 9 });
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log("Im loading these props", props);
-  console.log("props.url", props.url);
-
   const handleImageLoad = (event) => {
     const img = event.target as HTMLImageElement;
     if (img) {
