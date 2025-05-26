@@ -45,7 +45,7 @@ export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
   return (
     <Bars3Icon
       onClick={onToggle}
-      className="mx-5 md:mr-6 md:ml-0 md:size-12 text-brand-secondary-contrast lg:hidden cursor-pointer"
+      className="size-12 mx-5 md:mr-6 md:ml-0 text-brand-secondary-contrast lg:hidden cursor-pointer"
     />
   );
 };
