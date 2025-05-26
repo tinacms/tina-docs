@@ -13,14 +13,16 @@ interface NavItem {
 
 interface NavigationBarData {
   navigationBar: {
-    title?: string | null | undefined;
+    lightModeLogo?: string | null | undefined;
+    darkModeLogo?: string | null | undefined;
     supermenuGroup?: any[] | null | undefined;
   };
 }
 
 interface FormattedNavigation {
   data: {
-    title: string;
+    lightModeLogo: string;
+    darkModeLogo: string;
     items: any[];
   };
   sha: string;
@@ -90,7 +92,11 @@ export function formatNavigationData(
 
   return {
     data: {
-      title: navigationData.navigationBar.title || "",
+      lightModeLogo: navigationData.navigationBar.lightModeLogo || "",
+      darkModeLogo:
+        navigationData.navigationBar.darkModeLogo ||
+        navigationData.navigationBar.lightModeLogo || 
+        "",
       items: navGroups,
     },
     sha: "",
