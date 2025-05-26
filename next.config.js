@@ -3,6 +3,10 @@ const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 /** @type {import('next').NextConfig} */
 
 module.exports = {
+  images: {
+    remotePatterns: [],
+    unoptimized: true,
+  },
   async rewrites() {
     return [
       {

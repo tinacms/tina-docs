@@ -1,13 +1,22 @@
 ---
 title: Editing Content via the CMS
-last_edited: '2025-05-09T08:43:22.235Z'
-next: ''
-previous: ''
+last_edited: '2025-05-23T06:15:41.028Z'
+next: content/docs/customising/schema.mdx
+previous: content/docs/API-References.mdx
 ---
 
 Now our site is up and running, let's start using the **no-code editing window**.
 
 We've set up **visual editing** in this starter so you can view changes on your page live.
+
+<Callout
+  body={<>
+    Prefer to watch a video? Follow the one provided.
+  </>}
+  variant="idea"
+/>
+
+<youtube embedSrc="https://www.youtube.com/embed/CsCQS7HIBv0?si=os9ona92O2VMOl-V" caption="Seth goes over the basics of using TinaCMS" minutes="2" />
 
 ## Running your Project
 
@@ -20,25 +29,40 @@ In local development mode, changes are saved directly to files in your local rep
 
 ## Accessing the Editor
 
-The TinaCMS editor is available at the `/admin/index.html` route of your site.
+The TinaCMS editor is available at the `/admin` route of your site.
 
 Here's how to access the editor in different environments:
 
 * **Local Development**:
   * Run `pnpm run dev` in your terminal
-  * Visit `http://localhost:3000/admin/index.html`
+  * Visit `http://localhost:3000/admin`
   * Changes are saved to your local files
-* **TinaCloud Production**:
-  * Visit `https://<DOMAIN>/admin/index.html` on your deployed site
-  * Changes are automatically pushed to your Git repository
-* **TinaCloud Local Preview**:
-  * Run `pnpm run build` followed by `pnpm run start`
-  * Visit `http://localhost:3000/admin/index.html`
-  * This lets you test the production editor locally
+* **Production**:
+  * Visit `https://<DOMAIN>/admin`on your deployed site
+  * If you are hosting your site with TinaCloud you will be asked to log in
+  * If you self-host you will be prompted to plug in your own authentication credentials
 
-<youtube embedSrc="https://www.youtube.com/embed/CsCQS7HIBv0?si=os9ona92O2VMOl-V" caption="Seth goes over the basics of using TinaCMS" minutes="2" />
+Once on this route, you will see a pencil icon in the top left hand side of the screen. Click to open it.
 
-### The Editing Interface
+## The Initial Editing Interface
+
+Once the editor is open you will be prompted with numerous fields representing the content on this page. The layout of these fields is dictated by the schema of this collection.
+
+![](/img/tina-editor-example.png "Example Slide-out Editor")
+
+Here we can make edits to the content of our file and witness the changes in real time (WYSIWYG)
+
+## Editing Other Files
+
+Whilst we can navigate through our files with the admin route prefixed, we can also use the editor to edit other files. 
+
+You'll notice on the top left of the open editor there is a menu button (indicated by the three lines icon).
+
+Clicking it will open another slide-out showing your Collections. You can think of each collection as a  structured data type (or different table in your database). 
+
+Out of the box, all files on the docs route will be stored in your docs collection. If you click on the Docscollection you will see all of your other files in this project in a file directory structure. Navigate through and find the file you want to edit.
+
+## The Editing Interface
 
 > **Visual Editing**: TinaCMS offers a powerful visual editing experience where you can see your changes in real-time. This works alongside the standard document editor and provides a WYSIWYG approach to content editing. Toggle between form mode and visual mode to get the best of both worlds.
 
@@ -48,8 +72,6 @@ The TinaCMS editing interface consists of several key components:
 2. **Document List**: Displays all documents within a selected collection
 3. **Document Editor**: The form for editing a specific document
 4. **Media Manager**: For uploading and managing media files
-
-![TinaCMS Editor Interface](/img/tina-editor-interface.png)
 
 ### Making and Saving Changes
 
@@ -79,8 +101,6 @@ For example, this documentation page is stored as an MDX file with YAML front ma
 ---
 title: Editing Content via the CMS
 last_edited: '2025-04-28T02:24:07.977Z'
-next: ''
-previous: ''
 ---
 
 Now our site is up and running, let's start using the **no-code editing window**.
@@ -88,43 +108,13 @@ Now our site is up and running, let's start using the **no-code editing window**
 We've set up **visual editing** in this starter so you can view changes on your page live.
 ```
 
-#### Collections and Content Modeling
-
-In Tina, content is organized into collections. Each collection is defined in your `tina/config.js` file and specifies:
-
-1. **Name**: The identifier for the collection
-2. **Path**: Where files are stored in your repository
-3. **Format**: File format (md, mdx, json, etc.)
-4. **Schema**: The structure of your content (fields, validation, UI components)
-
-```javascript
-// Example collection definition
-{
-  name: 'page',
-  path: 'content/pages',
-  format: 'mdx',
-  fields: [
-    {
-      name: 'title',
-      type: 'string',
-      required: true,
-    },
-    {
-      name: 'body',
-      type: 'rich-text',
-      isBody: true,
-    }
-  ]
-}
-```
-
-#### How Changes Are Saved
+### How Changes Are Saved
 
 When you save changes in TinaCMS:
 
 1. **Local Development**: Changes are written directly to your local file system
-2. **TinaCloud**: Changes are committed to your Git repository through the following process:
-   * The change is sent to TinaCloud
+2. **Production with TinaCloud**: Changes are committed to your Git repository through the following process:
+   * The change is sent to TinaCloud and indexed
    * TinaCloud creates a commit in your repository
    * Your site is rebuilt with the new content
 

@@ -1,39 +1,58 @@
 ---
-id: introduction
-seo:
-  title: "Take Back your Docs \U0001F680"
-  description: Example Description
-title: "Take Back your Docs \U0001F680"
-last_edited: '2025-05-15T23:28:48.546Z'
-tocIsHidden: false
+title: Welcome to TinaDocs
+last_edited: '2025-05-26T04:59:18.484Z'
+tocIsHidden: true
 next: ''
 previous: ''
 ---
 
-Most documentation builder platforms lock you into certain style patterns and rigid workflows that limit customization.
+This new Starter Template offers users the ability to set-up their documentation sites, with full flexibility, in just minutes.
 
-**This starter package changes that.**
+Built for both developers and non-developers.
 
-Built with **TinaCMS**, it gives you full control over both your content and your UI—no more templates you can’t tweak or structures you’re stuck with.
-
-![](/img/smashingmagazine-tinacms.gif)
-
-> Since TinaCMS has no proprietary data store, your content lives entirely in your GitHub repository—versioned, portable, and fully under your control.
-
-## What is TinaCMS?
-
-TinaCMS is a Git-backed CMS for developers. It lets you build a custom editing UI using React, with content stored in markdown or JSON and committed straight to Git. No database, no admin panel—just full control and instant versioning.
-
-For more details, check out our documentation. If you have further questions, feel free to join our community on Discord.
-
-## About the Starter Docs Package
-
-This starter is a ready-to-use documentation site powered by TinaCMS. It includes:
-
-* A minimal, clean UI with file-based routing.
-* Markdown content stored in your Git repo.
-* Live editing via Tina’s sidebar interface.
-* Pre-built components for code blocks, callouts, and navigation, and more.
-* Git-based version control out of the box.
-
-It’s ideal for teams who want a fast, customizable way to build and maintain developer docs without sacrificing flexibility or control.
+<cardGrid
+  cards={[
+    {
+      title: "Editing with TinaCMS",
+      description:
+        "Learn how the TinaCMS editor works and manage content inside your browser",
+      link: "/docs/tinadocs-and-tinacms/editing-content",
+      linkText: "TinaDocs & TinaCMS"
+    },
+    {
+      title: "Components",
+      description:
+        "Create dynamic, engaging docs with our plug-and-play components",
+      link: "/docs/components/overview",
+      linkText: "Our Components"
+    },
+    {
+      title: "API Referencing",
+      description:
+        "Link and display your API endpoints with auto-generated references and customizable fields",
+      link: "/docs/api-documentation/Overview",
+      linkText: "API Documentation"
+    },
+    {
+      title: "Customization & Themes",
+      description:
+        "Tailor the look and feel of your docs with full control over themes and layout",
+      link: "/docs/customization-and-themes/Overview",
+      linkText: "Customization Options"
+    },
+    {
+      title: "Extending TinaDocs",
+      description:
+        "Build on top of TinaDocs with APIs, custom blocks, and editable templates",
+      link: "https://tina.io/docs/reference/collections",
+      linkText: "Learn about Extending TinaDocs"
+    },
+    {
+      title: "Deploying your Site",
+      description:
+        "Learn how to take your TinaDocs site live with step-by-step deployment guides.",
+      link: "/docs/set-up/deploying-your-docs",
+      linkText: "Get your Site Live"
+    }
+  ]}
+/>
