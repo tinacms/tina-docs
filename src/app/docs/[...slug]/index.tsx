@@ -48,12 +48,6 @@ export default function Document({ props, tinaProps }) {
           </h1>
           <CopyPageDropdown className="self-end mb-2 md:mb-0" />
         </div>
-        {/* MOBILE TABLE OF CONTENTS */}
-        {documentationData?.tocIsHidden ? null : (
-          <div className="block xl:hidden">
-            <TableOfContentsDropdown tocData={pageTableOfContents} />
-          </div>
-        )}
         {/* CONTENT */}
         <div
           ref={contentRef}

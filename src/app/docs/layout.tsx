@@ -106,6 +106,13 @@ const Body = ({
 }) => {
   return (
     <>
+      {/* MOBILE NAVIGATION DROPDOWN */}
+      <div className="block md:hidden">
+        <div className="relative">
+          <NavigationDropdown tocData={navigationDocsData} />
+        </div>
+      </div>
+
       <Breadcrumbs navItems={navigationDocsData} />
       <div data-pagefind-body id="doc-content">
         {children}

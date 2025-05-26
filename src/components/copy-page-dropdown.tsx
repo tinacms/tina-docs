@@ -115,7 +115,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 
   return (
     <div
-      className="mb-4 inline-flex rounded-lg overflow-hidden lg:mb-0 brand-glass-gradient text-neutral-text shadow-sm item-center w-fit ml-auto"
+      className="mb-2 inline-flex rounded-lg overflow-hidden lg:mb-0 brand-glass-gradient text-neutral-text shadow-sm item-center w-fit ml-auto"
       data-exclude-from-md
     >
       {/* Primary copy button */}
