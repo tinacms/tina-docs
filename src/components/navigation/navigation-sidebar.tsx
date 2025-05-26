@@ -22,9 +22,7 @@ export const NavigationSideBar = ({
 };
 
 const Title = ({ title }: { title: string }) => (
-  <div className="">
-    <h1 className="ml-2 brand-primary-gradient bg-clip-text pb-4 pt-6 font-tuner text-4xl text-transparent">
-      {title}
-    </h1>
-  </div>
+  <h1 className="ml-2 brand-primary-gradient bg-clip-text pb-4 pt-6 font-tuner text-4xl text-transparent">
+    {title}
+  </h1>
 );
