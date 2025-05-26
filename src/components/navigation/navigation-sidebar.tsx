@@ -12,8 +12,6 @@ export const NavigationSideBar = ({
   tableOfContents: any;
 }) => {
   const { resolvedTheme } = useTheme();
-
-  console.log(tableOfContents);
   return (
     <div className="w-full h-full rounded-2xl brand-glass-gradient border border-neutral-border-subtle shadow-xl">
       <div className="pl-6">
