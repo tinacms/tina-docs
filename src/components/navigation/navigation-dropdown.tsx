@@ -95,7 +95,7 @@ export const NavigationDropdownContent = ({
 
       <div className="relative w-full mb-4" ref={dropdownRef}>
         <button
-          className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-0 focus:ring-none flex items-center justify-between"
+          className="w-full p-2 px-4 rounded-lg border border-neutral-border focus:outline-none focus:ring-0 focus:ring-none flex items-center justify-between"
           onClick={() => setIsOpen(!isOpen)}
         >
           <span>
@@ -109,11 +109,11 @@ export const NavigationDropdownContent = ({
         </button>
 
         {isOpen && (
-          <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-border rounded-md shadow-lg">
+          <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-border rounded-lg shadow-lg">
             {options.map((option) => (
               <button
                 key={option.value}
-                className={`w-full p-2 px-4 text-left hover:bg-neutral-50 ${
+                className={`w-full p-2 px-4 text-left hover:bg-neutral-50 rounded-0 first:rounded-t-lg last:rounded-b-lg ${
                   selectedValue === option.value ? "bg-neutral-50" : ""
                 }`}
                 onClick={() => {
