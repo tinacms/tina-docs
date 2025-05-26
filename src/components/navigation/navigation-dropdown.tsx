@@ -78,7 +78,7 @@ export const NavigationDropdownContent = ({ tocData }) => {
   }, []);
 
   return (
-    <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 min-h-[90vh] max-h-[90vh] overflow-y-auto w-[70%] rounded-lg bg-white p-6 shadow-xl right-6">
+    <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 h-[100vh] max-h-[90vh] overflow-y-auto w-[75%] rounded-lg bg-white p-6 shadow-xl right-0 -top-4">
       <div className="relative w-full mb-4" ref={dropdownRef}>
         <select
           className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none"
