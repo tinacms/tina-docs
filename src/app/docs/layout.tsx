@@ -45,7 +45,7 @@ export default async function DocsLayout({
           <Sidebar tabs={tabs} />
           <main>
             <Body
-              navigationDocsData={navigationDocsData.data}
+              navigationDocsData={navigationDocsData?.data}
               children={children}
             />
           </main>
@@ -109,11 +109,11 @@ const Body = ({
       {/* MOBILE NAVIGATION DROPDOWN */}
       <div className="block md:hidden">
         <div className="relative">
-          <NavigationDropdown tocData={navigationDocsData.data} />
+          <NavigationDropdown tocData={navigationDocsData} />
         </div>
       </div>
 
-      <Breadcrumbs navItems={navigationDocsData.data} />
+      <Breadcrumbs navItems={navigationDocsData} />
       <div data-pagefind-body id="doc-content">
         {children}
       </div>

@@ -13,7 +13,7 @@ const NavigationDropdownContent = ({ tocData }) => {
   );
 };
 
-export const NavigationDropdown = ({ tocData }) => {
+export const NavigationDropdown = ({ tocData }: { tocData: any }) => {
   const [isTableOfContentsOpen, setIsTableOfContentsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
