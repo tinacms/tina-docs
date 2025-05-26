@@ -62,7 +62,7 @@ export default async function DocsLayout({
                   href="/"
                   className="text-xl font-bold text-gray-800 dark:text-white"
                 >
-                  <TinaLamaIcon className="h-10 w-auto fill-orange-500 mr-4 ml-2" />
+                  <TinaLamaIcon className="h-10 w-auto fill-orange-500 mx-4" />
                 </Link>
                 <Tabs.List className="flex">
                   {tabs.map((tab) => (

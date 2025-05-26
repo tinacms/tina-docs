@@ -221,32 +221,13 @@ export const DocsNavigationItems = ({ navItems }: DocsNavProps) => {
     >
       {navItems.length > 0 &&
         navItems?.map((categoryData) => (
-          <>
-            <div
-              className="flex gap-2 group"
-              key={getIdSyntax(categoryData.title)}
-            >
-              <div
-                className={` border-1 border-neutral-border  ${
-                  "1" === getIdSyntax(categoryData.title)
-                    ? "border-brand-primary"
-                    : "border-neutral-border group-hover:border-neutral-500"
-                }`}
-              />
-              <div
-                key={`mobile-${
-                  categoryData.slug
-                    ? getUrl(categoryData.slug)
-                    : categoryData.title
-                }`}
-              >
-                <NavLevel
-                  navListElem={navListElem}
-                  categoryData={categoryData}
-                />
-              </div>
-            </div>
-          </>
+          <div
+            key={`mobile-${
+              categoryData.slug ? getUrl(categoryData.slug) : categoryData.title
+            }`}
+          >
+            <NavLevel navListElem={navListElem} categoryData={categoryData} />
+          </div>
         ))}
     </div>
   );
