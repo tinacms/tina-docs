@@ -1,13 +1,56 @@
 "use client";
-
-import { Bars3Icon } from "@heroicons/react/24/outline";
 import { MdArrowDropDown } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { DocsNavigationItems } from "./navigation-items";
 
-const NavigationDropdownContent = ({ tocData }) => {
-  const [selectedValue, setSelectedValue] = useState("docs");
+export const MobileNavigationWrapper = ({ tocData }: { tocData: any }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const toggleDropdown = () => setIsOpen((prev) => !prev);
+  const closeDropdown = () => setIsOpen(false);
+
+  // Ensure outside click always works
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        closeDropdown();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef}>
+      <NavigationToggle onToggle={toggleDropdown} />
+      {isOpen && (
+        <NavigationDropdownContent
+          tocData={Array.isArray(tocData.items) ? tocData.items : []}
+        />
+      )}
+    </div>
+  );
+};
+
+export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
+  return (
+    <Bars3Icon
+      onClick={onToggle}
+      className="size-12 mx-5 md:mr-6 md:ml-0 md:size-18 text-brand-primary lg:hidden cursor-pointer"
+    />
+  );
+};
+
+export const NavigationDropdownContent = ({ tocData }) => {
+  const [selectedValue, setSelectedValue] = useState("docs");
   const dropdownRef = useRef(null);
 
   const options = [
@@ -17,10 +60,14 @@ const NavigationDropdownContent = ({ tocData }) => {
     { value: "logs", label: "Logs" },
   ];
 
+  // This handles click outside inside the dropdown itself (if needed later)
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !(dropdownRef.current as any).contains(event.target)
+      ) {
+        // no-op — parent handles closing
       }
     };
 
@@ -31,90 +78,22 @@ const NavigationDropdownContent = ({ tocData }) => {
   }, []);
 
   return (
-    <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 h-96 w-full overflow-y-scroll rounded-lg bg-white p-6 shadow-xl">
+    <div className="animate-fade-down animate-duration-300 absolute z-20 mt-4 h-96 w-[400px] overflow-y-scroll rounded-lg bg-white p-6 shadow-xl right-6">
       <div className="relative w-full mb-4" ref={dropdownRef}>
-        <button
-          className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between"
-          onClick={() => setIsOpen(!isOpen)}
+        <select
+          className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none"
+          value={selectedValue}
+          onChange={(e) => setSelectedValue(e.target.value)}
         >
-          <span>
-            {options.find((opt) => opt.value === selectedValue)?.label}
-          </span>
-          <MdArrowDropDown
-            className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          />
-        </button>
-
-        {isOpen && (
-          <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-border rounded-md shadow-lg">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                className={`w-full p-2 px-4 text-left hover:bg-neutral-50 ${
-                  selectedValue === option.value ? "bg-neutral-50" : ""
-                }`}
-                onClick={() => {
-                  setSelectedValue(option.value);
-                  setIsOpen(false);
-                }}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        )}
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <MdArrowDropDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-secondary-dark-dark pointer-events-none" />
       </div>
       {selectedValue === "docs" && <DocsNavigationItems navItems={tocData} />}
-    </div>
-  );
-};
-
-export const NavigationDropdown = ({ tocData }: { tocData: any }) => {
-  const [isTableOfContentsOpen, setIsTableOfContentsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target)
-      ) {
-        setIsTableOfContentsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  return (
-    <div className="w-full pb-6" ref={containerRef}>
-      <div
-        className="cursor-pointer rounded-lg border-neutral-border brand-glass-gradient px-4 py-2 shadow-lg"
-        onClick={() => setIsTableOfContentsOpen(!isTableOfContentsOpen)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setIsTableOfContentsOpen(!isTableOfContentsOpen);
-          }
-        }}
-      >
-        <span className="flex items-center space-x-2 py-1">
-          <Bars3Icon className="size-5 text-brand-primary" />
-          <span className="text-neutral-text">Topics</span>
-        </span>
-      </div>
-      {isTableOfContentsOpen && (
-        <div className="relative w-full">
-          <NavigationDropdownContent
-            tocData={Array.isArray(tocData.items) ? tocData.items : []}
-          />
-        </div>
-      )}
     </div>
   );
 };

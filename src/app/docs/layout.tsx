@@ -1,6 +1,10 @@
 import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import TinaLamaIcon from "@/src/components/icons/tina-icon.svg";
-import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
+import {
+  MobileNavigationWrapper,
+  NavigationDropdown,
+  NavigationToggle,
+} from "@/src/components/navigation/navigation-dropdown";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
 import { Search } from "@/src/components/search-docs/search";
 import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
@@ -41,7 +45,7 @@ export default async function DocsLayout({
   return (
     <div className="relative flex flex-col w-full pb-2">
       <Tabs.Root defaultValue={tabs[0].label} className="flex flex-col w-full">
-        <TopNav tabs={tabs} />
+        <TopNav tabs={tabs} navigationDocsData={navigationDocsData?.data} />
         <div className="w-full grid grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[25%_75%] gap-4 p-4">
           <Sidebar tabs={tabs} />
           <main>
@@ -56,7 +60,13 @@ export default async function DocsLayout({
   );
 }
 
-const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
+const TopNav = ({
+  tabs,
+  navigationDocsData,
+}: {
+  tabs: { label: string; content: any }[];
+  navigationDocsData: any;
+}) => {
   return (
     <div className="flex items-center justify-between md:justify-start font-semibold w-full lg:border-b border-neutral-border py-3 lg:shadow">
       <Link href="/" className="text-xl">
@@ -77,7 +87,7 @@ const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
         <LightDarkSwitch />
       </div>
       <Search className="mr-5" />
-      <Bars3Icon className="size-12 mx-5 md:mr-6 md:ml-0 md:size-18 text-brand-primary hidden" />
+      <MobileNavigationWrapper tocData={navigationDocsData} />
     </div>
   );
 };
@@ -108,13 +118,6 @@ const Body = ({
 }) => {
   return (
     <>
-      {/* MOBILE NAVIGATION DROPDOWN */}
-      <div className="block md:hidden">
-        <div className="relative">
-          <NavigationDropdown tocData={navigationDocsData} />
-        </div>
-      </div>
-
       <Breadcrumbs navItems={navigationDocsData} />
       <div data-pagefind-body id="doc-content">
         {children}
