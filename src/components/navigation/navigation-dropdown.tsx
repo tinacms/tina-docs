@@ -45,7 +45,7 @@ export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
   return (
     <Bars3Icon
       onClick={onToggle}
-      className="size-12 mx-5 md:mr-6 md:ml-0 md:size-18 text-brand-primary lg:hidden cursor-pointer"
+      className="mx-5 md:mr-6 md:ml-0 md:size-12 text-brand-secondary-contrast lg:hidden cursor-pointer"
     />
   );
 };
@@ -88,7 +88,7 @@ export const NavigationDropdownContent = ({
       <div className="flex justify-end mb-4">
         <MdClose
           onClick={onClose}
-          className="text-2xl text-brand-primary cursor-pointer"
+          className="text-3xl text-brand-secondary-contrast cursor-pointer"
         />
       </div>
 

@@ -5,7 +5,6 @@ import { NavigationSideBar } from "@/src/components/navigation/navigation-sideba
 import { Search } from "@/src/components/search-docs/search";
 import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
 import { getDocsNavigation } from "@/utils/docs";
-import { Bars3Icon } from "@heroicons/react/24/outline";
 import * as Tabs from "@radix-ui/react-tabs";
 import Link from "next/link";
 import type React from "react";
@@ -66,7 +65,7 @@ const TopNav = ({
   return (
     <div className="flex items-center justify-between md:justify-start font-semibold w-full lg:border-b border-neutral-border py-3 lg:shadow">
       <Link href="/" className="text-xl">
-        <TinaLamaIcon className="h-10 w-auto fill-orange-600 mx-5" />
+        <TinaLamaIcon className="h-14 w-auto fill-orange-600 mx-5" />
       </Link>
       <Tabs.List className="lg:flex hidden">
         {tabs.map((tab) => (
