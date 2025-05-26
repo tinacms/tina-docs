@@ -5,6 +5,7 @@ import { NavigationSideBar } from "@/src/components/navigation/navigation-sideba
 import { Search } from "@/src/components/search-docs/search";
 import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
 import { getDocsNavigation } from "@/utils/docs";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import * as Tabs from "@radix-ui/react-tabs";
 import Link from "next/link";
 import type React from "react";
@@ -76,6 +77,7 @@ const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
         <LightDarkSwitch />
       </div>
       <Search />
+      <Bars3Icon className="size-12 mx-6 md:mr-6 md:ml-0 md:size-18 text-brand-primary lg:hidden" />
     </div>
   );
 };
