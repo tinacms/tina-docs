@@ -25,9 +25,7 @@
       "@/config/*": ["./src/config/*"],
       "@/app/*": ["./src/app/*"],
       "@/tina/*": ["./tina/*"],
-      "@/src/*": ["./src/*"],
-      "@/icons/*": ["./src/icons*"]
-
+      "@/src/*": ["./src/*"]
     },
     "plugins": [
       {
