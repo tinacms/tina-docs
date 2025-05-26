@@ -1,10 +1,6 @@
 import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import TinaLamaIcon from "@/src/components/icons/tina-icon.svg";
-import {
-  MobileNavigationWrapper,
-  NavigationDropdown,
-  NavigationToggle,
-} from "@/src/components/navigation/navigation-dropdown";
+import { MobileNavigationWrapper } from "@/src/components/navigation/navigation-dropdown";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
 import { Search } from "@/src/components/search-docs/search";
 import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
@@ -86,7 +82,7 @@ const TopNav = ({
       <div className="w-full hidden md:flex justify-end mr-2">
         <LightDarkSwitch />
       </div>
-      <Search className="mr-5" />
+      <Search />
       <MobileNavigationWrapper tocData={navigationDocsData} />
     </div>
   );
