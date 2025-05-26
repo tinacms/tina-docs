@@ -42,28 +42,9 @@ export default async function DocsLayout({
       <Tabs.Root defaultValue={tabs[0].label} className="flex flex-col w-full">
         <TopNav tabs={tabs} />
         <div className="w-full grid grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[25%_75%] gap-4 p-4">
-          {tabs.map((tab) => (
-            <Tabs.Content key={tab.label} value={tab.label}>
-              <aside className="sticky top-4 hidden md:block mr-4 h-[calc(100vh-2rem)]">
-                <NavigationSideBar
-                  title={tab?.label}
-                  tableOfContents={tab?.content}
-                />
-              </aside>
-            </Tabs.Content>
-          ))}
+          <Sidebar tabs={tabs} />
           <main>
-            {/* MOBILE NAVIGATION DROPDOWN */}
-            <div className="block md:hidden">
-              <div className="relative">
-                <NavigationDropdown tocData={navigationDocsData.data} />
-              </div>
-            </div>
-
-            <Breadcrumbs navItems={navigationDocsData.data} />
-            <div data-pagefind-body id="doc-content">
-              {children}
-            </div>
+            <Body navigationDocsData={navigationDocsData.data}>{children}</Body>
           </main>
         </div>
       </Tabs.Root>
@@ -93,5 +74,46 @@ const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
       </div>
       <Search />
     </div>
+  );
+};
+
+const Sidebar = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
+  return (
+    <>
+      {tabs.map((tab) => (
+        <Tabs.Content key={tab.label} value={tab.label}>
+          <aside className="sticky top-4 hidden md:block mr-4 h-[calc(100vh-2rem)]">
+            <NavigationSideBar
+              title={tab?.label}
+              tableOfContents={tab?.content}
+            />
+          </aside>
+        </Tabs.Content>
+      ))}
+    </>
+  );
+};
+
+const Body = ({
+  children,
+  navigationDocsData,
+}: {
+  children: React.ReactNode;
+  navigationDocsData: any;
+}) => {
+  return (
+    <>
+      {/* MOBILE NAVIGATION DROPDOWN */}
+      <div className="block md:hidden">
+        <div className="relative">
+          <NavigationDropdown tocData={navigationDocsData.data} />
+        </div>
+      </div>
+
+      <Breadcrumbs navItems={navigationDocsData.data} />
+      <div data-pagefind-body id="doc-content">
+        {children}
+      </div>
+    </>
   );
 };
