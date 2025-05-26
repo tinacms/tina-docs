@@ -59,6 +59,9 @@ importers:
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
+      react-dropzone:
+        specifier: ^14.3.8
+        version: 14.3.8(react@19.1.0)
       react-icons:
         specifier: ^5.5.0
         version: 5.5.0(react@19.1.0)
@@ -92,7 +95,7 @@ importers:
         version: 4.1.7
       '@tinacms/cli':
         specifier: ^1.9.7
-        version: 1.9.7(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.39.0)
+        version: 1.9.7(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.39.2)
       '@types/node':
         specifier: ^22.15.18
         version: 22.15.19
@@ -1043,8 +1046,8 @@ packages:
   '@codemirror/state@6.5.2':
     resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
 
-  '@codemirror/view@6.36.7':
-    resolution: {integrity: sha512-kCWGW/chWGPgZqfZ36Um9Iz0X2IVpmCjg1P/qY6B6a2ecXtWRRAigmpJ6YgUQ5lTWXMyyVdfmpzhLZmsZQMbtg==}
+  '@codemirror/view@6.36.8':
+    resolution: {integrity: sha512-yoRo4f+FdnD01fFt4XpfpMCcCAo9QvZOtbrXExn4SqzH32YC6LgzqxfLZw/r6Ge65xyY03mK/UfUqrVw1gFiFg==}
 
   '@csstools/cascade-layer-name-parser@2.0.4':
     resolution: {integrity: sha512-7DFHlPuIxviKYZrOiwVU/PiHLm3lLUR23OMuEEtfEOQTOp9hzQ2JjdY6X5H18RVuUPJqSCI+qNnD5iOLMVE0bA==}
@@ -1905,6 +1908,10 @@ packages:
 
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
+    engines: {node: '>=6.0.0'}
+
+  '@jridgewell/gen-mapping@0.3.8':
+    resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
     engines: {node: '>=6.0.0'}
 
   '@jridgewell/resolve-uri@3.1.2':
@@ -3230,6 +3237,9 @@ packages:
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
+  '@types/estree@1.0.7':
+    resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
+
   '@types/geojson@7946.0.16':
     resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
 
@@ -3265,6 +3275,9 @@ packages:
 
   '@types/node@22.15.19':
     resolution: {integrity: sha512-3vMNr4TzNQyjHcRZadojpRaD9Ofr6LsonZAoQ+HMUa/9ORTPoxVIw0e0mpqWpdjj8xybyCM+oKOUH2vwFu/oEw==}
+
+  '@types/node@22.15.21':
+    resolution: {integrity: sha512-EV/37Td6c+MgKAbkcLG6vqZ2zEYHD7bvSrzqqs2RIhbA6w3x+Dqz8MZM3sP6kGTeLrdoOgKZe+Xja7tUB2DNkQ==}
 
   '@types/prismjs@1.26.4':
     resolution: {integrity: sha512-rlAnzkW2sZOjbqZ743IHUhFcvzaGbqijwOu8QZnZCjfQzBqFE3s4lOTJEsxikImav9uzz/42I+O7YUs1mWgMlg==}
@@ -4010,6 +4023,10 @@ packages:
 
   attr-accept@2.2.2:
     resolution: {integrity: sha512-7prDjvt9HmqiZ0cl5CRjtS84sEyhsHP2coDkaZKRKVfCDo9s7iw7ChVmar78Gu9pC4SoR/28wFu/G5JJhTnqEg==}
+    engines: {node: '>=4'}
+
+  attr-accept@2.2.5:
+    resolution: {integrity: sha512-0bDNnY/u6pPwHDMoF0FieU354oBi0a8rD9FcsLwzcGWbc8KS8KPIi7y+s13OlVY+gMWc/9xEMUgNE6Qm8ZllYQ==}
     engines: {node: '>=4'}
 
   auto-bind@4.0.0:
@@ -4942,6 +4959,10 @@ packages:
 
   file-selector@0.6.0:
     resolution: {integrity: sha512-QlZ5yJC0VxHxQQsQhXvBaC7VRJ2uaxTf+Tfpu4Z/OcVQJVpZO+DGU0rkoVW5ce2SccxugvpBJoMvUs59iILYdw==}
+    engines: {node: '>= 12'}
+
+  file-selector@2.1.2:
+    resolution: {integrity: sha512-QgXo+mXTe8ljeqUFaX3QVHc5osSItJ/Km+xpocx0aSqWGMSCf6qYs/VnzZgS864Pjn5iceMRFigeAV7AfTlaig==}
     engines: {node: '>= 12'}
 
   file-uri-to-path@1.0.0:
@@ -6804,6 +6825,12 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
+  react-dropzone@14.3.8:
+    resolution: {integrity: sha512-sBgODnq+lcA4P296DY4wacOZz3JFpD99fp+hb//iBO2HHnyeZU3FwWyXJ6salNpqQdsZrgMrotuko/BdJMV8Ug==}
+    engines: {node: '>= 10.13'}
+    peerDependencies:
+      react: '>= 16.8 || 18.0.0'
+
   react-final-form@6.5.9:
     resolution: {integrity: sha512-x3XYvozolECp3nIjly+4QqxdjSSWfcnpGEL5K8OBT6xmGrq5kBqbA6+/tOqoom9NwqIPPbxPNsOViFlbKgowbA==}
     peerDependencies:
@@ -7397,6 +7424,10 @@ packages:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
 
+  tapable@2.2.2:
+    resolution: {integrity: sha512-Re10+NauLTMCudc7T5WLFLAwDhQ0JWdrMK+9B2M8zR5hRExKmsRDCBA7/aV/pNJFltmBFO5BAMlQFi/vq3nKOg==}
+    engines: {node: '>=6'}
+
   tar-fs@2.1.1:
     resolution: {integrity: sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==}
 
@@ -7428,8 +7459,8 @@ packages:
       uglify-js:
         optional: true
 
-  terser@5.39.0:
-    resolution: {integrity: sha512-LBAhFyLho16harJoWMg/nZsQYgTrg5jXOn2nCYjRUcZZEdE3qa2zb8QEDRUGVZBW4rlazf2fxkg8tztybTaqWw==}
+  terser@5.39.2:
+    resolution: {integrity: sha512-yEPUmWve+VA78bI71BW70Dh0TuV4HHd+I5SHOAfS1+QBOmvmCiiffgjR8ryyEd3KIfvPGFqoADt8LdQ6XpXIvg==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -7834,8 +7865,8 @@ packages:
   w3c-keyname@2.2.8:
     resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}
 
-  watchpack@2.4.2:
-    resolution: {integrity: sha512-TnbFSbcOCcDgjZ4piURLCbJ3nJhznVh9kw6F6iokjiFPl8ONxe9A6nMDVXDiNbrSfLILs6vB07F7wLBrwPYzJw==}
+  watchpack@2.4.4:
+    resolution: {integrity: sha512-c5EGNOiyxxV5qmTtAB7rbiXxi1ooX1pQKMLX/MIabJjRA0SJBQOjKF+KSVfHkr9U1cADPon0mRiVe/riyaiDUA==}
     engines: {node: '>=10.13.0'}
 
   web-namespaces@2.0.1:
@@ -9100,7 +9131,7 @@ snapshots:
   '@codemirror/language@6.11.0':
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.36.7
+      '@codemirror/view': 6.36.8
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
@@ -9110,7 +9141,7 @@ snapshots:
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.36.7':
+  '@codemirror/view@6.36.8':
     dependencies:
       '@codemirror/state': 6.5.2
       style-mod: 4.1.2
@@ -9918,13 +9949,19 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.0
       '@jridgewell/trace-mapping': 0.3.25
 
+  '@jridgewell/gen-mapping@0.3.8':
+    dependencies:
+      '@jridgewell/set-array': 1.2.1
+      '@jridgewell/sourcemap-codec': 1.5.0
+      '@jridgewell/trace-mapping': 0.3.25
+
   '@jridgewell/resolve-uri@3.1.2': {}
 
   '@jridgewell/set-array@1.2.1': {}
 
   '@jridgewell/source-map@0.3.6':
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.5
+      '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
@@ -11036,7 +11073,7 @@ snapshots:
       - supports-color
       - yup
 
-  '@tinacms/cli@1.9.7(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.39.0)':
+  '@tinacms/cli@1.9.7(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.39.2)':
     dependencies:
       '@graphql-codegen/core': 2.6.8(graphql@15.8.0)
       '@graphql-codegen/plugin-helpers': 5.1.0(graphql@15.8.0)
@@ -11056,7 +11093,7 @@ snapshots:
       '@tinacms/metrics': 1.0.9(fs-extra@11.3.0)
       '@tinacms/schema-tools': 1.7.3(react@19.1.0)(yup@1.6.1)
       '@tinacms/search': 1.0.44(abstract-level@1.0.4)(react@19.1.0)(sucrase@3.35.0)(typescript@5.8.3)(yup@1.6.1)
-      '@vitejs/plugin-react': 3.1.0(vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.0))
+      '@vitejs/plugin-react': 3.1.0(vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2))
       altair-express-middleware: 7.3.6
       async-lock: 1.4.1
       auto-bind: 4.0.0
@@ -11088,7 +11125,7 @@ snapshots:
       tinacms: 2.7.7(@types/react@19.0.12)(abstract-level@1.0.4)(immer@10.1.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(scheduler@0.26.0)(sucrase@3.35.0)(typescript@5.8.3)
       typanion: 3.13.0
       typescript: 5.8.3
-      vite: 4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.0)
+      vite: 4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2)
       yup: 1.6.1
       zod: 3.24.2
     transitivePeerDependencies:
@@ -11397,11 +11434,11 @@ snapshots:
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 9.6.1
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
 
   '@types/eslint@9.6.1':
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       '@types/json-schema': 7.0.15
 
   '@types/estree-jsx@1.0.5':
@@ -11409,6 +11446,8 @@ snapshots:
       '@types/estree': 1.0.6
 
   '@types/estree@1.0.6': {}
+
+  '@types/estree@1.0.7': {}
 
   '@types/geojson@7946.0.16': {}
 
@@ -11444,6 +11483,10 @@ snapshots:
   '@types/ms@0.7.34': {}
 
   '@types/node@22.15.19':
+    dependencies:
+      undici-types: 6.21.0
+
+  '@types/node@22.15.21':
     dependencies:
       undici-types: 6.21.0
 
@@ -12122,14 +12165,14 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react@3.1.0(vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.0))':
+  '@vitejs/plugin-react@3.1.0(vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2))':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.25.2)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.25.2)
       magic-string: 0.27.0
       react-refresh: 0.14.2
-      vite: 4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.0)
+      vite: 4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -12330,6 +12373,8 @@ snapshots:
   async-lock@1.4.1: {}
 
   attr-accept@2.2.2: {}
+
+  attr-accept@2.2.5: {}
 
   auto-bind@4.0.0: {}
 
@@ -13403,6 +13448,10 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  file-selector@2.1.2:
+    dependencies:
+      tslib: 2.8.1
+
   file-uri-to-path@1.0.0: {}
 
   fill-range@7.1.1:
@@ -13897,7 +13946,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.21
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -15733,6 +15782,13 @@ snapshots:
       prop-types: 15.8.1
       react: 19.1.0
 
+  react-dropzone@14.3.8(react@19.1.0):
+    dependencies:
+      attr-accept: 2.2.5
+      file-selector: 2.1.2
+      prop-types: 15.8.1
+      react: 19.1.0
+
   react-final-form@6.5.9(final-form@4.20.10)(react@19.1.0):
     dependencies:
       '@babel/runtime': 7.25.0
@@ -16514,6 +16570,8 @@ snapshots:
 
   tapable@2.2.1: {}
 
+  tapable@2.2.2: {}
+
   tar-fs@2.1.1:
     dependencies:
       chownr: 1.1.4
@@ -16546,10 +16604,10 @@ snapshots:
       jest-worker: 27.5.1
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
-      terser: 5.39.0
+      terser: 5.39.2
       webpack: 5.99.7
 
-  terser@5.39.0:
+  terser@5.39.2:
     dependencies:
       '@jridgewell/source-map': 0.3.6
       acorn: 8.14.1
@@ -16979,7 +17037,7 @@ snapshots:
       '@types/unist': 3.0.2
       vfile-message: 4.0.2
 
-  vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.0):
+  vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.5.3
@@ -16988,7 +17046,7 @@ snapshots:
       '@types/node': 22.15.19
       fsevents: 2.3.3
       lightningcss: 1.30.1
-      terser: 5.39.0
+      terser: 5.39.2
 
   vscode-jsonrpc@8.2.0: {}
 
@@ -17009,7 +17067,7 @@ snapshots:
 
   w3c-keyname@2.2.8: {}
 
-  watchpack@2.4.2:
+  watchpack@2.4.4:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
@@ -17025,7 +17083,7 @@ snapshots:
   webpack@5.99.7:
     dependencies:
       '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       '@types/json-schema': 7.0.15
       '@webassemblyjs/ast': 1.14.1
       '@webassemblyjs/wasm-edit': 1.14.1
@@ -17044,9 +17102,9 @@ snapshots:
       mime-types: 2.1.35
       neo-async: 2.6.2
       schema-utils: 4.3.2
-      tapable: 2.2.1
+      tapable: 2.2.2
       terser-webpack-plugin: 5.3.14(webpack@5.99.7)
-      watchpack: 2.4.2
+      watchpack: 2.4.4
       webpack-sources: 3.2.3
     transitivePeerDependencies:
       - '@swc/core'
