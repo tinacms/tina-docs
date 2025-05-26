@@ -68,7 +68,7 @@ export default async function DocsLayout({
                     <Tabs.Trigger
                       key={tab.id}
                       value={tab.id}
-                      className="text-lg relative text-neutral-text mx-4 focus:text-brand-secondary-hover cursor-pointer font-bold"
+                      className="text-lg relative text-neutral-text mx-4 focus:text-brand-secondary-hover cursor-pointer font-bold  data-[state=active]:text-blue-600 "
                     >
                       {tab.label}
                     </Tabs.Trigger>
