@@ -8,6 +8,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
 import { Search } from "@/src/components/search-docs/search";
 import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
+import TinaLamaIcon from "@/src/icons/tina-icon.svg";
 
 export default async function DocsLayout({
   children,
@@ -61,7 +62,7 @@ export default async function DocsLayout({
                   href="/"
                   className="text-xl font-bold text-gray-800 dark:text-white"
                 >
-                  <TinaIcon className="h-10 w-auto fill-orange-500 mr-4 ml-2" />
+                  <TinaLamaIcon className="h-10 w-auto fill-orange-500 mr-4 ml-2" />
                 </Link>
                 <Tabs.List className="flex">
                   {tabs.map((tab) => (
