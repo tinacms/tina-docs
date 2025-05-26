@@ -12,7 +12,7 @@ export const NavigationSideBar = ({
   return (
     <div className="w-full h-full rounded-2xl brand-glass-gradient shadow-xl">
       <div className="overflow-y-auto overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">
-        <Title title={title} />
+        {title != "Docs" && <Title title={title} />}
         {tableOfContents && (
           <DocsNavigationItems navItems={tableOfContents.items} />
         )}
