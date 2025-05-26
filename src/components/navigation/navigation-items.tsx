@@ -14,7 +14,6 @@ import {
   TRANSITION_DURATION,
 } from "./constants";
 import type { DocsNavProps, NavTitleProps } from "./type";
-import { getIdSyntax } from "../docs/on-this-page";
 
 const NavTitle: React.FC<NavTitleProps> = ({
   children,
