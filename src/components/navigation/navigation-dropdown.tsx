@@ -59,6 +59,7 @@ export const NavigationDropdownContent = ({
 }) => {
   const [selectedValue, setSelectedValue] = useState("docs");
   const dropdownRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const options = [
     { value: "docs", label: "Docs" },
@@ -93,18 +94,38 @@ export const NavigationDropdownContent = ({
       </div>
 
       <div className="relative w-full mb-4" ref={dropdownRef}>
-        <select
-          className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none"
-          value={selectedValue}
-          onChange={(e) => setSelectedValue(e.target.value)}
+        <button
+          className="w-full p-2 px-4 rounded-md border border-neutral-border focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between"
+          onClick={() => setIsOpen(!isOpen)}
         >
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <MdArrowDropDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-secondary-dark-dark pointer-events-none" />
+          <span>
+            {options.find((opt) => opt.value === selectedValue)?.label}
+          </span>
+          <MdArrowDropDown
+            className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+
+        {isOpen && (
+          <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-border rounded-md shadow-lg">
+            {options.map((option) => (
+              <button
+                key={option.value}
+                className={`w-full p-2 px-4 text-left hover:bg-neutral-50 ${
+                  selectedValue === option.value ? "bg-neutral-50" : ""
+                }`}
+                onClick={() => {
+                  setSelectedValue(option.value);
+                  setIsOpen(false);
+                }}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {selectedValue === "docs" && <DocsNavigationItems navItems={tocData} />}
