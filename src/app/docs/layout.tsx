@@ -44,7 +44,10 @@ export default async function DocsLayout({
         <div className="w-full grid grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[25%_75%] gap-4 p-4">
           <Sidebar tabs={tabs} />
           <main>
-            <Body navigationDocsData={navigationDocsData.data}>{children}</Body>
+            <Body
+              navigationDocsData={navigationDocsData.data}
+              children={children}
+            />
           </main>
         </div>
       </Tabs.Root>
