@@ -95,7 +95,7 @@ export function formatNavigationData(
       lightModeLogo: navigationData.navigationBar.lightModeLogo || "",
       darkModeLogo:
         navigationData.navigationBar.darkModeLogo ||
-        navigationData.navigationBar.lightModeLogo || 
+        navigationData.navigationBar.lightModeLogo ||
         "",
       items: navGroups,
     },

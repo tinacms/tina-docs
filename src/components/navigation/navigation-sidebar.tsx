@@ -1,10 +1,10 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import { Search } from "../search-docs/search";
 import LightDarkSwitch from "../ui/light-dark-switch";
 import { DocsNavigationItems } from "./navigation-items";
-import { useTheme } from "next-themes";
 
 export const NavigationSideBar = ({
   tableOfContents,
