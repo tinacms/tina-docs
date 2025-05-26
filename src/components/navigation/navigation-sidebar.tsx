@@ -12,7 +12,7 @@ export const NavigationSideBar = ({
 }) => {
   return (
     <div className="w-full h-full rounded-2xl brand-glass-gradient border border-neutral-border-subtle shadow-xl">
-      <div className="flex-col pl-6 items-center">
+      <div className="pl-6">
         <Image
           src={tableOfContents?.title}
           alt={tableOfContents?.title}
@@ -24,7 +24,7 @@ export const NavigationSideBar = ({
         <Search />
       </div>
 
-      <div className="overflow-y-scroll overflow-x-hidden pl-4 2xl:max-h-[75vh] 2xl:pl-0">
+      <div className="h-[calc(100%-230px)] overflow-y-auto overflow-x-hidden pl-4 2xl:pl-0">
         <DocsNavigationItems navItems={tableOfContents.items} />
       </div>
     </div>
