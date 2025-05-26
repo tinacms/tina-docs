@@ -1,110 +1,114 @@
 {
-  "title": "TinaDocs™",
-  "supermenuGroup": [
+  "tabs": [
     {
-      "title": "Introduction",
-      "items": [
+      "title": "Docs",
+      "supermenuGroup": [
         {
-          "title": "Take Back your Docs",
-          "slug": "content/docs/index.mdx",
-          "_template": "item"
-        },
-        {
-          "title": "What's Included?",
-          "slug": "content/docs/introduction/whats-included.mdx",
-          "_template": "item"
-        },
-        {
-          "title": "Built-in Components",
-          "slug": "content/docs/introduction/built-in-components.mdx",
-          "_template": "item"
-        }
-      ]
-    },
-    {
-      "title": "Project Set-Up",
-      "items": [
-        {
-          "title": "Setting Up Locally",
-          "slug": "content/docs/set-up/local-set-up.mdx",
-          "_template": "item"
-        },
-        {
-          "title": "Setting Up TinaCloud",
-          "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
-          "_template": "item"
-        },
-        {
-          "title": "Self-Hosting Your Datalayer",
+          "title": "Introduction",
           "items": [
             {
-              "title": "What is the Datalayer?",
-              "slug": "content/docs/set-up/self-hosting/what-is-the-datalayer.mdx",
+              "title": "Take Back your Docs",
+              "slug": "content/docs/index.mdx",
               "_template": "item"
             },
             {
-              "title": "Configuring Your Own Datalayer",
-              "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
-              "_template": "item"
-            }
-          ],
-          "_template": "items"
-        },
-        {
-          "title": "Deploying Your Docs",
-          "slug": "content/docs/set-up/deploying-your-docs.mdx",
-          "_template": "item"
-        }
-      ]
-    },
-    {
-      "title": "Customise Your Docs",
-      "items": [
-        {
-          "title": "Editing Content",
-          "slug": "content/docs/customising/editing-content.mdx",
-          "_template": "item"
-        },
-        {
-          "title": "Theming and Styling",
-          "slug": "content/docs/customising/updating-the-styling.mdx",
-          "_template": "item"
-        },
-        {
-          "title": "Working with Tina",
-          "items": [
-            {
-              "title": "Learn TinaCMS",
-              "slug": "content/docs/customising/learn-tinacms.mdx",
+              "title": "What's Included?",
+              "slug": "content/docs/introduction/whats-included.mdx",
               "_template": "item"
             },
             {
-              "title": "Update the Data Model",
-              "slug": "content/docs/customising/schema.mdx",
+              "title": "Built-in Components",
+              "slug": "content/docs/introduction/built-in-components.mdx",
               "_template": "item"
             }
-          ],
-          "_template": "items"
+          ]
         },
         {
-          "title": "Custom Components",
-          "slug": "content/docs/customising/custom-components.mdx",
-          "_template": "item"
+          "title": "Project Set-Up",
+          "items": [
+            {
+              "title": "Setting Up Locally",
+              "slug": "content/docs/set-up/local-set-up.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Setting Up TinaCloud",
+              "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Self-Hosting Your Datalayer",
+              "items": [
+                {
+                  "title": "What is the Datalayer?",
+                  "slug": "content/docs/set-up/self-hosting/what-is-the-datalayer.mdx",
+                  "_template": "item"
+                },
+                {
+                  "title": "Configuring Your Own Datalayer",
+                  "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
+                  "_template": "item"
+                }
+              ],
+              "_template": "items"
+            },
+            {
+              "title": "Deploying Your Docs",
+              "slug": "content/docs/set-up/deploying-your-docs.mdx",
+              "_template": "item"
+            }
+          ]
         },
         {
-          "title": "Technical References",
-          "slug": "content/docs/customising/technical-reference.mdx",
-          "_template": "item"
-        }
-      ]
-    },
-    {
-      "title": "API",
-      "items": [
+          "title": "Customise Your Docs",
+          "items": [
+            {
+              "title": "Editing Content",
+              "slug": "content/docs/customising/editing-content.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Theming and Styling",
+              "slug": "content/docs/customising/updating-the-styling.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Working with Tina",
+              "items": [
+                {
+                  "title": "Learn TinaCMS",
+                  "slug": "content/docs/customising/learn-tinacms.mdx",
+                  "_template": "item"
+                },
+                {
+                  "title": "Update the Data Model",
+                  "slug": "content/docs/customising/schema.mdx",
+                  "_template": "item"
+                }
+              ],
+              "_template": "items"
+            },
+            {
+              "title": "Custom Components",
+              "slug": "content/docs/customising/custom-components.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Technical References",
+              "slug": "content/docs/customising/technical-reference.mdx",
+              "_template": "item"
+            }
+          ]
+        },
         {
           "title": "API",
-          "slug": "content/docs/API-References.mdx",
-          "_template": "item"
+          "items": [
+            {
+              "title": "API",
+              "slug": "content/docs/API-References.mdx",
+              "_template": "item"
+            }
+          ]
         }
       ]
     }
