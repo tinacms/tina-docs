@@ -72,10 +72,10 @@ const TopNav = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
           </Tabs.Trigger>
         ))}
       </Tabs.List>
-      <div className="w-full flex justify-end mr-2">
+      <div className="w-full hidden md:flex justify-end mr-2">
         <LightDarkSwitch />
       </div>
-      <Search />
+      <Search className="hidden md:block" />
     </div>
   );
 };
