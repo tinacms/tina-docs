@@ -1,13 +1,13 @@
 import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
+import TinaLamaIcon from "@/src/components/icons/tina-icon.svg";
 import { NavigationDropdown } from "@/src/components/navigation/navigation-dropdown";
-import { getDocsNavigation } from "@/utils/docs";
-import type React from "react";
-import Link from "next/link";
-import * as Tabs from "@radix-ui/react-tabs";
 import { NavigationSideBar } from "@/src/components/navigation/navigation-sidebar";
 import { Search } from "@/src/components/search-docs/search";
 import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
-import TinaLamaIcon from "@/src/components/icons/tina-icon.svg";
+import { getDocsNavigation } from "@/utils/docs";
+import * as Tabs from "@radix-ui/react-tabs";
+import Link from "next/link";
+import type React from "react";
 
 export default async function DocsLayout({
   children,
