@@ -176,6 +176,16 @@
           "title": "Updating the Styling",
           "slug": "content/docs/customising/updating-the-styling.mdx",
           "_template": "item"
+        },
+        {
+          "title": "SEO",
+          "slug": "content/docs/customization-and-themes/SEO.mdx",
+          "_template": "item"
+        },
+        {
+          "title": "FavIcon",
+          "slug": "content/docs/customization-and-themes/FavIcon.mdx",
+          "_template": "item"
         }
       ]
     },
