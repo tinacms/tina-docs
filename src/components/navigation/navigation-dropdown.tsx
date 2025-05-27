@@ -26,7 +26,7 @@ export const MobileNavigationWrapper = ({ tocData }: { tocData: any }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  });
 
   return (
     <div ref={containerRef}>
