@@ -48,8 +48,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -62,7 +62,7 @@ const NavTitle: React.FC<NavTitleProps> = ({
   );
 };
 
-const hasNestedSlug = (navItems: any[], slug: string) => {
+export const hasNestedSlug = (navItems: any[], slug: string) => {
   for (const item of Array.isArray(navItems) ? navItems : []) {
     if (matchActualTarget(getUrl(item.slug || item.href), slug)) {
       return true;

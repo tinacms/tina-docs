@@ -1,7 +1,8 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown, MdClose } from "react-icons/md";
-import { DocsNavigationItems } from "./navigation-items";
+import { DocsNavigationItems, hasNestedSlug } from "./navigation-items";
+import { usePathname } from "next/navigation";
 
 export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
   return (
@@ -19,7 +20,19 @@ export const NavigationDropdownContent = ({
   tocData: any;
   onClose: () => void;
 }) => {
-  const [selectedValue, setSelectedValue] = useState(tocData[0]?.title);
+  const pathname = usePathname();
+  const path = pathname || "";
+
+  const findTabWithPath = (tabs: any[]) => {
+    for (const tab of tabs) {
+      if (tab.items && hasNestedSlug(tab.items, path)) {
+        return tab.title;
+      }
+    }
+    return tabs[0]?.title;
+  };
+
+  const [selectedValue, setSelectedValue] = useState(findTabWithPath(tocData));
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
