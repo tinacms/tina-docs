@@ -220,7 +220,7 @@ export const DocsNavigationItems = ({ navItems }: DocsNavProps) => {
       className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin 2xl:py-4 2xl:px-4 2xl:pb-8"
       ref={navListElem}
     >
-      {navItems.length > 0 &&
+      {navItems?.length > 0 &&
         navItems?.map((categoryData) => (
           <div
             key={`mobile-${

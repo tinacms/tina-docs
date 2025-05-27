@@ -2,13 +2,13 @@
 
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { Search } from "../search-docs/search";
-import LightDarkSwitch from "../ui/light-dark-switch";
 import { DocsNavigationItems } from "./navigation-items";
 
 export const NavigationSideBar = ({
+  title,
   tableOfContents,
 }: {
+  title: string;
   tableOfContents: any;
 }) => {
   const { resolvedTheme } = useTheme();
@@ -30,8 +30,6 @@ export const NavigationSideBar = ({
           height={200}
           className="py-6 h-full text-brand-primary"
         />
-        <LightDarkSwitch />
-        <Search />
       </div>
 
       <div className="h-[calc(100%-230px)] overflow-y-auto overflow-x-hidden pl-4 2xl:pl-0">

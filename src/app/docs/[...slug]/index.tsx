@@ -1,7 +1,6 @@
 "use client";
 
 import { CopyPageDropdown } from "@/components/copy-page-dropdown";
-import { TableOfContentsDropdown } from "@/components/docs/table-of-contents-dropdown";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { OnThisPage } from "@/src/components/docs/on-this-page";
 import { Pagination } from "@/src/components/ui/pagination";
@@ -48,12 +47,6 @@ export default function Document({ props, tinaProps }) {
           </h1>
           <CopyPageDropdown className="self-end mb-2 md:mb-0" />
         </div>
-        {/* MOBILE TABLE OF CONTENTS */}
-        {documentationData?.tocIsHidden ? null : (
-          <div className="block xl:hidden">
-            <TableOfContentsDropdown tocData={pageTableOfContents} />
-          </div>
-        )}
         {/* CONTENT */}
         <div
           ref={contentRef}
