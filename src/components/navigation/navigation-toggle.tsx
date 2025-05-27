@@ -46,7 +46,7 @@ export const NavigationDropdownContent = ({
   }, []);
 
   return (
-    <div className="animate-fade-down animate-duration-300 fixed top-0 z-20 h-screen w-[75%] overflow-y-auto bg-white p-6 shadow-lg right-0">
+    <div className="animate-fade-down animate-duration-300 fixed top-0 z-20 h-screen w-[75%] overflow-y-auto bg-neutral-background border-l border-neutral-border-subtle p-6 shadow-xl right-0">
       <div className="flex justify-end mb-4">
         <MdClose
           onClick={onClose}
