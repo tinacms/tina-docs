@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "tinacms dev -c \"next dev --turbopack\"",
+    "dev": "tinacms dev -c \"next dev\"",
     "build": "tinacms build && next build",
     "postbuild": "npx pagefind --site .next --output-path .next/static/pagefind",
     "build-local-pagefind": "tinacms build && next build && npx pagefind --site .next --output-subdir ../public/pagefind",
