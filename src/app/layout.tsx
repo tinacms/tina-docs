@@ -20,7 +20,7 @@ export default function RootLayout({
   const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
 
   return (
-    <html lang="en" className={`theme-${theme}`}>
+    <html lang="en" className={`theme-${theme}`} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#E6FAF8" />
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />

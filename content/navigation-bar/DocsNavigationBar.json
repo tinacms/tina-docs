@@ -6,7 +6,7 @@
       "title": "Docs",
       "supermenuGroup": [
         {
-          "title": "TinaDocs & TinaCMS",
+          "title": "Introduction",
           "items": [
             {
               "title": "Quickstart",
@@ -14,10 +14,15 @@
               "_template": "item"
             },
             {
-              "title": "Take back your docs",
+              "title": "Take Back your Docs",
               "slug": "content/docs/introduction/take-back-your-docs.mdx",
               "_template": "item"
-            },
+            }
+          ]
+        },
+        {
+          "title": "TinaDocs & TinaCMS",
+          "items": [
             {
               "title": "Editing Content",
               "slug": "content/docs/tinadocs-and-tinacms/editing-content.mdx",
