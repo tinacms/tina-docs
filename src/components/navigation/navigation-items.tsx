@@ -215,7 +215,7 @@ export const DocsNavigationItems = ({ navItems }: DocsNavProps) => {
 
   return (
     <div
-      className="overflow-y-auto overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin scrollbar-thumb-[rgba(0,0,0,0.3)] scrollbar-track-transparent scrollbar-thumb-rounded-[4px] 2xl:py-4 2xl:px-4 2xl:pb-8"
+      className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin 2xl:py-4 2xl:px-4 2xl:pb-8"
       ref={navListElem}
     >
       {navItems?.length > 0 &&

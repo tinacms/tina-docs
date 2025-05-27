@@ -1,0 +1,110 @@
+---
+title: Mermaid Diagrams
+last_edited: '2025-05-26T00:38:51.790Z'
+next: ''
+previous: ''
+---
+
+TinaDocs supports [Mermaid.js](https://mermaid.js.org/) to let you define and render diagrams directly inside Markdown content. This enables you to add flowcharts, sequence diagrams, Gantt charts, and more—without ever leaving your content file.
+
+While the diagram appears inside code\_block UI blocks in the editor, it is actually stored in a distinct node with the `type: mermaid`
+
+<Callout
+  body={<>
+    Mermaid Rendering is **client-side** only, so server-side previews wont show diagrams
+  </>}
+  variant="warning"
+/>
+
+You can also preview all mermaid diagrams inside the rich-text editor:
+
+![](/img/mermaid-preview-example.png "Mermaid Preview")
+
+## Flowcharts
+
+```mermaid
+%% This won't render without implementing a rendering engine (e.g. mermaid on npm)
+flowchart TD
+    id1(this is an example flow diagram) 
+    --> id2(modify me to see changes!)
+    id2 
+    --> id3(Click the top button to preview the changes)
+    --> id4(Learn about mermaid diagrams - mermaid.js.org)
+```
+
+## Sequence Diagrams
+
+```mermaid
+%% This won't render without implementing a rendering engine (e.g. mermaid on npm)
+sequenceDiagram
+    participant Client
+    participant API
+    participant DB
+
+    Client->>API: GET /data
+    API->>DB: Query data
+    DB-->>API: Result
+    API-->>Client: Response
+```
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+  [*] --> Waiting
+  Waiting --> RequestSent: Client calls API
+  RequestSent --> Querying: API queries DB
+  Querying --> Responding: DB returns result
+  Responding --> Complete: API sends response
+  Complete --> [*]
+
+```
+
+## Class Diagram
+
+```mermaid
+classDiagram
+  class Client {
+    +requestData()
+  }
+  class API {
+    +handleRequest()
+    +queryDB()
+  }
+  class DB {
+    +runQuery()
+  }
+
+  Client --> API : calls
+  API --> DB : queries
+
+```
+
+## Gaant Chart
+
+```mermaid
+gantt
+  title API Data Flow
+  dateFormat  HH:mm
+  axisFormat  %H:%M
+
+  section Request
+  Client Sends Request  :a1, 09:00, 1m
+  API Receives Request  :a2, after a1, 1m
+
+  section Processing
+  API Queries DB        :a3, after a2, 2m
+  DB Returns Result     :a4, after a3, 1m
+  API Responds          :a5, after a4, 1m
+
+```
+
+## Pie Chart
+
+```mermaid
+pie
+  title API Resource Usage
+  "Client Requests" : 30
+  "API Processing" : 40
+  "DB Query Time" : 30
+```

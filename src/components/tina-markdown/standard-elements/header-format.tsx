@@ -22,7 +22,7 @@ export default function HeaderFormat({
   const styles = {
     1: "brand-primary-gradient  text-4xl !mt-16 mb-4",
     2: "brand-primary-gradient  text-3xl !mt-12 mb-2",
-    3: "brand-secondary-gradient text-xl font-medium !mt-8 mb-2 !important",
+    3: "brand-secondary-gradient text-2xl font-medium !mt-8 mb-2 !important",
     4: "brand-primary-gradient  text-xl font-medium !mt-2 mb-2",
     5: "brand-primary-gradient  text-lg font-medium !mt-2 mb-1",
     6: "text-neutral-text-secondary text-base font-normal mt-2 mb-1",

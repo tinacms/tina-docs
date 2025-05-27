@@ -26,6 +26,8 @@ export interface SupermenuGroup {
  */
 export interface Tab {
   title?: string | null;
+  lightModeLogo?: string | null | undefined;
+  darkModeLogo?: string | null | undefined;
   supermenuGroup?: SupermenuGroup[] | null;
 }
 
@@ -45,6 +47,8 @@ export interface FormattedNavigation {
   data: {
     title: string;
     items: SupermenuGroup[];
+    lightModeLogo: string;
+    darkModeLogo: string;
   }[];
   sha: string;
   fileRelativePath: string;
@@ -97,6 +101,8 @@ export const formatNavigationData = (
     return {
       title: tab.title || "",
       items: groups,
+      lightModeLogo: tab.lightModeLogo || "",
+      darkModeLogo: tab.darkModeLogo || "",
     };
   });
 

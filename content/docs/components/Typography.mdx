@@ -1,0 +1,35 @@
+---
+title: Typography
+last_edited: '2025-05-23T07:34:54.473Z'
+next: ''
+previous: ''
+---
+
+TinaDocs comes with a flexible, clean typographic system that ensures consistency across your documentation. Whether you're writing Markdown content, hardcoding layout components, or extending with custom blocks, TinaDocs gives you the tools to apply consistent and customizable text styles.
+
+TinaCMS uses all standard markdown syntax for titles
+
+You can modify the size of any text in the rich-text editor in the rich-text tool-bar.
+
+## Writing with Markdown
+
+Whilst TinaDocs stores all of your content in Markdown all editing is done through a rich-text editor powered by [Plate](https://platejs.org/). This toolbar allows you to apply common formatting with ease, which is all automatically transformed into Markdown behind the scenes.
+
+* Titles use standard Markdown syntax (#)
+* You can change font size via headling levels in the toolbar
+* Inline formatting maps 1:1 with Markdown. 
+
+## Base Style Sizing
+
+TinaDocs uses semantic HTML tags styled with TailwindCSS utility classes to maintain hierarchical sizing. 
+
+| Tag      | Size            | Use Case                 |
+| -------- | --------------- | ------------------------ |
+| h1       | 36px (2.25rem)  | Page titles              |
+| h2       | 30px (1.875rem) | Section headings         |
+| h3       | 24px (1.5rem)   | Subsections              |
+| h4       | 20px (1.25rem)  | Minor Subsections        |
+| h5       | 18px (1.125rem) | Fine-grained Subsections |
+| p        | 16px (1rem)     | Body Text                |
+| li/ul/ol | 16px (1rem)     | Lists                    |
+| code     | 16px (1rem)     | Inline code              |
