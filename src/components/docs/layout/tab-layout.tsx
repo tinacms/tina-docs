@@ -1,0 +1,49 @@
+"use client";
+
+import React from "react";
+import * as Tabs from "@radix-ui/react-tabs";
+import { hasNestedSlug } from "../../navigation/navigation-items";
+import { TopNav } from "./top-nav";
+import { Sidebar } from "./sidebar";
+import { Body } from "./body";
+
+export const TabsLayout = ({
+  tabs,
+  children,
+}: {
+  tabs: { label: string; content: any }[];
+  children: React.ReactNode;
+}) => {
+  const [selectedTab, setSelectedTab] = React.useState(tabs[0].label);
+
+  React.useEffect(() => {
+    // Find the tab that contains the current path
+    const findTabWithPath = (tabs: any[], path: string) => {
+      for (const tab of tabs) {
+        if (tab.content.items && hasNestedSlug(tab.content.items, path)) {
+          return tab.label;
+        }
+      }
+      return tabs[0]?.label;
+    };
+
+    const path = window.location.pathname;
+    setSelectedTab(findTabWithPath(tabs, path));
+  }, [tabs]);
+
+  return (
+    <Tabs.Root
+      value={selectedTab}
+      onValueChange={setSelectedTab}
+      className="flex flex-col w-full"
+    >
+      <TopNav tabs={tabs} />
+      <div className="w-full flex flex-col md:flex-row gap-4 p-4 max-w-[2560px] mx-auto">
+        <Sidebar tabs={tabs} />
+        <main className="flex-1">
+          <Body navigationDocsData={tabs} children={children} />
+        </main>
+      </div>
+    </Tabs.Root>
+  );
+};
