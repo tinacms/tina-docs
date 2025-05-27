@@ -1,9 +1,9 @@
 {
+  "lightModeLogo": "/svg/Tina Marketing Logo Black.svg",
+  "darkModeLogo": "/svg/Tina Marketing Logo Full White.svg",
   "tabs": [
     {
       "title": "Docs",
-      "lightModeLogo": "/svg/Tina Marketing Logo Black.svg",
-      "darkModeLogo": "/svg/Tina Marketing Logo Full White.svg",
       "supermenuGroup": [
         {
           "title": "TinaDocs & TinaCMS",
@@ -182,8 +182,6 @@
     },
     {
       "title": "API",
-      "lightModeLogo": "/svg/Tina Marketing Logo Black.svg",
-      "darkModeLogo": "/svg/Tina Marketing Logo Full White.svg",
       "supermenuGroup": [
         {
           "title": "API Reference",
