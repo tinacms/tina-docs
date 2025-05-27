@@ -111,6 +111,21 @@
           ]
         }
       ]
+    },
+    {
+      "title": "API",
+      "supermenuGroup": [
+        {
+          "title": "Test API",
+          "items": [
+            {
+              "title": "API Reference",
+              "slug": "content/docs/customising/custom-components.mdx",
+              "_template": "item"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

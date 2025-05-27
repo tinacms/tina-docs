@@ -17,25 +17,10 @@ export default async function DocsLayout({
   // Fetch navigation data that will be shared across all docs pages
   const navigationDocsData = await getDocsNavigation();
 
-  // TODO: Make this editable through TinaCMS
-  const tabs = [
-    {
-      label: "Docs",
-      content: navigationDocsData.data,
-    },
-    {
-      label: "Learn",
-      content: null, // TODO: Replace with actual learn navigation data
-    },
-    {
-      label: "API",
-      content: null, // TODO: Replace with actual API navigation data
-    },
-    {
-      label: "Logs",
-      content: null, // TODO: Replace with actual logs navigation data
-    },
-  ];
+  const tabs = navigationDocsData.data.map((tab) => ({
+    label: tab.title,
+    content: tab,
+  }));
 
   return (
     <div className="relative flex flex-col w-full pb-2">
