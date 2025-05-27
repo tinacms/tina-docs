@@ -14,34 +14,53 @@ export const docsNavigationBarCollection = {
   },
   fields: [
     {
-      name: "lightModeLogo",
-      label: "Light Mode Logo",
-      type: "image",
-    },
-    {
-      name: "darkModeLogo",
-      label: "Dark Mode Logo",
-      type: "image",
-      description: "If your light mode logo fits dark-mode, leave this blank.",
-    },
-    {
-      name: "supermenuGroup",
-      label: "Supermenu Group",
+      name: "tabs",
+      label: "Tabs",
       type: "object",
       list: true,
       ui: {
         itemProps: (item) => ({
-          label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
+          label: `🗂️ ${item?.title ?? "Unnamed Tab"}`,
         }),
       },
       fields: [
-        { name: "title", label: "Name", type: "string" },
         {
-          name: "items",
-          label: "Page or Submenu",
+          name: "title",
+          label: "Title Label",
+          type: "string",
+        },
+        {
+          name: "lightModeLogo",
+          label: "Light Mode Logo",
+          type: "image",
+        },
+        {
+          name: "darkModeLogo",
+          label: "Dark Mode Logo",
+          type: "image",
+          description:
+            "If your light mode logo fits dark-mode, leave this blank.",
+        },
+        {
+          name: "supermenuGroup",
+          label: "Supermenu Group",
           type: "object",
           list: true,
-          templates: [submenuTemplate, itemTemplate],
+          ui: {
+            itemProps: (item) => ({
+              label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
+            }),
+          },
+          fields: [
+            { name: "title", label: "Name", type: "string" },
+            {
+              name: "items",
+              label: "Page or Submenu",
+              type: "object",
+              list: true,
+              templates: [submenuTemplate, itemTemplate],
+            },
+          ],
         },
       ],
     },

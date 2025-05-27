@@ -1,30 +1,55 @@
 import siteConfig from "@/content/siteConfig.json";
-/**
- * Utilities for managing document navigation structure
- */
 import client from "@/tina/__generated__/client";
 
-interface NavItem {
+/**
+ * A single navigation item
+ */
+export interface NavItem {
   _template?: string;
   slug?: string;
+  title?: string;
   items?: NavItem[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
-interface NavigationBarData {
+/**
+ * A group of navigation items (i.e., supermenu)
+ */
+export interface SupermenuGroup {
+  title?: string;
+  items?: NavItem[];
+  [key: string]: unknown;
+}
+
+/**
+ * A tab in the navigation bar
+ */
+export interface Tab {
+  title?: string | null;
+  lightModeLogo?: string | null | undefined;
+  darkModeLogo?: string | null | undefined;
+  supermenuGroup?: SupermenuGroup[] | null;
+}
+
+/**
+ * Raw structure of navigation data returned by TinaCMS
+ */
+export interface NavigationBarData {
   navigationBar: {
-    lightModeLogo?: string | null | undefined;
-    darkModeLogo?: string | null | undefined;
-    supermenuGroup?: any[] | null | undefined;
+    tabs: Tab[];
   };
 }
 
-interface FormattedNavigation {
+/**
+ * Final formatted structure returned by our utility
+ */
+export interface FormattedNavigation {
   data: {
+    title: string;
+    items: SupermenuGroup[];
     lightModeLogo: string;
     darkModeLogo: string;
-    items: any[];
-  };
+  }[];
   sha: string;
   fileRelativePath: string;
   preview: boolean;
@@ -55,52 +80,55 @@ const transformReferencesToSlugs = (navItems: NavItem[]): NavItem[] => {
 };
 
 /**
- * Fetches and formats the documentation navigation structure
- *
- * @param preview - Whether to fetch in preview mode
- * @returns Formatted navigation structure with proper slugs
- */
-export async function getDocsNavigation(
-  preview?: boolean
-): Promise<FormattedNavigation> {
-  // Fetch navigation data from Tina
-  const navigationData = await client.queries.navigationBar({
-    relativePath: "DocsNavigationBar.json",
-  });
-
-  return formatNavigationData(navigationData.data, preview);
-}
-
-/**
  * Processes navigation data into a standardized structure
  *
  * @param navigationData - Raw navigation data from Tina CMS
  * @param preview - Whether in preview mode
  * @returns Formatted navigation data with proper URL structures
  */
-export function formatNavigationData(
+export const formatNavigationData = (
   navigationData: NavigationBarData,
-  preview?: boolean
-): FormattedNavigation {
-  // Extract the supermenu group data
-  const navGroups = navigationData.navigationBar.supermenuGroup || [];
+  preview = false
+): FormattedNavigation => {
+  const tabs = navigationData.navigationBar.tabs || [];
 
-  // Process each navigation group to transform references to URLs
-  navGroups.forEach((group: any, index: number, array: any[]) => {
-    array[index].items = transformReferencesToSlugs(group.items || []);
+  const tabsData = tabs.map((tab) => {
+    const groups = (tab.supermenuGroup || []).map((group) => ({
+      ...group,
+      items: transformReferencesToSlugs(group.items || []),
+    }));
+
+    return {
+      title: tab.title || "",
+      items: groups,
+      lightModeLogo: tab.lightModeLogo || "",
+      darkModeLogo: tab.darkModeLogo || "",
+    };
   });
 
   return {
-    data: {
-      lightModeLogo: navigationData.navigationBar.lightModeLogo || "",
-      darkModeLogo:
-        navigationData.navigationBar.darkModeLogo ||
-        navigationData.navigationBar.lightModeLogo ||
-        "",
-      items: navGroups,
-    },
+    data: tabsData,
     sha: "",
     fileRelativePath: "content/navigation-bar/DocsNavigationBar.json",
-    preview: !!preview,
+    preview,
   };
-}
+};
+
+/**
+ * Fetches and formats the documentation navigation structure
+ *
+ * @param preview - Whether to fetch in preview mode
+ * @returns Formatted navigation structure with proper slugs
+ */
+export const getDocsNavigation = async (
+  preview = false
+): Promise<FormattedNavigation> => {
+  const navigationData = await client.queries.navigationBar({
+    relativePath: "DocsNavigationBar.json",
+  });
+
+  return formatNavigationData(
+    navigationData.data as NavigationBarData,
+    preview
+  );
+};

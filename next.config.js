@@ -27,6 +27,13 @@ module.exports = {
   },
   turbopack: {
     resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
+    // Add this rule to handle SVG as React components for Local Development
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -39,6 +46,11 @@ module.exports = {
         })
       );
     }
+    // Add this module rule to handle SVG as React components for Production
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
     return config;
   },
 };
