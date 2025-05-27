@@ -100,21 +100,6 @@ const generateExample = (schema: any, definitions: any, depth = 0): any => {
   }
 };
 
-// Component to display an example value for a schema
-const SchemaExample = ({ schema }: { schema: any }) => {
-  const definitions = useContext(SchemaContext);
-
-  const example = generateExample(schema, definitions);
-
-  return (
-    <div className="mt-2 p-3 rounded-md">
-      <pre className="text-sm overflow-auto p-2 bg-gray-800 text-gray-100 rounded">
-        {JSON.stringify(example, null, 2)}
-      </pre>
-    </div>
-  );
-};
-
 // Wrapper component for the chevron icon
 const ChevronIcon = ({ isExpanded }: { isExpanded: boolean }) => {
   const Icon = FaChevronRight as React.ComponentType<IconBaseProps>;
@@ -498,116 +483,6 @@ const SchemaType = ({
   );
 };
 
-// Component to render a schema section with example toggle
-const SchemaSection = ({
-  schema,
-  title,
-  isErrorSchema = false,
-}: {
-  schema: any;
-  title?: string;
-  isErrorSchema?: boolean;
-}) => {
-  const [showExample, setShowExample] = useState(false);
-
-  const toggleExample = () => {
-    setShowExample(!showExample);
-  };
-
-  if (!schema) return null;
-
-  return (
-    <div>
-      {title && (
-        <div
-          className={`text-sm font-medium mb-2 ${
-            isErrorSchema ? "text-red-700" : "text-gray-700"
-          }`}
-        >
-          {title}
-        </div>
-      )}
-      <SchemaType
-        schema={schema}
-        showExampleButton={true}
-        onToggleExample={toggleExample}
-        isErrorSchema={isErrorSchema}
-      />
-      {showExample && <SchemaExample schema={schema} />}
-    </div>
-  );
-};
-
-// Update TabbedSchemaSection to use CodeBlock for the Example tab
-const TabbedSchemaSection = ({
-  schema,
-  title,
-  isErrorSchema = false,
-}: {
-  schema: any;
-  title?: string;
-  isErrorSchema?: boolean;
-}) => {
-  const [tab, setTab] = useState<"schema" | "example">("schema");
-  const definitions = useContext(SchemaContext);
-  const example = generateExample(schema, definitions);
-  const schemaTabRef = React.useRef<HTMLButtonElement>(null);
-  const jsonTabRef = React.useRef<HTMLButtonElement>(null);
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
-
-  useEffect(() => {
-    const activeRef = tab === "schema" ? schemaTabRef : jsonTabRef;
-    if (activeRef.current) {
-      const { offsetLeft, offsetWidth } = activeRef.current;
-      setIndicatorStyle({ left: offsetLeft, width: offsetWidth });
-    }
-  }, [tab]);
-
-  return (
-    <div>
-      <div className="relative flex border-b-[0.5px] border-neutral-border mb-3">
-        <button
-          type="button"
-          ref={schemaTabRef}
-          className={`px-4 py-1 font-medium cursor-pointer ${
-            tab === "schema"
-              ? "text-brand-secondary"
-              : "text-neutral-text-secondary"
-          }`}
-          onClick={() => setTab("schema")}
-        >
-          Schema
-        </button>
-        <button
-          type="button"
-          ref={jsonTabRef}
-          className={`px-4 py-1 font-medium cursor-pointer ${
-            tab === "example"
-              ? "text-brand-secondary"
-              : "text-neutral-text-secondary"
-          }`}
-          onClick={() => setTab("example")}
-        >
-          JSON
-        </button>
-        <div
-          className="absolute bottom-0 h-[0.5px] bg-brand-secondary transition-all duration-200"
-          style={{ left: indicatorStyle.left, width: indicatorStyle.width }}
-        />
-      </div>
-      {tab === "schema" ? (
-        <SchemaType
-          schema={schema}
-          showExampleButton={false}
-          isErrorSchema={isErrorSchema}
-        />
-      ) : (
-        <CodeBlock value={JSON.stringify(example, null, 2)} lang="json" />
-      )}
-    </div>
-  );
-};
-
 const RequestBodyDropdown = ({
   value,
   onChange,
@@ -615,45 +490,19 @@ const RequestBodyDropdown = ({
   value: "schema" | "example";
   onChange: (v: "schema" | "example") => void;
 }) => {
-  const [open, setOpen] = useState(false);
-  const Icon = FaChevronDown as React.ComponentType<IconBaseProps>;
   return (
     <div className="relative inline-block text-left">
-      <button
-        type="button"
+      <select
+        tabIndex={-1}
         className="border-[0.25px] border-neutral-border rounded px-2 text-sm text-neutral-text-secondary bg-neutral-background min-w-[100px] flex items-center justify-between gap-2"
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpen((o) => !o);
+        value={value}
+        onChange={(e) => {
+          onChange(e.target.value as "schema" | "example");
         }}
-        aria-haspopup="listbox"
-        aria-expanded={open}
       >
-        {value === "schema" ? "Schema" : "JSON"}
-        <span className="text-xs">
-          <Icon />
-        </span>
-      </button>
-      {open && (
-        <div
-          className="absolute mt-1 w-full bg-white border border-neutral-border rounded-sm shadow-lg z-[9999]"
-          style={{ position: "absolute", zIndex: 9999 }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <select
-            tabIndex={-1}
-            onBlur={() => setOpen(false)}
-            value={value}
-            onChange={(e) => {
-              onChange(e.target.value as "schema" | "example");
-              setOpen(false);
-            }}
-          >
-            <option value="schema">Schema</option>
-            <option value="example">Example</option>
-          </select>
-        </div>
-      )}
+        <option value="schema">Schema</option>
+        <option value="example">Example</option>
+      </select>
     </div>
   );
 };
@@ -668,7 +517,6 @@ const ApiReference = (data: any) => {
     null
   );
   const [schemaDefinitions, setSchemaDefinitions] = useState<any>({});
-  const [rawSchema, setRawSchema] = useState<any>(null);
   const [expandedResponses, setExpandedResponses] = useState<
     Map<string, boolean>
   >(new Map());
@@ -678,7 +526,6 @@ const ApiReference = (data: any) => {
   const [responseView, setResponseView] = useState<
     Record<string, "schema" | "example">
   >({});
-  const [openDropdownKey, setOpenDropdownKey] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -726,7 +573,6 @@ const ApiReference = (data: any) => {
 
         // Parse the schema JSON
         const schemaJson = JSON.parse(result.data.apiSchema.apiSchema);
-        setRawSchema(schemaJson);
 
         // Store schema definitions for references
         const definitions = {
@@ -928,7 +774,7 @@ const ApiReference = (data: any) => {
                         {param.type}
                       </span>
                       {param.required && (
-                        <span className="px-2 py-0.5 text-xs rounded-full bg-brand-primary text-white font-tuner">
+                        <span className="px-2 py-0.5 text-xs rounded-full bg-brand-primary text-neutral-text font-tuner">
                           required
                         </span>
                       )}
