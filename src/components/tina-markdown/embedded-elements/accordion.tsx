@@ -26,7 +26,7 @@ const Accordion = ({
     <div className="flex flex-col justify-center items-center">
       {/* Header */}
       <div
-        className={`mb-5 max-w-full overflow-hidden rounded-lg brand-glass-gradient shadow-md transition-[width] duration-300 ease-in-out ${
+        className={`mb-5 max-w-full overflow-hidden rounded-lg brand-glass-gradient shadow-md transition-[width] duration-700 ease-in-out ${
           fullWidth ? "w-full" : "w-3/4"
         }`}
       >
@@ -34,7 +34,7 @@ const Accordion = ({
           className="flex cursor-pointer items-center justify-between px-6 py-6"
           onClick={toggleExpand}
         >
-          <h4 className="text-neutral-text text-base font-tuner mt-0.5">
+          <h4 className="text-neutral-text text-base font-heading mt-0.5">
             {heading || "Click to expand"}
           </h4>
           <div>
@@ -47,7 +47,7 @@ const Accordion = ({
         </div>
         {/* Expandable content */}
         <div
-          className={`grid gap-4 border-t border-gray-100 transition-all duration-300 ease-in-out ${
+          className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
             isExpanded
               ? "max-h-[2000px] opacity-100"
               : "max-h-0 overflow-hidden opacity-0"
@@ -140,7 +140,7 @@ export const AccordionBlock = ({
             className="flex cursor-pointer items-center justify-between px-6 py-6"
             onClick={() => toggleExpand(index)}
           >
-            <h4 className="text-neutral-text text-base font-tuner mt-0.5">
+            <h4 className="text-neutral-text text-base font-heading mt-0.5">
               {item.heading || "Click to expand"}
             </h4>
             <div>
@@ -152,7 +152,7 @@ export const AccordionBlock = ({
             </div>
           </div>
           <div
-            className={`grid gap-4 border-t border-gray-100 transition-all duration-300 ease-in-out ${
+            className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
               isExpanded[index]
                 ? "max-h-[2000px] opacity-100"
                 : "max-h-0 overflow-hidden opacity-0"

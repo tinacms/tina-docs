@@ -48,8 +48,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -150,7 +150,9 @@ const NavLevel = ({
               setExpanded(!expanded);
             }}
           >
-            <span className=" -mr-2 pr-2">{categoryData.title}</span>
+            <span className=" -mr-2 pr-2 font-body font-semibold">
+              {categoryData.title}
+            </span>
             {categoryData.items && !selected && (
               <ChevronRightIcon
                 className={`${

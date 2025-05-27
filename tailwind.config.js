@@ -65,8 +65,8 @@ module.exports = {
       },
     },
     fontFamily: {
-      tuner: ["tuner-medium", ...defaultTheme.fontFamily.sans],
-      "tuner-regular": ["tuner-regular", ...defaultTheme.fontFamily.sans],
+      heading: ["var(--heading-font)", ...defaultTheme.fontFamily.serif],
+      body: ["var(--body-font)", ...defaultTheme.fontFamily.sans],
       mono: [
         "ui-monospace",
         "SFMono-Regular",

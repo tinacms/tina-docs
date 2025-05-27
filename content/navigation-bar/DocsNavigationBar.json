@@ -7,9 +7,6 @@
       "title": "Introduction",
       "items": [
         {
-          "_template": "item"
-        },
-        {
           "title": "Welcome to TinaDocs",
           "slug": "content/docs/index.mdx",
           "_template": "item"
