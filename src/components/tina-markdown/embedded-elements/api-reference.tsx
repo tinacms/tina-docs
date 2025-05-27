@@ -409,8 +409,8 @@ const SchemaType = ({
                       (propSchema.properties
                         ? "object"
                         : propSchema.items
-                          ? "array"
-                          : "unknown");
+                        ? "array"
+                        : "unknown");
                     const format = propSchema.format;
                     const isArray = propType === "array";
                     const itemType = isArray
@@ -878,7 +878,7 @@ const ApiReference = (data: any) => {
     return (
       <div
         key={endpoint.path + endpoint.method}
-        className="mb-12 bg-gradient-to-br from-white/40 to-white/70 p-4 rounded-lg shadow-sm"
+        className="mb-12 dark:bg-neutral-background-secondary dark:border dark:border-neutral-border-subtle/40 bg-glass-gradient-end p-4 rounded-lg shadow-sm"
       >
         <div className="flex flex-col gap-2 pb-6">
           <div className="flex items-center gap-4">
@@ -887,12 +887,12 @@ const ApiReference = (data: any) => {
                 endpoint.method === "GET"
                   ? "bg-[#B4EFD9] text-green-800"
                   : endpoint.method === "POST"
-                    ? "bg-[#B4DBFF] text-blue-800"
-                    : endpoint.method === "PUT"
-                      ? "bg-[#FEF3C7] text-yellow-800"
-                      : endpoint.method === "DELETE"
-                        ? "bg-[#FEE2E2] text-red-800"
-                        : "bg-gray-50"
+                  ? "bg-[#B4DBFF] text-blue-800"
+                  : endpoint.method === "PUT"
+                  ? "bg-[#FEF3C7] text-yellow-800"
+                  : endpoint.method === "DELETE"
+                  ? "bg-[#FEE2E2] text-red-800"
+                  : "bg-gray-50"
               }`}
             >
               {endpoint.method}
@@ -1083,8 +1083,8 @@ const ApiReference = (data: any) => {
                                   code.startsWith("2")
                                     ? "bg-[#B4EFD9] text-green-800 font-bold"
                                     : isErrorResponse
-                                      ? "bg-red-100 text-red-800"
-                                      : "bg-gray-200 text-gray-800 font-tuner text-center"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-gray-200 text-gray-800 font-tuner text-center"
                                 }`}
                               >
                                 {code}

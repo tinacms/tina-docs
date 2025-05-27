@@ -26,9 +26,9 @@ export default async function DocsLayout({
     <div className="relative flex flex-col w-full pb-2">
       <Tabs.Root defaultValue={tabs[0].label} className="flex flex-col w-full">
         <TopNav tabs={tabs} navigationDocsData={navigationDocsData?.data} />
-        <div className="w-full grid grid-cols-1 md:grid-cols-[35%_65%] lg:grid-cols-[25%_75%] gap-4 p-4">
+        <div className="w-full flex flex-col md:flex-row gap-4 p-4 max-w-[2560px] mx-auto">
           <Sidebar tabs={tabs} />
-          <main>
+          <main className="flex-1">
             <Body
               navigationDocsData={navigationDocsData?.data}
               children={children}
@@ -48,26 +48,28 @@ const TopNav = ({
   navigationDocsData: any;
 }) => {
   return (
-    <div className="flex items-center justify-between md:justify-start font-semibold w-full lg:border-b border-neutral-border py-3 lg:shadow">
-      <Link href="/" className="text-xl">
-        <TinaLamaIcon className="h-14 w-auto fill-orange-600 mx-5" />
-      </Link>
-      <Tabs.List className="lg:flex hidden">
-        {tabs.map((tab) => (
-          <Tabs.Trigger
-            key={tab.label}
-            value={tab.label}
-            className="text-lg relative text-brand-secondary-contrast mx-4 focus:text-brand-secondary-hover cursor-pointer font-bold  data-[state=active]:text-blue-600 "
-          >
-            {tab.label}
-          </Tabs.Trigger>
-        ))}
-      </Tabs.List>
-      <div className="w-full hidden md:flex justify-end mr-2">
-        <LightDarkSwitch />
+    <div className="mb-6 w-full px-8 py-1 dark:bg-glass-gradient-end dark:border-b dark:border-neutral-border-subtle/60 shadow-md">
+      <div className="max-w-[2560px] mx-auto flex items-center justify-between md:justify-start">
+        <Link href="/" className="text-xl">
+          <TinaLamaIcon className="h-14 w-auto fill-orange-600 mx-5" />
+        </Link>
+        <Tabs.List className="lg:flex hidden">
+          {tabs.map((tab) => (
+            <Tabs.Trigger
+              key={tab.label}
+              value={tab.label}
+              className=" px-1 text-lg relative text-brand-secondary-contrast mx-4 focus:text-brand-secondary-hover cursor-pointer font-semibold data-[state=active]:text-brand-secondary-text after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.25 after:bg-brand-secondary-text after:transition-all after:duration-300 after:ease-out data-[state=active]:after:w-full after:w-0"
+            >
+              {tab.label}
+            </Tabs.Trigger>
+          ))}
+        </Tabs.List>
+        <div className="w-full hidden md:flex justify-end mr-6">
+          <LightDarkSwitch />
+        </div>
+        <Search />
+        <MobileNavigationWrapper tocData={navigationDocsData} />
       </div>
-      <Search />
-      <MobileNavigationWrapper tocData={navigationDocsData} />
     </div>
   );
 };
@@ -77,7 +79,7 @@ const Sidebar = ({ tabs }: { tabs: { label: string; content: any }[] }) => {
     <>
       {tabs.map((tab) => (
         <Tabs.Content key={tab.label} value={tab.label}>
-          <aside className="sticky top-4 hidden md:block mr-4 h-[calc(100vh-2rem)]">
+          <aside className="sticky top-4 hidden md:block mr-4 h-[calc(100vh-2rem)] xl:w-84 justify-self-center w-72 ml-8">
             <NavigationSideBar
               title={tab?.label}
               tableOfContents={tab?.content}

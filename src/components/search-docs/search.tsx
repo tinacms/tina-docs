@@ -95,7 +95,7 @@ export function Search({ className }: { className?: string }) {
         <input
           type="text"
           value={searchTerm}
-          className={`w-full text-neutral-text p-2 pl-6 rounded-full bg-neutral-background shadow-lg focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
+          className={`w-full text-neutral-text p-2 pl-6 rounded-full bg-neutral-background-secondary shadow-lg border border-transparent dark:border-neutral-border-subtle focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
             error !== null ? "opacity-50 cursor-not-allowed" : ""
           }`}
           placeholder="Search..."

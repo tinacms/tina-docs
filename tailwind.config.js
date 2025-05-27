@@ -3,6 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const { blobBg } = require("./src/utils/backgrounds/svgs");
 
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",

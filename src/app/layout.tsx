@@ -2,13 +2,13 @@ import "@/styles/global.css";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 import AdminLink from "@/src/components/ui/admin-link";
 import { ThemeProvider } from "next-themes";
-import { Inter, Barlow } from "next/font/google";
+import { Inter, Roboto_Flex } from "next/font/google";
 
 const body = Inter({ subsets: ["latin"], variable: "--body-font" });
-const heading = Barlow({
+const heading = Roboto_Flex({
   subsets: ["latin"],
   weight: ["400"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   variable: "--heading-font",
 });
 
@@ -26,7 +26,12 @@ export default function RootLayout({
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
       </head>
       <body className={`${body.variable} ${heading.variable}`}>
-        <ThemeProvider attribute="class">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem={true}
+          disableTransitionOnChange={false}
+        >
           <AdminLink />
           <TailwindIndicator />
           <div className="font-sans flex min-h-screen flex-col bg-background-color">

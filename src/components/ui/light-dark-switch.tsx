@@ -1,13 +1,15 @@
 "use client";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { IoMoon, IoSunny } from "react-icons/io5";
 
 export default function LightDarkSwitch() {
-  const { theme, setTheme } = useTheme();
-  const isLight = theme === "light";
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const isLight = resolvedTheme === "light";
 
   return (
-    <div className="brand-glass-gradient w-fit rounded-full p-1 shadow-xl">
+    <div className="brand-glass-gradient w-fit rounded-full p-1 shadow-xl dark:border dark:border-neutral-border-subtle">
       <button
         type="button"
         className="flex items-center gap-4 cursor-pointer"
@@ -16,17 +18,17 @@ export default function LightDarkSwitch() {
         <div
           className={`w-fit rounded-full p-1 transition-all duration-300 ease-in-out ${
             isLight
-              ? "bg-neutral-background-secondary text-neutral-text"
+              ? "bg-neutral-border text-brand-primary"
               : "text-neutral-text"
           }`}
         >
           <IoSunny size={20} className="transition-colors duration-300" />
         </div>
         <div
-          className={`w-fit rounded-full p-1 transition-all duration-300 ease-in-out ${
+          className={`w-fit rounded-full p-1 transition-all duration-300 ease-in-out border border-transparent ${
             isLight
               ? "text-neutral-text-secondary"
-              : "text-neutral-text bg-neutral-background-secondary"
+              : "text-neutral-text bg-neutral-border-subtle"
           }`}
         >
           <IoMoon size={19} className="transition-colors duration-300" />

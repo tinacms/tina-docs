@@ -31,9 +31,9 @@ export default function Document({ props, tinaProps }) {
   return (
     // 73.5% of 100% is ~ 55% of the screenwidth in parent div
     // 26.5% of 100% is ~ 20% of the screenwidth in parent div
-    <div className="grid grid-cols-1 xl:grid-cols-[73.5%_26.5%] pr-4">
+    <div className="grid grid-cols-1 xl:grid-cols-[73.5%_26.5%]">
       <div
-        className={`max-w-full overflow-hidden break-words  ${
+        className={`max-w-full overflow-hidden break-words mx-8 ${
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
@@ -51,7 +51,7 @@ export default function Document({ props, tinaProps }) {
         <div
           ref={contentRef}
           data-tina-field={tinaField(documentationData, "body")}
-          className="pt-4 font-body font-light"
+          className="pt-4 font-body font-light leading-normal tracking-normal"
         >
           <TinaMarkdown
             content={documentationData?.body}
