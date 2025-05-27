@@ -37,7 +37,7 @@ export default function Document({ props, tinaProps }) {
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between w-full gap-2">
+        <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
           <h1
             className="brand-primary-gradient py-4 font-heading text-4xl"
             data-tina-field={tinaField(documentationData, "title")}
