@@ -1,16 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
 @config "../../tailwind.config.js";
-
-/* Custom font-face declaration */
-@font-face {
-  font-family: "tuner-medium";
-  src: url("/fonts/tuner-medium.woff2") format("woff2"),
-    url("/fonts/tuner-medium.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-/* TinaCMS Design Library */
 
 /* DEFAULT THEME */
 :root {
