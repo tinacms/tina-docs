@@ -26,8 +26,6 @@ export interface SupermenuGroup {
  */
 export interface Tab {
   title?: string | null;
-  lightModeLogo?: string | null | undefined;
-  darkModeLogo?: string | null | undefined;
   supermenuGroup?: SupermenuGroup[] | null;
 }
 
@@ -36,6 +34,8 @@ export interface Tab {
  */
 export interface NavigationBarData {
   navigationBar: {
+    lightModeLogo?: string | null | undefined;
+    darkModeLogo?: string | null | undefined;
     tabs: Tab[];
   };
 }
@@ -44,11 +44,11 @@ export interface NavigationBarData {
  * Final formatted structure returned by our utility
  */
 export interface FormattedNavigation {
+  lightModeLogo?: string | null | undefined;
+  darkModeLogo?: string | null | undefined;
   data: {
     title: string;
     items: SupermenuGroup[];
-    lightModeLogo: string;
-    darkModeLogo: string;
   }[];
   sha: string;
   fileRelativePath: string;
@@ -91,6 +91,8 @@ export const formatNavigationData = (
   preview = false
 ): FormattedNavigation => {
   const tabs = navigationData.navigationBar.tabs || [];
+  const lightModeLogo = navigationData.navigationBar?.lightModeLogo || "";
+  const darkModeLogo = navigationData.navigationBar?.darkModeLogo || "";
 
   const tabsData = tabs.map((tab) => {
     const groups = (tab.supermenuGroup || []).map((group) => ({
@@ -101,8 +103,8 @@ export const formatNavigationData = (
     return {
       title: tab.title || "",
       items: groups,
-      lightModeLogo: tab.lightModeLogo || "",
-      darkModeLogo: tab.darkModeLogo || "",
+      lightModeLogo: lightModeLogo,
+      darkModeLogo: darkModeLogo,
     };
   });
 

@@ -46,7 +46,7 @@ export const NavigationDropdownContent = ({
   }, []);
 
   return (
-    <div className="animate-fade-down animate-duration-300 fixed top-0 z-20 h-screen w-[75%] overflow-y-auto bg-white p-6 shadow-xl right-0">
+    <div className="animate-fade-down animate-duration-300 fixed top-0 z-20 h-screen w-[75%] overflow-y-auto bg-neutral-background border-l border-neutral-border-subtle p-6 shadow-xl right-0">
       <div className="flex justify-end mb-4">
         <MdClose
           onClick={onClose}
@@ -64,7 +64,7 @@ export const NavigationDropdownContent = ({
             {options.find((opt) => opt.value === selectedValue)?.label}
           </span>
           <MdArrowDropDown
-            className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 ${
+            className={`size-6 text-brand-secondary-dark-dark transition-transform duration-200 ${
               isOpen ? "rotate-180" : ""
             }`}
           />
@@ -77,7 +77,9 @@ export const NavigationDropdownContent = ({
                 type="button"
                 key={option.value}
                 className={`w-full p-2 px-4 text-left hover:bg-neutral-50 rounded-0 first:rounded-t-lg last:rounded-b-lg ${
-                  selectedValue === option.value ? "bg-neutral-50" : ""
+                  selectedValue === option.value
+                    ? "bg-neutral-50 text-brand-secondary"
+                    : ""
                 }`}
                 onClick={() => {
                   setSelectedValue(option.value);

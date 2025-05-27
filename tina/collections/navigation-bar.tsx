@@ -14,6 +14,17 @@ export const docsNavigationBarCollection = {
   },
   fields: [
     {
+      name: "lightModeLogo",
+      label: "Light Mode Logo",
+      type: "image",
+    },
+    {
+      name: "darkModeLogo",
+      label: "Dark Mode Logo",
+      type: "image",
+      description: "If your light mode logo fits dark-mode, leave this blank.",
+    },
+    {
       name: "tabs",
       label: "Tabs",
       type: "object",
@@ -28,18 +39,6 @@ export const docsNavigationBarCollection = {
           name: "title",
           label: "Title Label",
           type: "string",
-        },
-        {
-          name: "lightModeLogo",
-          label: "Light Mode Logo",
-          type: "image",
-        },
-        {
-          name: "darkModeLogo",
-          label: "Dark Mode Logo",
-          type: "image",
-          description:
-            "If your light mode logo fits dark-mode, leave this blank.",
         },
         {
           name: "supermenuGroup",
