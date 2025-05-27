@@ -9,6 +9,16 @@
           "title": "TinaDocs & TinaCMS",
           "items": [
             {
+              "title": "Quickstart",
+              "slug": "content/docs/index.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Take back your docs",
+              "slug": "content/docs/introduction/take-back-your-docs.mdx",
+              "_template": "item"
+            },
+            {
               "title": "Editing Content",
               "slug": "content/docs/tinadocs-and-tinacms/editing-content.mdx",
               "_template": "item"
