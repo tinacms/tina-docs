@@ -26,7 +26,7 @@ export const docsNavigationBarCollection = {
       fields: [
         {
           name: "title",
-          label: "Title",
+          label: "Title Label",
           type: "string",
         },
         {
@@ -48,35 +48,17 @@ export const docsNavigationBarCollection = {
           list: true,
           ui: {
             itemProps: (item) => ({
-              label: `🗂️ ${item?.title ?? "Unnamed Tab"}`,
+              label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
             }),
           },
           fields: [
+            { name: "title", label: "Name", type: "string" },
             {
-              name: "title",
-              label: "Tab Label",
-              type: "string",
-            },
-            {
-              name: "supermenuGroup",
-              label: "Supermenu Group",
+              name: "items",
+              label: "Page or Submenu",
               type: "object",
               list: true,
-              ui: {
-                itemProps: (item) => ({
-                  label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
-                }),
-              },
-              fields: [
-                { name: "title", label: "Name", type: "string" },
-                {
-                  name: "items",
-                  label: "Page or Submenu",
-                  type: "object",
-                  list: true,
-                  templates: [submenuTemplate, itemTemplate],
-                },
-              ],
+              templates: [submenuTemplate, itemTemplate],
             },
           ],
         },
