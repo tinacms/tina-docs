@@ -1,7 +1,7 @@
-import { MdArrowDropDown, MdClose } from "react-icons/md";
-import { DocsNavigationItems } from "./navigation-items";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
+import { MdArrowDropDown, MdClose } from "react-icons/md";
+import { DocsNavigationItems } from "./navigation-items";
 
 export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
   return (

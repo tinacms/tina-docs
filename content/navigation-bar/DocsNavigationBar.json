@@ -6,29 +6,6 @@
       "darkModeLogo": "/svg/Tina Marketing Logo Full White.svg",
       "supermenuGroup": [
         {
-          "title": "Docs",
-          "supermenuGroup": [
-            {
-              "_template": "item"
-            },
-            {
-              "title": "Welcome to TinaDocs",
-              "slug": "content/docs/index.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Take Back your Docs",
-              "slug": "content/docs/introduction/take-back-your-docs.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Quickstart",
-              "slug": "content/docs/introduction/Quickstart.mdx",
-              "_template": "item"
-            }
-          ]
-        },
-        {
           "title": "TinaDocs & TinaCMS",
           "items": [
             {
@@ -59,7 +36,8 @@
                   "slug": "content/docs/customising/technical-reference.mdx",
                   "_template": "item"
                 }
-              ]
+              ],
+              "_template": "items"
             },
             {
               "title": "The Datalayer",
@@ -208,10 +186,11 @@
       "darkModeLogo": "/svg/Tina Marketing Logo Full White.svg",
       "supermenuGroup": [
         {
-          "title": "Test",
-          "supermenuGroup": [
+          "title": "API Reference",
+          "items": [
             {
-              "title": "Test",
+              "title": "Reference",
+              "slug": "content/docs/API-References.mdx",
               "_template": "item"
             }
           ]

@@ -88,7 +88,7 @@ const transformReferencesToSlugs = (navItems: NavItem[]): NavItem[] => {
  */
 export const formatNavigationData = (
   navigationData: NavigationBarData,
-  preview: boolean = false
+  preview = false
 ): FormattedNavigation => {
   const tabs = navigationData.navigationBar.tabs || [];
 
@@ -121,7 +121,7 @@ export const formatNavigationData = (
  * @returns Formatted navigation structure with proper slugs
  */
 export const getDocsNavigation = async (
-  preview: boolean = false
+  preview = false
 ): Promise<FormattedNavigation> => {
   const navigationData = await client.queries.navigationBar({
     relativePath: "DocsNavigationBar.json",
