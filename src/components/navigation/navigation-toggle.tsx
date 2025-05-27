@@ -50,7 +50,7 @@ export const NavigationDropdownContent = ({
       <div
         onClick={onClose}
         className="fixed inset-0 bg-[rgba(0,0,0,0.4)] z-10 lg:hidden"
-      ></div>
+      />
 
       <div className="animate-fade-down animate-duration-300 fixed top-0 right-0 z-20 h-screen w-[75%] overflow-y-auto bg-neutral-background border-l border-neutral-border-subtle p-6 shadow-xl lg:hidden">
         <div className="flex justify-end mb-4">
