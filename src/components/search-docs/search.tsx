@@ -100,16 +100,18 @@ export function Search({ className }: { className?: string }) {
           }`}
           placeholder="Search..."
           onChange={handleSearch}
-          disabled={error !== null}
+          
         />
         <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-primary h-5 w-5" />
       </div>
 
       {error && (
-        <div className="md:mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm w-11/12 mx-auto">
+        <div className="md:mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm w-11/12 mx-auto absolute left-3 z-10">
           {error}
         </div>
       )}
+      
+    
 
       {!error && (
         <SearchResults
