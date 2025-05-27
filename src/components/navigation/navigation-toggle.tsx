@@ -19,16 +19,15 @@ export const NavigationDropdownContent = ({
   tocData: any;
   onClose: () => void;
 }) => {
-  const [selectedValue, setSelectedValue] = useState("docs");
+  const [selectedValue, setSelectedValue] = useState(tocData[0].title);
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const options = [
-    { value: "docs", label: "Docs" },
-    { value: "learn", label: "Learn" },
-    { value: "api", label: "API" },
-    { value: "logs", label: "Logs" },
-  ];
+  const options = tocData?.map((option: any) => ({
+    value: option.title,
+    label: option.title,
+    content: option.items,
+  }));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -89,8 +88,9 @@ export const NavigationDropdownContent = ({
           </div>
         )}
       </div>
-
-      {selectedValue === "docs" && <DocsNavigationItems navItems={tocData} />}
+      <DocsNavigationItems
+        navItems={options.find((opt) => opt.value === selectedValue)?.content}
+      />
     </div>
   );
 };

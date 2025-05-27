@@ -33,7 +33,7 @@ export const MobileNavigationWrapper = ({ tocData }: { tocData: any }) => {
       <NavigationToggle onToggle={toggleDropdown} />
       {isOpen && (
         <NavigationDropdownContent
-          tocData={Array.isArray(tocData.items) ? tocData.items : []}
+          tocData={Array.isArray(tocData) ? tocData : []}
           onClose={closeDropdown}
         />
       )}
