@@ -23,6 +23,7 @@ export function Search({ className }: { className?: string }) {
         !searchContainerRef.current.contains(event.target as Node)
       ) {
         setResults([]);
+        setSearchTerm("");
       }
     };
 
