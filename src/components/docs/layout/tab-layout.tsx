@@ -5,7 +5,7 @@ import React from "react";
 import { hasNestedSlug } from "../../navigation/navigation-items";
 import { Body } from "./body";
 import { Sidebar } from "./sidebar";
-import { TopNav } from "./TopNav";
+import { TopNav } from "./top-nav";
 
 export const TabsLayout = ({
   tabs,
