@@ -37,6 +37,27 @@ export interface NavigationBarData {
     lightModeLogo?: string | null | undefined;
     darkModeLogo?: string | null | undefined;
     tabs: Tab[];
+    ctaButtons?:
+      | {
+          button1?:
+            | {
+                label?: string | null | undefined;
+                link?: string | null | undefined;
+                variant?: string | null | undefined;
+              }
+            | null
+            | undefined;
+          button2?:
+            | {
+                label?: string | null | undefined;
+                link?: string | null | undefined;
+                variant?: string | null | undefined;
+              }
+            | null
+            | undefined;
+        }
+      | null
+      | undefined;
   };
 }
 
@@ -46,6 +67,27 @@ export interface NavigationBarData {
 export interface FormattedNavigation {
   lightModeLogo?: string | null | undefined;
   darkModeLogo?: string | null | undefined;
+  ctaButtons?:
+    | {
+        button1?:
+          | {
+              label?: string | null | undefined;
+              link?: string | null | undefined;
+              variant?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        button2?:
+          | {
+              label?: string | null | undefined;
+              link?: string | null | undefined;
+              variant?: string | null | undefined;
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
   data: {
     title: string;
     items: SupermenuGroup[];
@@ -93,6 +135,7 @@ export const formatNavigationData = (
   const tabs = navigationData.navigationBar.tabs || [];
   const lightModeLogo = navigationData.navigationBar?.lightModeLogo || "";
   const darkModeLogo = navigationData.navigationBar?.darkModeLogo || "";
+  const ctaButtons = navigationData.navigationBar?.ctaButtons;
 
   const tabsData = tabs.map((tab) => {
     const groups = (tab.supermenuGroup || []).map((group) => ({
@@ -113,6 +156,9 @@ export const formatNavigationData = (
     sha: "",
     fileRelativePath: "content/navigation-bar/DocsNavigationBar.json",
     preview,
+    ctaButtons,
+    lightModeLogo,
+    darkModeLogo,
   };
 };
 
