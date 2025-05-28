@@ -39,6 +39,7 @@ export function Search({ className }: { className?: string }) {
 
     if (!value.trim()) {
       setResults([]);
+      setSearchTerm("");
       return;
     }
 
