@@ -1,14 +1,14 @@
 "use client";
 
-import { MobileNavigationWrapper } from "./navigation/navigation-dropdown";
 import * as Tabs from "@radix-ui/react-tabs";
+import { useTheme } from "next-themes";
+import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
+import { useEffect, useState } from "react";
+import { MobileNavigationWrapper } from "./navigation/navigation-dropdown";
 import { Search } from "./search-docs/search";
 import LightDarkSwitch from "./ui/light-dark-switch";
-import Image from "next/image";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 export const TopNav = ({
   tabs,

@@ -1,11 +1,9 @@
-import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import { Sidebar } from "@/src/components/SideBar";
 import { TopNav } from "@/src/components/TopNav";
+import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
 import { getDocsNavigation } from "@/utils/docs";
 import * as Tabs from "@radix-ui/react-tabs";
 import type React from "react";
-import { useTheme } from "next-themes";
-import { useEffect } from "react";
 
 export default async function DocsLayout({
   children,
@@ -13,7 +11,7 @@ export default async function DocsLayout({
   children: React.ReactNode;
 }) {
   // Fetch navigation data that will be shared across all docs pages
-  
+
   const navigationDocsData = await getDocsNavigation();
 
   const tabs = navigationDocsData.data.map((tab) => ({
