@@ -1,6 +1,6 @@
 {
-  "lightModeLogo": "/svg/tina-icon-orange.svg",
-  "darkModeLogo": "/svg/tina-full-logo-white.svg",
+  "lightModeLogo": "/svg/tina-icon.svg",
+  "darkModeLogo": "/svg/tina-icon-orange.svg",
   "tabs": [
     {
       "title": "Docs",
@@ -195,5 +195,17 @@
         }
       ]
     }
-  ]
+  ],
+  "ctaButtons": {
+    "button1": {
+      "label": "TinaCMS Docs",
+      "link": "https://tina.io/docs",
+      "variant": "primary-background"
+    },
+    "button2": {
+      "label": "TinaCloud",
+      "link": "https://app.tina.io",
+      "variant": "primary-outline"
+    }
+  }
 }

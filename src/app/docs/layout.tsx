@@ -22,7 +22,7 @@ export default async function DocsLayout({
       <TabsLayout
         tabs={tabs}
         children={children}
-        navigationDocsData={navigationDocsData.data}
+        navigationDocsData={navigationDocsData}
       />
     </div>
   );
