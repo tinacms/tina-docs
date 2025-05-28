@@ -33,8 +33,8 @@ export const TopNav = ({
           <Search />
         </div>
         <div>
-          <div className="w-full hidden md:flex justify-end mr-6">
-            <MobileNavigationWrapper tocData={navigationDocsData} />
+          <MobileNavigationWrapper tocData={navigationDocsData} />
+          <div className="w-full hidden lg:flex justify-end mr-6">
             <LightDarkSwitch />
           </div>
         </div>

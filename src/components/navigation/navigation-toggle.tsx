@@ -95,7 +95,7 @@ export const NavigationDropdownContent = ({
                 <button
                   type="button"
                   key={option.value}
-                  className={`w-full p-2 px-4 text-left hover:bg-neutral-50 first:rounded-t-lg last:rounded-b-lg ${
+                  className={`w-full p-2 px-4 text-left  first:rounded-t-lg last:rounded-b-lg ${
                     selectedValue === option.value
                       ? "bg-neutral-background-secondary text-brand-secondary"
                       : ""
@@ -116,6 +116,7 @@ export const NavigationDropdownContent = ({
           navItems={
             options.find((opt) => opt.value === selectedValue)?.content || []
           }
+          onNavigate={onClose}
         />
       </div>
     </>
