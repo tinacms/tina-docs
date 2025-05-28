@@ -144,21 +144,6 @@
           ]
         },
         {
-          "title": "API Documentation",
-          "items": [
-            {
-              "title": "Overview",
-              "slug": "content/docs/api-documentation/Overview.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "API Reference Examples",
-              "slug": "content/docs/API-References.mdx",
-              "_template": "item"
-            }
-          ]
-        },
-        {
           "title": "Customization & Themes",
           "items": [
             {
@@ -199,8 +184,13 @@
       "title": "API",
       "supermenuGroup": [
         {
-          "title": "API Reference",
+          "title": "API Documentation",
           "items": [
+            {
+              "title": "Overview",
+              "slug": "content/docs/api-documentation/Overview.mdx",
+              "_template": "item"
+            },
             {
               "title": "Reference",
               "slug": "content/docs/API-References.mdx",
