@@ -29,7 +29,7 @@ export const MobileNavigationWrapper = ({ tocData }: { tocData: any }) => {
   });
 
   return (
-    <div ref={containerRef}>
+    <div className="flex items-center" ref={containerRef}>
       <NavigationToggle onToggle={toggleDropdown} />
       {isOpen && (
         <NavigationDropdownContent
