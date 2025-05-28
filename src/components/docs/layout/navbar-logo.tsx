@@ -30,7 +30,7 @@ export const NavbarLogo = ({ navigationDocsData }: NavbarLogoProps) => {
 
   return (
     <Link href="/" className="flex items-center">
-      <div className="relative w-[120px] h-[40px]">
+      <div className="relative md:w-[120px] w-[90px] h-[40px]">
         <Image src={logo} alt="Logo" fill className="object-contain" priority />
       </div>
     </Link>
