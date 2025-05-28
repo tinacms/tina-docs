@@ -1,8 +1,8 @@
-import Link from "next/link";
-import * as Tabs from "@radix-ui/react-tabs";
 import TinaLamaIcon from "@/src/components/icons/tina-icon.svg";
 import { Search } from "@/src/components/search-docs/search";
 import LightDarkSwitch from "@/src/components/ui/light-dark-switch";
+import * as Tabs from "@radix-ui/react-tabs";
+import Link from "next/link";
 import { MobileNavigationWrapper } from "../../navigation/navigation-dropdown";
 
 export const TopNav = ({

@@ -1,8 +1,8 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown, MdClose } from "react-icons/md";
 import { DocsNavigationItems, hasNestedSlug } from "./navigation-items";
-import { usePathname } from "next/navigation";
 
 export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
   return (
