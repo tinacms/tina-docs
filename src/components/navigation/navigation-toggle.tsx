@@ -116,6 +116,7 @@ export const NavigationDropdownContent = ({
           navItems={
             options.find((opt) => opt.value === selectedValue)?.content || []
           }
+          onNavigate={onClose}
         />
       </div>
     </>

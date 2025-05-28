@@ -48,8 +48,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -80,10 +80,12 @@ const NavLevel = ({
   navListElem,
   categoryData,
   level = 0,
+  onNavigate,
 }: {
   navListElem?: any;
   categoryData: any;
   level?: number;
+  onNavigate?: () => void;
 }) => {
   const navLevelElem = React.useRef(null);
   const pathname = usePathname();
@@ -136,7 +138,11 @@ const NavLevel = ({
         data-status={categoryData.status?.toLowerCase()}
       >
         {categoryData.slug ? (
-          <DynamicLink href={getUrl(categoryData.slug)} passHref>
+          <DynamicLink
+            href={getUrl(categoryData.slug)}
+            passHref
+            onClick={onNavigate}
+          >
             <NavTitle level={level} selected={selected && !childSelected}>
               <span className="-mr-2 pr-2">{categoryData.title}</span>
             </NavTitle>
@@ -199,6 +205,7 @@ const NavLevel = ({
                     navListElem={navListElem}
                     level={level + 1}
                     categoryData={item}
+                    onNavigate={onNavigate}
                   />
                 </div>
               ))}
@@ -210,7 +217,10 @@ const NavLevel = ({
   );
 };
 
-export const DocsNavigationItems = ({ navItems }: DocsNavProps) => {
+export const DocsNavigationItems = ({
+  navItems,
+  onNavigate,
+}: DocsNavProps & { onNavigate?: () => void }) => {
   const navListElem = React.useRef(null);
 
   return (
@@ -225,7 +235,11 @@ export const DocsNavigationItems = ({ navItems }: DocsNavProps) => {
               categoryData.slug ? getUrl(categoryData.slug) : categoryData.title
             }`}
           >
-            <NavLevel navListElem={navListElem} categoryData={categoryData} />
+            <NavLevel
+              navListElem={navListElem}
+              categoryData={categoryData}
+              onNavigate={onNavigate}
+            />
           </div>
         ))}
     </div>
