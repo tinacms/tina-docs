@@ -30,13 +30,29 @@ export const TabsLayout = ({
     };
 
     const path = window.location.pathname;
-    setSelectedTab(findTabWithPath(tabs, path));
+    const initialTab = findTabWithPath(tabs, path);
+    setSelectedTab(initialTab);
+    // Dispatch initial tab change with index
+    const initialIndex = tabs.findIndex((tab) => tab.label === initialTab);
+    window.dispatchEvent(
+      new CustomEvent("tabChange", {
+        detail: { value: initialIndex.toString() },
+      })
+    );
   }, [tabs]);
+
+  const handleTabChange = (value: string) => {
+    setSelectedTab(value);
+    const newIndex = tabs.findIndex((tab) => tab.label === value);
+    window.dispatchEvent(
+      new CustomEvent("tabChange", { detail: { value: newIndex.toString() } })
+    );
+  };
 
   return (
     <Tabs.Root
       value={selectedTab}
-      onValueChange={setSelectedTab}
+      onValueChange={handleTabChange}
       className="flex flex-col w-full"
     >
       <TopNav tabs={tabs} navigationDocsData={navigationDocsData} />
