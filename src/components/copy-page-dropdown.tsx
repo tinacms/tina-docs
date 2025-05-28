@@ -21,6 +21,7 @@ import { SiOpenai } from "react-icons/si";
 
 interface CopyPageDropdownProps {
   title?: string;
+  className?: string;
 }
 
 export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
