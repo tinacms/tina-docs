@@ -7,8 +7,10 @@ import { MobileNavigationWrapper } from "../../navigation/navigation-dropdown";
 
 export const TopNav = ({
   tabs,
+  navigationDocsData,
 }: {
   tabs: { label: string; content: any }[];
+  navigationDocsData: any;
 }) => {
   return (
     <div className="mb-2 md:mb-4 w-full px-8 py-1 dark:bg-glass-gradient-end dark:border-b dark:border-neutral-border-subtle/60 shadow-md">
@@ -31,7 +33,7 @@ export const TopNav = ({
           <LightDarkSwitch />
         </div>
         <Search />
-        <MobileNavigationWrapper tocData={tabs} />
+        <MobileNavigationWrapper tocData={navigationDocsData} />
       </div>
     </div>
   );

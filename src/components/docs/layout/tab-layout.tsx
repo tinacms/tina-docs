@@ -10,9 +10,11 @@ import { Body } from "./body";
 export const TabsLayout = ({
   tabs,
   children,
+  navigationDocsData,
 }: {
   tabs: { label: string; content: any }[];
   children: React.ReactNode;
+  navigationDocsData: any;
 }) => {
   const [selectedTab, setSelectedTab] = React.useState(tabs[0].label);
 
@@ -37,7 +39,7 @@ export const TabsLayout = ({
       onValueChange={setSelectedTab}
       className="flex flex-col w-full"
     >
-      <TopNav tabs={tabs} />
+      <TopNav tabs={tabs} navigationDocsData={navigationDocsData} />
       <div className="w-full flex flex-col md:flex-row gap-4 p-4 max-w-[2560px] mx-auto">
         <Sidebar tabs={tabs} />
         <main className="flex-1">

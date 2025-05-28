@@ -14,21 +14,16 @@ export default async function DocsLayout({
 
   const tabs = navigationDocsData.data.map((tab) => ({
     label: tab.title,
-    content: {
-      items: tab.items.map((group) => ({
-        title: group.title || "",
-        url: group.items?.[0]?.slug || "",
-        items: group.items?.map((item) => ({
-          title: item.title || "",
-          url: item.slug || "",
-        })),
-      })),
-    },
+    content: tab,
   }));
 
   return (
     <div className="relative flex flex-col w-full pb-2">
-      <TabsLayout tabs={tabs} children={children} />
+      <TabsLayout
+        tabs={tabs}
+        children={children}
+        navigationDocsData={navigationDocsData.data}
+      />
     </div>
   );
 }
