@@ -42,11 +42,6 @@
                   "_template": "item"
                 },
                 {
-                  "title": "Built-in Components",
-                  "slug": "content/docs/introduction/built-in-components.mdx",
-                  "_template": "item"
-                },
-                {
                   "title": "Further Technical References",
                   "slug": "content/docs/customising/technical-reference.mdx",
                   "_template": "item"
