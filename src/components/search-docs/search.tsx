@@ -1,7 +1,7 @@
 "use client";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SearchResults } from "./search-results";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -14,6 +14,24 @@ export function Search({ className }: { className?: string }) {
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        setResults([]);
+        setSearchTerm("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -22,6 +40,7 @@ export function Search({ className }: { className?: string }) {
 
     if (!value.trim()) {
       setResults([]);
+      setSearchTerm("");
       return;
     }
 
@@ -90,7 +109,10 @@ export function Search({ className }: { className?: string }) {
   };
 
   return (
-    <div className="relative w-full md:max-w-lg lg:my-4 lg:mb-4">
+    <div
+      className="relative w-full md:max-w-lg lg:my-4 lg:mb-4"
+      ref={searchContainerRef}
+    >
       <div className={`relative md:mr-4 ${className || ""}`}>
         <input
           type="text"
