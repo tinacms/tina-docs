@@ -5,6 +5,14 @@ import { IoMoon, IoSunny } from "react-icons/io5";
 
 export default function LightDarkSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  // Prevent hydration mismatch by not rendering anything until mounted
+  if (!mounted) {
+    return null;
+  }
 
   const isLight = resolvedTheme === "light";
 

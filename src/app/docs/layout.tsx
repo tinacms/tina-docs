@@ -9,11 +9,21 @@ export default async function DocsLayout({
   children: React.ReactNode;
 }) {
   // Fetch navigation data that will be shared across all docs pages
+
   const navigationDocsData = await getDocsNavigation();
 
   const tabs = navigationDocsData.data.map((tab) => ({
     label: tab.title,
-    content: tab,
+    content: {
+      items: tab.items.map((group) => ({
+        title: group.title || "",
+        url: group.items?.[0]?.slug || "",
+        items: group.items?.map((item) => ({
+          title: item.title || "",
+          url: item.slug || "",
+        })),
+      })),
+    },
   }));
 
   return (
