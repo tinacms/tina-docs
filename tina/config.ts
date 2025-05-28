@@ -20,7 +20,7 @@ export const config = defineConfig({
       publicFolder: "public",
       mediaRoot: "",
     },
-    accept: ["application/json"],
+    accept: ["image/*", "video/*", "application/json", ".json"],
   },
   build: {
     publicFolder: "public", // The public asset folder for your framework
