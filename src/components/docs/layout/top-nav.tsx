@@ -1,12 +1,12 @@
 import * as Tabs from "@radix-ui/react-tabs";
+import Link from "next/link";
 import type React from "react";
+import { useState } from "react";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { MobileNavigationWrapper } from "../../navigation/navigation-dropdown";
 import { Search } from "../../search-docs/search";
 import LightDarkSwitch from "../../ui/light-dark-switch";
 import { NavbarLogo } from "./navbar-logo";
-import Link from "next/link";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { useState } from "react";
 
 export const TopNav = ({
   tabs,
@@ -83,6 +83,7 @@ export const TopNav = ({
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="p-2 hover:bg-neutral-background-secondary rounded-md"
+                  type="button"
                 >
                   <BsThreeDotsVertical className="size-5 text-brand-secondary-contrast" />
                 </button>

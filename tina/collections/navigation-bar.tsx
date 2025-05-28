@@ -64,33 +64,52 @@ export const docsNavigationBarCollection = {
       ],
     },
     {
-      name: 'ctaButtons',
-      label: 'CTA Buttons',
-      type: 'object',
+      name: "ctaButtons",
+      label: "CTA Buttons",
+      type: "object",
       fields: [
         {
-          name: 'button1',
-          label: 'Button 1',
-          type: 'object',
-          fields: 
-          [
-            { label: 'Label', name: 'label', type: 'string' },
-            { label: 'Link', name: 'link', type: 'string' },
-            { label: 'variant', name: 'variant', type: 'string', options: ['primary-background', 'secondary-background', 'primary-outline', 'secondary-outline'] },
-          ]
+          name: "button1",
+          label: "Button 1",
+          type: "object",
+          fields: [
+            { label: "Label", name: "label", type: "string" },
+            { label: "Link", name: "link", type: "string" },
+            {
+              label: "variant",
+              name: "variant",
+              type: "string",
+              options: [
+                "primary-background",
+                "secondary-background",
+                "primary-outline",
+                "secondary-outline",
+              ],
+            },
+          ],
         },
         {
-          name: 'button2',
-          label: 'Button 2',
-          type: 'object',
+          name: "button2",
+          label: "Button 2",
+          type: "object",
           fields: [
-            { label: 'Label', name: 'label', type: 'string' },
-            { label: 'Link', name: 'link', type: 'string' },
-            { label: 'variant', name: 'variant', type: 'string', options: ['primary-background', 'secondary-background', 'primary-outline', 'secondary-outline'] },
-          ]
-        }
-      ]
-    }
+            { label: "Label", name: "label", type: "string" },
+            { label: "Link", name: "link", type: "string" },
+            {
+              label: "variant",
+              name: "variant",
+              type: "string",
+              options: [
+                "primary-background",
+                "secondary-background",
+                "primary-outline",
+                "secondary-outline",
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ],
 };
 
