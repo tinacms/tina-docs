@@ -62,7 +62,7 @@ export function CodeBlock({
         {lang}
       </div>
       <div
-        className={`absolute top-0 right-0 z-10 mx-2 my-1 text-xs font-mono bg-[#222] transition-opacity duration-200 opacity-0 group-hover:opacity-100 cursor-pointer ${
+        className={`absolute top-0 right-0 z-10 mx-2 my-1 text-xs font-mono transition-opacity duration-200 opacity-0 group-hover:opacity-100 cursor-pointer ${
           showCopyButton ? "" : "hidden"
         }`}
       >

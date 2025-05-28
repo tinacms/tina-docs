@@ -1,10 +1,25 @@
 {
-  "lightModeLogo": "/svg/Tina Marketing Logo Black.svg",
-  "darkModeLogo": "/svg/Tina Marketing Logo Full White.svg",
+  "lightModeLogo": "/svg/tina-icon-orange.svg",
+  "darkModeLogo": "/svg/tina-full-logo-white.svg",
   "tabs": [
     {
       "title": "Docs",
       "supermenuGroup": [
+        {
+          "title": "Introduction",
+          "items": [
+            {
+              "title": "Quickstart",
+              "slug": "content/docs/index.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Take Back your Docs",
+              "slug": "content/docs/introduction/take-back-your-docs.mdx",
+              "_template": "item"
+            }
+          ]
+        },
         {
           "title": "TinaDocs & TinaCMS",
           "items": [
@@ -19,16 +34,11 @@
               "_template": "item"
             },
             {
-              "title": "Learning more about TinaCMS",
+              "title": "Learning TinaCMS",
               "items": [
                 {
                   "title": "Learn TinaCMS",
                   "slug": "content/docs/customising/learn-tinacms.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Built-in Components",
-                  "slug": "content/docs/introduction/built-in-components.mdx",
                   "_template": "item"
                 },
                 {
@@ -129,21 +139,6 @@
           ]
         },
         {
-          "title": "API Documentation",
-          "items": [
-            {
-              "title": "Overview",
-              "slug": "content/docs/api-documentation/Overview.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "API Reference Examples",
-              "slug": "content/docs/API-References.mdx",
-              "_template": "item"
-            }
-          ]
-        },
-        {
           "title": "Customization & Themes",
           "items": [
             {
@@ -184,8 +179,13 @@
       "title": "API",
       "supermenuGroup": [
         {
-          "title": "API Reference",
+          "title": "API Documentation",
           "items": [
+            {
+              "title": "Overview",
+              "slug": "content/docs/api-documentation/Overview.mdx",
+              "_template": "item"
+            },
             {
               "title": "Reference",
               "slug": "content/docs/API-References.mdx",

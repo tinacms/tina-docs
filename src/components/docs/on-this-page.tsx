@@ -126,18 +126,16 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
                 className={`border-r border-1  ${
                   activeId === getIdSyntax(item.text)
                     ? "border-brand-primary"
-                    : "border-neutral-border group-hover:border-neutral-500"
+                    : "border-neutral-border-subtle group-hover:border-neutral-border"
                 }`}
               />
               <a
                 href={`#${getIdSyntax(item.text)}`}
                 onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
-                className={`${
-                  item.type === "h3" ? "pl-7" : "pl-2"
-                } py-1.5 text-neutral-text ${
+                className={`${item.type === "h3" ? "pl-7" : "pl-2"} py-1.5 ${
                   activeId === getIdSyntax(item.text)
                     ? "text-brand-primary"
-                    : "group-hover:text-black text-neutral-text-secondary"
+                    : "group-hover:text-neutral-text text-neutral-text-secondary"
                 }`}
               >
                 {item.text}

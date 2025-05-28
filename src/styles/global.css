@@ -1,17 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
 @config "../../tailwind.config.js";
-
-/* Custom font-face declaration */
-@font-face {
-  font-family: "tuner-medium";
-  src: url("/fonts/tuner-medium.woff2") format("woff2"),
-    url("/fonts/tuner-medium.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
-/* TinaCMS Design Library */
 
 /* DEFAULT THEME */
 :root {
@@ -49,7 +37,7 @@
   --neutral-background-secondary: #F1F5F9;
   --neutral-surface: #FFFFFF;
   --neutral-text: #0f172a;
-  --neutral-text-secondary: #64748B;
+  --neutral-text-secondary: #64748b;
   --neutral-border: #CBD5E1;
   --neutral-border-subtle: #e2e8f0;
 
@@ -115,7 +103,7 @@
 
   --brand-secondary: #0f172a;
   --brand-secondary-hover: #334155;
-  --brand-secondary-light: #64748b;
+  --brand-secondary-light: #b5becd;
   --brand-secondary-text: #0f172a;
   --brand-secondary-contrast: #334155;
 
@@ -157,7 +145,7 @@
 
   --brand-secondary: #f1f5f9;
   --brand-secondary-hover: #94a3b8;
-  --brand-secondary-light: #cbd5e1;
+  --brand-secondary-light: #4b4f53;
   --brand-secondary-text: #f1f5f9;
   --brand-secondary-contrast: #f1f5f9;
 

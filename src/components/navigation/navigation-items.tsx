@@ -62,7 +62,7 @@ const NavTitle: React.FC<NavTitleProps> = ({
   );
 };
 
-const hasNestedSlug = (navItems: any[], slug: string) => {
+export const hasNestedSlug = (navItems: any[], slug: string) => {
   for (const item of Array.isArray(navItems) ? navItems : []) {
     if (matchActualTarget(getUrl(item.slug || item.href), slug)) {
       return true;
@@ -150,13 +150,13 @@ const NavLevel = ({
               setExpanded(!expanded);
             }}
           >
-            <span className=" -mr-2 pr-2">{categoryData.title}</span>
+            <span className=" -mr-2 pr-2 font-body">{categoryData.title}</span>
             {categoryData.items && !selected && (
               <ChevronRightIcon
                 className={`${
                   level < 1
-                    ? "text-brand-primary-light group-hover:text-brand-primary-hover"
-                    : "text-brand-secondary-light group-hover:text-brand-secondary-hover"
+                    ? "text-brand-primary group-hover:text-brand-primary-hover"
+                    : "text-neutral-text group-hover:text-neutral-text-secondary"
                 } -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
                   expanded ? "rotate-90" : ""
                 }`}

@@ -3,6 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const { blobBg } = require("./src/utils/backgrounds/svgs");
 
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -65,8 +66,8 @@ module.exports = {
       },
     },
     fontFamily: {
-      tuner: ["tuner-medium", ...defaultTheme.fontFamily.sans],
-      "tuner-regular": ["tuner-regular", ...defaultTheme.fontFamily.sans],
+      heading: ["var(--heading-font)", ...defaultTheme.fontFamily.serif],
+      body: ["var(--body-font)", ...defaultTheme.fontFamily.sans],
       mono: [
         "ui-monospace",
         "SFMono-Regular",

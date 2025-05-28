@@ -21,6 +21,7 @@ import { SiOpenai } from "react-icons/si";
 
 interface CopyPageDropdownProps {
   title?: string;
+  className?: string;
 }
 
 export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
@@ -115,7 +116,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 
   return (
     <div
-      className="mb-2 inline-flex rounded-lg overflow-hidden lg:mb-0 brand-glass-gradient text-neutral-text shadow-sm item-center w-fit ml-auto"
+      className="mb-2 inline-flex rounded-lg overflow-hidden lg:mb-0 brand-glass-gradient text-neutral-text shadow-sm item-center w-fit ml-auto lg:border-0 border border-neutral-border-subtle"
       data-exclude-from-md
     >
       {/* Primary copy button */}
