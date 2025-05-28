@@ -16,7 +16,16 @@ export default async function DocsLayout({
 
   const tabs = navigationDocsData.data.map((tab) => ({
     label: tab.title,
-    content: tab,
+    content: {
+      items: tab.items.map((group) => ({
+        title: group.title || "",
+        url: group.items?.[0]?.slug || "",
+        items: group.items?.map((item) => ({
+          title: item.title || "",
+          url: item.slug || "",
+        })),
+      })),
+    },
   }));
 
   return (
