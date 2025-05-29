@@ -194,35 +194,6 @@
           ]
         }
       ]
-    },
-    {
-      "title": "Test 1",
-      "supermenuGroup": [
-        {
-          "title": "tTest",
-          "items": [
-            {
-              "title": "Test",
-              "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/overview.mdx",
-              "_template": "item"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Test 2",
-      "supermenuGroup": [
-        {
-          "title": "Test",
-          "items": [
-            {
-              "slug": "content/docs/tinadocs-and-tinacms/editing-content.mdx",
-              "_template": "item"
-            }
-          ]
-        }
-      ]
     }
   ],
   "ctaButtons": {
