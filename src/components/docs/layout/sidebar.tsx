@@ -1,4 +1,7 @@
+"use client";
+
 import * as Tabs from "@radix-ui/react-tabs";
+import { useEffect, useState } from "react";
 import { NavigationSideBar } from "../../navigation/navigation-sidebar";
 
 export const Sidebar = ({
@@ -6,18 +9,43 @@ export const Sidebar = ({
 }: {
   tabs: { label: string; content: any }[];
 }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const handleTabChange = (e: CustomEvent) => {
+      const newValue = e.detail.value;
+      setCurrentIndex(Number.parseInt(newValue));
+    };
+
+    window.addEventListener("tabChange" as any, handleTabChange);
+    return () => {
+      window.removeEventListener("tabChange" as any, handleTabChange);
+    };
+  }, []);
+
   return (
-    <>
-      {tabs.map((tab) => (
-        <Tabs.Content key={tab.label} value={tab.label}>
-          <aside className="sticky top-4 hidden lg:block mr-4 h-[calc(100vh-2rem)] xl:w-84 justify-self-center w-72 ml-8">
-            <NavigationSideBar
-              title={tab?.label}
-              tableOfContents={tab?.content}
-            />
-          </aside>
-        </Tabs.Content>
-      ))}
-    </>
+    <div className="sticky hidden lg:block mr-4 h-[calc(100vh-2rem)] w-84 ml-8">
+      <div
+        className="absolute inset-0 flex transition-transform duration-300 ease-in-out"
+        style={
+          isMounted
+            ? { transform: `translateX(-${currentIndex * 100}%)` }
+            : undefined
+        }
+      >
+        {tabs.map((tab) => (
+          <div key={tab.label} className="w-full flex-shrink-0">
+            <Tabs.Content value={tab.label}>
+              <NavigationSideBar
+                title={tab?.label}
+                tableOfContents={tab?.content}
+              />
+            </Tabs.Content>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };

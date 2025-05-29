@@ -17,21 +17,34 @@ export const NavbarLogo = ({ navigationDocsData }: NavbarLogoProps) => {
     setMounted(true);
   }, []);
 
-  // Prevent hydration mismatch by not rendering anything until mounted
-  if (!mounted) {
-    return null;
-  }
-
-  const logo =
-    resolvedTheme === "dark"
-      ? navigationDocsData[0]?.darkModeLogo ||
-        navigationDocsData[0]?.lightModeLogo
-      : navigationDocsData[0]?.lightModeLogo;
+  const lightLogo = navigationDocsData[0]?.lightModeLogo;
+  const darkLogo = navigationDocsData[0]?.darkModeLogo || lightLogo;
 
   return (
     <Link href="/" className="flex items-center">
       <div className="relative md:w-[120px] w-[90px] h-[40px]">
-        <Image src={logo} alt="Logo" fill className="object-contain" priority />
+        {mounted ? (
+          <>
+            <Image
+              src={resolvedTheme === "dark" ? darkLogo : lightLogo}
+              alt="Logo"
+              fill
+              className="object-contain"
+              priority
+              sizes="(max-width: 768px) 90px, 120px"
+            />
+            {/* Preload the other logo */}
+            <Image
+              src={resolvedTheme === "dark" ? lightLogo : darkLogo}
+              alt=""
+              fill
+              className="hidden"
+              priority
+            />
+          </>
+        ) : (
+          <div className="w-full h-full animate-pulse opacity-20" />
+        )}
       </div>
     </Link>
   );
