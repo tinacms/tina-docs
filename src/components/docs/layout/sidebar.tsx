@@ -24,9 +24,9 @@ export const Sidebar = ({
   }, []);
 
   return (
-    <div className="sticky hidden lg:block mr-4 h-[calc(100vh-2rem)] xl:w-84 w-72 ml-8 overflow-hidden rounded-2xl shadow-xl">
+    <div className="sticky hidden lg:block mr-4 h-[calc(100vh-2rem)] xl:w-84 w-72 ml-8">
       <div
-        className="absolute inset-0 flex transition-transform duration-300 ease-in-out"
+        className="absolute inset-0 flex transition-transform duration-300 ease-in-out rounded-2xl shadow-xl"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {tabs.map((tab) => (
