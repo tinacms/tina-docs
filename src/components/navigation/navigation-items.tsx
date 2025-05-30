@@ -48,8 +48,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -219,9 +219,12 @@ const NavLevel = ({
 
 export const DocsNavigationItems = ({
   navItems,
+  __typename,
   onNavigate,
-}: DocsNavProps & { onNavigate?: () => void }) => {
+}: DocsNavProps & { __typename: string } & { onNavigate?: () => void }) => {
   const navListElem = React.useRef(null);
+
+  console.log(__typename);
 
   return (
     <div
@@ -242,6 +245,22 @@ export const DocsNavigationItems = ({
             />
           </div>
         ))}
+    </div>
+  );
+};
+
+export const ApiNavigationItems = ({
+  navItems,
+  __typename,
+  onNavigate,
+}: DocsNavProps & { __typename: string } & { onNavigate?: () => void }) => {
+  // TODO: Implement your API navigation rendering here
+  return (
+    <div className="p-4 text-blue-700">
+      API Navigation (stub)
+      <pre className="text-xs text-gray-600 bg-gray-100 rounded p-2 mt-2 overflow-x-auto max-w-full whitespace-pre-wrap break-all">
+        {JSON.stringify(navItems, null, 2)}
+      </pre>
     </div>
   );
 };

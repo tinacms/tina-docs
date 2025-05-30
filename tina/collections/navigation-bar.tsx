@@ -1,5 +1,6 @@
 import { itemTemplate } from "../templates/navbar-ui.template";
 import submenuTemplate from "../templates/submenu.template";
+import GroupOfApiReferencesSelector from "../customFields/group-of-api-references-selector";
 
 const docsNavigationBarFields = [
   {
@@ -30,11 +31,48 @@ const docsNavigationBarFields = [
   },
 ];
 
+const documentSubMenuTemplate = {
+  name: "documentSubMenu",
+  label: "Document Submenu",
+  fields: [
+    { name: "title", label: "Name", type: "string" },
+    {
+      name: "items",
+      label: "Items",
+      type: "object",
+      list: true,
+      templates: [itemTemplate],
+    },
+  ],
+};
+
+const groupOfApiReferencesTemplate = {
+  name: "groupOfApiReferences",
+  label: "Group of API References",
+  fields: [
+    {
+      type: "string",
+      name: "apiGroup",
+      label: "API Group",
+      ui: {
+        component: GroupOfApiReferencesSelector,
+      },
+    },
+  ],
+};
+
 const apiNavigationBarFields = [
   {
     name: "title",
     label: "title",
     type: "string",
+  },
+  {
+    name: "supermenuGroup",
+    label: "Supermenu Group",
+    type: "object",
+    list: true,
+    templates: [documentSubMenuTemplate, groupOfApiReferencesTemplate],
   },
 ];
 

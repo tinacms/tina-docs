@@ -178,6 +178,16 @@
     },
     {
       "title": "API",
+      "supermenuGroup": [
+        {
+          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"store\",\"endpoints\":[\"GET:/store/inventory\",\"POST:/store/order\",\"GET:/store/order/{orderId}\",\"DELETE:/store/order/{orderId}\"]}",
+          "_template": "groupOfApiReferences"
+        },
+        {
+          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[\"POST:/user/createWithList\",\"GET:/user/{username}\",\"PUT:/user/{username}\",\"DELETE:/user/{username}\",\"GET:/user/login\",\"GET:/user/logout\",\"POST:/user/createWithArray\",\"POST:/user\"]}",
+          "_template": "groupOfApiReferences"
+        }
+      ],
       "_template": "apiTab"
     }
   ],

@@ -11,10 +11,10 @@ export default async function DocsLayout({
   // Fetch navigation data that will be shared across all docs pages
 
   const navigationDocsData = await getDocsNavigation();
-
   const tabs = navigationDocsData.data.map((tab) => ({
     label: tab.title,
     content: tab,
+    __typename: tab.__typename,
   }));
 
   return (

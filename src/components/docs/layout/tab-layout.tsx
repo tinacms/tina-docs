@@ -16,6 +16,7 @@ export const TabsLayout = ({
   children: React.ReactNode;
   navigationDocsData: any;
 }) => {
+
   const [selectedTab, setSelectedTab] = React.useState(tabs[0].label);
 
   React.useEffect(() => {
