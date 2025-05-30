@@ -19,6 +19,8 @@ export const TopNav = ({
   const hasButtons = ctaButtons && (ctaButtons.button1 || ctaButtons.button2);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  console.log(tabs);
+
   const getButtonClasses = (variant: string | undefined) => {
     switch (variant) {
       case "primary-background":
@@ -46,7 +48,7 @@ export const TopNav = ({
                 value={tab.label}
                 className="px-1 text-lg relative text-brand-secondary-contrast mx-4 focus:text-brand-secondary-hover cursor-pointer font-semibold data-[state=active]:text-brand-secondary-text after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.25 after:bg-brand-secondary-text after:transition-all after:duration-300 after:ease-out data-[state=active]:after:w-full after:w-0"
               >
-                {tab.label}
+                {tab.label || 'Untitled Tab'}
               </Tabs.Trigger>
             ))}
           </Tabs.List>
