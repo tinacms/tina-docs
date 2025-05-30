@@ -224,18 +224,22 @@ export const DocsNavigationItems = ({
 }: DocsNavProps & { __typename: string } & { onNavigate?: () => void }) => {
   const navListElem = React.useRef(null);
 
-  console.log(__typename);
-
   return (
     <div
       className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin 2xl:py-4 2xl:px-4 2xl:pb-8"
       ref={navListElem}
     >
       {navItems?.length > 0 &&
-        navItems?.map((categoryData) => (
+        navItems?.map((categoryData, index) => (
           <div
             key={`mobile-${
-              categoryData.slug ? getUrl(categoryData.slug) : categoryData.title
+              categoryData.slug
+                ? getUrl(categoryData.slug)
+                : categoryData.title
+                ? categoryData.title
+                : categoryData.id
+                ? categoryData.id
+                : `item-${index}`
             }`}
           >
             <NavLevel
@@ -254,13 +258,169 @@ export const ApiNavigationItems = ({
   __typename,
   onNavigate,
 }: DocsNavProps & { __typename: string } & { onNavigate?: () => void }) => {
-  // TODO: Implement your API navigation rendering here
+  const navListElem = React.useRef(null);
+
+  // Group endpoints by tags using only the data we already have
+  const groupedByTag = React.useMemo(() => {
+    if (!navItems?.length) return {};
+
+    const groups: Record<
+      string,
+      Array<{
+        method: string;
+        path: string;
+        summary: string;
+        operationId?: string;
+        schema: string;
+      }>
+    > = {};
+
+    navItems.forEach((item) => {
+      if (item.apiGroup) {
+        try {
+          const apiGroupData = JSON.parse(item.apiGroup);
+          const { schema, tag, endpoints } = apiGroupData;
+
+          if (tag && endpoints?.length && schema) {
+            if (!groups[tag]) {
+              groups[tag] = [];
+            }
+
+            // If endpoints are stored as objects (new format), use them directly
+            if (
+              endpoints[0] &&
+              typeof endpoints[0] === "object" &&
+              endpoints[0].summary
+            ) {
+              endpoints.forEach((endpoint: any) => {
+                groups[tag].push({
+                  method: endpoint.method.toLowerCase(),
+                  path: endpoint.path,
+                  summary:
+                    endpoint.summary || `${endpoint.method} ${endpoint.path}`,
+                  operationId: endpoint.operationId,
+                  schema: schema,
+                });
+              });
+            } else {
+              // Legacy format: endpoints are stored as "METHOD:path" strings
+              // Use fallback summaries without making API calls
+              endpoints.forEach((endpointId: string) => {
+                const [method, path] = endpointId.split(":");
+                const summary = `${method} ${path}`; // fallback summary
+
+                groups[tag].push({
+                  method: method.toLowerCase(),
+                  path,
+                  summary: summary,
+                  schema: schema,
+                });
+              });
+            }
+          }
+        } catch (error) {
+          console.warn("Failed to parse API group data:", error);
+        }
+      }
+    });
+
+    return groups;
+  }, [navItems]);
+
+  const getEndpointSlug = (method: string, path: string) => {
+    return `${method}-${path
+      .replace(/[^a-zA-Z0-9]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")}`.toLowerCase();
+  };
+
+  const getTagSlug = (tag: string) => {
+    return tag.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-");
+  };
+
   return (
-    <div className="p-4 text-blue-700">
-      API Navigation (stub)
-      <pre className="text-xs text-gray-600 bg-gray-100 rounded p-2 mt-2 overflow-x-auto max-w-full whitespace-pre-wrap break-all">
-        {JSON.stringify(navItems, null, 2)}
-      </pre>
+    <div
+      className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin 2xl:py-4 2xl:px-4 2xl:pb-8"
+      ref={navListElem}
+    >
+      {Object.keys(groupedByTag).length > 0 ? (
+        Object.entries(groupedByTag).map(([tag, endpoints]) => (
+          <div key={tag} className="mb-6">
+            {/* Tag Header */}
+            <div className="mb-3">
+              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider px-3">
+                {tag}
+              </h3>
+            </div>
+
+            {/* Endpoints List */}
+            <div className="space-y-1">
+              {endpoints.map((endpoint, index) => (
+                <a
+                  key={`${endpoint.method}-${endpoint.path}-${index}`}
+                  href={`/docs/api-reference/${getTagSlug(
+                    tag
+                  )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
+                  onClick={onNavigate}
+                  className="group flex items-center px-3 py-2 text-sm rounded-md hover:bg-gray-50 transition-colors duration-150"
+                >
+                  {/* HTTP Method Badge */}
+                  <span
+                    className={`
+                    inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium mr-2 mt-0 flex-shrink-0
+                    ${
+                      endpoint.method === "get"
+                        ? "bg-blue-100 text-blue-800"
+                        : ""
+                    }
+                    ${
+                      endpoint.method === "post"
+                        ? "bg-green-100 text-green-800"
+                        : ""
+                    }
+                    ${
+                      endpoint.method === "put"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : ""
+                    }
+                    ${
+                      endpoint.method === "delete"
+                        ? "bg-red-100 text-red-800"
+                        : ""
+                    }
+                    ${
+                      endpoint.method === "patch"
+                        ? "bg-purple-100 text-purple-800"
+                        : ""
+                    }
+                    ${
+                      !["get", "post", "put", "delete", "patch"].includes(
+                        endpoint.method
+                      )
+                        ? "bg-gray-100 text-gray-800"
+                        : ""
+                    }
+                  `}
+                  >
+                    {endpoint.method.toUpperCase()}
+                  </span>
+
+                  {/* Summary (multi-line allowed) */}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-gray-900 group-hover:text-gray-700 text-xs font-normal leading-relaxed">
+                      {endpoint.summary}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="p-4 text-gray-500 text-sm">
+          No API endpoints configured
+        </div>
+      )}
     </div>
   );
 };

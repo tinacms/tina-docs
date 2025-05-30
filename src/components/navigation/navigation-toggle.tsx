@@ -2,7 +2,11 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown, MdClose } from "react-icons/md";
-import { DocsNavigationItems, hasNestedSlug } from "./navigation-items";
+import {
+  DocsNavigationItems,
+  ApiNavigationItems,
+  hasNestedSlug,
+} from "./navigation-items";
 
 export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
   return (
@@ -40,6 +44,7 @@ export const NavigationDropdownContent = ({
     value: option.title,
     label: option.title,
     content: option.items,
+    __typename: option.__typename,
   }));
 
   useEffect(() => {
@@ -65,7 +70,7 @@ export const NavigationDropdownContent = ({
         className="fixed inset-0 bg-[rgba(0,0,0,0.4)] z-10 lg:hidden"
       />
 
-      <div className="animate-fade-down animate-duration-300 fixed top-0 right-0 z-20 h-screen w-[75%] overflow-y-auto bg-neutral-background border-l border-neutral-border-subtle p-6 shadow-xl lg:hidden">
+      <div className="fixed top-0 right-0 z-20 h-screen w-[75%] overflow-y-auto bg-neutral-background border-l border-neutral-border-subtle p-6 shadow-xl lg:hidden">
         <div className="flex justify-end mb-4">
           <MdClose
             onClick={onClose}
@@ -112,12 +117,34 @@ export const NavigationDropdownContent = ({
           )}
         </div>
 
-        <DocsNavigationItems
-          navItems={
-            options.find((opt) => opt.value === selectedValue)?.content || []
-          }
-          onNavigate={onClose}
-        />
+        <div className="h-[calc(100vh-250px)] overflow-y-auto px-4 pb-4">
+          {options.find((opt) => opt.value === selectedValue)?.__typename ===
+          "NavigationBarTabsApiTab" ? (
+            <ApiNavigationItems
+              navItems={
+                options.find((opt) => opt.value === selectedValue)?.content ||
+                []
+              }
+              __typename={
+                options.find((opt) => opt.value === selectedValue)
+                  ?.__typename || ""
+              }
+              onNavigate={onClose}
+            />
+          ) : (
+            <DocsNavigationItems
+              navItems={
+                options.find((opt) => opt.value === selectedValue)?.content ||
+                []
+              }
+              __typename={
+                options.find((opt) => opt.value === selectedValue)
+                  ?.__typename || ""
+              }
+              onNavigate={onClose}
+            />
+          )}
+        </div>
       </div>
     </>
   );

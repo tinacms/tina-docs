@@ -29,7 +29,7 @@ export const Sidebar = ({
   return (
     <div className="sticky hidden lg:block mr-4 h-[calc(100vh-2rem)] w-84 ml-8">
       <div
-        className="absolute inset-0 flex transition-transform duration-300 ease-in-out"
+        className="absolute inset-0 flex"
         style={
           isMounted
             ? { transform: `translateX(-${currentIndex * 100}%)` }
@@ -39,10 +39,7 @@ export const Sidebar = ({
         {tabs.map((tab) => (
           <div key={tab.label} className="w-full flex-shrink-0">
             <Tabs.Content value={tab.label}>
-              <NavigationSideBar
-                title={tab?.label}
-                tableOfContents={tab?.content}
-              />
+              <NavigationSideBar tableOfContents={tab?.content} />
             </Tabs.Content>
           </div>
         ))}

@@ -6,9 +6,16 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const { input } = props;
   const [schemas, setSchemas] = useState<any[]>([]);
   const [tags, setTags] = useState<string[]>([]);
-  const [endpoints, setEndpoints] = useState<{ id: string; label: string }[]>(
-    []
-  );
+  const [endpoints, setEndpoints] = useState<
+    {
+      id: string;
+      label: string;
+      method: string;
+      path: string;
+      summary: string;
+      description: string;
+    }[]
+  >([]);
   const [loadingSchemas, setLoadingSchemas] = useState(true);
   const [loadingTags, setLoadingTags] = useState(false);
   const [loadingEndpoints, setLoadingEndpoints] = useState(false);
@@ -70,7 +77,14 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             // If we also have a selected tag, load endpoints
             if (selectedTag) {
               setLoadingEndpoints(true);
-              const endpointsList: { id: string; label: string }[] = [];
+              const endpointsList: {
+                id: string;
+                label: string;
+                method: string;
+                path: string;
+                summary: string;
+                description: string;
+              }[] = [];
 
               for (const path in apiSchema.paths) {
                 for (const method in apiSchema.paths[path]) {
@@ -81,6 +95,10 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                       label: `${method.toUpperCase()} ${path} - ${
                         op.summary || ""
                       }`,
+                      method: method.toUpperCase(),
+                      path,
+                      summary: op.summary || "",
+                      description: op.description || "",
                     });
                   }
                 }
@@ -164,7 +182,14 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const raw = result.data.apiSchema?.apiSchema;
       if (raw) {
         const apiSchema = JSON.parse(raw);
-        const endpointsList: { id: string; label: string }[] = [];
+        const endpointsList: {
+          id: string;
+          label: string;
+          method: string;
+          path: string;
+          summary: string;
+          description: string;
+        }[] = [];
 
         for (const path in apiSchema.paths) {
           for (const method in apiSchema.paths[path]) {
@@ -173,6 +198,10 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
               endpointsList.push({
                 id: `${method.toUpperCase()}:${path}`,
                 label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
+                method: method.toUpperCase(),
+                path,
+                summary: op.summary || "",
+                description: op.description || "",
               });
             }
           }
@@ -189,11 +218,14 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   };
 
   const handleEndpointCheckbox = (id: string) => {
-    let updated: string[];
-    if (selectedEndpoints.includes(id)) {
-      updated = selectedEndpoints.filter((ep) => ep !== id);
+    let updated: typeof endpoints;
+    const clickedEndpoint = endpoints.find((ep) => ep.id === id);
+    if (!clickedEndpoint) return;
+
+    if (selectedEndpoints.find((ep) => ep.id === id)) {
+      updated = selectedEndpoints.filter((ep) => ep.id !== id);
     } else {
-      updated = [...selectedEndpoints, id];
+      updated = [...selectedEndpoints, clickedEndpoint];
     }
     input.onChange(
       JSON.stringify({
@@ -205,12 +237,11 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   };
 
   const handleSelectAll = () => {
-    const all = endpoints.map((ep) => ep.id);
     input.onChange(
       JSON.stringify({
         schema: selectedSchema,
         tag: selectedTag,
-        endpoints: all,
+        endpoints: endpoints,
       })
     );
   };
@@ -284,14 +315,16 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                 <label
                   key={ep.id}
                   className={`flex items-center rounded-md px-2 py-2 cursor-pointer transition-colors border ${
-                    selectedEndpoints.includes(ep.id)
+                    selectedEndpoints.some((selected) => selected.id === ep.id)
                       ? "bg-indigo-50 border-indigo-400 shadow"
                       : "bg-white border-gray-200"
                   } hover:bg-indigo-100`}
                 >
                   <input
                     type="checkbox"
-                    checked={selectedEndpoints.includes(ep.id)}
+                    checked={selectedEndpoints.some(
+                      (selected) => selected.id === ep.id
+                    )}
                     onChange={() => handleEndpointCheckbox(ep.id)}
                     className="accent-indigo-600 w-5 h-5 mr-3 cursor-pointer"
                   />
