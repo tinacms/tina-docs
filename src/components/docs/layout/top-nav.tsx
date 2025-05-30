@@ -19,8 +19,6 @@ export const TopNav = ({
   const hasButtons = ctaButtons && (ctaButtons.button1 || ctaButtons.button2);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  console.log(tabs);
-
   const getButtonClasses = (variant: string | undefined) => {
     switch (variant) {
       case "primary-background":

@@ -8,6 +8,8 @@ export const NavigationSideBar = ({
   title: string;
   tableOfContents: any;
 }) => {
+
+  console.log('toc', tableOfContents);
   return (
     <div className="w-full h-full rounded-2xl brand-glass-gradient dark:border dark:border-neutral-border-subtle/60 shadow-xl">
       <div className="h-[calc(100vh-2rem)] overflow-y-auto overflow-x-hidden pl-4 2xl:pl-0">
