@@ -98,10 +98,10 @@ importers:
         version: 4.1.7
       '@tinacms/cli':
         specifier: ^1.9.7
-        version: 1.9.7(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.39.2)
+        version: 1.9.7(@codemirror/language@6.11.0)(@types/node@22.15.21)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.39.2)
       '@types/node':
-        specifier: ^22.15.18
-        version: 22.15.19
+        specifier: ^22.15.21
+        version: 22.15.21
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.3)
@@ -3276,9 +3276,6 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
-  '@types/node@22.15.19':
-    resolution: {integrity: sha512-3vMNr4TzNQyjHcRZadojpRaD9Ofr6LsonZAoQ+HMUa/9ORTPoxVIw0e0mpqWpdjj8xybyCM+oKOUH2vwFu/oEw==}
-
   '@types/node@22.15.21':
     resolution: {integrity: sha512-EV/37Td6c+MgKAbkcLG6vqZ2zEYHD7bvSrzqqs2RIhbA6w3x+Dqz8MZM3sP6kGTeLrdoOgKZe+Xja7tUB2DNkQ==}
 
@@ -3899,8 +3896,8 @@ packages:
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
 
-  '@whatwg-node/promise-helpers@1.3.0':
-    resolution: {integrity: sha512-486CouizxHXucj8Ky153DDragfkMcHtVEToF5Pn/fInhUUSiCmt9Q4JVBa6UK5q4RammFBtGQ4C9qhGlXU9YbA==}
+  '@whatwg-node/promise-helpers@1.3.2':
+    resolution: {integrity: sha512-Nst5JdK47VIl9UcGwtv2Rcgyn5lWtZ0/mhRQ4G8NN2isxpq2TO30iqHzmwoJycjWuyUfg3GFXqP/gFHXeV57IA==}
     engines: {node: '>=16.0.0'}
 
   '@xobotyi/scrollbar-width@1.9.5':
@@ -7887,8 +7884,8 @@ packages:
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
-  webpack-sources@3.2.3:
-    resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}
+  webpack-sources@3.3.0:
+    resolution: {integrity: sha512-77R0RDmJfj9dyv5p3bM5pOHa+X8/ZkO9c7kpDstigkC4nIDobadsfSGCwB4bKhMVxqAok8tajaoR8rirM7+VFQ==}
     engines: {node: '>=10.13.0'}
 
   webpack@5.99.7:
@@ -9601,9 +9598,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@graphiql/react@0.18.0(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(graphql@15.8.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@graphiql/react@0.18.0(@codemirror/language@6.11.0)(@types/node@22.15.21)(@types/react@19.0.12)(graphql@15.8.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@graphiql/toolkit': 0.8.4(@types/node@22.15.19)(graphql@15.8.0)
+      '@graphiql/toolkit': 0.8.4(@types/node@22.15.21)(graphql@15.8.0)
       '@headlessui/react': 1.7.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-dialog': 1.1.7(@types/react@19.0.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-dropdown-menu': 2.1.14(@types/react@19.0.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -9628,11 +9625,11 @@ snapshots:
       - '@types/react-dom'
       - graphql-ws
 
-  '@graphiql/toolkit@0.8.4(@types/node@22.15.19)(graphql@15.8.0)':
+  '@graphiql/toolkit@0.8.4(@types/node@22.15.21)(graphql@15.8.0)':
     dependencies:
       '@n1ru4l/push-pull-async-iterable-iterator': 3.2.0
       graphql: 15.8.0
-      meros: 1.3.0(@types/node@22.15.19)
+      meros: 1.3.0(@types/node@22.15.21)
     transitivePeerDependencies:
       - '@types/node'
 
@@ -9800,7 +9797,7 @@ snapshots:
   '@graphql-tools/utils@10.8.6(graphql@15.8.0)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@15.8.0)
-      '@whatwg-node/promise-helpers': 1.3.0
+      '@whatwg-node/promise-helpers': 1.3.2
       cross-inspect: 1.0.1
       dset: 3.1.4
       graphql: 15.8.0
@@ -11051,15 +11048,15 @@ snapshots:
 
   '@tanstack/virtual-core@3.8.4': {}
 
-  '@tinacms/app@2.2.7(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(abstract-level@1.0.4)(immer@10.1.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(scheduler@0.26.0)(sucrase@3.35.0)(yup@1.6.1)':
+  '@tinacms/app@2.2.7(@codemirror/language@6.11.0)(@types/node@22.15.21)(@types/react@19.0.12)(abstract-level@1.0.4)(immer@10.1.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(scheduler@0.26.0)(sucrase@3.35.0)(yup@1.6.1)':
     dependencies:
-      '@graphiql/toolkit': 0.8.4(@types/node@22.15.19)(graphql@15.8.0)
+      '@graphiql/toolkit': 0.8.4(@types/node@22.15.21)(graphql@15.8.0)
       '@headlessui/react': 2.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@heroicons/react': 1.0.6(react@19.1.0)
       '@monaco-editor/react': 4.7.0-rc.0(monaco-editor@0.31.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@tinacms/mdx': 1.6.2(react@19.1.0)(typescript@5.8.3)(yup@1.6.1)
       final-form: 4.20.10
-      graphiql: 3.0.0-alpha.1(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(graphql@15.8.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      graphiql: 3.0.0-alpha.1(@codemirror/language@6.11.0)(@types/node@22.15.21)(@types/react@19.0.12)(graphql@15.8.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       graphql: 15.8.0
       monaco-editor: 0.31.0
       react: 19.1.0
@@ -11082,7 +11079,7 @@ snapshots:
       - supports-color
       - yup
 
-  '@tinacms/cli@1.9.7(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.39.2)':
+  '@tinacms/cli@1.9.7(@codemirror/language@6.11.0)(@types/node@22.15.21)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.39.2)':
     dependencies:
       '@graphql-codegen/core': 2.6.8(graphql@15.8.0)
       '@graphql-codegen/plugin-helpers': 5.1.0(graphql@15.8.0)
@@ -11097,12 +11094,12 @@ snapshots:
       '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17)
       '@tailwindcss/container-queries': 0.1.1(tailwindcss@3.4.17)
       '@tailwindcss/typography': 0.5.16(tailwindcss@3.4.17)
-      '@tinacms/app': 2.2.7(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(abstract-level@1.0.4)(immer@10.1.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(scheduler@0.26.0)(sucrase@3.35.0)(yup@1.6.1)
+      '@tinacms/app': 2.2.7(@codemirror/language@6.11.0)(@types/node@22.15.21)(@types/react@19.0.12)(abstract-level@1.0.4)(immer@10.1.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(scheduler@0.26.0)(sucrase@3.35.0)(yup@1.6.1)
       '@tinacms/graphql': 1.5.17(react@19.1.0)(typescript@5.8.3)
       '@tinacms/metrics': 1.0.9(fs-extra@11.3.0)
       '@tinacms/schema-tools': 1.7.3(react@19.1.0)(yup@1.6.1)
       '@tinacms/search': 1.0.44(abstract-level@1.0.4)(react@19.1.0)(sucrase@3.35.0)(typescript@5.8.3)(yup@1.6.1)
-      '@vitejs/plugin-react': 3.1.0(vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2))
+      '@vitejs/plugin-react': 3.1.0(vite@4.5.13(@types/node@22.15.21)(lightningcss@1.30.1)(terser@5.39.2))
       altair-express-middleware: 7.3.6
       async-lock: 1.4.1
       auto-bind: 4.0.0
@@ -11134,7 +11131,7 @@ snapshots:
       tinacms: 2.7.7(@types/react@19.0.12)(abstract-level@1.0.4)(immer@10.1.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(scheduler@0.26.0)(sucrase@3.35.0)(typescript@5.8.3)
       typanion: 3.13.0
       typescript: 5.8.3
-      vite: 4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2)
+      vite: 4.5.13(@types/node@22.15.21)(lightningcss@1.30.1)(terser@5.39.2)
       yup: 1.6.1
       zod: 3.24.2
     transitivePeerDependencies:
@@ -11490,10 +11487,6 @@ snapshots:
       '@types/unist': 3.0.2
 
   '@types/ms@0.7.34': {}
-
-  '@types/node@22.15.19':
-    dependencies:
-      undici-types: 6.21.0
 
   '@types/node@22.15.21':
     dependencies:
@@ -12174,14 +12167,14 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react@3.1.0(vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2))':
+  '@vitejs/plugin-react@3.1.0(vite@4.5.13(@types/node@22.15.21)(lightningcss@1.30.1)(terser@5.39.2))':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.25.2)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.25.2)
       magic-string: 0.27.0
       react-refresh: 0.14.2
-      vite: 4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2)
+      vite: 4.5.13(@types/node@22.15.21)(lightningcss@1.30.1)(terser@5.39.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -12267,7 +12260,7 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
-  '@whatwg-node/promise-helpers@1.3.0':
+  '@whatwg-node/promise-helpers@1.3.2':
     dependencies:
       tslib: 2.8.1
 
@@ -13622,10 +13615,10 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  graphiql@3.0.0-alpha.1(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(graphql@15.8.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  graphiql@3.0.0-alpha.1(@codemirror/language@6.11.0)(@types/node@22.15.21)(@types/react@19.0.12)(graphql@15.8.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
-      '@graphiql/react': 0.18.0(@codemirror/language@6.11.0)(@types/node@22.15.19)(@types/react@19.0.12)(graphql@15.8.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@graphiql/toolkit': 0.8.4(@types/node@22.15.19)(graphql@15.8.0)
+      '@graphiql/react': 0.18.0(@codemirror/language@6.11.0)(@types/node@22.15.21)(@types/react@19.0.12)(graphql@15.8.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@graphiql/toolkit': 0.8.4(@types/node@22.15.21)(graphql@15.8.0)
       graphql: 15.8.0
       graphql-language-service: 5.2.2(graphql@15.8.0)
       markdown-it: 12.3.2
@@ -14572,9 +14565,9 @@ snapshots:
       stylis: 4.3.6
       uuid: 9.0.1
 
-  meros@1.3.0(@types/node@22.15.19):
+  meros@1.3.0(@types/node@22.15.21):
     optionalDependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.21
 
   methods@1.1.2: {}
 
@@ -17051,13 +17044,13 @@ snapshots:
       '@types/unist': 3.0.2
       vfile-message: 4.0.2
 
-  vite@4.5.13(@types/node@22.15.19)(lightningcss@1.30.1)(terser@5.39.2):
+  vite@4.5.13(@types/node@22.15.21)(lightningcss@1.30.1)(terser@5.39.2):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.5.3
       rollup: 3.29.4
     optionalDependencies:
-      '@types/node': 22.15.19
+      '@types/node': 22.15.21
       fsevents: 2.3.3
       lightningcss: 1.30.1
       terser: 5.39.2
@@ -17092,7 +17085,7 @@ snapshots:
 
   webidl-conversions@3.0.1: {}
 
-  webpack-sources@3.2.3: {}
+  webpack-sources@3.3.0: {}
 
   webpack@5.99.7:
     dependencies:
@@ -17119,7 +17112,7 @@ snapshots:
       tapable: 2.2.2
       terser-webpack-plugin: 5.3.14(webpack@5.99.7)
       watchpack: 2.4.4
-      webpack-sources: 3.2.3
+      webpack-sources: 3.3.0
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild
