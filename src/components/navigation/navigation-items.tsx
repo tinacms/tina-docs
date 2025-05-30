@@ -260,11 +260,12 @@ export const ApiNavigationItems = ({
 }: DocsNavProps & { __typename: string } & { onNavigate?: () => void }) => {
   const navListElem = React.useRef(null);
 
-  // Group endpoints by tags using only the data we already have
-  const groupedByTag = React.useMemo(() => {
-    if (!navItems?.length) return {};
+  // Separate normal documents from API groups
+  const { normalDocs, apiGroups } = React.useMemo(() => {
+    if (!navItems?.length) return { normalDocs: [], apiGroups: {} };
 
-    const groups: Record<
+    const normalDocs: any[] = [];
+    const apiGroups: Record<
       string,
       Array<{
         method: string;
@@ -276,14 +277,15 @@ export const ApiNavigationItems = ({
     > = {};
 
     navItems.forEach((item) => {
+      // Check if this is an API group (has apiGroup property)
       if (item.apiGroup) {
         try {
           const apiGroupData = JSON.parse(item.apiGroup);
           const { schema, tag, endpoints } = apiGroupData;
 
           if (tag && endpoints?.length && schema) {
-            if (!groups[tag]) {
-              groups[tag] = [];
+            if (!apiGroups[tag]) {
+              apiGroups[tag] = [];
             }
 
             // If endpoints are stored as objects (new format), use them directly
@@ -293,7 +295,7 @@ export const ApiNavigationItems = ({
               endpoints[0].summary
             ) {
               endpoints.forEach((endpoint: any) => {
-                groups[tag].push({
+                apiGroups[tag].push({
                   method: endpoint.method.toLowerCase(),
                   path: endpoint.path,
                   summary:
@@ -309,7 +311,7 @@ export const ApiNavigationItems = ({
                 const [method, path] = endpointId.split(":");
                 const summary = `${method} ${path}`; // fallback summary
 
-                groups[tag].push({
+                apiGroups[tag].push({
                   method: method.toLowerCase(),
                   path,
                   summary: summary,
@@ -321,10 +323,13 @@ export const ApiNavigationItems = ({
         } catch (error) {
           console.warn("Failed to parse API group data:", error);
         }
+      } else {
+        // This is a normal document group, add it to normalDocs
+        normalDocs.push(item);
       }
     });
 
-    return groups;
+    return { normalDocs, apiGroups };
   }, [navItems]);
 
   const getEndpointSlug = (method: string, path: string) => {
@@ -343,14 +348,37 @@ export const ApiNavigationItems = ({
       className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin 2xl:py-4 2xl:px-4 2xl:pb-8"
       ref={navListElem}
     >
-      {Object.keys(groupedByTag).length > 0 ? (
-        Object.entries(groupedByTag).map(([tag, endpoints]) => (
+      {/* Render normal documents first */}
+      {normalDocs?.length > 0 &&
+        normalDocs.map((categoryData, index) => (
+          <div
+            key={`api-docs-${
+              categoryData.slug
+                ? getUrl(categoryData.slug)
+                : categoryData.title
+                ? categoryData.title
+                : categoryData.id
+                ? categoryData.id
+                : `item-${index}`
+            }`}
+          >
+            <NavLevel
+              navListElem={navListElem}
+              categoryData={categoryData}
+              onNavigate={onNavigate}
+            />
+          </div>
+        ))}
+
+      {/* Render API endpoint groups */}
+      {Object.keys(apiGroups).length > 0 &&
+        Object.entries(apiGroups).map(([tag, endpoints]) => (
           <div key={tag} className="mb-6">
             {/* Tag Header */}
             <div className="mb-3">
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider px-3">
+              <NavTitle level={0} selected={false}>
                 {tag}
-              </h3>
+              </NavTitle>
             </div>
 
             {/* Endpoints List */}
@@ -415,11 +443,11 @@ export const ApiNavigationItems = ({
               ))}
             </div>
           </div>
-        ))
-      ) : (
-        <div className="p-4 text-gray-500 text-sm">
-          No API endpoints configured
-        </div>
+        ))}
+
+      {/* Show message if no content */}
+      {normalDocs?.length === 0 && Object.keys(apiGroups).length === 0 && (
+        <div className="p-4 text-gray-500 text-sm">No content configured</div>
       )}
     </div>
   );

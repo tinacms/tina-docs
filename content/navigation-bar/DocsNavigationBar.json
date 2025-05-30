@@ -180,6 +180,17 @@
       "title": "API",
       "supermenuGroup": [
         {
+          "title": "Introduction",
+          "items": [
+            {
+              "title": "Overview",
+              "slug": "content/docs/api-documentation/Overview.mdx",
+              "_template": "item"
+            }
+          ],
+          "_template": "documentSubMenu"
+        },
+        {
           "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"store\",\"endpoints\":[\"GET:/store/inventory\",\"POST:/store/order\",\"GET:/store/order/{orderId}\",\"DELETE:/store/order/{orderId}\"]}",
           "_template": "groupOfApiReferences"
         },
