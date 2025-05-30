@@ -177,25 +177,7 @@
       "_template": "docsTab"
     },
     {
-      "title": "API",
-      "supermenuGroup": [
-        {
-          "title": "API Documentation",
-          "items": [
-            {
-              "title": "Overview",
-              "slug": "content/docs/api-documentation/Overview.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Reference",
-              "slug": "content/docs/API-References.mdx",
-              "_template": "item"
-            }
-          ]
-        }
-      ],
-      "_template": "docsTab"
+      "_template": "apiTab"
     }
   ],
   "ctaButtons": {
