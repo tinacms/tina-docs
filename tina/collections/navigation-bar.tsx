@@ -1,6 +1,55 @@
 import { itemTemplate } from "../templates/navbar-ui.template";
 import submenuTemplate from "../templates/submenu.template";
 
+const docsNavigationBarFields = [
+  {
+    name: "title",
+    label: "Title Label",
+    type: "string",
+  },
+  {
+    name: "supermenuGroup",
+    label: "Supermenu Group",
+    type: "object",
+    list: true,
+    ui: {
+      itemProps: (item) => ({
+        label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
+      }),
+    },
+    fields: [
+      { name: "title", label: "Name", type: "string" },
+      {
+        name: "items",
+        label: "Page or Submenu",
+        type: "object",
+        list: true,
+        templates: [submenuTemplate, itemTemplate],
+      },
+    ],
+  },
+];
+
+const apiNavigationBarFields = [
+  {
+    name: "title",
+    label: "title",
+    type: "string",
+  },
+];
+
+const docsTabTemplate = {
+  name: "docsTab",
+  label: "Docs Tab",
+  fields: docsNavigationBarFields,
+};
+
+const apiTabTemplate = {
+  name: "apiTab",
+  label: "API Tab",
+  fields: apiNavigationBarFields,
+};
+
 export const docsNavigationBarCollection = {
   name: "navigationBar",
   label: "Navigation Bar",
@@ -34,34 +83,7 @@ export const docsNavigationBarCollection = {
           label: `🗂️ ${item?.title ?? "Unnamed Tab"}`,
         }),
       },
-      fields: [
-        {
-          name: "title",
-          label: "Title Label",
-          type: "string",
-        },
-        {
-          name: "supermenuGroup",
-          label: "Supermenu Group",
-          type: "object",
-          list: true,
-          ui: {
-            itemProps: (item) => ({
-              label: `🗂️ ${item?.title ?? "Unnamed Menu Group"}`,
-            }),
-          },
-          fields: [
-            { name: "title", label: "Name", type: "string" },
-            {
-              name: "items",
-              label: "Page or Submenu",
-              type: "object",
-              list: true,
-              templates: [submenuTemplate, itemTemplate],
-            },
-          ],
-        },
-      ],
+      templates: [docsTabTemplate, apiTabTemplate],
     },
     {
       name: "ctaButtons",

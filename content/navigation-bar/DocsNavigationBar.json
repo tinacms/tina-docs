@@ -173,7 +173,8 @@
             }
           ]
         }
-      ]
+      ],
+      "_template": "docsTab"
     },
     {
       "title": "API",
@@ -193,7 +194,8 @@
             }
           ]
         }
-      ]
+      ],
+      "_template": "docsTab"
     }
   ],
   "ctaButtons": {
