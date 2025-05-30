@@ -292,7 +292,9 @@ export const ApiNavigationItems = ({
             if (
               endpoints[0] &&
               typeof endpoints[0] === "object" &&
-              endpoints[0].summary
+              !endpoints[0].includes && // Not a string with includes method
+              (endpoints[0].summary !== undefined ||
+                endpoints[0].method !== undefined)
             ) {
               endpoints.forEach((endpoint: any) => {
                 apiGroups[tag].push({
@@ -376,9 +378,9 @@ export const ApiNavigationItems = ({
           <div key={tag} className="mb-6">
             {/* Tag Header */}
             <div className="mb-3">
-              <NavTitle level={0} selected={false}>
+              <div className="group flex items-center gap-1 pb-0.5 pl-4 leading-tight text-brand-primary text-xl pt-2 opacity-100 font-light">
                 {tag}
-              </NavTitle>
+              </div>
             </div>
 
             {/* Endpoints List */}
@@ -395,15 +397,15 @@ export const ApiNavigationItems = ({
                   {/* HTTP Method Badge */}
                   <span
                     className={`
-                    inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium mr-2 mt-0 flex-shrink-0
+                    inline-flex items-center justify-center px-0.5 py-0 rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
                     ${
                       endpoint.method === "get"
-                        ? "bg-blue-100 text-blue-800"
+                        ? "bg-green-100 text-green-800"
                         : ""
                     }
                     ${
                       endpoint.method === "post"
-                        ? "bg-green-100 text-green-800"
+                        ? "bg-blue-100 text-blue-800"
                         : ""
                     }
                     ${
@@ -430,7 +432,9 @@ export const ApiNavigationItems = ({
                     }
                   `}
                   >
-                    {endpoint.method.toUpperCase()}
+                    {endpoint.method === "delete"
+                      ? "DEL"
+                      : endpoint.method.toUpperCase()}
                   </span>
 
                   {/* Summary (multi-line allowed) */}

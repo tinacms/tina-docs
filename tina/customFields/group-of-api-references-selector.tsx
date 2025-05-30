@@ -19,6 +19,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [loadingSchemas, setLoadingSchemas] = useState(true);
   const [loadingTags, setLoadingTags] = useState(false);
   const [loadingEndpoints, setLoadingEndpoints] = useState(false);
+  const [selectedSchema, setSelectedSchema] = useState("");
+  const [selectedTag, setSelectedTag] = useState("");
 
   // Parse the current value
   const parsedValue = (() => {
@@ -31,8 +33,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     }
   })();
 
-  const selectedSchema = parsedValue.schema || "";
-  const selectedTag = parsedValue.tag || "";
   const selectedEndpoints = Array.isArray(parsedValue.endpoints)
     ? parsedValue.endpoints
     : [];
@@ -48,12 +48,18 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       setSchemas(schemasList);
       setLoadingSchemas(false);
 
+      // Set local state from parsed values
+      const currentSchema = parsedValue.schema || "";
+      const currentTag = parsedValue.tag || "";
+      setSelectedSchema(currentSchema);
+      setSelectedTag(currentTag);
+
       // If we have existing data, load tags and endpoints
-      if (selectedSchema) {
+      if (currentSchema) {
         setLoadingTags(true);
         try {
           const schemaResult = await client.queries.apiSchema({
-            relativePath: selectedSchema,
+            relativePath: currentSchema,
           });
           const raw = schemaResult.data.apiSchema?.apiSchema;
           if (raw) {
@@ -75,7 +81,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             setLoadingTags(false);
 
             // If we also have a selected tag, load endpoints
-            if (selectedTag) {
+            if (currentTag) {
               setLoadingEndpoints(true);
               const endpointsList: {
                 id: string;
@@ -89,7 +95,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
               for (const path in apiSchema.paths) {
                 for (const method in apiSchema.paths[path]) {
                   const op = apiSchema.paths[path][method];
-                  if (op.tags && op.tags.includes(selectedTag)) {
+                  if (op.tags && op.tags.includes(currentTag)) {
                     endpointsList.push({
                       id: `${method.toUpperCase()}:${path}`,
                       label: `${method.toUpperCase()} ${path} - ${
@@ -126,11 +132,20 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const schema = e.target.value;
+
+    // Only update if schema actually changed to reduce form disruption
+    if (schema === selectedSchema) return;
+
+    setSelectedSchema(schema);
+    setSelectedTag("");
+    setTags([]);
+    setEndpoints([]);
+
+    // Update form state once at the end
     input.onChange(JSON.stringify({ schema, tag: "", endpoints: [] }));
 
     if (!schema) {
-      setTags([]);
-      setEndpoints([]);
+      setLoadingTags(false);
       return;
     }
 
@@ -165,12 +180,20 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   // Handle tag change
   const handleTagChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const tag = e.target.value;
+
+    // Only update if tag actually changed
+    if (tag === selectedTag) return;
+
+    setSelectedTag(tag);
+    setEndpoints([]);
+
+    // Update form state once
     input.onChange(
       JSON.stringify({ schema: selectedSchema, tag, endpoints: [] })
     );
 
     if (!tag || !selectedSchema) {
-      setEndpoints([]);
+      setLoadingEndpoints(false);
       return;
     }
 
