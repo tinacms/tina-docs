@@ -374,29 +374,40 @@ export const ApiNavigationItems = ({
 
       {/* Render API endpoint groups */}
       {Object.keys(apiGroups).length > 0 &&
-        Object.entries(apiGroups).map(([tag, endpoints]) => (
-          <div key={tag} className="mb-6">
-            {/* Tag Header */}
-            <div className="mb-3">
-              <div className="group flex items-center gap-1 pb-0.5 pl-4 leading-tight text-brand-primary text-xl pt-2 opacity-100 font-light">
-                {tag}
+        Object.entries(apiGroups).map(
+          ([tag, endpoints]: [
+            string,
+            Array<{
+              method: string;
+              path: string;
+              summary: string;
+              operationId?: string;
+              schema: string;
+            }>
+          ]) => (
+            <div key={tag} className="mb-6">
+              {/* Tag Header */}
+              <div className="mb-3">
+                <div className="group flex items-center gap-1 pb-0.5 pl-4 leading-tight text-brand-primary text-xl pt-2 opacity-100 font-light">
+                  {tag}
+                </div>
               </div>
-            </div>
 
-            {/* Endpoints List */}
-            <div className="space-y-1">
-              {endpoints && endpoints?.map((endpoint, index) => (
-                <a
-                  key={`${endpoint.method}-${endpoint.path}-${index}`}
-                  href={`/docs/api-reference/${getTagSlug(
-                    tag
-                  )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
-                  onClick={onNavigate}
-                  className="group flex items-center px-3 py-2 text-sm rounded-md hover:bg-gray-50 transition-colors duration-150"
-                >
-                  {/* HTTP Method Badge */}
-                  <span
-                    className={`
+              {/* Endpoints List */}
+              <div className="space-y-1">
+                {endpoints &&
+                  endpoints?.map((endpoint, index) => (
+                    <a
+                      key={`${endpoint.method}-${endpoint.path}-${index}`}
+                      href={`/docs/api-reference/${getTagSlug(
+                        tag
+                      )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
+                      onClick={onNavigate}
+                      className="group flex items-center px-3 py-2 text-sm rounded-md hover:bg-gray-50 transition-colors duration-150"
+                    >
+                      {/* HTTP Method Badge */}
+                      <span
+                        className={`
                     inline-flex items-center justify-center px-0.5 py-0 rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
                     ${
                       endpoint.method === "get"
@@ -431,23 +442,24 @@ export const ApiNavigationItems = ({
                         : ""
                     }
                   `}
-                  >
-                    {endpoint.method === "delete"
-                      ? "DEL"
-                      : endpoint.method.toUpperCase()}
-                  </span>
+                      >
+                        {endpoint.method === "delete"
+                          ? "DEL"
+                          : endpoint.method.toUpperCase()}
+                      </span>
 
-                  {/* Summary (multi-line allowed) */}
-                  <div className="flex-1 min-w-0">
-                    <div className="text-gray-900 group-hover:text-gray-700 text-xs font-normal leading-relaxed">
-                      {endpoint.summary}
-                    </div>
-                  </div>
-                </a>
-              ))}
+                      {/* Summary (multi-line allowed) */}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-gray-900 group-hover:text-gray-700 text-xs font-normal leading-relaxed">
+                          {endpoint.summary}
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        )}
 
       {/* Show message if no content */}
       {normalDocs?.length === 0 && Object.keys(apiGroups).length === 0 && (
