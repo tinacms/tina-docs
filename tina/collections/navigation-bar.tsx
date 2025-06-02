@@ -98,6 +98,45 @@ export const docsNavigationBarCollection = {
       create: false,
       delete: false,
     },
+    beforeSubmit: async ({ values }: { values: Record<string, any> }) => {
+      try {
+        // Generate .mdx files for API endpoints when navigation is saved
+        const response = await fetch("/api/process-navigation-api-groups", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            navigationData: values,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log(
+            "Successfully generated API endpoint files:",
+            result.message
+          );
+          if (result.files && result.files.length > 0) {
+            console.log("Created files:", result.files);
+          }
+        } else {
+          const error = await response.json();
+          console.warn("Failed to generate API endpoint files:", error.error);
+        }
+
+        // Always return the values, don't block the save operation if file generation fails
+        return {
+          ...values,
+        };
+      } catch (error) {
+        console.error("Error generating API endpoint files:", error);
+        // Don't block the save operation if file generation fails
+        return {
+          ...values,
+        };
+      }
+    },
   },
   fields: [
     {

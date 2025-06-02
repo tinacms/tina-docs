@@ -21,6 +21,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [loadingEndpoints, setLoadingEndpoints] = useState(false);
   const [selectedSchema, setSelectedSchema] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
+  const [generatingFiles, setGeneratingFiles] = useState(false);
 
   // Parse the current value
   const parsedValue = (() => {
@@ -269,6 +270,45 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     );
   };
 
+  const handleGenerateFiles = async () => {
+    if (!input.value || selectedEndpoints.length === 0) {
+      alert("Please select some endpoints first");
+      return;
+    }
+
+    setGeneratingFiles(true);
+    try {
+      const response = await fetch("/api/generate-api-docs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          apiGroupData: input.value,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(
+          `${result.message}\n\nFiles created:\n${result.files.join("\n")}`
+        );
+      } else {
+        throw new Error(result.error || "Failed to generate files");
+      }
+    } catch (error) {
+      console.error("Failed to generate files:", error);
+      alert(
+        `Failed to generate MDX files: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setGeneratingFiles(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-md p-7 my-5 max-w-xl w-full border border-gray-200 font-sans">
       <div className="mb-6">
@@ -367,6 +407,35 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
               )}
             </div>
           )}
+
+          {/* Generate Files Button */}
+          {selectedEndpoints.length > 0 && (
+            <div className="mb-4">
+              <button
+                type="button"
+                onClick={handleGenerateFiles}
+                disabled={generatingFiles}
+                className="w-full px-4 py-2 rounded-md bg-green-600 text-white font-semibold text-sm shadow hover:bg-green-700 transition-colors border border-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {generatingFiles ? (
+                  <>
+                    <span className="inline-block mr-2">⏳</span>
+                    Generating MDX Files...
+                  </>
+                ) : (
+                  <>
+                    <span className="inline-block mr-2">📄</span>
+                    Generate MDX Files ({selectedEndpoints.length} endpoints)
+                  </>
+                )}
+              </button>
+              <div className="text-xs text-gray-600 mt-1 text-center">
+                This will create individual .mdx files for each selected
+                endpoint
+              </div>
+            </div>
+          )}
+
           <div className="mt-2 p-3 bg-gray-100 rounded text-xs text-gray-700 font-mono break-all overflow-x-auto whitespace-pre">
             {JSON.stringify(
               {

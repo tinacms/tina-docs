@@ -335,14 +335,23 @@ export const ApiNavigationItems = ({
   }, [navItems]);
 
   const getEndpointSlug = (method: string, path: string) => {
-    return `${method}-${path
-      .replace(/[^a-zA-Z0-9]/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "")}`.toLowerCase();
+    // Match the exact filename generation logic from our API endpoint generator
+    const pathSafe = path
+      .replace(/^\//, "") // Remove leading slash
+      .replace(/\//g, "-") // Replace slashes with dashes
+      .replace(/[{}]/g, "") // Remove curly braces
+      .replace(/[^\w-]/g, "") // Remove any non-word characters except dashes
+      .toLowerCase();
+
+    return `${method.toLowerCase()}-${pathSafe}`;
   };
 
   const getTagSlug = (tag: string) => {
-    return tag.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-");
+    // Match the exact tag sanitization logic from our API endpoint generator
+    return tag
+      .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and dashes
+      .replace(/\s+/g, "-") // Replace spaces with dashes
+      .toLowerCase();
   };
 
   return (
@@ -399,7 +408,7 @@ export const ApiNavigationItems = ({
                   endpoints?.map((endpoint, index) => (
                     <a
                       key={`${endpoint.method}-${endpoint.path}-${index}`}
-                      href={`/docs/api-reference/${getTagSlug(
+                      href={`/docs/api-documentation/${getTagSlug(
                         tag
                       )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
                       onClick={onNavigate}
