@@ -341,11 +341,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     const { schema, tag, endpoints } = groupData;
     const tagDir = sanitizeFileName(tag);
 
-    // Construct the TinaCloud GraphQL endpoint using config values
-    // Pattern: https://content.tinajs.io/1.5/content/{client_id}/github/{branch}
+    // Get config values for logging purposes
     const clientId = config.clientId;
     const branch = config.branch;
-    const token = config.token;
 
     if (!clientId) {
       return {
@@ -363,10 +361,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       };
     }
 
-    const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
-
-    console.log(`Using TinaCMS Cloud endpoint: ${tinaEndpoint}`);
-    console.log(`Client ID: ${clientId}, Branch: ${branch}`);
+    console.log(
+      `Using TinaCMS client with Client ID: ${clientId}, Branch: ${branch}`
+    );
 
     for (const endpoint of endpoints) {
       try {
@@ -379,107 +376,61 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           endpoint.description ||
           `API endpoint for ${endpoint.method} ${endpoint.path}`;
 
-        // Use fetch with the correct TinaCloud endpoint and auth token
-        const mutation = `
-          mutation AddPendingDocument($collection: String!, $relativePath: String!) {
-            addPendingDocument(collection: $collection, relativePath: $relativePath) {
-              __typename
+        // Use client.request() with the format from TinaCMS docs
+        const result = await client.request(
+          {
+            query: `
+            mutation AddPendingDocument($collection: String!, $relativePath: String!) {
+              addPendingDocument(collection: $collection, relativePath: $relativePath) {
+                __typename
+              }
             }
-          }
-        `;
+          `,
+            variables: {
+              collection: "docs",
+              relativePath,
+            },
+          },
+          {}
+        );
 
-        const variables = {
-          collection: "docs",
-          relativePath,
-        };
-
-        // Prepare headers with authentication
-        const headers: Record<string, string> = {
-          "Content-Type": "application/json",
-        };
-
-        // Add auth token if available
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
-
-        const response = await fetch(tinaEndpoint, {
-          method: "POST",
-          headers,
-          body: JSON.stringify({
-            query: mutation,
-            variables: variables,
-          }),
-        });
-
-        console.log(`Response status: ${response.status} for ${tinaEndpoint}`);
-
-        if (!response.ok) {
-          let errorDetails = `HTTP error! status: ${response.status}`;
-          try {
-            const errorBody = await response.text();
-            if (errorBody) {
-              errorDetails += ` - Response: ${errorBody}`;
-            }
-          } catch (e) {
-            // Ignore if we can't read the response body
-          }
-          throw new Error(errorDetails);
-        }
-
-        const result = await response.json();
         console.log("GraphQL response:", result);
 
-        if (result.errors) {
-          results.errors.push(
-            `Failed to create ${relativePath}: ${result.errors
-              .map((e: any) => e.message)
-              .join(", ")}`
-          );
-          results.success = false;
-        } else if (result.data?.addPendingDocument) {
+        if (result.data?.addPendingDocument) {
           results.createdFiles.push(relativePath);
           console.log(`Created pending document via TinaCMS: ${relativePath}`);
 
-          // Now try to update it with content
+          // Now try to update it with content using client.request()
           try {
-            const updateMutation = `
-              mutation UpdateDocs($relativePath: String!, $params: DocsMutation!) {
-                updateDocs(relativePath: $relativePath, params: $params) {
-                  __typename
-                  id
-                  title
+            const updateResult = await client.request(
+              {
+                query: `
+                mutation UpdateDocs($relativePath: String!, $params: DocsMutation!) {
+                  updateDocs(relativePath: $relativePath, params: $params) {
+                    __typename
+                    id
+                    title
+                  }
                 }
-              }
-            `;
-
-            const updateVariables = {
-              relativePath,
-              params: {
-                title,
-                last_edited: new Date().toISOString(),
-                seo: {
-                  title,
-                  description,
+              `,
+                variables: {
+                  relativePath,
+                  params: {
+                    title,
+                    last_edited: new Date().toISOString(),
+                    seo: {
+                      title,
+                      description,
+                    },
+                    // Skip body for now to avoid rich text issues
+                  },
                 },
-                // Skip body for now to avoid rich text issues
               },
-            };
+              {}
+            );
 
-            const updateResponse = await fetch(tinaEndpoint, {
-              method: "POST",
-              headers,
-              body: JSON.stringify({
-                query: updateMutation,
-                variables: updateVariables,
-              }),
-            });
-
-            if (updateResponse.ok) {
-              const updateResult = await updateResponse.json();
-              if (updateResult.data?.updateDocs) {
-                console.log(`Updated document content for: ${relativePath}`);
-              }
+            if (updateResult.data?.updateDocs) {
+              console.log(`Updated document content for: ${relativePath}`);
             }
           } catch (updateError) {
             console.warn(
@@ -488,6 +439,13 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             );
             // Don't fail the overall operation for update errors
           }
+        } else if (result.errors) {
+          results.errors.push(
+            `Failed to create ${relativePath}: ${result.errors
+              .map((e: any) => e.message)
+              .join(", ")}`
+          );
+          results.success = false;
         } else {
           results.errors.push(
             `Failed to create ${relativePath}: No data returned`
