@@ -172,7 +172,7 @@ export const getDocsNavigation = async (
   preview = false
 ): Promise<FormattedNavigation> => {
   const navigationData = await client.queries.navigationBar({
-    relativePath: "DocsNavigationBar.json",
+    relativePath: "docs-navigation-bar.json",
   });
 
   return formatNavigationData(
