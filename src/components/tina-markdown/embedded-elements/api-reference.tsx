@@ -394,8 +394,8 @@ const SchemaType = ({
                       (propSchema.properties
                         ? "object"
                         : propSchema.items
-                          ? "array"
-                          : "unknown");
+                        ? "array"
+                        : "unknown");
                     const format = propSchema.format;
                     const isArray = propType === "array";
                     const itemType = isArray
@@ -496,6 +496,10 @@ const RequestBodyDropdown = ({
         tabIndex={-1}
         className="border-[0.25px] border-neutral-border rounded px-2 text-sm text-neutral-text-secondary bg-neutral-background min-w-[100px] flex items-center justify-between gap-2"
         value={value}
+        onClick={(e) => {
+          // Prevent click event from bubbling up
+          e.stopPropagation();
+        }}
         onChange={(e) => {
           onChange(e.target.value as "schema" | "example");
         }}
@@ -733,12 +737,12 @@ const ApiReference = (data: any) => {
                 endpoint.method === "GET"
                   ? "bg-[#B4EFD9] text-green-800"
                   : endpoint.method === "POST"
-                    ? "bg-[#B4DBFF] text-blue-800"
-                    : endpoint.method === "PUT"
-                      ? "bg-[#FEF3C7] text-yellow-800"
-                      : endpoint.method === "DELETE"
-                        ? "bg-[#FEE2E2] text-red-800"
-                        : "bg-gray-50"
+                  ? "bg-[#B4DBFF] text-blue-800"
+                  : endpoint.method === "PUT"
+                  ? "bg-[#FEF3C7] text-yellow-800"
+                  : endpoint.method === "DELETE"
+                  ? "bg-[#FEE2E2] text-red-800"
+                  : "bg-gray-50"
               }`}
             >
               {endpoint.method}
@@ -929,8 +933,8 @@ const ApiReference = (data: any) => {
                                   code.startsWith("2")
                                     ? "bg-[#B4EFD9] text-green-800 font-bold"
                                     : isErrorResponse
-                                      ? "bg-red-100 text-red-800"
-                                      : "bg-gray-200 text-gray-800 font-tuner text-center"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-gray-200 text-gray-800 font-tuner text-center"
                                 }`}
                               >
                                 {code}
