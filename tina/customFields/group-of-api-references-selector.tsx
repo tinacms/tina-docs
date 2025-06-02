@@ -1,4 +1,3 @@
-import { client } from "@/tina/__generated__/client";
 import React, { useEffect, useState } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
 
@@ -22,7 +21,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [selectedSchema, setSelectedSchema] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [generatingFiles, setGeneratingFiles] = useState(false);
-  const [clientReady, setClientReady] = useState(false);
 
   // Parse the current value
   const parsedValue = (() => {
@@ -39,46 +37,22 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     ? parsedValue.endpoints
     : [];
 
-  // Check if client is ready
+  // Load schemas from filesystem API
   useEffect(() => {
-    const checkClient = async () => {
-      try {
-        // Test if we can actually make a query
-        await client.queries.apiSchemaConnection({ first: 1 });
-        setClientReady(true);
-      } catch (error) {
-        console.log("Client not ready yet, retrying...");
-        // If not ready, try again in a bit
-        setTimeout(checkClient, 2000);
-      }
-    };
-    checkClient();
-  }, []);
-
-  // Load schemas and initialize existing data
-  useEffect(() => {
-    if (!clientReady) return;
-
-    const loadData = async () => {
-      // First load schemas
+    const loadSchemas = async () => {
       setLoadingSchemas(true);
       try {
-        console.log("Loading API schemas...");
+        console.log("Loading API schemas from filesystem...");
 
-        const result = await client.queries.apiSchemaConnection({ first: 100 });
-        console.log("API schema connection result:", result);
+        const response = await fetch("/api/list-api-schemas");
+        const result = await response.json();
 
-        if (!result?.data?.apiSchemaConnection) {
-          console.error("No apiSchemaConnection found in result");
-          setSchemas([]);
-          setLoadingSchemas(false);
-          return;
+        if (!response.ok) {
+          throw new Error(result.error || "Failed to load schemas");
         }
 
-        const edges = result.data.apiSchemaConnection?.edges || [];
-        console.log("Found schema edges:", edges);
-        const schemasList = edges.map((e: any) => e.node);
-        setSchemas(schemasList);
+        console.log("API schema list result:", result);
+        setSchemas(result.schemas || []);
         setLoadingSchemas(false);
 
         // Set local state from parsed values
@@ -89,73 +63,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
         // If we have existing data, load tags and endpoints
         if (currentSchema) {
-          setLoadingTags(true);
-          try {
-            const schemaResult = await client.queries.apiSchema({
-              relativePath: currentSchema,
-            });
-
-            const raw = schemaResult.data.apiSchema?.apiSchema;
-            if (raw) {
-              const apiSchema = JSON.parse(raw);
-              const tagSet = new Set<string>();
-
-              // Extract tags
-              for (const path in apiSchema.paths) {
-                for (const method in apiSchema.paths[path]) {
-                  const op = apiSchema.paths[path][method];
-                  if (op.tags) {
-                    op.tags.forEach((tag: string) => tagSet.add(tag));
-                  }
-                }
-              }
-
-              const tagsList = Array.from(tagSet);
-              setTags(tagsList);
-              setLoadingTags(false);
-
-              // If we also have a selected tag, load endpoints
-              if (currentTag) {
-                setLoadingEndpoints(true);
-                const endpointsList: {
-                  id: string;
-                  label: string;
-                  method: string;
-                  path: string;
-                  summary: string;
-                  description: string;
-                }[] = [];
-
-                for (const path in apiSchema.paths) {
-                  for (const method in apiSchema.paths[path]) {
-                    const op = apiSchema.paths[path][method];
-                    if (op.tags && op.tags.includes(currentTag)) {
-                      endpointsList.push({
-                        id: `${method.toUpperCase()}:${path}`,
-                        label: `${method.toUpperCase()} ${path} - ${
-                          op.summary || ""
-                        }`,
-                        method: method.toUpperCase(),
-                        path,
-                        summary: op.summary || "",
-                        description: op.description || "",
-                      });
-                    }
-                  }
-                }
-
-                setEndpoints(endpointsList);
-                setLoadingEndpoints(false);
-              }
-            } else {
-              setTags([]);
-              setLoadingTags(false);
-            }
-          } catch (error) {
-            console.error("Error loading tags for schema:", error);
-            setTags([]);
-            setLoadingTags(false);
-          }
+          await loadTagsForSchema(currentSchema, currentTag);
         }
       } catch (error) {
         console.error("Error loading API schemas:", error);
@@ -164,8 +72,87 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       }
     };
 
-    loadData();
-  }, [clientReady]); // Only run when client is ready
+    loadSchemas();
+  }, []); // Run once on mount
+
+  const loadTagsForSchema = async (
+    schemaFilename: string,
+    currentTag?: string
+  ) => {
+    setLoadingTags(true);
+    try {
+      const response = await fetch(
+        `/api/get-api-schema?filename=${encodeURIComponent(schemaFilename)}`
+      );
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to load schema");
+      }
+
+      const apiSchema = result.apiSchema;
+      if (apiSchema && apiSchema.paths) {
+        const tagSet = new Set<string>();
+
+        // Extract tags
+        for (const path in apiSchema.paths) {
+          for (const method in apiSchema.paths[path]) {
+            const op = apiSchema.paths[path][method];
+            if (op.tags) {
+              op.tags.forEach((tag: string) => tagSet.add(tag));
+            }
+          }
+        }
+
+        const tagsList = Array.from(tagSet);
+        setTags(tagsList);
+        setLoadingTags(false);
+
+        // If we also have a selected tag, load endpoints
+        if (currentTag) {
+          await loadEndpointsForTag(apiSchema, currentTag);
+        }
+      } else {
+        setTags([]);
+        setLoadingTags(false);
+      }
+    } catch (error) {
+      console.error("Error loading tags for schema:", error);
+      setTags([]);
+      setLoadingTags(false);
+    }
+  };
+
+  const loadEndpointsForTag = async (apiSchema: any, tag: string) => {
+    setLoadingEndpoints(true);
+    const endpointsList: {
+      id: string;
+      label: string;
+      method: string;
+      path: string;
+      summary: string;
+      description: string;
+    }[] = [];
+
+    for (const path in apiSchema.paths) {
+      for (const method in apiSchema.paths[path]) {
+        const op = apiSchema.paths[path][method];
+        if (op.tags && op.tags.includes(tag)) {
+          endpointsList.push({
+            id: `${method.toUpperCase()}:${path}`,
+            label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
+            method: method.toUpperCase(),
+            path,
+            summary: op.summary || "",
+            description: op.description || "",
+          });
+        }
+      }
+    }
+
+    setEndpoints(endpointsList);
+    setLoadingEndpoints(false);
+  };
 
   // Handle schema change
   const handleSchemaChange = async (
@@ -189,33 +176,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       return;
     }
 
-    setLoadingTags(true);
-    try {
-      const result = await client.queries.apiSchema({ relativePath: schema });
-
-      const raw = result.data.apiSchema?.apiSchema;
-      if (raw) {
-        const apiSchema = JSON.parse(raw);
-        const tagSet = new Set<string>();
-
-        for (const path in apiSchema.paths) {
-          for (const method in apiSchema.paths[path]) {
-            const op = apiSchema.paths[path][method];
-            if (op.tags) {
-              op.tags.forEach((tag: string) => tagSet.add(tag));
-            }
-          }
-        }
-
-        setTags(Array.from(tagSet));
-        setEndpoints([]);
-      } else {
-        setTags([]);
-      }
-    } catch (error) {
-      setTags([]);
-    }
-    setLoadingTags(false);
+    await loadTagsForSchema(schema);
   };
 
   // Handle tag change
@@ -238,47 +199,22 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       return;
     }
 
-    setLoadingEndpoints(true);
     try {
-      const result = await client.queries.apiSchema({
-        relativePath: selectedSchema,
-      });
-      const raw = result.data.apiSchema?.apiSchema;
-      if (raw) {
-        const apiSchema = JSON.parse(raw);
-        const endpointsList: {
-          id: string;
-          label: string;
-          method: string;
-          path: string;
-          summary: string;
-          description: string;
-        }[] = [];
+      const response = await fetch(
+        `/api/get-api-schema?filename=${encodeURIComponent(selectedSchema)}`
+      );
+      const result = await response.json();
 
-        for (const path in apiSchema.paths) {
-          for (const method in apiSchema.paths[path]) {
-            const op = apiSchema.paths[path][method];
-            if (op.tags && op.tags.includes(tag)) {
-              endpointsList.push({
-                id: `${method.toUpperCase()}:${path}`,
-                label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
-                method: method.toUpperCase(),
-                path,
-                summary: op.summary || "",
-                description: op.description || "",
-              });
-            }
-          }
-        }
-
-        setEndpoints(endpointsList);
-      } else {
-        setEndpoints([]);
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to load schema");
       }
+
+      await loadEndpointsForTag(result.apiSchema, tag);
     } catch (error) {
+      console.error("Error loading endpoints:", error);
       setEndpoints([]);
+      setLoadingEndpoints(false);
     }
-    setLoadingEndpoints(false);
   };
 
   const handleEndpointCheckbox = (id: string) => {
@@ -369,8 +305,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
               : "Select a schema"}
           </option>
           {schemas.map((schema) => (
-            <option key={schema.id} value={schema._sys.relativePath}>
-              {schema._sys.filename}
+            <option key={schema.id} value={schema.filename}>
+              {schema.displayName}
             </option>
           ))}
         </select>
