@@ -99,7 +99,8 @@ function generateMdxBodyContent(endpoint: EndpointData, schema: string): any {
  * Creates docs via TinaCMS GraphQL mutation
  */
 async function createDocsViaTina(
-  groupData: GroupApiData
+  groupData: GroupApiData,
+  req: NextApiRequest
 ): Promise<{ success: boolean; createdFiles: string[]; errors: string[] }> {
   const results = {
     success: true,
@@ -121,9 +122,10 @@ async function createDocsViaTina(
     // In development, use local TinaCMS server
     tinaEndpoint = "http://localhost:4001/graphql";
   } else {
-    // In staging/production, use the local admin GraphQL endpoint
-    // This uses the authentication already configured in TinaCMS
-    tinaEndpoint = "/admin/api/graphql";
+    // In staging/production, construct the full URL to the admin GraphQL endpoint
+    const protocol = req.headers["x-forwarded-proto"] || "https";
+    const host = req.headers.host;
+    tinaEndpoint = `${protocol}://${host}/admin/api/graphql`;
   }
 
   console.log(
@@ -322,7 +324,7 @@ export default async function handler(
       return res.status(400).json({ error: "No endpoints provided" });
     }
 
-    const results = await createDocsViaTina(groupData);
+    const results = await createDocsViaTina(groupData, req);
 
     if (results.success) {
       return res.status(200).json({
