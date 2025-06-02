@@ -385,7 +385,7 @@ export const ApiNavigationItems = ({
 
             {/* Endpoints List */}
             <div className="space-y-1">
-              {endpoints.map((endpoint, index) => (
+              {endpoints && endpoints?.map((endpoint, index) => (
                 <a
                   key={`${endpoint.method}-${endpoint.path}-${index}`}
                   href={`/docs/api-reference/${getTagSlug(
