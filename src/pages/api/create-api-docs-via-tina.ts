@@ -121,25 +121,9 @@ async function createDocsViaTina(
     // In development, use local TinaCMS server
     tinaEndpoint = "http://localhost:4001/graphql";
   } else {
-    // In staging/production, use TinaCloud API
-    const clientId = process.env.NEXT_PUBLIC_TINA_CLIENT_ID;
-    const branch =
-      process.env.NEXT_PUBLIC_TINA_BRANCH ||
-      process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF ||
-      "main";
-
-    if (!clientId) {
-      return {
-        ...results,
-        success: false,
-        errors: [
-          `TinaCMS client ID not found. Please set NEXT_PUBLIC_TINA_CLIENT_ID environment variable. Current branch: ${branch}`,
-        ],
-      };
-    }
-
-    // TinaCloud GraphQL endpoint format
-    tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
+    // In staging/production, use the local admin GraphQL endpoint
+    // This uses the authentication already configured in TinaCMS
+    tinaEndpoint = "/admin/api/graphql";
   }
 
   console.log(
@@ -158,22 +142,23 @@ async function createDocsViaTina(
     };
   }
 
+  // Clean up the token (remove quotes, whitespace, etc.)
+  let cleanToken = "";
+  let debugInfo = "";
+  if (tinaToken) {
+    cleanToken = tinaToken.trim().replace(/^["']|["']$/g, ""); // Remove surrounding quotes and whitespace
+    debugInfo = `Token info - Length: ${
+      cleanToken.length
+    }, Token starts with: ${cleanToken.substring(0, 20)}...`;
+  }
+
   // Prepare headers for GraphQL requests
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 
-  // Add authorization header if token is available
-  if (tinaToken) {
-    headers["Authorization"] = `Bearer ${tinaToken}`;
-    console.log(
-      `Using TinaCMS token: ${tinaToken.substring(0, 10)}... (length: ${
-        tinaToken.length
-      })`
-    );
-  } else {
-    console.log("No TinaCMS token available - using unauthenticated requests");
-  }
+  // For the admin endpoint, we don't need to manually add auth headers
+  // The TinaCMS admin handles authentication internally
 
   for (const endpoint of endpoints) {
     try {
@@ -217,6 +202,10 @@ async function createDocsViaTina(
           const errorBody = await response.text();
           if (errorBody) {
             errorDetails += ` - Response: ${errorBody}`;
+            // If it's a JWT error, add our debug info
+            if (errorBody.includes("JWT") || errorBody.includes("token")) {
+              errorDetails += ` | Debug: ${debugInfo}`;
+            }
           }
         } catch (e) {
           // Ignore if we can't read the response body
