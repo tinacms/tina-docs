@@ -7,6 +7,26 @@ module.exports = {
     remotePatterns: [],
     unoptimized: true,
   },
+
+  // Optimize serverless functions
+  experimental: {
+    outputFileTracingIncludes: {
+      "/api/**/*": [],
+    },
+    outputFileTracingExcludes: {
+      "/api/**/*": [
+        ".next/cache/**/*",
+        "node_modules/@swc/core-linux-x64-gnu",
+        "node_modules/@swc/core-linux-x64-musl",
+        "node_modules/@esbuild/",
+        "node_modules/webpack",
+        "node_modules/terser",
+        ".git/**/*",
+        "public/**/*",
+      ],
+    },
+  },
+
   async rewrites() {
     return [
       {
@@ -25,6 +45,7 @@ module.exports = {
       },
     ];
   },
+
   turbopack: {
     resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
     // Add this rule to handle SVG as React components for Local Development
@@ -35,6 +56,7 @@ module.exports = {
       },
     },
   },
+
   webpack: (config, { isServer }) => {
     if (!isServer) {
       // Configure Monaco Editor for minimal build
@@ -46,11 +68,18 @@ module.exports = {
         })
       );
     }
+
     // Add this module rule to handle SVG as React components for Production
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
+
+    // Optimize bundle size for serverless functions
+    if (isServer) {
+      config.externals = [...(config.externals || []), "fs", "path", "os"];
+    }
+
     return config;
   },
 };
