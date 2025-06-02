@@ -372,7 +372,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     let token;
     try {
       const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
-      token = authData?.token_id || config.token;
+      token = authData?.id_token || config.token;
       console.log("Extracted token:", token);
     } catch (e) {
       console.warn("Failed to parse tinacms-auth from localStorage:", e);
