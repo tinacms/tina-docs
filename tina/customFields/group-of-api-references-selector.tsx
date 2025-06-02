@@ -293,6 +293,188 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     }
   };
 
+  /**
+   * Generates a safe filename from endpoint data
+   */
+  function generateFileName(endpoint: any): string {
+    const method = endpoint.method.toLowerCase();
+    const pathSafe = endpoint.path
+      .replace(/^\//, "") // Remove leading slash
+      .replace(/\//g, "-") // Replace slashes with dashes
+      .replace(/[{}]/g, "") // Remove curly braces
+      .replace(/[^\w-]/g, "") // Remove any non-word characters except dashes
+      .toLowerCase();
+
+    return `${method}-${pathSafe}`;
+  }
+
+  /**
+   * Sanitizes a string to be used as a directory/file name
+   */
+  function sanitizeFileName(name: string): string {
+    return name
+      .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and dashes
+      .replace(/\s+/g, "-") // Replace spaces with dashes
+      .toLowerCase();
+  }
+
+  /**
+   * Creates docs via TinaCMS GraphQL mutation - CLIENT SIDE
+   */
+  async function createDocsViaTinaClientSide(groupData: any): Promise<{
+    success: boolean;
+    createdFiles: string[];
+    errors: string[];
+  }> {
+    const results = {
+      success: true,
+      createdFiles: [] as string[],
+      errors: [] as string[],
+    };
+
+    if (!groupData.endpoints || groupData.endpoints.length === 0) {
+      return { ...results, success: false, errors: ["No endpoints provided"] };
+    }
+
+    const { schema, tag, endpoints } = groupData;
+    const tagDir = sanitizeFileName(tag);
+
+    // Use the client-side GraphQL endpoint (this will use TinaCMS auth automatically)
+    const tinaEndpoint = "/admin/api/graphql";
+
+    console.log(`Using TinaCMS client-side endpoint: ${tinaEndpoint}`);
+
+    for (const endpoint of endpoints) {
+      try {
+        const fileName = generateFileName(endpoint);
+        const relativePath = `api-documentation/${tagDir}/${fileName}.mdx`;
+
+        // Create title from summary or generate one
+        const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
+        const description =
+          endpoint.description ||
+          `API endpoint for ${endpoint.method} ${endpoint.path}`;
+
+        // First, try to create using addPendingDocument
+        const simpleMutation = `
+          mutation AddPendingDocument($collection: String!, $relativePath: String!) {
+            addPendingDocument(collection: $collection, relativePath: $relativePath) {
+              __typename
+            }
+          }
+        `;
+
+        const simpleVariables = {
+          collection: "docs",
+          relativePath,
+        };
+
+        // Make GraphQL request to TinaCMS (client-side, will use existing auth)
+        const response = await fetch(tinaEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query: simpleMutation,
+            variables: simpleVariables,
+          }),
+        });
+
+        if (!response.ok) {
+          let errorDetails = `HTTP error! status: ${response.status}`;
+          try {
+            const errorBody = await response.text();
+            if (errorBody) {
+              errorDetails += ` - Response: ${errorBody}`;
+            }
+          } catch (e) {
+            // Ignore if we can't read the response body
+          }
+          throw new Error(errorDetails);
+        }
+
+        const result = await response.json();
+
+        if (result.errors) {
+          results.errors.push(
+            `Failed to create ${relativePath}: ${result.errors
+              .map((e: any) => e.message)
+              .join(", ")}`
+          );
+          results.success = false;
+        } else if (result.data?.addPendingDocument) {
+          results.createdFiles.push(relativePath);
+          console.log(`Created pending document via TinaCMS: ${relativePath}`);
+
+          // Now try to update it with content
+          try {
+            const updateMutation = `
+              mutation UpdateDocs($relativePath: String!, $params: DocsMutation!) {
+                updateDocs(relativePath: $relativePath, params: $params) {
+                  __typename
+                  id
+                  title
+                }
+              }
+            `;
+
+            const updateVariables = {
+              relativePath,
+              params: {
+                title,
+                last_edited: new Date().toISOString(),
+                seo: {
+                  title,
+                  description,
+                },
+                // Skip body for now to avoid rich text issues
+              },
+            };
+
+            const updateResponse = await fetch(tinaEndpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                query: updateMutation,
+                variables: updateVariables,
+              }),
+            });
+
+            if (updateResponse.ok) {
+              const updateResult = await updateResponse.json();
+              if (!updateResult.errors) {
+                console.log(`Updated document content for: ${relativePath}`);
+              }
+            }
+          } catch (updateError) {
+            console.warn(
+              `Failed to update content for ${relativePath}:`,
+              updateError
+            );
+            // Don't fail the overall operation for update errors
+          }
+        } else {
+          results.errors.push(
+            `Failed to create ${relativePath}: No data returned`
+          );
+          results.success = false;
+        }
+      } catch (error) {
+        const errorMsg = `Failed to create file for ${endpoint.method} ${
+          endpoint.path
+        }: ${error instanceof Error ? error.message : "Unknown error"}`;
+        results.errors.push(errorMsg);
+        results.success = false;
+        console.error(errorMsg, error);
+      }
+    }
+
+    return results;
+  }
+
   const handleGenerateFilesViaGraphQL = async () => {
     if (!input.value || selectedEndpoints.length === 0) {
       alert("Please select some endpoints first");
@@ -301,32 +483,41 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     setGeneratingViaGraphQL(true);
     try {
-      const response = await fetch("/api/create-api-docs-via-tina", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          apiGroupData: input.value,
-        }),
-      });
+      // Parse the group data
+      let groupData;
+      try {
+        groupData =
+          typeof input.value === "string"
+            ? JSON.parse(input.value)
+            : input.value;
+      } catch (error) {
+        throw new Error("Invalid API group data format");
+      }
 
-      const result = await response.json();
+      // Call the client-side GraphQL function directly
+      const results = await createDocsViaTinaClientSide(groupData);
 
-      if (response.ok) {
+      if (results.success) {
         alert(
-          `✅ ${
-            result.message
-          }\n\nFiles created via TinaCMS:\n${result.files.join(
+          `✅ Successfully created ${
+            results.createdFiles.length
+          } MDX files via TinaCMS!\n\nFiles created:\n${results.createdFiles.join(
             "\n"
-          )}\n\nMethod: ${result.method}`
+          )}\n\nMethod: Client-side TinaCMS GraphQL`
         );
       } else {
-        const errorMsg = result.errors
-          ? `❌ ${result.message}\n\nErrors:\n${result.errors.join(
-              "\n"
-            )}\n\nSuccessful files:\n${result.files?.join("\n") || "None"}`
-          : `❌ ${result.error}`;
+        const errorMsg =
+          results.errors.length > 0
+            ? `❌ Partially successful: created ${
+                results.createdFiles.length
+              } files, ${
+                results.errors.length
+              } errors\n\nErrors:\n${results.errors.join(
+                "\n"
+              )}\n\nSuccessful files:\n${
+                results.createdFiles?.join("\n") || "None"
+              }`
+            : `❌ Failed to create files`;
         alert(errorMsg);
       }
     } catch (error) {
