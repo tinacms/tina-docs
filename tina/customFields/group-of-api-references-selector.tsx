@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
 import { client } from "@/tina/__generated__/client";
+import { config } from "@/tina/config";
 
 const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const { input } = props;
@@ -340,11 +341,31 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     const { schema, tag, endpoints } = groupData;
     const tagDir = sanitizeFileName(tag);
 
-    // Use the client's configured URL which handles environment-specific endpoints
-    // This way we don't hardcode client IDs or branches
-    const tinaEndpoint = (client as any).client?.url || "/admin/index.html#/graphql";
+    // Construct the TinaCloud GraphQL endpoint using config values
+    // Pattern: https://content.tinajs.io/1.5/content/{client_id}/github/{branch}
+    const clientId = config.clientId;
+    const branch = config.branch;
 
-    console.log(`Using TinaCMS endpoint: ${tinaEndpoint}`);
+    if (!clientId) {
+      return {
+        ...results,
+        success: false,
+        errors: ["Missing TinaCMS client ID in config"],
+      };
+    }
+
+    if (!branch) {
+      return {
+        ...results,
+        success: false,
+        errors: ["Missing TinaCMS branch in config"],
+      };
+    }
+
+    const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
+
+    console.log(`Using TinaCMS Cloud endpoint: ${tinaEndpoint}`);
+    console.log(`Client ID: ${clientId}, Branch: ${branch}`);
 
     for (const endpoint of endpoints) {
       try {
@@ -357,7 +378,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           endpoint.description ||
           `API endpoint for ${endpoint.method} ${endpoint.path}`;
 
-        // Use fetch with the client's endpoint
+        // Use fetch with the correct TinaCloud endpoint
         const mutation = `
           mutation AddPendingDocument($collection: String!, $relativePath: String!) {
             addPendingDocument(collection: $collection, relativePath: $relativePath) {
@@ -382,6 +403,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           }),
         });
 
+        console.log(`Response status: ${response.status} for ${tinaEndpoint}`);
+
         if (!response.ok) {
           let errorDetails = `HTTP error! status: ${response.status}`;
           try {
@@ -396,6 +419,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         }
 
         const result = await response.json();
+        console.log("GraphQL response:", result);
 
         if (result.errors) {
           results.errors.push(
