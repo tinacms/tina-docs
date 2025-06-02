@@ -114,20 +114,37 @@ async function createDocsViaTina(
   const { schema, tag, endpoints } = groupData;
   const tagDir = sanitizeFileName(tag);
 
-  // Try multiple possible TinaCMS endpoints
-  const possibleEndpoints = [
-    process.env.NEXT_PUBLIC_TINA_CLIENT_URL,
-    "http://localhost:4001/graphql",
-    "/api/graphql",
-    "https://content.tinajs.io/graphql",
-  ].filter(Boolean) as string[];
+  // Determine the correct TinaCMS GraphQL endpoint based on environment
+  let tinaEndpoint: string;
 
-  let tinaEndpoint = possibleEndpoints[0] || "http://localhost:4001/graphql";
+  if (process.env.NODE_ENV === "development") {
+    // In development, use local TinaCMS server
+    tinaEndpoint = "http://localhost:4001/graphql";
+  } else {
+    // In staging/production, use TinaCloud API
+    const clientId = process.env.NEXT_PUBLIC_TINA_CLIENT_ID;
+    const branch =
+      process.env.NEXT_PUBLIC_TINA_BRANCH ||
+      process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF ||
+      "main";
 
-  // If we're in browser environment, try relative endpoint first
-  if (typeof window !== "undefined") {
-    tinaEndpoint = "/api/graphql";
+    if (!clientId) {
+      return {
+        ...results,
+        success: false,
+        errors: [
+          `TinaCMS client ID not found. Please set NEXT_PUBLIC_TINA_CLIENT_ID environment variable. Current branch: ${branch}`,
+        ],
+      };
+    }
+
+    // TinaCloud GraphQL endpoint format
+    tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
   }
+
+  console.log(
+    `Using TinaCMS endpoint: ${tinaEndpoint} (NODE_ENV: ${process.env.NODE_ENV})`
+  );
 
   for (const endpoint of endpoints) {
     try {
