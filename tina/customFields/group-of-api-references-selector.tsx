@@ -342,7 +342,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     // Use the client's configured URL which handles environment-specific endpoints
     // This way we don't hardcode client IDs or branches
-    const tinaEndpoint = (client as any).client?.url || "/admin/api/graphql";
+    const tinaEndpoint = (client as any).client?.url || "/admin/index.html#/graphql";
 
     console.log(`Using TinaCMS endpoint: ${tinaEndpoint}`);
 
