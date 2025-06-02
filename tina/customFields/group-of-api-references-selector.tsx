@@ -21,6 +21,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [selectedSchema, setSelectedSchema] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [generatingFiles, setGeneratingFiles] = useState(false);
+  const [generatingViaGraphQL, setGeneratingViaGraphQL] = useState(false);
 
   // Parse the current value
   const parsedValue = (() => {
@@ -271,7 +272,14 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           `${result.message}\n\nFiles created:\n${result.files.join("\n")}`
         );
       } else {
-        throw new Error(result.error || "Failed to generate files");
+        // Handle staging environment error specifically
+        if (response.status === 403 && result.suggestion) {
+          alert(
+            `⚠️ ${result.error}\n\n💡 ${result.suggestion}\n\nThis feature is designed for local development where files can be written to the filesystem.`
+          );
+        } else {
+          throw new Error(result.error || "Failed to generate files");
+        }
       }
     } catch (error) {
       console.error("Failed to generate files:", error);
@@ -282,6 +290,54 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       );
     } finally {
       setGeneratingFiles(false);
+    }
+  };
+
+  const handleGenerateFilesViaGraphQL = async () => {
+    if (!input.value || selectedEndpoints.length === 0) {
+      alert("Please select some endpoints first");
+      return;
+    }
+
+    setGeneratingViaGraphQL(true);
+    try {
+      const response = await fetch("/api/create-api-docs-via-tina", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          apiGroupData: input.value,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(
+          `✅ ${
+            result.message
+          }\n\nFiles created via TinaCMS:\n${result.files.join(
+            "\n"
+          )}\n\nMethod: ${result.method}`
+        );
+      } else {
+        const errorMsg = result.errors
+          ? `❌ ${result.message}\n\nErrors:\n${result.errors.join(
+              "\n"
+            )}\n\nSuccessful files:\n${result.files?.join("\n") || "None"}`
+          : `❌ ${result.error}`;
+        alert(errorMsg);
+      }
+    } catch (error) {
+      console.error("Failed to generate files via TinaCMS:", error);
+      alert(
+        `❌ Failed to create MDX files via TinaCMS: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setGeneratingViaGraphQL(false);
     }
   };
 
@@ -403,9 +459,35 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             </div>
           )}
 
-          {/* Generate Files Button */}
+          {/* Generate Files Buttons */}
           {selectedEndpoints.length > 0 && (
-            <div className="mb-4">
+            <div className="mb-4 space-y-2">
+              {/* TinaCMS GraphQL Method (Recommended) */}
+              <button
+                type="button"
+                onClick={handleGenerateFilesViaGraphQL}
+                disabled={generatingViaGraphQL}
+                className="w-full px-4 py-2 rounded-md bg-blue-600 text-white font-semibold text-sm shadow hover:bg-blue-700 transition-colors border border-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {generatingViaGraphQL ? (
+                  <>
+                    <span className="inline-block mr-2">⏳</span>
+                    Creating via TinaCMS GraphQL...
+                  </>
+                ) : (
+                  <>
+                    <span className="inline-block mr-2">🚀</span>
+                    Create via TinaCMS GraphQL ({selectedEndpoints.length}{" "}
+                    endpoints)
+                  </>
+                )}
+              </button>
+              <div className="text-xs text-gray-600 text-center">
+                ✨ Recommended: Works in all environments (dev, staging,
+                production)
+              </div>
+
+              {/* Filesystem Method (Dev Only) */}
               <button
                 type="button"
                 onClick={handleGenerateFiles}
@@ -420,13 +502,15 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                 ) : (
                   <>
                     <span className="inline-block mr-2">📄</span>
-                    Generate MDX Files ({selectedEndpoints.length} endpoints)
+                    Generate MDX Files - Dev Only ({
+                      selectedEndpoints.length
+                    }{" "}
+                    endpoints)
                   </>
                 )}
               </button>
-              <div className="text-xs text-gray-600 mt-1 text-center">
-                This will create individual .mdx files for each selected
-                endpoint
+              <div className="text-xs text-gray-600 text-center">
+                💻 Direct filesystem write (development environment only)
               </div>
             </div>
           )}

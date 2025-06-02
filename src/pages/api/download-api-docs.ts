@@ -1,6 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import * as fs from "fs";
-import * as path from "path";
 
 interface EndpointData {
   id: string;
@@ -73,47 +71,35 @@ ${description ? `${description}\n` : ""}
 }
 
 /**
- * Generates .mdx files for each endpoint in the provided API group data
+ * Generates files in memory and returns them as JSON
  */
-async function generateApiEndpointFiles(
-  groupData: GroupApiData,
-  baseDir: string = "content/docs/api-documentation"
-): Promise<string[]> {
+function generateApiEndpointFilesInMemory(
+  groupData: GroupApiData
+): { filename: string; content: string; path: string }[] {
   if (!groupData.endpoints || groupData.endpoints.length === 0) {
     return [];
   }
 
-  const createdFiles: string[] = [];
+  const files: { filename: string; content: string; path: string }[] = [];
   const { schema, tag, endpoints } = groupData;
 
-  // Create a directory for this tag if it doesn't exist
-  const tagDir = path.join(process.cwd(), baseDir, sanitizeFileName(tag));
-  if (!fs.existsSync(tagDir)) {
-    fs.mkdirSync(tagDir, { recursive: true });
-  }
+  const tagDir = sanitizeFileName(tag);
 
   for (const endpoint of endpoints) {
     const fileName = generateFileName(endpoint);
-    const filePath = path.join(tagDir, `${fileName}.mdx`);
-
-    // Don't overwrite existing files
-    if (fs.existsSync(filePath)) {
-      console.log(`File ${filePath} already exists, skipping...`);
-      continue;
-    }
+    const fullFileName = `${fileName}.mdx`;
+    const relativePath = `content/docs/api-documentation/${tagDir}/${fullFileName}`;
 
     const mdxContent = generateMdxContent(endpoint, schema);
 
-    try {
-      fs.writeFileSync(filePath, mdxContent, "utf8");
-      createdFiles.push(path.relative(process.cwd(), filePath));
-      console.log(`Created API endpoint file: ${filePath}`);
-    } catch (error) {
-      console.error(`Failed to create file ${filePath}:`, error);
-    }
+    files.push({
+      filename: fullFileName,
+      content: mdxContent,
+      path: relativePath,
+    });
   }
 
-  return createdFiles;
+  return files;
 }
 
 export default async function handler(
@@ -122,14 +108,6 @@ export default async function handler(
 ) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
-  }
-
-  // Only allow file generation in development environment
-  if (process.env.NODE_ENV !== "development") {
-    return res.status(403).json({
-      error: "File generation is only available in development environment",
-      suggestion: "Please run this feature locally in development mode",
-    });
   }
 
   try {
@@ -154,12 +132,14 @@ export default async function handler(
       return res.status(400).json({ error: "No endpoints provided" });
     }
 
-    const createdFiles = await generateApiEndpointFiles(groupData);
+    const generatedFiles = generateApiEndpointFilesInMemory(groupData);
 
     return res.status(200).json({
       success: true,
-      message: `Successfully generated ${createdFiles.length} MDX files`,
-      files: createdFiles,
+      message: `Generated ${generatedFiles.length} MDX files`,
+      files: generatedFiles,
+      instructions:
+        "Download these files and place them in your content/docs/api-documentation directory",
     });
   } catch (error) {
     console.error("Error generating API docs:", error);
