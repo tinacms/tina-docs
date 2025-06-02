@@ -22,6 +22,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [selectedSchema, setSelectedSchema] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [generatingFiles, setGeneratingFiles] = useState(false);
+  const [clientReady, setClientReady] = useState(false);
 
   // Parse the current value
   const parsedValue = (() => {
@@ -38,42 +39,31 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     ? parsedValue.endpoints
     : [];
 
+  // Check if client is ready
+  useEffect(() => {
+    const checkClient = async () => {
+      try {
+        // Test if we can actually make a query
+        await client.queries.apiSchemaConnection({ first: 1 });
+        setClientReady(true);
+      } catch (error) {
+        console.log("Client not ready yet, retrying...");
+        // If not ready, try again in a bit
+        setTimeout(checkClient, 2000);
+      }
+    };
+    checkClient();
+  }, []);
+
   // Load schemas and initialize existing data
   useEffect(() => {
+    if (!clientReady) return;
+
     const loadData = async () => {
       // First load schemas
       setLoadingSchemas(true);
       try {
         console.log("Loading API schemas...");
-
-        // Add a delay to ensure client is fully initialized
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Check if client and queries are available
-        if (!client) {
-          console.error("TinaCMS client is not available");
-          setSchemas([]);
-          setLoadingSchemas(false);
-          return;
-        }
-
-        if (!client.queries) {
-          console.error(
-            "TinaCMS client.queries is not available - client may not be fully initialized"
-          );
-          setSchemas([]);
-          setLoadingSchemas(false);
-          return;
-        }
-
-        if (!client.queries.apiSchemaConnection) {
-          console.error(
-            "apiSchemaConnection query is not available. Check if the apiSchema collection is properly configured."
-          );
-          setSchemas([]);
-          setLoadingSchemas(false);
-          return;
-        }
 
         const result = await client.queries.apiSchemaConnection({ first: 100 });
         console.log("API schema connection result:", result);
@@ -101,16 +91,10 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         if (currentSchema) {
           setLoadingTags(true);
           try {
-            if (!client.queries.apiSchema) {
-              console.error("apiSchema query is not available");
-              setTags([]);
-              setLoadingTags(false);
-              return;
-            }
-
             const schemaResult = await client.queries.apiSchema({
               relativePath: currentSchema,
             });
+
             const raw = schemaResult.data.apiSchema?.apiSchema;
             if (raw) {
               const apiSchema = JSON.parse(raw);
@@ -181,7 +165,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     };
 
     loadData();
-  }, []); // Only run once on mount
+  }, [clientReady]); // Only run when client is ready
 
   // Handle schema change
   const handleSchemaChange = async (
@@ -208,6 +192,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     setLoadingTags(true);
     try {
       const result = await client.queries.apiSchema({ relativePath: schema });
+
       const raw = result.data.apiSchema?.apiSchema;
       if (raw) {
         const apiSchema = JSON.parse(raw);
