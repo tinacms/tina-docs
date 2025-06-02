@@ -1,5 +1,5 @@
 {
-  "buildCommand": "echo '🚀🚀🚀 STARTING TINACMS BUILD 🚀🚀🚀' && NEXT_PUBLIC_TINA_BRANCH=${VERCEL_GIT_COMMIT_REF:-api-reference-nav-ba} tinacms build && echo '✅✅✅ TINACMS BUILD COMPLETED ✅✅✅' && echo '🏗️🏗️🏗️ STARTING NEXT.JS BUILD 🏗️🏗️🏗️' && next build && echo '🎉🎉🎉 ALL BUILDS COMPLETED 🎉🎉🎉'",
+  "buildCommand": "NEXT_PUBLIC_TINA_BRANCH=${VERCEL_GIT_COMMIT_REF:-api-reference-nav-ba} tinacms build && next build",
   "devCommand": "pnpm run dev",
   "installCommand": "pnpm install"
 } 
