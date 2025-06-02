@@ -146,6 +146,28 @@ async function createDocsViaTina(
     `Using TinaCMS endpoint: ${tinaEndpoint} (NODE_ENV: ${process.env.NODE_ENV})`
   );
 
+  // Check for authentication token
+  const tinaToken = process.env.TINA_TOKEN;
+  if (!tinaToken && process.env.NODE_ENV !== "development") {
+    return {
+      ...results,
+      success: false,
+      errors: [
+        "TINA_TOKEN environment variable is required for staging/production environments",
+      ],
+    };
+  }
+
+  // Prepare headers for GraphQL requests
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  // Add authorization header if token is available
+  if (tinaToken) {
+    headers["Authorization"] = `Bearer ${tinaToken}`;
+  }
+
   for (const endpoint of endpoints) {
     try {
       const fileName = generateFileName(endpoint);
@@ -174,9 +196,7 @@ async function createDocsViaTina(
       // Make GraphQL request to TinaCMS
       const response = await fetch(tinaEndpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify({
           query: simpleMutation,
           variables: simpleVariables,
@@ -227,9 +247,7 @@ async function createDocsViaTina(
 
           const updateResponse = await fetch(tinaEndpoint, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers,
             body: JSON.stringify({
               query: updateMutation,
               variables: updateVariables,
