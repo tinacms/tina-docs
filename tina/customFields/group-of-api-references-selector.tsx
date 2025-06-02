@@ -46,6 +46,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       try {
         console.log("Loading API schemas...");
 
+        // Add a delay to ensure client is fully initialized
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         // Check if client and queries are available
         if (!client) {
           console.error("TinaCMS client is not available");
@@ -55,7 +58,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         }
 
         if (!client.queries) {
-          console.error("TinaCMS client.queries is not available");
+          console.error(
+            "TinaCMS client.queries is not available - client may not be fully initialized"
+          );
           setSchemas([]);
           setLoadingSchemas(false);
           return;
