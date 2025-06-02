@@ -1,5 +1,5 @@
 {
   "buildCommand": "echo '🚀🚀🚀 STARTING TINACMS BUILD 🚀🚀🚀' && tinacms build && echo '✅✅✅ TINACMS BUILD COMPLETED ✅✅✅' && echo '🏗️🏗️🏗️ STARTING NEXT.JS BUILD 🏗️🏗️🏗️' && next build && echo '🎉🎉🎉 ALL BUILDS COMPLETED 🎉🎉🎉'",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install"
+  "devCommand": "pnpm run dev",
+  "installCommand": "pnpm install"
 } 
