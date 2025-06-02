@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
+import { client } from "@/tina/__generated__/client";
 
 const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const { input } = props;
@@ -339,10 +340,11 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     const { schema, tag, endpoints } = groupData;
     const tagDir = sanitizeFileName(tag);
 
-    // Use the client-side GraphQL endpoint (this will use TinaCMS auth automatically)
-    const tinaEndpoint = "/admin/api/graphql";
+    // Use the client's configured URL which handles environment-specific endpoints
+    // This way we don't hardcode client IDs or branches
+    const tinaEndpoint = (client as any).client?.url || "/admin/api/graphql";
 
-    console.log(`Using TinaCMS client-side endpoint: ${tinaEndpoint}`);
+    console.log(`Using TinaCMS endpoint: ${tinaEndpoint}`);
 
     for (const endpoint of endpoints) {
       try {
@@ -355,8 +357,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           endpoint.description ||
           `API endpoint for ${endpoint.method} ${endpoint.path}`;
 
-        // First, try to create using addPendingDocument
-        const simpleMutation = `
+        // Use fetch with the client's endpoint
+        const mutation = `
           mutation AddPendingDocument($collection: String!, $relativePath: String!) {
             addPendingDocument(collection: $collection, relativePath: $relativePath) {
               __typename
@@ -364,20 +366,19 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           }
         `;
 
-        const simpleVariables = {
+        const variables = {
           collection: "docs",
           relativePath,
         };
 
-        // Make GraphQL request to TinaCMS (client-side, will use existing auth)
         const response = await fetch(tinaEndpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            query: simpleMutation,
-            variables: simpleVariables,
+            query: mutation,
+            variables: variables,
           }),
         });
 
@@ -445,7 +446,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
             if (updateResponse.ok) {
               const updateResult = await updateResponse.json();
-              if (!updateResult.errors) {
+              if (updateResult.data?.updateDocs) {
                 console.log(`Updated document content for: ${relativePath}`);
               }
             }
