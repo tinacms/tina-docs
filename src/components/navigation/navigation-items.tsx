@@ -48,8 +48,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -225,7 +225,7 @@ export const DocsNavigationItems = ({
 
   return (
     <div
-      className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin 2xl:py-4 2xl:px-4 2xl:pb-8"
+      className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin lg:py-4 lg:pb-8"
       ref={navListElem}
     >
       {navItems?.length > 0 &&
