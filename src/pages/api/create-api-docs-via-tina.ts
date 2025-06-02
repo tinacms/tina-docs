@@ -166,6 +166,13 @@ async function createDocsViaTina(
   // Add authorization header if token is available
   if (tinaToken) {
     headers["Authorization"] = `Bearer ${tinaToken}`;
+    console.log(
+      `Using TinaCMS token: ${tinaToken.substring(0, 10)}... (length: ${
+        tinaToken.length
+      })`
+    );
+  } else {
+    console.log("No TinaCMS token available - using unauthenticated requests");
   }
 
   for (const endpoint of endpoints) {
@@ -204,7 +211,17 @@ async function createDocsViaTina(
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // Try to get more detailed error information
+        let errorDetails = `HTTP error! status: ${response.status}`;
+        try {
+          const errorBody = await response.text();
+          if (errorBody) {
+            errorDetails += ` - Response: ${errorBody}`;
+          }
+        } catch (e) {
+          // Ignore if we can't read the response body
+        }
+        throw new Error(errorDetails);
       }
 
       const result = await response.json();
