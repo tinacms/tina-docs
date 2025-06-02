@@ -1,6 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import * as fs from "fs";
-import * as path from "path";
 
 interface EndpointData {
   id: string;
@@ -79,6 +77,10 @@ async function generateApiEndpointFiles(
   groupData: GroupApiData,
   baseDir: string = "content/docs/api-documentation"
 ): Promise<string[]> {
+  // Dynamic import to reduce bundle size
+  const fs = await import("fs");
+  const path = await import("path");
+
   if (!groupData.endpoints || groupData.endpoints.length === 0) {
     return [];
   }
