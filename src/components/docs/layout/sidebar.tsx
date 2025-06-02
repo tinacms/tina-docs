@@ -26,7 +26,7 @@ export const Sidebar = ({
   }, []);
 
   return (
-    <div className="sticky hidden lg:block mr-4 h-[calc(100vh-4rem)] w-84 ml-8 top-4 rounded-lg shadow-lg bg-white dark:bg-gray-800">
+    <div className="sticky hidden lg:block mr-4 h-[calc(100vh-4rem)] w-84 ml-8 top-4 rounded-lg dark:border dark:border-neutral-border-subtle/60 shadow-xl">
       <div className="relative w-full h-full overflow-hidden rounded-lg">
         <div
           className="absolute inset-0 flex transition-transform duration-300 ease-in-out"
