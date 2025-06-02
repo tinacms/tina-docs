@@ -1,4 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
+import * as fs from "fs";
+import * as path from "path";
 
 interface EndpointData {
   id: string;
@@ -77,10 +79,6 @@ async function generateApiEndpointFiles(
   groupData: GroupApiData,
   baseDir: string = "content/docs/api-documentation"
 ): Promise<string[]> {
-  // Dynamic import to reduce bundle size
-  const fs = await import("fs");
-  const path = await import("path");
-
   if (!groupData.endpoints || groupData.endpoints.length === 0) {
     return [];
   }
@@ -118,67 +116,64 @@ async function generateApiEndpointFiles(
   return createdFiles;
 }
 
-/**
- * Processes all API groups in navigation data and generates MDX files
- */
-async function processNavigationApiGroups(
-  navigationData: any
-): Promise<string[]> {
-  if (!navigationData || !navigationData.tabs) {
-    return [];
-  }
-
-  const allCreatedFiles: string[] = [];
-
-  // Extract all API groups from navigation data
-  for (const tab of navigationData.tabs) {
-    if (tab._template === "apiTab" && tab.supermenuGroup) {
-      for (const group of tab.supermenuGroup) {
-        if (group._template === "groupOfApiReferences" && group.apiGroup) {
-          try {
-            const groupData: GroupApiData = JSON.parse(group.apiGroup);
-            if (groupData.endpoints && groupData.endpoints.length > 0) {
-              const createdFiles = await generateApiEndpointFiles(groupData);
-              allCreatedFiles.push(...createdFiles);
-            }
-          } catch (error) {
-            console.error("Failed to process API group:", error);
-          }
-        }
-      }
-    }
-  }
-
-  return allCreatedFiles;
-}
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+export async function POST(req: NextRequest) {
+  // Only allow file generation in development environment
+  if (process.env.NODE_ENV !== "development") {
+    return NextResponse.json(
+      {
+        error: "File generation is only available in development environment",
+        suggestion: "Please run this feature locally in development mode",
+      },
+      { status: 403 }
+    );
   }
 
   try {
-    const { navigationData } = req.body;
+    const { apiGroupData } = await req.json();
 
-    if (!navigationData) {
-      return res.status(400).json({ error: "Navigation data is required" });
+    if (!apiGroupData) {
+      return NextResponse.json(
+        { error: "API group data is required" },
+        { status: 400 }
+      );
     }
 
-    const createdFiles = await processNavigationApiGroups(navigationData);
+    let groupData: GroupApiData;
 
-    return res.status(200).json({
+    try {
+      groupData =
+        typeof apiGroupData === "string"
+          ? JSON.parse(apiGroupData)
+          : apiGroupData;
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Invalid API group data format" },
+        { status: 400 }
+      );
+    }
+
+    if (!groupData.endpoints || groupData.endpoints.length === 0) {
+      return NextResponse.json(
+        { error: "No endpoints provided" },
+        { status: 400 }
+      );
+    }
+
+    const createdFiles = await generateApiEndpointFiles(groupData);
+
+    return NextResponse.json({
       success: true,
-      message: `Successfully processed navigation data and generated ${createdFiles.length} MDX files`,
+      message: `Successfully generated ${createdFiles.length} MDX files`,
       files: createdFiles,
     });
   } catch (error) {
-    console.error("Error processing navigation API groups:", error);
-    return res.status(500).json({
-      error: "Failed to process navigation API groups",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
+    console.error("Error generating API docs:", error);
+    return NextResponse.json(
+      {
+        error: "Failed to generate API documentation files",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
-}
+} 

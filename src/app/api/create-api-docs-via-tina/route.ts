@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 interface EndpointData {
   id: string;
@@ -41,66 +41,11 @@ function sanitizeFileName(name: string): string {
 }
 
 /**
- * Generates the MDX body content for an endpoint as TinaCMS-compatible rich text JSON
- */
-function generateMdxBodyContent(endpoint: EndpointData, schema: string): any {
-  const { method, path, description } = endpoint;
-
-  // Simple rich text structure that TinaCMS can handle
-  return {
-    type: "root",
-    children: [
-      ...(description
-        ? [
-            {
-              type: "paragraph",
-              children: [{ type: "text", value: description }],
-            },
-          ]
-        : []),
-      {
-        type: "heading",
-        attrs: { level: 2 },
-        children: [{ type: "text", value: "Endpoint Details" }],
-      },
-      {
-        type: "paragraph",
-        children: [
-          { type: "text", value: "Method: " },
-          { type: "inlineCode", value: method },
-          { type: "text", value: " " },
-          { type: "hardBreak" },
-          { type: "text", value: "Path: " },
-          { type: "inlineCode", value: path },
-        ],
-      },
-      {
-        type: "heading",
-        attrs: { level: 2 },
-        children: [{ type: "text", value: "API Reference" }],
-      },
-      {
-        type: "mdxJsxFlowElement",
-        name: "apiReference",
-        attributes: [
-          {
-            type: "mdxJsxAttribute",
-            name: "schemaFile",
-            value: `${schema}|${method}:${path}`,
-          },
-        ],
-        children: [],
-      },
-    ],
-  };
-}
-
-/**
  * Creates docs via TinaCMS GraphQL mutation
  */
 async function createDocsViaTina(
   groupData: GroupApiData,
-  req: NextApiRequest
+  req: NextRequest
 ): Promise<{ success: boolean; createdFiles: string[]; errors: string[] }> {
   const results = {
     success: true,
@@ -123,9 +68,8 @@ async function createDocsViaTina(
     tinaEndpoint = "http://localhost:4001/graphql";
   } else {
     // In staging/production, construct the full URL to the admin GraphQL endpoint
-    const protocol = req.headers["x-forwarded-proto"] || "https";
-    const host = req.headers.host;
-    tinaEndpoint = `${protocol}://${host}/admin/api/graphql`;
+    const url = new URL(req.url);
+    tinaEndpoint = `${url.protocol}//${url.host}/admin/api/graphql`;
   }
 
   console.log(
@@ -294,19 +238,15 @@ async function createDocsViaTina(
   return results;
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    const { apiGroupData } = req.body;
+    const { apiGroupData } = await req.json();
 
     if (!apiGroupData) {
-      return res.status(400).json({ error: "API group data is required" });
+      return NextResponse.json(
+        { error: "API group data is required" },
+        { status: 400 }
+      );
     }
 
     let groupData: GroupApiData;
@@ -317,36 +257,48 @@ export default async function handler(
           ? JSON.parse(apiGroupData)
           : apiGroupData;
     } catch (error) {
-      return res.status(400).json({ error: "Invalid API group data format" });
+      return NextResponse.json(
+        { error: "Invalid API group data format" },
+        { status: 400 }
+      );
     }
 
     if (!groupData.endpoints || groupData.endpoints.length === 0) {
-      return res.status(400).json({ error: "No endpoints provided" });
+      return NextResponse.json(
+        { error: "No endpoints provided" },
+        { status: 400 }
+      );
     }
 
     const results = await createDocsViaTina(groupData, req);
 
     if (results.success) {
-      return res.status(200).json({
+      return NextResponse.json({
         success: true,
         message: `Successfully created ${results.createdFiles.length} MDX files via TinaCMS`,
         files: results.createdFiles,
         method: "TinaCMS GraphQL mutations",
       });
     } else {
-      return res.status(207).json({
-        success: false,
-        message: `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`,
-        files: results.createdFiles,
-        errors: results.errors,
-        method: "TinaCMS GraphQL mutations",
-      });
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`,
+          files: results.createdFiles,
+          errors: results.errors,
+          method: "TinaCMS GraphQL mutations",
+        },
+        { status: 207 }
+      );
     }
   } catch (error) {
     console.error("Error creating API docs via TinaCMS:", error);
-    return res.status(500).json({
-      error: "Failed to create API documentation files via TinaCMS",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
+    return NextResponse.json(
+      {
+        error: "Failed to create API documentation files via TinaCMS",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

@@ -1,6 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import * as fs from "fs";
-import * as path from "path";
+import { NextRequest, NextResponse } from "next/server";
 
 interface EndpointData {
   id: string;
@@ -79,6 +77,10 @@ async function generateApiEndpointFiles(
   groupData: GroupApiData,
   baseDir: string = "content/docs/api-documentation"
 ): Promise<string[]> {
+  // Dynamic import to reduce bundle size
+  const fs = await import("fs");
+  const path = await import("path");
+
   if (!groupData.endpoints || groupData.endpoints.length === 0) {
     return [];
   }
@@ -116,56 +118,66 @@ async function generateApiEndpointFiles(
   return createdFiles;
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+/**
+ * Processes all API groups in navigation data and generates MDX files
+ */
+async function processNavigationApiGroups(
+  navigationData: any
+): Promise<string[]> {
+  if (!navigationData || !navigationData.tabs) {
+    return [];
   }
 
-  // Only allow file generation in development environment
-  if (process.env.NODE_ENV !== "development") {
-    return res.status(403).json({
-      error: "File generation is only available in development environment",
-      suggestion: "Please run this feature locally in development mode",
-    });
+  const allCreatedFiles: string[] = [];
+
+  // Extract all API groups from navigation data
+  for (const tab of navigationData.tabs) {
+    if (tab._template === "apiTab" && tab.supermenuGroup) {
+      for (const group of tab.supermenuGroup) {
+        if (group._template === "groupOfApiReferences" && group.apiGroup) {
+          try {
+            const groupData: GroupApiData = JSON.parse(group.apiGroup);
+            if (groupData.endpoints && groupData.endpoints.length > 0) {
+              const createdFiles = await generateApiEndpointFiles(groupData);
+              allCreatedFiles.push(...createdFiles);
+            }
+          } catch (error) {
+            console.error("Failed to process API group:", error);
+          }
+        }
+      }
+    }
   }
 
+  return allCreatedFiles;
+}
+
+export async function POST(req: NextRequest) {
   try {
-    const { apiGroupData } = req.body;
+    const { navigationData } = await req.json();
 
-    if (!apiGroupData) {
-      return res.status(400).json({ error: "API group data is required" });
+    if (!navigationData) {
+      return NextResponse.json(
+        { error: "Navigation data is required" },
+        { status: 400 }
+      );
     }
 
-    let groupData: GroupApiData;
+    const createdFiles = await processNavigationApiGroups(navigationData);
 
-    try {
-      groupData =
-        typeof apiGroupData === "string"
-          ? JSON.parse(apiGroupData)
-          : apiGroupData;
-    } catch (error) {
-      return res.status(400).json({ error: "Invalid API group data format" });
-    }
-
-    if (!groupData.endpoints || groupData.endpoints.length === 0) {
-      return res.status(400).json({ error: "No endpoints provided" });
-    }
-
-    const createdFiles = await generateApiEndpointFiles(groupData);
-
-    return res.status(200).json({
+    return NextResponse.json({
       success: true,
-      message: `Successfully generated ${createdFiles.length} MDX files`,
+      message: `Successfully processed navigation data and generated ${createdFiles.length} MDX files`,
       files: createdFiles,
     });
   } catch (error) {
-    console.error("Error generating API docs:", error);
-    return res.status(500).json({
-      error: "Failed to generate API documentation files",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
+    console.error("Error processing navigation API groups:", error);
+    return NextResponse.json(
+      {
+        error: "Failed to process navigation API groups",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

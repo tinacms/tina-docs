@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 interface EndpointData {
   id: string;
@@ -102,19 +102,15 @@ function generateApiEndpointFilesInMemory(
   return files;
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    const { apiGroupData } = req.body;
+    const { apiGroupData } = await req.json();
 
     if (!apiGroupData) {
-      return res.status(400).json({ error: "API group data is required" });
+      return NextResponse.json(
+        { error: "API group data is required" },
+        { status: 400 }
+      );
     }
 
     let groupData: GroupApiData;
@@ -125,16 +121,22 @@ export default async function handler(
           ? JSON.parse(apiGroupData)
           : apiGroupData;
     } catch (error) {
-      return res.status(400).json({ error: "Invalid API group data format" });
+      return NextResponse.json(
+        { error: "Invalid API group data format" },
+        { status: 400 }
+      );
     }
 
     if (!groupData.endpoints || groupData.endpoints.length === 0) {
-      return res.status(400).json({ error: "No endpoints provided" });
+      return NextResponse.json(
+        { error: "No endpoints provided" },
+        { status: 400 }
+      );
     }
 
     const generatedFiles = generateApiEndpointFilesInMemory(groupData);
 
-    return res.status(200).json({
+    return NextResponse.json({
       success: true,
       message: `Generated ${generatedFiles.length} MDX files`,
       files: generatedFiles,
@@ -143,9 +145,12 @@ export default async function handler(
     });
   } catch (error) {
     console.error("Error generating API docs:", error);
-    return res.status(500).json({
-      error: "Failed to generate API documentation files",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
+    return NextResponse.json(
+      {
+        error: "Failed to generate API documentation files",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

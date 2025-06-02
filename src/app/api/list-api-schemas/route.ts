@@ -1,21 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
+export async function GET() {
   try {
     const schemaDir = path.join(process.cwd(), "content/apiSchema");
 
     // Check if directory exists
     if (!fs.existsSync(schemaDir)) {
-      return res.status(200).json({ schemas: [] });
+      return NextResponse.json({ schemas: [] });
     }
 
     // Read all JSON files in the directory
@@ -30,9 +23,12 @@ export default async function handler(
       displayName: file.replace(".json", ""),
     }));
 
-    res.status(200).json({ schemas });
+    return NextResponse.json({ schemas });
   } catch (error) {
     console.error("Error reading API schemas:", error);
-    res.status(500).json({ error: "Failed to read API schemas" });
+    return NextResponse.json(
+      { error: "Failed to read API schemas" },
+      { status: 500 }
+    );
   }
 }
