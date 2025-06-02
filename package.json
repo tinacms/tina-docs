@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",
     "build": "tinacms build && next build",
-    "postbuild": "npx pagefind --site .next --output-path .next/static/pagefind",
+    "postbuild": "next-sitemap && npx pagefind --site .next --output-path .next/static/pagefind",
     "build-local-pagefind": "tinacms build && next build && npx pagefind --site .next --output-subdir ../public/pagefind",
     "start": "tinacms build && next start",
     "lint": "biome check src/ tina/",
@@ -39,6 +39,7 @@
     "typescript": "5.8.3"
   },
   "devDependencies": {
+    "next-sitemap": "^4.2.3",
     "@biomejs/biome": "^1.9.4",
     "@svgr/webpack": "^8.1.0",
     "@shikijs/transformers": "^3.4.1",
