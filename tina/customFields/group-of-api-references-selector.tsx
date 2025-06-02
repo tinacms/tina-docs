@@ -45,6 +45,31 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       setLoadingSchemas(true);
       try {
         console.log("Loading API schemas...");
+
+        // Check if client and queries are available
+        if (!client) {
+          console.error("TinaCMS client is not available");
+          setSchemas([]);
+          setLoadingSchemas(false);
+          return;
+        }
+
+        if (!client.queries) {
+          console.error("TinaCMS client.queries is not available");
+          setSchemas([]);
+          setLoadingSchemas(false);
+          return;
+        }
+
+        if (!client.queries.apiSchemaConnection) {
+          console.error(
+            "apiSchemaConnection query is not available. Check if the apiSchema collection is properly configured."
+          );
+          setSchemas([]);
+          setLoadingSchemas(false);
+          return;
+        }
+
         const result = await client.queries.apiSchemaConnection({ first: 100 });
         console.log("API schema connection result:", result);
 
@@ -71,6 +96,13 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         if (currentSchema) {
           setLoadingTags(true);
           try {
+            if (!client.queries.apiSchema) {
+              console.error("apiSchema query is not available");
+              setTags([]);
+              setLoadingTags(false);
+              return;
+            }
+
             const schemaResult = await client.queries.apiSchema({
               relativePath: currentSchema,
             });
@@ -354,8 +386,17 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         </select>
         {!loadingSchemas && schemas.length === 0 && (
           <div className="text-red-600 text-sm mt-1">
-            ⚠️ No API schemas found. Please ensure schema files are uploaded to
-            the "API Schema" collection.
+            ⚠️ No API schemas found. This might be due to:
+            <br />
+            • Missing TinaCMS client generation on staging
+            <br />
+            • Missing schema files deployment
+            <br />
+            • Environment configuration issues
+            <br />
+            <br />
+            Please ensure schema files are uploaded to the "API Schema"
+            collection.
           </div>
         )}
       </div>
