@@ -160,7 +160,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="z-50 mt-2 w-72 rounded-lg bg-white shadow-md"
+          className="z-50 mt-2 w-72 rounded-lg bg-neutral-background dark:border-1 dark:border-neutral-border-subtle shadow-md"
           sideOffset={0}
           align="end"
         >
@@ -212,14 +212,14 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
           ].map(({ icon, label, description, onClick }) => (
             <DropdownMenuItem
               key={label}
-              className="flex items-start gap-3 p-2 text-sm text-neutral hover:bg-gray-100 focus:outline-none first:rounded-t-lg last:rounded-b-lg cursor-pointer"
+              className="flex items-start gap-3 p-2 text-sm text-neutral hover:bg-neutral-background-secondary focus:outline-none first:rounded-t-lg last:rounded-b-lg cursor-pointer"
               onClick={onClick}
             >
               <span className="flex items-center justify-center w-8 h-8 border-2 border-neutral-border rounded-md">
                 {icon}
               </span>
               <span className="flex flex-col">
-                <span className="font-medium">{label}</span>
+                <span className="font-medium text-neutral-text">{label}</span>
                 <span className="text-xs text-neutral-text-secondary font-light">
                   {description}
                 </span>
