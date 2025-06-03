@@ -124,7 +124,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
         onClick={handleCopyPage}
         className={`cursor-pointer flex items-center px-1.5 py-0.5 ${
           copied
-            ? "bg-brand-tertiary text-brand-tertiary-dark-dark"
+            ? "bg-brand-tertiary text-brand-tertiary-dark-dark dark:bg-[#529C7B]"
             : "text-brand-secondary-dark-dark hover:bg-brand-secondary-light"
         }`}
         type="button"
@@ -215,7 +215,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
               className="flex items-start gap-3 p-2 text-sm text-neutral hover:bg-neutral-background-secondary focus:outline-none first:rounded-t-lg last:rounded-b-lg cursor-pointer"
               onClick={onClick}
             >
-              <span className="flex items-center justify-center w-8 h-8 border-2 border-neutral-border rounded-md">
+              <span className="flex items-center justify-center w-8 h-8 border-1 border-neutral-border-subtle rounded-md">
                 {icon}
               </span>
               <span className="flex flex-col">
