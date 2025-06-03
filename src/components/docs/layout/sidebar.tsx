@@ -26,10 +26,10 @@ export const Sidebar = ({
   }, []);
 
   return (
-    <div className="sticky hidden brand-glass-gradient lg:block mr-4 h-[calc(100vh-8rem)] w-84 ml-8 top-4 rounded-2xl dark:border dark:border-neutral-border-subtle/60 shadow-xl">
-      <div className="relative w-full h-full overflow-hidden">
+    <div className="sticky hidden brand-glass-gradient lg:block mr-4 min-h-[calc(100vh-8rem)] h-fit w-84 ml-8 top-4 rounded-2xl dark:border dark:border-neutral-border-subtle/60 shadow-xl">
+      <div className="relative w-full overflow-x-hidden">
         <div
-          className="absolute inset-0 flex transition-transform duration-300 ease-in-out"
+          className="flex transition-transform duration-300 ease-in-out"
           style={
             isMounted
               ? { transform: `translateX(-${currentIndex * 100}%)` }

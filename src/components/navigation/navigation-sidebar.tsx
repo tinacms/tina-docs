@@ -9,7 +9,7 @@ export const NavigationSideBar = ({
   tableOfContents: any;
 }) => {
   return (
-    <div className="h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
+    <div className="overflow-y-auto overflow-x-hidden">
       <DocsNavigationItems navItems={tableOfContents.items} />
     </div>
   );
