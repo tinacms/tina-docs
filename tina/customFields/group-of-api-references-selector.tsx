@@ -54,26 +54,52 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const hasValidSelection =
         selectedSchema && selectedTag && selectedEndpoints.length > 0;
 
+      console.log("🔍 Form save check:", {
+        "meta.dirty": meta.dirty,
+        "currentValue !== lastSavedValue": currentValue !== lastSavedValue,
+        hasValidSelection: hasValidSelection,
+        generatingFiles: generatingFiles,
+        selectedSchema: selectedSchema,
+        selectedTag: selectedTag,
+        "selectedEndpoints.length": selectedEndpoints.length,
+      });
+
       if (
         !meta.dirty &&
         currentValue !== lastSavedValue &&
         hasValidSelection &&
         !generatingFiles
       ) {
-        console.log("🔄 Form save detected - triggering file generation");
+        console.log(
+          "🔄 Form save detected - clearing tag directory and regenerating files"
+        );
         setLastSavedValue(currentValue);
         setGeneratingFiles(true);
 
         try {
-          if (isLocalMode) {
-            console.log("🏠 Local mode - using filesystem generation");
-            await handleFileSystemGeneration();
-          } else {
-            console.log("☁️ Remote mode - using TinaCMS GraphQL generation");
-            await handleTinaCMSGeneration();
+          // Step 1: Clear the entire tag directory
+          const tagDir = sanitizeFileName(selectedTag);
+          const tagDirectoryPath = `docs/api-documentation/${tagDir}`;
+
+          console.log(`🗑️ About to clear directory: ${tagDirectoryPath}`);
+          console.log(`🔍 selectedTag: "${selectedTag}"`);
+          console.log(`🔍 sanitized tagDir: "${tagDir}"`);
+          console.log(`🔍 full tagDirectoryPath: "${tagDirectoryPath}"`);
+          await clearTagDirectory(tagDirectoryPath);
+
+          // Step 2: Generate all selected files
+          if (selectedEndpoints.length > 0) {
+            console.log(`📁 Creating ${selectedEndpoints.length} files`);
+            if (isLocalMode) {
+              console.log("🏠 Local mode - using filesystem generation");
+              await handleFileSystemGeneration();
+            } else {
+              console.log("☁️ Remote mode - using TinaCMS GraphQL generation");
+              await handleTinaCMSGeneration();
+            }
           }
         } catch (error) {
-          console.error("File generation failed:", error);
+          console.error("File generation and cleanup failed:", error);
         } finally {
           setGeneratingFiles(false);
         }
@@ -322,7 +348,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           `✅ Created ${result.files.length} files via filesystem:`,
           result.files
         );
-        // Show a subtle notification instead of alert
+
         showNotification(
           `📄 Generated ${result.files.length} MDX files locally`,
           "success"
@@ -362,16 +388,31 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         throw new Error("Invalid API group data format");
       }
 
+      // Filter endpoints to only create the specified files
+      const filteredEndpoints = groupData.endpoints.filter((endpoint: any) => {
+        const fileName = generateFileName(endpoint);
+        const tagDir = sanitizeFileName(groupData.tag);
+        const filePath = `docs/api-documentation/${tagDir}/${fileName}.mdx`;
+        return selectedEndpoints.some((ep) => ep.id === endpoint.id);
+      });
+
+      // Create filtered group data for generation
+      const filteredGroupData = {
+        ...groupData,
+        endpoints: filteredEndpoints,
+      };
+
       // Call the client-side GraphQL function directly
-      const results = await createDocsViaTinaClientSide(groupData);
+      const results = await createDocsViaTinaClientSide(filteredGroupData);
 
       if (results.success) {
         console.log(
           `✅ Created ${results.createdFiles.length} files via TinaCMS GraphQL:`,
           results.createdFiles
         );
+
         showNotification(
-          `🚀 Created ${results.createdFiles.length} MDX files via TinaCMS`,
+          `✅ Created ${results.createdFiles.length} MDX files via TinaCMS`,
           "success"
         );
       } else {
@@ -529,7 +570,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     for (const endpoint of endpoints) {
       try {
         const fileName = generateFileName(endpoint);
-        const relativePath = `api-documentation/${tagDir}/${fileName}.mdx`;
+        const relativePath = `docs/api-documentation/${tagDir}/${fileName}.mdx`;
 
         // Create title from summary or generate one
         const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
@@ -667,6 +708,185 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     return results;
   }
+
+  // Clear the entire tag directory
+  const clearTagDirectory = async (tagDirectoryPath: string) => {
+    try {
+      console.log(
+        `🗑️ Clearing directory: ${tagDirectoryPath}, isLocalMode: ${isLocalMode}`
+      );
+      if (isLocalMode) {
+        await clearDirectoryViaFilesystem(tagDirectoryPath);
+      } else {
+        await clearDirectoryViaTinaCMS(tagDirectoryPath);
+      }
+      console.log(`✅ Successfully cleared directory: ${tagDirectoryPath}`);
+    } catch (error) {
+      console.warn(`⚠️ Failed to clear directory ${tagDirectoryPath}:`, error);
+      // Continue anyway - maybe the directory doesn't exist yet
+    }
+  };
+
+  // Clear directory via filesystem API
+  const clearDirectoryViaFilesystem = async (directoryPath: string) => {
+    console.log(`🔥 Making API call to clear directory: ${directoryPath}`);
+    const response = await fetch("/api/clear-directory", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ directoryPath }),
+    });
+
+    console.log(`📡 Clear directory API response status: ${response.status}`);
+
+    if (!response.ok) {
+      const result = await response.json();
+      console.error("❌ Clear directory API error:", result);
+      throw new Error(result.error || "Failed to clear directory");
+    }
+
+    const result = await response.json();
+    console.log("✅ Clear directory API success:", result);
+  };
+
+  // Clear directory via TinaCMS GraphQL (list and delete all files)
+  const clearDirectoryViaTinaCMS = async (directoryPath: string) => {
+    const clientId = config.clientId;
+    const branch = config.branch;
+
+    if (!clientId || !branch) {
+      throw new Error("Missing TinaCMS configuration for directory clearing");
+    }
+
+    const tinacmsAuthString = localStorage.getItem("tinacms-auth");
+    let token;
+    try {
+      const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
+      token = authData?.id_token || config.token;
+    } catch (e) {
+      token = config.token;
+    }
+
+    const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
+
+    // First, list all files in the directory via TinaCMS collection query
+    const listQuery = `
+      query GetDocsInDirectory {
+        docsConnection(filter: {_sys: {filename: {startsWith: "${directoryPath}/"}}}) {
+          edges {
+            node {
+              _sys {
+                filename
+                relativePath
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers["Authorization"] = "Bearer " + token;
+    }
+
+    const listResponse = await fetch(tinaEndpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        query: listQuery,
+      }),
+    });
+
+    if (!listResponse.ok) {
+      throw new Error(`Failed to list files: HTTP ${listResponse.status}`);
+    }
+
+    const listResult = await listResponse.json();
+    if (listResult.errors) {
+      throw new Error(
+        `List query errors: ${listResult.errors
+          .map((e: any) => e.message)
+          .join(", ")}`
+      );
+    }
+
+    // Delete each file found in the directory
+    const filesToDelete = listResult.data?.docsConnection?.edges || [];
+    for (const edge of filesToDelete) {
+      const relativePath = edge.node._sys.relativePath;
+      try {
+        await deleteFileViaTinaCMS(relativePath);
+        console.log(`🗑️ Deleted: ${relativePath}`);
+      } catch (error) {
+        console.warn(`⚠️ Failed to delete ${relativePath}:`, error);
+      }
+    }
+  };
+
+  // Delete file via TinaCMS GraphQL
+  const deleteFileViaTinaCMS = async (filePath: string) => {
+    const clientId = config.clientId;
+    const branch = config.branch;
+
+    if (!clientId || !branch) {
+      throw new Error("Missing TinaCMS configuration for file deletion");
+    }
+
+    const tinacmsAuthString = localStorage.getItem("tinacms-auth");
+    let token;
+    try {
+      const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
+      token = authData?.id_token || config.token;
+    } catch (e) {
+      token = config.token;
+    }
+
+    const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
+
+    const mutation = `
+      mutation DeleteDocument($collection: String!, $relativePath: String!) {
+        deleteDocument(collection: $collection, relativePath: $relativePath) {
+          __typename
+        }
+      }
+    `;
+
+    const variables = {
+      collection: "docs",
+      relativePath: filePath,
+    };
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers["Authorization"] = "Bearer " + token;
+    }
+
+    const response = await fetch(tinaEndpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        query: mutation,
+        variables: variables,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    if (result.errors) {
+      throw new Error(result.errors.map((e: any) => e.message).join(", "));
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-md p-7 my-5 max-w-xl w-full border border-gray-200 font-sans">
@@ -811,6 +1031,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                     {selectedEndpoints.length !== 1 ? "s" : ""} selected - files
                     will be generated when you save this form using{" "}
                     {isLocalMode ? "filesystem method" : "TinaCMS GraphQL"}
+                    <br />
+                    🗑️ Will clear entire "{selectedTag}" directory and
+                    regenerate all files
                   </div>
                 </div>
               )}
