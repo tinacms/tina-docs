@@ -4,7 +4,7 @@ import { client } from "@/tina/__generated__/client";
 import { config } from "@/tina/config";
 
 const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
-  const { input } = props;
+  const { input, meta } = props;
   const [schemas, setSchemas] = useState<any[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [endpoints, setEndpoints] = useState<
@@ -23,7 +23,12 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [selectedSchema, setSelectedSchema] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [generatingFiles, setGeneratingFiles] = useState(false);
-  const [generatingViaGraphQL, setGeneratingViaGraphQL] = useState(false);
+  const [lastSavedValue, setLastSavedValue] = useState<string>("");
+
+  // Detect if we're in local development mode
+  const isLocalMode =
+    process.env.NODE_ENV === "development" ||
+    (typeof window !== "undefined" && window.location.hostname === "localhost");
 
   // Parse the current value
   const parsedValue = (() => {
@@ -39,6 +44,55 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const selectedEndpoints = Array.isArray(parsedValue.endpoints)
     ? parsedValue.endpoints
     : [];
+
+  // Detect form submission and trigger file generation
+  useEffect(() => {
+    const handleFormSave = async () => {
+      // Check if this is a form save by detecting when the field becomes "not dirty"
+      // and the value has changed from what we last processed
+      const currentValue = input.value || "";
+      const hasValidSelection =
+        selectedSchema && selectedTag && selectedEndpoints.length > 0;
+
+      if (
+        !meta.dirty &&
+        currentValue !== lastSavedValue &&
+        hasValidSelection &&
+        !generatingFiles
+      ) {
+        console.log("🔄 Form save detected - triggering file generation");
+        setLastSavedValue(currentValue);
+        setGeneratingFiles(true);
+
+        try {
+          if (isLocalMode) {
+            console.log("🏠 Local mode - using filesystem generation");
+            await handleFileSystemGeneration();
+          } else {
+            console.log("☁️ Remote mode - using TinaCMS GraphQL generation");
+            await handleTinaCMSGeneration();
+          }
+        } catch (error) {
+          console.error("File generation failed:", error);
+        } finally {
+          setGeneratingFiles(false);
+        }
+      }
+    };
+
+    // Small delay to ensure meta.dirty state is updated
+    const timeoutId = setTimeout(handleFormSave, 100);
+    return () => clearTimeout(timeoutId);
+  }, [
+    meta.dirty,
+    input.value,
+    selectedSchema,
+    selectedTag,
+    selectedEndpoints.length,
+    lastSavedValue,
+    generatingFiles,
+    isLocalMode,
+  ]);
 
   // Load schemas from filesystem API
   useEffect(() => {
@@ -249,13 +303,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     );
   };
 
-  const handleGenerateFiles = async () => {
-    if (!input.value || selectedEndpoints.length === 0) {
-      alert("Please select some endpoints first");
-      return;
-    }
-
-    setGeneratingFiles(true);
+  const handleFileSystemGeneration = async () => {
     try {
       const response = await fetch("/api/generate-api-docs", {
         method: "POST",
@@ -270,28 +318,121 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const result = await response.json();
 
       if (response.ok) {
-        alert(
-          `${result.message}\n\nFiles created:\n${result.files.join("\n")}`
+        console.log(
+          `✅ Created ${result.files.length} files via filesystem:`,
+          result.files
+        );
+        // Show a subtle notification instead of alert
+        showNotification(
+          `📄 Generated ${result.files.length} MDX files locally`,
+          "success"
         );
       } else {
-        // Handle staging environment error specifically
         if (response.status === 403 && result.suggestion) {
-          alert(
-            `⚠️ ${result.error}\n\n💡 ${result.suggestion}\n\nThis feature is designed for local development where files can be written to the filesystem.`
+          console.warn("⚠️ Filesystem generation not available:", result.error);
+          showNotification(
+            "⚠️ Filesystem generation not available in this environment",
+            "warning"
           );
         } else {
           throw new Error(result.error || "Failed to generate files");
         }
       }
     } catch (error) {
-      console.error("Failed to generate files:", error);
-      alert(
-        `Failed to generate MDX files: ${
+      console.error("Filesystem generation failed:", error);
+      showNotification(
+        `❌ Failed to generate files: ${
           error instanceof Error ? error.message : "Unknown error"
-        }`
+        }`,
+        "error"
       );
-    } finally {
-      setGeneratingFiles(false);
+    }
+  };
+
+  const handleTinaCMSGeneration = async () => {
+    try {
+      // Parse the group data
+      let groupData;
+      try {
+        groupData =
+          typeof input.value === "string"
+            ? JSON.parse(input.value)
+            : input.value;
+      } catch (error) {
+        throw new Error("Invalid API group data format");
+      }
+
+      // Call the client-side GraphQL function directly
+      const results = await createDocsViaTinaClientSide(groupData);
+
+      if (results.success) {
+        console.log(
+          `✅ Created ${results.createdFiles.length} files via TinaCMS GraphQL:`,
+          results.createdFiles
+        );
+        showNotification(
+          `🚀 Created ${results.createdFiles.length} MDX files via TinaCMS`,
+          "success"
+        );
+      } else {
+        const errorMsg =
+          results.errors.length > 0
+            ? `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`
+            : "Failed to create files";
+        console.warn("❌ TinaCMS generation issues:", results.errors);
+        showNotification(`⚠️ ${errorMsg}`, "warning");
+      }
+    } catch (error) {
+      console.error("TinaCMS generation failed:", error);
+      showNotification(
+        `❌ Failed to create files via TinaCMS: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+        "error"
+      );
+    }
+  };
+
+  // Simple notification system (you could replace this with a toast library)
+  const showNotification = (
+    message: string,
+    type: "success" | "warning" | "error"
+  ) => {
+    // For now, we'll use console.log with emojis, but you could implement a proper toast system
+    const emoji = type === "success" ? "✅" : type === "warning" ? "⚠️" : "❌";
+    console.log(`${emoji} ${message}`);
+
+    // Optional: Show a temporary visual indicator
+    if (typeof window !== "undefined") {
+      const notification = document.createElement("div");
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${
+          type === "success"
+            ? "#10b981"
+            : type === "warning"
+            ? "#f59e0b"
+            : "#ef4444"
+        };
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 1000;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        max-width: 400px;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 4000);
     }
   };
 
@@ -527,63 +668,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     return results;
   }
 
-  const handleGenerateFilesViaGraphQL = async () => {
-    if (!input.value || selectedEndpoints.length === 0) {
-      alert("Please select some endpoints first");
-      return;
-    }
-
-    setGeneratingViaGraphQL(true);
-    try {
-      // Parse the group data
-      let groupData;
-      try {
-        groupData =
-          typeof input.value === "string"
-            ? JSON.parse(input.value)
-            : input.value;
-      } catch (error) {
-        throw new Error("Invalid API group data format");
-      }
-
-      // Call the client-side GraphQL function directly
-      const results = await createDocsViaTinaClientSide(groupData);
-
-      if (results.success) {
-        alert(
-          `✅ Successfully created ${
-            results.createdFiles.length
-          } MDX files via TinaCMS!\n\nFiles created:\n${results.createdFiles.join(
-            "\n"
-          )}\n\nMethod: Client-side TinaCMS GraphQL`
-        );
-      } else {
-        const errorMsg =
-          results.errors.length > 0
-            ? `❌ Partially successful: created ${
-                results.createdFiles.length
-              } files, ${
-                results.errors.length
-              } errors\n\nErrors:\n${results.errors.join(
-                "\n"
-              )}\n\nSuccessful files:\n${
-                results.createdFiles?.join("\n") || "None"
-              }`
-            : `❌ Failed to create files`;
-        alert(errorMsg);
-      }
-    } catch (error) {
-      console.error("Failed to generate files via TinaCMS:", error);
-      alert(
-        `❌ Failed to create MDX files via TinaCMS: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
-    } finally {
-      setGeneratingViaGraphQL(false);
-    }
-  };
-
   return (
     <div className="bg-white rounded-xl shadow-md p-7 my-5 max-w-xl w-full border border-gray-200 font-sans">
       <div className="mb-6">
@@ -702,59 +786,34 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             </div>
           )}
 
-          {/* Generate Files Buttons */}
+          {/* Form Save Generation Status */}
           {selectedEndpoints.length > 0 && (
-            <div className="mb-4 space-y-2">
-              {/* TinaCMS GraphQL Method (Recommended) */}
-              <button
-                type="button"
-                onClick={handleGenerateFilesViaGraphQL}
-                disabled={generatingViaGraphQL}
-                className="w-full px-4 py-2 rounded-md bg-blue-600 text-white font-semibold text-sm shadow hover:bg-blue-700 transition-colors border border-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {generatingViaGraphQL ? (
-                  <>
-                    <span className="inline-block mr-2">⏳</span>
-                    Creating via TinaCMS GraphQL...
-                  </>
-                ) : (
-                  <>
-                    <span className="inline-block mr-2">🚀</span>
-                    Create via TinaCMS GraphQL ({selectedEndpoints.length}{" "}
-                    endpoints)
-                  </>
-                )}
-              </button>
-              <div className="text-xs text-gray-600 text-center">
-                ✨ Recommended: Works in all environments (dev, staging,
-                production)
-              </div>
-
-              {/* Filesystem Method (Dev Only) */}
-              <button
-                type="button"
-                onClick={handleGenerateFiles}
-                disabled={generatingFiles}
-                className="w-full px-4 py-2 rounded-md bg-green-600 text-white font-semibold text-sm shadow hover:bg-green-700 transition-colors border border-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {generatingFiles ? (
-                  <>
-                    <span className="inline-block mr-2">⏳</span>
-                    Generating MDX Files...
-                  </>
-                ) : (
-                  <>
-                    <span className="inline-block mr-2">📄</span>
-                    Generate MDX Files - Dev Only ({
-                      selectedEndpoints.length
-                    }{" "}
-                    endpoints)
-                  </>
-                )}
-              </button>
-              <div className="text-xs text-gray-600 text-center">
-                💻 Direct filesystem write (development environment only)
-              </div>
+            <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
+              {generatingFiles ? (
+                <div className="flex items-center text-green-700">
+                  <span className="inline-block mr-2 animate-spin">⏳</span>
+                  <span className="text-sm font-medium">
+                    {isLocalMode
+                      ? "Generating MDX files locally..."
+                      : "Creating files via TinaCMS..."}
+                  </span>
+                </div>
+              ) : (
+                <div className="text-green-700">
+                  <div className="flex items-center mb-1">
+                    <span className="inline-block mr-2">💾</span>
+                    <span className="text-sm font-medium">
+                      Ready for Save & Generate
+                    </span>
+                  </div>
+                  <div className="text-xs text-green-600">
+                    {selectedEndpoints.length} endpoint
+                    {selectedEndpoints.length !== 1 ? "s" : ""} selected - files
+                    will be generated when you save this form using{" "}
+                    {isLocalMode ? "filesystem method" : "TinaCMS GraphQL"}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
