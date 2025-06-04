@@ -1,0 +1,30 @@
+# Next.js serverless function ignore file
+# Exclude webpack cache and build artifacts
+.next/cache/**
+.next/static/**
+.next/server/chunks/**
+
+# Exclude git files
+.git/**
+.github/**
+
+# Exclude public assets (except those needed by API)
+public/img/**
+public/admin/**
+
+# Exclude large dependencies not needed in serverless functions
+node_modules/@swc/core-linux-x64-gnu/**
+node_modules/@swc/core-linux-x64-musl/**
+node_modules/@esbuild/**
+node_modules/webpack/**
+node_modules/terser/**
+node_modules/monaco-editor/**
+
+# Exclude development files
+*.map
+*.development.js
+
+# Exclude documentation and readme files
+*.md
+README*
+CHANGELOG* 

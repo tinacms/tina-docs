@@ -219,8 +219,9 @@ const NavLevel = ({
 
 export const DocsNavigationItems = ({
   navItems,
+  __typename,
   onNavigate,
-}: DocsNavProps & { onNavigate?: () => void }) => {
+}: DocsNavProps & { __typename: string } & { onNavigate?: () => void }) => {
   const navListElem = React.useRef(null);
 
   return (
@@ -229,10 +230,16 @@ export const DocsNavigationItems = ({
       ref={navListElem}
     >
       {navItems?.length > 0 &&
-        navItems?.map((categoryData) => (
+        navItems?.map((categoryData, index) => (
           <div
             key={`mobile-${
-              categoryData.slug ? getUrl(categoryData.slug) : categoryData.title
+              categoryData.slug
+                ? getUrl(categoryData.slug)
+                : categoryData.title
+                  ? categoryData.title
+                  : categoryData.id
+                    ? categoryData.id
+                    : `item-${index}`
             }`}
           >
             <NavLevel
@@ -242,6 +249,263 @@ export const DocsNavigationItems = ({
             />
           </div>
         ))}
+    </div>
+  );
+};
+
+export const ApiNavigationItems = ({
+  navItems,
+  __typename,
+  onNavigate,
+}: DocsNavProps & { __typename: string } & { onNavigate?: () => void }) => {
+  const navListElem = React.useRef(null);
+
+  // Separate normal documents from API groups
+  const { normalDocs, apiGroups } = React.useMemo(() => {
+    if (!navItems?.length) return { normalDocs: [], apiGroups: {} };
+
+    const normalDocs: any[] = [];
+    const apiGroups: Record<
+      string,
+      Array<{
+        method: string;
+        path: string;
+        summary: string;
+        operationId?: string;
+        schema: string;
+      }>
+    > = {};
+
+    for (const item of navItems) {
+      // Check if this is an API group (has apiGroup property)
+      if (item.apiGroup) {
+        try {
+          const apiGroupData = JSON.parse(item.apiGroup);
+          const { tag, endpoints } = apiGroupData;
+
+          if (tag && endpoints) {
+            // Initialize the tag if not present
+            if (!apiGroups[tag]) {
+              apiGroups[tag] = [];
+            }
+
+            // Check if endpoints is in new format (array of objects)
+            if (
+              Array.isArray(endpoints) &&
+              endpoints.length > 0 &&
+              typeof endpoints[0] === "object" &&
+              endpoints[0].method !== undefined
+            ) {
+              for (const endpoint of endpoints) {
+                apiGroups[tag].push({
+                  method: endpoint.method || "GET",
+                  path: endpoint.path || "",
+                  summary: endpoint.summary || "",
+                  operationId: endpoint.operationId,
+                  schema: apiGroupData.schema || "",
+                });
+              }
+            } else {
+              // Legacy format: endpoints are stored as "METHOD:path" strings
+              // Use fallback summaries without making API calls
+              for (const endpointId of endpoints) {
+                const [method, path] = endpointId.split(":");
+                apiGroups[tag].push({
+                  method: method || "GET",
+                  path: path || "",
+                  summary: `${method} ${path}`,
+                  operationId: endpointId,
+                  schema: apiGroupData.schema || "",
+                });
+              }
+            }
+          }
+        } catch (error) {
+          // Continue processing other items
+        }
+      } else {
+        normalDocs.push(item);
+      }
+    }
+
+    return { normalDocs, apiGroups };
+  }, [navItems]);
+
+  // State to manage which tag sections are expanded
+  const [expandedTags, setExpandedTags] = React.useState<
+    Record<string, boolean>
+  >(() => {
+    // Initialize all tags as expanded by default
+    const initialState: Record<string, boolean> = {};
+    for (const tag of Object.keys(apiGroups)) {
+      initialState[tag] = true;
+    }
+    return initialState;
+  });
+
+  const toggleTag = (tag: string) => {
+    setExpandedTags((prev) => ({
+      ...prev,
+      [tag]: !prev[tag],
+    }));
+  };
+
+  const getEndpointSlug = (method: string, path: string) => {
+    // Match the exact filename generation logic from our API endpoint generator
+    const pathSafe = path
+      .replace(/^\//, "") // Remove leading slash
+      .replace(/\//g, "-") // Replace slashes with dashes
+      .replace(/[{}]/g, "") // Remove curly braces
+      .replace(/[^\w-]/g, "") // Remove any non-word characters except dashes
+      .toLowerCase();
+
+    return `${method.toLowerCase()}-${pathSafe}`;
+  };
+
+  const getTagSlug = (tag: string) => {
+    // Match the exact tag sanitization logic from our API endpoint generator
+    return tag
+      .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and dashes
+      .replace(/\s+/g, "-") // Replace spaces with dashes
+      .toLowerCase();
+  };
+
+  return (
+    <div
+      className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin 2xl:py-4 2xl:px-4 2xl:pb-8"
+      ref={navListElem}
+    >
+      {/* Render normal documents first */}
+      {normalDocs?.length > 0 &&
+        normalDocs.map((categoryData, index) => (
+          <div
+            key={`api-docs-${
+              categoryData.slug
+                ? getUrl(categoryData.slug)
+                : categoryData.title
+                  ? categoryData.title
+                  : categoryData.id
+                    ? categoryData.id
+                    : `item-${index}`
+            }`}
+          >
+            <NavLevel
+              navListElem={navListElem}
+              categoryData={categoryData}
+              onNavigate={onNavigate}
+            />
+          </div>
+        ))}
+
+      {/* Render API endpoint groups */}
+      {Object.keys(apiGroups).length > 0 &&
+        Object.entries(apiGroups).map(
+          ([tag, endpoints]: [
+            string,
+            Array<{
+              method: string;
+              path: string;
+              summary: string;
+              operationId?: string;
+              schema: string;
+            }>,
+          ]) => {
+            const isExpanded = expandedTags[tag] ?? true;
+
+            return (
+              <div key={tag}>
+                {/* Tag Header - Now Clickable */}
+                <div className="mb-3">
+                  <div
+                    className="group flex cursor-pointer items-center gap-1 pb-0.5 pl-4 leading-tight transition duration-150 ease-out hover:opacity-100 text-brand-primary text-xl pt-2 opacity-100 font-light"
+                    onClick={() => toggleTag(tag)}
+                  >
+                    <span className="-mr-2 pr-2">{tag}</span>
+                    <ChevronRightIcon
+                      className={`text-brand-primary group-hover:text-brand-primary-hover -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
+                        isExpanded ? "rotate-90" : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                {/* Endpoints List - Now Collapsible */}
+                <AnimateHeight
+                  duration={TRANSITION_DURATION}
+                  height={isExpanded ? "auto" : 0}
+                >
+                  <div className="space-y-1 pl-4">
+                    {endpoints?.map((endpoint, index) => (
+                      <a
+                        key={`${endpoint.method}-${endpoint.path}-${index}`}
+                        href={`/docs/api-documentation/${getTagSlug(
+                          tag
+                        )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
+                        onClick={onNavigate}
+                        className="group flex items-center px-3 py-2 text-sm rounded-md  text-neutral-text transition-colors duration-150"
+                      >
+                        {/* HTTP Method Badge */}
+                        <span
+                          className={`
+                        inline-flex items-center justify-center px-0.5 py-0 rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
+                        ${
+                          endpoint.method.toLowerCase() === "get"
+                            ? "bg-green-100 text-green-800"
+                            : ""
+                        }
+                        ${
+                          endpoint.method.toLowerCase() === "post"
+                            ? "bg-blue-100 text-blue-800"
+                            : ""
+                        }
+                        ${
+                          endpoint.method.toLowerCase() === "put"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : ""
+                        }
+                        ${
+                          endpoint.method.toLowerCase() === "delete"
+                            ? "bg-red-100 text-red-800"
+                            : ""
+                        }
+                        ${
+                          endpoint.method.toLowerCase() === "patch"
+                            ? "bg-purple-100 text-purple-800"
+                            : ""
+                        }
+                        ${
+                          !["get", "post", "put", "delete", "patch"].includes(
+                            endpoint.method.toLowerCase()
+                          )
+                            ? "bg-gray-100 text-gray-800"
+                            : ""
+                        }
+                      `}
+                        >
+                          {endpoint.method.toLowerCase() === "delete"
+                            ? "DEL"
+                            : endpoint.method.toUpperCase()}
+                        </span>
+
+                        {/* Summary (multi-line allowed) */}
+                        <div className="flex-1 min-w-0">
+                          <div className=" group-hover:text-gray-700 text-neutral-text text-xs font-normal leading-relaxed">
+                            {endpoint.summary}
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </AnimateHeight>
+              </div>
+            );
+          }
+        )}
+
+      {/* Show message if no content */}
+      {normalDocs?.length === 0 && Object.keys(apiGroups).length === 0 && (
+        <div className="p-4 text-gray-500 text-sm">No content configured</div>
+      )}
     </div>
   );
 };

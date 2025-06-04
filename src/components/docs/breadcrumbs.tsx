@@ -46,7 +46,7 @@ const getNestedBreadcrumbs = (
 
 export function Breadcrumbs({ navItems }: DocsNavProps) {
   const pathname = usePathname();
-  const breadcrumbs = getNestedBreadcrumbs(navItems, pathname) || [];
+  const breadcrumbs = getNestedBreadcrumbs(navItems, pathname || "") || [];
 
   return (
     <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
