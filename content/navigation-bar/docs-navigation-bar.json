@@ -211,12 +211,12 @@
     "button1": {
       "label": "TinaCMS Docs",
       "link": "https://tina.io/docs",
-      "variant": "primary-background"
+      "variant": "primary-outline"
     },
     "button2": {
       "label": "TinaCloud",
       "link": "https://app.tina.io",
-      "variant": "primary-outline"
+      "variant": "primary-background"
     }
   }
 }
