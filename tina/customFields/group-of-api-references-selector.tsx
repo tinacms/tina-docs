@@ -649,15 +649,20 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         console.log("GraphQL response:", result);
 
         if (result.errors) {
+          const errorMessages = result.errors
+            .map((e: any) => e.message)
+            .join(", ");
+          console.error(
+            `❌ GraphQL errors for ${relativePath}:`,
+            result.errors
+          );
           results.errors.push(
-            `Failed to create ${relativePath}: ${result.errors
-              .map((e: any) => e.message)
-              .join(", ")}`
+            `Failed to create ${relativePath}: ${errorMessages}`
           );
           results.success = false;
         } else if (result.data?.addPendingDocument) {
           results.createdFiles.push(relativePath);
-          console.log(`Created pending document via TinaCMS: ${relativePath}`);
+          console.log(`✅ Created empty document via TinaCMS: ${relativePath}`);
 
           // Now try to update it with content
           try {
@@ -728,7 +733,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             if (updateResponse.ok) {
               const updateResult = await updateResponse.json();
               if (updateResult.data?.updateDocs) {
-                console.log(`Updated document content for: ${relativePath}`);
+                console.log(`✅ Updated document content for: ${relativePath}`);
               } else if (updateResult.errors) {
                 console.warn(
                   `Update errors for ${relativePath}:`,
@@ -831,10 +836,10 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     // So we need to remove the 'docs/' prefix for the query
     const relativeDirectoryPath = directoryPath.replace(/^docs\//, "");
 
-    // First, list all files in the directory via TinaCMS collection query
+    // Get all docs and filter in JavaScript since GraphQL filters don't work
     const listQuery = `
-      query GetDocsInDirectory {
-        docsConnection(filter: {filename: {startsWith: "${relativeDirectoryPath}/"}}) {
+      query GetAllDocs {
+        docsConnection {
           edges {
             node {
               id
@@ -877,11 +882,17 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       );
     }
 
-    // Delete each file found in the directory
-    const filesToDelete = listResult.data?.docsConnection?.edges || [];
+    // Filter files in JavaScript to find ones in our target directory
+    const allFiles = listResult.data?.docsConnection?.edges || [];
+    const filesToDelete = allFiles.filter((edge: any) => {
+      const filename = edge.node._sys.filename;
+      return filename && filename.startsWith(relativeDirectoryPath + "/");
+    });
+
     console.log(
       `🔍 Found ${filesToDelete.length} files to delete in ${relativeDirectoryPath}/`
     );
+
     for (const edge of filesToDelete) {
       const relativePath = edge.node._sys.relativePath;
       try {
