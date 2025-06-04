@@ -180,7 +180,7 @@
       "title": "API",
       "supermenuGroup": [
         {
-          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"GET:/user/logout\",\"label\":\"GET /user/logout - Logs out current logged in user session\",\"method\":\"GET\",\"path\":\"/user/logout\",\"summary\":\"Logs out current logged in user session\",\"description\":\"\"}]}",
+          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"GET:/user/login\",\"label\":\"GET /user/login - Logs user into the system\",\"method\":\"GET\",\"path\":\"/user/login\",\"summary\":\"Logs user into the system\",\"description\":\"\"},{\"id\":\"PUT:/user/{username}\",\"label\":\"PUT /user/{username} - Updated user\",\"method\":\"PUT\",\"path\":\"/user/{username}\",\"summary\":\"Updated user\",\"description\":\"This can only be done by the logged in user.\"}]}",
           "_template": "groupOfApiReferences"
         },
         {
