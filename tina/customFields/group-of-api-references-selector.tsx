@@ -392,7 +392,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const filteredEndpoints = groupData.endpoints.filter((endpoint: any) => {
         const fileName = generateFileName(endpoint);
         const tagDir = sanitizeFileName(groupData.tag);
-        const filePath = `docs/api-documentation/${tagDir}/${fileName}.mdx`;
+        const filePath = `api-documentation/${tagDir}/${fileName}.mdx`;
         return selectedEndpoints.some((ep) => ep.id === endpoint.id);
       });
 
@@ -570,7 +570,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     for (const endpoint of endpoints) {
       try {
         const fileName = generateFileName(endpoint);
-        const relativePath = `docs/api-documentation/${tagDir}/${fileName}.mdx`;
+        const relativePath = `api-documentation/${tagDir}/${fileName}.mdx`;
 
         // Create title from summary or generate one
         const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
@@ -770,10 +770,14 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
 
+    // TinaCMS relativePaths are relative to the collection root (content/docs)
+    // So we need to remove the 'docs/' prefix for the query
+    const relativeDirectoryPath = directoryPath.replace(/^docs\//, "");
+
     // First, list all files in the directory via TinaCMS collection query
     const listQuery = `
       query GetDocsInDirectory {
-        docsConnection(filter: {_sys: {filename: {startsWith: "${directoryPath}/"}}}) {
+        docsConnection(filter: {_sys: {filename: {startsWith: "${relativeDirectoryPath}/"}}}) {
           edges {
             node {
               _sys {
@@ -817,6 +821,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     // Delete each file found in the directory
     const filesToDelete = listResult.data?.docsConnection?.edges || [];
+    console.log(
+      `🔍 Found ${filesToDelete.length} files to delete in ${relativeDirectoryPath}/`
+    );
     for (const edge of filesToDelete) {
       const relativePath = edge.node._sys.relativePath;
       try {
