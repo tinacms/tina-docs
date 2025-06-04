@@ -44,7 +44,7 @@ export const TopNav = ({
               <Tabs.Trigger
                 key={tab.label}
                 value={tab.label}
-                className="px-1 text-lg relative text-brand-secondary-contrast mx-4 focus:text-brand-secondary-hover cursor-pointer font-semibold data-[state=active]:text-brand-secondary-text after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.25 after:bg-brand-secondary-text after:transition-all after:duration-300 after:ease-out data-[state=active]:after:w-full after:w-0"
+                className="px-1 text-lg relative text-brand-secondary-contrast mx-4 focus:text-brand-secondary-hover cursor-pointer font-semibold data-[state=active]:text-brand-secondary-text after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-brand-secondary-text after:transition-all after:duration-300 after:ease-out data-[state=active]:after:w-full after:w-0"
               >
                 {tab.label || "Untitled Tab"}
               </Tabs.Trigger>
@@ -88,7 +88,7 @@ export const TopNav = ({
                   <BsThreeDotsVertical className="size-5 text-brand-secondary-contrast" />
                 </button>
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-neutral-background border border-neutral-border-subtle z-50">
+                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-neutral-background border border-neutral-border-subtle z-10">
                     <div className="py-1">
                       {ctaButtons.button1?.label &&
                         ctaButtons.button1?.link && (

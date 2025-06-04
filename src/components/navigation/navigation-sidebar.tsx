@@ -11,7 +11,7 @@ export const NavigationSideBar = ({
   const typename = tableOfContents.__typename;
 
   return (
-    <div className="h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
+    <div className="overflow-y-auto overflow-x-hidden">
       {typename?.includes("DocsTab") ? (
         <DocsNavigationItems
           navItems={tableOfContents.items}
