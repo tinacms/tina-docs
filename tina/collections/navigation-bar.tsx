@@ -1,6 +1,6 @@
+import GroupOfApiReferencesSelector from "../customFields/group-of-api-references-selector";
 import { itemTemplate } from "../templates/navbar-ui.template";
 import submenuTemplate from "../templates/submenu.template";
-import GroupOfApiReferencesSelector from "../customFields/group-of-api-references-selector";
 
 const docsNavigationBarFields = [
   {

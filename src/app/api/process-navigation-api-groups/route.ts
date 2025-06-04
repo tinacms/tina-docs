@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 interface EndpointData {
   id: string;
@@ -73,7 +73,7 @@ ${description ? `${description}\n` : ""}
  */
 async function generateApiEndpointFiles(
   groupData: GroupApiData,
-  baseDir: string = "content/docs/api-documentation"
+  baseDir = "content/docs/api-documentation"
 ): Promise<string[]> {
   // Dynamic import to reduce bundle size
   const fs = await import("fs");
@@ -95,7 +95,6 @@ async function generateApiEndpointFiles(
   for (const endpoint of endpoints) {
     const fileName = generateFileName(endpoint);
     const filePath = path.join(tagDir, `${fileName}.mdx`);
-
 
     const mdxContent = generateMdxContent(endpoint, schema);
 

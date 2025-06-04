@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
 import * as fs from "fs";
 import * as path from "path";
+import { type NextRequest, NextResponse } from "next/server";
 
 interface EndpointData {
   id: string;
@@ -75,7 +75,7 @@ ${description ? `${description}\n` : ""}
  */
 async function generateApiEndpointFiles(
   groupData: GroupApiData,
-  baseDir: string = "content/docs/api-documentation"
+  baseDir = "content/docs/api-documentation"
 ): Promise<string[]> {
   if (!groupData.endpoints || groupData.endpoints.length === 0) {
     return [];
@@ -99,7 +99,6 @@ async function generateApiEndpointFiles(
     try {
       fs.writeFileSync(filePath, mdxContent, "utf8");
       createdFiles.push(path.relative(process.cwd(), filePath));
-      
     } catch (error) {
       console.error(`Failed to create file ${filePath}:`, error);
     }
@@ -168,4 +167,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

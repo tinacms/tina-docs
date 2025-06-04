@@ -11,7 +11,7 @@ export const Sidebar = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
-  
+
   useEffect(() => {
     setIsMounted(true);
     const handleTabChange = (e: CustomEvent) => {

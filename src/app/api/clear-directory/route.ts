@@ -1,12 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-
   // Only allow in development environment for security
   if (process.env.NODE_ENV !== "development") {
-    
     return NextResponse.json(
       {
         error:
@@ -20,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    
+
     const { directoryPath } = body;
 
     if (!directoryPath || typeof directoryPath !== "string") {
@@ -35,7 +33,6 @@ export async function POST(request: NextRequest) {
     const fullPath = path.join(contentDir, directoryPath);
     const normalizedPath = path.normalize(fullPath);
 
-
     if (!normalizedPath.startsWith(contentDir)) {
       return NextResponse.json(
         {
@@ -47,7 +44,6 @@ export async function POST(request: NextRequest) {
 
     // Check if directory exists
     if (!fs.existsSync(normalizedPath)) {
-      
       return NextResponse.json(
         {
           message: "Directory does not exist (nothing to clear)",
@@ -79,12 +75,10 @@ export async function POST(request: NextRequest) {
         if (fileStats.isDirectory()) {
           clearDirectoryRecursive(filePath);
           fs.rmdirSync(filePath);
-          
         } else {
           fs.unlinkSync(filePath);
           const relativePath = path.relative(contentDir, filePath);
           deletedFiles.push(relativePath);
-          
         }
       }
     }

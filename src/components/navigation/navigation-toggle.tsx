@@ -3,8 +3,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown, MdClose } from "react-icons/md";
 import {
-  DocsNavigationItems,
   ApiNavigationItems,
+  DocsNavigationItems,
   hasNestedSlug,
 } from "./navigation-items";
 
