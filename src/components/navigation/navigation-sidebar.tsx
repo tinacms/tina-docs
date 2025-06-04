@@ -12,7 +12,17 @@ export const NavigationSideBar = ({
 
   return (
     <div className="h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
-      <DocsNavigationItems navItems={tableOfContents.items} />
+      {typename?.includes("DocsTab") ? (
+        <DocsNavigationItems
+          navItems={tableOfContents.items}
+          __typename={tableOfContents.__typename}
+        />
+      ) : (
+        <ApiNavigationItems
+          navItems={tableOfContents.items}
+          __typename={tableOfContents.__typename}
+        />
+      )}
     </div>
   );
 };

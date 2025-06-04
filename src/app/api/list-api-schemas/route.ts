@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const schemasDir = path.join(process.cwd(), "content", "api-schemas");
+    const schemasDir = path.join(process.cwd(), "content", "apiSchema");
 
     if (!fs.existsSync(schemasDir)) {
       return NextResponse.json({ schemas: [] });

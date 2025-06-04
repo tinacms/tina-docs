@@ -48,8 +48,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -236,10 +236,10 @@ export const DocsNavigationItems = ({
               categoryData.slug
                 ? getUrl(categoryData.slug)
                 : categoryData.title
-                  ? categoryData.title
-                  : categoryData.id
-                    ? categoryData.id
-                    : `item-${index}`
+                ? categoryData.title
+                : categoryData.id
+                ? categoryData.id
+                : `item-${index}`
             }`}
           >
             <NavLevel
@@ -383,10 +383,10 @@ export const ApiNavigationItems = ({
               categoryData.slug
                 ? getUrl(categoryData.slug)
                 : categoryData.title
-                  ? categoryData.title
-                  : categoryData.id
-                    ? categoryData.id
-                    : `item-${index}`
+                ? categoryData.title
+                : categoryData.id
+                ? categoryData.id
+                : `item-${index}`
             }`}
           >
             <NavLevel
@@ -408,7 +408,7 @@ export const ApiNavigationItems = ({
               summary: string;
               operationId?: string;
               schema: string;
-            }>,
+            }>
           ]) => {
             const isExpanded = expandedTags[tag] ?? true;
 
@@ -449,40 +449,40 @@ export const ApiNavigationItems = ({
                           className={`
                         inline-flex items-center justify-center px-0.5 py-0 rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
                         ${
-                          endpoint.method === "get"
+                          endpoint.method.toLowerCase() === "get"
                             ? "bg-green-100 text-green-800"
                             : ""
                         }
                         ${
-                          endpoint.method === "post"
+                          endpoint.method.toLowerCase() === "post"
                             ? "bg-blue-100 text-blue-800"
                             : ""
                         }
                         ${
-                          endpoint.method === "put"
+                          endpoint.method.toLowerCase() === "put"
                             ? "bg-yellow-100 text-yellow-800"
                             : ""
                         }
                         ${
-                          endpoint.method === "delete"
+                          endpoint.method.toLowerCase() === "delete"
                             ? "bg-red-100 text-red-800"
                             : ""
                         }
                         ${
-                          endpoint.method === "patch"
+                          endpoint.method.toLowerCase() === "patch"
                             ? "bg-purple-100 text-purple-800"
                             : ""
                         }
                         ${
                           !["get", "post", "put", "delete", "patch"].includes(
-                            endpoint.method
+                            endpoint.method.toLowerCase()
                           )
                             ? "bg-gray-100 text-gray-800"
                             : ""
                         }
                       `}
                         >
-                          {endpoint.method === "delete"
+                          {endpoint.method.toLowerCase() === "delete"
                             ? "DEL"
                             : endpoint.method.toUpperCase()}
                         </span>

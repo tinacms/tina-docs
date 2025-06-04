@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const schemasDir = path.join(process.cwd(), "content", "api-schemas");
+    const schemasDir = path.join(process.cwd(), "content", "apiSchema");
     const filePath = path.join(schemasDir, filename);
 
     // Security check: ensure the file is within the schemas directory
