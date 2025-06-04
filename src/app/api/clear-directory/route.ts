@@ -1,100 +1,86 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
-  // Only allow in development environment for security
-  if (process.env.NODE_ENV !== "development") {
-    return NextResponse.json(
-      {
-        error:
-          "Directory clearing is only available in development environment",
-        suggestion:
-          "Use TinaCMS GraphQL API for directory clearing in production",
-      },
-      { status: 403 }
-    );
+/**
+ * Recursively deletes all files and subdirectories in a directory
+ */
+function clearDirectoryRecursive(dirPath: string): void {
+  if (!fs.existsSync(dirPath)) {
+    return; // Directory doesn't exist, nothing to clear
   }
 
+  const items = fs.readdirSync(dirPath);
+
+  for (const item of items) {
+    const itemPath = path.join(dirPath, item);
+    const stats = fs.statSync(itemPath);
+
+    if (stats.isDirectory()) {
+      // Recursively clear subdirectory
+      clearDirectoryRecursive(itemPath);
+      // Remove the empty directory
+      fs.rmdirSync(itemPath);
+    } else {
+      // Remove file
+      fs.unlinkSync(itemPath);
+    }
+  }
+}
+
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
     const { directoryPath } = body;
 
-    if (!directoryPath || typeof directoryPath !== "string") {
+    if (!directoryPath) {
       return NextResponse.json(
-        { error: "directoryPath is required" },
+        { error: "Directory path is required" },
         { status: 400 }
       );
     }
 
-    // Ensure the directory path is within the content directory for security
+    // Security check: ensure the path is within the content directory
     const contentDir = path.join(process.cwd(), "content");
-    const fullPath = path.join(contentDir, directoryPath);
-    const normalizedPath = path.normalize(fullPath);
+    const targetPath = path.join(contentDir, directoryPath);
+    const resolvedTargetPath = path.resolve(targetPath);
+    const resolvedContentDir = path.resolve(contentDir);
 
-    if (!normalizedPath.startsWith(contentDir)) {
+    if (!resolvedTargetPath.startsWith(resolvedContentDir)) {
       return NextResponse.json(
-        {
-          error: "Invalid directory path - must be within content directory",
-        },
+        { error: "Invalid directory path - must be within content directory" },
         { status: 400 }
       );
     }
 
-    // Check if directory exists
-    if (!fs.existsSync(normalizedPath)) {
+    // Check if we're in a development environment
+    if (process.env.NODE_ENV === "production") {
       return NextResponse.json(
         {
-          message: "Directory does not exist (nothing to clear)",
+          error: "Directory clearing is not allowed in production",
+          suggestion: "Use TinaCMS GraphQL mutations instead",
         },
-        { status: 200 }
+        { status: 403 }
       );
     }
 
-    // Check if it's actually a directory
-    const stats = fs.statSync(normalizedPath);
-    if (!stats.isDirectory()) {
-      return NextResponse.json(
-        {
-          error: "Path is not a directory",
-        },
-        { status: 400 }
-      );
+    // Clear the directory
+    clearDirectoryRecursive(targetPath);
+
+    // Recreate the directory (empty)
+    if (!fs.existsSync(targetPath)) {
+      fs.mkdirSync(targetPath, { recursive: true });
     }
-
-    // Recursively remove all contents of the directory
-    const deletedFiles: string[] = [];
-    function clearDirectoryRecursive(dirPath: string) {
-      const files = fs.readdirSync(dirPath);
-
-      for (const file of files) {
-        const filePath = path.join(dirPath, file);
-        const fileStats = fs.statSync(filePath);
-
-        if (fileStats.isDirectory()) {
-          clearDirectoryRecursive(filePath);
-          fs.rmdirSync(filePath);
-        } else {
-          fs.unlinkSync(filePath);
-          const relativePath = path.relative(contentDir, filePath);
-          deletedFiles.push(relativePath);
-        }
-      }
-    }
-
-    clearDirectoryRecursive(normalizedPath);
 
     return NextResponse.json(
       {
-        message: "Directory cleared successfully",
-        clearedDirectory: directoryPath,
-        deletedFiles: deletedFiles,
+        success: true,
+        message: `Directory ${directoryPath} cleared successfully`,
+        clearedPath: path.relative(process.cwd(), targetPath),
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error clearing directory:", error);
     return NextResponse.json(
       {
         error: "Failed to clear directory",

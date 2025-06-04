@@ -1,61 +1,60 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
   const filename = searchParams.get("filename");
 
   if (!filename) {
     return NextResponse.json(
-      { error: "Filename is required" },
+      { error: "Filename parameter is required" },
       { status: 400 }
     );
   }
 
   try {
-    const schemaPath = path.join(process.cwd(), "content/apiSchema", filename);
+    const schemasDir = path.join(process.cwd(), "content", "api-schemas");
+    const filePath = path.join(schemasDir, filename);
 
-    // Security check - ensure file is in the correct directory
-    if (!schemaPath.startsWith(path.join(process.cwd(), "content/apiSchema"))) {
+    // Security check: ensure the file is within the schemas directory
+    const resolvedPath = path.resolve(filePath);
+    const resolvedSchemasDir = path.resolve(schemasDir);
+
+    if (!resolvedPath.startsWith(resolvedSchemasDir)) {
       return NextResponse.json({ error: "Invalid file path" }, { status: 400 });
     }
 
-    // Check if file exists
-    if (!fs.existsSync(schemaPath)) {
+    if (!fs.existsSync(filePath)) {
       return NextResponse.json(
         { error: "Schema file not found" },
         { status: 404 }
       );
     }
 
-    // Read and parse the JSON file
-    const fileContent = fs.readFileSync(schemaPath, "utf8");
+    const fileContent = fs.readFileSync(filePath, "utf-8");
     const parsedFile = JSON.parse(fileContent);
 
     // The actual API schema is stored as a string in the apiSchema property
     // We need to parse it again to get the actual OpenAPI spec
-    let apiSchema;
+    let apiSchema: any;
     if (parsedFile.apiSchema && typeof parsedFile.apiSchema === "string") {
       apiSchema = JSON.parse(parsedFile.apiSchema);
     } else {
-      // If it's already an object, use it directly
       apiSchema = parsedFile.apiSchema || parsedFile;
     }
 
     return NextResponse.json({ apiSchema });
   } catch (error) {
-    console.error("Error reading API schema:", error);
     if (error instanceof SyntaxError) {
       return NextResponse.json(
-        { error: "Invalid JSON format" },
+        { error: "Invalid JSON in schema file" },
         { status: 400 }
       );
-    } else {
-      return NextResponse.json(
-        { error: "Failed to read API schema" },
-        { status: 500 }
-      );
     }
+    return NextResponse.json(
+      { error: "Failed to read API schema" },
+      { status: 500 }
+    );
   }
 }

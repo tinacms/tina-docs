@@ -276,60 +276,57 @@ export const ApiNavigationItems = ({
       }>
     > = {};
 
-    navItems.forEach((item) => {
+    for (const item of navItems) {
       // Check if this is an API group (has apiGroup property)
       if (item.apiGroup) {
         try {
           const apiGroupData = JSON.parse(item.apiGroup);
-          const { schema, tag, endpoints } = apiGroupData;
+          const { tag, endpoints } = apiGroupData;
 
-          if (tag && endpoints?.length && schema) {
+          if (tag && endpoints) {
+            // Initialize the tag if not present
             if (!apiGroups[tag]) {
               apiGroups[tag] = [];
             }
 
-            // If endpoints are stored as objects (new format), use them directly
+            // Check if endpoints is in new format (array of objects)
             if (
-              endpoints[0] &&
+              Array.isArray(endpoints) &&
+              endpoints.length > 0 &&
               typeof endpoints[0] === "object" &&
-              !endpoints[0].includes && // Not a string with includes method
-              (endpoints[0].summary !== undefined ||
-                endpoints[0].method !== undefined)
+              endpoints[0].method !== undefined
             ) {
-              endpoints.forEach((endpoint: any) => {
+              for (const endpoint of endpoints) {
                 apiGroups[tag].push({
-                  method: endpoint.method.toLowerCase(),
-                  path: endpoint.path,
-                  summary:
-                    endpoint.summary || `${endpoint.method} ${endpoint.path}`,
+                  method: endpoint.method || "GET",
+                  path: endpoint.path || "",
+                  summary: endpoint.summary || "",
                   operationId: endpoint.operationId,
-                  schema: schema,
+                  schema: apiGroupData.schema || "",
                 });
-              });
+              }
             } else {
               // Legacy format: endpoints are stored as "METHOD:path" strings
               // Use fallback summaries without making API calls
-              endpoints.forEach((endpointId: string) => {
+              for (const endpointId of endpoints) {
                 const [method, path] = endpointId.split(":");
-                const summary = `${method} ${path}`; // fallback summary
-
                 apiGroups[tag].push({
-                  method: method.toLowerCase(),
-                  path,
-                  summary: summary,
-                  schema: schema,
+                  method: method || "GET",
+                  path: path || "",
+                  summary: `${method} ${path}`,
+                  operationId: endpointId,
+                  schema: apiGroupData.schema || "",
                 });
-              });
+              }
             }
           }
         } catch (error) {
-          console.warn("Failed to parse API group data:", error);
+          // Continue processing other items
         }
       } else {
-        // This is a normal document group, add it to normalDocs
         normalDocs.push(item);
       }
-    });
+    }
 
     return { normalDocs, apiGroups };
   }, [navItems]);
@@ -340,9 +337,9 @@ export const ApiNavigationItems = ({
   >(() => {
     // Initialize all tags as expanded by default
     const initialState: Record<string, boolean> = {};
-    Object.keys(apiGroups).forEach((tag) => {
+    for (const tag of Object.keys(apiGroups)) {
       initialState[tag] = true;
-    });
+    }
     return initialState;
   });
 
@@ -438,22 +435,18 @@ export const ApiNavigationItems = ({
                   height={isExpanded ? "auto" : 0}
                 >
                   <div className="space-y-1 pl-4">
-                    {endpoints &&
-                      endpoints?.map((endpoint, index) => (
-                        <a
-                          key={`${endpoint.method}-${endpoint.path}-${index}`}
-                          href={`/docs/api-documentation/${getTagSlug(
-                            tag
-                          )}/${getEndpointSlug(
-                            endpoint.method,
-                            endpoint.path
-                          )}`}
-                          onClick={onNavigate}
-                          className="group flex items-center px-3 py-2 text-sm rounded-md  text-neutral-text transition-colors duration-150"
-                        >
-                          {/* HTTP Method Badge */}
-                          <span
-                            className={`
+                    {endpoints?.map((endpoint, index) => (
+                      <a
+                        key={`${endpoint.method}-${endpoint.path}-${index}`}
+                        href={`/docs/api-documentation/${getTagSlug(
+                          tag
+                        )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
+                        onClick={onNavigate}
+                        className="group flex items-center px-3 py-2 text-sm rounded-md  text-neutral-text transition-colors duration-150"
+                      >
+                        {/* HTTP Method Badge */}
+                        <span
+                          className={`
                         inline-flex items-center justify-center px-0.5 py-0 rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
                         ${
                           endpoint.method === "get"
@@ -488,20 +481,20 @@ export const ApiNavigationItems = ({
                             : ""
                         }
                       `}
-                          >
-                            {endpoint.method === "delete"
-                              ? "DEL"
-                              : endpoint.method.toUpperCase()}
-                          </span>
+                        >
+                          {endpoint.method === "delete"
+                            ? "DEL"
+                            : endpoint.method.toUpperCase()}
+                        </span>
 
-                          {/* Summary (multi-line allowed) */}
-                          <div className="flex-1 min-w-0">
-                            <div className=" group-hover:text-gray-700 text-neutral-text text-xs font-normal leading-relaxed">
-                              {endpoint.summary}
-                            </div>
+                        {/* Summary (multi-line allowed) */}
+                        <div className="flex-1 min-w-0">
+                          <div className=" group-hover:text-gray-700 text-neutral-text text-xs font-normal leading-relaxed">
+                            {endpoint.summary}
                           </div>
-                        </a>
-                      ))}
+                        </div>
+                      </a>
+                    ))}
                   </div>
                 </AnimateHeight>
               </div>

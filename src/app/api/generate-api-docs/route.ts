@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 
 interface EndpointData {
@@ -100,27 +100,28 @@ async function generateApiEndpointFiles(
       fs.writeFileSync(filePath, mdxContent, "utf8");
       createdFiles.push(path.relative(process.cwd(), filePath));
     } catch (error) {
-      console.error(`Failed to create file ${filePath}:`, error);
+      // Continue with other files if one fails
     }
   }
 
   return createdFiles;
 }
 
-export async function POST(req: NextRequest) {
-  // Only allow file generation in development environment
+export async function POST(request: NextRequest) {
+  // Only allow in development environment for security
   if (process.env.NODE_ENV !== "development") {
     return NextResponse.json(
       {
         error: "File generation is only available in development environment",
-        suggestion: "Please run this feature locally in development mode",
+        suggestion: "Use TinaCMS GraphQL API for file generation in production",
       },
       { status: 403 }
     );
   }
 
   try {
-    const { apiGroupData } = await req.json();
+    const body = await request.json();
+    const { apiGroupData } = body;
 
     if (!apiGroupData) {
       return NextResponse.json(
@@ -129,8 +130,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Parse the group data if it's a string
     let groupData: GroupApiData;
-
     try {
       groupData =
         typeof apiGroupData === "string"
@@ -143,25 +144,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!groupData.endpoints || groupData.endpoints.length === 0) {
+    const { schema, tag, endpoints } = groupData;
+
+    if (!schema || !tag || !endpoints || endpoints.length === 0) {
       return NextResponse.json(
-        { error: "No endpoints provided" },
+        { error: "Schema, tag, and endpoints are required" },
         { status: 400 }
       );
     }
 
+    // Generate files using the helper function
     const createdFiles = await generateApiEndpointFiles(groupData);
 
     return NextResponse.json({
       success: true,
-      message: `Successfully generated ${createdFiles.length} MDX files`,
       files: createdFiles,
+      message: `Generated ${createdFiles.length} MDX files`,
     });
   } catch (error) {
-    console.error("Error generating API docs:", error);
     return NextResponse.json(
       {
-        error: "Failed to generate API documentation files",
+        error: "Failed to generate API docs",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }

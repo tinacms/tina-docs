@@ -69,40 +69,68 @@ ${description ? `${description}\n` : ""}
 }
 
 /**
- * Generates .mdx files for each endpoint in the provided API group data
+ * Helper function to generate API documentation files
  */
-async function generateApiEndpointFiles(
-  groupData: GroupApiData,
-  baseDir = "content/docs/api-documentation"
-): Promise<string[]> {
+async function generateApiDocsFiles(groupData: any): Promise<string[]> {
   // Dynamic import to reduce bundle size
-  const fs = await import("fs");
-  const path = await import("path");
+  const fs = await import("node:fs");
+  const path = await import("node:path");
 
   if (!groupData.endpoints || groupData.endpoints.length === 0) {
     return [];
   }
 
-  const createdFiles: string[] = [];
   const { schema, tag, endpoints } = groupData;
+  const createdFiles: string[] = [];
 
-  // Create a directory for this tag if it doesn't exist
-  const tagDir = path.join(process.cwd(), baseDir, sanitizeFileName(tag));
-  if (!fs.existsSync(tagDir)) {
-    fs.mkdirSync(tagDir, { recursive: true });
+  const tagDir = sanitizeFileName(tag);
+  const outputDir = path.join(
+    process.cwd(),
+    "content",
+    "docs",
+    "api-documentation",
+    tagDir
+  );
+
+  // Ensure output directory exists
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
   }
 
   for (const endpoint of endpoints) {
-    const fileName = generateFileName(endpoint);
-    const filePath = path.join(tagDir, `${fileName}.mdx`);
-
-    const mdxContent = generateMdxContent(endpoint, schema);
-
     try {
-      fs.writeFileSync(filePath, mdxContent, "utf8");
+      const fileName = generateFileName(endpoint);
+      const filePath = path.join(outputDir, `${fileName}.mdx`);
+
+      // Create title from summary or generate one
+      const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
+      const description =
+        endpoint.description ||
+        `API endpoint for ${endpoint.method} ${endpoint.path}`;
+
+      // Generate MDX content
+      const mdxContent = `---
+title: "${title}"
+last_edited: "${new Date().toISOString()}"
+seo:
+  title: "${title}"
+  description: "${description}"
+---
+
+# ${title}
+
+${description || `Documentation for ${endpoint.method} ${endpoint.path}`}
+
+**Method:** ${endpoint.method}
+**Path:** ${endpoint.path}
+
+<!-- Add your API documentation content here -->
+`;
+
+      fs.writeFileSync(filePath, mdxContent, "utf-8");
       createdFiles.push(path.relative(process.cwd(), filePath));
     } catch (error) {
-      console.error(`Failed to create file ${filePath}:`, error);
+      // Continue with other files if one fails
     }
   }
 
@@ -129,11 +157,11 @@ async function processNavigationApiGroups(
           try {
             const groupData: GroupApiData = JSON.parse(group.apiGroup);
             if (groupData.endpoints && groupData.endpoints.length > 0) {
-              const createdFiles = await generateApiEndpointFiles(groupData);
+              const createdFiles = await generateApiDocsFiles(groupData);
               allCreatedFiles.push(...createdFiles);
             }
           } catch (error) {
-            console.error("Failed to process API group:", error);
+            // Continue processing other groups
           }
         }
       }
@@ -143,26 +171,56 @@ async function processNavigationApiGroups(
   return allCreatedFiles;
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const { navigationData } = await req.json();
+    const body = await request.json();
+    const { data } = body;
 
-    if (!navigationData) {
+    if (!data || !Array.isArray(data)) {
       return NextResponse.json(
-        { error: "Navigation data is required" },
+        { error: "Invalid data format - expected array" },
         { status: 400 }
       );
     }
 
-    const createdFiles = await processNavigationApiGroups(navigationData);
+    const allCreatedFiles: string[] = [];
+
+    // Process each navigation item
+    for (const item of data) {
+      if (item.__typename === "ApiTab") {
+        // Process API groups within this tab
+        for (const group of item.groups || []) {
+          if (group.type === "groupOfApiReferences" && group.data) {
+            try {
+              // Parse the group data
+              let groupData: GroupApiData;
+              try {
+                groupData =
+                  typeof group.data === "string"
+                    ? JSON.parse(group.data)
+                    : group.data;
+              } catch (parseError) {
+                continue; // Skip invalid data
+              }
+
+              // Generate files for this group
+              const createdFiles = await generateApiDocsFiles(groupData);
+              allCreatedFiles.push(...createdFiles);
+            } catch (error) {
+              // Continue processing other groups
+            }
+          }
+        }
+      }
+    }
 
     return NextResponse.json({
       success: true,
-      message: `Successfully processed navigation data and generated ${createdFiles.length} MDX files`,
-      files: createdFiles,
+      message: `Processed ${data.length} navigation items`,
+      totalFilesCreated: allCreatedFiles.length,
+      createdFiles: allCreatedFiles,
     });
   } catch (error) {
-    console.error("Error processing navigation API groups:", error);
     return NextResponse.json(
       {
         error: "Failed to process navigation API groups",

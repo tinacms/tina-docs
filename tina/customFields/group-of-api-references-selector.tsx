@@ -94,7 +94,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             }
           }
         } catch (error) {
-          console.error("File generation and cleanup failed:", error);
+          // Continue processing if file generation fails
         } finally {
           setGeneratingFiles(false);
         }
@@ -141,14 +141,13 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           await loadTagsForSchema(currentSchema, currentTag);
         }
       } catch (error) {
-        console.error("Error loading API schemas:", error);
         setSchemas([]);
         setLoadingSchemas(false);
       }
     };
 
     loadSchemas();
-  }, []); // Run once on mount
+  }, [parsedValue.schema, parsedValue.tag]); // Add dependencies
 
   const loadTagsForSchema = async (
     schemaFilename: string,
@@ -166,7 +165,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       }
 
       const apiSchema = result.apiSchema;
-      if (apiSchema && apiSchema.paths) {
+      if (apiSchema?.paths) {
         const tagSet = new Set<string>();
 
         // Extract tags
@@ -174,7 +173,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           for (const method in apiSchema.paths[path]) {
             const op = apiSchema.paths[path][method];
             if (op.tags) {
-              op.tags.forEach((tag: string) => tagSet.add(tag));
+              for (const tag of op.tags) {
+                tagSet.add(tag);
+              }
             }
           }
         }
@@ -192,7 +193,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         setLoadingTags(false);
       }
     } catch (error) {
-      console.error("Error loading tags for schema:", error);
       setTags([]);
       setLoadingTags(false);
     }
@@ -212,7 +212,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     for (const path in apiSchema.paths) {
       for (const method in apiSchema.paths[path]) {
         const op = apiSchema.paths[path][method];
-        if (op.tags && op.tags.includes(tag)) {
+        if (op.tags?.includes(tag)) {
           endpointsList.push({
             id: `${method.toUpperCase()}:${path}`,
             label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
@@ -286,7 +286,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
       await loadEndpointsForTag(result.apiSchema, tag);
     } catch (error) {
-      console.error("Error loading endpoints:", error);
       setEndpoints([]);
       setLoadingEndpoints(false);
     }
@@ -337,12 +336,11 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
       if (response.ok) {
         showNotification(
-          `📄 Generated ${result.files.length} MDX files locally`,
+          `✅ Generated ${result.files.length} MDX files locally`,
           "success"
         );
       } else {
         if (response.status === 403 && result.suggestion) {
-          console.warn("⚠️ Filesystem generation not available:", result.error);
           showNotification(
             "⚠️ Filesystem generation not available in this environment",
             "warning"
@@ -352,7 +350,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         }
       }
     } catch (error) {
-      console.error("Filesystem generation failed:", error);
       showNotification(
         `❌ Failed to generate files: ${
           error instanceof Error ? error.message : "Unknown error"
@@ -365,7 +362,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const handleTinaCMSGeneration = async () => {
     try {
       // Parse the group data
-      let groupData;
+      let groupData: any;
       try {
         groupData =
           typeof input.value === "string"
@@ -402,11 +399,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           results.errors.length > 0
             ? `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`
             : "Failed to create files";
-        console.warn("❌ TinaCMS generation issues:", results.errors);
         showNotification(`⚠️ ${errorMsg}`, "warning");
       }
     } catch (error) {
-      console.error("TinaCMS generation failed:", error);
       showNotification(
         `❌ Failed to create files via TinaCMS: ${
           error instanceof Error ? error.message : "Unknown error"
@@ -524,13 +519,12 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     // Get token from localStorage using TinaCMS internal method
     const tinacmsAuthString = localStorage.getItem("tinacms-auth");
 
-    let token;
+    let token: string | null = null;
     try {
       const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
-      token = authData?.id_token || config.token;
+      token = authData?.id_token || config.token || null;
     } catch (e) {
-      console.warn("Failed to parse tinacms-auth from localStorage:", e);
-      token = config.token;
+      token = config.token || null;
     }
 
     const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
@@ -567,9 +561,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
         // Add auth token using the internal TinaCMS pattern
         if (token) {
-          headers["Authorization"] = "Bearer " + token;
+          headers.Authorization = `Bearer ${token}`;
         } else {
-          console.warn("No auth token available - request may fail");
+          // No auth token available - request may fail
         }
 
         const response = await fetch(tinaEndpoint, {
@@ -600,10 +594,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           const errorMessages = result.errors
             .map((e: any) => e.message)
             .join(", ");
-          console.error(
-            `❌ GraphQL errors for ${relativePath}:`,
-            result.errors
-          );
           results.errors.push(
             `Failed to create ${relativePath}: ${errorMessages}`
           );
@@ -677,10 +667,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
               }),
             });
           } catch (updateError) {
-            console.warn(
-              `Failed to update content for ${relativePath}:`,
-              updateError
-            );
             // Don't fail the overall operation for update errors
           }
         } else {
@@ -695,7 +681,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         }: ${error instanceof Error ? error.message : "Unknown error"}`;
         results.errors.push(errorMsg);
         results.success = false;
-        console.error(errorMsg, error);
       }
     }
 
@@ -711,7 +696,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         await clearDirectoryViaTinaCMS(tagDirectoryPath);
       }
     } catch (error) {
-      console.warn(`⚠️ Failed to clear directory ${tagDirectoryPath}:`, error);
       // Continue anyway - maybe the directory doesn't exist yet
     }
   };
@@ -728,7 +712,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     if (!response.ok) {
       const result = await response.json();
-      console.error("❌ Clear directory API error:", result);
       throw new Error(result.error || "Failed to clear directory");
     }
 
@@ -745,12 +728,12 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     }
 
     const tinacmsAuthString = localStorage.getItem("tinacms-auth");
-    let token;
+    let token: string | null = null;
     try {
       const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
-      token = authData?.id_token || config.token;
+      token = authData?.id_token || config.token || null;
     } catch (e) {
-      token = config.token;
+      token = config.token || null;
     }
 
     const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
@@ -781,7 +764,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     };
 
     if (token) {
-      headers["Authorization"] = "Bearer " + token;
+      headers.Authorization = `Bearer ${token}`;
     }
 
     const listResponse = await fetch(tinaEndpoint, {
@@ -810,8 +793,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     const filesToDelete = allFiles.filter((edge: any) => {
       const relativePath = edge.node._sys.relativePath;
-      const matches =
-        relativePath && relativePath.startsWith(relativeDirectoryPath + "/");
+      const matches = relativePath?.startsWith(`${relativeDirectoryPath}/`);
 
       return matches;
     });
@@ -821,7 +803,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       try {
         await deleteFileViaTinaCMS(relativePath);
       } catch (error) {
-        console.warn(`⚠️ Failed to delete ${relativePath}:`, error);
+        // Continue processing other files
       }
     }
   };
@@ -836,12 +818,12 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     }
 
     const tinacmsAuthString = localStorage.getItem("tinacms-auth");
-    let token;
+    let token: string | null = null;
     try {
       const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
-      token = authData?.id_token || config.token;
+      token = authData?.id_token || config.token || null;
     } catch (e) {
-      token = config.token;
+      token = config.token || null;
     }
 
     const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
@@ -864,7 +846,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     };
 
     if (token) {
-      headers["Authorization"] = "Bearer " + token;
+      headers.Authorization = `Bearer ${token}`;
     }
 
     const response = await fetch(tinaEndpoint, {

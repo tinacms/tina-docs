@@ -115,7 +115,7 @@ export const docsNavigationBarCollection = {
           const result = await response.json();
         } else {
           const error = await response.json();
-          console.warn("Failed to generate API endpoint files:", error.error);
+          // Log error but don't block the save operation
         }
 
         // Always return the values, don't block the save operation if file generation fails
@@ -123,7 +123,6 @@ export const docsNavigationBarCollection = {
           ...values,
         };
       } catch (error) {
-        console.error("Error generating API endpoint files:", error);
         // Don't block the save operation if file generation fails
         return {
           ...values,

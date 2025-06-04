@@ -205,10 +205,6 @@ async function createDocsViaTina(
             const updateResult = await updateResponse.json();
           }
         } catch (updateError) {
-          console.warn(
-            `Failed to update content for ${relativePath}:`,
-            updateError
-          );
           // Don't fail the overall operation for update errors
         }
       } else {
@@ -223,7 +219,6 @@ async function createDocsViaTina(
       }: ${error instanceof Error ? error.message : "Unknown error"}`;
       results.errors.push(errorMsg);
       results.success = false;
-      console.error(errorMsg, error);
     }
   }
 
@@ -271,23 +266,25 @@ export async function POST(req: NextRequest) {
         files: results.createdFiles,
         method: "TinaCMS GraphQL mutations",
       });
-    } else {
-      return NextResponse.json(
-        {
-          success: false,
-          message: `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`,
-          files: results.createdFiles,
-          errors: results.errors,
-          method: "TinaCMS GraphQL mutations",
-        },
-        { status: 207 }
-      );
     }
-  } catch (error) {
-    console.error("Error creating API docs via TinaCMS:", error);
     return NextResponse.json(
       {
-        error: "Failed to create API documentation files via TinaCMS",
+        success: results.success,
+        createdFiles: results.createdFiles,
+        errors: results.errors,
+        message: `Created ${results.createdFiles.length} files${
+          results.errors.length > 0
+            ? ` with ${results.errors.length} errors`
+            : ""
+        }`,
+        method: "TinaCMS GraphQL mutations",
+      },
+      { status: 207 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Failed to create API docs via TinaCMS",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
