@@ -57,8 +57,6 @@ description: "${description || `API endpoint for ${method} ${path}`}"
 last_edited: "${new Date().toISOString()}"
 ---
 
-# ${title}
-
 ${description ? `${description}\n` : ""}
 
 ## Endpoint Details
