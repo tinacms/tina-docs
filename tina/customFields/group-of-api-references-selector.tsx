@@ -1,6 +1,7 @@
 import { client } from "@/tina/__generated__/client";
 import { config } from "@/tina/config";
-import React, { useEffect, useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
 
 const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
@@ -426,8 +427,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           type === "success"
             ? "#10b981"
             : type === "warning"
-            ? "#f59e0b"
-            : "#ef4444"
+              ? "#f59e0b"
+              : "#ef4444"
         };
         color: white;
         padding: 12px 20px;
@@ -883,8 +884,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             {loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
-              ? "No schemas available"
-              : "Select a schema"}
+                ? "No schemas available"
+                : "Select a schema"}
           </option>
           {schemas.map((schema) => (
             <option key={schema.id} value={schema.filename}>

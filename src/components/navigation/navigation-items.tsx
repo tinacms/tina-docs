@@ -48,8 +48,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-    ? "childSelected"
-    : "default";
+      ? "childSelected"
+      : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -236,10 +236,10 @@ export const DocsNavigationItems = ({
               categoryData.slug
                 ? getUrl(categoryData.slug)
                 : categoryData.title
-                ? categoryData.title
-                : categoryData.id
-                ? categoryData.id
-                : `item-${index}`
+                  ? categoryData.title
+                  : categoryData.id
+                    ? categoryData.id
+                    : `item-${index}`
             }`}
           >
             <NavLevel
@@ -383,10 +383,10 @@ export const ApiNavigationItems = ({
               categoryData.slug
                 ? getUrl(categoryData.slug)
                 : categoryData.title
-                ? categoryData.title
-                : categoryData.id
-                ? categoryData.id
-                : `item-${index}`
+                  ? categoryData.title
+                  : categoryData.id
+                    ? categoryData.id
+                    : `item-${index}`
             }`}
           >
             <NavLevel
@@ -408,7 +408,7 @@ export const ApiNavigationItems = ({
               summary: string;
               operationId?: string;
               schema: string;
-            }>
+            }>,
           ]) => {
             const isExpanded = expandedTags[tag] ?? true;
 
