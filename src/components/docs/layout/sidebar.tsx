@@ -39,10 +39,7 @@ export const Sidebar = ({
           {tabs.map((tab) => (
             <div key={tab.label} className="w-full flex-shrink-0">
               <Tabs.Content value={tab.label}>
-                <NavigationSideBar
-                  title={tab?.label}
-                  tableOfContents={tab?.content}
-                />
+                <NavigationSideBar tableOfContents={tab?.content} />
               </Tabs.Content>
             </div>
           ))}
