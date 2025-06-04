@@ -1,13 +1,12 @@
-import { client } from "@/tina/__generated__/client";
 import { config } from "@/tina/config";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { wrapFieldsWithMeta } from "tinacms";
 
 const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const { input, meta } = props;
-  const [schemas, setSchemas] = useState<any[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
-  const [endpoints, setEndpoints] = useState<
+  const [schemas, setSchemas] = React.useState<any[]>([]);
+  const [tags, setTags] = React.useState<string[]>([]);
+  const [endpoints, setEndpoints] = React.useState<
     {
       id: string;
       label: string;
@@ -17,13 +16,13 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       description: string;
     }[]
   >([]);
-  const [loadingSchemas, setLoadingSchemas] = useState(true);
-  const [loadingTags, setLoadingTags] = useState(false);
-  const [loadingEndpoints, setLoadingEndpoints] = useState(false);
-  const [selectedSchema, setSelectedSchema] = useState("");
-  const [selectedTag, setSelectedTag] = useState("");
-  const [generatingFiles, setGeneratingFiles] = useState(false);
-  const [lastSavedValue, setLastSavedValue] = useState<string>("");
+  const [loadingSchemas, setLoadingSchemas] = React.useState(true);
+  const [loadingTags, setLoadingTags] = React.useState(false);
+  const [loadingEndpoints, setLoadingEndpoints] = React.useState(false);
+  const [selectedSchema, setSelectedSchema] = React.useState("");
+  const [selectedTag, setSelectedTag] = React.useState("");
+  const [generatingFiles, setGeneratingFiles] = React.useState(false);
+  const [lastSavedValue, setLastSavedValue] = React.useState<string>("");
 
   // Detect if we're in local development mode
   const isLocalMode = (() => {
@@ -60,7 +59,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     : [];
 
   // Detect form submission and trigger file generation
-  useEffect(() => {
+  React.useEffect(() => {
     const handleFormSave = async () => {
       // Check if this is a form save by detecting when the field becomes "not dirty"
       // and the value has changed from what we last processed
@@ -115,7 +114,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   ]);
 
   // Load schemas from filesystem API
-  useEffect(() => {
+  React.useEffect(() => {
     const loadSchemas = async () => {
       setLoadingSchemas(true);
       try {
