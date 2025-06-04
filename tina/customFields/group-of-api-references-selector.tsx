@@ -86,12 +86,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
           // Step 2: Generate all selected files
           if (selectedEndpoints.length > 0) {
-            
             if (isLocalMode) {
-            
               await handleFileSystemGeneration();
             } else {
-              
               await handleTinaCMSGeneration();
             }
           }
@@ -122,8 +119,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     const loadSchemas = async () => {
       setLoadingSchemas(true);
       try {
-        
-
         const response = await fetch("/api/list-api-schemas");
         const result = await response.json();
 
@@ -131,7 +126,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           throw new Error(result.error || "Failed to load schemas");
         }
 
-        
         setSchemas(result.schemas || []);
         setLoadingSchemas(false);
 
@@ -341,8 +335,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const result = await response.json();
 
       if (response.ok) {
-
-
         showNotification(
           `📄 Generated ${result.files.length} MDX files locally`,
           "success"
@@ -400,8 +392,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const results = await createDocsViaTinaClientSide(filteredGroupData);
 
       if (results.success) {
-
-
         showNotification(
           `✅ Created ${results.createdFiles.length} MDX files via TinaCMS`,
           "success"
@@ -430,10 +420,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     message: string,
     type: "success" | "warning" | "error"
   ) => {
-    
-    
-    
-
     // Optional: Show a temporary visual indicator
     if (typeof window !== "undefined") {
       const notification = document.createElement("div");
@@ -534,26 +520,19 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       };
     }
 
-    
-      
-
     // Get token from localStorage using TinaCMS internal method
     const tinacmsAuthString = localStorage.getItem("tinacms-auth");
-  
 
     let token;
     try {
       const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
       token = authData?.id_token || config.token;
-      
     } catch (e) {
       console.warn("Failed to parse tinacms-auth from localStorage:", e);
       token = config.token;
     }
 
     const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
-
-    
 
     for (const endpoint of endpoints) {
       try {
@@ -588,7 +567,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         // Add auth token using the internal TinaCMS pattern
         if (token) {
           headers["Authorization"] = "Bearer " + token;
-          
         } else {
           console.warn("No auth token available - request may fail");
         }
@@ -601,8 +579,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             variables: variables,
           }),
         });
-
-        
 
         if (!response.ok) {
           let errorDetails = `HTTP error! status: ${response.status}`;
@@ -618,7 +594,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         }
 
         const result = await response.json();
-        
 
         if (result.errors) {
           const errorMessages = result.errors
@@ -634,7 +609,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           results.success = false;
         } else if (result.data?.addPendingDocument) {
           results.createdFiles.push(relativePath);
-          
 
           // Now try to update it with content
           try {
@@ -701,7 +675,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                 variables: updateVariables,
               }),
             });
-
           } catch (updateError) {
             console.warn(
               `Failed to update content for ${relativePath}:`,
@@ -736,7 +709,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       } else {
         await clearDirectoryViaTinaCMS(tagDirectoryPath);
       }
-      
     } catch (error) {
       console.warn(`⚠️ Failed to clear directory ${tagDirectoryPath}:`, error);
       // Continue anyway - maybe the directory doesn't exist yet
@@ -745,7 +717,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
   // Clear directory via filesystem API
   const clearDirectoryViaFilesystem = async (directoryPath: string) => {
-    
     const response = await fetch("/api/clear-directory", {
       method: "POST",
       headers: {
@@ -754,8 +725,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       body: JSON.stringify({ directoryPath }),
     });
 
-    
-
     if (!response.ok) {
       const result = await response.json();
       console.error("❌ Clear directory API error:", result);
@@ -763,7 +732,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     }
 
     const result = await response.json();
-    
   };
 
   // Clear directory via TinaCMS GraphQL (list and delete all files)
@@ -843,7 +811,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const relativePath = edge.node._sys.relativePath;
       const matches =
         relativePath && relativePath.startsWith(relativeDirectoryPath + "/");
-
 
       return matches;
     });
@@ -1058,12 +1025,12 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                   </div>
                   <div className="text-xs text-green-600">
                     {selectedEndpoints.length} endpoint
-                    {selectedEndpoints.length !== 1 ? "s" : ""} selected - files
-                    will be generated when you save this form using{" "}
-                    {isLocalMode ? "filesystem method" : "TinaCMS GraphQL"}
+                    {selectedEndpoints.length !== 1 ? "s" : ""} selected
                     <br />
-                    🗑️ Will clear entire "{selectedTag}" directory and
-                    regenerate all files
+                    Files will be generated when you save this form using{" "}
+                    <span className="underline">
+                      {isLocalMode ? "filesystem method" : "TinaCMS GraphQL"}
+                    </span>
                   </div>
                 </div>
               )}
