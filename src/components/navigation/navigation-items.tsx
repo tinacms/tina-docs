@@ -449,7 +449,7 @@ export const ApiNavigationItems = ({
                             endpoint.path
                           )}`}
                           onClick={onNavigate}
-                          className="group flex items-center px-3 py-2 text-sm rounded-md hover:bg-neutral-border text-neutral-text transition-colors duration-150"
+                          className="group flex items-center px-3 py-2 text-sm rounded-md  text-neutral-text transition-colors duration-150"
                         >
                           {/* HTTP Method Badge */}
                           <span
