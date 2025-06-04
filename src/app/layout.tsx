@@ -1,6 +1,6 @@
-import "@/styles/global.css";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 import AdminLink from "@/src/components/ui/admin-link";
+import "@/styles/global.css";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 

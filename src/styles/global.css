@@ -2,23 +2,30 @@
 @config "../../tailwind.config.js";
 
 /* DEFAULT THEME */
+
+
+@layer base {
+* {
+  scrollbar-color: #333333 transparent;
+}
+}
 :root {
-  --brand-primary: #EC4815;
-  --brand-primary-hover: #D13F13;
+  --brand-primary: #cc4141;
+  --brand-primary-hover: #cc4141cc;
   --brand-primary-light: #FFEDE4;
   --brand-primary-text: #D13F13;
-  --brand-primary-contrast: #7a230b;
+  --brand-primary-contrast: #312d2b;
 
-  --brand-primary-gradient-start: #FF724B;
-  --brand-primary-gradient-end: #D13F13;
+  --brand-primary-gradient-end: oklch(50.5% .213 27.518);
+  --brand-primary-gradient-start: oklch(70.4% .191 22.216);
 
-  --brand-secondary: #0084FF;
+  --brand-secondary: #cc4141;
   --brand-secondary-hover: #0574E4;
   --brand-secondary-light: #DCEEFF;
-  --brand-secondary-text: #0574e4;
-  --brand-secondary-contrast: #1d2c6c;
+  --brand-secondary-text: #FFFFFF;
+  --brand-secondary-contrast: #FFFFFF;
 
-  --brand-secondary-gradient-start: #4EABFE;
+  --brand-secondary-gradient-start: oklch(50.5% .213 27.518);
   --brand-secondary-gradient-end: #0574E4;
 
   --brand-tertiary: #93E9BE;
@@ -30,21 +37,24 @@
   --brand-tertiary-gradient-start:  #B4EFD9;
   --brand-tertiary-gradient-end: #72C39b;
 
-  --glass-gradient-start: rgba(255, 255, 255, 0.1);
-  --glass-gradient-end: rgba(255, 255, 255, 0.4);
+  --glass-gradient-start: rgba(255, 255, 255, 0);
+  --glass-gradient-end: rgba(255, 255, 255, 0.1);
 
-  --neutral-background: #F8FAFC;
+  --neutral-background: #1F1F1F;
   --neutral-background-secondary: #F1F5F9;
-  --neutral-surface: #FFFFFF;
-  --neutral-text: #0f172a;
-  --neutral-text-secondary: #64748b;
-  --neutral-border: #CBD5E1;
+  --neutral-surface: #333333;
+  --neutral-text: #FFFFFF;
+  --neutral-text-secondary: #727272;
+  --neutral-border: #cc4141;
   --neutral-border-subtle: #e2e8f0;
 
-  --background-color: #e4f6f9;
+  --background-color: #121212;
   --glass-hover-gradient-start: oklch(98.5% 0 0);
   --glass-hover-gradient-end: oklch(95.6% 0.045 203.388);
+  
 }
+
+
 
 .dark {
   --brand-primary: #FF6A2D;
@@ -178,7 +188,7 @@
 
 /* Shared styles */
 .brand-primary-gradient {
-  background-image: linear-gradient(to bottom right, var(--brand-primary-gradient-start), var(--brand-primary-gradient-end));
+  background-image: linear-gradient(to right, #CC4141, #D699FB, #FF778E );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -186,7 +196,7 @@
 }
 
 .brand-secondary-gradient {
-  background-image: linear-gradient(to bottom right, var(--brand-secondary-gradient-start), var(--brand-secondary-gradient-end));
+  background-image:  linear-gradient( to bottom right in oklab, oklch(70.4% .191 22.216) 0, oklch(50.5% .213 27.518) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -203,6 +213,7 @@
 
 .brand-glass-gradient {
   background-image: linear-gradient(to bottom right, var(--glass-gradient-start), var(--glass-gradient-end));
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .brand-glass-hover-gradient {
@@ -230,6 +241,9 @@
 }
 
 @theme {
+
+
+  --gradient-pink: linear-gradient(to right, #CC4141, #D699FB, #FF778E );
   --color-ochre-400: #FF724B;
   --color-ochre-500: #D13F13;
   --color-ochre-600: #FE642C;
@@ -244,11 +258,10 @@
   --color-neutral-light: #6B7280;
   --color-neutral-border: #D1D5DB;
   --font-inter: "Inter", sans-serif;
+  
 }
 
 mark {
   background-color: var(--brand-primary-light);
   font-weight: bold;
 }
-
-

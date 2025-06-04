@@ -29,12 +29,12 @@ const NavTitle: React.FC<NavTitleProps> = ({
     0: `${FONT_WEIGHTS.light} text-brand-primary ${FONT_SIZES.xl} pt-2 opacity-100`,
     1: {
       default: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 text-neutral-text`,
-      selected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.bold} text-brand-secondary`,
+      selected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.bold} text-brand-secondary-text`,
       childSelected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} text-neutral-text`,
     },
     2: {
       default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 text-neutral-text`,
-      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} text-brand-secondary`,
+      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} text-brand-secondary-text`,
       childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} text-neutral-text`,
     },
     3: {

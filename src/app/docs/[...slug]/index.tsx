@@ -33,13 +33,13 @@ export default function Document({ props, tinaProps }) {
     // 26.5% of 100% is ~ 20% of the screenwidth in parent div
     <div className="grid grid-cols-1 xl:grid-cols-[73.5%_26.5%]">
       <div
-        className={`max-w-full overflow-hidden break-words mx-8 ${
+        className={`max-w-full  -outline-offset-2 break-words mx-8 ${
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
         }`}
       >
         <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
           <h1
-            className="brand-primary-gradient py-4 font-heading text-4xl"
+            className="brand-primary-gradient -outline-offset-2 py-4 font-heading text-4xl"
             data-tina-field={tinaField(documentationData, "title")}
             data-pagefind-meta="title"
           >
@@ -51,7 +51,7 @@ export default function Document({ props, tinaProps }) {
         <div
           ref={contentRef}
           data-tina-field={tinaField(documentationData, "body")}
-          className="pt-4 font-body font-light leading-normal tracking-normal"
+          className="mt-4 font-body font-light leading-normal tracking-normal"
         >
           <TinaMarkdown
             content={documentationData?.body}
