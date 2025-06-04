@@ -496,6 +496,10 @@ const RequestBodyDropdown = ({
         tabIndex={-1}
         className="border-[0.25px] border-neutral-border rounded px-2 text-sm text-neutral-text-secondary bg-neutral-background min-w-[100px] flex items-center justify-between gap-2"
         value={value}
+        onClick={(e) => {
+          // Prevent click event from bubbling up
+          e.stopPropagation();
+        }}
         onChange={(e) => {
           onChange(e.target.value as "schema" | "example");
         }}

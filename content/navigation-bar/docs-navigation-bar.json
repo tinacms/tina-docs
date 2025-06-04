@@ -30,7 +30,7 @@
             },
             {
               "title": "Adding a New Document",
-              "slug": "content/docs/tinadocs-and-tinacms/Adding-a-new-Document.mdx",
+              "slug": "content/docs/tinadocs-and-tinacms/adding-a-new-document.mdx",
               "_template": "item"
             },
             {
@@ -82,27 +82,27 @@
             },
             {
               "title": "Typography",
-              "slug": "content/docs/components/Typography.mdx",
+              "slug": "content/docs/components/typography.mdx",
               "_template": "item"
             },
             {
               "title": "Image and Embeds",
-              "slug": "content/docs/components/Images-and-Embeds.mdx",
+              "slug": "content/docs/components/images-and-embeds.mdx",
               "_template": "item"
             },
             {
               "title": "Lists and Tables",
-              "slug": "content/docs/components/Lists-and-Tables.mdx",
+              "slug": "content/docs/components/lists-and-tables.mdx",
               "_template": "item"
             },
             {
               "title": "Mermaid Diagrams",
-              "slug": "content/docs/components/Mermaid-Diagrams.mdx",
+              "slug": "content/docs/components/mermaid-diagrams.mdx",
               "_template": "item"
             },
             {
               "title": "Code Blocks",
-              "slug": "content/docs/components/Code-Blocks.mdx",
+              "slug": "content/docs/components/code-blocks.mdx",
               "_template": "item"
             },
             {
@@ -110,27 +110,27 @@
               "items": [
                 {
                   "title": "Overview",
-                  "slug": "content/docs/components/custom-components/Overview.mdx",
+                  "slug": "content/docs/components/custom-components/overview.mdx",
                   "_template": "item"
                 },
                 {
                   "title": "Accordions",
-                  "slug": "content/docs/components/custom-components/Accordions.mdx",
+                  "slug": "content/docs/components/custom-components/accordions.mdx",
                   "_template": "item"
                 },
                 {
                   "title": "Card Grid",
-                  "slug": "content/docs/components/custom-components/Card-Grid.mdx",
+                  "slug": "content/docs/components/custom-components/card-grid.mdx",
                   "_template": "item"
                 },
                 {
                   "title": "Callouts",
-                  "slug": "content/docs/components/custom-components/Callouts.mdx",
+                  "slug": "content/docs/components/custom-components/callouts.mdx",
                   "_template": "item"
                 },
                 {
                   "title": "Tabbed Code Blocks",
-                  "slug": "content/docs/components/custom-components/Tabbed-Codeblocks.mdx",
+                  "slug": "content/docs/components/custom-components/tabbed-codeblocks.mdx",
                   "_template": "item"
                 }
               ],
@@ -143,7 +143,7 @@
           "items": [
             {
               "title": "Overview",
-              "slug": "content/docs/customization-and-themes/Overview.mdx",
+              "slug": "content/docs/customization-and-themes/overview.mdx",
               "_template": "item"
             },
             {
@@ -153,12 +153,12 @@
             },
             {
               "title": "SEO",
-              "slug": "content/docs/customization-and-themes/SEO.mdx",
+              "slug": "content/docs/customization-and-themes/seo.mdx",
               "_template": "item"
             },
             {
               "title": "FavIcon",
-              "slug": "content/docs/customization-and-themes/FavIcon.mdx",
+              "slug": "content/docs/customization-and-themes/favicon.mdx",
               "_template": "item"
             }
           ]
@@ -188,7 +188,12 @@
           "items": [
             {
               "title": "Overview",
-              "slug": "content/docs/api-documentation/Overview.mdx",
+              "slug": "content/docs/api-documentation/overview.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Reference",
+              "slug": "content/docs/api-references.mdx",
               "_template": "item"
             }
           ],
