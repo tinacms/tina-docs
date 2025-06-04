@@ -99,6 +99,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           console.log(`🔍 selectedTag: "${selectedTag}"`);
           console.log(`🔍 sanitized tagDir: "${tagDir}"`);
           console.log(`🔍 full tagDirectoryPath: "${tagDirectoryPath}"`);
+
+          // Clear directory in all environments to ensure proper cleanup
           await clearTagDirectory(tagDirectoryPath);
 
           // Step 2: Generate all selected files
@@ -594,8 +596,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
         // Use fetch with the correct TinaCloud endpoint and auth token
         const mutation = `
-          mutation AddPendingDocument($collection: String!, $relativePath: String!) {
-            addPendingDocument(collection: $collection, relativePath: $relativePath) {
+          mutation AddPendingDocument($collection: String!, $relativePath: String!, $params: DocsMutation) {
+            addPendingDocument(collection: $collection, relativePath: $relativePath, params: $params) {
               __typename
             }
           }
@@ -604,6 +606,45 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         const variables = {
           collection: "docs",
           relativePath,
+          params: {
+            title,
+            last_edited: new Date().toISOString(),
+            seo: {
+              title,
+              description,
+            },
+            // Include basic content in the initial creation to reduce commits
+            body: {
+              type: "root",
+              children: [
+                {
+                  type: "h1",
+                  children: [{ type: "text", text: title }],
+                },
+                {
+                  type: "p",
+                  children: [
+                    {
+                      type: "text",
+                      text:
+                        description ||
+                        `Documentation for ${endpoint.method} ${endpoint.path}`,
+                    },
+                  ],
+                },
+                {
+                  type: "p",
+                  children: [
+                    { type: "text", text: `Method: ${endpoint.method}` },
+                  ],
+                },
+                {
+                  type: "p",
+                  children: [{ type: "text", text: `Path: ${endpoint.path}` }],
+                },
+              ],
+            },
+          },
         };
 
         // Prepare headers with authentication using TinaCMS internal pattern
@@ -656,54 +697,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         } else if (result.data?.addPendingDocument) {
           results.createdFiles.push(relativePath);
           console.log(`Created pending document via TinaCMS: ${relativePath}`);
-
-          // Now try to update it with content
-          try {
-            const updateMutation = `
-              mutation UpdateDocs($relativePath: String!, $params: DocsMutation!) {
-                updateDocs(relativePath: $relativePath, params: $params) {
-                  __typename
-                  id
-                  title
-                }
-              }
-            `;
-
-            const updateVariables = {
-              relativePath,
-              params: {
-                title,
-                last_edited: new Date().toISOString(),
-                seo: {
-                  title,
-                  description,
-                },
-                // Skip body for now to avoid rich text issues
-              },
-            };
-
-            const updateResponse = await fetch(tinaEndpoint, {
-              method: "POST",
-              headers,
-              body: JSON.stringify({
-                query: updateMutation,
-                variables: updateVariables,
-              }),
-            });
-
-            if (updateResponse.ok) {
-              const updateResult = await updateResponse.json();
-              if (updateResult.data?.updateDocs) {
-                console.log(`Updated document content for: ${relativePath}`);
-              }
-            }
-          } catch (updateError) {
-            console.warn(
-              `Failed to update content for ${relativePath}:`,
-              updateError
-            );
-            // Don't fail the overall operation for update errors
-          }
         } else {
           results.errors.push(
             `Failed to create ${relativePath}: No data returned`
