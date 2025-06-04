@@ -884,9 +884,25 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     // Filter files in JavaScript to find ones in our target directory
     const allFiles = listResult.data?.docsConnection?.edges || [];
+
+    console.log(`📋 DEBUG: Found ${allFiles.length} total files in TinaCMS`);
+    if (allFiles.length > 0) {
+      console.log(`📋 DEBUG: Sample file structure:`, {
+        filename: allFiles[0]?.node?._sys?.filename,
+        relativePath: allFiles[0]?.node?._sys?.relativePath,
+      });
+    }
+
     const filesToDelete = allFiles.filter((edge: any) => {
-      const filename = edge.node._sys.filename;
-      return filename && filename.startsWith(relativeDirectoryPath + "/");
+      const relativePath = edge.node._sys.relativePath;
+      const matches =
+        relativePath && relativePath.startsWith(relativeDirectoryPath + "/");
+
+      if (matches) {
+        console.log(`✅ Found file to delete: ${relativePath}`);
+      }
+
+      return matches;
     });
 
     console.log(
