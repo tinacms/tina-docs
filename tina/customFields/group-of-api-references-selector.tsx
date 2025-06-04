@@ -26,9 +26,23 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [lastSavedValue, setLastSavedValue] = useState<string>("");
 
   // Detect if we're in local development mode
-  const isLocalMode =
-    process.env.NODE_ENV === "development" ||
-    (typeof window !== "undefined" && window.location.hostname === "localhost");
+  const isLocalMode = (() => {
+    // Server-side: use NODE_ENV
+    if (typeof window === "undefined") {
+      return process.env.NODE_ENV === "development";
+    }
+
+    // Client-side: check hostname for localhost/127.0.0.1 patterns
+    const hostname = window.location.hostname;
+    const isLocalhost =
+      hostname === "localhost" ||
+      hostname === "127.0.0.1" ||
+      hostname.startsWith("localhost:") ||
+      hostname.startsWith("127.0.0.1:");
+
+    // Only consider it local if BOTH conditions are met
+    return process.env.NODE_ENV === "development" && isLocalhost;
+  })();
 
   // Parse the current value
   const parsedValue = (() => {
