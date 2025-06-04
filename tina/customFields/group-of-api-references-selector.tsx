@@ -596,8 +596,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
         // Use fetch with the correct TinaCloud endpoint and auth token
         const mutation = `
-          mutation AddPendingDocument($collection: String!, $relativePath: String!, $params: DocsMutation) {
-            addPendingDocument(collection: $collection, relativePath: $relativePath, params: $params) {
+          mutation AddPendingDocument($collection: String!, $relativePath: String!) {
+            addPendingDocument(collection: $collection, relativePath: $relativePath) {
               __typename
             }
           }
@@ -606,45 +606,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         const variables = {
           collection: "docs",
           relativePath,
-          params: {
-            title,
-            last_edited: new Date().toISOString(),
-            seo: {
-              title,
-              description,
-            },
-            // Include basic content in the initial creation to reduce commits
-            body: {
-              type: "root",
-              children: [
-                {
-                  type: "h1",
-                  children: [{ type: "text", text: title }],
-                },
-                {
-                  type: "p",
-                  children: [
-                    {
-                      type: "text",
-                      text:
-                        description ||
-                        `Documentation for ${endpoint.method} ${endpoint.path}`,
-                    },
-                  ],
-                },
-                {
-                  type: "p",
-                  children: [
-                    { type: "text", text: `Method: ${endpoint.method}` },
-                  ],
-                },
-                {
-                  type: "p",
-                  children: [{ type: "text", text: `Path: ${endpoint.path}` }],
-                },
-              ],
-            },
-          },
         };
 
         // Prepare headers with authentication using TinaCMS internal pattern
@@ -697,6 +658,95 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         } else if (result.data?.addPendingDocument) {
           results.createdFiles.push(relativePath);
           console.log(`Created pending document via TinaCMS: ${relativePath}`);
+
+          // Now try to update it with content
+          try {
+            const updateMutation = `
+              mutation UpdateDocs($relativePath: String!, $params: DocsMutation!) {
+                updateDocs(relativePath: $relativePath, params: $params) {
+                  __typename
+                  id
+                  title
+                }
+              }
+            `;
+
+            const updateVariables = {
+              relativePath,
+              params: {
+                title,
+                last_edited: new Date().toISOString(),
+                seo: {
+                  title,
+                  description,
+                },
+                // Add basic structured content
+                body: {
+                  type: "root",
+                  children: [
+                    {
+                      type: "h1",
+                      children: [{ type: "text", text: title }],
+                    },
+                    {
+                      type: "p",
+                      children: [
+                        {
+                          type: "text",
+                          text:
+                            description ||
+                            `Documentation for ${endpoint.method} ${endpoint.path}`,
+                        },
+                      ],
+                    },
+                    {
+                      type: "p",
+                      children: [
+                        { type: "text", text: `Method: ${endpoint.method}` },
+                      ],
+                    },
+                    {
+                      type: "p",
+                      children: [
+                        { type: "text", text: `Path: ${endpoint.path}` },
+                      ],
+                    },
+                  ],
+                },
+              },
+            };
+
+            const updateResponse = await fetch(tinaEndpoint, {
+              method: "POST",
+              headers,
+              body: JSON.stringify({
+                query: updateMutation,
+                variables: updateVariables,
+              }),
+            });
+
+            if (updateResponse.ok) {
+              const updateResult = await updateResponse.json();
+              if (updateResult.data?.updateDocs) {
+                console.log(`Updated document content for: ${relativePath}`);
+              } else if (updateResult.errors) {
+                console.warn(
+                  `Update errors for ${relativePath}:`,
+                  updateResult.errors
+                );
+              }
+            } else {
+              console.warn(
+                `Update response not OK for ${relativePath}: ${updateResponse.status}`
+              );
+            }
+          } catch (updateError) {
+            console.warn(
+              `Failed to update content for ${relativePath}:`,
+              updateError
+            );
+            // Don't fail the overall operation for update errors
+          }
         } else {
           results.errors.push(
             `Failed to create ${relativePath}: No data returned`
@@ -784,9 +834,10 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     // First, list all files in the directory via TinaCMS collection query
     const listQuery = `
       query GetDocsInDirectory {
-        docsConnection(filter: {_sys: {filename: {startsWith: "${relativeDirectoryPath}/"}}}) {
+        docsConnection(filter: {filename: {startsWith: "${relativeDirectoryPath}/"}}) {
           edges {
             node {
+              id
               _sys {
                 filename
                 relativePath
