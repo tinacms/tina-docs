@@ -96,18 +96,12 @@ async function generateApiEndpointFiles(
     const fileName = generateFileName(endpoint);
     const filePath = path.join(tagDir, `${fileName}.mdx`);
 
-    // Don't overwrite existing files
-    if (fs.existsSync(filePath)) {
-      console.log(`File ${filePath} already exists, skipping...`);
-      continue;
-    }
-
     const mdxContent = generateMdxContent(endpoint, schema);
 
     try {
       fs.writeFileSync(filePath, mdxContent, "utf8");
       createdFiles.push(path.relative(process.cwd(), filePath));
-      console.log(`Created API endpoint file: ${filePath}`);
+      
     } catch (error) {
       console.error(`Failed to create file ${filePath}:`, error);
     }

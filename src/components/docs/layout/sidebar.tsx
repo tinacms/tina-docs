@@ -11,8 +11,7 @@ export const Sidebar = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
-
-  // TODO: __TYPENAME IS BEING CORRECTLY PASSED INTO THIS FROM THE NAV BAR - NEED TO SET UP THE UI OF THE NEW TABS AND PASS INTO NAVSIDEBAR
+  
   useEffect(() => {
     setIsMounted(true);
     const handleTabChange = (e: CustomEvent) => {

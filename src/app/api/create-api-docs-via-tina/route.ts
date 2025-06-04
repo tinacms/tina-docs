@@ -72,10 +72,6 @@ async function createDocsViaTina(
     tinaEndpoint = `${url.protocol}//${url.host}/admin/api/graphql`;
   }
 
-  console.log(
-    `Using TinaCMS endpoint: ${tinaEndpoint} (NODE_ENV: ${process.env.NODE_ENV})`
-  );
-
   // Check for authentication token
   const tinaToken = process.env.TINA_TOKEN;
   if (!tinaToken && process.env.NODE_ENV !== "development") {
@@ -170,7 +166,6 @@ async function createDocsViaTina(
         results.success = false;
       } else if (result.data?.addPendingDocument) {
         results.createdFiles.push(relativePath);
-        console.log(`Created pending document via TinaCMS: ${relativePath}`);
 
         // Now try to update it with content
         try {
@@ -208,9 +203,6 @@ async function createDocsViaTina(
 
           if (updateResponse.ok) {
             const updateResult = await updateResponse.json();
-            if (!updateResult.errors) {
-              console.log(`Updated document content for: ${relativePath}`);
-            }
           }
         } catch (updateError) {
           console.warn(

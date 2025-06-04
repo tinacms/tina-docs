@@ -334,6 +334,25 @@ export const ApiNavigationItems = ({
     return { normalDocs, apiGroups };
   }, [navItems]);
 
+  // State to manage which tag sections are expanded
+  const [expandedTags, setExpandedTags] = React.useState<
+    Record<string, boolean>
+  >(() => {
+    // Initialize all tags as expanded by default
+    const initialState: Record<string, boolean> = {};
+    Object.keys(apiGroups).forEach((tag) => {
+      initialState[tag] = true;
+    });
+    return initialState;
+  });
+
+  const toggleTag = (tag: string) => {
+    setExpandedTags((prev) => ({
+      ...prev,
+      [tag]: !prev[tag],
+    }));
+  };
+
   const getEndpointSlug = (method: string, path: string) => {
     // Match the exact filename generation logic from our API endpoint generator
     const pathSafe = path
@@ -393,81 +412,101 @@ export const ApiNavigationItems = ({
               operationId?: string;
               schema: string;
             }>
-          ]) => (
-            <div key={tag} className="mb-6">
-              {/* Tag Header */}
-              <div className="mb-3">
-                <div className="group flex items-center gap-1 pb-0.5 pl-4 leading-tight text-brand-primary text-xl pt-2 opacity-100 font-light">
-                  {tag}
+          ]) => {
+            const isExpanded = expandedTags[tag] ?? true;
+
+            return (
+              <div key={tag}>
+                {/* Tag Header - Now Clickable */}
+                <div className="mb-3">
+                  <div
+                    className="group flex cursor-pointer items-center gap-1 pb-0.5 pl-4 leading-tight transition duration-150 ease-out hover:opacity-100 text-brand-primary text-xl pt-2 opacity-100 font-light"
+                    onClick={() => toggleTag(tag)}
+                  >
+                    <span className="-mr-2 pr-2">{tag}</span>
+                    <ChevronRightIcon
+                      className={`text-brand-primary group-hover:text-brand-primary-hover -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
+                        isExpanded ? "rotate-90" : ""
+                      }`}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* Endpoints List */}
-              <div className="space-y-1">
-                {endpoints &&
-                  endpoints?.map((endpoint, index) => (
-                    <a
-                      key={`${endpoint.method}-${endpoint.path}-${index}`}
-                      href={`/docs/api-documentation/${getTagSlug(
-                        tag
-                      )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
-                      onClick={onNavigate}
-                      className="group flex items-center px-3 py-2 text-sm rounded-md hover:bg-gray-50 transition-colors duration-150"
-                    >
-                      {/* HTTP Method Badge */}
-                      <span
-                        className={`
-                    inline-flex items-center justify-center px-0.5 py-0 rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
-                    ${
-                      endpoint.method === "get"
-                        ? "bg-green-100 text-green-800"
-                        : ""
-                    }
-                    ${
-                      endpoint.method === "post"
-                        ? "bg-blue-100 text-blue-800"
-                        : ""
-                    }
-                    ${
-                      endpoint.method === "put"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : ""
-                    }
-                    ${
-                      endpoint.method === "delete"
-                        ? "bg-red-100 text-red-800"
-                        : ""
-                    }
-                    ${
-                      endpoint.method === "patch"
-                        ? "bg-purple-100 text-purple-800"
-                        : ""
-                    }
-                    ${
-                      !["get", "post", "put", "delete", "patch"].includes(
-                        endpoint.method
-                      )
-                        ? "bg-gray-100 text-gray-800"
-                        : ""
-                    }
-                  `}
-                      >
-                        {endpoint.method === "delete"
-                          ? "DEL"
-                          : endpoint.method.toUpperCase()}
-                      </span>
+                {/* Endpoints List - Now Collapsible */}
+                <AnimateHeight
+                  duration={TRANSITION_DURATION}
+                  height={isExpanded ? "auto" : 0}
+                >
+                  <div className="space-y-1 pl-4">
+                    {endpoints &&
+                      endpoints?.map((endpoint, index) => (
+                        <a
+                          key={`${endpoint.method}-${endpoint.path}-${index}`}
+                          href={`/docs/api-documentation/${getTagSlug(
+                            tag
+                          )}/${getEndpointSlug(
+                            endpoint.method,
+                            endpoint.path
+                          )}`}
+                          onClick={onNavigate}
+                          className="group flex items-center px-3 py-2 text-sm rounded-md hover:bg-neutral-border text-neutral-text transition-colors duration-150"
+                        >
+                          {/* HTTP Method Badge */}
+                          <span
+                            className={`
+                        inline-flex items-center justify-center px-0.5 py-0 rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
+                        ${
+                          endpoint.method === "get"
+                            ? "bg-green-100 text-green-800"
+                            : ""
+                        }
+                        ${
+                          endpoint.method === "post"
+                            ? "bg-blue-100 text-blue-800"
+                            : ""
+                        }
+                        ${
+                          endpoint.method === "put"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : ""
+                        }
+                        ${
+                          endpoint.method === "delete"
+                            ? "bg-red-100 text-red-800"
+                            : ""
+                        }
+                        ${
+                          endpoint.method === "patch"
+                            ? "bg-purple-100 text-purple-800"
+                            : ""
+                        }
+                        ${
+                          !["get", "post", "put", "delete", "patch"].includes(
+                            endpoint.method
+                          )
+                            ? "bg-gray-100 text-gray-800"
+                            : ""
+                        }
+                      `}
+                          >
+                            {endpoint.method === "delete"
+                              ? "DEL"
+                              : endpoint.method.toUpperCase()}
+                          </span>
 
-                      {/* Summary (multi-line allowed) */}
-                      <div className="flex-1 min-w-0">
-                        <div className="text-gray-900 group-hover:text-gray-700 text-xs font-normal leading-relaxed">
-                          {endpoint.summary}
-                        </div>
-                      </div>
-                    </a>
-                  ))}
+                          {/* Summary (multi-line allowed) */}
+                          <div className="flex-1 min-w-0">
+                            <div className=" group-hover:text-gray-700 text-neutral-text text-xs font-normal leading-relaxed">
+                              {endpoint.summary}
+                            </div>
+                          </div>
+                        </a>
+                      ))}
+                  </div>
+                </AnimateHeight>
               </div>
-            </div>
-          )
+            );
+          }
         )}
 
       {/* Show message if no content */}

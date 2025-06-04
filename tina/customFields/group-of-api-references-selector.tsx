@@ -67,26 +67,12 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const currentValue = input.value || "";
       const hasValidSelection =
         selectedSchema && selectedTag && selectedEndpoints.length > 0;
-
-      console.log("🔍 Form save check:", {
-        "meta.dirty": meta.dirty,
-        "currentValue !== lastSavedValue": currentValue !== lastSavedValue,
-        hasValidSelection: hasValidSelection,
-        generatingFiles: generatingFiles,
-        selectedSchema: selectedSchema,
-        selectedTag: selectedTag,
-        "selectedEndpoints.length": selectedEndpoints.length,
-      });
-
       if (
         !meta.dirty &&
         currentValue !== lastSavedValue &&
         hasValidSelection &&
         !generatingFiles
       ) {
-        console.log(
-          "🔄 Form save detected - clearing tag directory and regenerating files"
-        );
         setLastSavedValue(currentValue);
         setGeneratingFiles(true);
 
@@ -95,22 +81,17 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           const tagDir = sanitizeFileName(selectedTag);
           const tagDirectoryPath = `docs/api-documentation/${tagDir}`;
 
-          console.log(`🗑️ About to clear directory: ${tagDirectoryPath}`);
-          console.log(`🔍 selectedTag: "${selectedTag}"`);
-          console.log(`🔍 sanitized tagDir: "${tagDir}"`);
-          console.log(`🔍 full tagDirectoryPath: "${tagDirectoryPath}"`);
-
           // Clear directory in all environments to ensure proper cleanup
           await clearTagDirectory(tagDirectoryPath);
 
           // Step 2: Generate all selected files
           if (selectedEndpoints.length > 0) {
-            console.log(`📁 Creating ${selectedEndpoints.length} files`);
+            
             if (isLocalMode) {
-              console.log("🏠 Local mode - using filesystem generation");
+            
               await handleFileSystemGeneration();
             } else {
-              console.log("☁️ Remote mode - using TinaCMS GraphQL generation");
+              
               await handleTinaCMSGeneration();
             }
           }
@@ -141,7 +122,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     const loadSchemas = async () => {
       setLoadingSchemas(true);
       try {
-        console.log("Loading API schemas from filesystem...");
+        
 
         const response = await fetch("/api/list-api-schemas");
         const result = await response.json();
@@ -150,7 +131,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           throw new Error(result.error || "Failed to load schemas");
         }
 
-        console.log("API schema list result:", result);
+        
         setSchemas(result.schemas || []);
         setLoadingSchemas(false);
 
@@ -360,10 +341,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const result = await response.json();
 
       if (response.ok) {
-        console.log(
-          `✅ Created ${result.files.length} files via filesystem:`,
-          result.files
-        );
+
 
         showNotification(
           `📄 Generated ${result.files.length} MDX files locally`,
@@ -422,10 +400,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const results = await createDocsViaTinaClientSide(filteredGroupData);
 
       if (results.success) {
-        console.log(
-          `✅ Created ${results.createdFiles.length} files via TinaCMS GraphQL:`,
-          results.createdFiles
-        );
+
 
         showNotification(
           `✅ Created ${results.createdFiles.length} MDX files via TinaCMS`,
@@ -455,9 +430,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     message: string,
     type: "success" | "warning" | "error"
   ) => {
-    // For now, we'll use console.log with emojis, but you could implement a proper toast system
-    const emoji = type === "success" ? "✅" : type === "warning" ? "⚠️" : "❌";
-    console.log(`${emoji} ${message}`);
+    
+    
+    
 
     // Optional: Show a temporary visual indicator
     if (typeof window !== "undefined") {
@@ -559,19 +534,18 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       };
     }
 
-    console.log(
-      `Using TinaCMS client with Client ID: ${clientId}, Branch: ${branch}`
-    );
+    
+      
 
     // Get token from localStorage using TinaCMS internal method
     const tinacmsAuthString = localStorage.getItem("tinacms-auth");
-    console.log("tinacmsAuthString:", tinacmsAuthString);
+  
 
     let token;
     try {
       const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
       token = authData?.id_token || config.token;
-      console.log("Extracted token:", token);
+      
     } catch (e) {
       console.warn("Failed to parse tinacms-auth from localStorage:", e);
       token = config.token;
@@ -579,9 +553,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
 
-    console.log(`Using TinaCMS Cloud endpoint: ${tinaEndpoint}`);
-    console.log(`Client ID: ${clientId}, Branch: ${branch}`);
-    console.log(`Token available: ${!!token}`);
+    
 
     for (const endpoint of endpoints) {
       try {
@@ -616,7 +588,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         // Add auth token using the internal TinaCMS pattern
         if (token) {
           headers["Authorization"] = "Bearer " + token;
-          console.log("Added Authorization header with TinaCMS token");
+          
         } else {
           console.warn("No auth token available - request may fail");
         }
@@ -630,7 +602,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           }),
         });
 
-        console.log(`Response status: ${response.status} for ${tinaEndpoint}`);
+        
 
         if (!response.ok) {
           let errorDetails = `HTTP error! status: ${response.status}`;
@@ -646,7 +618,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         }
 
         const result = await response.json();
-        console.log("GraphQL response:", result);
+        
 
         if (result.errors) {
           const errorMessages = result.errors
@@ -662,7 +634,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           results.success = false;
         } else if (result.data?.addPendingDocument) {
           results.createdFiles.push(relativePath);
-          console.log(`✅ Created empty document via TinaCMS: ${relativePath}`);
+          
 
           // Now try to update it with content
           try {
@@ -730,21 +702,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
               }),
             });
 
-            if (updateResponse.ok) {
-              const updateResult = await updateResponse.json();
-              if (updateResult.data?.updateDocs) {
-                console.log(`✅ Updated document content for: ${relativePath}`);
-              } else if (updateResult.errors) {
-                console.warn(
-                  `Update errors for ${relativePath}:`,
-                  updateResult.errors
-                );
-              }
-            } else {
-              console.warn(
-                `Update response not OK for ${relativePath}: ${updateResponse.status}`
-              );
-            }
           } catch (updateError) {
             console.warn(
               `Failed to update content for ${relativePath}:`,
@@ -774,15 +731,12 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   // Clear the entire tag directory
   const clearTagDirectory = async (tagDirectoryPath: string) => {
     try {
-      console.log(
-        `🗑️ Clearing directory: ${tagDirectoryPath}, isLocalMode: ${isLocalMode}`
-      );
       if (isLocalMode) {
         await clearDirectoryViaFilesystem(tagDirectoryPath);
       } else {
         await clearDirectoryViaTinaCMS(tagDirectoryPath);
       }
-      console.log(`✅ Successfully cleared directory: ${tagDirectoryPath}`);
+      
     } catch (error) {
       console.warn(`⚠️ Failed to clear directory ${tagDirectoryPath}:`, error);
       // Continue anyway - maybe the directory doesn't exist yet
@@ -791,7 +745,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
   // Clear directory via filesystem API
   const clearDirectoryViaFilesystem = async (directoryPath: string) => {
-    console.log(`🔥 Making API call to clear directory: ${directoryPath}`);
+    
     const response = await fetch("/api/clear-directory", {
       method: "POST",
       headers: {
@@ -800,7 +754,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       body: JSON.stringify({ directoryPath }),
     });
 
-    console.log(`📡 Clear directory API response status: ${response.status}`);
+    
 
     if (!response.ok) {
       const result = await response.json();
@@ -809,7 +763,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     }
 
     const result = await response.json();
-    console.log("✅ Clear directory API success:", result);
+    
   };
 
   // Clear directory via TinaCMS GraphQL (list and delete all files)
@@ -885,35 +839,19 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     // Filter files in JavaScript to find ones in our target directory
     const allFiles = listResult.data?.docsConnection?.edges || [];
 
-    console.log(`📋 DEBUG: Found ${allFiles.length} total files in TinaCMS`);
-    if (allFiles.length > 0) {
-      console.log(`📋 DEBUG: Sample file structure:`, {
-        filename: allFiles[0]?.node?._sys?.filename,
-        relativePath: allFiles[0]?.node?._sys?.relativePath,
-      });
-    }
-
     const filesToDelete = allFiles.filter((edge: any) => {
       const relativePath = edge.node._sys.relativePath;
       const matches =
         relativePath && relativePath.startsWith(relativeDirectoryPath + "/");
 
-      if (matches) {
-        console.log(`✅ Found file to delete: ${relativePath}`);
-      }
 
       return matches;
     });
-
-    console.log(
-      `🔍 Found ${filesToDelete.length} files to delete in ${relativeDirectoryPath}/`
-    );
 
     for (const edge of filesToDelete) {
       const relativePath = edge.node._sys.relativePath;
       try {
         await deleteFileViaTinaCMS(relativePath);
-        console.log(`🗑️ Deleted: ${relativePath}`);
       } catch (error) {
         console.warn(`⚠️ Failed to delete ${relativePath}:`, error);
       }

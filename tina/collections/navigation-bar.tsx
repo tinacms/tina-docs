@@ -113,13 +113,6 @@ export const docsNavigationBarCollection = {
 
         if (response.ok) {
           const result = await response.json();
-          console.log(
-            "Successfully generated API endpoint files:",
-            result.message
-          );
-          if (result.files && result.files.length > 0) {
-            console.log("Created files:", result.files);
-          }
         } else {
           const error = await response.json();
           console.warn("Failed to generate API endpoint files:", error.error);
