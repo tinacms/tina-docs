@@ -15,7 +15,7 @@ export const CardGrid = (data: {
           return (
             <Link
               href={card.link}
-              className="bg-neutral-background/75 rounded-lg group p-6  shadow-lg hover:bg-gradient-to-br hover:from-transparent hover:via-seafoam/25 hover:to-seafoam dark:hover:bg-gradient-to-br dark:hover:from-transparent dark:hover:via-brand-secondary/10 dark:hover:to-brand-secondary/50 transition-all duration-300"
+              className="bg-neutral-background/75 rounded-lg group p-6  shadow-lg hover:bg-gradient-to-br hover:from-transparent hover:to-brand-tertiary-hover/10 dark:hover:bg-gradient-to-br dark:hover:from-transparent dark:hover:via-brand-secondary/10 dark:hover:to-brand-secondary/50 transition-all duration-300"
               key={`card-${index}-${card.title}`}
             >
               <h2 className="text-2xl font-medium brand-primary-gradient mb-2 font-heading">
