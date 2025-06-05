@@ -22,7 +22,14 @@ export const TabsLayout = ({
     // Find the tab that contains the current path
     const findTabWithPath = (tabs: any[], path: string) => {
       for (const tab of tabs) {
-        if (tab.content.items && hasNestedSlug(tab.content.items, path)) {
+        if (tab.content.__typename === "NavigationBarTabsApiTab") {
+          if (path.startsWith("/docs/api-documentation")) {
+            return tab.label;
+          }
+        } else if (
+          tab.content.items &&
+          hasNestedSlug(tab.content.items, path)
+        ) {
           return tab.label;
         }
       }
