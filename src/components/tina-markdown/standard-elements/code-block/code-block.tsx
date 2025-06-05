@@ -80,7 +80,7 @@ export function CodeBlock({
       </div>
 
       <div
-        className="shiki w-full overflow-x-auto rounded-lg bg-[#011627] p-4 text-sm"
+        className="shiki w-full overflow-x-auto rounded-b-lg bg-neutral-background-quinary p-4 text-sm"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki output is trusted and already escaped for XSS safety.
         dangerouslySetInnerHTML={{ __html: html }}
       />
