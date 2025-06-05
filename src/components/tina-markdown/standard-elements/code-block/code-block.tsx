@@ -57,9 +57,9 @@ export function CodeBlock({
   }, [value, lang, isDarkMode]);
 
   return (
-    <div className={`relative w-full my-2${showCopyButton ? " group" : ""}`}>
+    <div className={`relative w-full my-2 ${showCopyButton ? " group" : ""}`}>
       <div
-        className={`absolute top-0 right-0 z-10 px-2 py-1 text-xs font-mono text-neutral-text-secondary transition-opacity duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none ${
+        className={`absolute top-0 right-0 z-10 px-4 py-1 text-xs font-mono text-neutral-text-secondary transition-opacity duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none ${
           showCopyButton ? "" : "hidden"
         }`}
       >
@@ -84,7 +84,9 @@ export function CodeBlock({
       </div>
 
       <div
-        className="shiki w-full overflow-x-auto rounded-b-lg bg-background-brand-code p-4 text-sm"
+        className={`shiki w-full overflow-x-auto bg-background-brand-code p-4 text-sm ${
+          showCopyButton ? "" : "rounded-b-lg"
+        }`}
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki output is trusted and already escaped for XSS safety.
         dangerouslySetInnerHTML={{ __html: html }}
       />

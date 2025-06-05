@@ -58,7 +58,7 @@ export const QueryResponseTabs = ({ ...props }) => {
       `}</style>
       <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-neutral-background-quaternary shadow-sm">
         {/* TOP SECTION w/ Buttons */}
-        <div className="flex items-center border-b border-b-neutral-border w-full">
+        <div className="flex items-center border-b border-b-neutral-border-subtle w-full">
           <div className="flex flex-1">
             <button
               type="button"
