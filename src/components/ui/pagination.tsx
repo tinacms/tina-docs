@@ -1,6 +1,6 @@
 import React from "react";
-import { DynamicLink } from "./dynamic-link";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { DynamicLink } from "./dynamic-link";
 
 interface NextPrevPageProps {
   title: string;
@@ -20,7 +20,7 @@ export function Pagination({ prevPage, nextPage }: PaginationProps) {
           <div className="group relative block cursor-pointer p-4 text-left transition-all">
             <span className="pl-10 text-sm uppercase opacity-50">Previous</span>
             <h5 className="pl m-0 flex items-center text-base leading-[1.3] text-brand-secondary transition-all duration-150 ease-out group-hover:text-orange-500 md:text-xl">
-              <MdChevronLeft className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-orange-500"/>
+              <MdChevronLeft className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-orange-500" />
               {prevPage.title}
             </h5>
           </div>
@@ -36,8 +36,7 @@ export function Pagination({ prevPage, nextPage }: PaginationProps) {
             </span>
             <h5 className="m-0 flex items-center justify-end text-base leading-[1.3] text-brand-secondary transition-all duration-150 ease-out group-hover:text-orange-500 md:text-xl">
               {nextPage.title}
-              <MdChevronRight className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-orange-500"/>
-              
+              <MdChevronRight className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-orange-500" />
             </h5>
           </div>
         </DynamicLink>
