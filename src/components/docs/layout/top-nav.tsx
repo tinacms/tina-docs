@@ -116,7 +116,7 @@ export const TopNav = ({
               </div>
             </>
           )}
-          <MobileNavigationWrapper tocData={navigationDocsData.data} />
+          <MobileNavigationWrapper tocData={tabs} />
           <div className="w-full hidden lg:flex justify-end">
             <LightDarkSwitch />
           </div>

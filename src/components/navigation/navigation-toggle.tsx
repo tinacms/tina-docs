@@ -6,7 +6,6 @@ import { findTabWithPath } from "../docs/layout/utils";
 import {
   ApiNavigationItems,
   DocsNavigationItems,
-  hasNestedSlug,
 } from "./navigation-items/index";
 
 export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
@@ -35,9 +34,9 @@ export const NavigationDropdownContent = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const options = tocData?.map((option: any) => ({
-    value: option.title,
-    label: option.title,
-    content: option.items,
+    value: option.label,
+    label: option.label,
+    content: option.content.items,
     __typename: option.__typename,
   }));
 
