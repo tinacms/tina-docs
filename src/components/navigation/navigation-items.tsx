@@ -260,6 +260,8 @@ export const ApiNavigationItems = ({
   onNavigate,
 }: DocsNavProps & { __typename: string } & { onNavigate?: () => void }) => {
   const navListElem = React.useRef(null);
+  const pathname = usePathname();
+  const currentPath = pathname || "";
 
   // Separate normal documents from API groups
   const { normalDocs, apiGroups } = React.useMemo(() => {
@@ -443,7 +445,14 @@ export const ApiNavigationItems = ({
                           tag
                         )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
                         onClick={onNavigate}
-                        className="group flex items-center px-3 py-2 text-sm rounded-md  text-neutral-text transition-colors duration-150"
+                        className={`group flex items-center px-3 py-2 text-sm rounded-md transition-colors duration-150 ${
+                          currentPath ===
+                          `/docs/api-documentation/${getTagSlug(
+                            tag
+                          )}/${getEndpointSlug(endpoint.method, endpoint.path)}`
+                            ? "bg-neutral-background-secondary text-brand-secondary"
+                            : "text-neutral-text hover:bg-neutral-background-secondary"
+                        }`}
                       >
                         {/* HTTP Method Badge */}
                         <span
