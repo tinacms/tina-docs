@@ -2,6 +2,7 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown, MdClose } from "react-icons/md";
+import { findTabWithPath } from "../docs/layout/utils";
 import {
   ApiNavigationItems,
   DocsNavigationItems,
@@ -27,16 +28,9 @@ export const NavigationDropdownContent = ({
   const pathname = usePathname();
   const path = pathname || "";
 
-  const findTabWithPath = (tabs: any[]) => {
-    for (const tab of tabs) {
-      if (tab.items && hasNestedSlug(tab.items, path)) {
-        return tab.title;
-      }
-    }
-    return tabs[0]?.title;
-  };
-
-  const [selectedValue, setSelectedValue] = useState(findTabWithPath(tocData));
+  const [selectedValue, setSelectedValue] = useState(
+    findTabWithPath(tocData, path)
+  );
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
