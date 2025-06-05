@@ -2,7 +2,11 @@
 
 import * as Tabs from "@radix-ui/react-tabs";
 import React from "react";
-import { hasNestedSlug } from "../../navigation/navigation-items";
+import {
+  getEndpointSlug,
+  getTagSlug,
+  hasNestedSlug,
+} from "../../navigation/navigation-items";
 import { Body } from "./body";
 import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
@@ -22,15 +26,45 @@ export const TabsLayout = ({
     // Find the tab that contains the current path
     const findTabWithPath = (tabs: any[], path: string) => {
       for (const tab of tabs) {
+        if (tab.content.items && hasNestedSlug(tab.content.items, path)) {
+          return tab.label;
+        }
         if (tab.content.__typename === "NavigationBarTabsApiTab") {
-          if (path.startsWith("/docs/api-documentation")) {
+          // Check if any endpoint in this tab matches the current path
+          const hasMatchingEndpoint = tab.content.items?.some((item: any) => {
+            if (item.apiGroup) {
+              try {
+                const apiGroupData = JSON.parse(item.apiGroup);
+                const { tag, endpoints } = apiGroupData;
+                if (tag && endpoints) {
+                  return endpoints.some((endpoint: any) => {
+                    const method =
+                      endpoint.method ||
+                      (typeof endpoint === "string"
+                        ? endpoint.split(":")[0]
+                        : "GET");
+                    const endpointPath =
+                      endpoint.path ||
+                      (typeof endpoint === "string"
+                        ? endpoint.split(":")[1]
+                        : "");
+                    return (
+                      path ===
+                      `/docs/api-documentation/${getTagSlug(
+                        tag
+                      )}/${getEndpointSlug(method, endpointPath)}`
+                    );
+                  });
+                }
+              } catch (error) {
+                return false;
+              }
+            }
+            return false;
+          });
+          if (hasMatchingEndpoint) {
             return tab.label;
           }
-        } else if (
-          tab.content.items &&
-          hasNestedSlug(tab.content.items, path)
-        ) {
-          return tab.label;
         }
       }
       return tabs[0]?.label;

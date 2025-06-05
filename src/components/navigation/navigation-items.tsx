@@ -254,6 +254,26 @@ export const DocsNavigationItems = ({
   );
 };
 
+export const getEndpointSlug = (method: string, path: string) => {
+  // Match the exact filename generation logic from our API endpoint generator
+  const pathSafe = path
+    .replace(/^\//, "") // Remove leading slash
+    .replace(/\//g, "-") // Replace slashes with dashes
+    .replace(/[{}]/g, "") // Remove curly braces
+    .replace(/[^\w-]/g, "") // Remove any non-word characters except dashes
+    .toLowerCase();
+
+  return `${method.toLowerCase()}-${pathSafe}`;
+};
+
+export const getTagSlug = (tag: string) => {
+  // Match the exact tag sanitization logic from our API endpoint generator
+  return tag
+    .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and dashes
+    .replace(/\s+/g, "-") // Replace spaces with dashes
+    .toLowerCase();
+};
+
 export const ApiNavigationItems = ({
   navItems,
   __typename,
@@ -351,26 +371,6 @@ export const ApiNavigationItems = ({
       ...prev,
       [tag]: !prev[tag],
     }));
-  };
-
-  const getEndpointSlug = (method: string, path: string) => {
-    // Match the exact filename generation logic from our API endpoint generator
-    const pathSafe = path
-      .replace(/^\//, "") // Remove leading slash
-      .replace(/\//g, "-") // Replace slashes with dashes
-      .replace(/[{}]/g, "") // Remove curly braces
-      .replace(/[^\w-]/g, "") // Remove any non-word characters except dashes
-      .toLowerCase();
-
-    return `${method.toLowerCase()}-${pathSafe}`;
-  };
-
-  const getTagSlug = (tag: string) => {
-    // Match the exact tag sanitization logic from our API endpoint generator
-    return tag
-      .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and dashes
-      .replace(/\s+/g, "-") // Replace spaces with dashes
-      .toLowerCase();
   };
 
   return (
