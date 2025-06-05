@@ -1,9 +1,9 @@
 "use client";
 
 import { CopyPageDropdown } from "@/components/copy-page-dropdown";
+import { OnThisPage } from "@/components/docs/on-this-page";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
-import { OnThisPage } from "@/src/components/docs/on-this-page";
-import { Pagination } from "@/src/components/ui/pagination";
+import { Pagination } from "@/components/ui/pagination";
 import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";

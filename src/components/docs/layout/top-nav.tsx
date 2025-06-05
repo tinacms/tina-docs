@@ -1,4 +1,4 @@
-import { MobileNavSidebar } from "@/src/components/navigation/mobile-navigation-sidebar";
+import { MobileNavSidebar } from "@/components/navigation/mobile-navigation-sidebar";
 import * as Tabs from "@radix-ui/react-tabs";
 import Link from "next/link";
 import type React from "react";

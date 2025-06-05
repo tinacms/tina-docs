@@ -1,6 +1,6 @@
-import { DynamicLink } from "@/src/components/ui/dynamic-link";
-import { getUrl } from "@/src/utils/get-url";
+import { DynamicLink } from "@/components/ui/dynamic-link";
 import { matchActualTarget } from "@/utils/docs/urls";
+import { getUrl } from "@/utils/get-url";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import React from "react";

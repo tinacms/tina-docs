@@ -1,4 +1,4 @@
-import { getUrl } from "@/src/utils/get-url";
+import { getUrl } from "@/utils/get-url";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

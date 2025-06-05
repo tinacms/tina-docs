@@ -1,4 +1,4 @@
-import { getUrl } from "@/src/utils/get-url";
+import { getUrl } from "@/utils/get-url";
 import React from "react";
 import { NavLevel } from "./nav-level";
 import type { DocsNavProps } from "./types";

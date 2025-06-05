@@ -1,5 +1,5 @@
-import { getUrl } from "@/src/utils/get-url";
 import { matchActualTarget } from "@/utils/docs/urls";
+import { getUrl } from "@/utils/get-url";
 import type { ApiEndpoint, ApiGroupData } from "./types";
 
 export const getEndpointSlug = (method: string, path: string) => {

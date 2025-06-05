@@ -1,6 +1,6 @@
-import { hasNestedSlug } from "../../navigation/navigation-items/utils";
+import { hasNestedSlug } from "@/components/navigation/navigation-items/utils";
 
-import { hasMatchingApiEndpoint } from "../../navigation/navigation-items/utils";
+import { hasMatchingApiEndpoint } from "@/components/navigation/navigation-items/utils";
 
 export const findTabWithPath = (tabs: any[], path: string) => {
   for (const tab of tabs) {
