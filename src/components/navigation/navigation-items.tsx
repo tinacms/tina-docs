@@ -4,6 +4,7 @@ import { DynamicLink } from "@/src/components/ui/dynamic-link";
 import { getUrl } from "@/src/utils/get-url";
 import { matchActualTarget } from "@/utils/docs/urls";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import AnimateHeight from "react-animate-height";
@@ -48,8 +49,8 @@ const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]
@@ -236,10 +237,10 @@ export const DocsNavigationItems = ({
               categoryData.slug
                 ? getUrl(categoryData.slug)
                 : categoryData.title
-                  ? categoryData.title
-                  : categoryData.id
-                    ? categoryData.id
-                    : `item-${index}`
+                ? categoryData.title
+                : categoryData.id
+                ? categoryData.id
+                : `item-${index}`
             }`}
           >
             <NavLevel
@@ -383,10 +384,10 @@ export const ApiNavigationItems = ({
               categoryData.slug
                 ? getUrl(categoryData.slug)
                 : categoryData.title
-                  ? categoryData.title
-                  : categoryData.id
-                    ? categoryData.id
-                    : `item-${index}`
+                ? categoryData.title
+                : categoryData.id
+                ? categoryData.id
+                : `item-${index}`
             }`}
           >
             <NavLevel
@@ -408,7 +409,7 @@ export const ApiNavigationItems = ({
               summary: string;
               operationId?: string;
               schema: string;
-            }>,
+            }>
           ]) => {
             const isExpanded = expandedTags[tag] ?? true;
 
@@ -436,7 +437,7 @@ export const ApiNavigationItems = ({
                 >
                   <div className="space-y-1 pl-4">
                     {endpoints?.map((endpoint, index) => (
-                      <a
+                      <Link
                         key={`${endpoint.method}-${endpoint.path}-${index}`}
                         href={`/docs/api-documentation/${getTagSlug(
                           tag
@@ -493,7 +494,7 @@ export const ApiNavigationItems = ({
                             {endpoint.summary}
                           </div>
                         </div>
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </AnimateHeight>
