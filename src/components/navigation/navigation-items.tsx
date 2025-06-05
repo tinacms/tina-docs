@@ -445,14 +445,7 @@ export const ApiNavigationItems = ({
                           tag
                         )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
                         onClick={onNavigate}
-                        className={`group flex items-center px-3 py-2 text-sm rounded-md transition-colors duration-150 ${
-                          currentPath ===
-                          `/docs/api-documentation/${getTagSlug(
-                            tag
-                          )}/${getEndpointSlug(endpoint.method, endpoint.path)}`
-                            ? "bg-neutral-background-secondary text-brand-secondary"
-                            : "text-neutral-text hover:bg-neutral-background-secondary"
-                        }`}
+                        className="group flex items-center px-3 py-2 text-sm rounded-md transition-colors duration-150"
                       >
                         {/* HTTP Method Badge */}
                         <span
@@ -499,7 +492,19 @@ export const ApiNavigationItems = ({
 
                         {/* Summary (multi-line allowed) */}
                         <div className="flex-1 min-w-0">
-                          <div className=" group-hover:text-gray-700 text-neutral-text text-xs font-normal leading-relaxed">
+                          <div
+                            className={`leading-relaxed first-letter:capitalize font-sans  ${
+                              currentPath ===
+                              `/docs/api-documentation/${getTagSlug(
+                                tag
+                              )}/${getEndpointSlug(
+                                endpoint.method,
+                                endpoint.path
+                              )}`
+                                ? "text-brand-secondary font-bold"
+                                : "text-neutral-text font-normal"
+                            }`}
+                          >
                             {endpoint.summary}
                           </div>
                         </div>
