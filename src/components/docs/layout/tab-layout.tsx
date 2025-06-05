@@ -5,7 +5,7 @@ import React from "react";
 import {
   hasMatchingApiEndpoint,
   hasNestedSlug,
-} from "../../navigation/navigation-items";
+} from "../../navigation/navigation-items/index";
 import { Body } from "./body";
 import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";

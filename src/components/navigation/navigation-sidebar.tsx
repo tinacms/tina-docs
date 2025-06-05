@@ -1,7 +1,9 @@
 "use client";
 
-import { DocsNavigationItems } from "./navigation-items";
-import { ApiNavigationItems } from "./navigation-items";
+import {
+  ApiNavigationItems,
+  DocsNavigationItems,
+} from "./navigation-items/index";
 
 export const NavigationSideBar = ({
   tableOfContents,

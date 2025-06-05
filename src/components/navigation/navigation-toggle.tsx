@@ -6,7 +6,7 @@ import {
   ApiNavigationItems,
   DocsNavigationItems,
   hasNestedSlug,
-} from "./navigation-items";
+} from "./navigation-items/index";
 
 export const NavigationToggle = ({ onToggle }: { onToggle: () => void }) => {
   return (
