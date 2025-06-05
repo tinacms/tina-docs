@@ -274,6 +274,37 @@ export const getTagSlug = (tag: string) => {
     .toLowerCase();
 };
 
+export const hasMatchingApiEndpoint = (items: any[], path: string) => {
+  return items?.some((item: any) => {
+    if (item.apiGroup) {
+      try {
+        const apiGroupData = JSON.parse(item.apiGroup);
+        const { tag, endpoints } = apiGroupData;
+        if (tag && endpoints) {
+          return endpoints.some((endpoint: any) => {
+            const method =
+              endpoint.method ||
+              (typeof endpoint === "string" ? endpoint.split(":")[0] : "GET");
+            const endpointPath =
+              endpoint.path ||
+              (typeof endpoint === "string" ? endpoint.split(":")[1] : "");
+            return (
+              path ===
+              `/docs/api-documentation/${getTagSlug(tag)}/${getEndpointSlug(
+                method,
+                endpointPath
+              )}`
+            );
+          });
+        }
+      } catch (error) {
+        return false;
+      }
+    }
+    return false;
+  });
+};
+
 export const ApiNavigationItems = ({
   navItems,
   __typename,
@@ -358,7 +389,7 @@ export const ApiNavigationItems = ({
   const [expandedTags, setExpandedTags] = React.useState<
     Record<string, boolean>
   >(() => {
-    // Initialize all tags as expanded by default
+    // Initialize expanded state based on current path
     const initialState: Record<string, boolean> = {};
     for (const tag of Object.keys(apiGroups)) {
       initialState[tag] = true;

@@ -3,8 +3,7 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import React from "react";
 import {
-  getEndpointSlug,
-  getTagSlug,
+  hasMatchingApiEndpoint,
   hasNestedSlug,
 } from "../../navigation/navigation-items";
 import { Body } from "./body";
@@ -29,42 +28,11 @@ export const TabsLayout = ({
         if (tab.content.items && hasNestedSlug(tab.content.items, path)) {
           return tab.label;
         }
-        if (tab.content.__typename === "NavigationBarTabsApiTab") {
-          // Check if any endpoint in this tab matches the current path
-          const hasMatchingEndpoint = tab.content.items?.some((item: any) => {
-            if (item.apiGroup) {
-              try {
-                const apiGroupData = JSON.parse(item.apiGroup);
-                const { tag, endpoints } = apiGroupData;
-                if (tag && endpoints) {
-                  return endpoints.some((endpoint: any) => {
-                    const method =
-                      endpoint.method ||
-                      (typeof endpoint === "string"
-                        ? endpoint.split(":")[0]
-                        : "GET");
-                    const endpointPath =
-                      endpoint.path ||
-                      (typeof endpoint === "string"
-                        ? endpoint.split(":")[1]
-                        : "");
-                    return (
-                      path ===
-                      `/docs/api-documentation/${getTagSlug(
-                        tag
-                      )}/${getEndpointSlug(method, endpointPath)}`
-                    );
-                  });
-                }
-              } catch (error) {
-                return false;
-              }
-            }
-            return false;
-          });
-          if (hasMatchingEndpoint) {
-            return tab.label;
-          }
+        if (
+          tab.content.__typename === "NavigationBarTabsApiTab" &&
+          hasMatchingApiEndpoint(tab.content.items, path)
+        ) {
+          return tab.label;
         }
       }
       return tabs[0]?.label;
