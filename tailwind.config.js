@@ -65,6 +65,9 @@ module.exports = {
         "neutral-text-secondary": "var(--neutral-text-secondary)",
         "neutral-border": "var(--neutral-border)",
         "neutral-border-subtle": "var(--neutral-border-subtle)",
+
+        // Code Block Background
+        "background-brand-code": "var(--background-brand-code)",
       },
     },
     fontFamily: {

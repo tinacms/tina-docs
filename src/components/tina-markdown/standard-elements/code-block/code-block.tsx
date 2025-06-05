@@ -6,6 +6,7 @@ import {
   transformerNotationFocus,
   transformerNotationHighlight,
 } from "@shikijs/transformers";
+import { useTheme } from "next-themes";
 import { FaCheck } from "react-icons/fa";
 import { MdOutlineContentCopy } from "react-icons/md";
 
@@ -13,15 +14,15 @@ export function CodeBlock({
   value,
   lang = "ts",
   showCopyButton = true,
-  theme = "github-light",
 }: {
   value: string;
   lang?: string;
   showCopyButton?: boolean;
-  theme?: "night-owl" | "github-light";
 }) {
   const [html, setHtml] = useState("");
   const [isCopied, setIsCopied] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === "dark";
 
   useEffect(() => {
     let isMounted = true;
@@ -34,7 +35,7 @@ export function CodeBlock({
 
       const code = await highlighter.codeToHtml(value, {
         lang,
-        theme,
+        theme: isDarkMode ? "night-owl" : "github-light",
         transformers: [
           transformerNotationDiff({ matchAlgorithm: "v3" }),
           transformerNotationHighlight({ matchAlgorithm: "v3" }),
@@ -53,14 +54,12 @@ export function CodeBlock({
     return () => {
       isMounted = false;
     };
-  }, [value, lang, theme]);
+  }, [value, lang, isDarkMode]);
 
   return (
     <div className={`relative w-full my-2${showCopyButton ? " group" : ""}`}>
       <div
-        className={`absolute top-0 right-0 z-10 px-2 py-1 text-xs font-mono ${
-          theme === "night-owl" ? "text-[#d6deeb]" : "text-[#24292e]"
-        } transition-opacity duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none ${
+        className={`absolute top-0 right-0 z-10 px-2 py-1 text-xs font-mono text-neutral-text-secondary transition-opacity duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none ${
           showCopyButton ? "" : "hidden"
         }`}
       >
@@ -78,16 +77,14 @@ export function CodeBlock({
             setIsCopied(true);
             setTimeout(() => setIsCopied(false), 1000);
           }}
-          className={`px-2 py-1 ${
-            theme === "night-owl" ? "text-[#d6deeb]" : "text-[#24292e]"
-          } rounded transition cursor-pointer flex items-center gap-1`}
+          className="px-2 py-1 text-neutral-text-secondary rounded transition cursor-pointer flex items-center gap-1"
         >
           {isCopied ? <FaCheck size={12} /> : <MdOutlineContentCopy />}
         </button>
       </div>
 
       <div
-        className="shiki w-full overflow-x-auto rounded-b-lg bg-neutral-surface p-4 text-sm"
+        className="shiki w-full overflow-x-auto rounded-b-lg bg-background-brand-code p-4 text-sm"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki output is trusted and already escaped for XSS safety.
         dangerouslySetInnerHTML={{ __html: html }}
       />

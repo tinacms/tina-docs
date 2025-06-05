@@ -46,6 +46,7 @@
   --background-color: #e4f6f9;
   --glass-hover-gradient-start: oklch(98.5% 0 0);
   --glass-hover-gradient-end: oklch(95.6% 0.045 203.388);
+  --background-brand-code: #ffffff;
 }
 
 .dark {
@@ -91,6 +92,9 @@
   --neutral-border-subtle: #64748b;
 
   --background-color: #051619;
+
+  --background-brand-code: #011627;
+
 }
 
 /* MONOCHROME THEME */
