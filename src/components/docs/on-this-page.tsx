@@ -22,11 +22,12 @@ export const generateMarkdown = (
     .join("\n");
 };
 
-export function getIdSyntax(text: string) {
-  return text
+export function getIdSyntax(text: string, index?: number) {
+  const baseId = text
     .toLowerCase()
     .replace(/ /g, "-")
     .replace(/[^a-z0-9\-]/g, "");
+  return index !== undefined ? `${baseId}-${index}` : baseId;
 }
 
 export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
@@ -38,7 +39,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
 
   useEffect(() => {
     if (pageItems && pageItems.length > 0) {
-      const firstItemId = getIdSyntax(pageItems[0].text);
+      const firstItemId = getIdSyntax(pageItems[0].text, 0);
       setActiveId(firstItemId);
     }
   }, [pageItems]);
@@ -52,7 +53,10 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
     );
 
     if (sectionIndex >= 0) {
-      const newActiveId = getIdSyntax(pageItems[sectionIndex].text);
+      const newActiveId = getIdSyntax(
+        pageItems[sectionIndex].text,
+        sectionIndex
+      );
       setActiveId(newActiveId);
     }
   });
@@ -117,31 +121,31 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
             maskRepeat: "no-repeat",
           }}
         >
-          {pageItems.map((item) => (
-            <div
-              className="flex gap-2 font-light group"
-              key={getIdSyntax(item.text)}
-            >
-              <div
-                className={`border-r border-1  ${
-                  activeId === getIdSyntax(item.text)
-                    ? "border-brand-primary"
-                    : "border-neutral-border-subtle group-hover:border-neutral-border"
-                }`}
-              />
-              <a
-                href={`#${getIdSyntax(item.text)}`}
-                onClick={(e) => handleLinkClick(e, getIdSyntax(item.text))}
-                className={`${item.type === "h3" ? "pl-7" : "pl-2"} py-1.5 ${
-                  activeId === getIdSyntax(item.text)
-                    ? "text-brand-primary"
-                    : "group-hover:text-neutral-text text-neutral-text-secondary"
-                }`}
-              >
-                {item.text}
-              </a>
-            </div>
-          ))}
+          {pageItems.map((item, index) => {
+            const uniqueId = getIdSyntax(item.text, index);
+            return (
+              <div className="flex gap-2 font-light group" key={uniqueId}>
+                <div
+                  className={`border-r border-1  ${
+                    activeId === uniqueId
+                      ? "border-brand-primary"
+                      : "border-neutral-border-subtle group-hover:border-neutral-border"
+                  }`}
+                />
+                <a
+                  href={`#${uniqueId}`}
+                  onClick={(e) => handleLinkClick(e, uniqueId)}
+                  className={`${item.type === "h3" ? "pl-7" : "pl-2"} py-1.5 ${
+                    activeId === uniqueId
+                      ? "text-brand-primary"
+                      : "group-hover:text-neutral-text text-neutral-text-secondary"
+                  }`}
+                >
+                  {item.text}
+                </a>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
