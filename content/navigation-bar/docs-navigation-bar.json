@@ -157,6 +157,11 @@
               "_template": "item"
             },
             {
+              "title": "Redirects",
+              "slug": "content/docs/customization-and-themes/redirects.mdx",
+              "_template": "item"
+            },
+            {
               "title": "FavIcon",
               "slug": "content/docs/customization-and-themes/favicon.mdx",
               "_template": "item"
@@ -180,7 +185,7 @@
       "title": "API",
       "supermenuGroup": [
         {
-          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"POST:/user/createWithList\",\"label\":\"POST /user/createWithList - Creates list of users with given input array\",\"method\":\"POST\",\"path\":\"/user/createWithList\",\"summary\":\"Creates list of users with given input array\",\"description\":\"\"}]}",
+          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"POST:/user\",\"label\":\"POST /user - Create user\",\"method\":\"POST\",\"path\":\"/user\",\"summary\":\"Create user\",\"description\":\"This can only be done by the logged in user.\"}]}",
           "_template": "groupOfApiReferences"
         },
         {

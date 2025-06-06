@@ -1,3 +1,6 @@
+import React from "react";
+import { RedirectItem } from "../customFields/redirect-item";
+
 export const Settings = {
   name: "settings",
   label: "Settings",
@@ -91,6 +94,59 @@ export const Settings = {
           name: "forum",
           label: "Forum",
           type: "string",
+        },
+      ],
+    },
+    {
+      name: "redirects",
+      label: "Redirects",
+      type: "object",
+      list: true,
+      ui: {
+        itemProps: (item) => {
+          return {
+            label:
+              item.source && item.destination ? (
+                <RedirectItem
+                  source={item.source}
+                  destination={item.destination}
+                  permanent={item.permanent}
+                />
+              ) : (
+                "Add Redirect"
+              ),
+          };
+        },
+      },
+      fields: [
+        {
+          name: "source",
+          label: "Source",
+          type: "string",
+          ui: {
+            validate: (value) => {
+              if (!value?.startsWith("/")) {
+                return "Source path must start with /";
+              }
+            },
+          },
+        },
+        {
+          name: "destination",
+          label: "Destination",
+          type: "string",
+          ui: {
+            validate: (value) => {
+              if (!value?.startsWith("/")) {
+                return "Destination path must start with /";
+              }
+            },
+          },
+        },
+        {
+          name: "permanent",
+          label: "Permanent",
+          type: "boolean",
         },
       ],
     },
