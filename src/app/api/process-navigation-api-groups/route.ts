@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { sanitizeFileName } from "../../../utils/sanitizeFilename";
 
 interface EndpointData {
   id: string;
@@ -28,44 +29,6 @@ function generateFileName(endpoint: EndpointData): string {
     .toLowerCase();
 
   return `${method}-${pathSafe}`;
-}
-
-/**
- * Sanitizes a string to be used as a directory/file name
- */
-function sanitizeFileName(name: string): string {
-  return name
-    .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and dashes
-    .replace(/\s+/g, "-") // Replace spaces with dashes
-    .toLowerCase();
-}
-
-/**
- * Generates the MDX content for an endpoint
- */
-function generateMdxContent(endpoint: EndpointData, schema: string): string {
-  const { method, path, summary, description } = endpoint;
-
-  // Create a title from the summary or generate one
-  const title = summary || `${method} ${path}`;
-
-  return `---
-title: "${title}"
-description: "${description || `API endpoint for ${method} ${path}`}"
-last_edited: "${new Date().toISOString()}"
----
-
-${description ? `${description}\n` : ""}
-
-## Endpoint Details
-
-**Method:** \`${method}\`  
-**Path:** \`${path}\`
-
-## API Reference
-
-<apiReference schemaFile="${schema}|${method}:${path}" />
-`;
 }
 
 /**
@@ -135,40 +98,6 @@ ${description || `Documentation for ${endpoint.method} ${endpoint.path}`}
   }
 
   return createdFiles;
-}
-
-/**
- * Processes all API groups in navigation data and generates MDX files
- */
-async function processNavigationApiGroups(
-  navigationData: any
-): Promise<string[]> {
-  if (!navigationData || !navigationData.tabs) {
-    return [];
-  }
-
-  const allCreatedFiles: string[] = [];
-
-  // Extract all API groups from navigation data
-  for (const tab of navigationData.tabs) {
-    if (tab._template === "apiTab" && tab.supermenuGroup) {
-      for (const group of tab.supermenuGroup) {
-        if (group._template === "groupOfApiReferences" && group.apiGroup) {
-          try {
-            const groupData: GroupApiData = JSON.parse(group.apiGroup);
-            if (groupData.endpoints && groupData.endpoints.length > 0) {
-              const createdFiles = await generateApiDocsFiles(groupData);
-              allCreatedFiles.push(...createdFiles);
-            }
-          } catch (error) {
-            // Continue processing other groups
-          }
-        }
-      }
-    }
-  }
-
-  return allCreatedFiles;
 }
 
 export async function POST(request: NextRequest) {

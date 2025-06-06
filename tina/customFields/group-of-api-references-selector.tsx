@@ -30,7 +30,7 @@ const loadSchemas = async () => {
  */
 const loadTagsForSchema = async (schemaFilename: string) => {
   const response = await fetch(
-    `/api/get-api-schema?filename=${encodeURIComponent(schemaFilename)}`
+    `/api/get-tag-api-schema?filename=${encodeURIComponent(schemaFilename)}`
   );
   const result = await response.json();
 
@@ -99,7 +99,7 @@ const loadEndpointsForTag = (apiSchema: any, tag: string) => {
  * Handles file generation via filesystem API
  */
 const handleFileSystemGeneration = async (inputValue: string) => {
-  const response = await fetch("/api/generate-api-docs", {
+  const response = await fetch("/api/create-api-docs-via-filesystem", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -132,7 +132,7 @@ const handleFileSystemGeneration = async (inputValue: string) => {
  * Clear directory via filesystem API
  */
 const clearDirectoryViaFilesystem = async (directoryPath: string) => {
-  const response = await fetch("/api/clear-directory", {
+  const response = await fetch("/api/prepare-directory-via-filesystem", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -690,9 +690,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   ) => {
     setLoadingTags(true);
     try {
-      const { tags: tagsList, apiSchema } = await loadTagsForSchema(
-        schemaFilename
-      );
+      const { tags: tagsList, apiSchema } =
+        await loadTagsForSchema(schemaFilename);
       setTags(tagsList);
       setLoadingTags(false);
 
@@ -813,8 +812,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             {loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
-              ? "No schemas available"
-              : "Select a schema"}
+                ? "No schemas available"
+                : "Select a schema"}
           </option>
           {schemas.map((schema) => (
             <option key={schema.id} value={schema.filename}>
