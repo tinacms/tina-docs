@@ -1,4 +1,5 @@
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const redirects = require("./content/settings/config.json")?.redirects || [];
 
 /** @type {import('next').NextConfig} */
 
@@ -9,22 +10,21 @@ module.exports = {
   },
 
   // Optimize serverless functions
-  experimental: {
-    outputFileTracingIncludes: {
-      "/api/**/*": [],
-    },
-    outputFileTracingExcludes: {
-      "/api/**/*": [
-        ".next/cache/**/*",
-        "node_modules/@swc/core-linux-x64-gnu",
-        "node_modules/@swc/core-linux-x64-musl",
-        "node_modules/@esbuild/",
-        "node_modules/webpack",
-        "node_modules/terser",
-        ".git/**/*",
-        "public/**/*",
-      ],
-    },
+  experimental: {},
+  outputFileTracingIncludes: {
+    "/api/**/*": [],
+  },
+  outputFileTracingExcludes: {
+    "/api/**/*": [
+      ".next/cache/**/*",
+      "node_modules/@swc/core-linux-x64-gnu",
+      "node_modules/@swc/core-linux-x64-musl",
+      "node_modules/@esbuild/",
+      "node_modules/webpack",
+      "node_modules/terser",
+      ".git/**/*",
+      "public/**/*",
+    ],
   },
 
   async rewrites() {
@@ -37,13 +37,11 @@ module.exports = {
   },
 
   async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/docs",
-        permanent: true,
-      },
-    ];
+    return redirects.map((redirect) => ({
+      source: redirect.source,
+      destination: redirect.destination,
+      permanent: redirect.permanent,
+    }));
   },
 
   turbopack: {
