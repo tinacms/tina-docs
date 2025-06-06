@@ -48,7 +48,7 @@ export const TabsLayout = ({
       className="flex flex-col w-full"
     >
       <TopNav tabs={tabs} navigationDocsData={navigationDocsData} />
-      <div className="w-full flex flex-col md:flex-row gap-4 p-4 max-w-[2560px] mx-auto">
+      <div className="w-full flex flex-col md:flex-row gap-4 md:p-4 max-w-[2560px] mx-auto">
         <Sidebar tabs={tabs} />
         <main className="flex-1">
           <Body navigationDocsData={tabs} children={children} />
