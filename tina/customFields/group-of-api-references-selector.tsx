@@ -1,107 +1,11 @@
+import { detectLocalMode } from "@/src/utils/detectLocalMode";
+import { generateFileName } from "@/src/utils/generateFileName";
+import { parseFieldValue } from "@/src/utils/parseFieldValue";
+import { sanitizeFileName } from "@/src/utils/sanitizeFilename";
+import { showNotification } from "@/src/utils/showNotification";
 import { config } from "@/tina/config";
 import React from "react";
 import { wrapFieldsWithMeta } from "tinacms";
-
-// ========================================
-// UTILITY FUNCTIONS
-// ========================================
-
-/**
- * Detects if we're in local development mode
- */
-const detectLocalMode = (): boolean => {
-  // Server-side: use NODE_ENV
-  if (typeof window === "undefined") {
-    return process.env.NODE_ENV === "development";
-  }
-
-  // Client-side: check hostname for localhost/127.0.0.1 patterns
-  const hostname = window.location.hostname;
-  const isLocalhost =
-    hostname === "localhost" ||
-    hostname === "127.0.0.1" ||
-    hostname.startsWith("localhost:") ||
-    hostname.startsWith("127.0.0.1:");
-
-  // Only consider it local if BOTH conditions are met
-  return process.env.NODE_ENV === "development" && isLocalhost;
-};
-
-/**
- * Parses field value safely
- */
-const parseFieldValue = (value: string) => {
-  try {
-    return value ? JSON.parse(value) : { schema: "", tag: "", endpoints: [] };
-  } catch {
-    return { schema: "", tag: "", endpoints: [] };
-  }
-};
-
-/**
- * Generates a safe filename from endpoint data
- */
-const generateFileName = (endpoint: any): string => {
-  const method = endpoint.method.toLowerCase();
-  const pathSafe = endpoint.path
-    .replace(/^\//, "") // Remove leading slash
-    .replace(/\//g, "-") // Replace slashes with dashes
-    .replace(/[{}]/g, "") // Remove curly braces
-    .replace(/[^\w-]/g, "") // Remove any non-word characters except dashes
-    .toLowerCase();
-
-  return `${method}-${pathSafe}`;
-};
-
-/**
- * Sanitizes a string to be used as a directory/file name
- */
-const sanitizeFileName = (name: string): string => {
-  return name
-    .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and dashes
-    .replace(/\s+/g, "-") // Replace spaces with dashes
-    .toLowerCase();
-};
-
-/**
- * Shows a temporary notification message
- */
-const showNotification = (
-  message: string,
-  type: "success" | "warning" | "error"
-) => {
-  if (typeof window !== "undefined") {
-    const notification = document.createElement("div");
-    notification.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: ${
-        type === "success"
-          ? "#10b981"
-          : type === "warning"
-          ? "#f59e0b"
-          : "#ef4444"
-      };
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      z-index: 1000;
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      max-width: 400px;
-    `;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-      if (notification.parentNode) {
-        notification.parentNode.removeChild(notification);
-      }
-    }, 4000);
-  }
-};
 
 // ========================================
 // API FUNCTIONS
