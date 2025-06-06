@@ -3,13 +3,13 @@ pre.shiki {
 }
 
 .shiki .diff.add {
-  background-color: #003800;
+  background-color: rgba(46, 160, 67, 0.15);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
 
 .shiki .diff.remove {
-  background-color: #380000;
+  background-color: rgba(218, 54, 51, 0.15);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
@@ -29,11 +29,11 @@ pre.shiki {
   width: 2em;
   margin-right: 1em;
   text-align: right;
-  color: #6e7681;
+  color: var(--neutral-text-secondary);
 }
 
 .shiki .line.highlighted {
-  background-color: #2d2a55;
+  background-color: rgba(45, 42, 85, 0.3);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
