@@ -39,7 +39,7 @@ export default function Document({ props, tinaProps }) {
       >
         <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
           <h1
-            className="brand-primary-gradient py-4 font-heading text-4xl"
+            className="brand-primary-gradient my-4 font-heading text-4xl"
             data-tina-field={tinaField(documentationData, "title")}
             data-pagefind-meta="title"
           >
@@ -51,7 +51,7 @@ export default function Document({ props, tinaProps }) {
         <div
           ref={contentRef}
           data-tina-field={tinaField(documentationData, "body")}
-          className="pt-4 font-body font-light leading-normal tracking-normal"
+          className="mt-4 font-body font-light leading-normal tracking-normal"
         >
           <TinaMarkdown
             content={documentationData?.body}
