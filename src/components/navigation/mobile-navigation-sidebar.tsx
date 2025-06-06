@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavigationToggle } from "./navigation-toggle";
 import { NavigationDropdownContent } from "./navigation-toggle";
 
-export const MobileNavigationWrapper = ({ tocData }: { tocData: any }) => {
+export const MobileNavSidebar = ({ tocData }: { tocData: any }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
