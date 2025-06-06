@@ -180,7 +180,7 @@
       "title": "API",
       "supermenuGroup": [
         {
-          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"POST:/user/createWithArray\",\"label\":\"POST /user/createWithArray - Creates list of users with given input array\",\"method\":\"POST\",\"path\":\"/user/createWithArray\",\"summary\":\"Creates list of users with given input array\",\"description\":\"\"},{\"id\":\"GET:/user/login\",\"label\":\"GET /user/login - Logs user into the system\",\"method\":\"GET\",\"path\":\"/user/login\",\"summary\":\"Logs user into the system\",\"description\":\"\"}]}",
+          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"DELETE:/user/{username}\",\"label\":\"DELETE /user/{username} - Delete user\",\"method\":\"DELETE\",\"path\":\"/user/{username}\",\"summary\":\"Delete user\",\"description\":\"This can only be done by the logged in user.\"}]}",
           "_template": "groupOfApiReferences"
         },
         {
