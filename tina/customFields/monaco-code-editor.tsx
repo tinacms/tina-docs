@@ -27,14 +27,18 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
   const [value, setValue] = useState(input.value || "");
   const [editorHeight, setEditorHeight] = useState(MINIMUM_HEIGHT);
   const editorRef = useRef<any>(null);
+  const lastSavedValue = useRef(input.value || "");
 
   const updateTinaValue = debounce((newValue: string) => {
+    lastSavedValue.current = newValue;
     input.onChange(newValue);
-  }, 1);
+  }, 100);
 
   useEffect(() => {
-    if (input.value !== value) {
+    // Only update if the value coming from Tina is different from what we last saved
+    if (input.value !== lastSavedValue.current && input.value !== value) {
       setValue(input.value || "");
+      lastSavedValue.current = input.value || "";
     }
   }, [input.value, value]);
 
@@ -55,6 +59,15 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
       editor.layout();
     });
 
+    // Add listener for all content changes including auto-completions
+    editor.onDidChangeModelContent(() => {
+      const currentValue = editor.getValue();
+      if (currentValue !== lastSavedValue.current) {
+        setValue(currentValue);
+        updateTinaValue(currentValue);
+      }
+    });
+
     if (editorRef.current) {
       setTimeout(() => {
         try {
@@ -64,11 +77,6 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
         }
       }, 100);
     }
-  };
-
-  const handleEditorChange = (newValue: string | undefined) => {
-    setValue(newValue || "");
-    updateTinaValue(newValue || "");
   };
 
   const editorOptions = {
@@ -113,7 +121,6 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
           theme="vs-dark"
           value={value}
           options={editorOptions}
-          onChange={handleEditorChange}
           onMount={handleEditorDidMount}
         />
       </div>

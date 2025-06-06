@@ -28,25 +28,33 @@ export function CodeBlock({
     let isMounted = true;
 
     const load = async () => {
+      // Guard clause to prevent processing undefined/null/empty values - shiki will throw an error if the value is not a string as it tries to .split all values
+      if (!value || typeof value !== "string") {
+        if (isMounted) setHtml("");
+        return;
+      }
+
       const highlighter = await createHighlighter({
         themes: ["night-owl", "github-light"],
         langs: [lang],
       });
 
-      const code = await highlighter.codeToHtml(value, {
-        lang,
-        theme: isDarkMode ? "night-owl" : "github-light",
-        transformers: [
-          transformerNotationDiff({ matchAlgorithm: "v3" }),
-          transformerNotationHighlight({ matchAlgorithm: "v3" }),
-          transformerNotationFocus({ matchAlgorithm: "v3" }),
-        ],
-        meta: {
-          showLineNumbers: true,
-        },
-      });
+      if (highlighter) {
+        const code = await highlighter?.codeToHtml(value, {
+          lang,
+          theme: isDarkMode ? "night-owl" : "github-light",
+          transformers: [
+            transformerNotationDiff({ matchAlgorithm: "v3" }),
+            transformerNotationHighlight({ matchAlgorithm: "v3" }),
+            transformerNotationFocus({ matchAlgorithm: "v3" }),
+          ],
+          meta: {
+            showLineNumbers: true,
+          },
+        });
 
-      if (isMounted) setHtml(code);
+        if (isMounted) setHtml(code);
+      }
     };
 
     load();

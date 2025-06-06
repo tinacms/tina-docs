@@ -2,10 +2,10 @@
 
 import * as Tabs from "@radix-ui/react-tabs";
 import React from "react";
-import { hasNestedSlug } from "../../navigation/navigation-items";
 import { Body } from "./body";
 import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
+import { findTabWithPath } from "./utils";
 
 export const TabsLayout = ({
   tabs,
@@ -20,14 +20,6 @@ export const TabsLayout = ({
 
   React.useEffect(() => {
     // Find the tab that contains the current path
-    const findTabWithPath = (tabs: any[], path: string) => {
-      for (const tab of tabs) {
-        if (tab.content.items && hasNestedSlug(tab.content.items, path)) {
-          return tab.label;
-        }
-      }
-      return tabs[0]?.label;
-    };
 
     const path = window.location.pathname;
     const initialTab = findTabWithPath(tabs, path);

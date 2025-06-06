@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@/src/components/docs/breadcrumbs";
+import { Breadcrumbs } from "@/components/docs/breadcrumbs";
 
 export const Body = ({
   navigationDocsData,
