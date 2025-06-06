@@ -1,6 +1,6 @@
 import { getDocsNavigation } from "@/utils/docs";
 
-import { TabsLayout } from "@/src/components/docs/layout/tab-layout";
+import { TabsLayout } from "@/components/docs/layout/tab-layout";
 import type React from "react";
 
 export default async function DocsLayout({

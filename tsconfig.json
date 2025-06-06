@@ -25,7 +25,7 @@
       "@/config/*": ["./src/config/*"],
       "@/app/*": ["./src/app/*"],
       "@/tina/*": ["./tina/*"],
-      "@/src/*": ["./src/*"]
+      "@/services/*": ["./src/services/*"]
     },
     "plugins": [
       {
