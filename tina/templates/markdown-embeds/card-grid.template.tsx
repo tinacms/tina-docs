@@ -28,6 +28,11 @@ export const CardGridTemplate = {
             linkText: "Search now",
           };
         },
+        itemProps: (item) => {
+          return {
+            label: item.title,
+          };
+        },
       },
       fields: [
         {
