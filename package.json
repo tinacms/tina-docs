@@ -34,7 +34,7 @@
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
     "rehype-pretty-code": "^0.14.1",
-    "shiki": "^3.4.1",
+    "shiki": "^3.6.0",
     "tinacms": "^2.7.7",
     "typescript": "5.8.3"
   },
