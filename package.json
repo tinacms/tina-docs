@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",
     "build": "echo 'Starting TinaCMS build...' && tinacms build && echo 'TinaCMS build completed. Starting Next.js build...' && next build",
-    "postbuild": "npx pagefind --site .next --output-path .next/static/pagefind",
+    "postbuild": "npx pagefind --site .next --output-path .next/static/pagefind && next-sitemap",
     "build-local-pagefind": "tinacms build && next build && npx pagefind --site .next --output-subdir ../public/pagefind",
     "start": "tinacms build && next start",
     "lint": "biome check src/ tina/",
@@ -34,7 +34,7 @@
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
     "rehype-pretty-code": "^0.14.1",
-    "shiki": "^3.4.1",
+    "shiki": "^3.6.0",
     "tinacms": "^2.7.7",
     "typescript": "5.8.3"
   },
@@ -45,13 +45,13 @@
     "@shikijs/transformers": "^3.4.1",
     "@tailwindcss/postcss": "^4.1.8",
     "@tinacms/cli": "^1.9.8",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.15.30",
     "autoprefixer": "^10.4.21",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "pagefind": "^1.3.0",
-    "postcss": "^8.5.3",
+    "postcss": "^8.5.4",
     "postcss-preset-env": "^10.2.0",
-    "tailwindcss": "^4.1.6",
+    "tailwindcss": "^4.1.8",
     "worker-loader": "^3.0.8"
   },
   "packageManager": "pnpm@9.15.2"
