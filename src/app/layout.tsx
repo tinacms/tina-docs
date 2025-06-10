@@ -18,27 +18,40 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isDev = process.env.NODE_ENV === "development";
+  const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
+
+  const content = (
+    <>
+      <AdminLink />
+      <TailwindIndicator />
+      {isDev && <ThemeSelector />}
+      <div className="font-sans flex min-h-screen flex-col bg-background-color">
+        <div className="flex flex-1 flex-col items-center">{children}</div>
+      </div>
+    </>
+  );
+
   return (
-    <html lang="en" className="theme-default" suppressHydrationWarning>
+    <html lang="en" className={`theme-${theme}`} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#E6FAF8" />
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <body className={`${body.variable} ${heading.variable}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="default"
-          enableSystem={false}
-          disableTransitionOnChange={false}
-        >
-          <AdminLink />
-          <TailwindIndicator />
-          <ThemeSelector />
-          <div className="font-sans flex min-h-screen flex-col bg-background-color">
-            <div className="flex flex-1 flex-col items-center">{children}</div>
-          </div>
-        </ThemeProvider>
+        {isDev ? (
+          <ThemeProvider
+            attribute="class"
+            defaultTheme={theme}
+            enableSystem={false}
+            disableTransitionOnChange={false}
+          >
+            {content}
+          </ThemeProvider>
+        ) : (
+          content
+        )}
       </body>
     </html>
   );
