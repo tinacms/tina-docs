@@ -56,7 +56,7 @@ export const QueryResponseTabs = ({ ...props }) => {
           tab-size: 2;
         }
       `}</style>
-      <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-neutral-background-quaternary shadow-sm">
+      <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-neutral-background shadow-sm border border-neutral-border-subtle">
         {/* TOP SECTION w/ Buttons */}
         <div className="flex items-center border-b border-b-neutral-border-subtle w-full">
           <div className="flex flex-1">
