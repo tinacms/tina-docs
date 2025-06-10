@@ -1,5 +1,0 @@
-{
-  "buildCommand": "NEXT_PUBLIC_TINA_BRANCH=${VERCEL_GIT_COMMIT_REF:-api-reference-nav-ba} tinacms build && next build",
-  "devCommand": "pnpm run dev",
-  "installCommand": "pnpm install"
-} 
