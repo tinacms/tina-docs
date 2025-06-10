@@ -7,7 +7,6 @@ const themes = [
   "monochrome",
   "blossom",
   "lake",
-  "pine",
   "pine-green",
   "pine-indigo",
 ];
@@ -20,6 +19,12 @@ export function ThemeSelector() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (mounted && theme) {
+      document.documentElement.className = `theme-${theme}`;
+    }
+  }, [theme, mounted]);
 
   if (!mounted) return null;
 

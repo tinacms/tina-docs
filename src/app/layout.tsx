@@ -18,10 +18,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
-
   return (
-    <html lang="en" className={`theme-${theme}`} suppressHydrationWarning>
+    <html lang="en" className="theme-default" suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#E6FAF8" />
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
@@ -30,8 +28,8 @@ export default function RootLayout({
       <body className={`${body.variable} ${heading.variable}`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem={true}
+          defaultTheme="default"
+          enableSystem={false}
           disableTransitionOnChange={false}
         >
           <AdminLink />
