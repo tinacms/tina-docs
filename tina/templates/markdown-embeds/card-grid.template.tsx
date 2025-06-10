@@ -30,7 +30,7 @@ export const CardGridTemplate = {
         },
         itemProps: (item) => {
           return {
-            label: item.title,
+            label: item.title || "Untitled",
           };
         },
       },
