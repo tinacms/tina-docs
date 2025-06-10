@@ -1,9 +1,7 @@
-import {
-  CheckIcon as CheckIconOutline,
-  ClipboardIcon as ClipboardIconOutline,
-} from "@heroicons/react/24/outline";
+import { CheckIcon as CheckIconOutline } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
+import { MdContentCopy } from "react-icons/md";
 import { CodeBlock } from "../standard-elements/code-block/code-block";
 
 export const QueryResponseTabs = ({ ...props }) => {
@@ -85,7 +83,7 @@ export const QueryResponseTabs = ({ ...props }) => {
           </div>
 
           {/* Copy Button */}
-          <div className="flex pr-4">
+          <div className="flex pr-2">
             <button
               type="button"
               onClick={handleCopy}
@@ -99,8 +97,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                 </>
               ) : (
                 <>
-                  <ClipboardIconOutline className="h-4 w-4" />
-                  <span>Copy</span>
+                  <MdContentCopy className="h-4 w-4" />
                 </>
               )}
             </button>
