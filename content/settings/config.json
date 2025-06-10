@@ -15,5 +15,12 @@
     "twitter": "https://twitter.com/tinacms",
     "github": "https://github.com/tinacms/tinacms",
     "forum": "https://tina.io/community"
-  }
+  },
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/docs",
+      "permanent": true
+    }
+  ]
 }

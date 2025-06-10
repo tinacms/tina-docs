@@ -1,6 +1,572 @@
+import { detectLocalMode } from "@/src/utils/detectLocalMode";
+import { generateFileName } from "@/src/utils/generateFileName";
+import { parseFieldValue } from "@/src/utils/parseFieldValue";
+import { sanitizeFileName } from "@/src/utils/sanitizeFilename";
+import { showNotification } from "@/src/utils/showNotification";
 import { config } from "@/tina/config";
 import React from "react";
 import { wrapFieldsWithMeta } from "tinacms";
+
+// ========================================
+// API FUNCTIONS
+// ========================================
+
+/**
+ * Loads schemas from the API
+ */
+const loadSchemas = async () => {
+  const response = await fetch("/api/list-api-schemas");
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error || "Failed to load schemas");
+  }
+
+  return result.schemas || [];
+};
+
+/**
+ * Loads tags for a specific schema
+ */
+const loadTagsForSchema = async (schemaFilename: string) => {
+  const response = await fetch(
+    `/api/get-tag-api-schema?filename=${encodeURIComponent(schemaFilename)}`
+  );
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error || "Failed to load schema");
+  }
+
+  const apiSchema = result.apiSchema;
+  if (apiSchema?.paths) {
+    const tagSet = new Set<string>();
+
+    // Extract tags
+    for (const path in apiSchema.paths) {
+      for (const method in apiSchema.paths[path]) {
+        const op = apiSchema.paths[path][method];
+        if (op.tags) {
+          for (const tag of op.tags) {
+            tagSet.add(tag);
+          }
+        }
+      }
+    }
+
+    return {
+      tags: Array.from(tagSet),
+      apiSchema: apiSchema,
+    };
+  }
+
+  return { tags: [], apiSchema: null };
+};
+
+/**
+ * Loads endpoints for a specific tag from API schema
+ */
+const loadEndpointsForTag = (apiSchema: any, tag: string) => {
+  const endpointsList: {
+    id: string;
+    label: string;
+    method: string;
+    path: string;
+    summary: string;
+    description: string;
+  }[] = [];
+
+  for (const path in apiSchema.paths) {
+    for (const method in apiSchema.paths[path]) {
+      const op = apiSchema.paths[path][method];
+      if (op.tags?.includes(tag)) {
+        endpointsList.push({
+          id: `${method.toUpperCase()}:${path}`,
+          label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
+          method: method.toUpperCase(),
+          path,
+          summary: op.summary || "",
+          description: op.description || "",
+        });
+      }
+    }
+  }
+
+  return endpointsList;
+};
+
+/**
+ * Handles file generation via filesystem API
+ */
+const handleFileSystemGeneration = async (inputValue: string) => {
+  const response = await fetch("/api/create-api-docs-via-filesystem", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      apiGroupData: inputValue,
+    }),
+  });
+
+  const result = await response.json();
+
+  if (response.ok) {
+    showNotification(
+      `✅ Generated ${result.files.length} MDX files locally`,
+      "success"
+    );
+  } else {
+    if (response.status === 403 && result.suggestion) {
+      showNotification(
+        "⚠️ Filesystem generation not available in this environment",
+        "warning"
+      );
+    } else {
+      throw new Error(result.error || "Failed to generate files");
+    }
+  }
+};
+
+/**
+ * Clear directory via filesystem API
+ */
+const clearDirectoryViaFilesystem = async (directoryPath: string) => {
+  const response = await fetch("/api/prepare-directory-via-filesystem", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ directoryPath }),
+  });
+
+  if (!response.ok) {
+    const result = await response.json();
+    throw new Error(result.error || "Failed to clear directory");
+  }
+
+  return await response.json();
+};
+
+/**
+ * Get TinaCMS authentication token
+ */
+const getTinaCMSToken = (): string | null => {
+  const tinacmsAuthString = localStorage.getItem("tinacms-auth");
+  let token: string | null = null;
+  try {
+    const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
+    token = authData?.id_token || config.token || null;
+  } catch (e) {
+    token = config.token || null;
+  }
+  return token;
+};
+
+/**
+ * Delete file via TinaCMS GraphQL
+ */
+const deleteFileViaTinaCMS = async (filePath: string) => {
+  const clientId = config.clientId;
+  const branch = config.branch;
+
+  if (!clientId || !branch) {
+    throw new Error("Missing TinaCMS configuration for file deletion");
+  }
+
+  const token = getTinaCMSToken();
+  const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
+
+  const mutation = `
+    mutation DeleteDocument($collection: String!, $relativePath: String!) {
+      deleteDocument(collection: $collection, relativePath: $relativePath) {
+        __typename
+      }
+    }
+  `;
+
+  const variables = {
+    collection: "docs",
+    relativePath: filePath,
+  };
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(tinaEndpoint, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      query: mutation,
+      variables: variables,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  if (result.errors) {
+    throw new Error(result.errors.map((e: any) => e.message).join(", "));
+  }
+};
+
+/**
+ * Clear directory via TinaCMS GraphQL (list and delete all files)
+ */
+const clearDirectoryViaTinaCMS = async (directoryPath: string) => {
+  const clientId = config.clientId;
+  const branch = config.branch;
+
+  if (!clientId || !branch) {
+    throw new Error("Missing TinaCMS configuration for directory clearing");
+  }
+
+  const token = getTinaCMSToken();
+  const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
+
+  // TinaCMS relativePaths are relative to the collection root (content/docs)
+  // So we need to remove the 'docs/' prefix for the query
+  const relativeDirectoryPath = directoryPath.replace(/^docs\//, "");
+
+  // Get all docs and filter in JavaScript since GraphQL filters don't work
+  const listQuery = `
+    query GetAllDocs {
+      docsConnection {
+        edges {
+          node {
+            id
+            _sys {
+              filename
+              relativePath
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const listResponse = await fetch(tinaEndpoint, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      query: listQuery,
+    }),
+  });
+
+  if (!listResponse.ok) {
+    throw new Error(`Failed to list files: HTTP ${listResponse.status}`);
+  }
+
+  const listResult = await listResponse.json();
+  if (listResult.errors) {
+    throw new Error(
+      `List query errors: ${listResult.errors
+        .map((e: any) => e.message)
+        .join(", ")}`
+    );
+  }
+
+  // Filter files in JavaScript to find ones in our target directory
+  const allFiles = listResult.data?.docsConnection?.edges || [];
+
+  const filesToDelete = allFiles.filter((edge: any) => {
+    const relativePath = edge.node._sys.relativePath;
+    const matches = relativePath?.startsWith(`${relativeDirectoryPath}/`);
+    return matches;
+  });
+
+  for (const edge of filesToDelete) {
+    const relativePath = edge.node._sys.relativePath;
+    try {
+      await deleteFileViaTinaCMS(relativePath);
+    } catch (error) {
+      // Continue processing other files
+    }
+  }
+};
+
+/**
+ * Creates docs via TinaCMS GraphQL mutation - CLIENT SIDE
+ */
+const createDocsViaTinaClientSide = async (
+  groupData: any
+): Promise<{
+  success: boolean;
+  createdFiles: string[];
+  errors: string[];
+}> => {
+  const results = {
+    success: true,
+    createdFiles: [] as string[],
+    errors: [] as string[],
+  };
+
+  if (!groupData.endpoints || groupData.endpoints.length === 0) {
+    return { ...results, success: false, errors: ["No endpoints provided"] };
+  }
+
+  const { schema, tag, endpoints } = groupData;
+  const tagDir = sanitizeFileName(tag);
+
+  // Get config values for logging purposes
+  const clientId = config.clientId;
+  const branch = config.branch;
+
+  if (!clientId) {
+    return {
+      ...results,
+      success: false,
+      errors: ["Missing TinaCMS client ID in config"],
+    };
+  }
+
+  if (!branch) {
+    return {
+      ...results,
+      success: false,
+      errors: ["Missing TinaCMS branch in config"],
+    };
+  }
+
+  const token = getTinaCMSToken();
+  const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
+
+  for (const endpoint of endpoints) {
+    try {
+      const fileName = generateFileName(endpoint);
+      const relativePath = `api-documentation/${tagDir}/${fileName}.mdx`;
+
+      // Create title from summary or generate one
+      const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
+      const description =
+        endpoint.description ||
+        `API endpoint for ${endpoint.method} ${endpoint.path}`;
+
+      // Use fetch with the correct TinaCloud endpoint and auth token
+      const mutation = `
+        mutation AddPendingDocument($collection: String!, $relativePath: String!) {
+          addPendingDocument(collection: $collection, relativePath: $relativePath) {
+            __typename
+          }
+        }
+      `;
+
+      const variables = {
+        collection: "docs",
+        relativePath,
+      };
+
+      // Prepare headers with authentication using TinaCMS internal pattern
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+
+      // Add auth token using the internal TinaCMS pattern
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      const response = await fetch(tinaEndpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          query: mutation,
+          variables: variables,
+        }),
+      });
+
+      if (!response.ok) {
+        let errorDetails = `HTTP error! status: ${response.status}`;
+        try {
+          const errorBody = await response.text();
+          if (errorBody) {
+            errorDetails += ` - Response: ${errorBody}`;
+          }
+        } catch (e) {
+          // Ignore if we can't read the response body
+        }
+        throw new Error(errorDetails);
+      }
+
+      const result = await response.json();
+
+      if (result.errors) {
+        const errorMessages = result.errors
+          .map((e: any) => e.message)
+          .join(", ");
+        results.errors.push(
+          `Failed to create ${relativePath}: ${errorMessages}`
+        );
+        results.success = false;
+      } else if (result.data?.addPendingDocument) {
+        results.createdFiles.push(relativePath);
+
+        // Now try to update it with content
+        try {
+          const updateMutation = `
+            mutation UpdateDocs($relativePath: String!, $params: DocsMutation!) {
+              updateDocs(relativePath: $relativePath, params: $params) {
+                __typename
+                id
+                title
+              }
+            }
+          `;
+
+          const updateVariables = {
+            relativePath,
+            params: {
+              title,
+              last_edited: new Date().toISOString(),
+              seo: {
+                title,
+                description,
+              },
+              // Add basic structured content
+              body: {
+                type: "root",
+                children: [
+                  {
+                    type: "h1",
+                    children: [{ type: "text", text: title }],
+                  },
+                  {
+                    type: "p",
+                    children: [
+                      {
+                        type: "text",
+                        text:
+                          description ||
+                          `Documentation for ${endpoint.method} ${endpoint.path}`,
+                      },
+                    ],
+                  },
+                  {
+                    type: "p",
+                    children: [
+                      { type: "text", text: `Method: ${endpoint.method}` },
+                    ],
+                  },
+                  {
+                    type: "p",
+                    children: [
+                      { type: "text", text: `Path: ${endpoint.path}` },
+                    ],
+                  },
+                ],
+              },
+            },
+          };
+
+          await fetch(tinaEndpoint, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+              query: updateMutation,
+              variables: updateVariables,
+            }),
+          });
+        } catch (updateError) {
+          // Don't fail the overall operation for update errors
+        }
+      } else {
+        results.errors.push(
+          `Failed to create ${relativePath}: No data returned`
+        );
+        results.success = false;
+      }
+    } catch (error) {
+      const errorMsg = `Failed to create file for ${endpoint.method} ${
+        endpoint.path
+      }: ${error instanceof Error ? error.message : "Unknown error"}`;
+      results.errors.push(errorMsg);
+      results.success = false;
+    }
+  }
+
+  return results;
+};
+
+/**
+ * Handles TinaCMS file generation
+ */
+const handleTinaCMSGeneration = async (
+  inputValue: string,
+  selectedEndpoints: any[]
+) => {
+  // Parse the group data
+  let groupData: any;
+  try {
+    groupData =
+      typeof inputValue === "string" ? JSON.parse(inputValue) : inputValue;
+  } catch (error) {
+    throw new Error("Invalid API group data format");
+  }
+
+  // Filter endpoints to only create the specified files
+  const filteredEndpoints = groupData.endpoints.filter((endpoint: any) => {
+    return selectedEndpoints.some((ep) => ep.id === endpoint.id);
+  });
+
+  // Create filtered group data for generation
+  const filteredGroupData = {
+    ...groupData,
+    endpoints: filteredEndpoints,
+  };
+
+  // Call the client-side GraphQL function directly
+  const results = await createDocsViaTinaClientSide(filteredGroupData);
+
+  if (results.success) {
+    showNotification(
+      `✅ Created ${results.createdFiles.length} MDX files via TinaCMS`,
+      "success"
+    );
+  } else {
+    const errorMsg =
+      results.errors.length > 0
+        ? `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`
+        : "Failed to create files";
+    showNotification(`⚠️ ${errorMsg}`, "warning");
+  }
+};
+
+/**
+ * Clear the entire tag directory
+ */
+const clearTagDirectory = async (
+  tagDirectoryPath: string,
+  isLocalMode: boolean
+) => {
+  try {
+    if (isLocalMode) {
+      await clearDirectoryViaFilesystem(tagDirectoryPath);
+    } else {
+      await clearDirectoryViaTinaCMS(tagDirectoryPath);
+    }
+  } catch (error) {
+    // Continue anyway - maybe the directory doesn't exist yet
+  }
+};
+
+// ========================================
+// MAIN COMPONENT
+// ========================================
 
 const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const { input, meta } = props;
@@ -24,36 +590,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [generatingFiles, setGeneratingFiles] = React.useState(false);
   const [lastSavedValue, setLastSavedValue] = React.useState<string>("");
 
-  // Detect if we're in local development mode
-  const isLocalMode = (() => {
-    // Server-side: use NODE_ENV
-    if (typeof window === "undefined") {
-      return process.env.NODE_ENV === "development";
-    }
-
-    // Client-side: check hostname for localhost/127.0.0.1 patterns
-    const hostname = window.location.hostname;
-    const isLocalhost =
-      hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname.startsWith("localhost:") ||
-      hostname.startsWith("127.0.0.1:");
-
-    // Only consider it local if BOTH conditions are met
-    return process.env.NODE_ENV === "development" && isLocalhost;
-  })();
-
-  // Parse the current value
-  const parsedValue = (() => {
-    try {
-      return input.value
-        ? JSON.parse(input.value)
-        : { schema: "", tag: "", endpoints: [] };
-    } catch {
-      return { schema: "", tag: "", endpoints: [] };
-    }
-  })();
-
+  const isLocalMode = detectLocalMode();
+  const parsedValue = parseFieldValue(input.value);
   const selectedEndpoints = Array.isArray(parsedValue.endpoints)
     ? parsedValue.endpoints
     : [];
@@ -81,18 +619,23 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           const tagDirectoryPath = `docs/api-documentation/${tagDir}`;
 
           // Clear directory in all environments to ensure proper cleanup
-          await clearTagDirectory(tagDirectoryPath);
+          await clearTagDirectory(tagDirectoryPath, isLocalMode);
 
           // Step 2: Generate all selected files
           if (selectedEndpoints.length > 0) {
             if (isLocalMode) {
-              await handleFileSystemGeneration();
+              await handleFileSystemGeneration(input.value);
             } else {
-              await handleTinaCMSGeneration();
+              await handleTinaCMSGeneration(input.value, selectedEndpoints);
             }
           }
         } catch (error) {
-          // Continue processing if file generation fails
+          showNotification(
+            `❌ Failed to generate files: ${
+              error instanceof Error ? error.message : "Unknown error"
+            }`,
+            "error"
+          );
         } finally {
           setGeneratingFiles(false);
         }
@@ -107,7 +650,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     input.value,
     selectedSchema,
     selectedTag,
-    selectedEndpoints.length,
+    selectedEndpoints,
     lastSavedValue,
     generatingFiles,
     isLocalMode,
@@ -115,17 +658,11 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
   // Load schemas from filesystem API
   React.useEffect(() => {
-    const loadSchemas = async () => {
+    const loadInitialData = async () => {
       setLoadingSchemas(true);
       try {
-        const response = await fetch("/api/list-api-schemas");
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(result.error || "Failed to load schemas");
-        }
-
-        setSchemas(result.schemas || []);
+        const schemasList = await loadSchemas();
+        setSchemas(schemasList);
         setLoadingSchemas(false);
 
         // Set local state from parsed values
@@ -136,7 +673,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
         // If we have existing data, load tags and endpoints
         if (currentSchema) {
-          await loadTagsForSchema(currentSchema, currentTag);
+          await loadTagsAndEndpoints(currentSchema, currentTag);
         }
       } catch (error) {
         setSchemas([]);
@@ -144,87 +681,31 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       }
     };
 
-    loadSchemas();
-  }, [parsedValue.schema, parsedValue.tag]); // Add dependencies
+    loadInitialData();
+  }, [parsedValue.schema, parsedValue.tag]);
 
-  const loadTagsForSchema = async (
+  const loadTagsAndEndpoints = async (
     schemaFilename: string,
     currentTag?: string
   ) => {
     setLoadingTags(true);
     try {
-      const response = await fetch(
-        `/api/get-api-schema?filename=${encodeURIComponent(schemaFilename)}`
-      );
-      const result = await response.json();
+      const { tags: tagsList, apiSchema } =
+        await loadTagsForSchema(schemaFilename);
+      setTags(tagsList);
+      setLoadingTags(false);
 
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to load schema");
-      }
-
-      const apiSchema = result.apiSchema;
-      if (apiSchema?.paths) {
-        const tagSet = new Set<string>();
-
-        // Extract tags
-        for (const path in apiSchema.paths) {
-          for (const method in apiSchema.paths[path]) {
-            const op = apiSchema.paths[path][method];
-            if (op.tags) {
-              for (const tag of op.tags) {
-                tagSet.add(tag);
-              }
-            }
-          }
-        }
-
-        const tagsList = Array.from(tagSet);
-        setTags(tagsList);
-        setLoadingTags(false);
-
-        // If we also have a selected tag, load endpoints
-        if (currentTag) {
-          await loadEndpointsForTag(apiSchema, currentTag);
-        }
-      } else {
-        setTags([]);
-        setLoadingTags(false);
+      // If we also have a selected tag, load endpoints
+      if (currentTag && apiSchema) {
+        setLoadingEndpoints(true);
+        const endpointsList = loadEndpointsForTag(apiSchema, currentTag);
+        setEndpoints(endpointsList);
+        setLoadingEndpoints(false);
       }
     } catch (error) {
       setTags([]);
       setLoadingTags(false);
     }
-  };
-
-  const loadEndpointsForTag = async (apiSchema: any, tag: string) => {
-    setLoadingEndpoints(true);
-    const endpointsList: {
-      id: string;
-      label: string;
-      method: string;
-      path: string;
-      summary: string;
-      description: string;
-    }[] = [];
-
-    for (const path in apiSchema.paths) {
-      for (const method in apiSchema.paths[path]) {
-        const op = apiSchema.paths[path][method];
-        if (op.tags?.includes(tag)) {
-          endpointsList.push({
-            id: `${method.toUpperCase()}:${path}`,
-            label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
-            method: method.toUpperCase(),
-            path,
-            summary: op.summary || "",
-            description: op.description || "",
-          });
-        }
-      }
-    }
-
-    setEndpoints(endpointsList);
-    setLoadingEndpoints(false);
   };
 
   // Handle schema change
@@ -249,7 +730,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       return;
     }
 
-    await loadTagsForSchema(schema);
+    await loadTagsAndEndpoints(schema);
   };
 
   // Handle tag change
@@ -273,16 +754,13 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     }
 
     try {
-      const response = await fetch(
-        `/api/get-api-schema?filename=${encodeURIComponent(selectedSchema)}`
-      );
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to load schema");
+      const { apiSchema } = await loadTagsForSchema(selectedSchema);
+      if (apiSchema) {
+        setLoadingEndpoints(true);
+        const endpointsList = loadEndpointsForTag(apiSchema, tag);
+        setEndpoints(endpointsList);
+        setLoadingEndpoints(false);
       }
-
-      await loadEndpointsForTag(result.apiSchema, tag);
     } catch (error) {
       setEndpoints([]);
       setLoadingEndpoints(false);
@@ -316,554 +794,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         endpoints: endpoints,
       })
     );
-  };
-
-  const handleFileSystemGeneration = async () => {
-    try {
-      const response = await fetch("/api/generate-api-docs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          apiGroupData: input.value,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        showNotification(
-          `✅ Generated ${result.files.length} MDX files locally`,
-          "success"
-        );
-      } else {
-        if (response.status === 403 && result.suggestion) {
-          showNotification(
-            "⚠️ Filesystem generation not available in this environment",
-            "warning"
-          );
-        } else {
-          throw new Error(result.error || "Failed to generate files");
-        }
-      }
-    } catch (error) {
-      showNotification(
-        `❌ Failed to generate files: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`,
-        "error"
-      );
-    }
-  };
-
-  const handleTinaCMSGeneration = async () => {
-    try {
-      // Parse the group data
-      let groupData: any;
-      try {
-        groupData =
-          typeof input.value === "string"
-            ? JSON.parse(input.value)
-            : input.value;
-      } catch (error) {
-        throw new Error("Invalid API group data format");
-      }
-
-      // Filter endpoints to only create the specified files
-      const filteredEndpoints = groupData.endpoints.filter((endpoint: any) => {
-        const fileName = generateFileName(endpoint);
-        const tagDir = sanitizeFileName(groupData.tag);
-        const filePath = `api-documentation/${tagDir}/${fileName}.mdx`;
-        return selectedEndpoints.some((ep) => ep.id === endpoint.id);
-      });
-
-      // Create filtered group data for generation
-      const filteredGroupData = {
-        ...groupData,
-        endpoints: filteredEndpoints,
-      };
-
-      // Call the client-side GraphQL function directly
-      const results = await createDocsViaTinaClientSide(filteredGroupData);
-
-      if (results.success) {
-        showNotification(
-          `✅ Created ${results.createdFiles.length} MDX files via TinaCMS`,
-          "success"
-        );
-      } else {
-        const errorMsg =
-          results.errors.length > 0
-            ? `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`
-            : "Failed to create files";
-        showNotification(`⚠️ ${errorMsg}`, "warning");
-      }
-    } catch (error) {
-      showNotification(
-        `❌ Failed to create files via TinaCMS: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`,
-        "error"
-      );
-    }
-  };
-
-  // Simple notification system (you could replace this with a toast library)
-  const showNotification = (
-    message: string,
-    type: "success" | "warning" | "error"
-  ) => {
-    // Optional: Show a temporary visual indicator
-    if (typeof window !== "undefined") {
-      const notification = document.createElement("div");
-      notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${
-          type === "success"
-            ? "#10b981"
-            : type === "warning"
-              ? "#f59e0b"
-              : "#ef4444"
-        };
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        z-index: 1000;
-        font-family: system-ui, -apple-system, sans-serif;
-        font-size: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        max-width: 400px;
-      `;
-      notification.textContent = message;
-      document.body.appendChild(notification);
-
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-      }, 4000);
-    }
-  };
-
-  /**
-   * Generates a safe filename from endpoint data
-   */
-  function generateFileName(endpoint: any): string {
-    const method = endpoint.method.toLowerCase();
-    const pathSafe = endpoint.path
-      .replace(/^\//, "") // Remove leading slash
-      .replace(/\//g, "-") // Replace slashes with dashes
-      .replace(/[{}]/g, "") // Remove curly braces
-      .replace(/[^\w-]/g, "") // Remove any non-word characters except dashes
-      .toLowerCase();
-
-    return `${method}-${pathSafe}`;
-  }
-
-  /**
-   * Sanitizes a string to be used as a directory/file name
-   */
-  function sanitizeFileName(name: string): string {
-    return name
-      .replace(/[^\w\s-]/g, "") // Remove special characters except spaces and dashes
-      .replace(/\s+/g, "-") // Replace spaces with dashes
-      .toLowerCase();
-  }
-
-  /**
-   * Creates docs via TinaCMS GraphQL mutation - CLIENT SIDE
-   */
-  async function createDocsViaTinaClientSide(groupData: any): Promise<{
-    success: boolean;
-    createdFiles: string[];
-    errors: string[];
-  }> {
-    const results = {
-      success: true,
-      createdFiles: [] as string[],
-      errors: [] as string[],
-    };
-
-    if (!groupData.endpoints || groupData.endpoints.length === 0) {
-      return { ...results, success: false, errors: ["No endpoints provided"] };
-    }
-
-    const { schema, tag, endpoints } = groupData;
-    const tagDir = sanitizeFileName(tag);
-
-    // Get config values for logging purposes
-    const clientId = config.clientId;
-    const branch = config.branch;
-
-    if (!clientId) {
-      return {
-        ...results,
-        success: false,
-        errors: ["Missing TinaCMS client ID in config"],
-      };
-    }
-
-    if (!branch) {
-      return {
-        ...results,
-        success: false,
-        errors: ["Missing TinaCMS branch in config"],
-      };
-    }
-
-    // Get token from localStorage using TinaCMS internal method
-    const tinacmsAuthString = localStorage.getItem("tinacms-auth");
-
-    let token: string | null = null;
-    try {
-      const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
-      token = authData?.id_token || config.token || null;
-    } catch (e) {
-      token = config.token || null;
-    }
-
-    const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
-
-    for (const endpoint of endpoints) {
-      try {
-        const fileName = generateFileName(endpoint);
-        const relativePath = `api-documentation/${tagDir}/${fileName}.mdx`;
-
-        // Create title from summary or generate one
-        const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
-        const description =
-          endpoint.description ||
-          `API endpoint for ${endpoint.method} ${endpoint.path}`;
-
-        // Use fetch with the correct TinaCloud endpoint and auth token
-        const mutation = `
-          mutation AddPendingDocument($collection: String!, $relativePath: String!) {
-            addPendingDocument(collection: $collection, relativePath: $relativePath) {
-              __typename
-            }
-          }
-        `;
-
-        const variables = {
-          collection: "docs",
-          relativePath,
-        };
-
-        // Prepare headers with authentication using TinaCMS internal pattern
-        const headers: Record<string, string> = {
-          "Content-Type": "application/json",
-        };
-
-        // Add auth token using the internal TinaCMS pattern
-        if (token) {
-          headers.Authorization = `Bearer ${token}`;
-        } else {
-          // No auth token available - request may fail
-        }
-
-        const response = await fetch(tinaEndpoint, {
-          method: "POST",
-          headers,
-          body: JSON.stringify({
-            query: mutation,
-            variables: variables,
-          }),
-        });
-
-        if (!response.ok) {
-          let errorDetails = `HTTP error! status: ${response.status}`;
-          try {
-            const errorBody = await response.text();
-            if (errorBody) {
-              errorDetails += ` - Response: ${errorBody}`;
-            }
-          } catch (e) {
-            // Ignore if we can't read the response body
-          }
-          throw new Error(errorDetails);
-        }
-
-        const result = await response.json();
-
-        if (result.errors) {
-          const errorMessages = result.errors
-            .map((e: any) => e.message)
-            .join(", ");
-          results.errors.push(
-            `Failed to create ${relativePath}: ${errorMessages}`
-          );
-          results.success = false;
-        } else if (result.data?.addPendingDocument) {
-          results.createdFiles.push(relativePath);
-
-          // Now try to update it with content
-          try {
-            const updateMutation = `
-              mutation UpdateDocs($relativePath: String!, $params: DocsMutation!) {
-                updateDocs(relativePath: $relativePath, params: $params) {
-                  __typename
-                  id
-                  title
-                }
-              }
-            `;
-
-            const updateVariables = {
-              relativePath,
-              params: {
-                title,
-                last_edited: new Date().toISOString(),
-                seo: {
-                  title,
-                  description,
-                },
-                // Add basic structured content
-                body: {
-                  type: "root",
-                  children: [
-                    {
-                      type: "h1",
-                      children: [{ type: "text", text: title }],
-                    },
-                    {
-                      type: "p",
-                      children: [
-                        {
-                          type: "text",
-                          text:
-                            description ||
-                            `Documentation for ${endpoint.method} ${endpoint.path}`,
-                        },
-                      ],
-                    },
-                    {
-                      type: "p",
-                      children: [
-                        { type: "text", text: `Method: ${endpoint.method}` },
-                      ],
-                    },
-                    {
-                      type: "p",
-                      children: [
-                        { type: "text", text: `Path: ${endpoint.path}` },
-                      ],
-                    },
-                  ],
-                },
-              },
-            };
-
-            const updateResponse = await fetch(tinaEndpoint, {
-              method: "POST",
-              headers,
-              body: JSON.stringify({
-                query: updateMutation,
-                variables: updateVariables,
-              }),
-            });
-          } catch (updateError) {
-            // Don't fail the overall operation for update errors
-          }
-        } else {
-          results.errors.push(
-            `Failed to create ${relativePath}: No data returned`
-          );
-          results.success = false;
-        }
-      } catch (error) {
-        const errorMsg = `Failed to create file for ${endpoint.method} ${
-          endpoint.path
-        }: ${error instanceof Error ? error.message : "Unknown error"}`;
-        results.errors.push(errorMsg);
-        results.success = false;
-      }
-    }
-
-    return results;
-  }
-
-  // Clear the entire tag directory
-  const clearTagDirectory = async (tagDirectoryPath: string) => {
-    try {
-      if (isLocalMode) {
-        await clearDirectoryViaFilesystem(tagDirectoryPath);
-      } else {
-        await clearDirectoryViaTinaCMS(tagDirectoryPath);
-      }
-    } catch (error) {
-      // Continue anyway - maybe the directory doesn't exist yet
-    }
-  };
-
-  // Clear directory via filesystem API
-  const clearDirectoryViaFilesystem = async (directoryPath: string) => {
-    const response = await fetch("/api/clear-directory", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ directoryPath }),
-    });
-
-    if (!response.ok) {
-      const result = await response.json();
-      throw new Error(result.error || "Failed to clear directory");
-    }
-
-    const result = await response.json();
-  };
-
-  // Clear directory via TinaCMS GraphQL (list and delete all files)
-  const clearDirectoryViaTinaCMS = async (directoryPath: string) => {
-    const clientId = config.clientId;
-    const branch = config.branch;
-
-    if (!clientId || !branch) {
-      throw new Error("Missing TinaCMS configuration for directory clearing");
-    }
-
-    const tinacmsAuthString = localStorage.getItem("tinacms-auth");
-    let token: string | null = null;
-    try {
-      const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
-      token = authData?.id_token || config.token || null;
-    } catch (e) {
-      token = config.token || null;
-    }
-
-    const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
-
-    // TinaCMS relativePaths are relative to the collection root (content/docs)
-    // So we need to remove the 'docs/' prefix for the query
-    const relativeDirectoryPath = directoryPath.replace(/^docs\//, "");
-
-    // Get all docs and filter in JavaScript since GraphQL filters don't work
-    const listQuery = `
-      query GetAllDocs {
-        docsConnection {
-          edges {
-            node {
-              id
-              _sys {
-                filename
-                relativePath
-              }
-            }
-          }
-        }
-      }
-    `;
-
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
-
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    const listResponse = await fetch(tinaEndpoint, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        query: listQuery,
-      }),
-    });
-
-    if (!listResponse.ok) {
-      throw new Error(`Failed to list files: HTTP ${listResponse.status}`);
-    }
-
-    const listResult = await listResponse.json();
-    if (listResult.errors) {
-      throw new Error(
-        `List query errors: ${listResult.errors
-          .map((e: any) => e.message)
-          .join(", ")}`
-      );
-    }
-
-    // Filter files in JavaScript to find ones in our target directory
-    const allFiles = listResult.data?.docsConnection?.edges || [];
-
-    const filesToDelete = allFiles.filter((edge: any) => {
-      const relativePath = edge.node._sys.relativePath;
-      const matches = relativePath?.startsWith(`${relativeDirectoryPath}/`);
-
-      return matches;
-    });
-
-    for (const edge of filesToDelete) {
-      const relativePath = edge.node._sys.relativePath;
-      try {
-        await deleteFileViaTinaCMS(relativePath);
-      } catch (error) {
-        // Continue processing other files
-      }
-    }
-  };
-
-  // Delete file via TinaCMS GraphQL
-  const deleteFileViaTinaCMS = async (filePath: string) => {
-    const clientId = config.clientId;
-    const branch = config.branch;
-
-    if (!clientId || !branch) {
-      throw new Error("Missing TinaCMS configuration for file deletion");
-    }
-
-    const tinacmsAuthString = localStorage.getItem("tinacms-auth");
-    let token: string | null = null;
-    try {
-      const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
-      token = authData?.id_token || config.token || null;
-    } catch (e) {
-      token = config.token || null;
-    }
-
-    const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
-
-    const mutation = `
-      mutation DeleteDocument($collection: String!, $relativePath: String!) {
-        deleteDocument(collection: $collection, relativePath: $relativePath) {
-          __typename
-        }
-      }
-    `;
-
-    const variables = {
-      collection: "docs",
-      relativePath: filePath,
-    };
-
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
-
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    const response = await fetch(tinaEndpoint, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        query: mutation,
-        variables: variables,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    if (result.errors) {
-      throw new Error(result.errors.map((e: any) => e.message).join(", "));
-    }
   };
 
   return (
