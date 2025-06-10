@@ -1,6 +1,7 @@
 import "@/styles/global.css";
 import AdminLink from "@/components/ui/admin-link";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
+import { ThemeSelector } from "@/components/ui/theme-selector";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 
@@ -35,6 +36,7 @@ export default function RootLayout({
         >
           <AdminLink />
           <TailwindIndicator />
+          <ThemeSelector />
           <div className="font-sans flex min-h-screen flex-col bg-background-color">
             <div className="flex flex-1 flex-col items-center">{children}</div>
           </div>
