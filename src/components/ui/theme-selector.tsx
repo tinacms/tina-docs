@@ -90,7 +90,7 @@ export const ThemeSelector = () => {
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-2 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between"
+          className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-2 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
         >
           <span className="truncate">
             {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)}
@@ -108,7 +108,7 @@ export const ThemeSelector = () => {
               <button
                 key={t}
                 onClick={() => handleThemeChange(t)}
-                className={`w-full px-3 py-2 text-sm text-left hover:bg-neutral-hover transition-colors ${
+                className={`w-full px-3 py-2 text-sm text-left hover:bg-neutral-hover transition-colors cursor-pointer ${
                   t === selectedTheme ? "bg-neutral-hover" : ""
                 }`}
                 style={{
