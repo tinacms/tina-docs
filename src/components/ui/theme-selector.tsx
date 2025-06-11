@@ -1,6 +1,6 @@
 "use client";
 import { useTheme } from "next-themes";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 
 const themes = [
@@ -92,6 +92,7 @@ export const ThemeSelector = () => {
     <div className="fixed bottom-4 right-4 z-50 bg-neutral-surface p-2 rounded-lg shadow-lg">
       <div className="relative" ref={dropdownRef}>
         <button
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
           className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-2 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
         >
@@ -109,6 +110,7 @@ export const ThemeSelector = () => {
           <div className="absolute bottom-full left-0 right-0 mb-1 bg-neutral-surface rounded-md border border-neutral-border shadow-lg overflow-hidden w-[120px]">
             {themes.map((t) => (
               <button
+                type="button"
                 key={t}
                 onClick={() => handleThemeChange(t)}
                 className={`w-full px-3 py-1 text-sm text-left hover:bg-neutral-hover transition-colors cursor-pointer first:rounded-t-md last:rounded-b-md my-0.25 first:mt-0 last:mb-0 ${
@@ -118,15 +120,15 @@ export const ThemeSelector = () => {
                   backgroundColor:
                     t === "default"
                       ? DEFAULT_COLORS.background
-                      : `var(--brand-primary-light)`,
+                      : "var(--brand-primary-light)",
                   color:
                     t === "default"
                       ? DEFAULT_COLORS.text
-                      : `var(--brand-primary)`,
+                      : "var(--brand-primary)",
                   border:
                     t === "default"
                       ? `1px solid ${DEFAULT_COLORS.border}`
-                      : `1px solid var(--brand-primary)`,
+                      : "1px solid var(--brand-primary)",
                 }}
               >
                 {t.charAt(0).toUpperCase() + t.slice(1)}
