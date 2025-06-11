@@ -13,27 +13,17 @@ const heading = Roboto_Flex({
   variable: "--heading-font",
 });
 
+const isThemeSelectorEnabled =
+  process.env.NODE_ENV === "development" ||
+  process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
+
+const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
+
 export default function RootLayout({
   children = null,
 }: {
   children: React.ReactNode;
 }) {
-  const isThemeSelectorEnabled =
-    process.env.NODE_ENV === "development" ||
-    process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
-  const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
-
-  const content = (
-    <>
-      <AdminLink />
-      <TailwindIndicator />
-      {isThemeSelectorEnabled && <ThemeSelector />}
-      <div className="font-sans flex min-h-screen flex-col bg-background-color">
-        <div className="flex flex-1 flex-col items-center">{children}</div>
-      </div>
-    </>
-  );
-
   return (
     <html lang="en" className={`theme-${theme}`} suppressHydrationWarning>
       <head>
@@ -42,19 +32,26 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <body className={`${body.variable} ${heading.variable}`}>
-        {isThemeSelectorEnabled ? (
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem={true}
-            disableTransitionOnChange={false}
-          >
-            {content}
-          </ThemeProvider>
-        ) : (
-          content
-        )}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem={true}
+          disableTransitionOnChange={false}
+        >
+          {isThemeSelectorEnabled && <ThemeSelector />}
+          <Content>{children}</Content>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+
+const Content = ({ children = null }: { children: React.ReactNode }) => (
+  <>
+    <AdminLink />
+    <TailwindIndicator />
+    <div className="font-sans flex min-h-screen flex-col bg-background-color">
+      <div className="flex flex-1 flex-col items-center">{children}</div>
+    </div>
+  </>
+);
