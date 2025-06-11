@@ -1,9 +1,7 @@
-import {
-  CheckIcon as CheckIconOutline,
-  ClipboardIcon as ClipboardIconOutline,
-} from "@heroicons/react/24/outline";
+import { CheckIcon as CheckIconOutline } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
+import { MdContentCopy } from "react-icons/md";
 import { CodeBlock } from "../standard-elements/code-block/code-block";
 
 export const QueryResponseTabs = ({ ...props }) => {
@@ -41,11 +39,11 @@ export const QueryResponseTabs = ({ ...props }) => {
   };
 
   const buttonStyling =
-    "flex justify-center cursor-pointer relative leading-tight text-white py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
+    "flex justify-center cursor-pointer relative leading-tight text-neutral-text py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
   const activeButtonStyling =
-    " hover:text-gray-50 opacity-50 hover:opacity-100";
+    " hover:text-neutral-text-secondary opacity-50 hover:opacity-100";
   const underlineStyling =
-    "transition-[width] absolute h-0.25 -bottom-0.25 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg";
+    "transition-[width] absolute h-0.5 -bottom-0.25 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg";
 
   return (
     <div className="mb-1">
@@ -56,9 +54,9 @@ export const QueryResponseTabs = ({ ...props }) => {
           tab-size: 2;
         }
       `}</style>
-      <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-slate-900">
+      <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle">
         {/* TOP SECTION w/ Buttons */}
-        <div className="flex items-center border-b border-b-slate-700 w-full">
+        <div className="flex items-center border-b border-b-neutral-border-subtle w-full">
           <div className="flex flex-1">
             <button
               type="button"
@@ -85,11 +83,11 @@ export const QueryResponseTabs = ({ ...props }) => {
           </div>
 
           {/* Copy Button */}
-          <div className="flex pr-4">
+          <div className="flex pr-2">
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-sm font-medium text-white/70 hover:text-white transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer"
+              className="flex items-center gap-1.5 text-sm font-medium text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer"
               title={`Copy ${isQuery ? "query" : "response"} code`}
             >
               {hasCopied ? (
@@ -99,8 +97,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                 </>
               ) : (
                 <>
-                  <ClipboardIconOutline className="h-4 w-4" />
-                  <span>Copy</span>
+                  <MdContentCopy className="h-4 w-4" />
                 </>
               )}
             </button>
@@ -114,7 +111,7 @@ export const QueryResponseTabs = ({ ...props }) => {
         >
           <div
             ref={contentRef}
-            className="font-light font-mono text-xs text-[#D5DEEB] relative query-response-pre"
+            className="font-light font-mono text-xs text-neutral-text hover:text-neutral-text-secondary relative query-response-pre"
             style={{
               fontFamily:
                 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',

@@ -35,6 +35,8 @@
 
   --neutral-background: #F8FAFC;
   --neutral-background-secondary: #F1F5F9;
+  --neutral-background-quaternary: #E2E8F0;
+  --neutral-background-quinary: #F1F5F9;
   --neutral-surface: #FFFFFF;
   --neutral-text: #0f172a;
   --neutral-text-secondary: #64748b;
@@ -44,6 +46,7 @@
   --background-color: #e4f6f9;
   --glass-hover-gradient-start: oklch(98.5% 0 0);
   --glass-hover-gradient-end: oklch(95.6% 0.045 203.388);
+  --background-brand-code: #ffffff;
 }
 
 .dark {
@@ -65,7 +68,7 @@
   --brand-secondary-gradient-start: #85C5FE;
   --brand-secondary-gradient-end: #0574E4;
 
-  --brand-tertiary: #6ee7cb;
+  --brand-tertiary: #529C7B;
   --brand-tertiary-hover: #102a24;
   --brand-tertiary-light: #529c7b;
   --brand-tertiary-text: #c1f5eb;
@@ -81,12 +84,17 @@
   --neutral-surface: #1A202C;
   --neutral-background-secondary: #1F2937;
   --neutral-background-tertiary: #1A202C;
+  --neutral-background-quaternary: #0f172a;
+  --neutral-background-quinary: #1E293B;
   --neutral-text: #F9FAFB;
   --neutral-text-secondary: #9CA3AF;
   --neutral-border: #4B5563;
   --neutral-border-subtle: #64748b;
 
   --background-color: #051619;
+
+  --background-brand-code: #011627;
+
 }
 
 /* MONOCHROME THEME */
