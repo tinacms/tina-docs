@@ -111,6 +111,7 @@ export const ThemeSelector = () => {
                 style={{
                   backgroundColor: `var(--brand-primary-light)`,
                   color: `var(--brand-primary)`,
+                  border: `1px solid var(--brand-primary)`,
                 }}
               >
                 {t.charAt(0).toUpperCase() + t.slice(1)}
