@@ -1,6 +1,6 @@
 "use client";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 
 const themes = [
@@ -14,10 +14,14 @@ const themes = [
 
 const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
 
+// Calculate the longest theme name for consistent width
+const longestThemeName = Math.max(...themes.map((t) => t.length));
+
 export const ThemeSelector = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [selectedTheme, setSelectedTheme] = useState(() => {
     // Initialize from sessionStorage if available
     if (typeof window !== "undefined") {
@@ -25,6 +29,21 @@ export const ThemeSelector = () => {
     }
     return theme;
   });
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Avoid hydration mismatch
   useEffect(() => {
@@ -57,7 +76,7 @@ export const ThemeSelector = () => {
     const currentMode = resolvedTheme;
     setSelectedTheme(newTheme);
     sessionStorage.setItem(BROWSER_TAB_THEME_KEY, newTheme);
-    // Force the mode to stay the same by toggling it twice
+    setIsOpen(false);
     if (currentMode === "dark") {
       setTheme("light");
       setTimeout(() => setTheme("dark"), 0);
@@ -68,31 +87,40 @@ export const ThemeSelector = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 bg-neutral-surface p-2 rounded-lg shadow-lg">
-      <div className="relative">
-        <select
-          value={selectedTheme}
-          onChange={(e) => handleThemeChange(e.target.value)}
-          onFocus={() => setIsOpen(true)}
-          onBlur={() => setIsOpen(false)}
-          className="w-full rounded-md border border-neutral-border bg-neutral-surface px-3 py-2 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none pr-8"
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-2 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between"
         >
-          {themes.map((t) => (
-            <option key={t} value={t}>
-              {t.charAt(0).toUpperCase() + t.slice(1)}
-            </option>
-          ))}
-        </select>
-        <div
-          className={`absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        >
+          <span className="truncate">
+            {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)}
+          </span>
           <MdArrowDropDown
-            className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 ${
-              isOpen ? "rotate-180" : "rotate-0"
+            className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 flex-shrink-0 ${
+              isOpen ? "rotate-180" : ""
             }`}
           />
-        </div>
+        </button>
+
+        {isOpen && (
+          <div className="absolute bottom-full left-0 right-0 mb-1 bg-neutral-surface rounded-md border border-neutral-border shadow-lg overflow-hidden w-[120px]">
+            {themes.map((t) => (
+              <button
+                key={t}
+                onClick={() => handleThemeChange(t)}
+                className={`w-full px-3 py-2 text-sm text-left hover:bg-neutral-hover transition-colors ${
+                  t === selectedTheme ? "bg-neutral-hover" : ""
+                }`}
+                style={{
+                  backgroundColor: `var(--theme-${t}-background)`,
+                  color: `var(--theme-${t}-text)`,
+                }}
+              >
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
