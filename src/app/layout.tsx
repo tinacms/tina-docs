@@ -45,8 +45,8 @@ export default function RootLayout({
         {isThemeSelectorEnabled ? (
           <ThemeProvider
             attribute="class"
-            defaultTheme={theme}
-            enableSystem={false}
+            defaultTheme="system"
+            enableSystem={true}
             disableTransitionOnChange={false}
           >
             {content}
