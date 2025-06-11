@@ -59,10 +59,15 @@ module.exports = {
         "neutral-surface": "var(--neutral-surface)",
         "neutral-background-secondary": "var(--neutral-background-secondary)",
         "neutral-background-tertiary": "var(--neutral-background-tertiary)",
+        "neutral-background-quaternary": "var(--neutral-background-quaternary)",
+        "neutral-background-quinary": "var(--neutral-background-quinary)",
         "neutral-text": "var(--neutral-text)",
         "neutral-text-secondary": "var(--neutral-text-secondary)",
         "neutral-border": "var(--neutral-border)",
         "neutral-border-subtle": "var(--neutral-border-subtle)",
+
+        // Code Block Background
+        "background-brand-code": "var(--background-brand-code)",
       },
     },
     fontFamily: {
