@@ -54,7 +54,7 @@ export const QueryResponseTabs = ({ ...props }) => {
           tab-size: 2;
         }
       `}</style>
-      <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 pt-1 bg-neutral-background shadow-sm border border-neutral-border-subtle">
+      <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle">
         {/* TOP SECTION w/ Buttons */}
         <div className="flex items-center border-b border-b-neutral-border-subtle w-full">
           <div className="flex flex-1">
@@ -87,7 +87,7 @@ export const QueryResponseTabs = ({ ...props }) => {
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-sm font-medium text-neutral-text hover:text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer"
+              className="flex items-center gap-1.5 text-sm font-medium text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer"
               title={`Copy ${isQuery ? "query" : "response"} code`}
             >
               {hasCopied ? (
