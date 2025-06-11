@@ -89,12 +89,12 @@ export const ThemeSelector = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 bg-neutral-surface p-2 rounded-lg shadow-lg">
+    <div className="fixed bottom-4 right-4 z-50 bg-neutral-surface p-1 rounded-lg shadow-lg">
       <div className="relative" ref={dropdownRef}>
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-2 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
+          className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-1 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
         >
           <span className="truncate">
             {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)}
