@@ -14,9 +14,6 @@ const themes = [
 
 const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
 
-// Calculate the longest theme name for consistent width
-const longestThemeName = Math.max(...themes.map((t) => t.length));
-
 export const ThemeSelector = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -108,12 +105,12 @@ export const ThemeSelector = () => {
               <button
                 key={t}
                 onClick={() => handleThemeChange(t)}
-                className={`w-full px-3 py-2 text-sm text-left hover:bg-neutral-hover transition-colors cursor-pointer ${
-                  t === selectedTheme ? "bg-neutral-hover" : ""
-                }`}
+                className={`w-full px-3 py-2 text-sm text-left hover:bg-neutral-hover transition-colors cursor-pointer first:rounded-t-md last:rounded-b-md my-0.25 first:mt-0 last:mb-0 theme-${
+                  t === "default" ? "" : t
+                } ${t === selectedTheme ? "bg-neutral-hover" : ""}`}
                 style={{
-                  backgroundColor: `var(--theme-${t}-background)`,
-                  color: `var(--theme-${t}-text)`,
+                  backgroundColor: `var(--brand-primary-light)`,
+                  color: `var(--brand-primary)`,
                 }}
               >
                 {t.charAt(0).toUpperCase() + t.slice(1)}
