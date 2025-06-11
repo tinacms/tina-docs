@@ -14,13 +14,19 @@ const themes = [
 
 const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
 
+// Default theme colors from root
+const DEFAULT_COLORS = {
+  background: "#ecf8fb",
+  text: "#EC4815",
+  border: "#EC4815",
+};
+
 export const ThemeSelector = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [selectedTheme, setSelectedTheme] = useState(() => {
-    // Initialize from sessionStorage if available
     if (typeof window !== "undefined") {
       return sessionStorage.getItem(BROWSER_TAB_THEME_KEY) || theme;
     }
@@ -105,13 +111,22 @@ export const ThemeSelector = () => {
               <button
                 key={t}
                 onClick={() => handleThemeChange(t)}
-                className={`w-full px-3 py-2 text-sm text-left hover:bg-neutral-hover transition-colors cursor-pointer first:rounded-t-md last:rounded-b-md my-0.25 first:mt-0 last:mb-0 theme-${
-                  t === "default" ? "" : t
+                className={`w-full px-3 py-1 text-sm text-left hover:bg-neutral-hover transition-colors cursor-pointer first:rounded-t-md last:rounded-b-md my-0.25 first:mt-0 last:mb-0 ${
+                  t === "default" ? "" : `theme-${t}`
                 } ${t === selectedTheme ? "bg-neutral-hover" : ""}`}
                 style={{
-                  backgroundColor: `var(--brand-primary-light)`,
-                  color: `var(--brand-primary)`,
-                  border: `1px solid var(--brand-primary)`,
+                  backgroundColor:
+                    t === "default"
+                      ? DEFAULT_COLORS.background
+                      : `var(--brand-primary-light)`,
+                  color:
+                    t === "default"
+                      ? DEFAULT_COLORS.text
+                      : `var(--brand-primary)`,
+                  border:
+                    t === "default"
+                      ? `1px solid ${DEFAULT_COLORS.border}`
+                      : `1px solid var(--brand-primary)`,
                 }}
               >
                 {t.charAt(0).toUpperCase() + t.slice(1)}
