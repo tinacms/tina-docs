@@ -11,10 +11,18 @@ const themes = [
   "pine-indigo",
 ];
 
-export function ThemeSelector() {
+const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
+
+export const ThemeSelector = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState(theme);
+  const [selectedTheme, setSelectedTheme] = useState(() => {
+    // Initialize from sessionStorage if available
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem(BROWSER_TAB_THEME_KEY) || theme;
+    }
+    return theme;
+  });
 
   // Avoid hydration mismatch
   useEffect(() => {
@@ -37,16 +45,16 @@ export function ThemeSelector() {
       document.documentElement.className = `theme-${selectedTheme}${
         isDark ? " dark" : ""
       }`;
+      sessionStorage.setItem(BROWSER_TAB_THEME_KEY, selectedTheme);
     }
   }, [selectedTheme, resolvedTheme, mounted]);
 
   if (!mounted) return null;
 
   const handleThemeChange = (newTheme: string) => {
-    // Store the current mode
     const currentMode = resolvedTheme;
-    // Update the theme
     setSelectedTheme(newTheme);
+    sessionStorage.setItem(BROWSER_TAB_THEME_KEY, newTheme);
     // Force the mode to stay the same by toggling it twice
     if (currentMode === "dark") {
       setTheme("light");
@@ -71,4 +79,4 @@ export function ThemeSelector() {
       </select>
     </div>
   );
-}
+};
