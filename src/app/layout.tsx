@@ -1,6 +1,7 @@
 import "@/styles/global.css";
 import AdminLink from "@/components/ui/admin-link";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
+import { ThemeSelector } from "@/components/ui/theme-selector";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 
@@ -12,13 +13,17 @@ const heading = Roboto_Flex({
   variable: "--heading-font",
 });
 
+const isThemeSelectorEnabled =
+  process.env.NODE_ENV === "development" ||
+  process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
+
+const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
+
 export default function RootLayout({
   children = null,
 }: {
   children: React.ReactNode;
 }) {
-  const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
-
   return (
     <html lang="en" className={`theme-${theme}`} suppressHydrationWarning>
       <head>
@@ -33,13 +38,20 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange={false}
         >
-          <AdminLink />
-          <TailwindIndicator />
-          <div className="font-sans flex min-h-screen flex-col bg-background-color">
-            <div className="flex flex-1 flex-col items-center">{children}</div>
-          </div>
+          {isThemeSelectorEnabled && <ThemeSelector />}
+          <Content>{children}</Content>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+
+const Content = ({ children = null }: { children: React.ReactNode }) => (
+  <>
+    <AdminLink />
+    <TailwindIndicator />
+    <div className="font-sans flex min-h-screen flex-col bg-background-color">
+      <div className="flex flex-1 flex-col items-center">{children}</div>
+    </div>
+  </>
+);
