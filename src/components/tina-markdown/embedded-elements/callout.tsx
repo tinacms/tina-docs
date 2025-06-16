@@ -22,7 +22,7 @@ const variants = {
   info: "border-x-brand-secondary",
   success: "border-x-green-600",
   error: "border-x-red-500",
-  idea: "border-x-seafoam-600",
+  idea: "border-x-brand-tertiary-hover",
   lock: "border-x-neutral-text-secondary",
   api: "border-x-brand-primary",
 } as const;
@@ -42,7 +42,7 @@ const iconColors = {
   info: "text-brand-secondary",
   success: "text-green-600",
   error: "text-red-500",
-  idea: "text-seafoam-600",
+  idea: "text-brand-tertiary-hover",
   lock: "text-neutral-text-secondary",
   api: "text-brand-primary",
 } as const;

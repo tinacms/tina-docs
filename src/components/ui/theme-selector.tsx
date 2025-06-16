@@ -8,8 +8,8 @@ const themes = [
   "monochrome",
   "blossom",
   "lake",
-  "pine-green",
-  "pine-indigo",
+  "pine",
+  "indigo",
 ];
 
 const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
