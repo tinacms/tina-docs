@@ -11,24 +11,24 @@ export const NavTitle: React.FC<NavTitleProps> = ({
   ...props
 }: NavTitleProps) => {
   const baseStyles =
-    "group flex cursor-pointer items-center gap-1 pb-0.5 pl-4 leading-tight transition duration-150 ease-out hover:opacity-100";
+    "group flex cursor-pointer items-center gap-1 py-0.5 leading-tight transition duration-150 ease-out hover:opacity-100 w-full";
 
   const headerLevelClasses = {
     0: `${FONT_WEIGHTS.light} text-brand-primary ${FONT_SIZES.xl} pt-2 opacity-100`,
     1: {
-      default: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 text-neutral-text`,
-      selected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.bold} text-brand-secondary`,
-      childSelected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} text-neutral-text`,
+      default: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pl-3 pt-1 text-neutral-text-secondary hover:text-neutral-text hover:bg-brand-secondary/10 rounded-lg`,
+      selected: `${FONT_SIZES.base} ${FONT_WEIGHTS.semibold} pl-3 pt-1 text-brand-secondary-contrast  bg-brand-secondary/20 rounded-lg`,
+      childSelected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pl-3 pt-1  text-neutral-text`,
     },
     2: {
-      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 text-neutral-text`,
-      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} text-brand-secondary`,
-      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} text-neutral-text`,
+      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pl-6 opacity-80 pt-0.5 text-neutral-text-secondary hover:text-neutral-text  hover:bg-brand-secondary/10   rounded-lg`,
+      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.semibold} pl-6 pt-0.5 text-brand-secondary-contrast  bg-brand-secondary/20 rounded-lg`,
+      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pl-6 pt-1  text-neutral-text`,
     },
     3: {
-      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} opacity-80 pt-0.5 text-neutral-text`,
-      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-0.5 ${FONT_WEIGHTS.bold} text-brand-secondary`,
-      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pt-1 ${FONT_WEIGHTS.medium} text-neutral-text`,
+      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pl-9 opacity-80 pt-0.5 text-neutral-text  hover:bg-brand-secondary/10   rounded-lg`,
+      selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.semibold} pl-9 pt-0.5  text-brand-secondary-contrast  bg-brand-secondary/20 rounded-lg`,
+      childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pl-9 pt-1  text-neutral-text`,
     },
   };
 
@@ -36,8 +36,8 @@ export const NavTitle: React.FC<NavTitleProps> = ({
   const selectedClass = selected
     ? "selected"
     : childSelected
-      ? "childSelected"
-      : "default";
+    ? "childSelected"
+    : "default";
   const classes =
     level < 1
       ? headerLevelClasses[headerLevel]

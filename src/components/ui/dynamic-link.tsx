@@ -6,11 +6,12 @@ type ExtraProps = Omit<LinkProps, "as" | "href">;
 interface DynamicLinkProps extends ExtraProps {
   href: string;
   children?: React.ReactNode;
+  isFullWidth?: boolean;
 }
 
-export const DynamicLink = ({ href, children, ...props }: DynamicLinkProps) => {
+export const DynamicLink = ({ href, children, isFullWidth = false, ...props }: DynamicLinkProps) => {
   return (
-    <Link href={href} {...props} className="cursor-pointer">
+    <Link href={href} {...props} className={`cursor-pointer ${isFullWidth ? "w-full" : ""}`}>
       {children}
     </Link>
   );
