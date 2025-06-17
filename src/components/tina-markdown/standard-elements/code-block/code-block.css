@@ -3,25 +3,25 @@ pre.shiki {
 }
 
 .shiki .diff.add {
-  background-color: rgba(22, 163, 77, 0.30);
+  background-color: rgba(22, 163, 77, 0.3);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
 
 :root.dark .shiki .diff.add {
-  background-color: rgba(22, 163, 77, 0.30);
+  background-color: rgba(22, 163, 77, 0.3);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
 
 .shiki .diff.remove {
-  background-color: rgba(220,57,38,0.25);
+  background-color: rgba(220, 57, 38, 0.25);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
 
 :root.dark .shiki .diff.remove {
-  background-color: rgba(220,57,38,0.25);
+  background-color: rgba(220, 57, 38, 0.25);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
@@ -53,13 +53,13 @@ pre.shiki {
 }
 
 .shiki .line.highlighted {
-  background-color: rgba(203,213,255,0.6);
+  background-color: rgba(203, 213, 255, 0.6);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
 
 :root.dark .shiki .line.highlighted {
-  background-color: rgb(100,107,139,0.6);
+  background-color: rgb(100, 107, 139, 0.6);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }

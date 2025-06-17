@@ -100,9 +100,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
             <NavTitle level={level} selected={selected && !childSelected}>
               <span className="flex w-full items-center justify-between font-body">
                 <span className="truncate">{categoryData.title}</span>
-                <ChevronRightIcon
-                  className={`ml-2 flex-shrink-0 opacity-0 w-5 h-auto`}
-                />
+                <ChevronRightIcon className="ml-2 flex-shrink-0 opacity-0 w-5 h-auto" />
               </span>
             </NavTitle>
           </DynamicLink>

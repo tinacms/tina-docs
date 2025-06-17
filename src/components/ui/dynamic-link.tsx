@@ -9,9 +9,18 @@ interface DynamicLinkProps extends ExtraProps {
   isFullWidth?: boolean;
 }
 
-export const DynamicLink = ({ href, children, isFullWidth = false, ...props }: DynamicLinkProps) => {
+export const DynamicLink = ({
+  href,
+  children,
+  isFullWidth = false,
+  ...props
+}: DynamicLinkProps) => {
   return (
-    <Link href={href} {...props} className={`cursor-pointer ${isFullWidth ? "w-full" : ""}`}>
+    <Link
+      href={href}
+      {...props}
+      className={`cursor-pointer ${isFullWidth ? "w-full" : ""}`}
+    >
       {children}
     </Link>
   );

@@ -96,9 +96,7 @@ export function CodeBlock({
       <div
         className={`shiki w-full overflow-x-auto bg-background-brand-code py-5 px-2 text-sm ${
           showBorder ? "border border-neutral-border-subtle/50 shadow-sm" : ""
-        } ${
-          showCopyButton ? "rounded-lg" : "rounded-b-xl"
-        }`}
+        } ${showCopyButton ? "rounded-lg" : "rounded-b-xl"}`}
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki output is trusted and already escaped for XSS safety.
         dangerouslySetInnerHTML={{ __html: html }}
       />
