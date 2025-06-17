@@ -60,7 +60,7 @@ const Callout = ({ body, variant = "warning", text }: CalloutProps) => {
 
   return (
     <blockquote
-      className={`relative overflow-hidden rounded-lg bg-neutral-surface border-l-4 my-4 shadow-sm ${variantClass} `}
+      className={`relative overflow-hidden rounded-lg bg-white dark:bg-[#1A202C] border-l-4 my-4 shadow-sm ${variantClass} `}
     >
       <div className="flex items-start gap-3 px-4">
         <div className="relative top-7 left-1">

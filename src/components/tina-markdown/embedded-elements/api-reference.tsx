@@ -778,7 +778,7 @@ const ApiReference = (data: any) => {
                         {param.type}
                       </span>
                       {param.required && (
-                        <span className="px-2 py-0.5 text-xs rounded-full bg-brand-primary text-neutral-text font-tuner">
+                        <span className="px-2 py-0.5 text-xs rounded-full bg-brand-primary-light text-black dark:text-white font-tuner">
                           required
                         </span>
                       )}
