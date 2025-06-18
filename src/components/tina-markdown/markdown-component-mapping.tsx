@@ -147,7 +147,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   ),
   code: (props) => (
     <code
-      className="rounded border-y-neutral-border brand-glass-gradient px-1 py-0.5 text-brand-primary"
+      className="rounded border-y-neutral-border bg-neutral-surface shadow-sm px-1 py-0.5 text-brand-primary"
       {...props}
     />
   ),

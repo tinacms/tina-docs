@@ -26,7 +26,7 @@ const Accordion = ({
     <div className="flex flex-col justify-center items-center">
       {/* Header */}
       <div
-        className={`mb-5 max-w-full overflow-hidden rounded-lg brand-glass-gradient shadow-md transition-[width] duration-700 ease-in-out ${
+        className={`mb-5 max-w-full overflow-hidden rounded-lg bg-neutral-surface shadow-md transition-[width] duration-700 ease-in-out ${
           fullWidth ? "w-full" : "w-3/4"
         }`}
       >
@@ -47,7 +47,7 @@ const Accordion = ({
         </div>
         {/* Expandable content */}
         <div
-          className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
+          className={`grid gap-4  transition-all duration-700 ease-in-out ${
             isExpanded
               ? "max-h-[2000px] opacity-100"
               : "max-h-0 overflow-hidden opacity-0"
@@ -130,7 +130,7 @@ export const AccordionBlock = ({
 
   return (
     <div
-      className={`mx-auto flex flex-col justify-center items-center rounded-lg brand-glass-gradient shadow-md mb-5 ${
+      className={`mx-auto flex flex-col justify-center items-center rounded-lg bg-neutral-surface shadow-md mb-5 ${
         fullWidth ? "w-full" : "w-3/4"
       }`}
     >
@@ -152,7 +152,7 @@ export const AccordionBlock = ({
             </div>
           </div>
           <div
-            className={`grid gap-4 border-t border-gray-100 transition-all duration-700 ease-in-out ${
+            className={`grid gap-4  transition-all duration-700 ease-in-out ${
               isExpanded[index]
                 ? "max-h-[2000px] opacity-100"
                 : "max-h-0 overflow-hidden opacity-0"

@@ -43,7 +43,7 @@ export const QueryResponseTabs = ({ ...props }) => {
   const activeButtonStyling =
     " hover:text-neutral-text-secondary opacity-50 hover:opacity-100";
   const underlineStyling =
-    "transition-[width] absolute h-0.5 -bottom-0.25 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg";
+    "transition-[width] absolute h-0.5 -bottom-0.25 bg-brand-primary rounded-lg";
 
   return (
     <div className="mb-1">
@@ -56,8 +56,8 @@ export const QueryResponseTabs = ({ ...props }) => {
       `}</style>
       <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle">
         {/* TOP SECTION w/ Buttons */}
-        <div className="flex items-center border-b border-b-neutral-border-subtle w-full">
-          <div className="flex flex-1">
+        <div className="flex items-center w-full border-b border-neutral-border-subtle ">
+          <div className="flex flex-1 ">
             <button
               type="button"
               onClick={() => setIsQuery(true)}
@@ -125,6 +125,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                   value={props.query}
                   lang="javascript"
                   showCopyButton={false}
+                  showBorder={false}
                 />
               </div>
             ) : (
@@ -133,6 +134,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                   value={props.response}
                   lang="javascript"
                   showCopyButton={false}
+                  showBorder={false}
                 />
               </div>
             )}

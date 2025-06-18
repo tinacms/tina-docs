@@ -65,21 +65,43 @@ export const NavLevel: React.FC<NavLevelProps> = ({
     <>
       <div
         ref={navLevelElem}
-        className={`relative flex last:mb-[0.375rem] ${
+        className={`relative flex last:pb-[0.375rem]  ${
           categoryData.status
-            ? "after:content-[attr(data-status)] after:inline-flex after:text-xs after:font-bold after:bg-[#f9ebe6] after:border after:border-[#edcdc4] after:w-fit after:px-[5px] after:py-[2px] after:rounded-[5px] after:tracking-[0.25px] after:text-[#ec4815] after:mr-[5px] after:ml-[5px] after:leading-none after:align-middle after:h-fit after:self-center"
+            ? "after:content-[attr(data-status)] after:text-xs after:font-bold after:bg-[#f9ebe6] after:border after:border-[#edcdc4] after:w-fit after:px-[5px] after:py-[2px] after:rounded-[5px] after:tracking-[0.25px] after:text-[#ec4815] after:mr-[5px] after:ml-[5px] after:leading-none after:align-middle after:h-fit after:self-center"
             : ""
         }`}
         data-status={categoryData.status?.toLowerCase()}
+        style={{
+          paddingLeft:
+            level === 0
+              ? PADDING_LEVELS.level0.left
+              : PADDING_LEVELS.default.left,
+          paddingRight:
+            level === 0
+              ? PADDING_LEVELS.level0.right
+              : PADDING_LEVELS.default.right,
+          paddingTop:
+            level === 0
+              ? PADDING_LEVELS.level0.top
+              : PADDING_LEVELS.default.top,
+          paddingBottom:
+            level === 0
+              ? PADDING_LEVELS.level0.bottom
+              : PADDING_LEVELS.default.bottom,
+        }}
       >
         {categoryData.slug ? (
           <DynamicLink
             href={getUrl(categoryData.slug)}
             passHref
             onClick={onNavigate}
+            isFullWidth={true}
           >
             <NavTitle level={level} selected={selected && !childSelected}>
-              <span className="-mr-2 pr-2">{categoryData.title}</span>
+              <span className="flex items-center justify-between font-body">
+                <span className="truncate">{categoryData.title}</span>
+                <ChevronRightIcon className="ml-2 flex-shrink-0 opacity-0 w-5 h-auto" />
+              </span>
             </NavTitle>
           </DynamicLink>
         ) : (
@@ -91,18 +113,18 @@ export const NavLevel: React.FC<NavLevelProps> = ({
               setExpanded(!expanded);
             }}
           >
-            <span className=" -mr-2 pr-2 font-body">{categoryData.title}</span>
-            {categoryData.items && !selected && (
-              <ChevronRightIcon
-                className={`${
-                  level < 1
-                    ? "text-brand-primary group-hover:text-brand-primary-hover"
-                    : "text-neutral-text group-hover:text-neutral-text-secondary"
-                } -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
-                  expanded ? "rotate-90" : ""
-                }`}
-              />
-            )}
+            <span className="flex items-center justify-start font-body">
+              <span className="truncate">{categoryData.title}</span>
+              {categoryData.items && (
+                <ChevronRightIcon
+                  className={`ml-2 flex-shrink-0 w-5 h-auto transition-[300ms] ease-out group-hover:rotate-90 ${
+                    level < 1
+                      ? "text-neutral-text font-bold"
+                      : "text-neutral-text-secondary group-hover:text-neutral-text"
+                  } ${expanded ? "rotate-90" : ""}`}
+                />
+              )}
+            </span>
           </NavTitle>
         )}
       </div>
@@ -113,23 +135,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
             duration={TRANSITION_DURATION}
             height={expanded ? "auto" : 0}
           >
-            <div
-              className="relative block"
-              style={{
-                paddingLeft:
-                  level === 0
-                    ? PADDING_LEVELS.level0.left
-                    : PADDING_LEVELS.default.left,
-                paddingTop:
-                  level === 0
-                    ? PADDING_LEVELS.level0.top
-                    : PADDING_LEVELS.default.top,
-                paddingBottom:
-                  level === 0
-                    ? PADDING_LEVELS.level0.bottom
-                    : PADDING_LEVELS.default.bottom,
-              }}
-            >
+            <div className="relative block">
               {(categoryData.items || []).map((item: any) => (
                 <div
                   key={`child-container-${

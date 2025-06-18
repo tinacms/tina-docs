@@ -26,7 +26,7 @@ export const Table = (props) => {
                       key={`cell-${rowIndex}-${cellIndex}`}
                       className={` px-4 pt-2 ${
                         rowIndex === 0
-                          ? " text-left font-tuner bg-neutral-background  "
+                          ? " text-left font-tuner bg-neutral-background-secondary  border-b-[0.5px] border-neutral-border "
                           : ""
                       } ${cellIndex === 0 ? "max-w-xs break-words" : ""}
                       ${

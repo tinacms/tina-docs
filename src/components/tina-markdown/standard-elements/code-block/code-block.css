@@ -3,23 +3,43 @@ pre.shiki {
 }
 
 .shiki .diff.add {
-  background-color: rgba(46, 160, 67, 0.15);
+  background-color: rgba(22, 163, 77, 0.3);
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+
+:root.dark .shiki .diff.add {
+  background-color: rgba(22, 163, 77, 0.3);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
 
 .shiki .diff.remove {
-  background-color: rgba(218, 54, 51, 0.15);
+  background-color: rgba(220, 57, 38, 0.25);
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+
+:root.dark .shiki .diff.remove {
+  background-color: rgba(220, 57, 38, 0.25);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
 
 .shiki .line.diff.add::before {
-  color: #3dd68c;
+  color: #14532d;
 }
 
 .shiki .line.diff.remove::before {
-  color: #cb7676;
+  color: #7f1d1d;
+}
+
+:root.dark .shiki .line.diff.add::before {
+  color: #6ff4b3;
+}
+
+:root.dark .shiki .line.diff.remove::before {
+  color: #f43a3a;
 }
 
 .shiki .line::before {
@@ -33,7 +53,13 @@ pre.shiki {
 }
 
 .shiki .line.highlighted {
-  background-color: rgba(45, 42, 85, 0.3);
+  background-color: rgba(203, 213, 255, 0.6);
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+
+:root.dark .shiki .line.highlighted {
+  background-color: rgb(100, 107, 139, 0.6);
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }

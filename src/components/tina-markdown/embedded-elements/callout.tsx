@@ -22,7 +22,7 @@ const variants = {
   info: "border-x-brand-secondary",
   success: "border-x-green-600",
   error: "border-x-red-500",
-  idea: "border-x-seafoam-600",
+  idea: "border-x-brand-tertiary-hover",
   lock: "border-x-neutral-text-secondary",
   api: "border-x-brand-primary",
 } as const;
@@ -42,7 +42,7 @@ const iconColors = {
   info: "text-brand-secondary",
   success: "text-green-600",
   error: "text-red-500",
-  idea: "text-seafoam-600",
+  idea: "text-brand-tertiary-hover",
   lock: "text-neutral-text-secondary",
   api: "text-brand-primary",
 } as const;
@@ -60,7 +60,7 @@ const Callout = ({ body, variant = "warning", text }: CalloutProps) => {
 
   return (
     <blockquote
-      className={`relative overflow-hidden rounded-lg bg-neutral-surface border-l-4 my-4 shadow-sm ${variantClass} `}
+      className={`relative overflow-hidden rounded-lg bg-white dark:bg-[#1A202C] border-l-4 my-4 shadow-sm ${variantClass} `}
     >
       <div className="flex items-start gap-3 px-4">
         <div className="relative top-7 left-1">

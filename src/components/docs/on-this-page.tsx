@@ -135,7 +135,7 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
                 <a
                   href={`#${uniqueId}`}
                   onClick={(e) => handleLinkClick(e, uniqueId)}
-                  className={`${item.type === "h3" ? "pl-7" : "pl-2"} py-1.5 ${
+                  className={`${item.type === "h3" ? "pl-6" : "pl-2"} py-1.5 ${
                     activeId === uniqueId
                       ? "text-brand-primary"
                       : "group-hover:text-neutral-text text-neutral-text-secondary"

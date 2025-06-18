@@ -3,14 +3,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 
-const themes = [
-  "default",
-  "monochrome",
-  "blossom",
-  "lake",
-  "pine-green",
-  "pine-indigo",
-];
+const themes = ["default", "monochrome", "blossom", "lake", "pine", "indigo"];
 
 const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
 

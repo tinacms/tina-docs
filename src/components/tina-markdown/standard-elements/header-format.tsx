@@ -20,18 +20,17 @@ export default function HeaderFormat({
   const linkHref = `#${id}`;
 
   const styles = {
-    1: "brand-primary-gradient  text-3xl !mt-16 mb-4 font-heading",
-    2: "brand-primary-gradient  text-2xl !mt-12 mb-2 font-heading",
-    3: "brand-secondary-gradient text-xl font-medium !mt-8 mb-2 !important font-heading",
-    4: "brand-primary-gradient  text-xl font-medium !mt-8 mb-2 font-heading",
-    5: "brand-primary-gradient  text-lg font-medium !mt-2 mb-1 font-heading",
+    1: "text-brand-primary text-4xl !mt-16 mb-4 font-heading",
+    2: "text-brand-primary text-3xl !mt-12 mb-2 font-heading",
+    3: "text-brand-primary text-2xl font-medium !mt-8 mb-2 !important font-heading",
+    4: "text-brand-primary text-xl font-medium !mt-8 mb-2 font-heading",
+    5: "text-brand-primary text-lg font-medium !mt-2 mb-1 font-heading",
     6: "text-neutral-text-secondary text-base font-normal mt-2 mb-1 font-heading",
   };
-
   const linkStyle = {
     1: "text-brand-primary size-8",
     2: "text-brand-primary size-6",
-    3: "text-brand-secondary size-6",
+    3: "text-brand-primary size-6",
     4: "text-brand-primary size-6",
     5: "text-brand-primary size-4",
     6: "text-neutral-text-secondary size-4",

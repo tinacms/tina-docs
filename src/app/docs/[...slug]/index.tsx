@@ -39,7 +39,7 @@ export default function Document({ props, tinaProps }) {
       >
         <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
           <h1
-            className="brand-primary-gradient my-4 font-heading text-4xl"
+            className="text-brand-primary my-4 font-heading text-4xl"
             data-tina-field={tinaField(documentationData, "title")}
             data-pagefind-meta="title"
           >
