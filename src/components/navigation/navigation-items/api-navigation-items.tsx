@@ -56,10 +56,10 @@ export const ApiNavigationItems: React.FC<
               categoryData.slug
                 ? getUrl(categoryData.slug)
                 : categoryData.title
-                  ? categoryData.title
-                  : categoryData.id
-                    ? categoryData.id
-                    : `item-${index}`
+                ? categoryData.title
+                : categoryData.id
+                ? categoryData.id
+                : `item-${index}`
             }`}
           >
             <NavLevel
@@ -77,12 +77,12 @@ export const ApiNavigationItems: React.FC<
             {/* Tag Header */}
             <div className="mb-3">
               <div
-                className="group flex cursor-pointer items-center gap-1 pb-0.5 pl-4 leading-tight transition duration-150 ease-out hover:opacity-100 text-brand-primary text-xl pt-2 opacity-100 font-light"
+                className="group flex cursor-pointer items-center gap-1 pb-0.5 pl-4 leading-tight transition duration-150 ease-out hover:opacity-100 text-neutral-text text-xl pt-2 opacity-100 font-light"
                 onClick={() => toggleTag(tag)}
               >
                 <span className="-mr-2 pr-2">{tag}</span>
                 <ChevronRightIcon
-                  className={`text-brand-primary group-hover:text-brand-primary-hover -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
+                  className={`text-neutral-text -my-2 h-auto w-5 transition-[300ms] ease-out group-hover:rotate-90 ${
                     expandedTags[tag] ? "rotate-90" : ""
                   }`}
                 />
@@ -102,42 +102,90 @@ export const ApiNavigationItems: React.FC<
                       tag
                     )}/${getEndpointSlug(endpoint.method, endpoint.path)}`}
                     onClick={onNavigate}
-                    className="group flex items-center px-3 py-2 text-sm rounded-md transition-colors duration-150"
+                    className="group flex items-center pl-2 py-2 text-sm rounded-md transition-colors duration-150"
                   >
                     {/* HTTP Method Badge */}
                     <span
                       className={`
-                        inline-flex items-center justify-center px-0.5 py-0 rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
+                        inline-flex items-center justify-center px-0.5 py-[3px] rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
                         ${
                           endpoint.method.toLowerCase() === "get"
-                            ? "bg-green-100 text-green-800"
+                            ? currentPath ===
+                              `/docs/api-documentation/${getTagSlug(
+                                tag
+                              )}/${getEndpointSlug(
+                                endpoint.method,
+                                endpoint.path
+                              )}`
+                              ? "bg-green-100 text-green-800"
+                              : "bg-green-100/75 group-hover:bg-green-100 text-green-800"
                             : ""
                         }
                         ${
                           endpoint.method.toLowerCase() === "post"
-                            ? "bg-blue-100 text-blue-800"
+                            ? currentPath ===
+                              `/docs/api-documentation/${getTagSlug(
+                                tag
+                              )}/${getEndpointSlug(
+                                endpoint.method,
+                                endpoint.path
+                              )}`
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-blue-100/75 group-hover:bg-blue-100 text-blue-800"
                             : ""
                         }
                         ${
                           endpoint.method.toLowerCase() === "put"
-                            ? "bg-yellow-100 text-yellow-800"
+                            ? currentPath ===
+                              `/docs/api-documentation/${getTagSlug(
+                                tag
+                              )}/${getEndpointSlug(
+                                endpoint.method,
+                                endpoint.path
+                              )}`
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-yellow-100/75 group-hover:bg-yellow-100 text-yellow-800"
                             : ""
                         }
                         ${
                           endpoint.method.toLowerCase() === "delete"
-                            ? "bg-red-100 text-red-800"
+                            ? currentPath ===
+                              `/docs/api-documentation/${getTagSlug(
+                                tag
+                              )}/${getEndpointSlug(
+                                endpoint.method,
+                                endpoint.path
+                              )}`
+                              ? "bg-red-100 text-red-800"
+                              : "bg-red-100/75 group-hover:bg-red-100 text-red-800"
                             : ""
                         }
                         ${
                           endpoint.method.toLowerCase() === "patch"
-                            ? "bg-purple-100 text-purple-800"
+                            ? currentPath ===
+                              `/docs/api-documentation/${getTagSlug(
+                                tag
+                              )}/${getEndpointSlug(
+                                endpoint.method,
+                                endpoint.path
+                              )}`
+                              ? "bg-purple-100 text-purple-800"
+                              : "bg-purple-100/75 group-hover:bg-purple-100 text-purple-800"
                             : ""
                         }
                         ${
                           !["get", "post", "put", "delete", "patch"].includes(
                             endpoint.method.toLowerCase()
                           )
-                            ? "bg-gray-100 text-gray-800"
+                            ? currentPath ===
+                              `/docs/api-documentation/${getTagSlug(
+                                tag
+                              )}/${getEndpointSlug(
+                                endpoint.method,
+                                endpoint.path
+                              )}`
+                              ? "bg-gray-100 text-gray-800"
+                              : "bg-gray-100/75 group-hover:bg-gray-100 text-gray-800"
                             : ""
                         }
                       `}
@@ -155,8 +203,8 @@ export const ApiNavigationItems: React.FC<
                           `/docs/api-documentation/${getTagSlug(
                             tag
                           )}/${getEndpointSlug(endpoint.method, endpoint.path)}`
-                            ? "text-brand-secondary font-bold"
-                            : "text-neutral-text font-normal"
+                            ? "text-brand-primary font-semibold"
+                            : "text-neutral-text-secondary group-hover:text-neutral-text font-normal"
                         }`}
                       >
                         {endpoint.summary}
