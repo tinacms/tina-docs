@@ -19,7 +19,7 @@ export const DynamicLink = ({
     <Link
       href={href}
       {...props}
-      className={`cursor-pointer ${isFullWidth ? "w-full" : ""}`}
+      className={`cursor-pointer ${isFullWidth ? "" : ""}`}
     >
       {children}
     </Link>

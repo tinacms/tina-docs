@@ -124,8 +124,8 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
         onClick={handleCopyPage}
         className={`cursor-pointer flex items-center px-1.5 py-0.5 ${
           copied
-            ? "bg-brand-tertiary text-neutral-text-secondary"
-            : "text-brand-secondary-dark-dark hover:bg-brand-secondary-light"
+            ? "text-neutral-text-secondary"
+            : "text-brand-secondary-dark-dark"
         }`}
         type="button"
       >
@@ -136,7 +136,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
               <span>Copied</span>
             </span>
           ) : (
-            <span className="flex items-center gap-2 py-1 lg:py-0 text-neutral-text-secondary">
+            <span className="flex items-center gap-2 py-1 lg:py-0 text-neutral-text-secondary`">
               <MdContentCopy className="w-4 h-4" />
               <span className="hidden lg:block">Copy</span>
             </span>
@@ -148,7 +148,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       <DropdownMenu onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <button
-            className="cursor-pointer px-3 rounded-r-lg hover:bg-brand-secondary-light focus:outline-none"
+            className="cursor-pointer px-3 rounded-r-lg focus:outline-none"
             type="button"
           >
             <MdArrowDropDown

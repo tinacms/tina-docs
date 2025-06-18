@@ -65,7 +65,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
     <>
       <div
         ref={navLevelElem}
-        className={`relative flex last:pb-[0.375rem] w-full  ${
+        className={`relative flex last:pb-[0.375rem]  ${
           categoryData.status
             ? "after:content-[attr(data-status)] after:text-xs after:font-bold after:bg-[#f9ebe6] after:border after:border-[#edcdc4] after:w-fit after:px-[5px] after:py-[2px] after:rounded-[5px] after:tracking-[0.25px] after:text-[#ec4815] after:mr-[5px] after:ml-[5px] after:leading-none after:align-middle after:h-fit after:self-center"
             : ""
@@ -98,7 +98,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
             isFullWidth={true}
           >
             <NavTitle level={level} selected={selected && !childSelected}>
-              <span className="flex w-full items-center justify-between font-body">
+              <span className="flex items-center justify-between font-body">
                 <span className="truncate">{categoryData.title}</span>
                 <ChevronRightIcon className="ml-2 flex-shrink-0 opacity-0 w-5 h-auto" />
               </span>
@@ -113,13 +113,13 @@ export const NavLevel: React.FC<NavLevelProps> = ({
               setExpanded(!expanded);
             }}
           >
-            <span className="flex w-full items-center justify-between font-body">
+            <span className="flex items-center justify-start font-body">
               <span className="truncate">{categoryData.title}</span>
               {categoryData.items && (
                 <ChevronRightIcon
                   className={`ml-2 flex-shrink-0 w-5 h-auto transition-[300ms] ease-out group-hover:rotate-90 ${
                     level < 1
-                      ? "text-brand-primary font-bold"
+                      ? "text-neutral-text font-bold"
                       : "text-neutral-text-secondary group-hover:text-neutral-text"
                   } ${expanded ? "rotate-90" : ""}`}
                 />
