@@ -30,7 +30,7 @@ export const QueryResponseTabs = ({ ...props }) => {
     setIsTransitioning(false);
     return () => {
       resizeObserver.disconnect();
-      setIsTransitioning(false);
+      setIsTransitioning(true);
     };
   }, [isQuery]);
 
