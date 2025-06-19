@@ -27,10 +27,8 @@ export const QueryResponseTabs = ({ ...props }) => {
     if (activeRef.current) {
       resizeObserver.observe(activeRef.current);
     }
-    setIsTransitioning(false);
     return () => {
       resizeObserver.disconnect();
-      setIsTransitioning(true);
     };
   }, [isQuery]);
 
@@ -39,7 +37,6 @@ export const QueryResponseTabs = ({ ...props }) => {
     if (newIsQuery !== isQuery) {
       setIsTransitioning(true);
       setIsQuery(newIsQuery);
-      setTimeout(() => setIsTransitioning(false), 300);
     }
   };
 
@@ -116,10 +113,12 @@ export const QueryResponseTabs = ({ ...props }) => {
             </button>
           </div>
         </div>
+
         {/* BOTTOM SECTION w/ Query/Response */}
         {isTransitioning && <CodeBlockSkeleton isCodeBlockTab={true} />}
         <div
           className="overflow-hidden rounded-b-xl"
+          hidden={isTransitioning}
           style={{ height: `${height}px` }}
         >
           <div
@@ -139,6 +138,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                   lang="javascript"
                   showCopyButton={false}
                   showBorder={false}
+                  setIsTransitioning={setIsTransitioning}
                 />
               </div>
             ) : (
@@ -148,6 +148,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                   lang="javascript"
                   showCopyButton={false}
                   showBorder={false}
+                  setIsTransitioning={setIsTransitioning}
                 />
               </div>
             )}

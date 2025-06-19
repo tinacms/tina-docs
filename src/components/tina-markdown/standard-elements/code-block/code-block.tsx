@@ -16,11 +16,13 @@ export function CodeBlock({
   lang = "ts",
   showCopyButton = true,
   showBorder = true,
+  setIsTransitioning,
 }: {
   value: string;
   lang?: string;
   showCopyButton?: boolean;
   showBorder?: boolean;
+  setIsTransitioning?: (isTransitioning: boolean) => void;
 }) {
   const [html, setHtml] = useState("");
   const [isCopied, setIsCopied] = useState(false);
@@ -75,6 +77,12 @@ export function CodeBlock({
       isMounted = false;
     };
   }, [value, lang, isDarkMode]);
+
+  useEffect(() => {
+    if (setIsTransitioning && html !== "") {
+      setTimeout(() => setIsTransitioning(false), 10);
+    }
+  }, [html, setIsTransitioning]);
 
   // Show skeleton while loading
   if (isLoading && showCopyButton) {
