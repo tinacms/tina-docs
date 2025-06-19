@@ -35,7 +35,6 @@ export const QueryResponseTabs = ({ ...props }) => {
   // Handle tab switching with transition
   const handleTabSwitch = (newIsQuery: boolean) => {
     if (newIsQuery !== isQuery) {
-      setIsTransitioning(true);
       setIsQuery(newIsQuery);
     }
   };
