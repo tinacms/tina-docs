@@ -1,6 +1,6 @@
 import React from "react";
 
-export const CodeBlockSkeleton = ({ isCodeBlockTab = false }) => {
+export const CodeBlockSkeleton = ({ hasTabs = false }) => {
   // Use deterministic values instead of Math.random() to prevent hydration issues
   const skeletonLines = [
     { width: "75%", delay: "0s" },
@@ -22,14 +22,10 @@ export const CodeBlockSkeleton = ({ isCodeBlockTab = false }) => {
 
   return (
     <div className="relative w-full my-2">
-      {!isCodeBlockTab && (
-        <div className="absolute top-0 right-0 z-10 px-4 py-1 text-xs font-mono text-neutral-text-secondary">
-          <div className="w-8 h-3 bg-neutral-border-subtle rounded animate-pulse" />
-        </div>
-      )}
+      {!hasTabs && <InlineCopyButton />}
       <div
         className={`shiki w-full overflow-x-auto bg-background-brand-code py-4 px-2 text-sm shadow-sm rounded-lg ${
-          isCodeBlockTab ? "" : "border border-neutral-border-subtle"
+          hasTabs ? "" : "border border-neutral-border-subtle"
         }`}
       >
         <div className="space-y-2">
@@ -68,6 +64,14 @@ export const CodeBlockSkeleton = ({ isCodeBlockTab = false }) => {
           ))}
         </div>
       </div>
+    </div>
+  );
+};
+
+const InlineCopyButton = () => {
+  return (
+    <div className="absolute top-0 right-0 z-10 px-4 py-1 text-xs font-mono text-neutral-text-secondary">
+      <div className="w-8 h-3 bg-neutral-border-subtle rounded animate-pulse" />
     </div>
   );
 };
