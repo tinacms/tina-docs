@@ -3,12 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import React from "react";
 import { MdContentCopy } from "react-icons/md";
 import { CodeBlock } from "../standard-elements/code-block/code-block";
+import { CodeBlockSkeleton } from "../standard-elements/code-block/code-block-skeleton";
 
 export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);
   const [height, setHeight] = useState(0);
   const [hasCopied, setHasCopied] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
   const queryRef = useRef<HTMLDivElement>(null);
   const responseRef = useRef<HTMLDivElement>(null);
@@ -26,8 +27,10 @@ export const QueryResponseTabs = ({ ...props }) => {
     if (activeRef.current) {
       resizeObserver.observe(activeRef.current);
     }
+    setIsTransitioning(false);
     return () => {
       resizeObserver.disconnect();
+      setIsTransitioning(false);
     };
   }, [isQuery]);
 
@@ -113,8 +116,8 @@ export const QueryResponseTabs = ({ ...props }) => {
             </button>
           </div>
         </div>
-
         {/* BOTTOM SECTION w/ Query/Response */}
+        {isTransitioning && <CodeBlockSkeleton />}
         <div
           className="overflow-hidden transition-all duration-300 ease-in-out rounded-b-xl"
           style={{ height: `${height}px` }}
