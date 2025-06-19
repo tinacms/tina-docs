@@ -8,7 +8,6 @@ export const CodeBlockSkeleton = ({ hasTabs = false }) => {
     const numberOfLines = 6; // Fixed number to prevent hydration issues
 
     for (let i = 0; i < numberOfLines; i++) {
-      // Use deterministic selection based on index
       const widthIndex = i % widths.length;
       lines.push({
         width: widths[widthIndex],

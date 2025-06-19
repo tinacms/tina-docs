@@ -48,7 +48,7 @@ export const QueryResponseTabs = ({ ...props }) => {
   };
 
   const buttonStyling =
-    "flex justify-center cursor-pointer relative leading-tight text-neutral-text py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
+    "flex justify-center relative leading-tight text-neutral-text py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
   const activeButtonStyling =
     " hover:text-neutral-text-secondary opacity-50 hover:opacity-100";
   const underlineStyling =
@@ -70,7 +70,9 @@ export const QueryResponseTabs = ({ ...props }) => {
             <button
               type="button"
               onClick={() => handleTabSwitch(true)}
-              className={buttonStyling + (isQuery ? "" : activeButtonStyling)}
+              className={`${buttonStyling}${
+                isQuery ? "" : activeButtonStyling
+              }${isTransitioning ? " cursor-not-allowed" : " cursor-pointer"}`}
               disabled={isQuery || isTransitioning}
             >
               {props.customQueryName || "Query"}
@@ -81,7 +83,9 @@ export const QueryResponseTabs = ({ ...props }) => {
             <button
               type="button"
               onClick={() => handleTabSwitch(false)}
-              className={buttonStyling + (isQuery ? activeButtonStyling : "")}
+              className={`${buttonStyling}${
+                isQuery ? activeButtonStyling : ""
+              }${isTransitioning ? " cursor-not-allowed" : " cursor-pointer"}`}
               disabled={!isQuery || isTransitioning}
             >
               {props.customResponseName || "Response"}
@@ -96,7 +100,12 @@ export const QueryResponseTabs = ({ ...props }) => {
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-sm font-medium text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer"
+              disabled={isTransitioning}
+              className={`flex items-center gap-1.5 text-sm font-medium text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 ${
+                isTransitioning
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
               title={`Copy ${isQuery ? "query" : "response"} code`}
             >
               {hasCopied ? (
