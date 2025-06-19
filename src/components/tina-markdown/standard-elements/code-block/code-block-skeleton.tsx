@@ -1,24 +1,22 @@
 import React from "react";
 
 export const CodeBlockSkeleton = ({ hasTabs = false }) => {
-  // Generate a random number of lines between 4 and 8
-  const numberOfLines = React.useMemo(() => {
-    return Math.floor(Math.random() * 5) + 4; // Random between 4-8
-  }, []);
-
-  // Generate skeleton lines dynamically
+  // Use deterministic values to prevent hydration issues
   const skeletonLines = React.useMemo(() => {
     const lines: Array<{ width: string; delay: string }> = [];
+    const widths = ["35%", "45%", "50%", "60%", "65%", "75%", "80%"];
+    const numberOfLines = 6; // Fixed number to prevent hydration issues
+
     for (let i = 0; i < numberOfLines; i++) {
-      const widths = ["35%", "45%", "50%", "60%", "65%", "75%", "80%"];
-      const randomWidth = widths[Math.floor(Math.random() * widths.length)];
+      // Use deterministic selection based on index
+      const widthIndex = i % widths.length;
       lines.push({
-        width: randomWidth,
+        width: widths[widthIndex],
         delay: `${i * 0.1}s`,
       });
     }
     return lines;
-  }, [numberOfLines]);
+  }, []);
 
   const secondaryLines = [
     { width: "30%", delay: "0.05s" },
