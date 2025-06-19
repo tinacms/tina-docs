@@ -8,6 +8,7 @@ export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);
   const [height, setHeight] = useState(0);
   const [hasCopied, setHasCopied] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const queryRef = useRef<HTMLDivElement>(null);
   const responseRef = useRef<HTMLDivElement>(null);
@@ -29,6 +30,15 @@ export const QueryResponseTabs = ({ ...props }) => {
       resizeObserver.disconnect();
     };
   }, [isQuery]);
+
+  // Handle tab switching with transition
+  const handleTabSwitch = (newIsQuery: boolean) => {
+    if (newIsQuery !== isQuery) {
+      setIsTransitioning(true);
+      setIsQuery(newIsQuery);
+      setTimeout(() => setIsTransitioning(false), 300);
+    }
+  };
 
   // Handle the copy action
   const handleCopy = () => {
@@ -60,9 +70,9 @@ export const QueryResponseTabs = ({ ...props }) => {
           <div className="flex flex-1 ">
             <button
               type="button"
-              onClick={() => setIsQuery(true)}
+              onClick={() => handleTabSwitch(true)}
               className={buttonStyling + (isQuery ? "" : activeButtonStyling)}
-              disabled={isQuery}
+              disabled={isQuery || isTransitioning}
             >
               {props.customQueryName || "Query"}
               <div
@@ -71,9 +81,9 @@ export const QueryResponseTabs = ({ ...props }) => {
             </button>
             <button
               type="button"
-              onClick={() => setIsQuery(false)}
+              onClick={() => handleTabSwitch(false)}
               className={buttonStyling + (isQuery ? activeButtonStyling : "")}
-              disabled={!isQuery}
+              disabled={!isQuery || isTransitioning}
             >
               {props.customResponseName || "Response"}
               <div
