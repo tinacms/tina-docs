@@ -25,7 +25,7 @@ export const CodeBlockSkeleton = ({ hasTabs = false }) => {
   ];
 
   return (
-    <div className="relative w-full my-2">
+    <div className={`relative w-full ${hasTabs ? "" : "my-2"}`}>
       {!hasTabs && <InlineCopyButton />}
       <div
         className={`shiki w-full overflow-x-auto bg-background-brand-code py-4 px-2 text-sm shadow-sm rounded-lg ${
