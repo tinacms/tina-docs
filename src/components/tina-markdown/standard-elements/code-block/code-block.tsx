@@ -77,7 +77,7 @@ export function CodeBlock({
   }, [value, lang, isDarkMode]);
 
   // Show skeleton while loading
-  if (isLoading) {
+  if (isLoading && showCopyButton) {
     return <CodeBlockSkeleton />;
   }
 

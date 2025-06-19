@@ -119,7 +119,7 @@ export const QueryResponseTabs = ({ ...props }) => {
         {/* BOTTOM SECTION w/ Query/Response */}
         {isTransitioning && <CodeBlockSkeleton isCodeBlockTab={true} />}
         <div
-          className="overflow-hidden transition-all duration-300 ease-in-out rounded-b-xl"
+          className="overflow-hidden rounded-b-xl"
           style={{ height: `${height}px` }}
         >
           <div
