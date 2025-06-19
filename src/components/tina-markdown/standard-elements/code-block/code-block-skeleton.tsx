@@ -1,17 +1,24 @@
 import React from "react";
 
 export const CodeBlockSkeleton = ({ hasTabs = false }) => {
-  // Use deterministic values instead of Math.random() to prevent hydration issues
-  const skeletonLines = [
-    { width: "75%", delay: "0s" },
-    { width: "45%", delay: "0.1s" },
-    { width: "60%", delay: "0.2s" },
-    { width: "35%", delay: "0.3s" },
-    { width: "80%", delay: "0.4s" },
-    { width: "50%", delay: "0.5s" },
-    { width: "65%", delay: "0.6s" },
-    { width: "40%", delay: "0.7s" },
-  ];
+  // Generate a random number of lines between 4 and 8
+  const numberOfLines = React.useMemo(() => {
+    return Math.floor(Math.random() * 5) + 4; // Random between 4-8
+  }, []);
+
+  // Generate skeleton lines dynamically
+  const skeletonLines = React.useMemo(() => {
+    const lines: Array<{ width: string; delay: string }> = [];
+    for (let i = 0; i < numberOfLines; i++) {
+      const widths = ["35%", "45%", "50%", "60%", "65%", "75%", "80%"];
+      const randomWidth = widths[Math.floor(Math.random() * widths.length)];
+      lines.push({
+        width: randomWidth,
+        delay: `${i * 0.1}s`,
+      });
+    }
+    return lines;
+  }, [numberOfLines]);
 
   const secondaryLines = [
     { width: "30%", delay: "0.05s" },
@@ -29,13 +36,10 @@ export const CodeBlockSkeleton = ({ hasTabs = false }) => {
         }`}
       >
         <div className="space-y-2">
-          {/* Generate skeleton lines */}
           {skeletonLines.map((line, index) => (
             <div key={index} className="flex items-center space-x-4">
-              {/* Line number skeleton */}
               <div className="w-8 h-4 bg-neutral-border-subtle rounded animate-pulse flex-shrink-0" />
 
-              {/* Code content skeleton */}
               <div className="flex-1 space-y-1">
                 <div
                   className="h-4 bg-neutral-border-subtle rounded animate-pulse"
