@@ -9,20 +9,24 @@ import {
 import { useTheme } from "next-themes";
 import { FaCheck } from "react-icons/fa";
 import { MdOutlineContentCopy } from "react-icons/md";
+import { CodeBlockSkeleton } from "./code-block-skeleton";
 
 export function CodeBlock({
   value,
   lang = "ts",
   showCopyButton = true,
   showBorder = true,
+  setIsTransitioning,
 }: {
   value: string;
   lang?: string;
   showCopyButton?: boolean;
   showBorder?: boolean;
+  setIsTransitioning?: (isTransitioning: boolean) => void;
 }) {
   const [html, setHtml] = useState("");
   const [isCopied, setIsCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
 
@@ -30,9 +34,14 @@ export function CodeBlock({
     let isMounted = true;
 
     const load = async () => {
+      setIsLoading(true);
+
       // Guard clause to prevent processing undefined/null/empty values - shiki will throw an error if the value is not a string as it tries to .split all values
       if (!value || typeof value !== "string") {
-        if (isMounted) setHtml("");
+        if (isMounted) {
+          setHtml("");
+          setIsLoading(false);
+        }
         return;
       }
 
@@ -55,7 +64,10 @@ export function CodeBlock({
           },
         });
 
-        if (isMounted) setHtml(code);
+        if (isMounted) {
+          setHtml(code);
+          setIsLoading(false);
+        }
       }
     };
 
@@ -65,6 +77,18 @@ export function CodeBlock({
       isMounted = false;
     };
   }, [value, lang, isDarkMode]);
+
+  useEffect(() => {
+    if (setIsTransitioning && html !== "") {
+      // Increase timeout to 200ms for smoother transitions, especially on slower devices.
+      setTimeout(() => setIsTransitioning(false), 200);
+    }
+  }, [html, setIsTransitioning]);
+
+  // Show skeleton while loading
+  if (isLoading && showCopyButton) {
+    return <CodeBlockSkeleton />;
+  }
 
   return (
     <div className={`relative w-full my-2 ${showCopyButton ? " group" : ""}`}>
