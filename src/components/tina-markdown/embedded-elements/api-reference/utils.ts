@@ -130,8 +130,7 @@ export const extractEndpoints = (schemaJson: any) => {
 
 // Generates the initial expanded/collapsed state for endpoint responses.
 // A response will be expanded by default when:
-//   1. It belongs to a GET endpoint, and
-//   2. The response object contains expandable content (schema, content, etc.)
+//   1. The response object contains expandable content (schema, content, etc.)
 // The returned Map is keyed by `<METHOD>-<PATH>-<STATUS_CODE>` and the value
 // indicates whether the response should start expanded (true) or collapsed (false).
 export const generateInitialExpandedState = (
@@ -155,10 +154,7 @@ export const generateInitialExpandedState = (
           (typeof resp === "object" &&
             Object.keys(resp).some((k) => k !== "description")));
 
-      const shouldBeExpanded =
-        endpoint.method === "GET" && hasExpandableContent;
-
-      initialState.set(key, shouldBeExpanded);
+      initialState.set(key, hasExpandableContent);
     }
   }
 
