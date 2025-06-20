@@ -3,7 +3,7 @@ import { client } from "@/tina/__generated__/client";
 import React, { useEffect, useState, useContext, createContext } from "react";
 import type { IconBaseProps } from "react-icons";
 import { FaChevronRight } from "react-icons/fa";
-import { FaChevronDown } from "react-icons/fa";
+
 import type {
   ApiReferenceProps,
   ChevronIconProps,
