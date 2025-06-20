@@ -1,7 +1,7 @@
 import { CodeBlock } from "@/components/tina-markdown/standard-elements/code-block/code-block";
 import { client } from "@/tina/__generated__/client";
 // biome-ignore lint/style/useImportType:
-import React, { useEffect, useState, createContext } from "react";
+import React, { useEffect, useState, createContext, useCallback } from "react";
 import { ChevronIcon, SchemaType } from "./scheme-type";
 import type {
   ApiReferenceProps,
@@ -125,6 +125,17 @@ const ApiReference = (data: ApiReferenceProps) => {
   const [responseView, setResponseView] = useState<ResponseViewState>({});
   const [isVisible, setIsVisible] = useState(false);
 
+  // Helper function to set empty schema state
+  const setEmptySchema = useCallback(() => {
+    setSchemaDetails({
+      title: "API Documentation",
+      version: "",
+      endpoints: [],
+      securityDefinitions: {},
+    });
+    setLoading(false);
+  }, []);
+
   useEffect(() => {
     if (!loading && schemaDetails) {
       // Force a reflow to ensure the animation triggers
@@ -151,18 +162,6 @@ const ApiReference = (data: ApiReferenceProps) => {
           }
         }
 
-        // Handle empty/placeholder schema case
-        if (schemaPath === "test-doc.json") {
-          setSchemaDetails({
-            title: "API Documentation",
-            version: "",
-            endpoints: [],
-            securityDefinitions: {},
-          });
-          setLoading(false);
-          return;
-        }
-
         if (!schemaPath) {
           setError("No schema file specified");
           setLoading(false);
@@ -170,13 +169,13 @@ const ApiReference = (data: ApiReferenceProps) => {
         }
 
         // Fetch the schema file
-        const result = await client.queries.apiSchema({
-          relativePath: schemaPath,
-        });
-
-        if (!result?.data?.apiSchema?.apiSchema) {
-          setError(`Could not load schema: ${schemaPath}`);
-          setLoading(false);
+        let result: any;
+        try {
+          result = await client.queries.apiSchema({
+            relativePath: schemaPath,
+          });
+        } catch (error) {
+          setEmptySchema();
           return;
         }
 
@@ -276,7 +275,7 @@ const ApiReference = (data: ApiReferenceProps) => {
     };
 
     fetchAndParseSchema();
-  }, [data.schemaFile]);
+  }, [data.schemaFile, setEmptySchema]);
 
   // Initialize expanded state for all endpoint responses
   useEffect(() => {
@@ -831,7 +830,8 @@ const NoEndpointsFound = () => {
           No API Endpoints Found
         </h3>
         <p className="text-neutral-text-secondary text-sm">
-          This API schema doesn't contain any endpoints to display.
+          This API schema doesn't contain any endpoints to display or the file
+          is not found.
         </p>
       </div>
     </div>
