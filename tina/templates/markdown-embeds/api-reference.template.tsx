@@ -1,12 +1,8 @@
+import CustomDropdown, {
+  type DropdownOption,
+} from "@/components/ui/custom-dropdown";
 import { client } from "@/tina/__generated__/client";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
 import React, { useCallback, useState, useEffect } from "react";
-import { MdArrowDropDown } from "react-icons/md";
 import { wrapFieldsWithMeta } from "tinacms";
 
 // Define schema type to match the actual structure from the API
@@ -45,9 +41,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   );
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
-  // State to control arrow rotation for custom dropdowns
-  const [isSchemaOpen, setIsSchemaOpen] = useState(false);
-  const [isEndpointOpen, setIsEndpointOpen] = useState(false);
 
   // When input.value changes, parse it to extract schema and endpoint
   useEffect(() => {
@@ -220,44 +213,15 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
       ) : (
         <div className="max-w-full w-full overflow-x-hidden">
           {/* Schema selector dropdown */}
-          <DropdownMenu onOpenChange={setIsSchemaOpen}>
-            <DropdownMenuTrigger asChild>
-              <button
-                type="button"
-                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 flex items-center justify-between gap-2 max-w-full overflow-x-hidden"
-              >
-                <span className="truncate break-words whitespace-normal max-w-full text-left">
-                  {input.value
-                    ? schemas.find(
-                        (s) => s.relativePath === input.value.split("|")[0]
-                      )?._sys.filename || "Select a schema"
-                    : "Select a schema"}
-                </span>
-                <MdArrowDropDown
-                  className={`w-5 h-5 transition-transform duration-200 ${
-                    isSchemaOpen ? "rotate-180" : "rotate-0"
-                  }`}
-                />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="z-50 max-h-60 overflow-y-auto w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] bg-white border border-gray-200 rounded-md shadow-lg">
-              <DropdownMenuItem
-                onClick={() => handleSchemaChange("")}
-                className="px-3 py-2 cursor-pointer hover:bg-gray-100 truncate break-words whitespace-normal max-w-full w-full focus:outline-none focus:ring-0"
-              >
-                Select a schema
-              </DropdownMenuItem>
-              {schemas.map((schema) => (
-                <DropdownMenuItem
-                  key={schema.id}
-                  onClick={() => handleSchemaChange(schema.relativePath)}
-                  className="px-3 py-2 cursor-pointer hover:bg-gray-100 truncate break-words whitespace-normal max-w-full w-full focus:outline-none focus:ring-0"
-                >
-                  {schema._sys.filename}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <CustomDropdown
+            value={input.value?.split("|")[0]}
+            onChange={handleSchemaChange}
+            options={schemas.map<DropdownOption>((schema) => ({
+              value: schema.relativePath,
+              label: schema._sys.filename,
+            }))}
+            placeholder="Select a schema"
+          />
 
           {input.value && (
             <div className="mt-3 p-3 bg-blue-50 text-blue-600 rounded text-sm w-full max-w-full overflow-x-hidden">
@@ -310,53 +274,20 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                         Select Endpoint (Optional)
                       </label>
                       {/* Endpoint selector dropdown */}
-                      <DropdownMenu onOpenChange={setIsEndpointOpen}>
-                        <DropdownMenuTrigger asChild>
-                          <button
-                            type="button"
-                            className="w-full p-2 border border-blue-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white text-blue-800 flex items-center justify-between gap-2 max-w-full overflow-x-hidden"
-                          >
-                            <span className="truncate break-words whitespace-normal max-w-full text-left">
-                              {selectedEndpoint
-                                ? `${selectedEndpoint.split(":")[0]} ${
-                                    selectedEndpoint.split(":")[1]
-                                  }`
-                                : "All Endpoints"}
-                            </span>
-                            <MdArrowDropDown
-                              className={`w-5 h-5 transition-transform duration-200 ${
-                                isEndpointOpen ? "rotate-180" : "rotate-0"
-                              }`}
-                            />
-                          </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="z-50 max-h-60 overflow-y-auto w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] bg-white border border-blue-300 rounded-md shadow-lg">
-                          <DropdownMenuItem
-                            onClick={() => handleEndpointChange("")}
-                            className="px-3 py-2 cursor-pointer hover:bg-blue-100 truncate break-words whitespace-normal max-w-full w-full focus:outline-none focus:ring-0"
-                          >
-                            All Endpoints
-                          </DropdownMenuItem>
-                          {schemaDetails.endpoints
-                            .sort((a, b) => a.path.localeCompare(b.path))
-                            .map((endpoint) => (
-                              <DropdownMenuItem
-                                key={createEndpointId(endpoint)}
-                                onClick={() =>
-                                  handleEndpointChange(
-                                    createEndpointId(endpoint)
-                                  )
-                                }
-                                className="px-3 py-2 cursor-pointer hover:bg-blue-100 truncate break-words whitespace-normal max-w-full w-full focus:outline-none focus:ring-0"
-                              >
-                                {endpoint.method} {endpoint.path}
-                                {endpoint.summary
-                                  ? ` - ${endpoint.summary}`
-                                  : ""}
-                              </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <CustomDropdown
+                        value={selectedEndpoint}
+                        onChange={handleEndpointChange}
+                        options={schemaDetails.endpoints
+                          .sort((a, b) => a.path.localeCompare(b.path))
+                          .map<DropdownOption>((endpoint) => ({
+                            value: createEndpointId(endpoint),
+                            label: `${endpoint.method} ${endpoint.path} ${
+                              endpoint.summary ? `- ${endpoint.summary}` : ""
+                            }`,
+                          }))}
+                        placeholder="All Endpoints"
+                        contentClassName="bg-white border border-blue-300"
+                      />
                     </div>
                   )}
                 </>
