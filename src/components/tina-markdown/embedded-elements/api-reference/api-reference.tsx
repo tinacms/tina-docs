@@ -4,31 +4,19 @@ import React, { useEffect, useState, useContext, createContext } from "react";
 import type { IconBaseProps } from "react-icons";
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
+import type {
+  ApiReferenceProps,
+  ChevronIconProps,
+  Endpoint,
+  ExpandedResponsesState,
+  RequestBodyDropdownProps,
+  ResponseViewState,
+  SchemaDetails,
+  SchemaTypeProps,
+} from "./types";
 
 // Context to share schema definitions across components
 const SchemaContext = createContext<any>({});
-
-// Interface for endpoint details
-interface Endpoint {
-  path: string;
-  method: string;
-  summary: string;
-  description?: string;
-  operationId?: string;
-  parameters?: any[];
-  responses?: Record<string, any>;
-  tags?: string[];
-  requestBody?: any;
-  security?: any[];
-}
-
-// Interface for parsed Swagger/OpenAPI details
-interface SchemaDetails {
-  title?: string;
-  version?: string;
-  endpoints: Endpoint[];
-  securityDefinitions?: Record<string, any>;
-}
 
 // Helper to resolve $ref references
 const resolveReference = (ref: string, definitions: any): any => {
@@ -101,7 +89,7 @@ const generateExample = (schema: any, definitions: any, depth = 0): any => {
 };
 
 // Wrapper component for the chevron icon
-const ChevronIcon = ({ isExpanded }: { isExpanded: boolean }) => {
+const ChevronIcon = ({ isExpanded }: ChevronIconProps) => {
   const Icon = FaChevronRight as React.ComponentType<IconBaseProps>;
   return (
     <Icon
@@ -122,15 +110,7 @@ const SchemaType = ({
   showExampleButton = false,
   onToggleExample = () => {},
   isErrorSchema = false,
-}: {
-  schema: any;
-  depth?: number;
-  isNested?: boolean;
-  name?: string;
-  showExampleButton?: boolean;
-  onToggleExample?: () => void;
-  isErrorSchema?: boolean;
-}) => {
+}: SchemaTypeProps) => {
   const [isExpanded, setIsExpanded] = useState(false); // Auto-expand first two levels and error schemas
   const definitions = useContext(SchemaContext);
 
@@ -394,8 +374,8 @@ const SchemaType = ({
                       (propSchema.properties
                         ? "object"
                         : propSchema.items
-                          ? "array"
-                          : "unknown");
+                        ? "array"
+                        : "unknown");
                     const format = propSchema.format;
                     const isArray = propType === "array";
                     const itemType = isArray
@@ -483,13 +463,7 @@ const SchemaType = ({
   );
 };
 
-const RequestBodyDropdown = ({
-  value,
-  onChange,
-}: {
-  value: "schema" | "example";
-  onChange: (v: "schema" | "example") => void;
-}) => {
+const RequestBodyDropdown = ({ value, onChange }: RequestBodyDropdownProps) => {
   return (
     <div className="relative inline-block text-left">
       <select
@@ -511,7 +485,7 @@ const RequestBodyDropdown = ({
   );
 };
 
-const ApiReference = (data: any) => {
+const ApiReference = (data: ApiReferenceProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [schemaDetails, setSchemaDetails] = useState<SchemaDetails | null>(
@@ -521,15 +495,12 @@ const ApiReference = (data: any) => {
     null
   );
   const [schemaDefinitions, setSchemaDefinitions] = useState<any>({});
-  const [expandedResponses, setExpandedResponses] = useState<
-    Map<string, boolean>
-  >(new Map());
+  const [expandedResponses, setExpandedResponses] =
+    useState<ExpandedResponsesState>(new Map());
   const [requestBodyView, setRequestBodyView] = useState<"schema" | "example">(
     "schema"
   );
-  const [responseView, setResponseView] = useState<
-    Record<string, "schema" | "example">
-  >({});
+  const [responseView, setResponseView] = useState<ResponseViewState>({});
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -737,12 +708,12 @@ const ApiReference = (data: any) => {
                 endpoint.method === "GET"
                   ? "bg-[#B4EFD9] text-green-800"
                   : endpoint.method === "POST"
-                    ? "bg-[#B4DBFF] text-blue-800"
-                    : endpoint.method === "PUT"
-                      ? "bg-[#FEF3C7] text-yellow-800"
-                      : endpoint.method === "DELETE"
-                        ? "bg-[#FEE2E2] text-red-800"
-                        : "bg-gray-50"
+                  ? "bg-[#B4DBFF] text-blue-800"
+                  : endpoint.method === "PUT"
+                  ? "bg-[#FEF3C7] text-yellow-800"
+                  : endpoint.method === "DELETE"
+                  ? "bg-[#FEE2E2] text-red-800"
+                  : "bg-gray-50"
               }`}
             >
               {endpoint.method}
@@ -933,8 +904,8 @@ const ApiReference = (data: any) => {
                                   code.startsWith("2")
                                     ? "bg-[#B4EFD9] text-green-800 font-bold"
                                     : isErrorResponse
-                                      ? "bg-red-100 text-red-800"
-                                      : "bg-gray-200 text-gray-800 font-tuner text-center"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-gray-200 text-gray-800 font-tuner text-center"
                                 }`}
                               >
                                 {code}
