@@ -80,7 +80,8 @@ export function CodeBlock({
 
   useEffect(() => {
     if (setIsTransitioning && html !== "") {
-      setTimeout(() => setIsTransitioning(false), 10);
+      // Increase timeout to 200ms for smoother transitions, especially on slower devices.
+      setTimeout(() => setIsTransitioning(false), 200);
     }
   }, [html, setIsTransitioning]);
 
