@@ -83,5 +83,3 @@ export const CustomDropdown = ({
     </DropdownMenu>
   );
 };
-
-export default CustomDropdown;

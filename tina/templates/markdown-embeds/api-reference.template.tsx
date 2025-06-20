@@ -1,4 +1,5 @@
-import CustomDropdown, {
+import {
+  CustomDropdown,
   type DropdownOption,
 } from "@/components/ui/custom-dropdown";
 import { client } from "@/tina/__generated__/client";
