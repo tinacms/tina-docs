@@ -812,16 +812,7 @@ const ApiReference = (data: ApiReferenceProps) => {
                 renderEndpoint(endpoint)
               )
             ) : (
-              <div className="p-8 text-center">
-                <div className="bg-neutral-background-secondary border border-neutral-border-subtle/40 rounded-lg p-6">
-                  <h3 className="text-lg font-medium text-neutral-text mb-2">
-                    No API Endpoints Found
-                  </h3>
-                  <p className="text-neutral-text-secondary text-sm">
-                    This API schema doesn't contain any endpoints to display.
-                  </p>
-                </div>
-              </div>
+              <NoEndpointsFound />
             )}
           </div>
         )}
@@ -831,3 +822,18 @@ const ApiReference = (data: ApiReferenceProps) => {
 };
 
 export default ApiReference;
+
+const NoEndpointsFound = () => {
+  return (
+    <div className="py-8 text-center">
+      <div className="bg-neutral-background-secondary border border-neutral-border-subtle/40 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-neutral-text mb-2">
+          No API Endpoints Found
+        </h3>
+        <p className="text-neutral-text-secondary text-sm">
+          This API schema doesn't contain any endpoints to display.
+        </p>
+      </div>
+    </div>
+  );
+};
