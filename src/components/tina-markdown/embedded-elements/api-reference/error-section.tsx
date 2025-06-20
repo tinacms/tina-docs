@@ -9,7 +9,7 @@ import type {
 } from "./types";
 import { generateExample } from "./utils";
 
-export const APIErrorsSection = ({
+export const ErrorsSection = ({
   responses,
   endpoint,
   expandedResponses,

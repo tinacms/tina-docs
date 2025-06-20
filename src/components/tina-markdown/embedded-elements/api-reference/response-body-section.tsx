@@ -9,7 +9,7 @@ import type {
 } from "./types";
 import { generateExample } from "./utils";
 
-export const APIResponsesSection = ({
+export const ResponseBodySection = ({
   responses,
   endpoint,
   expandedResponses,

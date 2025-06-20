@@ -3,7 +3,7 @@ import { SchemaType } from "./scheme-type";
 import type { RequestBodyDropdownProps } from "./types";
 import { generateExample } from "./utils";
 
-export const APIRequestBodySection = ({
+export const RequestBodySection = ({
   requestBody,
   requestBodyView,
   setRequestBodyView,

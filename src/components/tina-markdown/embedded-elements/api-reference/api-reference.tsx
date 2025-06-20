@@ -1,9 +1,9 @@
 import { client } from "@/tina/__generated__/client";
 // biome-ignore lint/style/useImportType:
 import React, { useEffect, useState, createContext, useCallback } from "react";
-import { APIErrorsSection } from "./error-section";
-import { APIRequestBodySection } from "./request-body-section";
-import { APIResponsesSection } from "./response-body-section";
+import { ErrorsSection } from "./error-section";
+import { RequestBodySection } from "./request-body-section";
+import { ResponseBodySection } from "./response-body-section";
 import type {
   ApiReferenceProps,
   Endpoint,
@@ -254,7 +254,7 @@ const ApiReference = (data: ApiReferenceProps) => {
 
           {/* Request Body section */}
           {endpoint.requestBody && (
-            <APIRequestBodySection
+            <RequestBodySection
               requestBody={endpoint.requestBody}
               requestBodyView={requestBodyView}
               setRequestBodyView={setRequestBodyView}
@@ -263,7 +263,7 @@ const ApiReference = (data: ApiReferenceProps) => {
           )}
 
           {/* Responses section */}
-          <APIResponsesSection
+          <ResponseBodySection
             responses={endpoint.responses}
             endpoint={endpoint}
             expandedResponses={expandedResponses}
@@ -277,7 +277,7 @@ const ApiReference = (data: ApiReferenceProps) => {
           {Object.entries(endpoint.responses || {}).some(
             ([code]) => code.startsWith("4") || code.startsWith("5")
           ) && (
-            <APIErrorsSection
+            <ErrorsSection
               responses={endpoint.responses}
               endpoint={endpoint}
               expandedResponses={expandedResponses}
