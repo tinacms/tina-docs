@@ -67,6 +67,97 @@ const ApiReference = (data: ApiReferenceProps) => {
     setLoading(false);
   }, []);
 
+  // Function to process schema data and extract endpoints
+  const processSchemaData = useCallback(
+    (schemaJson: any, endpointSelector: string) => {
+      // Store schema definitions for references
+      const definitions = {
+        definitions: schemaJson.definitions || {},
+        components: schemaJson.components || {},
+        // For OpenAPI 3.0
+        schemas: schemaJson.components?.schemas || {},
+      };
+      setSchemaDefinitions(definitions);
+
+      // Process the schema to extract endpoints
+      const endpoints: Endpoint[] = [];
+      if (schemaJson.paths) {
+        for (const path of Object.keys(schemaJson.paths)) {
+          const pathObj = schemaJson.paths[path];
+          for (const method of Object.keys(pathObj)) {
+            if (method === "parameters") continue; // Skip path-level parameters
+
+            const operation = pathObj[method];
+
+            // Handle request body for OpenAPI 3.0 or Swagger 2.0
+            let requestBody: any = undefined;
+            if (operation.requestBody) {
+              requestBody = operation.requestBody;
+            } else if (
+              operation.parameters?.some((p: any) => p.in === "body")
+            ) {
+              requestBody = {
+                content: {
+                  "application/json": {
+                    schema:
+                      operation.parameters.find((p: any) => p.in === "body")
+                        ?.schema || {},
+                  },
+                },
+              };
+            }
+
+            // Filter out body parameters if we have a request body
+            const parameters = [
+              ...(pathObj.parameters || []), // Include path-level parameters
+              ...(operation.parameters || []),
+            ].filter((p) => {
+              // If we have a request body from a body parameter, filter out that parameter
+              if (requestBody && p.in === "body") {
+                return false;
+              }
+              return true;
+            });
+
+            endpoints.push({
+              path,
+              method: method.toUpperCase(),
+              summary: operation.summary || `${method.toUpperCase()} ${path}`,
+              description: operation.description,
+              operationId: operation.operationId,
+              parameters,
+              responses: operation.responses,
+              requestBody,
+              tags: operation.tags,
+              security: operation.security,
+            });
+          }
+        }
+      }
+
+      // Set the schema details
+      setSchemaDetails({
+        title: schemaJson.info?.title || "API Documentation",
+        version: schemaJson.info?.version,
+        endpoints,
+        securityDefinitions: schemaJson.securityDefinitions || {},
+      });
+
+      // Find the selected endpoint if specified
+      if (endpointSelector) {
+        const [method, ...pathParts] = endpointSelector.split(":");
+        const path = pathParts.join(":"); // Rejoin in case path had colons
+
+        const endpoint = endpoints.find(
+          (e) => e.method === method && e.path === path
+        );
+
+        setSelectedEndpoint(endpoint || null);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     if (!loading && schemaDetails) {
       // Force a reflow to ensure the animation triggers
@@ -124,90 +215,8 @@ const ApiReference = (data: ApiReferenceProps) => {
         // Parse the schema JSON
         const schemaJson = JSON.parse(result.data.apiSchema.apiSchema);
 
-        // Store schema definitions for references
-        const definitions = {
-          definitions: schemaJson.definitions || {},
-          components: schemaJson.components || {},
-          // For OpenAPI 3.0
-          schemas: schemaJson.components?.schemas || {},
-        };
-        setSchemaDefinitions(definitions);
-
-        // Process the schema to extract endpoints
-        const endpoints: Endpoint[] = [];
-        if (schemaJson.paths) {
-          for (const path of Object.keys(schemaJson.paths)) {
-            const pathObj = schemaJson.paths[path];
-            for (const method of Object.keys(pathObj)) {
-              if (method === "parameters") continue; // Skip path-level parameters
-
-              const operation = pathObj[method];
-
-              // Handle request body for OpenAPI 3.0 or Swagger 2.0
-              let requestBody: any = undefined;
-              if (operation.requestBody) {
-                requestBody = operation.requestBody;
-              } else if (
-                operation.parameters?.some((p: any) => p.in === "body")
-              ) {
-                requestBody = {
-                  content: {
-                    "application/json": {
-                      schema:
-                        operation.parameters.find((p: any) => p.in === "body")
-                          ?.schema || {},
-                    },
-                  },
-                };
-              }
-
-              // Filter out body parameters if we have a request body
-              const parameters = [
-                ...(pathObj.parameters || []), // Include path-level parameters
-                ...(operation.parameters || []),
-              ].filter((p) => {
-                // If we have a request body from a body parameter, filter out that parameter
-                if (requestBody && p.in === "body") {
-                  return false;
-                }
-                return true;
-              });
-
-              endpoints.push({
-                path,
-                method: method.toUpperCase(),
-                summary: operation.summary || `${method.toUpperCase()} ${path}`,
-                description: operation.description,
-                operationId: operation.operationId,
-                parameters,
-                responses: operation.responses,
-                requestBody,
-                tags: operation.tags,
-                security: operation.security,
-              });
-            }
-          }
-        }
-
-        // Set the schema details
-        setSchemaDetails({
-          title: schemaJson.info?.title || "API Documentation",
-          version: schemaJson.info?.version,
-          endpoints,
-          securityDefinitions: schemaJson.securityDefinitions || {},
-        });
-
-        // Find the selected endpoint if specified
-        if (endpointSelector) {
-          const [method, ...pathParts] = endpointSelector.split(":");
-          const path = pathParts.join(":"); // Rejoin in case path had colons
-
-          const endpoint = endpoints.find(
-            (e) => e.method === method && e.path === path
-          );
-
-          setSelectedEndpoint(endpoint || null);
-        }
+        // Process the schema data
+        processSchemaData(schemaJson, endpointSelector);
 
         setLoading(false);
       } catch (error) {
@@ -217,7 +226,7 @@ const ApiReference = (data: ApiReferenceProps) => {
     };
 
     fetchAndParseSchema();
-  }, [data.schemaFile, resetState, setEmptySchema]);
+  }, [data.schemaFile, resetState, setEmptySchema, processSchemaData]);
 
   // Initialize expanded state for all endpoint responses
   useEffect(() => {
@@ -236,28 +245,11 @@ const ApiReference = (data: ApiReferenceProps) => {
   }, [schemaDetails]);
 
   if (loading) {
-    return (
-      <div className="p-4">
-        <div className="animate-pulse flex space-x-4">
-          <div className="flex-1 space-y-4 py-1">
-            <div className="h-4 bg-gray-200 rounded w-3/4" />
-            <div className="space-y-2">
-              <div className="h-4 bg-gray-200 rounded" />
-              <div className="h-4 bg-gray-200 rounded w-5/6" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <div className="p-4 bg-red-50 rounded-md text-red-700">
-        <h3 className="font-medium">Error</h3>
-        <p>{error}</p>
-      </div>
-    );
+    return <ErrorMessage error={error} />;
   }
 
   if (!schemaDetails) {
@@ -775,6 +767,33 @@ const NoEndpointsFound = () => {
           This API schema doesn't contain any endpoints to display or the file
           is not found.
         </p>
+      </div>
+    </div>
+  );
+};
+
+const Loading = () => {
+  return (
+    <div className="p-4">
+      <div className="animate-pulse flex space-x-4">
+        <div className="flex-1 space-y-4 py-1">
+          <div className="h-4 bg-gray-200 rounded w-3/4" />
+          <div className="space-y-2">
+            <div className="h-4 bg-gray-200 rounded" />
+            <div className="h-4 bg-gray-200 rounded w-5/6" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ErrorMessage = ({ error }: { error: string }) => {
+  return (
+    <div className="p-4">
+      <div className="bg-red-50 rounded-md text-red-700">
+        <h3 className="font-medium">Error</h3>
+        <p>{error}</p>
       </div>
     </div>
   );
