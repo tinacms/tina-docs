@@ -8,7 +8,6 @@ import {
 import React, { useCallback, useState, useEffect } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { wrapFieldsWithMeta } from "tinacms";
-import { tinaField, useTina } from "tinacms/dist/react";
 
 // Define schema type to match the actual structure from the API
 interface SchemaFile {
