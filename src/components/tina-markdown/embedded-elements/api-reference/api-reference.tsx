@@ -156,9 +156,25 @@ export const ApiReference = (data: ApiReferenceProps) => {
       const initialExpandedState = new Map();
       for (const endpoint of schemaDetails.endpoints) {
         if (endpoint.responses) {
-          for (const code of Object.keys(endpoint.responses)) {
+          for (const [code, response] of Object.entries(endpoint.responses)) {
             const key = `${endpoint.method}-${endpoint.path}-${code}`;
-            initialExpandedState.set(key, false);
+
+            // Cast response to any for type-safe property access
+            const resp = response as any;
+
+            // Determine if this response has expandable content similar to ResponseBodySection logic
+            const hasExpandableContent =
+              resp &&
+              ((resp.content && Object.keys(resp.content).length > 0) ||
+                resp.schema ||
+                (typeof resp === "object" &&
+                  Object.keys(resp).some((k) => k !== "description")));
+
+            // Open by default if it's a GET endpoint and the response has expandable content
+            const shouldBeExpanded =
+              endpoint.method === "GET" && hasExpandableContent;
+
+            initialExpandedState.set(key, shouldBeExpanded);
           }
         }
       }
