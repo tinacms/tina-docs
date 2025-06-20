@@ -1,4 +1,4 @@
-import type { Endpoint } from "./types";
+import type { Endpoint, ExpandedResponsesState } from "./types";
 
 export const resolveReference = (ref: string, definitions: any): any => {
   if (!ref || typeof ref !== "string" || !ref.startsWith("#/")) {
@@ -126,4 +126,41 @@ export const extractEndpoints = (schemaJson: any) => {
     }
   }
   return endpoints;
+};
+
+// Generates the initial expanded/collapsed state for endpoint responses.
+// A response will be expanded by default when:
+//   1. It belongs to a GET endpoint, and
+//   2. The response object contains expandable content (schema, content, etc.)
+// The returned Map is keyed by `<METHOD>-<PATH>-<STATUS_CODE>` and the value
+// indicates whether the response should start expanded (true) or collapsed (false).
+export const generateInitialExpandedState = (
+  endpoints: Endpoint[]
+): ExpandedResponsesState => {
+  const initialState: ExpandedResponsesState = new Map();
+
+  for (const endpoint of endpoints) {
+    if (!endpoint.responses) continue;
+
+    for (const [code, response] of Object.entries(endpoint.responses)) {
+      const key = `${endpoint.method}-${endpoint.path}-${code}`;
+
+      // Cast response to any for property access convenience
+      const resp = response as any;
+
+      const hasExpandableContent =
+        resp &&
+        ((resp.content && Object.keys(resp.content).length > 0) || // OpenAPI 3.x style
+          resp.schema || // Swagger 2.0 style
+          (typeof resp === "object" &&
+            Object.keys(resp).some((k) => k !== "description")));
+
+      const shouldBeExpanded =
+        endpoint.method === "GET" && hasExpandableContent;
+
+      initialState.set(key, shouldBeExpanded);
+    }
+  }
+
+  return initialState;
 };

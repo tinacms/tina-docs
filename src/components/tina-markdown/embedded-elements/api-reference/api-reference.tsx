@@ -8,7 +8,7 @@ import type {
   ResponseViewState,
   SchemaDetails,
 } from "./types";
-import { extractEndpoints } from "./utils";
+import { extractEndpoints, generateInitialExpandedState } from "./utils";
 
 // Context to share schema definitions across components
 export const SchemaContext = createContext<any>({});
@@ -153,32 +153,9 @@ export const ApiReference = (data: ApiReferenceProps) => {
   // Initialize expanded state for all endpoint responses
   useEffect(() => {
     if (schemaDetails?.endpoints) {
-      const initialExpandedState = new Map();
-      for (const endpoint of schemaDetails.endpoints) {
-        if (endpoint.responses) {
-          for (const [code, response] of Object.entries(endpoint.responses)) {
-            const key = `${endpoint.method}-${endpoint.path}-${code}`;
-
-            // Cast response to any for type-safe property access
-            const resp = response as any;
-
-            // Determine if this response has expandable content similar to ResponseBodySection logic
-            const hasExpandableContent =
-              resp &&
-              ((resp.content && Object.keys(resp.content).length > 0) ||
-                resp.schema ||
-                (typeof resp === "object" &&
-                  Object.keys(resp).some((k) => k !== "description")));
-
-            // Open by default if it's a GET endpoint and the response has expandable content
-            const shouldBeExpanded =
-              endpoint.method === "GET" && hasExpandableContent;
-
-            initialExpandedState.set(key, shouldBeExpanded);
-          }
-        }
-      }
-      setExpandedResponses(initialExpandedState);
+      setExpandedResponses(
+        generateInitialExpandedState(schemaDetails.endpoints)
+      );
     }
   }, [schemaDetails]);
 
