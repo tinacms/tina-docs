@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext, createContext } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import type { IconBaseProps } from "react-icons/lib/iconBase";
-import { resolveReference } from "./api-reference";
 import type { ChevronIconProps, SchemaTypeProps } from "./types";
+import { resolveReference } from "./utils";
 
 export const ChevronIcon = ({ isExpanded }: ChevronIconProps) => {
   const Icon = FaChevronRight as React.ComponentType<IconBaseProps>;
