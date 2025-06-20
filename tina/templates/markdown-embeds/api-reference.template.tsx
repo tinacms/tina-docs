@@ -244,7 +244,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
             <DropdownMenuContent className="z-50 max-h-60 overflow-y-auto w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] bg-white border border-gray-200 rounded-md shadow-lg">
               <DropdownMenuItem
                 onClick={() => handleSchemaChange("")}
-                className="px-3 py-2 cursor-pointer hover:bg-gray-100 truncate break-words whitespace-normal max-w-full w-full"
+                className="px-3 py-2 cursor-pointer hover:bg-gray-100 truncate break-words whitespace-normal max-w-full w-full focus:outline-none focus:ring-0"
               >
                 Select a schema
               </DropdownMenuItem>
@@ -252,7 +252,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                 <DropdownMenuItem
                   key={schema.id}
                   onClick={() => handleSchemaChange(schema.relativePath)}
-                  className="px-3 py-2 cursor-pointer hover:bg-gray-100 truncate break-words whitespace-normal max-w-full w-full"
+                  className="px-3 py-2 cursor-pointer hover:bg-gray-100 truncate break-words whitespace-normal max-w-full w-full focus:outline-none focus:ring-0"
                 >
                   {schema._sys.filename}
                 </DropdownMenuItem>
@@ -334,7 +334,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                         <DropdownMenuContent className="z-50 max-h-60 overflow-y-auto w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] bg-white border border-blue-300 rounded-md shadow-lg">
                           <DropdownMenuItem
                             onClick={() => handleEndpointChange("")}
-                            className="px-3 py-2 cursor-pointer hover:bg-blue-100 truncate break-words whitespace-normal max-w-full w-full"
+                            className="px-3 py-2 cursor-pointer hover:bg-blue-100 truncate break-words whitespace-normal max-w-full w-full focus:outline-none focus:ring-0"
                           >
                             All Endpoints
                           </DropdownMenuItem>
@@ -348,7 +348,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                                     createEndpointId(endpoint)
                                   )
                                 }
-                                className="px-3 py-2 cursor-pointer hover:bg-blue-100 truncate break-words whitespace-normal max-w-full w-full"
+                                className="px-3 py-2 cursor-pointer hover:bg-blue-100 truncate break-words whitespace-normal max-w-full w-full focus:outline-none focus:ring-0"
                               >
                                 {endpoint.method} {endpoint.path}
                                 {endpoint.summary
