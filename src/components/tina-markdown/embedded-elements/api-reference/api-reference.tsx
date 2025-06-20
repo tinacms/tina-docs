@@ -267,8 +267,8 @@ const Loading = () => {
 
 const ErrorMessage = ({ error }: { error: string }) => {
   return (
-    <div className="p-4">
-      <div className="bg-red-50 rounded-md text-red-700">
+    <div className="py-4">
+      <div className="bg-red-50 rounded-md text-red-700 p-4">
         <h3 className="font-medium">Error</h3>
         <p>{error}</p>
       </div>
