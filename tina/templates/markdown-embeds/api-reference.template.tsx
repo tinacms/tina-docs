@@ -331,7 +331,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                             />
                           </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="z-50 max-h-60 overflow-y-auto min-w-[200px] bg-white border border-blue-300 rounded-md shadow-lg">
+                        <DropdownMenuContent className="z-50 max-h-60 overflow-y-auto w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] bg-white border border-blue-300 rounded-md shadow-lg">
                           <DropdownMenuItem
                             onClick={() => handleEndpointChange("")}
                             className="px-3 py-2 cursor-pointer hover:bg-blue-100 truncate break-words whitespace-normal max-w-full w-full"
