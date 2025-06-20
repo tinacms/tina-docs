@@ -8,6 +8,7 @@ import type {
   ResponseViewState,
   SchemaDetails,
 } from "./types";
+import { extractEndpoints } from "./utils";
 
 // Context to share schema definitions across components
 export const SchemaContext = createContext<any>({});
@@ -54,60 +55,7 @@ const ApiReference = (data: ApiReferenceProps) => {
       setSchemaDefinitions(definitions);
 
       // Process the schema to extract endpoints
-      const endpoints: Endpoint[] = [];
-      if (schemaJson.paths) {
-        for (const path of Object.keys(schemaJson.paths)) {
-          const pathObj = schemaJson.paths[path];
-          for (const method of Object.keys(pathObj)) {
-            if (method === "parameters") continue; // Skip path-level parameters
-
-            const operation = pathObj[method];
-
-            // Handle request body for OpenAPI 3.0 or Swagger 2.0
-            let requestBody: any = undefined;
-            if (operation.requestBody) {
-              requestBody = operation.requestBody;
-            } else if (
-              operation.parameters?.some((p: any) => p.in === "body")
-            ) {
-              requestBody = {
-                content: {
-                  "application/json": {
-                    schema:
-                      operation.parameters.find((p: any) => p.in === "body")
-                        ?.schema || {},
-                  },
-                },
-              };
-            }
-
-            // Filter out body parameters if we have a request body
-            const parameters = [
-              ...(pathObj.parameters || []), // Include path-level parameters
-              ...(operation.parameters || []),
-            ].filter((p) => {
-              // If we have a request body from a body parameter, filter out that parameter
-              if (requestBody && p.in === "body") {
-                return false;
-              }
-              return true;
-            });
-
-            endpoints.push({
-              path,
-              method: method.toUpperCase(),
-              summary: operation.summary || `${method.toUpperCase()} ${path}`,
-              description: operation.description,
-              operationId: operation.operationId,
-              parameters,
-              responses: operation.responses,
-              requestBody,
-              tags: operation.tags,
-              security: operation.security,
-            });
-          }
-        }
-      }
+      const endpoints: Endpoint[] = extractEndpoints(schemaJson);
 
       // Set the schema details
       setSchemaDetails({
@@ -235,12 +183,13 @@ const ApiReference = (data: ApiReferenceProps) => {
     );
   }
 
+  const hasEndpoints =
+    schemaDetails.endpoints && schemaDetails.endpoints.length > 0;
+
   return (
     <div
       className={`api-reference ${
-        schemaDetails.endpoints && schemaDetails.endpoints.length > 0
-          ? "mb-40"
-          : ""
+        hasEndpoints ? "mb-40" : ""
       } transform transition-all duration-700 ease-out ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
@@ -261,7 +210,7 @@ const ApiReference = (data: ApiReferenceProps) => {
         ) : (
           // Show all endpoints
           <div>
-            {schemaDetails.endpoints && schemaDetails.endpoints.length > 0 ? (
+            {hasEndpoints ? (
               schemaDetails.endpoints.map((endpoint) =>
                 EndpointSection(
                   endpoint,
