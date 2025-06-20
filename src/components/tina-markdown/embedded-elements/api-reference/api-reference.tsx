@@ -1,42 +1,19 @@
-import { CodeBlock } from "@/components/tina-markdown/standard-elements/code-block/code-block";
 import { client } from "@/tina/__generated__/client";
 // biome-ignore lint/style/useImportType:
 import React, { useEffect, useState, createContext, useCallback } from "react";
-import { ChevronIcon, SchemaType } from "./scheme-type";
+import { APIErrorsSection } from "./error-section";
+import { APIRequestBodySection } from "./request-body-section";
+import { APIResponsesSection } from "./response-body-section";
 import type {
   ApiReferenceProps,
   Endpoint,
   ExpandedResponsesState,
-  RequestBodyDropdownProps,
   ResponseViewState,
   SchemaDetails,
 } from "./types";
-import { generateExample } from "./utils";
 
 // Context to share schema definitions across components
-const SchemaContext = createContext<any>({});
-
-const RequestBodyDropdown = ({ value, onChange }: RequestBodyDropdownProps) => {
-  return (
-    <div className="relative inline-block text-left">
-      <select
-        tabIndex={-1}
-        className="border-[0.25px] border-neutral-border rounded px-2 text-sm text-neutral-text-secondary bg-neutral-background min-w-[100px] flex items-center justify-between gap-2"
-        value={value}
-        onClick={(e) => {
-          // Prevent click event from bubbling up
-          e.stopPropagation();
-        }}
-        onChange={(e) => {
-          onChange(e.target.value as "schema" | "example");
-        }}
-      >
-        <option value="schema">Schema</option>
-        <option value="example">Example</option>
-      </select>
-    </div>
-  );
-};
+export const SchemaContext = createContext<any>({});
 
 const ApiReference = (data: ApiReferenceProps) => {
   const [loading, setLoading] = useState(true);
@@ -268,457 +245,49 @@ const ApiReference = (data: ApiReferenceProps) => {
         key={endpoint.path + endpoint.method}
         className="mb-12 dark:bg-neutral-background-secondary dark:border dark:border-neutral-border-subtle/40 bg-glass-gradient-end p-4 rounded-lg shadow-sm"
       >
-        <div className="flex flex-col gap-2 pb-6">
-          <div className="flex items-center gap-4">
-            <span
-              className={`px-3 py-1 rounded-md text-sm shadow-sm font-bold ${
-                endpoint.method === "GET"
-                  ? "bg-[#B4EFD9] text-green-800"
-                  : endpoint.method === "POST"
-                  ? "bg-[#B4DBFF] text-blue-800"
-                  : endpoint.method === "PUT"
-                  ? "bg-[#FEF3C7] text-yellow-800"
-                  : endpoint.method === "DELETE"
-                  ? "bg-[#FEE2E2] text-red-800"
-                  : "bg-gray-50"
-              }`}
-            >
-              {endpoint.method}
-            </span>
-            <span className="font-mono text-neutral-text text-sm brand-glass-gradient shadow-sm rounded-lg px-2 py-1 ">
-              {endpoint.path}
-            </span>
-          </div>
-          <span className="text-neutral-text-secondary text-sm">
-            {endpoint?.description}
-          </span>
-        </div>
-
-        <div className="">
+        <Header endpoint={endpoint} />
+        <>
           {/* Parameters section - only show if there are non-body parameters */}
           {endpoint.parameters && endpoint.parameters.length > 0 && (
-            <div className="mb-8">
-              <h4 className="text-xl text-neutral-text  mb-2">
-                Path Parameters
-              </h4>
-
-              <div className="space-y-4 pl-3">
-                {endpoint.parameters.map((param: any, index: number) => (
-                  <div key={index}>
-                    <div className="flex items-center mb-2">
-                      <span className="text-neutral-text mr-2">
-                        {param.name}
-                      </span>
-                      <span className="mr-2 px-2 py-0.5 brand-glass-gradient shadow-sm font-mono text-xs text-neutral-text rounded-md">
-                        {param.in}
-                      </span>
-                      <span className="mr-2 px-2 py-0.5 brand-glass-gradient shadow-sm font-mono text-xs text-neutral-text rounded-md">
-                        {param.type}
-                      </span>
-                      {param.required && (
-                        <span className="px-2 py-0.5 text-xs rounded-full bg-brand-primary-light text-black dark:text-white font-tuner">
-                          required
-                        </span>
-                      )}
-                    </div>
-
-                    {param.description && (
-                      <p className="text-neutral-text-secondary mb-3 text-sm">
-                        {param.description}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <APIParametersSection parameters={endpoint.parameters} />
           )}
 
           {/* Request Body section */}
           {endpoint.requestBody && (
-            <div className="mb-8">
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <h4 className="text-xl text-neutral-text">Request Body</h4>
-                <RequestBodyDropdown
-                  value={requestBodyView}
-                  onChange={setRequestBodyView}
-                />
-              </div>
-              {endpoint.requestBody.description && (
-                <p className="text-neutral-text mb-2">
-                  {endpoint.requestBody.description}
-                </p>
-              )}
-              <div>
-                {requestBodyView === "schema" ? (
-                  <SchemaType
-                    schema={
-                      endpoint.requestBody.content
-                        ? (
-                            Object.values(
-                              endpoint.requestBody.content
-                            )[0] as any
-                          ).schema
-                        : endpoint.requestBody.schema
-                    }
-                    showExampleButton={false}
-                    isErrorSchema={false}
-                    name={(() => {
-                      const schema = endpoint.requestBody.content
-                        ? (
-                            Object.values(
-                              endpoint.requestBody.content
-                            )[0] as any
-                          ).schema
-                        : endpoint.requestBody.schema;
-                      if (schema?.type === "array") {
-                        return "Array of object";
-                      }
-                      return undefined;
-                    })()}
-                  />
-                ) : (
-                  <CodeBlock
-                    value={JSON.stringify(
-                      generateExample(
-                        endpoint.requestBody.content
-                          ? (
-                              Object.values(
-                                endpoint.requestBody.content
-                              )[0] as any
-                            ).schema
-                          : endpoint.requestBody.schema,
-                        schemaDefinitions
-                      ),
-                      null,
-                      2
-                    )}
-                    lang="json"
-                  />
-                )}
-              </div>
-            </div>
+            <APIRequestBodySection
+              requestBody={endpoint.requestBody}
+              requestBodyView={requestBodyView}
+              setRequestBodyView={setRequestBodyView}
+              schemaDefinitions={schemaDefinitions}
+            />
           )}
 
           {/* Responses section */}
-          <div className="mb-8">
-            <h4 className="text-xl text-neutral-text mb-2">Responses</h4>
-
-            {(() => {
-              const nonErrorResponses = Object.entries(
-                endpoint.responses || {}
-              ).filter(
-                ([code]) => !code.startsWith("4") && !code.startsWith("5")
-              );
-              if (nonErrorResponses.length === 0) {
-                return (
-                  <div className="pl-3 text-neutral-text-secondary text-sm">
-                    No responses defined for this endpoint.
-                  </div>
-                );
-              }
-              return (
-                <div className="space-y-4">
-                  {nonErrorResponses.map(([code, response]: [string, any]) => {
-                    const isErrorResponse =
-                      code.startsWith("4") || code.startsWith("5");
-                    const responseKey = `${endpoint.method}-${endpoint.path}-${code}`;
-                    const hasExpandableContent =
-                      response &&
-                      ((response.content &&
-                        Object.keys(response.content).length > 0) ||
-                        response.schema ||
-                        (typeof response === "object" &&
-                          Object.keys(response).some(
-                            (k) => k !== "description"
-                          )));
-                    // Add dropdown state for this response
-                    const view = responseView[responseKey] || "schema";
-                    const setView = (v: "schema" | "example") =>
-                      setResponseView((prev) => ({
-                        ...prev,
-                        [responseKey]: v,
-                      }));
-                    return (
-                      <div key={code}>
-                        <div
-                          className={`p-3  ${
-                            hasExpandableContent ? "cursor-pointer" : ""
-                          }`}
-                          onClick={
-                            hasExpandableContent
-                              ? () => {
-                                  const newExpandedResponses = new Map(
-                                    expandedResponses
-                                  );
-                                  newExpandedResponses.set(
-                                    responseKey,
-                                    !expandedResponses.get(responseKey)
-                                  );
-                                  setExpandedResponses(newExpandedResponses);
-                                }
-                              : undefined
-                          }
-                          title={
-                            hasExpandableContent
-                              ? "Click to expand/collapse"
-                              : undefined
-                          }
-                        >
-                          <div className="flex items-center w-full justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <span
-                                className={`px-2 py-0.5 rounded-md inline-block ${
-                                  code.startsWith("2")
-                                    ? "bg-[#B4EFD9] text-green-800 font-bold"
-                                    : isErrorResponse
-                                    ? "bg-red-100 text-red-800"
-                                    : "bg-gray-200 text-gray-800 font-tuner text-center"
-                                }`}
-                              >
-                                {code}
-                              </span>
-                              {response.description && (
-                                <span className="ml-2 text-neutral-text flex items-center gap-2">
-                                  {response.description}
-                                </span>
-                              )}
-                              {hasExpandableContent && (
-                                <ChevronIcon
-                                  isExpanded={
-                                    expandedResponses.get(responseKey) || false
-                                  }
-                                />
-                              )}
-                            </div>
-                            {hasExpandableContent && (
-                              <div className="ml-auto relative">
-                                <RequestBodyDropdown
-                                  value={view}
-                                  onChange={setView}
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {/* Show schema details only when expanded */}
-                        {hasExpandableContent &&
-                          expandedResponses.get(responseKey) && (
-                            <div className="pb-3 px-3">
-                              <SchemaContext.Provider value={schemaDefinitions}>
-                                {view === "schema" ? (
-                                  <SchemaType
-                                    schema={(() => {
-                                      if (
-                                        response.content &&
-                                        Object.keys(response.content).length > 0
-                                      ) {
-                                        const firstContent = Object.values(
-                                          response.content
-                                        )[0] as any;
-                                        return firstContent.schema;
-                                      }
-                                      if (response.schema) {
-                                        return response.schema;
-                                      }
-                                      return {};
-                                    })()}
-                                    showExampleButton={false}
-                                    isErrorSchema={isErrorResponse}
-                                  />
-                                ) : (
-                                  <CodeBlock
-                                    value={JSON.stringify(
-                                      (() => {
-                                        if (
-                                          response.content &&
-                                          Object.keys(response.content).length >
-                                            0
-                                        ) {
-                                          const firstContent = Object.values(
-                                            response.content
-                                          )[0] as any;
-                                          return generateExample(
-                                            firstContent.schema,
-                                            schemaDefinitions
-                                          );
-                                        }
-                                        if (response.schema) {
-                                          return generateExample(
-                                            response.schema,
-                                            schemaDefinitions
-                                          );
-                                        }
-                                        return {};
-                                      })(),
-                                      null,
-                                      2
-                                    )}
-                                    lang="json"
-                                  />
-                                )}
-                              </SchemaContext.Provider>
-                            </div>
-                          )}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })()}
-          </div>
+          <APIResponsesSection
+            responses={endpoint.responses}
+            endpoint={endpoint}
+            expandedResponses={expandedResponses}
+            setExpandedResponses={setExpandedResponses}
+            responseView={responseView}
+            setResponseView={setResponseView}
+            schemaDefinitions={schemaDefinitions}
+          />
 
           {/* Errors section for 4XX and 5XX */}
           {Object.entries(endpoint.responses || {}).some(
             ([code]) => code.startsWith("4") || code.startsWith("5")
           ) && (
-            <div className="mb-8">
-              <h4 className="text-xl text-neutral-text mb-2">Errors</h4>
-
-              <div>
-                {Object.entries(endpoint.responses || {})
-                  .filter(
-                    ([code]) => code.startsWith("4") || code.startsWith("5")
-                  )
-                  .map(([code, response]: [string, any], index: number) => {
-                    const isErrorResponse = true;
-                    const responseKey = `${endpoint.method}-${endpoint.path}-${code}`;
-                    const hasExpandableContent =
-                      response &&
-                      ((response.content &&
-                        Object.keys(response.content).length > 0) ||
-                        response.schema ||
-                        (typeof response === "object" &&
-                          Object.keys(response).some(
-                            (k) => k !== "description"
-                          )));
-                    // Add dropdown state for this response
-                    const view = responseView[responseKey] || "schema";
-                    const setView = (v: "schema" | "example") =>
-                      setResponseView((prev) => ({
-                        ...prev,
-                        [responseKey]: v,
-                      }));
-                    return (
-                      <div key={code}>
-                        <div
-                          className={`px-3 py-1 ${
-                            hasExpandableContent
-                              ? "cursor-pointer hover:bg-opacity-80 transition-colors"
-                              : ""
-                          }`}
-                          onClick={
-                            hasExpandableContent
-                              ? () => {
-                                  const newExpandedResponses = new Map(
-                                    expandedResponses
-                                  );
-                                  newExpandedResponses.set(
-                                    responseKey,
-                                    !expandedResponses.get(responseKey)
-                                  );
-                                  setExpandedResponses(newExpandedResponses);
-                                }
-                              : undefined
-                          }
-                          title={
-                            hasExpandableContent
-                              ? "Click to expand/collapse"
-                              : undefined
-                          }
-                        >
-                          <div className="flex items-center w-full">
-                            <span className="px-2 py-0.5 rounded-md inline-block bg-[#FEE2E2] font-bold text-red-800">
-                              {code}
-                            </span>
-                            {response.description && (
-                              <span className="ml-2 text-neutral-text">
-                                {response.description}
-                              </span>
-                            )}
-                            {hasExpandableContent && (
-                              <div className="flex items-center gap-2 ml-2">
-                                <RequestBodyDropdown
-                                  value={view}
-                                  onChange={setView}
-                                />
-                                <span
-                                  className="ml-auto text-2xl font-bold select-none pointer-events-none flex items-center"
-                                  style={{ minWidth: 28 }}
-                                >
-                                  {expandedResponses.get(responseKey)
-                                    ? "−"
-                                    : "+"}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {/* Show schema details only when expanded */}
-                        {hasExpandableContent &&
-                          expandedResponses.get(responseKey) && (
-                            <div className="p-3">
-                              <SchemaContext.Provider value={schemaDefinitions}>
-                                {view === "schema" ? (
-                                  <SchemaType
-                                    schema={(() => {
-                                      if (
-                                        response.content &&
-                                        Object.keys(response.content).length > 0
-                                      ) {
-                                        const firstContent = Object.values(
-                                          response.content
-                                        )[0] as any;
-                                        return firstContent.schema;
-                                      }
-                                      if (response.schema) {
-                                        return response.schema;
-                                      }
-                                      return {};
-                                    })()}
-                                    showExampleButton={false}
-                                    isErrorSchema={isErrorResponse}
-                                  />
-                                ) : (
-                                  <CodeBlock
-                                    value={JSON.stringify(
-                                      (() => {
-                                        if (
-                                          response.content &&
-                                          Object.keys(response.content).length >
-                                            0
-                                        ) {
-                                          const firstContent = Object.values(
-                                            response.content
-                                          )[0] as any;
-                                          return generateExample(
-                                            firstContent.schema,
-                                            schemaDefinitions
-                                          );
-                                        }
-                                        if (response.schema) {
-                                          return generateExample(
-                                            response.schema,
-                                            schemaDefinitions
-                                          );
-                                        }
-                                        return {};
-                                      })(),
-                                      null,
-                                      2
-                                    )}
-                                    lang="json"
-                                  />
-                                )}
-                              </SchemaContext.Provider>
-                            </div>
-                          )}
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
+            <APIErrorsSection
+              responses={endpoint.responses}
+              endpoint={endpoint}
+              expandedResponses={expandedResponses}
+              setExpandedResponses={setExpandedResponses}
+              responseView={responseView}
+              setResponseView={setResponseView}
+              schemaDefinitions={schemaDefinitions}
+            />
           )}
-        </div>
+        </>
       </div>
     );
   };
@@ -753,8 +322,6 @@ const ApiReference = (data: ApiReferenceProps) => {
     </div>
   );
 };
-
-export default ApiReference;
 
 const NoEndpointsFound = () => {
   return (
@@ -798,3 +365,70 @@ const ErrorMessage = ({ error }: { error: string }) => {
     </div>
   );
 };
+
+const Header = ({ endpoint }: { endpoint: Endpoint }) => {
+  return (
+    <div className="flex flex-col gap-2 pb-6">
+      <div className="flex items-center gap-4">
+        <span
+          className={`px-3 py-1 rounded-md text-sm shadow-sm font-bold ${
+            endpoint.method === "GET"
+              ? "bg-[#B4EFD9] text-green-800"
+              : endpoint.method === "POST"
+              ? "bg-[#B4DBFF] text-blue-800"
+              : endpoint.method === "PUT"
+              ? "bg-[#FEF3C7] text-yellow-800"
+              : endpoint.method === "DELETE"
+              ? "bg-[#FEE2E2] text-red-800"
+              : "bg-gray-50"
+          }`}
+        >
+          {endpoint.method}
+        </span>
+        <span className="font-mono text-neutral-text text-sm brand-glass-gradient shadow-sm rounded-lg px-2 py-1 ">
+          {endpoint.path}
+        </span>
+      </div>
+      <span className="text-neutral-text-secondary text-sm">
+        {endpoint?.description}
+      </span>
+    </div>
+  );
+};
+
+const APIParametersSection = ({ parameters }: { parameters: any[] }) => {
+  if (!parameters || parameters.length === 0) return null;
+
+  return (
+    <div className="mb-8">
+      <h4 className="text-xl text-neutral-text mb-2">Path Parameters</h4>
+      <div className="space-y-4 pl-3">
+        {parameters.map((param: any, index: number) => (
+          <div key={index}>
+            <div className="flex items-center mb-2">
+              <span className="text-neutral-text mr-2">{param.name}</span>
+              <span className="mr-2 px-2 py-0.5 brand-glass-gradient shadow-sm font-mono text-xs text-neutral-text rounded-md">
+                {param.in}
+              </span>
+              <span className="mr-2 px-2 py-0.5 brand-glass-gradient shadow-sm font-mono text-xs text-neutral-text rounded-md">
+                {param.type}
+              </span>
+              {param.required && (
+                <span className="px-2 py-0.5 text-xs rounded-full bg-brand-primary-light text-black dark:text-white font-tuner">
+                  required
+                </span>
+              )}
+            </div>
+            {param.description && (
+              <p className="text-neutral-text-secondary mb-3 text-sm">
+                {param.description}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ApiReference;
