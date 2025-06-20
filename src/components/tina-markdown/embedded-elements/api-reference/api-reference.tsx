@@ -151,6 +151,18 @@ const ApiReference = (data: ApiReferenceProps) => {
           }
         }
 
+        // Handle empty/placeholder schema case
+        if (schemaPath === "test-doc.json") {
+          setSchemaDetails({
+            title: "API Documentation",
+            version: "",
+            endpoints: [],
+            securityDefinitions: {},
+          });
+          setLoading(false);
+          return;
+        }
+
         if (!schemaPath) {
           setError("No schema file specified");
           setLoading(false);
@@ -780,7 +792,11 @@ const ApiReference = (data: ApiReferenceProps) => {
 
   return (
     <div
-      className={`api-reference mb-40 transform transition-all duration-700 ease-out ${
+      className={`api-reference ${
+        schemaDetails.endpoints && schemaDetails.endpoints.length > 0
+          ? "mb-40"
+          : ""
+      } transform transition-all duration-700 ease-out ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
     >
@@ -791,8 +807,21 @@ const ApiReference = (data: ApiReferenceProps) => {
         ) : (
           // Show all endpoints
           <div>
-            {schemaDetails.endpoints.map((endpoint) =>
-              renderEndpoint(endpoint)
+            {schemaDetails.endpoints && schemaDetails.endpoints.length > 0 ? (
+              schemaDetails.endpoints.map((endpoint) =>
+                renderEndpoint(endpoint)
+              )
+            ) : (
+              <div className="p-8 text-center">
+                <div className="bg-neutral-background-secondary border border-neutral-border-subtle/40 rounded-lg p-6">
+                  <h3 className="text-lg font-medium text-neutral-text mb-2">
+                    No API Endpoints Found
+                  </h3>
+                  <p className="text-neutral-text-secondary text-sm">
+                    This API schema doesn't contain any endpoints to display.
+                  </p>
+                </div>
+              </div>
             )}
           </div>
         )}
