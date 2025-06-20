@@ -216,10 +216,13 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           <CustomDropdown
             value={input.value?.split("|")[0]}
             onChange={handleSchemaChange}
-            options={schemas.map<DropdownOption>((schema) => ({
-              value: schema.relativePath,
-              label: schema._sys.filename,
-            }))}
+            options={[
+              { value: "", label: "Select a schema" },
+              ...schemas.map<DropdownOption>((schema) => ({
+                value: schema.relativePath,
+                label: schema._sys.filename,
+              })),
+            ]}
             placeholder="Select a schema"
           />
 
@@ -277,14 +280,17 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                       <CustomDropdown
                         value={selectedEndpoint}
                         onChange={handleEndpointChange}
-                        options={schemaDetails.endpoints
-                          .sort((a, b) => a.path.localeCompare(b.path))
-                          .map<DropdownOption>((endpoint) => ({
-                            value: createEndpointId(endpoint),
-                            label: `${endpoint.method} ${endpoint.path} ${
-                              endpoint.summary ? `- ${endpoint.summary}` : ""
-                            }`,
-                          }))}
+                        options={[
+                          { value: "", label: "All Endpoints" },
+                          ...schemaDetails.endpoints
+                            .sort((a, b) => a.path.localeCompare(b.path))
+                            .map<DropdownOption>((endpoint) => ({
+                              value: createEndpointId(endpoint),
+                              label: `${endpoint.method} ${endpoint.path} ${
+                                endpoint.summary ? `- ${endpoint.summary}` : ""
+                              }`,
+                            })),
+                        ]}
                         placeholder="All Endpoints"
                         contentClassName="bg-white border border-blue-300"
                       />
