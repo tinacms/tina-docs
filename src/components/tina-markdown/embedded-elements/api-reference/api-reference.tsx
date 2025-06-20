@@ -13,7 +13,7 @@ import { extractEndpoints } from "./utils";
 // Context to share schema definitions across components
 export const SchemaContext = createContext<any>({});
 
-const ApiReference = (data: ApiReferenceProps) => {
+export const ApiReference = (data: ApiReferenceProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [schemaDetails, setSchemaDetails] = useState<SchemaDetails | null>(
@@ -275,5 +275,3 @@ const ErrorMessage = ({ error }: { error: string }) => {
     </div>
   );
 };
-
-export default ApiReference;

@@ -1,4 +1,4 @@
-import { Endpoint } from "./types";
+import type { Endpoint } from "./types";
 
 export const resolveReference = (ref: string, definitions: any): any => {
   if (!ref || typeof ref !== "string" || !ref.startsWith("#/")) {
