@@ -145,10 +145,21 @@ const ApiReference = (data: ApiReferenceProps) => {
     }
   }, [loading, schemaDetails]);
 
+  const resetState = useCallback(() => {
+    setLoading(true);
+    setError(null);
+    setSchemaDetails(null);
+    setSelectedEndpoint(null);
+    setSchemaDefinitions({});
+    setExpandedResponses(new Map());
+    setResponseView({});
+    setIsVisible(false);
+  }, []);
+
   useEffect(() => {
     const fetchAndParseSchema = async () => {
       try {
-        setLoading(true);
+        resetState();
 
         // Parse the combined schema and endpoint value
         let schemaPath = "";
@@ -275,7 +286,7 @@ const ApiReference = (data: ApiReferenceProps) => {
     };
 
     fetchAndParseSchema();
-  }, [data.schemaFile, setEmptySchema]);
+  }, [data.schemaFile, resetState, setEmptySchema]);
 
   // Initialize expanded state for all endpoint responses
   useEffect(() => {
