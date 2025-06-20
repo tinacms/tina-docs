@@ -249,7 +249,7 @@ const ApiReference = (data: ApiReferenceProps) => {
         <>
           {/* Parameters section - only show if there are non-body parameters */}
           {endpoint.parameters && endpoint.parameters.length > 0 && (
-            <APIParametersSection parameters={endpoint.parameters} />
+            <ParametersSection parameters={endpoint.parameters} />
           )}
 
           {/* Request Body section */}
@@ -396,7 +396,7 @@ const Header = ({ endpoint }: { endpoint: Endpoint }) => {
   );
 };
 
-const APIParametersSection = ({ parameters }: { parameters: any[] }) => {
+const ParametersSection = ({ parameters }: { parameters: any[] }) => {
   if (!parameters || parameters.length === 0) return null;
 
   return (
