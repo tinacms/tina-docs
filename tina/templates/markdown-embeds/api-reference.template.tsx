@@ -54,7 +54,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
         console.log("🚀 ~ fetchSchemas ~ client: when it is mounted");
         let result: any;
         try {
-          result = await client.queries?.apiSchemaConnection({ first: 100 });
+          result = await client.queries.apiSchemaConnection({ first: 100 });
         } catch (error) {
           // biome-ignore lint/suspicious/noConsole: <explanation>
           console.log("🚀 ~ fetchSchemas ~ error:", error);
