@@ -68,35 +68,19 @@ const parseSwaggerJson = (jsonContent: string): SchemaDetails => {
 };
 
 const getSchemas = async () => {
-  try {
-    const result = await client.queries.apiSchemaConnection({
-      first: 100,
-    });
+  // Hardcoded schema for now
+  const hardcodedSchemas: SchemaFile[] = [
+    {
+      id: "content/apiSchema/Swagger-Petstore.json",
+      relativePath: "Swagger-Petstore.json",
+      apiSchema: "",
+      _sys: {
+        filename: "Swagger-Petstore",
+      },
+    },
+  ];
 
-    if (result?.data?.apiSchemaConnection?.edges) {
-      // Convert API response into our simpler SchemaFile interface
-      const schemaFiles: SchemaFile[] = [];
-
-      for (const edge of result.data.apiSchemaConnection.edges) {
-        if (edge?.node) {
-          schemaFiles.push({
-            id: edge.node.id,
-            relativePath: edge.node._sys.relativePath,
-            apiSchema: edge.node.apiSchema,
-            _sys: {
-              filename: edge.node._sys.filename,
-            },
-          });
-        }
-      }
-      return schemaFiles;
-    }
-    return [];
-  } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: <explanation>
-    console.error(error);
-    return [];
-  }
+  return hardcodedSchemas;
 };
 
 // Custom field for selecting an API schema file
