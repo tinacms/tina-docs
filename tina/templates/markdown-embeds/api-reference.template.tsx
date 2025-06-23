@@ -68,7 +68,6 @@ const parseSwaggerJson = (jsonContent: string): SchemaDetails => {
 };
 
 const getSchemas = async () => {
-  ("use server");
   try {
     const result = await client.queries.apiSchemaConnection({
       first: 100,
@@ -168,10 +167,8 @@ const SchemaSelector = (props: any) => {
       setSchemas(schemas);
       setLoading(false);
     };
-    if (schemas.length === 0) {
-      fetchSchemas();
-    }
-  }, [schemas]);
+    fetchSchemas();
+  }, []);
 
   const handleSchemaChange = (schemaPath: string) => {
     // Reset endpoint selection when schema changes
