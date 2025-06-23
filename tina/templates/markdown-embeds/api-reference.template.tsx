@@ -47,6 +47,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
 
   // Fetch available schema files when component mounts
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const fetchSchemas = async () => {
       try {
         setLoading(true);
