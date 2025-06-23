@@ -70,7 +70,7 @@ const parseSwaggerJson = (jsonContent: string): SchemaDetails => {
 };
 
 // Custom field for selecting an API schema file
-const SchemaSelector = wrapFieldsWithMeta((props: any) => {
+const SchemaSelector = (props: any) => {
   const { input, field } = props;
   const [schemas, setSchemas] = useState<SchemaFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -316,7 +316,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
       </div>
     </div>
   );
-});
+};
 
 export const ApiReferenceTemplate = {
   name: "apiReference",
