@@ -4,9 +4,9 @@ import {
   CustomDropdown,
   type DropdownOption,
 } from "@/components/ui/custom-dropdown";
-import { client } from "@/tina/__generated__/client";
 import React, { useCallback, useState, useEffect } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
+import { client } from "../../../tina/__generated__/client";
 
 // Define schema type to match the actual structure from the API
 interface SchemaFile {
@@ -36,6 +36,7 @@ interface Endpoint {
 
 // Custom field for selecting an API schema file
 const SchemaSelector = wrapFieldsWithMeta((props: any) => {
+  if (typeof window === "undefined") return null;
   const { input, field } = props;
   const [schemas, setSchemas] = useState<SchemaFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,19 +48,17 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
 
   // Fetch available schema files when component mounts
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     const fetchSchemas = async () => {
       try {
         setLoading(true);
         // biome-ignore lint/suspicious/noConsole: <explanation>
         console.log("🚀 ~ fetchSchemas ~ client: when it is mounted");
         let result: any;
-        // biome-ignore lint/suspicious/noConsole: <explanation>
-        console.log("client.queries:", Object.keys(client.queries));
         try {
           result = await client.queries.apiSchemaConnection({ first: 100 });
         } catch (error) {
+          // biome-ignore lint/suspicious/noConsole: <explanation>
+          console.log("client.queries:", Object.keys(client.queries));
           // biome-ignore lint/suspicious/noConsole: <explanation>
           console.log("🚀 ~ fetchSchemas ~ error:", error);
         }
