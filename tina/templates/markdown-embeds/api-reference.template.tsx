@@ -145,43 +145,30 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   useEffect(() => {
     const fetchSchemas = async () => {
       try {
-        // Use the generated client to fetch all API schemas
-        const result = await client.queries.apiSchemaConnection({
-          first: 100,
-        });
+        setLoading(true);
+        const result = await client.queries.apiSchemaConnection({ first: 100 });
 
-        if (result?.data?.apiSchemaConnection?.edges) {
-          // Convert API response into our simpler SchemaFile interface
-          const schemaFiles: SchemaFile[] = [];
+        const edges = result?.data?.apiSchemaConnection?.edges || [];
 
-          for (const edge of result.data.apiSchemaConnection.edges) {
-            if (edge?.node) {
-              schemaFiles.push({
-                id: edge.node.id,
-                relativePath: edge.node._sys.relativePath,
-                apiSchema: edge.node.apiSchema,
-                _sys: {
-                  filename: edge.node._sys.filename,
-                },
-              });
-            }
-          }
+        const schemaFiles: SchemaFile[] = edges.map((edge) => ({
+          id: edge?.node?.id || "",
+          relativePath: edge?.node?._sys.relativePath || "",
+          apiSchema: edge?.node?.apiSchema || "",
+          _sys: {
+            filename: edge?.node?._sys.filename || "",
+          },
+        }));
 
-          setSchemas(schemaFiles);
-        } else {
-          setSchemas([]);
-        }
-
-        setLoading(false);
+        setSchemas(schemaFiles);
       } catch (error) {
+        setSchemas([]);
+      } finally {
         setLoading(false);
       }
     };
 
-    if (input.value) {
-      fetchSchemas();
-    }
-  }, [input.value]);
+    fetchSchemas();
+  }, []);
 
   const handleSchemaChange = (schemaPath: string) => {
     // Reset endpoint selection when schema changes
