@@ -44,6 +44,12 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   );
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we only run client-side operations after hydration
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // When input.value changes, parse it to extract schema and endpoint
   useEffect(() => {
@@ -101,7 +107,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
 
   // Fetch schema details when a schema is selected
   useEffect(() => {
-    if (!input.value) {
+    if (!input.value || !isClient) {
       setSchemaDetails(null);
       return;
     }
@@ -139,10 +145,14 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
     };
 
     fetchSchemaDetails();
-  }, [input.value, schemas, parseSwaggerJson]);
+  }, [input.value, schemas, parseSwaggerJson, isClient]);
 
-  // Fetch available schema files when component mounts
+  // Fetch available schema files when component mounts - only on client side
   useEffect(() => {
+    if (!isClient) {
+      return;
+    }
+
     const fetchSchemas = async () => {
       try {
         setLoading(true);
@@ -168,7 +178,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
     };
 
     fetchSchemas();
-  }, []);
+  }, [isClient]);
 
   const handleSchemaChange = (schemaPath: string) => {
     // Reset endpoint selection when schema changes
@@ -188,6 +198,20 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   const createEndpointId = (endpoint: Endpoint) => {
     return `${endpoint.method}:${endpoint.path}`;
   };
+
+  // Show loading state during hydration
+  if (!isClient) {
+    return (
+      <div className="w-full max-w-full overflow-x-hidden">
+        <label className="block font-medium text-gray-700 mb-1">
+          {field.label || "Select API Schema"}
+        </label>
+        <div className="py-2 px-3 bg-gray-100 rounded text-gray-500">
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-full overflow-x-hidden">
