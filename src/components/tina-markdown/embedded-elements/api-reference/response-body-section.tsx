@@ -1,5 +1,5 @@
+import { SchemaContext } from ".";
 import { CodeBlock } from "../../standard-elements/code-block/code-block";
-import { SchemaContext } from "./api-reference";
 import { RequestBodyDropdown } from "./request-body-section";
 import { ChevronIcon, SchemaType } from "./scheme-type";
 import type {

@@ -1,6 +1,6 @@
 import type { Components, TinaMarkdownContent } from "tinacms/dist/rich-text";
 import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
-import { ApiReference } from "./embedded-elements/api-reference/api-reference";
+import { ApiReference } from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
 import { CardGrid } from "./embedded-elements/card-grid";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
