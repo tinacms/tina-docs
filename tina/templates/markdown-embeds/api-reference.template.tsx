@@ -31,6 +31,44 @@ interface Endpoint {
   operationId?: string;
 }
 
+// Parse Swagger/OpenAPI JSON to extract details
+const parseSwaggerJson = (jsonContent: string): SchemaDetails => {
+  try {
+    const parsed = JSON.parse(jsonContent);
+
+    // Extract endpoints
+    const endpoints: Endpoint[] = [];
+    if (parsed.paths) {
+      for (const path of Object.keys(parsed.paths)) {
+        const pathObj = parsed.paths[path];
+        for (const method of Object.keys(pathObj)) {
+          const operation = pathObj[method];
+          endpoints.push({
+            path,
+            method: method.toUpperCase(),
+            summary: operation.summary || `${method.toUpperCase()} ${path}`,
+            operationId: operation.operationId,
+          });
+        }
+      }
+    }
+
+    return {
+      title: parsed.info?.title || "Unknown API",
+      version: parsed.info?.version || "Unknown Version",
+      endpointCount: endpoints.length,
+      endpoints,
+    };
+  } catch (error) {
+    return {
+      title: "Error Parsing Schema",
+      version: "Unknown",
+      endpointCount: 0,
+      endpoints: [],
+    };
+  }
+};
+
 // Custom field for selecting an API schema file
 const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   const { input, field } = props;
@@ -57,44 +95,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
       setSelectedEndpoint("");
     }
   }, [input.value]);
-
-  // Parse Swagger/OpenAPI JSON to extract details
-  const parseSwaggerJson = useCallback((jsonContent: string): SchemaDetails => {
-    try {
-      const parsed = JSON.parse(jsonContent);
-
-      // Extract endpoints
-      const endpoints: Endpoint[] = [];
-      if (parsed.paths) {
-        for (const path of Object.keys(parsed.paths)) {
-          const pathObj = parsed.paths[path];
-          for (const method of Object.keys(pathObj)) {
-            const operation = pathObj[method];
-            endpoints.push({
-              path,
-              method: method.toUpperCase(),
-              summary: operation.summary || `${method.toUpperCase()} ${path}`,
-              operationId: operation.operationId,
-            });
-          }
-        }
-      }
-
-      return {
-        title: parsed.info?.title || "Unknown API",
-        version: parsed.info?.version || "Unknown Version",
-        endpointCount: endpoints.length,
-        endpoints,
-      };
-    } catch (error) {
-      return {
-        title: "Error Parsing Schema",
-        version: "Unknown",
-        endpointCount: 0,
-        endpoints: [],
-      };
-    }
-  }, []);
 
   // Fetch schema details when a schema is selected
   useEffect(() => {
@@ -136,7 +136,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
     };
 
     fetchSchemaDetails();
-  }, [input.value, schemas, parseSwaggerJson]);
+  }, [input.value, schemas]);
 
   // Fetch available schema files when component mounts
   useEffect(() => {
