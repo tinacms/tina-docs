@@ -109,6 +109,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
     // Extract just the schema path if an endpoint is selected
     const schemaPath = input.value.split("|")[0];
 
+    // biome-ignore lint/suspicious/noConsole: <explanation>
+    console.log("🚀 ~ useEffect ~ schemaPath:", schemaPath);
     const fetchSchemaDetails = async () => {
       setLoadingDetails(true);
       try {
@@ -148,6 +150,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
         setLoading(true);
         const result = await client.queries.apiSchemaConnection({ first: 100 });
 
+        // biome-ignore lint/suspicious/noConsole: <explanation>
+        console.log("🚀 ~ fetchSchemas ~ result:", result);
         const edges = result?.data?.apiSchemaConnection?.edges || [];
 
         const schemaFiles: SchemaFile[] = edges.map((edge) => ({
