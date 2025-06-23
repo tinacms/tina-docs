@@ -45,6 +45,38 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
 
+  // Fetch available schema files when component mounts
+  useEffect(() => {
+    const fetchSchemas = async () => {
+      try {
+        setLoading(true);
+        // biome-ignore lint/suspicious/noConsole: <explanation>
+        console.log("🚀 ~ fetchSchemas ~ client: when it is mounted");
+        const result = await client.queries.apiSchemaConnection({ first: 100 });
+
+        // biome-ignore lint/suspicious/noConsole: <explanation>
+        console.log("🚀 ~ fetchSchemas ~ result:", result);
+        const edges = result?.data?.apiSchemaConnection?.edges || [];
+
+        const schemaFiles: SchemaFile[] = edges.map((edge) => ({
+          id: edge?.node?.id || "",
+          relativePath: edge?.node?._sys.relativePath || "",
+          apiSchema: edge?.node?.apiSchema || "",
+          _sys: {
+            filename: edge?.node?._sys.filename || "",
+          },
+        }));
+
+        setSchemas(schemaFiles);
+      } catch (error) {
+        setSchemas([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSchemas();
+  }, []);
   // When input.value changes, parse it to extract schema and endpoint
   useEffect(() => {
     if (!input.value) {
@@ -142,37 +174,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
 
     fetchSchemaDetails();
   }, [input.value, schemas, parseSwaggerJson]);
-
-  // Fetch available schema files when component mounts
-  useEffect(() => {
-    const fetchSchemas = async () => {
-      try {
-        setLoading(true);
-        const result = await client.queries.apiSchemaConnection({ first: 100 });
-
-        // biome-ignore lint/suspicious/noConsole: <explanation>
-        console.log("🚀 ~ fetchSchemas ~ result:", result);
-        const edges = result?.data?.apiSchemaConnection?.edges || [];
-
-        const schemaFiles: SchemaFile[] = edges.map((edge) => ({
-          id: edge?.node?.id || "",
-          relativePath: edge?.node?._sys.relativePath || "",
-          apiSchema: edge?.node?.apiSchema || "",
-          _sys: {
-            filename: edge?.node?._sys.filename || "",
-          },
-        }));
-
-        setSchemas(schemaFiles);
-      } catch (error) {
-        setSchemas([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSchemas();
-  }, []);
 
   const handleSchemaChange = (schemaPath: string) => {
     // Reset endpoint selection when schema changes
