@@ -1,4 +1,5 @@
 "use client";
+
 import {
   CustomDropdown,
   type DropdownOption,
@@ -177,8 +178,10 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
       }
     };
 
-    fetchSchemas();
-  }, []);
+    if (input.value) {
+      fetchSchemas();
+    }
+  }, [input.value]);
 
   const handleSchemaChange = (schemaPath: string) => {
     // Reset endpoint selection when schema changes
