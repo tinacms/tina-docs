@@ -52,10 +52,17 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
         setLoading(true);
         // biome-ignore lint/suspicious/noConsole: <explanation>
         console.log("🚀 ~ fetchSchemas ~ client: when it is mounted");
-        const result = await client.queries.apiSchemaConnection({ first: 100 });
+        let result: any;
+        try {
+          result = await client.queries.apiSchemaConnection({ first: 100 });
+        } catch (error) {
+          // biome-ignore lint/suspicious/noConsole: <explanation>
+          console.log("🚀 ~ fetchSchemas ~ error:", error);
+        }
 
         // biome-ignore lint/suspicious/noConsole: <explanation>
         console.log("🚀 ~ fetchSchemas ~ result:", result);
+
         const edges = result?.data?.apiSchemaConnection?.edges || [];
 
         const schemaFiles: SchemaFile[] = edges.map((edge) => ({
