@@ -53,6 +53,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
         // biome-ignore lint/suspicious/noConsole: <explanation>
         console.log("🚀 ~ fetchSchemas ~ client: when it is mounted");
         let result: any;
+        // biome-ignore lint/suspicious/noConsole: <explanation>
+        console.log("client.queries:", Object.keys(client.queries));
         try {
           result = await client.queries.apiSchemaConnection({ first: 100 });
         } catch (error) {
@@ -166,6 +168,8 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           const result = await client.queries.apiSchema({
             relativePath: schemaPath,
           });
+          // biome-ignore lint/suspicious/noConsole: <explanation>
+          console.log("🚀 ~ fetchSchemaDetails ~ result:", result);
 
           if (result?.data?.apiSchema?.apiSchema) {
             const details = parseSwaggerJson(result.data.apiSchema.apiSchema);
