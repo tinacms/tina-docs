@@ -1,9 +1,7 @@
 import { CustomDropdown } from "@/src/components/ui/custom-dropdown";
 import type { DropdownOption } from "@/src/components/ui/custom-dropdown";
 import { client } from "@/tina/__generated__/client";
-import React, { useCallback, useState, useEffect } from "react";
-import { wrapFieldsWithMeta } from "tinacms";
-import { tinaField, useTina } from "tinacms/dist/react";
+import React, { useState, useEffect } from "react";
 
 // Define schema type to match the actual structure from the API
 interface SchemaFile {
@@ -80,27 +78,18 @@ const SchemaSelector = (props: any) => {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
 
-  // When input.value changes, parse it to extract schema and endpoint
-  useEffect(() => {
-    if (!input.value) {
-      setSelectedEndpoint("");
-      return;
-    }
-
-    // Check if the value contains endpoint information
-    const parts = input.value.split("|");
-    if (parts.length > 1) {
-      setSelectedEndpoint(parts[1]);
-    } else {
-      setSelectedEndpoint("");
-    }
-  }, [input.value]);
-
   // Fetch schema details when a schema is selected
   useEffect(() => {
     if (!input.value) {
       setSchemaDetails(null);
       return;
+    }
+
+    const parts = input.value.split("|");
+    if (parts.length > 1) {
+      setSelectedEndpoint(parts[1]);
+    } else {
+      setSelectedEndpoint("");
     }
 
     // Extract just the schema path if an endpoint is selected
@@ -163,7 +152,7 @@ const SchemaSelector = (props: any) => {
               });
             }
           }
-
+          schemaFiles;
           setSchemas(schemaFiles);
         } else {
           setSchemas([]);
