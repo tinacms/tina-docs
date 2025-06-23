@@ -1,12 +1,9 @@
-"use client";
-
-import {
-  CustomDropdown,
-  type DropdownOption,
-} from "@/components/ui/custom-dropdown";
+import { CustomDropdown } from "@/src/components/ui/custom-dropdown";
+import type { DropdownOption } from "@/src/components/ui/custom-dropdown";
+import { client } from "@/tina/__generated__/client";
 import React, { useCallback, useState, useEffect } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
-import { client } from "../../../tina/__generated__/client";
+import { tinaField, useTina } from "tinacms/dist/react";
 
 // Define schema type to match the actual structure from the API
 interface SchemaFile {
@@ -36,7 +33,6 @@ interface Endpoint {
 
 // Custom field for selecting an API schema file
 const SchemaSelector = wrapFieldsWithMeta((props: any) => {
-  if (typeof window === "undefined") return null;
   const { input, field } = props;
   const [schemas, setSchemas] = useState<SchemaFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,47 +42,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
 
-  // Fetch available schema files when component mounts
-  useEffect(() => {
-    const fetchSchemas = async () => {
-      try {
-        setLoading(true);
-        // biome-ignore lint/suspicious/noConsole: <explanation>
-        console.log("🚀 ~ fetchSchemas ~ client: when it is mounted");
-        let result: any;
-        try {
-          result = await client.queries.apiSchemaConnection({ first: 100 });
-        } catch (error) {
-          // biome-ignore lint/suspicious/noConsole: <explanation>
-          console.log("client.queries:", Object.keys(client.queries));
-          // biome-ignore lint/suspicious/noConsole: <explanation>
-          console.log("🚀 ~ fetchSchemas ~ error:", error);
-        }
-
-        // biome-ignore lint/suspicious/noConsole: <explanation>
-        console.log("🚀 ~ fetchSchemas ~ result:", result);
-
-        const edges = result?.data?.apiSchemaConnection?.edges || [];
-
-        const schemaFiles: SchemaFile[] = edges.map((edge) => ({
-          id: edge?.node?.id || "",
-          relativePath: edge?.node?._sys.relativePath || "",
-          apiSchema: edge?.node?.apiSchema || "",
-          _sys: {
-            filename: edge?.node?._sys.filename || "",
-          },
-        }));
-
-        setSchemas(schemaFiles);
-      } catch (error) {
-        setSchemas([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSchemas();
-  }, []);
   // When input.value changes, parse it to extract schema and endpoint
   useEffect(() => {
     if (!input.value) {
@@ -151,8 +106,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
     // Extract just the schema path if an endpoint is selected
     const schemaPath = input.value.split("|")[0];
 
-    // biome-ignore lint/suspicious/noConsole: <explanation>
-    console.log("🚀 ~ useEffect ~ schemaPath:", schemaPath);
     const fetchSchemaDetails = async () => {
       setLoadingDetails(true);
       try {
@@ -169,8 +122,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           const result = await client.queries.apiSchema({
             relativePath: schemaPath,
           });
-          // biome-ignore lint/suspicious/noConsole: <explanation>
-          console.log("🚀 ~ fetchSchemaDetails ~ result:", result);
 
           if (result?.data?.apiSchema?.apiSchema) {
             const details = parseSwaggerJson(result.data.apiSchema.apiSchema);
@@ -186,6 +137,46 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
 
     fetchSchemaDetails();
   }, [input.value, schemas, parseSwaggerJson]);
+
+  // Fetch available schema files when component mounts
+  useEffect(() => {
+    const fetchSchemas = async () => {
+      try {
+        // Use the generated client to fetch all API schemas
+        const result = await client.queries.apiSchemaConnection({
+          first: 100,
+        });
+
+        if (result?.data?.apiSchemaConnection?.edges) {
+          // Convert API response into our simpler SchemaFile interface
+          const schemaFiles: SchemaFile[] = [];
+
+          for (const edge of result.data.apiSchemaConnection.edges) {
+            if (edge?.node) {
+              schemaFiles.push({
+                id: edge.node.id,
+                relativePath: edge.node._sys.relativePath,
+                apiSchema: edge.node.apiSchema,
+                _sys: {
+                  filename: edge.node._sys.filename,
+                },
+              });
+            }
+          }
+
+          setSchemas(schemaFiles);
+        } else {
+          setSchemas([]);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
+    fetchSchemas();
+  }, []);
 
   const handleSchemaChange = (schemaPath: string) => {
     // Reset endpoint selection when schema changes
