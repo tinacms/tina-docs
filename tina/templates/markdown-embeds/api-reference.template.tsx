@@ -198,10 +198,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
         <div className="py-2 px-3 bg-gray-100 rounded text-gray-500">
           Loading schemas...
         </div>
-      ) : schemas.length === 0 ? (
-        <div className="py-2 px-3 bg-red-50 text-red-500 rounded">
-          No API schema files found. Please upload one in the Content Manager.
-        </div>
       ) : (
         <div className="max-w-full w-full overflow-x-hidden">
           {/* Schema selector dropdown */}
