@@ -4,7 +4,7 @@ import {
   CustomDropdown,
   type DropdownOption,
 } from "@/components/ui/custom-dropdown";
-import client from "@/tina/__generated__/client";
+import { client } from "@/tina/__generated__/client";
 import React, { useCallback, useState, useEffect } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
 
