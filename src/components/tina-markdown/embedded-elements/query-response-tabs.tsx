@@ -3,11 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import React from "react";
 import { MdContentCopy } from "react-icons/md";
 import { CodeBlock } from "../standard-elements/code-block/code-block";
+import { CodeBlockSkeleton } from "../standard-elements/code-block/code-block-skeleton";
 
 export const QueryResponseTabs = ({ ...props }) => {
   const [isQuery, setIsQuery] = useState(!props.preselectResponse);
   const [height, setHeight] = useState(0);
   const [hasCopied, setHasCopied] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
   const queryRef = useRef<HTMLDivElement>(null);
   const responseRef = useRef<HTMLDivElement>(null);
@@ -30,6 +32,13 @@ export const QueryResponseTabs = ({ ...props }) => {
     };
   }, [isQuery]);
 
+  // Handle tab switching with transition
+  const handleTabSwitch = (newIsQuery: boolean) => {
+    if (newIsQuery !== isQuery) {
+      setIsQuery(newIsQuery);
+    }
+  };
+
   // Handle the copy action
   const handleCopy = () => {
     const textToCopy = isQuery ? props.query : props.response;
@@ -39,7 +48,7 @@ export const QueryResponseTabs = ({ ...props }) => {
   };
 
   const buttonStyling =
-    "flex justify-center cursor-pointer relative leading-tight text-neutral-text py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
+    "flex justify-center relative leading-tight text-neutral-text py-[8px] text-base font-bold transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6";
   const activeButtonStyling =
     " hover:text-neutral-text-secondary opacity-50 hover:opacity-100";
   const underlineStyling =
@@ -60,9 +69,11 @@ export const QueryResponseTabs = ({ ...props }) => {
           <div className="flex flex-1 ">
             <button
               type="button"
-              onClick={() => setIsQuery(true)}
-              className={buttonStyling + (isQuery ? "" : activeButtonStyling)}
-              disabled={isQuery}
+              onClick={() => handleTabSwitch(true)}
+              className={`${buttonStyling}${
+                isQuery ? "" : activeButtonStyling
+              }${isTransitioning ? " cursor-not-allowed" : " cursor-pointer"}`}
+              disabled={isQuery || isTransitioning}
             >
               {props.customQueryName || "Query"}
               <div
@@ -71,9 +82,11 @@ export const QueryResponseTabs = ({ ...props }) => {
             </button>
             <button
               type="button"
-              onClick={() => setIsQuery(false)}
-              className={buttonStyling + (isQuery ? activeButtonStyling : "")}
-              disabled={!isQuery}
+              onClick={() => handleTabSwitch(false)}
+              className={`${buttonStyling}${
+                isQuery ? activeButtonStyling : ""
+              }${isTransitioning ? " cursor-not-allowed" : " cursor-pointer"}`}
+              disabled={!isQuery || isTransitioning}
             >
               {props.customResponseName || "Response"}
               <div
@@ -87,7 +100,12 @@ export const QueryResponseTabs = ({ ...props }) => {
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-sm font-medium text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer"
+              disabled={isTransitioning}
+              className={`flex items-center gap-1.5 text-sm font-medium text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 ${
+                isTransitioning
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
               title={`Copy ${isQuery ? "query" : "response"} code`}
             >
               {hasCopied ? (
@@ -105,8 +123,10 @@ export const QueryResponseTabs = ({ ...props }) => {
         </div>
 
         {/* BOTTOM SECTION w/ Query/Response */}
+        {isTransitioning && <CodeBlockSkeleton hasTabs={true} />}
         <div
-          className="overflow-hidden transition-all duration-300 ease-in-out rounded-b-xl"
+          className="overflow-hidden rounded-b-xl"
+          hidden={isTransitioning}
           style={{ height: `${height}px` }}
         >
           <div
@@ -126,6 +146,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                   lang="javascript"
                   showCopyButton={false}
                   showBorder={false}
+                  setIsTransitioning={setIsTransitioning}
                 />
               </div>
             ) : (
@@ -135,6 +156,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                   lang="javascript"
                   showCopyButton={false}
                   showBorder={false}
+                  setIsTransitioning={setIsTransitioning}
                 />
               </div>
             )}
