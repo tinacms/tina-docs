@@ -69,8 +69,7 @@ const parseSwaggerJson = (jsonContent: string): SchemaDetails => {
 
 const getSchemas = async () => {
   try {
-    const response = await fetch("/api/list-api-schemas");
-    const { schemas } = await response.json();
+    const { schemas } = await fetchSchemas();
 
     if (schemas) {
       // Convert API response into our simpler SchemaFile interface
@@ -91,6 +90,11 @@ const getSchemas = async () => {
   }
 };
 
+const fetchSchemas = async () => {
+  const response = await fetch("/api/list-api-schemas");
+  return await response.json();
+};
+
 const getSchemaDetails = async (schemaPath: string, schemas: SchemaFile[]) => {
   try {
     // Find the selected schema
@@ -102,12 +106,10 @@ const getSchemaDetails = async (schemaPath: string, schemas: SchemaFile[]) => {
     }
 
     // If the schema content isn't in the current data, fetch it
-    const result = await client.queries.apiSchema({
-      relativePath: schemaPath,
-    });
+    const { schemas: data } = await fetchSchemas();
 
-    if (result?.data?.apiSchema?.apiSchema) {
-      const details = parseSwaggerJson(result.data.apiSchema.apiSchema);
+    if (data?.apiSchema) {
+      const details = parseSwaggerJson(data.apiSchema);
       return details;
     }
   } catch (error) {
