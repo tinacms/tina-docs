@@ -1,6 +1,5 @@
 "use client";
 
-import * as Tabs from "@radix-ui/react-tabs";
 import { useEffect, useState } from "react";
 import { NavigationSideBar } from "../../navigation/navigation-sidebar";
 
@@ -38,9 +37,7 @@ export const Sidebar = ({
         >
           {tabs.map((tab) => (
             <div key={tab.label} className="w-full flex-shrink-0">
-              <Tabs.Content value={tab.label}>
-                <NavigationSideBar tableOfContents={tab?.content} />
-              </Tabs.Content>
+              <NavigationSideBar tableOfContents={tab?.content} />
             </div>
           ))}
         </div>
