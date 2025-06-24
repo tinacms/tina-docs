@@ -90,7 +90,9 @@ export const ThemeSelector = () => {
           className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-1 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
         >
           <span className="truncate">
-            {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)}
+            {selectedTheme
+              ? selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)
+              : "Default"}
           </span>
           <MdArrowDropDown
             className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 flex-shrink-0 ${

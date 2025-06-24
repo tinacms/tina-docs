@@ -3,10 +3,18 @@
 import type React from "react";
 import { useTina } from "tinacms/dist/react";
 
+// Import TocItem type from utils
+type TocItem = {
+  type: string;
+  text: string;
+};
+
 export type UseTinaProps = {
   query: string;
   variables: Record<string, unknown>;
   data: Record<string, unknown>;
+  pageTableOfContents?: TocItem[];
+  documentationData?: Record<string, unknown>;
 };
 
 export type TinaClientProps<T> = {
@@ -17,8 +25,8 @@ export type TinaClientProps<T> = {
       query: string;
       variables: Record<string, unknown>;
       data: Record<string, unknown>;
-      pageTableOfContents: Record<string, unknown>;
-      documentationData: Record<string, unknown>;
+      pageTableOfContents?: TocItem[];
+      documentationData?: Record<string, unknown>;
     };
   }>;
 };

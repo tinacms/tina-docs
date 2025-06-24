@@ -28,7 +28,7 @@ function createHeadings(
   for (const heading of htmlElements ?? []) {
     headings.push({
       id: heading.id,
-      offset: heading.offsetTop,
+      offset: (heading as HTMLElement).offsetTop,
       level: heading.tagName,
     });
   }

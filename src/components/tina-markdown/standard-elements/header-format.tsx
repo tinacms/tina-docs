@@ -11,8 +11,14 @@ export default function HeaderFormat({
 }) {
   const HeadingTag = `h${level}` as any;
   const id = formatHeaderId(
-    React.isValidElement(children) && children.props?.content
-      ? children.props.content.map((content: any) => content.text).join("")
+    React.isValidElement(children) &&
+      children.props &&
+      typeof children.props === "object" &&
+      "content" in children.props &&
+      Array.isArray((children.props as any).content)
+      ? (children.props as any).content
+          .map((content: any) => content.text)
+          .join("")
       : typeof children === "string"
         ? children
         : ""

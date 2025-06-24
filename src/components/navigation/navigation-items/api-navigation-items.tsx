@@ -12,7 +12,7 @@ import { getEndpointSlug, getTagSlug, processApiGroups } from "./utils";
 export const ApiNavigationItems: React.FC<
   DocsNavProps & { __typename: string }
 > = ({ navItems, __typename, onNavigate }) => {
-  const navListElem = React.useRef(null);
+  const navListElem = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const currentPath = pathname || "";
 

@@ -6,7 +6,7 @@ import type { DocsNavProps } from "./types";
 export const DocsNavigationItems: React.FC<
   DocsNavProps & { __typename: string }
 > = ({ navItems, __typename, onNavigate }) => {
-  const navListElem = React.useRef(null);
+  const navListElem = React.useRef<HTMLDivElement>(null);
 
   return (
     <div

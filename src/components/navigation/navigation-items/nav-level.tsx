@@ -10,7 +10,7 @@ import { NavTitle } from "./nav-title";
 import { hasNestedSlug } from "./utils";
 
 interface NavLevelProps {
-  navListElem?: React.RefObject<HTMLDivElement>;
+  navListElem?: React.RefObject<HTMLDivElement | null>;
   categoryData: any;
   level?: number;
   onNavigate?: () => void;
@@ -22,7 +22,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
   level = 0,
   onNavigate,
 }) => {
-  const navLevelElem = React.useRef(null);
+  const navLevelElem = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const path = pathname || "";
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
