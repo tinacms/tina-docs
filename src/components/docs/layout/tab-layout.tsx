@@ -1,7 +1,7 @@
 "use client";
 
 import * as Tabs from "@radix-ui/react-tabs";
-import React from "react";
+import React, { type ReactNode } from "react";
 import { Body } from "./body";
 import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
@@ -13,7 +13,7 @@ export const TabsLayout = ({
   navigationDocsData,
 }: {
   tabs: { label: string; content: any }[];
-  children: React.ReactNode;
+  children: ReactNode;
   navigationDocsData: any;
 }) => {
   const [selectedTab, setSelectedTab] = React.useState(tabs[0].label);
