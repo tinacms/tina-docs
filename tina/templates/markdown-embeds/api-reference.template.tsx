@@ -72,12 +72,6 @@ const getSchemas = async () => {
     const response = await fetch("/api/list-api-schemas");
     const { schemas } = await response.json();
 
-    // biome-ignore lint/suspicious/noConsole: <explanation>
-    console.log("schemas", schemas);
-
-    // biome-ignore lint/suspicious/noConsole: <explanation>
-    console.log("client is defined", client);
-
     if (schemas) {
       // Convert API response into our simpler SchemaFile interface
       const schemaFiles: SchemaFile[] = schemas.map((schema) => ({
@@ -93,8 +87,6 @@ const getSchemas = async () => {
     }
     return [];
   } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: <explanation>
-    console.error(error);
     return [];
   }
 };
