@@ -69,6 +69,11 @@ const parseSwaggerJson = (jsonContent: string): SchemaDetails => {
 
 const getSchemas = async () => {
   try {
+    if (!client) {
+      // biome-ignore lint/suspicious/noConsole: <explanation>
+      console.log("client is not defined", client);
+      return [];
+    }
     const result = await client.queries.apiSchemaConnection({
       first: 100,
     });
