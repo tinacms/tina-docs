@@ -83,6 +83,7 @@ const getSchemas = async () => {
       const schemaFiles: SchemaFile[] = schemas.map((schema) => ({
         id: schema.id,
         relativePath: schema.filename,
+        apiSchema: schema.apiSchema,
         _sys: {
           filename: schema.displayName,
         },

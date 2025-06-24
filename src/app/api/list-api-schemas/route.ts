@@ -19,6 +19,9 @@ export async function GET() {
           id: displayName,
           filename: file,
           displayName,
+          apiSchema: JSON.parse(
+            fs.readFileSync(path.join(schemasDir, file), "utf-8")
+          ).apiSchema,
         };
       });
 
