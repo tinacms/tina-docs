@@ -69,11 +69,11 @@ const parseSwaggerJson = (jsonContent: string): SchemaDetails => {
 
 const getSchemas = async () => {
   try {
-    if (!client) {
-      // biome-ignore lint/suspicious/noConsole: <explanation>
-      console.log("client is not defined", client);
-      return [];
-    }
+    const response = await fetch("/api/list-api-schemas");
+    const { schemas } = await response.json();
+
+    // biome-ignore lint/suspicious/noConsole: <explanation>
+    console.log("schemas", schemas);
 
     // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log("client is defined", client);
