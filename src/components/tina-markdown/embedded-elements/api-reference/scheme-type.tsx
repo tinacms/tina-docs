@@ -291,8 +291,8 @@ export const SchemaType = ({
                       (propSchema.properties
                         ? "object"
                         : propSchema.items
-                        ? "array"
-                        : "unknown");
+                          ? "array"
+                          : "unknown");
                     const format = propSchema.format;
                     const isArray = propType === "array";
                     const itemType = isArray

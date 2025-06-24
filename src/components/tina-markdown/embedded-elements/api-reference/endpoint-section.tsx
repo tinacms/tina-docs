@@ -82,12 +82,12 @@ const Header = ({ endpoint }: { endpoint: Endpoint }) => {
             endpoint.method === "GET"
               ? "bg-[#B4EFD9] text-green-800"
               : endpoint.method === "POST"
-              ? "bg-[#B4DBFF] text-blue-800"
-              : endpoint.method === "PUT"
-              ? "bg-[#FEF3C7] text-yellow-800"
-              : endpoint.method === "DELETE"
-              ? "bg-[#FEE2E2] text-red-800"
-              : "bg-gray-50"
+                ? "bg-[#B4DBFF] text-blue-800"
+                : endpoint.method === "PUT"
+                  ? "bg-[#FEF3C7] text-yellow-800"
+                  : endpoint.method === "DELETE"
+                    ? "bg-[#FEE2E2] text-red-800"
+                    : "bg-gray-50"
           }`}
         >
           {endpoint.method}

@@ -93,8 +93,8 @@ export const ResponseBodySection = ({
                         code.startsWith("2")
                           ? "bg-[#B4EFD9] text-green-800 font-bold"
                           : isErrorResponse
-                          ? "bg-red-100 text-red-800"
-                          : "bg-gray-200 text-gray-800 font-tuner text-center"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-gray-200 text-gray-800 font-tuner text-center"
                       }`}
                     >
                       {code}
