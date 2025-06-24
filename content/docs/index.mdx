@@ -1,6 +1,6 @@
 ---
 title: Welcome to TinaDocs
-last_edited: '2025-06-20T04:43:27.065Z'
+last_edited: '2025-06-22T23:34:55.510Z'
 tocIsHidden: true
 next: ''
 previous: ''
@@ -9,29 +9,60 @@ previous: ''
 <scrollShowcase
   showcaseItems={[
     {
-      title: "Title",
-      image: "/img/rico-replacement.jpg",
-      content: "Default Text. Edit me!\n",
+      title: "",
+      image: "/img/landing-assets/TinaCMS-docs-graphics-12@2x.png",
+      content:
+        "TinaDocs is a feature rich template mirroring your GitHub documentation files through the power of TinaCMS.\n",
       useAsSubsection: false
     },
     {
-      title: "Title",
-      image: "/img/rico-replacement.jpg",
-      content: "Default Text. Edit me!\n",
+      title: "Backed by Markdown",
+      image: "/img/landing-assets/TinaCMS-docs-graphics-06@2x.png",
+      content:
+        "All your documentation exist here and as MD or MDX files in your own GitHub repository.\n",
       useAsSubsection: true
     },
     {
-      title: "Title",
-      image: "/img/rico-replacement.jpg",
-      content: "Default Text. Edit me!\n",
+      title: "The Frontend",
+      image: "/img/landing-assets/TinaCMS-docs-graphics-04@2x.png",
+      content:
+        'Edit your content with a WYSIWYG ("rich-text") editing experience, including a set of custom components tailored for use with technical documentation.\n',
+      useAsSubsection: false
+    },
+    {
+      title: "React + NextJS",
+      image: "/img/landing-assets/TinaCMS-docs-graphics-03@2x.png",
+      content:
+        "Implemented with performance in mind using the power of React + NextJS.\n",
+      useAsSubsection: true
+    },
+    {
+      title: "Deploy where you like",
+      image: "/img/landing-assets/TinaCMS-docs-graphics-02@2x.png",
+      content: "Host your website anywhere – from Vercel to GitHub pages.\n",
       useAsSubsection: true
     }
   ]}
 />
 
-This new Starter Template offers users the ability to set-up their documentation sites, with full flexibility, in just minutes.
-
-Built for both developers and non-developers.
+<cardGrid
+  cards={[
+    {
+      title: "API Referencing",
+      description:
+        "Link and display your API endpoints with auto-generated references and customizable fields",
+      link: "/docs/api-documentation/Overview",
+      linkText: "API Documentation"
+    },
+    {
+      title: "Customization & Themes",
+      description:
+        "Tailor the look and feel of your docs with full control over themes and layout",
+      link: "/docs/customization-and-themes/Overview",
+      linkText: "Customization Options"
+    }
+  ]}
+/>
 
 <cardGrid
   cards={[
@@ -48,21 +79,37 @@ Built for both developers and non-developers.
         "Create dynamic, engaging docs with our plug-and-play components",
       link: "/docs/components/overview",
       linkText: "Our Components"
+    }
+  ]}
+/>
+
+<scrollShowcase
+  showcaseItems={[
+    {
+      title: "The Backend",
+      image: "/img/landing-assets/TinaCMS-docs-graphics-07@2x.png",
+      content:
+        "Authenticate with GitHub and create a pull request with your changes – co-authored by you.\n",
+      useAsSubsection: false
     },
     {
-      title: "API Referencing",
-      description:
-        "Link and display your API endpoints with auto-generated references and customizable fields",
-      link: "/docs/api-documentation/Overview",
-      linkText: "API Documentation"
+      title: "TinaCloud",
+      image: "/img/landing-assets/TinaCMS-docs-graphics-09@2x.png",
+      content: "TinaCloud indexes \n",
+      useAsSubsection: true
     },
     {
-      title: "Customization & Themes",
-      description:
-        "Tailor the look and feel of your docs with full control over themes and layout",
-      link: "/docs/customization-and-themes/Overview",
-      linkText: "Customization Options"
-    },
+      title: "Totally Extensible",
+      image: "/img/landing-assets/TinaCMS-docs-graphics-13@2x.png",
+      content:
+        "The editing window can be modified as needed to work with your page layout.\n",
+      useAsSubsection: true
+    }
+  ]}
+/>
+
+<cardGrid
+  cards={[
     {
       title: "Extending TinaDocs",
       description:
