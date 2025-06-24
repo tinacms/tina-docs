@@ -589,6 +589,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [selectedTag, setSelectedTag] = React.useState("");
   const [generatingFiles, setGeneratingFiles] = React.useState(false);
   const [lastSavedValue, setLastSavedValue] = React.useState<string>("");
+  const [initialLoad, setInitialLoad] = React.useState(true);
 
   const isLocalMode = detectLocalMode();
   const parsedValue = parseFieldValue(input.value);
@@ -599,6 +600,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   // Detect form submission and trigger file generation
   React.useEffect(() => {
     const handleFormSave = async () => {
+      // Skip if this is the initial load
+      if (initialLoad) return;
+
       // Check if this is a form save by detecting when the field becomes "not dirty"
       // and the value has changed from what we last processed
       const currentValue = input.value || "";
@@ -654,6 +658,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     lastSavedValue,
     generatingFiles,
     isLocalMode,
+    initialLoad,
   ]);
 
   // Load schemas from filesystem API
@@ -675,14 +680,20 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         if (currentSchema) {
           await loadTagsAndEndpoints(currentSchema, currentTag);
         }
+
+        // Mark initial load as complete and set the last saved value
+        setInitialLoad(false);
+        setLastSavedValue(input.value || "");
       } catch (error) {
         setSchemas([]);
         setLoadingSchemas(false);
+        setInitialLoad(false);
+        setLastSavedValue(input.value || "");
       }
     };
 
     loadInitialData();
-  }, [parsedValue.schema, parsedValue.tag]);
+  }, [parsedValue.schema, parsedValue.tag, input.value]);
 
   const loadTagsAndEndpoints = async (
     schemaFilename: string,
@@ -690,8 +701,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   ) => {
     setLoadingTags(true);
     try {
-      const { tags: tagsList, apiSchema } =
-        await loadTagsForSchema(schemaFilename);
+      const { tags: tagsList, apiSchema } = await loadTagsForSchema(
+        schemaFilename
+      );
       setTags(tagsList);
       setLoadingTags(false);
 
@@ -812,8 +824,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             {loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
-                ? "No schemas available"
-                : "Select a schema"}
+              ? "No schemas available"
+              : "Select a schema"}
           </option>
           {schemas.map((schema) => (
             <option key={schema.id} value={schema.filename}>
