@@ -74,6 +74,9 @@ const getSchemas = async () => {
       console.log("client is not defined", client);
       return [];
     }
+
+    // biome-ignore lint/suspicious/noConsole: <explanation>
+    console.log("client is defined", client);
     const result = await client.queries.apiSchemaConnection({
       first: 100,
     });
