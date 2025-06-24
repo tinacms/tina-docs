@@ -1,12 +1,12 @@
 import { Breadcrumbs } from "@/components/docs/breadcrumbs";
-import { type ReactNode } from "react";
+import type React from "react";
 
 export const Body = ({
   navigationDocsData,
   children,
 }: {
   navigationDocsData: any;
-  children: ReactNode;
+  children: React.ReactNode;
 }) => {
   return (
     <>
