@@ -3,9 +3,11 @@ import React from "react";
 import { NavLevel } from "./nav-level";
 import type { DocsNavProps } from "./types";
 
-export const DocsNavigationItems: React.FC<
-  DocsNavProps & { __typename: string }
-> = ({ navItems, __typename, onNavigate }) => {
+export const DocsNavigationItems = ({
+  navItems,
+  __typename,
+  onNavigate,
+}: DocsNavProps & { __typename: string }): React.JSX.Element => {
   const navListElem = React.useRef<HTMLDivElement>(null);
 
   return (

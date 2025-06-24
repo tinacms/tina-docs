@@ -9,9 +9,11 @@ import { NavLevel } from "./nav-level";
 import type { ApiEndpoint, DocsNavProps } from "./types";
 import { getEndpointSlug, getTagSlug, processApiGroups } from "./utils";
 
-export const ApiNavigationItems: React.FC<
-  DocsNavProps & { __typename: string }
-> = ({ navItems, __typename, onNavigate }) => {
+export const ApiNavigationItems = ({
+  navItems,
+  __typename,
+  onNavigate,
+}: DocsNavProps & { __typename: string }): React.JSX.Element => {
   const navListElem = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const currentPath = pathname || "";

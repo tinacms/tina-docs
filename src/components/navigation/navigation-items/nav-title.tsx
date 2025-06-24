@@ -3,13 +3,13 @@ import React from "react";
 import { FONT_SIZES, FONT_WEIGHTS } from "../constants";
 import type { NavTitleProps } from "./types";
 
-export const NavTitle: React.FC<NavTitleProps> = ({
+export const NavTitle = ({
   children,
   level = 3,
   selected,
   childSelected,
   ...props
-}: NavTitleProps) => {
+}: NavTitleProps): React.JSX.Element => {
   const baseStyles =
     "group flex cursor-pointer items-center gap-1 py-0.5 leading-tight transition duration-150 ease-out hover:opacity-100";
 

@@ -16,12 +16,12 @@ interface NavLevelProps {
   onNavigate?: () => void;
 }
 
-export const NavLevel: React.FC<NavLevelProps> = ({
+export const NavLevel = ({
   navListElem,
   categoryData,
   level = 0,
   onNavigate,
-}) => {
+}: NavLevelProps): React.JSX.Element => {
   const navLevelElem = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const path = pathname || "";
