@@ -77,26 +77,17 @@ const getSchemas = async () => {
 
     // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log("client is defined", client);
-    const result = await client.queries.apiSchemaConnection({
-      first: 100,
-    });
 
-    if (result?.data?.apiSchemaConnection?.edges) {
+    if (schemas) {
       // Convert API response into our simpler SchemaFile interface
-      const schemaFiles: SchemaFile[] = [];
+      const schemaFiles: SchemaFile[] = schemas.map((schema) => ({
+        id: schema.id,
+        relativePath: schema.filename,
+        _sys: {
+          filename: schema.displayName,
+        },
+      }));
 
-      for (const edge of result.data.apiSchemaConnection.edges) {
-        if (edge?.node) {
-          schemaFiles.push({
-            id: edge.node.id,
-            relativePath: edge.node._sys.relativePath,
-            apiSchema: edge.node.apiSchema,
-            _sys: {
-              filename: edge.node._sys.filename,
-            },
-          });
-        }
-      }
       return schemaFiles;
     }
     return [];
@@ -104,6 +95,30 @@ const getSchemas = async () => {
     // biome-ignore lint/suspicious/noConsole: <explanation>
     console.error(error);
     return [];
+  }
+};
+
+const getSchemaDetails = async (schemaPath: string, schemas: SchemaFile[]) => {
+  try {
+    // Find the selected schema
+    const selectedSchema = schemas.find((s) => s.relativePath === schemaPath);
+
+    if (selectedSchema?.apiSchema) {
+      const details = parseSwaggerJson(selectedSchema.apiSchema);
+      return details;
+    }
+
+    // If the schema content isn't in the current data, fetch it
+    const result = await client.queries.apiSchema({
+      relativePath: schemaPath,
+    });
+
+    if (result?.data?.apiSchema?.apiSchema) {
+      const details = parseSwaggerJson(result.data.apiSchema.apiSchema);
+      return details;
+    }
+  } catch (error) {
+    return null;
   }
 };
 
@@ -132,36 +147,14 @@ const SchemaSelector = (props: any) => {
       setSelectedEndpoint("");
     }
 
-    // Extract just the schema path if an endpoint is selected
-    const schemaPath = input.value.split("|")[0];
-
     const fetchSchemaDetails = async () => {
       setLoadingDetails(true);
-      try {
-        // Find the selected schema
-        const selectedSchema = schemas.find(
-          (s) => s.relativePath === schemaPath
-        );
-
-        if (selectedSchema?.apiSchema) {
-          const details = parseSwaggerJson(selectedSchema.apiSchema);
-          setSchemaDetails(details);
-        } else {
-          // If the schema content isn't in the current data, fetch it
-          const result = await client.queries.apiSchema({
-            relativePath: schemaPath,
-          });
-
-          if (result?.data?.apiSchema?.apiSchema) {
-            const details = parseSwaggerJson(result.data.apiSchema.apiSchema);
-            setSchemaDetails(details);
-          }
-        }
-      } catch (error) {
-        setSchemaDetails(null);
-      } finally {
-        setLoadingDetails(false);
-      }
+      const details = await getSchemaDetails(
+        input.value.split("|")[0],
+        schemas
+      );
+      setSchemaDetails(details);
+      setLoadingDetails(false);
     };
 
     fetchSchemaDetails();
@@ -178,8 +171,17 @@ const SchemaSelector = (props: any) => {
     fetchSchemas();
   }, []);
 
-  const handleSchemaChange = (schemaPath: string) => {
+  const handleSchemaChange = async (schemaPath: string) => {
     // Reset endpoint selection when schema changes
+    if (!schemaDetails) {
+      setLoadingDetails(true);
+      const details = await getSchemaDetails(
+        input.value.split("|")[0],
+        schemas
+      );
+      setSchemaDetails(details);
+      setLoadingDetails(false);
+    }
     setSelectedEndpoint("");
     input.onChange(schemaPath);
   };
