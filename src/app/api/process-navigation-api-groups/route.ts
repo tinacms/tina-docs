@@ -71,6 +71,12 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
         endpoint.description ||
         `API endpoint for ${endpoint.method} ${endpoint.path}`;
 
+      // Process description to wrap curly bracket parts with backticks
+      const processedDescription = description.replace(
+        /\{([^}]+)\}/g,
+        "`{$1}`"
+      );
+
       // Generate MDX content
       const mdxContent = `---
 title: "${title}"
@@ -80,16 +86,17 @@ seo:
   description: "${description}"
 ---
 
-# ${title}
-
-${description || `Documentation for ${endpoint.method} ${endpoint.path}`}
+${
+  processedDescription ||
+  `Documentation for ${endpoint.method} ${endpoint.path}`
+}
 
 ## Endpoint Details
 
 **Method:** \`${endpoint.method}\`
 **Path:** \`${endpoint.path}\`
 
-## API Reference 
+## API Reference
 
 <apiReference schemaFile="Swagger-Petstore.json|${endpoint.method}:${
         endpoint.path
