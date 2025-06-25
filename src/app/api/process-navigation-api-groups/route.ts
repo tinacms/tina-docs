@@ -73,22 +73,31 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
 
       // Generate MDX content
       const mdxContent = `---
-title: "${title}"
-last_edited: "${new Date().toISOString()}"
-seo:
-  title: "${title}"
-  description: "${description}"
----
+                          title: "${title}"
+                          last_edited: "${new Date().toISOString()}"
+                          seo:
+                            title: "${title}"
+                            description: "${description}"
+                          ---
 
-# ${title}
+                          # ${title}
 
-${description || `Documentation for ${endpoint.method} ${endpoint.path}`}
+                          ${
+                            description ||
+                            `Documentation for ${endpoint.method} ${endpoint.path}`
+                          }
 
-**Method:** ${endpoint.method}
-**Path:** ${endpoint.path}
+                          ## Endpoint Details
 
-<!-- Add your API documentation content here -->
-`;
+                          **Method:** ${endpoint.method}
+                          **Path:** ${endpoint.path}
+
+                          ## API Reference 
+                          
+                          <apiReference schemaFile="Swagger-Petstore.json|${
+                            endpoint.method
+                          }:${endpoint.path}" />
+                          `;
 
       fs.writeFileSync(filePath, mdxContent, "utf-8");
       createdFiles.push(path.relative(process.cwd(), filePath));
