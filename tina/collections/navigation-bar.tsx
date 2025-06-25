@@ -1,4 +1,4 @@
-import GroupOfApiReferencesSelector from "../customFields/group-of-api-references-selector";
+import GroupOfApiReferencesSelector from "../customFields/group-of-api-reference-selector";
 import { itemTemplate } from "../templates/navbar-ui.template";
 import submenuTemplate from "../templates/submenu.template";
 
