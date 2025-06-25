@@ -1,7 +1,7 @@
+import { CustomDropdown } from "@/src/components/ui/custom-dropdown";
+import type { DropdownOption } from "@/src/components/ui/custom-dropdown";
 import { client } from "@/tina/__generated__/client";
-import React, { useCallback, useState, useEffect } from "react";
-import { wrapFieldsWithMeta } from "tinacms";
-import { tinaField, useTina } from "tinacms/dist/react";
+import React, { useState, useEffect } from "react";
 
 // Define schema type to match the actual structure from the API
 interface SchemaFile {
@@ -29,8 +29,96 @@ interface Endpoint {
   operationId?: string;
 }
 
+// Parse Swagger/OpenAPI JSON to extract details
+const parseSwaggerJson = (jsonContent: string): SchemaDetails => {
+  try {
+    const parsed = JSON.parse(jsonContent);
+
+    // Extract endpoints
+    const endpoints: Endpoint[] = [];
+    if (parsed.paths) {
+      for (const path of Object.keys(parsed.paths)) {
+        const pathObj = parsed.paths[path];
+        for (const method of Object.keys(pathObj)) {
+          const operation = pathObj[method];
+          endpoints.push({
+            path,
+            method: method.toUpperCase(),
+            summary: operation.summary || `${method.toUpperCase()} ${path}`,
+            operationId: operation.operationId,
+          });
+        }
+      }
+    }
+
+    return {
+      title: parsed.info?.title || "Unknown API",
+      version: parsed.info?.version || "Unknown Version",
+      endpointCount: endpoints.length,
+      endpoints,
+    };
+  } catch (error) {
+    return {
+      title: "Error Parsing Schema",
+      version: "Unknown",
+      endpointCount: 0,
+      endpoints: [],
+    };
+  }
+};
+
+const getSchemas = async () => {
+  try {
+    const { schemas } = await fetchSchemas();
+
+    if (schemas) {
+      // Convert API response into our simpler SchemaFile interface
+      const schemaFiles: SchemaFile[] = schemas.map((schema) => ({
+        id: schema.id,
+        relativePath: schema.filename,
+        apiSchema: schema.apiSchema,
+        _sys: {
+          filename: schema.displayName,
+        },
+      }));
+
+      return schemaFiles;
+    }
+    return [];
+  } catch (error) {
+    return [];
+  }
+};
+
+const fetchSchemas = async () => {
+  const response = await fetch("/api/list-api-schemas");
+  return await response.json();
+};
+
+const getSchemaDetails = async (schemaPath: string, schemas: SchemaFile[]) => {
+  try {
+    // Find the selected schema
+    const selectedSchema = schemas.find((s) => s.relativePath === schemaPath);
+
+    if (selectedSchema?.apiSchema) {
+      const details = parseSwaggerJson(selectedSchema.apiSchema);
+      return details;
+    }
+
+    // If the schema content isn't in the current data, fetch it
+    const { schemas: data } = await fetchSchemas();
+
+    if (data?.apiSchema) {
+      const details = parseSwaggerJson(data.apiSchema);
+      return details;
+    }
+  } catch (error) {
+    return null;
+  }
+};
+
 // Custom field for selecting an API schema file
-const SchemaSelector = wrapFieldsWithMeta((props: any) => {
+const SchemaSelector = (props: any) => {
   const { input, field } = props;
   const [schemas, setSchemas] = useState<SchemaFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,60 +128,6 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
 
-  // When input.value changes, parse it to extract schema and endpoint
-  useEffect(() => {
-    if (!input.value) {
-      setSelectedEndpoint("");
-      return;
-    }
-
-    // Check if the value contains endpoint information
-    const parts = input.value.split("|");
-    if (parts.length > 1) {
-      setSelectedEndpoint(parts[1]);
-    } else {
-      setSelectedEndpoint("");
-    }
-  }, [input.value]);
-
-  // Parse Swagger/OpenAPI JSON to extract details
-  const parseSwaggerJson = useCallback((jsonContent: string): SchemaDetails => {
-    try {
-      const parsed = JSON.parse(jsonContent);
-
-      // Extract endpoints
-      const endpoints: Endpoint[] = [];
-      if (parsed.paths) {
-        for (const path of Object.keys(parsed.paths)) {
-          const pathObj = parsed.paths[path];
-          for (const method of Object.keys(pathObj)) {
-            const operation = pathObj[method];
-            endpoints.push({
-              path,
-              method: method.toUpperCase(),
-              summary: operation.summary || `${method.toUpperCase()} ${path}`,
-              operationId: operation.operationId,
-            });
-          }
-        }
-      }
-
-      return {
-        title: parsed.info?.title || "Unknown API",
-        version: parsed.info?.version || "Unknown Version",
-        endpointCount: endpoints.length,
-        endpoints,
-      };
-    } catch (error) {
-      return {
-        title: "Error Parsing Schema",
-        version: "Unknown",
-        endpointCount: 0,
-        endpoints: [],
-      };
-    }
-  }, []);
-
   // Fetch schema details when a schema is selected
   useEffect(() => {
     if (!input.value) {
@@ -101,83 +135,48 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
       return;
     }
 
-    // Extract just the schema path if an endpoint is selected
-    const schemaPath = input.value.split("|")[0];
+    const parts = input.value.split("|");
+    if (parts.length > 1) {
+      setSelectedEndpoint(parts[1]);
+    } else {
+      setSelectedEndpoint("");
+    }
 
     const fetchSchemaDetails = async () => {
       setLoadingDetails(true);
-      try {
-        // Find the selected schema
-        const selectedSchema = schemas.find(
-          (s) => s.relativePath === schemaPath
-        );
-
-        if (selectedSchema?.apiSchema) {
-          const details = parseSwaggerJson(selectedSchema.apiSchema);
-          setSchemaDetails(details);
-        } else {
-          // If the schema content isn't in the current data, fetch it
-          const result = await client.queries.apiSchema({
-            relativePath: schemaPath,
-          });
-
-          if (result?.data?.apiSchema?.apiSchema) {
-            const details = parseSwaggerJson(result.data.apiSchema.apiSchema);
-            setSchemaDetails(details);
-          }
-        }
-      } catch (error) {
-        setSchemaDetails(null);
-      } finally {
-        setLoadingDetails(false);
-      }
+      const details = await getSchemaDetails(
+        input.value.split("|")[0],
+        schemas
+      );
+      setSchemaDetails(details);
+      setLoadingDetails(false);
     };
 
     fetchSchemaDetails();
-  }, [input.value, schemas, parseSwaggerJson]);
+  }, [input.value, schemas]);
 
   // Fetch available schema files when component mounts
   useEffect(() => {
     const fetchSchemas = async () => {
-      try {
-        // Use the generated client to fetch all API schemas
-        const result = await client.queries.apiSchemaConnection({
-          first: 100,
-        });
-
-        if (result?.data?.apiSchemaConnection?.edges) {
-          // Convert API response into our simpler SchemaFile interface
-          const schemaFiles: SchemaFile[] = [];
-
-          for (const edge of result.data.apiSchemaConnection.edges) {
-            if (edge?.node) {
-              schemaFiles.push({
-                id: edge.node.id,
-                relativePath: edge.node._sys.relativePath,
-                apiSchema: edge.node.apiSchema,
-                _sys: {
-                  filename: edge.node._sys.filename,
-                },
-              });
-            }
-          }
-
-          setSchemas(schemaFiles);
-        } else {
-          setSchemas([]);
-        }
-
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
+      setLoading(true);
+      const schemas = await getSchemas();
+      setSchemas(schemas);
+      setLoading(false);
     };
-
     fetchSchemas();
   }, []);
 
-  const handleSchemaChange = (schemaPath: string) => {
+  const handleSchemaChange = async (schemaPath: string) => {
     // Reset endpoint selection when schema changes
+    if (!schemaDetails) {
+      setLoadingDetails(true);
+      const details = await getSchemaDetails(
+        input.value.split("|")[0],
+        schemas
+      );
+      setSchemaDetails(details);
+      setLoadingDetails(false);
+    }
     setSelectedEndpoint("");
     input.onChange(schemaPath);
   };
@@ -205,27 +204,24 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
           Loading schemas...
         </div>
       ) : schemas.length === 0 ? (
-        <div className="py-2 px-3 bg-red-50 text-red-500 rounded">
+        <div className="max-w-full w-full py-2 px-3 bg-red-50 text-red-500 rounded whitespace-normal">
           No API schema files found. Please upload one in the Content Manager.
         </div>
       ) : (
         <div className="max-w-full w-full overflow-x-hidden">
-          <select
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 max-w-full overflow-x-hidden"
-            value={input.value.split("|")[0]} // Just use the schema part
-            onChange={(e) => handleSchemaChange(e.target.value)}
-          >
-            <option value="">Select a schema</option>
-            {schemas.map((schema) => (
-              <option
-                key={schema.id}
-                value={schema.relativePath}
-                className="break-words whitespace-normal max-w-full"
-              >
-                {schema._sys.filename}
-              </option>
-            ))}
-          </select>
+          {/* Schema selector dropdown */}
+          <CustomDropdown
+            value={input.value?.split("|")[0]}
+            onChange={handleSchemaChange}
+            options={[
+              { value: "", label: "Select a schema" },
+              ...schemas.map<DropdownOption>((schema) => ({
+                value: schema.relativePath,
+                label: schema._sys.filename,
+              })),
+            ]}
+            placeholder="Select a schema"
+          />
 
           {input.value && (
             <div className="mt-3 p-3 bg-blue-50 text-blue-600 rounded text-sm w-full max-w-full overflow-x-hidden">
@@ -277,34 +273,24 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
                       <label className="block text-blue-700 font-medium mb-1">
                         Select Endpoint (Optional)
                       </label>
-                      <select
-                        className="w-full p-2 border border-blue-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white text-blue-800 max-w-full overflow-x-hidden"
+                      {/* Endpoint selector dropdown */}
+                      <CustomDropdown
                         value={selectedEndpoint}
-                        onChange={(e) => handleEndpointChange(e.target.value)}
-                      >
-                        <option value="">All Endpoints</option>
-                        {schemaDetails.endpoints
-                          .sort((a, b) => a.path.localeCompare(b.path))
-                          .map((endpoint) => (
-                            <option
-                              key={createEndpointId(endpoint)}
-                              value={createEndpointId(endpoint)}
-                              className="truncate break-words whitespace-normal max-w-full"
-                            >
-                              {endpoint.method} {endpoint.path}{" "}
-                              {endpoint.summary ? `- ${endpoint.summary}` : ""}
-                            </option>
-                          ))}
-                      </select>
-
-                      {selectedEndpoint && (
-                        <div className="mt-2 bg-blue-100 p-2 rounded w-full max-w-full break-words whitespace-normal">
-                          <div className="font-medium truncate break-words whitespace-normal max-w-full">
-                            Selected endpoint: {selectedEndpoint.split(":")[0]}{" "}
-                            {selectedEndpoint.split(":")[1]}
-                          </div>
-                        </div>
-                      )}
+                        onChange={handleEndpointChange}
+                        options={[
+                          { value: "", label: "All Endpoints" },
+                          ...schemaDetails.endpoints
+                            .sort((a, b) => a.path.localeCompare(b.path))
+                            .map<DropdownOption>((endpoint) => ({
+                              value: createEndpointId(endpoint),
+                              label: `${endpoint.method} ${endpoint.path} ${
+                                endpoint.summary ? `- ${endpoint.summary}` : ""
+                              }`,
+                            })),
+                        ]}
+                        placeholder="All Endpoints"
+                        contentClassName="bg-white border border-blue-300"
+                      />
                     </div>
                   )}
                 </>
@@ -331,7 +317,7 @@ const SchemaSelector = wrapFieldsWithMeta((props: any) => {
       </div>
     </div>
   );
-});
+};
 
 export const ApiReferenceTemplate = {
   name: "apiReference",
@@ -354,5 +340,3 @@ export const ApiReferenceTemplate = {
     },
   ],
 };
-
-export default ApiReferenceTemplate;
