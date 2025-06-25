@@ -107,7 +107,7 @@ export const docsNavigationBarCollection = {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            navigationData: values,
+            data: values,
           }),
         });
 
