@@ -16,6 +16,37 @@ interface GroupApiData {
   endpoints: EndpointData[];
 }
 
+const generateMDXTemplate = (endpoint: EndpointData) => {
+  const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
+  const description =
+    endpoint.description ||
+    `API endpoint for ${endpoint.method} ${endpoint.path}`;
+
+  // Process description to wrap curly bracket parts with backticks
+  const processedDescription = description.replace(/\{([^}]+)\}/g, "`{$1}`");
+  return `
+title: "${title}"
+last_edited: "${new Date().toISOString()}"
+seo:
+  title: "${title}"
+  description: "${description}"
+---
+${
+  processedDescription ||
+  `Documentation for ${endpoint.method} ${endpoint.path}`
+}
+## Endpoint Details
+
+**Method:** \`${endpoint.method}\`
+**Path:** \`${endpoint.path}\`
+
+## API Reference
+
+<apiReference schemaFile="Swagger-Petstore.json|${endpoint.method}:${
+    endpoint.path
+  }" />`;
+};
+
 /**
  * Generates a safe filename from endpoint data
  */
@@ -65,40 +96,8 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
       const fileName = generateFileName(endpoint);
       const filePath = path.join(outputDir, `${fileName}.mdx`);
 
-      // Create title from summary or generate one
-      const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
-      const description =
-        endpoint.description ||
-        `API endpoint for ${endpoint.method} ${endpoint.path}`;
-
-      // Process description to wrap curly bracket parts with backticks
-      const processedDescription = description.replace(
-        /\{([^}]+)\}/g,
-        "`{$1}`"
-      );
-
       // Generate MDX content
-      const mdxContent = `---
-title: "${title}"
-last_edited: "${new Date().toISOString()}"
-seo:
-  title: "${title}"
-  description: "${description}"
----
-${
-  processedDescription ||
-  `Documentation for ${endpoint.method} ${endpoint.path}`
-}
-## Endpoint Details
-
-**Method:** \`${endpoint.method}\`
-**Path:** \`${endpoint.path}\`
-
-## API Reference
-
-<apiReference schemaFile="Swagger-Petstore.json|${endpoint.method}:${
-        endpoint.path
-      }" />`;
+      const mdxContent = generateMDXTemplate(endpoint);
 
       fs.writeFileSync(filePath, mdxContent, "utf-8");
       createdFiles.push(path.relative(process.cwd(), filePath));
