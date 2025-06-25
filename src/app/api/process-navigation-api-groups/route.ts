@@ -25,6 +25,7 @@ const generateMDXTemplate = (endpoint: EndpointData) => {
   // Process description to wrap curly bracket parts with backticks
   const processedDescription = description.replace(/\{([^}]+)\}/g, "`{$1}`");
   return `
+---
 title: "${title}"
 last_edited: "${new Date().toISOString()}"
 seo:
