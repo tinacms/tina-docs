@@ -105,9 +105,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { data } = body;
 
-    if (!data || !Array.isArray(data)) {
+    // The data should be the navigation configuration object
+    // Extract the tabs array from it
+    const tabs = data?.tabs || [];
+
+    if (!Array.isArray(tabs)) {
       return NextResponse.json(
-        { error: "Invalid data format - expected array" },
+        { error: "Invalid data format - expected tabs array" },
         { status: 400 }
       );
     }
@@ -115,19 +119,19 @@ export async function POST(request: NextRequest) {
     const allCreatedFiles: string[] = [];
 
     // Process each navigation item
-    for (const item of data) {
-      if (item.__typename === "ApiTab") {
+    for (const item of tabs) {
+      if (item._template === "apiTab") {
         // Process API groups within this tab
-        for (const group of item.groups || []) {
-          if (group.type === "groupOfApiReferences" && group.data) {
+        for (const group of item.supermenuGroup || []) {
+          if (group._template === "groupOfApiReferences" && group.apiGroup) {
             try {
               // Parse the group data
               let groupData: GroupApiData;
               try {
                 groupData =
-                  typeof group.data === "string"
-                    ? JSON.parse(group.data)
-                    : group.data;
+                  typeof group.apiGroup === "string"
+                    ? JSON.parse(group.apiGroup)
+                    : group.apiGroup;
               } catch (parseError) {
                 continue; // Skip invalid data
               }
@@ -145,7 +149,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Processed ${data.length} navigation items`,
+      message: `Processed ${tabs.length} navigation tabs`,
       totalFilesCreated: allCreatedFiles.length,
       createdFiles: allCreatedFiles,
     });
