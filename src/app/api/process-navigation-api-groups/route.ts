@@ -85,12 +85,10 @@ seo:
   title: "${title}"
   description: "${description}"
 ---
-
 ${
   processedDescription ||
   `Documentation for ${endpoint.method} ${endpoint.path}`
 }
-
 ## Endpoint Details
 
 **Method:** \`${endpoint.method}\`
