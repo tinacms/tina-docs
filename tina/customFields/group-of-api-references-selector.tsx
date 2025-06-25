@@ -1,3 +1,4 @@
+import { CustomDropdown } from "@/src/components/ui/custom-dropdown";
 import { detectLocalMode } from "@/src/utils/detectLocalMode";
 import { generateFileName } from "@/src/utils/generateFileName";
 import { parseFieldValue } from "@/src/utils/parseFieldValue";
@@ -721,11 +722,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   };
 
   // Handle schema change
-  const handleSchemaChange = async (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const schema = e.target.value;
-
+  const handleSchemaChange = async (schema: string) => {
     // Only update if schema actually changed to reduce form disruption
     if (schema === selectedSchema) return;
 
@@ -746,9 +743,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   };
 
   // Handle tag change
-  const handleTagChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const tag = e.target.value;
-
+  const handleTagChange = async (tag: string) => {
     // Only update if tag actually changed
     if (tag === selectedTag) return;
 
@@ -814,25 +809,23 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         <label className="font-bold text-slate-800 text-base mb-2 block">
           API Schema
         </label>
-        <select
+        <CustomDropdown
+          options={schemas.map((schema) => ({
+            value: schema.filename,
+            label: schema.displayName,
+          }))}
           value={selectedSchema}
           onChange={handleSchemaChange}
           disabled={loadingSchemas}
-          className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50"
-        >
-          <option value="">
-            {loadingSchemas
+          placeholder={
+            loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
               ? "No schemas available"
-              : "Select a schema"}
-          </option>
-          {schemas.map((schema) => (
-            <option key={schema.id} value={schema.filename}>
-              {schema.displayName}
-            </option>
-          ))}
-        </select>
+              : "Select a schema"
+          }
+          className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
         {!loadingSchemas && schemas.length === 0 && (
           <div className="text-red-600 text-sm mt-1">
             ⚠️ No API schemas found. This might be due to:
@@ -851,21 +844,17 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           <label className="font-bold text-slate-800 text-base mb-2 block">
             Group/Tag
           </label>
-          <select
+          <CustomDropdown
+            options={tags.map((tag) => ({
+              value: tag,
+              label: tag,
+            }))}
             value={selectedTag}
             onChange={handleTagChange}
             disabled={loadingTags}
-            className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50"
-          >
-            <option value="">
-              {loadingTags ? "Loading tags..." : "Select a tag"}
-            </option>
-            {tags.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </select>
+            placeholder={loadingTags ? "Loading tags..." : "Select a tag"}
+            className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
         </div>
       )}
       {selectedTag && (
