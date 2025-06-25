@@ -93,12 +93,6 @@ ${description || `Documentation for ${endpoint.method} ${endpoint.path}`}
 
 <apiReference schemaFile="Swagger-Petstore.json|${endpoint.method}:${
         endpoint.path
-      }" />
-
-## Request Body
-
-<requestBody schemaFile="Swagger-Petstore.json|${endpoint.method}:${
-        endpoint.path
       }" />`;
 
       fs.writeFileSync(filePath, mdxContent, "utf-8");
