@@ -12,26 +12,6 @@ export const getApiReferenceTemplate = (
   const descriptionText = description || `API endpoint for ${method} ${path}`;
   const schemaProp = `${schema}|${method}:${path}`;
 
-  if (process.env.NODE_ENV === "development") {
-    return `---
-title: "${title}"
-description: "${descriptionText}"
-last_edited: "${new Date().toISOString()}"
----
-
-${description ? `${description}\n` : ""}
-
-## ${heading2}
-
-**Method:** \`${method}\`  
-**Path:** \`${path}\`
-
-## ${heading3}
-
-<apiReference schemaFile="${schemaProp}" />
-`;
-  }
-
   return {
     title,
     last_edited: new Date().toISOString(),
@@ -44,7 +24,7 @@ ${description ? `${description}\n` : ""}
       children: [
         {
           type: "h2",
-          children: [{ type: "text", text: "Endpoint Details" }],
+          children: [{ type: "text", text: heading2 }],
         },
         {
           type: "p",
@@ -76,7 +56,7 @@ ${description ? `${description}\n` : ""}
         },
         {
           type: "h2",
-          children: [{ type: "text", text: "API Reference" }],
+          children: [{ type: "text", text: heading3 }],
         },
         {
           type: "mdxJsxFlowElement",

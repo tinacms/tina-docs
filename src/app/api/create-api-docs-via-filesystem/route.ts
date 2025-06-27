@@ -1,6 +1,11 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { getApiReferenceTemplate } from "@/src/utils/docs/get-api-reference-template";
+import {
+  ADD_PENDING_DOCUMENT_MUTATION,
+  UPDATE_DOCS_MUTATION,
+} from "@/src/constants";
+import { getTinaEndpoint } from "@/src/utils/get-tina-endpoint";
+import { insertContent } from "@/tina/customFields/group-of-api-reference-selector/tina-client-side";
 import { type NextRequest, NextResponse } from "next/server";
 
 export interface EndpointData {
@@ -43,6 +48,104 @@ function sanitizeFileName(name: string): string {
     .toLowerCase();
 }
 
+const createAPIReferenceMDXFilesInGraphQL = async (
+  collection: string,
+  relativePath: string
+) => {
+  const tinaEndpoint = getTinaEndpoint();
+
+  if (!tinaEndpoint) {
+    throw new Error("Missing TinaCMS configuration for file deletion");
+  }
+
+  // Use fetch with the correct TinaCloud endpoint and auth token
+  const mutation = ADD_PENDING_DOCUMENT_MUTATION;
+
+  const variables = {
+    collection,
+    relativePath,
+  };
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${process.env.TINA_TOKEN}`,
+  };
+
+  const response = await fetch(tinaEndpoint, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      query: mutation,
+      variables: variables,
+    }),
+  });
+
+  if (!response.ok) {
+    let errorDetails = `HTTP error! status: ${response.status}`;
+    try {
+      const errorBody = await response.text();
+      if (errorBody) {
+        errorDetails += ` - Response: ${errorBody}`;
+      }
+    } catch (e) {
+      // Ignore if we can't read the response body
+    }
+    throw new Error(errorDetails);
+  }
+
+  return await response.json();
+};
+
+const updateAPIReferenceMDXFilesInGraphQL = async (
+  relativePath: string,
+  endpoint: any,
+  schema: string
+) => {
+  const tinaEndpoint = getTinaEndpoint();
+
+  if (!tinaEndpoint) {
+    throw new Error("Missing TinaCMS configuration for file deletion");
+  }
+
+  // Create title from summary or generate one
+  const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
+  const description =
+    endpoint.description ||
+    `API endpoint for ${endpoint.method} ${endpoint.path}`;
+
+  // Now try to update it with content
+  try {
+    const updateMutation = UPDATE_DOCS_MUTATION;
+
+    const body = await insertContent(
+      relativePath,
+      title,
+      description,
+      endpoint,
+      schema
+    );
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.TINA_TOKEN}`,
+    };
+
+    await fetch(tinaEndpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        query: updateMutation,
+        variables: {
+          relativePath,
+          params: body,
+        },
+      }),
+    });
+  } catch (updateError) {
+    // Don't fail the overall operation for update errors
+  }
+};
+
 /**
  * Generates .mdx files for each endpoint in the provided API group data
  */
@@ -63,17 +166,54 @@ async function generateApiEndpointFiles(
     fs.mkdirSync(tagDir, { recursive: true });
   }
 
+  const results = {
+    success: true,
+    createdFiles: [] as string[],
+    errors: [] as string[],
+  };
+
   for (const endpoint of endpoints) {
     const fileName = generateFileName(endpoint);
-    const filePath = path.join(tagDir, `${fileName}.mdx`);
-
-    const mdxContent = getApiReferenceTemplate(endpoint, schema);
+    const relativePath = path.join(tagDir, `${fileName}.mdx`);
 
     try {
-      fs.writeFileSync(filePath, mdxContent as string, "utf8");
-      createdFiles.push(path.relative(process.cwd(), filePath));
+      const result = await createAPIReferenceMDXFilesInGraphQL(
+        "docs",
+        relativePath
+      );
+
+      if (result.errors) {
+        const errorMessages = result.errors
+          .map((e: any) => e.message)
+          .join(", ");
+        results.errors.push(
+          `Failed to create ${relativePath}: ${errorMessages}`
+        );
+        results.success = false;
+      } else if (result.data?.addPendingDocument) {
+        results.createdFiles.push(relativePath);
+
+        await updateAPIReferenceMDXFilesInGraphQL(
+          relativePath,
+          endpoint,
+          schema
+        );
+      } else {
+        results.errors.push(
+          `Failed to create ${relativePath}: No data returned`
+        );
+        results.success = false;
+      }
     } catch (error) {
-      // Continue with other files if one fails
+      const errorMsg = `Failed to create file for ${endpoint.method} ${
+        endpoint.path
+      }: ${error instanceof Error ? error.message : "Unknown error"}`;
+      results.errors.push(errorMsg);
+      results.success = false;
+    }
+
+    if (results.success) {
+      createdFiles.push(relativePath);
     }
   }
 
