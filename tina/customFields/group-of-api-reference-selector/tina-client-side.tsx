@@ -4,6 +4,7 @@ import {
   GET_ALL_DOCS_QUERY,
   UPDATE_DOCS_MUTATION,
 } from "@/src/constants";
+import { getApiReferenceTemplate } from "@/src/utils/docs/get-api-reference-template";
 import { generateFileName } from "@/src/utils/generateFileName";
 import { getTinaEndpoint } from "@/src/utils/get-tina-endpoint";
 import { sanitizeFileName } from "@/src/utils/sanitizeFilename";
@@ -77,7 +78,8 @@ const createAPIReferenceMDXFilesInGraphQL = async (
 
 const updateAPIReferenceMDXFilesInGraphQL = async (
   relativePath: string,
-  endpoint: any
+  endpoint: any,
+  schema: string
 ) => {
   const tinaEndpoint = getTinaEndpoint();
 
@@ -99,7 +101,8 @@ const updateAPIReferenceMDXFilesInGraphQL = async (
       relativePath,
       title,
       description,
-      endpoint
+      endpoint,
+      schema
     );
 
     const headers = getBearerAuthHeader();
@@ -217,7 +220,11 @@ export const createDocsViaTinaClientSide = async (
       } else if (result.data?.addPendingDocument) {
         results.createdFiles.push(relativePath);
 
-        await updateAPIReferenceMDXFilesInGraphQL(relativePath, endpoint);
+        await updateAPIReferenceMDXFilesInGraphQL(
+          relativePath,
+          endpoint,
+          schema
+        );
       } else {
         results.errors.push(
           `Failed to create ${relativePath}: No data returned`
@@ -337,46 +344,11 @@ export const insertContent = async (
   relativePath: string,
   title: string,
   description: string,
-  endpoint: any
+  endpoint: any,
+  schema: string
 ) => {
   return {
     relativePath,
-    params: {
-      title,
-      last_edited: new Date().toISOString(),
-      seo: {
-        title,
-        description,
-      },
-      // Add basic structured content
-      body: {
-        type: "root",
-        children: [
-          {
-            type: "h1",
-            children: [{ type: "text", text: title }],
-          },
-          {
-            type: "p",
-            children: [
-              {
-                type: "text",
-                text:
-                  description ||
-                  `Documentation for ${endpoint.method} ${endpoint.path}`,
-              },
-            ],
-          },
-          {
-            type: "p",
-            children: [{ type: "text", text: `Method: ${endpoint.method}` }],
-          },
-          {
-            type: "p",
-            children: [{ type: "text", text: `Path: ${endpoint.path}` }],
-          },
-        ],
-      },
-    },
+    params: getApiReferenceTemplate(endpoint, schema),
   };
 };

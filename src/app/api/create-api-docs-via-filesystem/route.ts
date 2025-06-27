@@ -1,8 +1,9 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { getApiReferenceTemplate } from "@/src/utils/docs/get-api-reference-template";
 import { type NextRequest, NextResponse } from "next/server";
 
-interface EndpointData {
+export interface EndpointData {
   id: string;
   label: string;
   method: string;
@@ -43,34 +44,6 @@ function sanitizeFileName(name: string): string {
 }
 
 /**
- * Generates the MDX content for an endpoint
- */
-function generateMdxContent(endpoint: EndpointData, schema: string): string {
-  const { method, path, summary, description } = endpoint;
-
-  // Create a title from the summary or generate one
-  const title = summary || `${method} ${path}`;
-
-  return `---
-title: "${title}"
-description: "${description || `API endpoint for ${method} ${path}`}"
-last_edited: "${new Date().toISOString()}"
----
-
-${description ? `${description}\n` : ""}
-
-## Endpoint Details
-
-**Method:** \`${method}\`  
-**Path:** \`${path}\`
-
-## API Reference
-
-<apiReference schemaFile="${schema}|${method}:${path}" />
-`;
-}
-
-/**
  * Generates .mdx files for each endpoint in the provided API group data
  */
 async function generateApiEndpointFiles(
@@ -94,10 +67,10 @@ async function generateApiEndpointFiles(
     const fileName = generateFileName(endpoint);
     const filePath = path.join(tagDir, `${fileName}.mdx`);
 
-    const mdxContent = generateMdxContent(endpoint, schema);
+    const mdxContent = getApiReferenceTemplate(endpoint, schema);
 
     try {
-      fs.writeFileSync(filePath, mdxContent, "utf8");
+      fs.writeFileSync(filePath, mdxContent as string, "utf8");
       createdFiles.push(path.relative(process.cwd(), filePath));
     } catch (error) {
       // Continue with other files if one fails
