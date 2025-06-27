@@ -43,56 +43,45 @@ ${description ? `${description}\n` : ""}
       type: "root",
       children: [
         {
-          type: "h1",
-          children: [{ type: "text", text: title }],
-        },
-        ...(description
-          ? [
-              {
-                type: "p",
-                children: [{ type: "text", text: description }],
-              },
-            ]
-          : []),
-        {
-          type: "heading",
-          depth: 2,
-          children: [{ type: "text", text: heading2 }],
+          type: "h2",
+          children: [{ type: "text", text: "Endpoint Details" }],
         },
         {
           type: "p",
           children: [
             {
-              type: "strong",
-              children: [{ type: "text", text: "Method: " }],
+              type: "text",
+              text: "Method:",
+              bold: true,
             },
+            { type: "text", text: " " },
             {
-              type: "inlineCode",
-              value: method,
+              type: "text",
+              text: method,
+              code: true,
+            },
+            { type: "text", text: "\n" },
+            {
+              type: "text",
+              text: "Path:",
+              bold: true,
+            },
+            { type: "text", text: " " },
+            {
+              type: "text",
+              text: path,
+              code: true,
             },
           ],
         },
         {
-          type: "p",
-          children: [
-            {
-              type: "strong",
-              children: [{ type: "text", text: "Path: " }],
-            },
-            {
-              type: "inlineCode",
-              value: path,
-            },
-          ],
+          type: "h2",
+          children: [{ type: "text", text: "API Reference" }],
         },
         {
-          type: "heading",
-          depth: 2,
-          children: [{ type: "text", text: heading3 }],
-        },
-        {
-          type: "component",
+          type: "mdxJsxFlowElement",
           name: "apiReference",
+          children: [{ type: "text", text: "" }],
           props: {
             schemaFile: schemaProp,
           },
