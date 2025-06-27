@@ -4,6 +4,65 @@ import { showNotification } from "@/src/utils/showNotification";
 import { config } from "@/tina/config";
 
 /**
+ * Get TinaCMS authentication token
+ */
+export const getTinaCMSToken = (): string | null => {
+  const tinacmsAuthString = localStorage.getItem("tinacms-auth");
+  let token: string | null = null;
+  try {
+    const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
+    token = authData?.id_token || config.token || null;
+  } catch (e) {
+    token = config.token || null;
+  }
+  return token;
+};
+
+/**
+ * Handles TinaCMS file generation
+ */
+export const handleTinaCMSGeneration = async (
+  inputValue: string,
+  selectedEndpoints: any[]
+) => {
+  // Parse the group data
+  let groupData: any;
+  try {
+    groupData =
+      typeof inputValue === "string" ? JSON.parse(inputValue) : inputValue;
+  } catch (error) {
+    throw new Error("Invalid API group data format");
+  }
+
+  // Filter endpoints to only create the specified files
+  const filteredEndpoints = groupData.endpoints.filter((endpoint: any) => {
+    return selectedEndpoints.some((ep) => ep.id === endpoint.id);
+  });
+
+  // Create filtered group data for generation
+  const filteredGroupData = {
+    ...groupData,
+    endpoints: filteredEndpoints,
+  };
+
+  // Call the client-side GraphQL function directly
+  const results = await createDocsViaTinaClientSide(filteredGroupData);
+
+  if (results.success) {
+    showNotification(
+      `✅ Created ${results.createdFiles.length} MDX files via TinaCMS`,
+      "success"
+    );
+  } else {
+    const errorMsg =
+      results.errors.length > 0
+        ? `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`
+        : "Failed to create files";
+    showNotification(`⚠️ ${errorMsg}`, "warning");
+  }
+};
+
+/**
  * Creates docs via TinaCMS GraphQL mutation - CLIENT SIDE
  */
 export const createDocsViaTinaClientSide = async (
@@ -206,21 +265,6 @@ export const createDocsViaTinaClientSide = async (
 };
 
 /**
- * Get TinaCMS authentication token
- */
-export const getTinaCMSToken = (): string | null => {
-  const tinacmsAuthString = localStorage.getItem("tinacms-auth");
-  let token: string | null = null;
-  try {
-    const authData = tinacmsAuthString ? JSON.parse(tinacmsAuthString) : null;
-    token = authData?.id_token || config.token || null;
-  } catch (e) {
-    token = config.token || null;
-  }
-  return token;
-};
-
-/**
  * Delete file via TinaCMS GraphQL
  */
 const deleteFileViaTinaCMS = async (filePath: string) => {
@@ -354,49 +398,5 @@ export const clearDirectoryViaTinaCMS = async (directoryPath: string) => {
     } catch (error) {
       // Continue processing other files
     }
-  }
-};
-
-/**
- * Handles TinaCMS file generation
- */
-export const handleTinaCMSGeneration = async (
-  inputValue: string,
-  selectedEndpoints: any[]
-) => {
-  // Parse the group data
-  let groupData: any;
-  try {
-    groupData =
-      typeof inputValue === "string" ? JSON.parse(inputValue) : inputValue;
-  } catch (error) {
-    throw new Error("Invalid API group data format");
-  }
-
-  // Filter endpoints to only create the specified files
-  const filteredEndpoints = groupData.endpoints.filter((endpoint: any) => {
-    return selectedEndpoints.some((ep) => ep.id === endpoint.id);
-  });
-
-  // Create filtered group data for generation
-  const filteredGroupData = {
-    ...groupData,
-    endpoints: filteredEndpoints,
-  };
-
-  // Call the client-side GraphQL function directly
-  const results = await createDocsViaTinaClientSide(filteredGroupData);
-
-  if (results.success) {
-    showNotification(
-      `✅ Created ${results.createdFiles.length} MDX files via TinaCMS`,
-      "success"
-    );
-  } else {
-    const errorMsg =
-      results.errors.length > 0
-        ? `Partially successful: created ${results.createdFiles.length} files, ${results.errors.length} errors`
-        : "Failed to create files";
-    showNotification(`⚠️ ${errorMsg}`, "warning");
   }
 };
