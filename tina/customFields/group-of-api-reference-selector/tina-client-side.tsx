@@ -1,12 +1,16 @@
+import {
+  ADD_PENDING_DOCUMENT_MUTATION,
+  DELETE_DOCUMENT_MUTATION,
+  GET_ALL_DOCS_QUERY,
+  UPDATE_DOCS_MUTATION,
+} from "@/src/constants";
 import { generateFileName } from "@/src/utils/generateFileName";
+import { getTinaEndpoint } from "@/src/utils/get-tina-endpoint";
 import { sanitizeFileName } from "@/src/utils/sanitizeFilename";
 import { showNotification } from "@/src/utils/showNotification";
 import { config } from "@/tina/config";
 
-/**
- * Get TinaCMS authentication token
- */
-export const getTinaCMSToken = (): string | null => {
+const getBearerAuthHeader = (): Record<string, string> => {
   const tinacmsAuthString = localStorage.getItem("tinacms-auth");
   let token: string | null = null;
   try {
@@ -15,7 +19,16 @@ export const getTinaCMSToken = (): string | null => {
   } catch (e) {
     token = config.token || null;
   }
-  return token;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
 };
 
 /**
@@ -85,28 +98,14 @@ export const createDocsViaTinaClientSide = async (
   const { schema, tag, endpoints } = groupData;
   const tagDir = sanitizeFileName(tag);
 
-  // Get config values for logging purposes
-  const clientId = config.clientId;
-  const branch = config.branch;
-
-  if (!clientId) {
+  const tinaEndpoint = getTinaEndpoint();
+  if (!tinaEndpoint) {
     return {
       ...results,
       success: false,
-      errors: ["Missing TinaCMS client ID in config"],
+      errors: ["Missing TinaCMS configuration for file deletion"],
     };
   }
-
-  if (!branch) {
-    return {
-      ...results,
-      success: false,
-      errors: ["Missing TinaCMS branch in config"],
-    };
-  }
-
-  const token = getTinaCMSToken();
-  const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
 
   for (const endpoint of endpoints) {
     try {
@@ -120,29 +119,14 @@ export const createDocsViaTinaClientSide = async (
         `API endpoint for ${endpoint.method} ${endpoint.path}`;
 
       // Use fetch with the correct TinaCloud endpoint and auth token
-      const mutation = `
-          mutation AddPendingDocument($collection: String!, $relativePath: String!) {
-            addPendingDocument(collection: $collection, relativePath: $relativePath) {
-              __typename
-            }
-          }
-        `;
+      const mutation = ADD_PENDING_DOCUMENT_MUTATION;
 
       const variables = {
         collection: "docs",
         relativePath,
       };
 
-      // Prepare headers with authentication using TinaCMS internal pattern
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
-
-      // Add auth token using the internal TinaCMS pattern
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
-
+      const headers = getBearerAuthHeader();
       const response = await fetch(tinaEndpoint, {
         method: "POST",
         headers,
@@ -180,67 +164,24 @@ export const createDocsViaTinaClientSide = async (
 
         // Now try to update it with content
         try {
-          const updateMutation = `
-              mutation UpdateDocs($relativePath: String!, $params: DocsMutation!) {
-                updateDocs(relativePath: $relativePath, params: $params) {
-                  __typename
-                  id
-                  title
-                }
-              }
-            `;
+          const updateMutation = UPDATE_DOCS_MUTATION;
 
-          const updateVariables = {
+          const body = await insertContent(
             relativePath,
-            params: {
-              title,
-              last_edited: new Date().toISOString(),
-              seo: {
-                title,
-                description,
-              },
-              // Add basic structured content
-              body: {
-                type: "root",
-                children: [
-                  {
-                    type: "h1",
-                    children: [{ type: "text", text: title }],
-                  },
-                  {
-                    type: "p",
-                    children: [
-                      {
-                        type: "text",
-                        text:
-                          description ||
-                          `Documentation for ${endpoint.method} ${endpoint.path}`,
-                      },
-                    ],
-                  },
-                  {
-                    type: "p",
-                    children: [
-                      { type: "text", text: `Method: ${endpoint.method}` },
-                    ],
-                  },
-                  {
-                    type: "p",
-                    children: [
-                      { type: "text", text: `Path: ${endpoint.path}` },
-                    ],
-                  },
-                ],
-              },
-            },
-          };
+            title,
+            description,
+            endpoint
+          );
 
           await fetch(tinaEndpoint, {
             method: "POST",
             headers,
             body: JSON.stringify({
               query: updateMutation,
-              variables: updateVariables,
+              variables: {
+                relativePath,
+                params: body,
+              },
             }),
           });
         } catch (updateError) {
@@ -268,36 +209,20 @@ export const createDocsViaTinaClientSide = async (
  * Delete file via TinaCMS GraphQL
  */
 const deleteFileViaTinaCMS = async (filePath: string) => {
-  const clientId = config.clientId;
-  const branch = config.branch;
+  const tinaEndpoint = getTinaEndpoint();
 
-  if (!clientId || !branch) {
+  if (!tinaEndpoint) {
     throw new Error("Missing TinaCMS configuration for file deletion");
   }
 
-  const token = getTinaCMSToken();
-  const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
-
-  const mutation = `
-      mutation DeleteDocument($collection: String!, $relativePath: String!) {
-        deleteDocument(collection: $collection, relativePath: $relativePath) {
-          __typename
-        }
-      }
-    `;
+  const mutation = DELETE_DOCUMENT_MUTATION;
 
   const variables = {
     collection: "docs",
     relativePath: filePath,
   };
 
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
+  const headers = getBearerAuthHeader();
 
   const response = await fetch(tinaEndpoint, {
     method: "POST",
@@ -322,44 +247,20 @@ const deleteFileViaTinaCMS = async (filePath: string) => {
  * Clear directory via TinaCMS GraphQL (list and delete all files)
  */
 export const clearDirectoryViaTinaCMS = async (directoryPath: string) => {
-  const clientId = config.clientId;
-  const branch = config.branch;
+  const tinaEndpoint = getTinaEndpoint();
 
-  if (!clientId || !branch) {
-    throw new Error("Missing TinaCMS configuration for directory clearing");
+  if (!tinaEndpoint) {
+    throw new Error("Missing TinaCMS configuration for file deletion");
   }
-
-  const token = getTinaCMSToken();
-  const tinaEndpoint = `https://content.tinajs.io/1.5/content/${clientId}/github/${branch}`;
 
   // TinaCMS relativePaths are relative to the collection root (content/docs)
   // So we need to remove the 'docs/' prefix for the query
   const relativeDirectoryPath = directoryPath.replace(/^docs\//, "");
 
   // Get all docs and filter in JavaScript since GraphQL filters don't work
-  const listQuery = `
-      query GetAllDocs {
-        docsConnection {
-          edges {
-            node {
-              id
-              _sys {
-                filename
-                relativePath
-              }
-            }
-          }
-        }
-      }
-    `;
+  const listQuery = GET_ALL_DOCS_QUERY;
 
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
+  const headers = getBearerAuthHeader();
 
   const listResponse = await fetch(tinaEndpoint, {
     method: "POST",
@@ -399,4 +300,52 @@ export const clearDirectoryViaTinaCMS = async (directoryPath: string) => {
       // Continue processing other files
     }
   }
+};
+
+export const insertContent = async (
+  relativePath: string,
+  title: string,
+  description: string,
+  endpoint: any
+) => {
+  return {
+    relativePath,
+    params: {
+      title,
+      last_edited: new Date().toISOString(),
+      seo: {
+        title,
+        description,
+      },
+      // Add basic structured content
+      body: {
+        type: "root",
+        children: [
+          {
+            type: "h1",
+            children: [{ type: "text", text: title }],
+          },
+          {
+            type: "p",
+            children: [
+              {
+                type: "text",
+                text:
+                  description ||
+                  `Documentation for ${endpoint.method} ${endpoint.path}`,
+              },
+            ],
+          },
+          {
+            type: "p",
+            children: [{ type: "text", text: `Method: ${endpoint.method}` }],
+          },
+          {
+            type: "p",
+            children: [{ type: "text", text: `Path: ${endpoint.path}` }],
+          },
+        ],
+      },
+    },
+  };
 };
