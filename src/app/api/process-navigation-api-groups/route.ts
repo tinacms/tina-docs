@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { generateApiDocsFiles } from "./generate-api-docs-files";
 import type { GroupApiData } from "./types";
-import { generateApiDocsFiles } from "./utils";
 
 export async function POST(request: NextRequest) {
   try {
