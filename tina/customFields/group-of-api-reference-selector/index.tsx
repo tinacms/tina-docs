@@ -541,9 +541,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                     {selectedEndpoints.length !== 1 ? "s" : ""} selected
                     <br />
                     Files will be generated when you save this form using{" "}
-                    <span className="underline">
-                      {isLocalMode ? "filesystem method" : "TinaCMS GraphQL"}
-                    </span>
+                    <span className="underline">TinaCMS GraphQL</span>
                   </div>
                 </div>
               )}
