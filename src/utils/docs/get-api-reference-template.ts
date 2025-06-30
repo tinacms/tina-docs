@@ -1,4 +1,4 @@
-import type { EndpointData } from "@/src/app/api/create-api-docs-via-filesystem/route";
+import type { EndpointData } from "@/src/app/api/process-navigation-api-groups/types";
 
 export const getApiReferenceTemplate = (
   endpoint: EndpointData,
