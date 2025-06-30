@@ -1,6 +1,6 @@
 import { sanitizeFileName } from "@/src/utils/sanitizeFilename";
 import { createOrUpdateAPIReference } from "@/src/utils/tina/api-reference";
-import { TinaGraphQLClient } from "@/src/utils/tina/tina-graphql-client";
+import type { TinaGraphQLClient } from "@/src/utils/tina/tina-graphql-client";
 import type { EndpointData } from "./types";
 
 const collection = "docs";
@@ -19,14 +19,16 @@ export function generateAPIEndpointFileName(endpoint: EndpointData): string {
   return `${method}-${pathSafe}`;
 }
 
-export async function generateApiDocsFiles(groupData: {
-  tag: string;
-  schema: string;
-  endpoints: EndpointData[];
-}): Promise<string[]> {
+export async function generateApiDocsFiles(
+  groupData: {
+    tag: string;
+    schema: string;
+    endpoints: EndpointData[];
+  },
+  client: TinaGraphQLClient
+): Promise<string[]> {
   if (!groupData.endpoints?.length) return [];
 
-  const client = new TinaGraphQLClient();
   const { tag, schema, endpoints } = groupData;
   const basePath = `api-documentation/${sanitizeFileName(tag)}`;
   const createdFiles: string[] = [];

@@ -4,14 +4,14 @@ export class TinaGraphQLClient {
   private endpoint: string;
   private headers: Record<string, string>;
 
-  constructor() {
+  constructor(token: string) {
     const endpoint = getTinaEndpoint();
     if (!endpoint) throw new Error("TinaCMS endpoint is not configured");
 
     this.endpoint = endpoint;
     this.headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.TINA_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
   }
 

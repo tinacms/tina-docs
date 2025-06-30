@@ -1,3 +1,4 @@
+import { TinaGraphQLClient } from "@/src/utils/tina/tina-graphql-client";
 import { type NextRequest, NextResponse } from "next/server";
 import { generateApiDocsFiles } from "./generate-api-docs-files";
 import type { GroupApiData } from "./types";
@@ -5,6 +6,17 @@ import type { GroupApiData } from "./types";
 export async function POST(request: NextRequest) {
   try {
     const { data } = await request.json();
+    const authHeader = request.headers.get("authorization");
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { error: "Missing Authorization token" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const client = new TinaGraphQLClient(token);
 
     const tabs = data?.tabs || [];
 
@@ -30,7 +42,10 @@ export async function POST(request: NextRequest) {
                   : group.apiGroup;
 
               // Generate files for this group
-              const createdFiles = await generateApiDocsFiles(groupData);
+              const createdFiles = await generateApiDocsFiles(
+                groupData,
+                client
+              );
               allCreatedFiles.push(...createdFiles);
             } catch (error) {
               // Continue processing other groups
