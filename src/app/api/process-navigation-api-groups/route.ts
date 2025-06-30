@@ -241,17 +241,10 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
           .join(", ");
 
         if (errorMessages.includes("already exists")) {
-          // biome-ignore lint/suspicious/noConsole: <explanation>
-          console.log("🚀 ~ generateApiDocsFiles ~ result:", "already exists");
           const updateResult = await updateAPIReferenceMDXFilesInGraphQL(
             relativePath,
             endpoint,
             schema
-          );
-          // biome-ignore lint/suspicious/noConsole: <explanation>
-          console.log(
-            "🚀 ~ generateApiDocsFiles ~ updateResult:",
-            updateResult
           );
         } else {
           results.errors.push(
