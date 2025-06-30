@@ -1,14 +1,8 @@
 import { CustomDropdown } from "@/src/components/ui/custom-dropdown";
 import { detectLocalMode } from "@/src/utils/detectLocalMode";
 import { parseFieldValue } from "@/src/utils/parseFieldValue";
-import { sanitizeFileName } from "@/src/utils/sanitizeFilename";
-import { showNotification } from "@/src/utils/showNotification";
 import React from "react";
 import { wrapFieldsWithMeta } from "tinacms";
-import {
-  clearDirectoryViaTinaCMS,
-  handleTinaCMSGeneration,
-} from "./tina-client-side";
 
 // ========================================
 // API FUNCTIONS
@@ -98,82 +92,11 @@ const loadEndpointsForTag = (apiSchema: any, tag: string) => {
   return endpointsList;
 };
 
-/**
- * Handles file generation via filesystem API
- */
-const handleFileSystemGeneration = async (inputValue: string) => {
-  const response = await fetch("/api/create-api-docs-via-filesystem", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      apiGroupData: inputValue,
-    }),
-  });
-
-  const result = await response.json();
-
-  if (response.ok) {
-    showNotification(
-      `✅ Generated ${result.files.length} MDX files locally`,
-      "success"
-    );
-  } else {
-    if (response.status === 403 && result.suggestion) {
-      showNotification(
-        "⚠️ Filesystem generation not available in this environment",
-        "warning"
-      );
-    } else {
-      throw new Error(result.error || "Failed to generate files");
-    }
-  }
-};
-
-/**
- * Clear directory via filesystem API
- */
-const clearDirectoryViaFilesystem = async (directoryPath: string) => {
-  const response = await fetch("/api/prepare-directory-via-filesystem", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ directoryPath }),
-  });
-
-  if (!response.ok) {
-    const result = await response.json();
-    throw new Error(result.error || "Failed to clear directory");
-  }
-
-  return await response.json();
-};
-
-/**
- * Clear the entire tag directory
- */
-const clearTagDirectory = async (
-  tagDirectoryPath: string,
-  isLocalMode: boolean
-) => {
-  try {
-    if (isLocalMode) {
-      await clearDirectoryViaFilesystem(tagDirectoryPath);
-    } else {
-      await clearDirectoryViaTinaCMS(tagDirectoryPath);
-    }
-  } catch (error) {
-    // Continue anyway - maybe the directory doesn't exist yet
-  }
-};
-
 // ========================================
 // MAIN COMPONENT
 // ========================================
 
-const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
+export const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const { input, meta } = props;
   const [schemas, setSchemas] = React.useState<any[]>([]);
   const [tags, setTags] = React.useState<string[]>([]);
@@ -201,70 +124,6 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const selectedEndpoints = Array.isArray(parsedValue.endpoints)
     ? parsedValue.endpoints
     : [];
-
-  // Detect form submission and trigger file generation
-  React.useEffect(() => {
-    const handleFormSave = async () => {
-      // Skip if this is the initial load
-      if (initialLoad) return;
-
-      // Check if this is a form save by detecting when the field becomes "not dirty"
-      // and the value has changed from what we last processed
-      const currentValue = input.value || "";
-      const hasValidSelection =
-        selectedSchema && selectedTag && selectedEndpoints.length > 0;
-      if (
-        !meta.dirty &&
-        currentValue !== lastSavedValue &&
-        hasValidSelection &&
-        !generatingFiles
-      ) {
-        setLastSavedValue(currentValue);
-        setGeneratingFiles(true);
-
-        try {
-          // Step 1: Clear the entire tag directory
-          const tagDir = sanitizeFileName(selectedTag);
-          const tagDirectoryPath = `docs/api-documentation/${tagDir}`;
-
-          // Clear directory in all environments to ensure proper cleanup
-          await clearTagDirectory(tagDirectoryPath, isLocalMode);
-
-          // Step 2: Generate all selected files
-          if (selectedEndpoints.length > 0) {
-            if (isLocalMode) {
-              await handleFileSystemGeneration(input.value);
-            } else {
-              await handleTinaCMSGeneration(input.value, selectedEndpoints);
-            }
-          }
-        } catch (error) {
-          showNotification(
-            `❌ Failed to generate files: ${
-              error instanceof Error ? error.message : "Unknown error"
-            }`,
-            "error"
-          );
-        } finally {
-          setGeneratingFiles(false);
-        }
-      }
-    };
-
-    // Small delay to ensure meta.dirty state is updated
-    const timeoutId = setTimeout(handleFormSave, 100);
-    return () => clearTimeout(timeoutId);
-  }, [
-    meta.dirty,
-    input.value,
-    selectedSchema,
-    selectedTag,
-    selectedEndpoints,
-    lastSavedValue,
-    generatingFiles,
-    isLocalMode,
-    initialLoad,
-  ]);
 
   // Load schemas from filesystem API
   React.useEffect(() => {
@@ -306,8 +165,9 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   ) => {
     setLoadingTags(true);
     try {
-      const { tags: tagsList, apiSchema } =
-        await loadTagsForSchema(schemaFilename);
+      const { tags: tagsList, apiSchema } = await loadTagsForSchema(
+        schemaFilename
+      );
       setTags(tagsList);
       setLoadingTags(false);
 
@@ -424,8 +284,8 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
-                ? "No schemas available"
-                : "Select a schema"
+              ? "No schemas available"
+              : "Select a schema"
           }
           className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
@@ -563,5 +423,3 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     </div>
   );
 });
-
-export default GroupOfApiReferencesSelector;
