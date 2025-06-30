@@ -58,7 +58,7 @@ export const CustomDropdown = ({
         <button
           type="button"
           disabled={disabled}
-          className={`w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 flex items-center justify-between gap-2 max-w-full overflow-x-hidden ${
+          className={`w-full p-2 border border-gray-300 rounded-md shadow-sm text-neutral hover:bg-neutral-background-secondary focus:outline-none flex items-center justify-between gap-2 max-w-full overflow-x-hidden ${
             disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50"
           } ${className}`}
         >
