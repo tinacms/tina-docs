@@ -6,25 +6,11 @@ import { getApiReferenceTemplate } from "@/src/utils/docs/get-api-reference-temp
 // import { getTinaEndpoint } from "@/src/utils/get-tina-endpoint";
 import { type NextRequest, NextResponse } from "next/server";
 import { sanitizeFileName } from "../../../utils/sanitizeFilename";
+import type { EndpointData, GroupApiData } from "./types";
 
 export const insertContent = async (endpoint: any, schema: string) => {
   return getApiReferenceTemplate(endpoint, schema);
 };
-
-interface EndpointData {
-  id: string;
-  label: string;
-  method: string;
-  path: string;
-  summary: string;
-  description: string;
-}
-
-interface GroupApiData {
-  schema: string;
-  tag: string;
-  endpoints: EndpointData[];
-}
 
 const createAPIReferenceMDXFilesInGraphQL = async (
   collection: string,
@@ -92,12 +78,6 @@ const updateAPIReferenceMDXFilesInGraphQL = async (
     throw new Error("Missing TinaCMS configuration for file deletion");
   }
 
-  // Create title from summary or generate one
-  const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
-  const description =
-    endpoint.description ||
-    `API endpoint for ${endpoint.method} ${endpoint.path}`;
-
   // Now try to update it with content
   try {
     const updateMutation = UPDATE_DOCS_MUTATION;
@@ -144,10 +124,6 @@ function generateFileName(endpoint: EndpointData): string {
  * Helper function to generate API documentation files
  */
 async function generateApiDocsFiles(groupData: any): Promise<string[]> {
-  // Dynamic import to reduce bundle size
-  const fs = await import("node:fs");
-  const path = await import("node:path");
-
   if (!groupData.endpoints || groupData.endpoints.length === 0) {
     return [];
   }
@@ -156,18 +132,6 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
   const createdFiles: string[] = [];
 
   const tagDir = `api-documentation/${sanitizeFileName(tag)}`;
-  const outputDir = path.join(
-    process.cwd(),
-    "content",
-    "docs",
-    "api-documentation",
-    tagDir
-  );
-
-  // Ensure output directory exists
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
 
   const results = {
     success: true,
@@ -177,7 +141,7 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
 
   for (const endpoint of endpoints) {
     const fileName = generateFileName(endpoint);
-    const relativePath = path.join(tagDir, `${fileName}.mdx`);
+    const relativePath = `${tagDir}/${fileName}.mdx`;
 
     try {
       const result = await createAPIReferenceMDXFilesInGraphQL(
