@@ -1,6 +1,7 @@
+"use client";
+
 import { CustomDropdown } from "@/src/components/ui/custom-dropdown";
 import type { DropdownOption } from "@/src/components/ui/custom-dropdown";
-import { client } from "@/tina/__generated__/client";
 import React, { useState, useEffect } from "react";
 
 // Define schema type to match the actual structure from the API

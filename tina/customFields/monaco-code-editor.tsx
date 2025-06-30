@@ -1,3 +1,4 @@
+"use client";
 import debounce from "lodash/debounce";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState, useRef } from "react";

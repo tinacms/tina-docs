@@ -1,4 +1,5 @@
-import GroupOfApiReferencesSelector from "../customFields/group-of-api-references-selector";
+import { getBearerAuthHeader } from "@/src/utils/tina/get-bearer-auth-header";
+import { ApiReferencesSelector } from "../customFields/api-reference-selector";
 import { itemTemplate } from "../templates/navbar-ui.template";
 import submenuTemplate from "../templates/submenu.template";
 
@@ -55,7 +56,7 @@ const groupOfApiReferencesTemplate = {
       name: "apiGroup",
       label: "API Group",
       ui: {
-        component: GroupOfApiReferencesSelector,
+        component: ApiReferencesSelector,
       },
     },
   ],
@@ -103,11 +104,9 @@ export const docsNavigationBarCollection = {
         // Generate .mdx files for API endpoints when navigation is saved
         const response = await fetch("/api/process-navigation-api-groups", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: getBearerAuthHeader(),
           body: JSON.stringify({
-            navigationData: values,
+            data: values,
           }),
         });
 
