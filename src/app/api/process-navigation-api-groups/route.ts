@@ -205,7 +205,7 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
   const { schema, tag, endpoints } = groupData;
   const createdFiles: string[] = [];
 
-  const tagDir = sanitizeFileName(tag);
+  const tagDir = `api-documentation/${sanitizeFileName(tag)}`;
   const outputDir = path.join(
     process.cwd(),
     "content",
@@ -229,6 +229,7 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
     const fileName = generateFileName(endpoint);
     const relativePath = path.join(tagDir, `${fileName}.mdx`);
 
+    console.log("🚀 ~ generateApiDocsFiles ~ relativePath:", relativePath);
     try {
       const result = await createAPIReferenceMDXFilesInGraphQL(
         "docs",
