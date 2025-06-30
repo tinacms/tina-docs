@@ -27,10 +27,6 @@ export const getApiReferenceTemplate = (
       type: "root",
       children: [
         {
-          type: "h2",
-          children: [{ type: "text", text: heading2 }],
-        },
-        {
           type: "p",
           children: [
             {
@@ -38,6 +34,10 @@ export const getApiReferenceTemplate = (
               text: processedDescription,
             },
           ],
+        },
+        {
+          type: "h2",
+          children: [{ type: "text", text: heading2 }],
         },
         {
           type: "p",
