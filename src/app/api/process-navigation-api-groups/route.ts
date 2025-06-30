@@ -7,13 +7,7 @@ import { getApiReferenceTemplate } from "@/src/utils/docs/get-api-reference-temp
 import { type NextRequest, NextResponse } from "next/server";
 import { sanitizeFileName } from "../../../utils/sanitizeFilename";
 
-export const insertContent = async (
-  relativePath: string,
-  title: string,
-  description: string,
-  endpoint: any,
-  schema: string
-) => {
+export const insertContent = async (endpoint: any, schema: string) => {
   return getApiReferenceTemplate(endpoint, schema);
 };
 
@@ -115,13 +109,7 @@ const updateAPIReferenceMDXFilesInGraphQL = async (
 
     const variables = {
       relativePath: relativePath,
-      params: await insertContent(
-        relativePath,
-        title,
-        description,
-        endpoint,
-        schema
-      ), // returns the correct object
+      params: await insertContent(endpoint, schema), // returns the correct object
     };
 
     await fetch(tinaEndpoint, {
@@ -135,44 +123,6 @@ const updateAPIReferenceMDXFilesInGraphQL = async (
   } catch (updateError) {
     // Don't fail the overall operation for update errors
   }
-};
-
-const generateMDXTemplate = (endpoint: EndpointData) => {
-  const title = endpoint.summary || `${endpoint.method} ${endpoint.path}`;
-  const description =
-    endpoint.description ||
-    `API endpoint for ${endpoint.method} ${endpoint.path}`;
-
-  // Process description to wrap curly bracket parts with backticks
-  const processedDescription = description.replace(/\{([^}]+)\}/g, "`{$1}`");
-  return `---
-title: "${title}"
-last_edited: "${new Date().toISOString()}"
-seo:
-  title: "${title}"
-  description: "${description}"
----
----
-title: "${title}"
-last_edited: "${new Date().toISOString()}"
-seo:
-  title: "${title}"
-  description: "${description}"
----
-${
-  processedDescription ||
-  `Documentation for ${endpoint.method} ${endpoint.path}`
-}
-## Endpoint Details
-
-**Method:** \`${endpoint.method}\`
-**Path:** \`${endpoint.path}\`
-
-## API Reference
-
-<apiReference schemaFile="Swagger-Petstore.json|${endpoint.method}:${
-    endpoint.path
-  }" />`;
 };
 
 /**
@@ -229,7 +179,6 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
     const fileName = generateFileName(endpoint);
     const relativePath = path.join(tagDir, `${fileName}.mdx`);
 
-    console.log("🚀 ~ generateApiDocsFiles ~ relativePath:", relativePath);
     try {
       const result = await createAPIReferenceMDXFilesInGraphQL(
         "docs",
@@ -242,7 +191,7 @@ async function generateApiDocsFiles(groupData: any): Promise<string[]> {
           .join(", ");
 
         if (errorMessages.includes("already exists")) {
-          const updateResult = await updateAPIReferenceMDXFilesInGraphQL(
+          await updateAPIReferenceMDXFilesInGraphQL(
             relativePath,
             endpoint,
             schema
