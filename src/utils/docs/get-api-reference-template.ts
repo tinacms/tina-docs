@@ -9,7 +9,11 @@ export const getApiReferenceTemplate = (
   const title = summary || `${method} ${path}`;
   const heading2 = "Endpoint Details";
   const heading3 = "API Reference";
-  const descriptionText = description || `API endpoint for ${method} ${path}`;
+  const processedDescription = description
+    ?.replace(/\n/g, " ")
+    .replace(/\{([^}]*)\}/g, "`{$1}`");
+  const descriptionText =
+    processedDescription || `API endpoint for ${method} ${path}`;
   const schemaProp = `${schema}|${method}:${path}`;
 
   return {
@@ -25,6 +29,15 @@ export const getApiReferenceTemplate = (
         {
           type: "h2",
           children: [{ type: "text", text: heading2 }],
+        },
+        {
+          type: "p",
+          children: [
+            {
+              type: "text",
+              text: processedDescription,
+            },
+          ],
         },
         {
           type: "p",
