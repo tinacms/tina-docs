@@ -2,7 +2,7 @@ import {
   ADD_PENDING_DOCUMENT_MUTATION,
   UPDATE_DOCS_MUTATION,
 } from "@/src/constants";
-import { getApiReferenceTemplate } from "@/src/utils/docs/get-api-reference-template";
+import { getApiReferenceGraphQLQuery } from "@/src/utils/tina/get-api-reference-graphql-query";
 import type { TinaGraphQLClient } from "./tina-graphql-client";
 
 export const createOrUpdateAPIReference = async (
@@ -21,7 +21,7 @@ export const createOrUpdateAPIReference = async (
     // If created, we still need to populate content
     await client.request(UPDATE_DOCS_MUTATION, {
       relativePath,
-      params: await getApiReferenceTemplate(endpoint, schema),
+      params: await getApiReferenceGraphQLQuery(endpoint, schema),
     });
 
     return "created";
@@ -30,7 +30,7 @@ export const createOrUpdateAPIReference = async (
       // Update existing document
       await client.request(UPDATE_DOCS_MUTATION, {
         relativePath,
-        params: await getApiReferenceTemplate(endpoint, schema),
+        params: await getApiReferenceGraphQLQuery(endpoint, schema),
       });
 
       return "updated";
