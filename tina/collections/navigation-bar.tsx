@@ -1,5 +1,5 @@
 import { getBearerAuthHeader } from "@/src/utils/tina/get-bearer-auth-header";
-import { GroupOfApiReferencesSelector } from "../customFields/group-of-api-reference-selector";
+import { ApiReferencesSelector } from "../customFields/api-reference-selector";
 import { itemTemplate } from "../templates/navbar-ui.template";
 import submenuTemplate from "../templates/submenu.template";
 
@@ -56,7 +56,7 @@ const groupOfApiReferencesTemplate = {
       name: "apiGroup",
       label: "API Group",
       ui: {
-        component: GroupOfApiReferencesSelector,
+        component: ApiReferencesSelector,
       },
     },
   ],
