@@ -3,6 +3,7 @@ import {
   UPDATE_DOCS_MUTATION,
 } from "@/src/constants";
 import { getApiReferenceTemplate } from "@/src/utils/docs/get-api-reference-template";
+import { getTinaEndpoint } from "@/src/utils/get-tina-endpoint";
 import { sanitizeFileName } from "@/src/utils/sanitizeFilename";
 import type { EndpointData } from "./types";
 
@@ -25,7 +26,7 @@ const createAPIReferenceMDXFilesInGraphQL = async (
   collection: string,
   relativePath: string
 ) => {
-  const tinaEndpoint = "http://localhost:4001/graphql"; //getTinaEndpoint();
+  const tinaEndpoint = getTinaEndpoint();
 
   if (!tinaEndpoint) {
     throw new Error("Missing TinaCMS configuration for file deletion");
@@ -81,7 +82,7 @@ export const updateAPIReferenceMDXFilesInGraphQL = async (
   endpoint: any,
   schema: string
 ) => {
-  const tinaEndpoint = "http://localhost:4001/graphql"; //getTinaEndpoint();
+  const tinaEndpoint = getTinaEndpoint();
 
   if (!tinaEndpoint) {
     throw new Error("Missing TinaCMS configuration for file deletion");
