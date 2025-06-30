@@ -497,7 +497,7 @@ const GroupOfApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                       (selected) => selected.id === ep.id
                     )}
                     onChange={() => handleEndpointCheckbox(ep.id)}
-                    className="accent-indigo-600 w-5 h-5 mr-3 cursor-pointer"
+                    className="accent-indigo-600 mr-3 cursor-pointer"
                   />
                   <span
                     className="text-slate-700 text-sm font-medium truncate"
