@@ -53,7 +53,11 @@ export const getApiReferenceTemplate = (
               text: method,
               code: true,
             },
-            { type: "text", text: "\n" },
+          ],
+        },
+        {
+          type: "p",
+          children: [
             {
               type: "text",
               text: "Path:",
