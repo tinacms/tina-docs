@@ -43,7 +43,10 @@ export default function Document({ props, tinaProps }) {
             data-tina-field={tinaField(documentationData, "title")}
             data-pagefind-meta="title"
           >
-            {documentationData?.title}
+            {documentationData?.title
+              ? documentationData.title.charAt(0).toUpperCase() +
+                documentationData.title.slice(1)
+              : documentationData?.title}
           </h1>
           <CopyPageDropdown className="self-end mb-2 md:mb-0" />
         </div>
