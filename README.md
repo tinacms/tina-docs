@@ -4,7 +4,7 @@
 
 TinaDocs is a complete documentation solution built with [Tina CMS](https://tina.io/) that combines developer-friendly tools with content creator accessibility.
 
-![TinaDocs Starter](./docs-starter.png)
+![TinaDocs Starter](./public/docs-starter.png)
 **Figure: Landing Page of TinaDocs**
 
 ## ✨ Why Choose TinaDocs
