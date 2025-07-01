@@ -102,7 +102,7 @@ export const docsNavigationBarCollection = {
     beforeSubmit: async ({ values }: { values: Record<string, any> }) => {
       try {
         // Generate .mdx files for API endpoints when navigation is saved
-        const response = await fetch("/api/process-navigation-api-groups", {
+        const response = await fetch("/api/process-api-docs", {
           method: "POST",
           headers: getBearerAuthHeader(),
           body: JSON.stringify({
