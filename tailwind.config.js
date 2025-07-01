@@ -20,6 +20,22 @@ module.exports = {
       backgroundImage: {
         "blob-bg": blobBg,
       },
+      animation: {
+        "gentle-bounce": "gentle-bounce 2s ease-in-out infinite",
+      },
+      keyframes: {
+        "gentle-bounce": {
+          "0%, 20%, 50%, 80%, 100%": {
+            transform: "translateY(0)",
+          },
+          "40%": {
+            transform: "translateY(-8px)",
+          },
+          "60%": {
+            transform: "translateY(-4px)",
+          },
+        },
+      },
       colors: {
         // Brand colors
         "brand-primary": "var(--brand-primary)",
@@ -86,7 +102,7 @@ module.exports = {
     },
   },
   plugins: [
-    function ({ addUtilities }) {
+    ({ addUtilities }) => {
       addUtilities({
         ".brand-glass-hover-gradient": {
           "background-image":

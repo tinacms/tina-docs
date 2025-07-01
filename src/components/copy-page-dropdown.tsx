@@ -24,9 +24,10 @@ interface CopyPageDropdownProps {
   className?: string;
 }
 
-export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
+export function CopyPageDropdown({
   title = "Documentation Page",
-}) => {
+  className,
+}: CopyPageDropdownProps) {
   const [copied, setCopied] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [markdownUrl, setMarkdownUrl] = useState<string | null>(null);
@@ -116,7 +117,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 
   return (
     <div
-      className="mb-2 inline-flex rounded-lg overflow-hidden lg:mb-0 brand-glass-gradient text-neutral-text-secondary shadow-sm item-center w-fit ml-auto border border-neutral-border-subtle/50"
+      className={`mb-2 inline-flex rounded-lg overflow-hidden lg:mb-0 brand-glass-gradient text-neutral-text-secondary shadow-sm item-center w-fit ml-auto border border-neutral-border-subtle/50 ${className || ""}`}
       data-exclude-from-md
     >
       {/* Primary copy button */}
@@ -230,4 +231,4 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
       </DropdownMenu>
     </div>
   );
-};
+}

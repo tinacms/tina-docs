@@ -1,12 +1,125 @@
+import {
+  ScrollTooltip,
+  useScrollTooltip,
+} from "@/components/ui/scroll-tooltip";
+import { gsap } from "gsap";
+import { Observer } from "gsap/Observer";
 import Image from "next/image";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import {
-  type Item,
-  createListener,
-  useWindowSize,
-} from "./scroll-showcase.helpers";
+
+// Register the Observer plugin
+gsap.registerPlugin(Observer);
+
+function ScrollShowcaseHeadingSection(data: {
+  title: string;
+  image: string;
+  content: any;
+  isFocused: boolean;
+}) {
+  return (
+    <div
+      className={`my-4 transition-opacity duration-200 ease-in-out ${
+        data.isFocused ? "opacity-100" : "opacity-30"
+      }`}
+    >
+      <h2
+        className={`mb-3 text-3xl font-medium transition-colors duration-200 ease-in-out ${
+          data.isFocused ? "text-brand-primary" : "text-neutral-text"
+        }`}
+      >
+        {data.title}
+      </h2>
+      <ul
+        className={`list-none transition-colors duration-200 ease-in-out ${
+          data.isFocused ? "border-brand-primary" : "border-neutral-text"
+        }`}
+      >
+        <li>
+          <TinaMarkdown content={data.content} />
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+function ScrollShowcaseSubsection(data: {
+  title: string;
+  content: any;
+  image: string;
+  isFocused: boolean;
+  direction?: number; // 1 for down, -1 for up
+}) {
+  const borderRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!borderRef.current || !containerRef.current) return;
+
+    if (data.isFocused) {
+      // Animate border sliding in based on scroll direction
+      const slideFromTop = (data.direction || 1) > 0;
+      gsap.fromTo(
+        borderRef.current,
+        {
+          scaleY: 0,
+          transformOrigin: slideFromTop ? "top" : "bottom",
+        },
+        {
+          scaleY: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        }
+      );
+    } else {
+      // Animate border sliding out opposite to entry direction
+      const slideToBottom = (data.direction || 1) > 0;
+      gsap.to(borderRef.current, {
+        scaleY: 0,
+        transformOrigin: slideToBottom ? "bottom" : "top",
+        duration: 0.3,
+        ease: "power2.in",
+      });
+    }
+  }, [data.isFocused, data.direction]);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`relative transition-opacity duration-200 ease-in-out ${
+        data.isFocused ? "opacity-100" : "opacity-30"
+      }`}
+    >
+      {/* Animated border */}
+      <div
+        ref={borderRef}
+        className="absolute left-0 top-0 w-0.5 h-full bg-brand-primary"
+        style={{ transformOrigin: "top" }}
+      />
+
+      {/* Static border for fallback */}
+      <div
+        className={`absolute left-0 top-0 w-0.5 h-full transition-colors duration-200 ease-in-out ${
+          data.isFocused ? "bg-transparent" : "bg-neutral-text"
+        }`}
+      />
+
+      <ul className="list-none pl-4">
+        <li className="py-2">
+          <div
+            className={`text-xl transition-colors duration-200 ease-in-out ${
+              data.isFocused ? "text-brand-primary" : "text-neutral-text"
+            }`}
+          >
+            {data.title}
+          </div>
+          <TinaMarkdown content={data.content} />
+        </li>
+      </ul>
+    </div>
+  );
+}
 
 /** Main Component */
 export function ScrollBasedShowcase(data: {
@@ -17,181 +130,177 @@ export function ScrollBasedShowcase(data: {
     useAsSubsection?: boolean;
   }[];
 }) {
-  const [headings, setHeadings] = useState<Item[]>([]);
-  const componentRef = useRef<HTMLDivElement>(null);
-  const headingRefs = useRef<(HTMLHeadingElement | null)[]>([]);
-  const [activeIds, setActiveIds] = useState<string[]>([]);
-  const [activeImageSrc, setActiveImageSrc] = useState<string>("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [animating, setAnimating] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState(1); // 1 for down, -1 for up
+  const { showTooltip, hideTooltip } = useScrollTooltip();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<any>(null);
+  const imageWrapperRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef<HTMLDivElement[]>([]);
 
-  const windowSize = useWindowSize();
+  // Wrap function to keep index within bounds
+  const wrap = useCallback(
+    (index: number) => {
+      if (index < 0) return data.showcaseItems.length - 1;
+      if (index >= data.showcaseItems.length) return 0;
+      return index;
+    },
+    [data.showcaseItems.length]
+  );
 
-  /** Build headings array on mount */
+  // Function to go to a specific section
+  const gotoSection = useCallback(
+    (index: number, direction: number, isScrollInteraction = false) => {
+      const newIndex = wrap(index);
+      setAnimating(true);
+      setScrollDirection(direction);
+      // Hide tooltip only on scroll/swipe interactions
+      if (showTooltip && isScrollInteraction) {
+        hideTooltip();
+      }
+
+      // Smooth transition with a timeout to simulate animation
+      setTimeout(() => {
+        setCurrentIndex(newIndex);
+        setAnimating(false);
+      }, 300);
+    },
+    [wrap, showTooltip, hideTooltip]
+  );
+
   useEffect(() => {
-    const tempHeadings: Item[] = [];
-    data.showcaseItems?.forEach((item, index) => {
-      const headingData: Item = {
-        id: `${item.title}-${index}`,
-        level: item.useAsSubsection ? "H3" : "H2",
-        src: item.image,
-        offset: headingRefs.current[index]?.offsetTop ?? 0,
-      };
-      tempHeadings.push(headingData);
+    if (!containerRef.current || data.showcaseItems.length === 0) return;
+
+    // Create GSAP Observer
+    observerRef.current = Observer.create({
+      target: containerRef.current,
+      type: "wheel,touch,scroll",
+      wheelSpeed: -4,
+      onDown: () => !animating && gotoSection(currentIndex - 1, -1, true),
+      onUp: () => !animating && gotoSection(currentIndex + 1, 1, true),
+      tolerance: 2000,
+      preventDefault: true,
     });
-    setHeadings(tempHeadings);
 
-    // Set initial active image
-    if (tempHeadings.length > 0 && tempHeadings[0].src) {
-      setActiveImageSrc(tempHeadings[0].src);
-    }
-  }, [data.showcaseItems]);
-
-  /** Update heading offsets on resize */
-  useEffect(() => {
-    const updateOffsets = () => {
-      const updatedHeadings = headings.map((heading, index) => ({
-        ...heading,
-        offset: headingRefs.current[index]?.offsetTop ?? 0,
-      }));
-      setHeadings(updatedHeadings);
+    // Cleanup function
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.kill();
+      }
     };
-    window.addEventListener("resize", updateOffsets);
-    return () => window.removeEventListener("resize", updateOffsets);
-  }, [headings]);
+  }, [currentIndex, animating, data.showcaseItems.length, gotoSection]);
 
-  /** Throttled scroll event */
+  // Handle keyboard navigation
   useEffect(() => {
-    if (typeof window === "undefined" || !componentRef.current) return;
-    const activeTocListener = createListener(
-      componentRef as React.RefObject<HTMLDivElement>,
-      headings,
-      setActiveIds
-    );
-    window.addEventListener("scroll", activeTocListener);
-    return () => window.removeEventListener("scroll", activeTocListener);
-  }, [headings]);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (animating) return;
 
-  /** Update active image when activeIds change */
+      switch (event.key) {
+        case "ArrowDown":
+        case "PageDown":
+          event.preventDefault();
+          gotoSection(currentIndex + 1, 1, true);
+          break;
+        case "ArrowUp":
+        case "PageUp":
+          event.preventDefault();
+          gotoSection(currentIndex - 1, -1, true);
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentIndex, animating, gotoSection]);
+
+  // Animate image wrapper with bounce effect
   useEffect(() => {
-    if (!activeIds.length) return;
-    const heading = headings.find((h) => h.id === activeIds[0]);
-    if (heading?.src) {
-      setActiveImageSrc(heading.src);
+    if (!imageWrapperRef.current) return;
+    const sectionOffset = sectionRefs.current[currentIndex].offsetTop;
+    const sectionHeight = sectionRefs.current[currentIndex].offsetHeight;
+    const imageHeight = imageWrapperRef.current.offsetHeight;
+    const containerHeight = containerRef.current?.offsetHeight || 0;
+    let offset = sectionOffset + sectionHeight / 4 - imageHeight / 4;
+    if (offset < 0) {
+      offset = 0;
     }
-  }, [activeIds, headings]);
+    if (offset + imageHeight > containerHeight) {
+      offset = containerHeight - imageHeight;
+    }
+
+    gsap.to(imageWrapperRef.current, {
+      top: offset, // Adjusted spacing for better visual effect
+      duration: 0.7,
+      ease: "back.inOut(1.5)", // Bouncy animation
+    });
+  }, [currentIndex]);
 
   return (
-    <div
-      ref={componentRef}
-      // doc-container replacements:
-      className="relative mx-auto my-5 block w-full"
-    >
-      <div className="relative flex ">
+    <div ref={containerRef} className="relative pb-12">
+      {/* Tooltip */}
+      <ScrollTooltip show={showTooltip} />
+
+      <div className="md:flex flex-col">
+        {data.showcaseItems.map((item, index) => (
+          <div
+            ref={(el) => {
+              if (el) sectionRefs.current[index] = el;
+            }}
+            key={`${item.title}-${index}`}
+            onClick={() =>
+              !animating && gotoSection(index, index > currentIndex ? 1 : -1)
+            }
+            className="cursor-pointer lg:max-w-[48%]"
+          >
+            {item.useAsSubsection ? (
+              <ScrollShowcaseSubsection
+                {...item}
+                isFocused={currentIndex === index}
+                direction={scrollDirection}
+              />
+            ) : (
+              <ScrollShowcaseHeadingSection
+                {...item}
+                isFocused={currentIndex === index}
+              />
+            )}
+          </div>
+        ))}
         <div
-          id="main-content-container"
-          className="m-2 box-border flex min-h-full gap-20 flex-1 flex-col justify-between px-2 pb-16 pt-8"
+          ref={imageWrapperRef}
+          className="absolute right-0 pb-12 lg:max-w-[48%]"
+          style={{ top: 0 }}
         >
-          {data.showcaseItems?.map((item, index) => {
-            const itemId = `${item.title}-${index}`;
-            const isFocused = activeIds.includes(itemId);
-
-            return (
-              <div
-                key={`showcase-item-${index}`}
-                // If active => full opacity + orange border + text colors
-                // If not => half opacity + gray border
-                className={`mt-0 transition-all duration-300 ease-in-out md:mt-8
-                  ${
-                    isFocused
-                      ? "text-neutral-text  opacity-100"
-                      : "border-neutral-border  text-neutral-text-secondary opacity-15"
-                  }
-                `}
-              >
-                {item.useAsSubsection ? (
-                  <div
-                    id={itemId}
-                    className="pointer-events-none"
-                    ref={(element) => {
-                      headingRefs.current[index] = element;
-                    }}
-                  >
-                    <div
-                      className={`my-2 bg-gradient-to-br bg-clip-text text-xl font-medium text-transparent ${
-                        isFocused
-                          ? "from-orange-400 via-orange-500 to-orange-600"
-                          : "from-gray-800 to-gray-700"
-                      } !important`}
-                    >
-                      {item.title}
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    id={itemId}
-                    className="pointer-events-none"
-                    ref={(element) => {
-                      headingRefs.current[index] = element;
-                    }}
-                  >
-                    <h2
-                      className={`mb-3  mt-4  text-3xl ${
-                        isFocused
-                          ? "brand-primary-gradient"
-                          : "text-neutral-text-secondary"
-                      }`}
-                    >
-                      {item.title}
-                    </h2>
-                  </div>
-                )}
-
-                <ul
-                  className={`list-none border-l-4 pl-4 transition-colors duration-500 ease-in-out ${
-                    isFocused
-                      ? "border-brand-primary"
-                      : "border-neutral-text-secondary"
-                  }`}
-                >
-                  <li>
-                    <TinaMarkdown content={item.content} />
-                  </li>
-                </ul>
-
-                {/* This image is only shown on mobile (md:hidden).
-                    On larger screens, the separate container is used. */}
-                {item.image && (
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    width={500}
-                    height={300}
-                    className="my-8 block md:hidden"
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* This image container is only displayed on md+ */}
-        <div className="relative hidden w-full flex-1 overflow-hidden md:block">
-          {activeImageSrc && (
+          <div className="bg-brand-primary/30 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-brand-primary/20">
             <Image
-              src={activeImageSrc}
-              alt=""
-              width={500}
+              className="rounded-lg"
+              src={data.showcaseItems[currentIndex].image}
+              alt={data.showcaseItems[currentIndex].title}
+              width={300}
               height={300}
-              className="w-100 absolute right-0 rounded-lg transition-all duration-1000 ease-in-out"
-              style={{
-                opacity: activeIds.length ? 1 : 0,
-                top:
-                  (headings.find((h) => h.id && activeIds.includes(h.id))
-                    ?.offset || 0) + 100,
-                transform: "translateY(-50%)",
-              }}
             />
-          )}
+          </div>
         </div>
+      </div>
+
+      {/* Navigation indicators */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1 z-50">
+        {data.showcaseItems.map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() =>
+              !animating && gotoSection(index, index > currentIndex ? 1 : -1)
+            }
+            className={`h-0.5 transition-all duration-300 ${
+              currentIndex === index
+                ? "w-8 bg-brand-primary"
+                : "w-4 bg-neutral-text/30 hover:bg-neutral-text/50"
+            }`}
+            aria-label={`Go to section ${index + 1}`}
+          />
+        ))}
       </div>
     </div>
   );
