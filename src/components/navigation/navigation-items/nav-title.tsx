@@ -11,7 +11,7 @@ export const NavTitle: React.FC<NavTitleProps> = ({
   ...props
 }: NavTitleProps) => {
   const baseStyles =
-    "group flex cursor-pointer items-center gap-1 py-0.5 leading-tight transition duration-150 ease-out hover:opacity-100";
+    "group flex cursor-pointer items-center gap-1 py-0.5 leading-tight transition duration-150 ease-out hover:opacity-100 w-full";
 
   const headerLevelClasses = {
     0: `${FONT_WEIGHTS.light} text-neutral-text ${FONT_SIZES.xl} pt-2 opacity-100`,
