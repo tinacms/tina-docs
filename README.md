@@ -23,6 +23,33 @@ TinaDocs is a complete documentation solution built with [Tina CMS](https://tina
 
 ---
 
+## 🚀 Quick Start with npx
+
+The fastest way to get started with TinaDocs is using npx:
+
+```bash
+npx {{ TODO }} --template tinadocs
+```
+
+This command will:
+- Download and set up TinaDocs in a new directory called `my-docs`
+- Prompt you to select your preferred theme during setup
+- Configure the basic project structure
+- Install all necessary dependencies
+
+### **Available Themes**
+
+When using npx, you can choose from these beautiful themes:
+
+- **Default** - TinaCMS-inspired theme with orange accents
+- **Monochrome** - Clean black and white design
+- **Blossom** - Elegant pink/rose color scheme
+- **Lake** - Professional blue color palette
+- **Pine** - Natural green tones
+- **Indigo** - Modern purple/indigo design
+
+---
+
 ## 📖 How to Use TinaDocs
 
 There are two ways you can use TinaDocs.
@@ -70,7 +97,16 @@ Open [http://localhost:3000](http://localhost:3000) to see your docs in action.
 NEXT_PUBLIC_TINA_CLIENT_ID=<get this from app.tina.io>
 TINA_TOKEN=<get this from app.tina.io>
 NEXT_PUBLIC_TINA_BRANCH=<your content branch>
+NEXT_PUBLIC_TINA_THEME=<your preferred theme>
 ```
+
+**Theme Options for `NEXT_PUBLIC_TINA_THEME`:**
+- `default` - TinaCMS-inspired theme (default)
+- `monochrome` - Clean black and white design
+- `blossom` - Elegant pink/rose color scheme
+- `lake` - Professional blue color palette
+- `pine` - Natural green tones
+- `indigo` - Modern purple/indigo design
 
 ### **Step 5: Build for Production**
 
