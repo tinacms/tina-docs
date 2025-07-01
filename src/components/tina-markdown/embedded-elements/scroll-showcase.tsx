@@ -1,3 +1,7 @@
+import {
+  ScrollTooltip,
+  useScrollTooltip,
+} from "@/components/ui/scroll-tooltip";
 import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import Image from "next/image";
@@ -129,6 +133,7 @@ export function ScrollBasedShowcase(data: {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [scrollDirection, setScrollDirection] = useState(1); // 1 for down, -1 for up
+  const { showTooltip, hideTooltip } = useScrollTooltip();
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<any>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
@@ -146,10 +151,14 @@ export function ScrollBasedShowcase(data: {
 
   // Function to go to a specific section
   const gotoSection = useCallback(
-    (index: number, direction: number) => {
+    (index: number, direction: number, isScrollInteraction = false) => {
       const newIndex = wrap(index);
       setAnimating(true);
       setScrollDirection(direction);
+      // Hide tooltip only on scroll/swipe interactions
+      if (showTooltip && isScrollInteraction) {
+        hideTooltip();
+      }
 
       // Smooth transition with a timeout to simulate animation
       setTimeout(() => {
@@ -157,7 +166,7 @@ export function ScrollBasedShowcase(data: {
         setAnimating(false);
       }, 300);
     },
-    [wrap]
+    [wrap, showTooltip, hideTooltip]
   );
 
   useEffect(() => {
@@ -168,8 +177,8 @@ export function ScrollBasedShowcase(data: {
       target: containerRef.current,
       type: "wheel,touch,scroll",
       wheelSpeed: -4,
-      onDown: () => !animating && gotoSection(currentIndex - 1, -1),
-      onUp: () => !animating && gotoSection(currentIndex + 1, 1),
+      onDown: () => !animating && gotoSection(currentIndex - 1, -1, true),
+      onUp: () => !animating && gotoSection(currentIndex + 1, 1, true),
       tolerance: 2000,
       preventDefault: true,
     });
@@ -191,12 +200,12 @@ export function ScrollBasedShowcase(data: {
         case "ArrowDown":
         case "PageDown":
           event.preventDefault();
-          gotoSection(currentIndex + 1, 1);
+          gotoSection(currentIndex + 1, 1, true);
           break;
         case "ArrowUp":
         case "PageUp":
           event.preventDefault();
-          gotoSection(currentIndex - 1, -1);
+          gotoSection(currentIndex - 1, -1, true);
           break;
       }
     };
@@ -229,6 +238,9 @@ export function ScrollBasedShowcase(data: {
 
   return (
     <div ref={containerRef} className="relative pb-12">
+      {/* Tooltip */}
+      <ScrollTooltip show={showTooltip} />
+
       <div className="md:flex flex-col">
         {data.showcaseItems.map((item, index) => (
           <div
@@ -260,7 +272,7 @@ export function ScrollBasedShowcase(data: {
           className="absolute right-0 pb-12 lg:max-w-[48%]"
           style={{ top: 0 }}
         >
-          <div className="bg-brand-primary/10 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-brand-primary/20">
+          <div className="bg-brand-primary/30 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-brand-primary/20">
             <Image
               className="rounded-lg"
               src={data.showcaseItems[currentIndex].image}
