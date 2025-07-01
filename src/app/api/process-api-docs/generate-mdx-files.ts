@@ -19,7 +19,7 @@ export function generateAPIEndpointFileName(endpoint: EndpointData): string {
   return `${method}-${pathSafe}`;
 }
 
-export async function generateApiDocsFiles(
+export async function generateMdxFiles(
   groupData: {
     tag: string;
     schema: string;

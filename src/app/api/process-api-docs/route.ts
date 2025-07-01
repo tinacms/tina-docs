@@ -1,6 +1,6 @@
 import { TinaGraphQLClient } from "@/src/utils/tina/tina-graphql-client";
 import { type NextRequest, NextResponse } from "next/server";
-import { generateApiDocsFiles } from "./generate-api-docs-files";
+import { generateMdxFiles } from "./generate-mdx-files";
 import type { GroupApiData } from "./types";
 
 export async function POST(request: NextRequest) {
@@ -42,10 +42,7 @@ export async function POST(request: NextRequest) {
                   : group.apiGroup;
 
               // Generate files for this group
-              const createdFiles = await generateApiDocsFiles(
-                groupData,
-                client
-              );
+              const createdFiles = await generateMdxFiles(groupData, client);
               allCreatedFiles.push(...createdFiles);
             } catch (error) {
               // Continue processing other groups

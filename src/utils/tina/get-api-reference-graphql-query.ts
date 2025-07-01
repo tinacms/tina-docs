@@ -1,4 +1,4 @@
-import type { EndpointData } from "@/src/app/api/process-navigation-api-groups/types";
+import type { EndpointData } from "@/src/app/api/process-api-docs/types";
 
 export const getApiReferenceGraphQLQuery = (
   endpoint: EndpointData,
@@ -18,11 +18,11 @@ export const getApiReferenceGraphQLQuery = (
 
   return {
     title,
-    last_edited: new Date().toISOString(),
     seo: {
       title,
       description: descriptionText,
     },
+    last_edited: new Date().toISOString(),
     body: {
       type: "root",
       children: [
