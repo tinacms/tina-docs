@@ -98,6 +98,7 @@ NEXT_PUBLIC_TINA_CLIENT_ID=<get this from app.tina.io>
 TINA_TOKEN=<get this from app.tina.io>
 NEXT_PUBLIC_TINA_BRANCH=<your content branch>
 NEXT_PUBLIC_TINA_THEME=<your preferred theme>
+NEXT_PUBLIC_ENABLE_THEME_SELECTION=<dispaly theme selector>
 ```
 
 **Theme Options for `NEXT_PUBLIC_TINA_THEME`:**
@@ -107,6 +108,14 @@ NEXT_PUBLIC_TINA_THEME=<your preferred theme>
 - `lake` - Professional blue color palette
 - `pine` - Natural green tones
 - `indigo` - Modern purple/indigo design
+
+**Theme Preview Mode:**
+To enable a theme selector in the UI for previewing all themes, add:
+```env
+NEXT_PUBLIC_ENABLE_THEME_SELECTION=true
+```
+
+> 💡 **Note:** The theme selector allows you to preview different themes in real-time, but these changes are temporary and won't persist when you open a new browser window/tab. To make a theme permanent, set it using the `NEXT_PUBLIC_TINA_THEME` variable above.
 
 ### **Step 5: Build for Production**
 
