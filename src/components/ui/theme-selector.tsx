@@ -2,6 +2,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
+import { MdHelpOutline } from "react-icons/md";
 
 const themes = ["default", "monochrome", "blossom", "lake", "pine", "indigo"];
 
@@ -18,7 +19,9 @@ export const ThemeSelector = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const [selectedTheme, setSelectedTheme] = useState(() => {
     if (typeof window !== "undefined") {
       return sessionStorage.getItem(BROWSER_TAB_THEME_KEY) || theme;
@@ -34,6 +37,12 @@ export const ThemeSelector = () => {
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
+      }
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target as Node)
+      ) {
+        setShowTooltip(false);
       }
     };
 
@@ -84,20 +93,52 @@ export const ThemeSelector = () => {
   return (
     <div className="fixed bottom-4 right-4 z-50 bg-neutral-surface p-1 rounded-lg shadow-lg">
       <div className="relative" ref={dropdownRef}>
-        <button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-1 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
-        >
-          <span className="truncate">
-            {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)}
-          </span>
-          <MdArrowDropDown
-            className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 flex-shrink-0 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          />
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="relative" ref={tooltipRef}>
+            <button
+              type="button"
+              onClick={() => setShowTooltip(!showTooltip)}
+              className="w-6 h-6 rounded-full bg-neutral-hover hover:bg-neutral-border flex items-center justify-center text-neutral-text transition-colors"
+              aria-label="Theme help"
+            >
+              <MdHelpOutline className="w-4 h-4" />
+            </button>
+
+            {showTooltip && (
+              <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-neutral-surface border border-neutral-border rounded-lg shadow-lg text-xs text-neutral-text">
+                <div className="font-medium mb-2">Theme Selection</div>
+                <p className="mb-2">
+                  Theme changes are temporary and will reset when opening in a
+                  new browser window or tab.
+                </p>
+                <p className="mb-2">
+                  To make theme changes permanent, add to your{" "}
+                  <code className="bg-neutral-hover px-1 rounded">.env</code>{" "}
+                  file:
+                </p>
+                <code className="block bg-neutral-hover p-2 rounded text-xs font-mono">
+                  NEXT_PUBLIC_DEFAULT_THEME={selectedTheme}
+                </code>
+                <div className="absolute top-full right-2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-neutral-border" />
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-1 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
+          >
+            <span className="truncate">
+              {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)}
+            </span>
+            <MdArrowDropDown
+              className={`w-4 h-4 text-brand-secondary-dark-dark transition-transform duration-200 flex-shrink-0 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+        </div>
 
         {isOpen && (
           <div className="absolute bottom-full left-0 right-0 mb-1 bg-neutral-surface rounded-md border border-neutral-border shadow-lg overflow-hidden w-[120px]">
