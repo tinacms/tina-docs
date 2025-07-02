@@ -35,7 +35,7 @@ export default function RootLayout({
       <body className={`${body.variable} ${heading.variable}`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme={theme}
           enableSystem={true}
           disableTransitionOnChange={false}
         >
