@@ -15,6 +15,7 @@ export const Settings = {
     },
     defaultItem: {
       autoCapitalizeNavigation: true,
+    },
     beforeSubmit: async ({ values }: { values: Record<string, any> }) => {
       sessionStorage.setItem(BROWSER_TAB_THEME_KEY, values.selectedTheme);
     },
