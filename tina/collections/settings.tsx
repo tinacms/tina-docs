@@ -1,3 +1,4 @@
+import { BROWSER_TAB_THEME_KEY } from "@/src/components/ui/theme-selector";
 import React from "react";
 import { RedirectItem } from "../customFields/redirect-item";
 
@@ -11,6 +12,9 @@ export const Settings = {
     allowedActions: {
       create: false,
       delete: false,
+    },
+    beforeSubmit: () => {
+      localStorage.removeItem(BROWSER_TAB_THEME_KEY);
     },
   },
   fields: [

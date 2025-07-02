@@ -6,7 +6,7 @@ import { MdHelpOutline } from "react-icons/md";
 
 const themes = ["default", "monochrome", "blossom", "lake", "pine", "indigo"];
 
-const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
+export const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
 
 // Default theme colors from root
 const DEFAULT_COLORS = {
