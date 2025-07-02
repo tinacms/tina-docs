@@ -13,8 +13,8 @@ export const Settings = {
       create: false,
       delete: false,
     },
-    beforeSubmit: () => {
-      sessionStorage.removeItem(BROWSER_TAB_THEME_KEY);
+    beforeSubmit: async ({ values }: { values: Record<string, any> }) => {
+      sessionStorage.setItem(BROWSER_TAB_THEME_KEY, values.selectedTheme);
     },
   },
   fields: [
