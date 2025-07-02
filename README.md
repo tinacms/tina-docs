@@ -100,11 +100,10 @@ Open [http://localhost:3000](http://localhost:3000) to see your docs in action.
 NEXT_PUBLIC_TINA_CLIENT_ID=<get this from app.tina.io>
 TINA_TOKEN=<get this from app.tina.io>
 NEXT_PUBLIC_TINA_BRANCH=<your content branch>
-NEXT_PUBLIC_TINA_THEME=<your preferred theme>
 NEXT_PUBLIC_ENABLE_THEME_SELECTION=<dispaly theme selector>
 ```
 
-**Theme Options for `NEXT_PUBLIC_TINA_THEME`:**
+**Theme Options for `selectedTheme`:**
 - `default` - TinaCMS-inspired theme (default)
 - `monochrome` - Clean black and white design
 - `blossom` - Elegant pink/rose color scheme
@@ -118,7 +117,7 @@ To enable a theme selector in the UI for previewing all themes, add:
 NEXT_PUBLIC_ENABLE_THEME_SELECTION=true
 ```
 
-> 💡 **Note:** The theme selector allows you to preview different themes in real-time, but these changes are temporary and won't persist when you open a new browser window/tab. To make a theme permanent, set it using the `NEXT_PUBLIC_TINA_THEME` variable above.
+> 💡 **Note:** The theme selector allows you to preview different themes in real-time, but these changes are temporary and won't persist when you open a new browser window/tab. To make a theme permanent, update the `Selected Them` field in your Settings through TinaCMS.
 
 ### **Step 5: Build for Production**
 
