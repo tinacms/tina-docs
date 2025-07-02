@@ -2,6 +2,7 @@ import "@/styles/global.css";
 import AdminLink from "@/components/ui/admin-link";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 import { ThemeSelector } from "@/components/ui/theme-selector";
+import settings from "@/content/settings/config.json";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 
@@ -17,7 +18,7 @@ const isThemeSelectorEnabled =
   process.env.NODE_ENV === "development" ||
   process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
 
-const theme = process.env.NEXT_PUBLIC_TINA_THEME || "default";
+const theme = settings.selectedTheme || "default";
 
 export default function RootLayout({
   children = null,
@@ -34,7 +35,7 @@ export default function RootLayout({
       <body className={`${body.variable} ${heading.variable}`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme={theme}
           enableSystem={true}
           disableTransitionOnChange={false}
         >

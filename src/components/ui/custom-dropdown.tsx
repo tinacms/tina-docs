@@ -22,6 +22,8 @@ interface CustomDropdownProps {
   options: DropdownOption[];
   /** Placeholder text shown when no option is selected */
   placeholder?: string;
+  /** Whether the dropdown is disabled */
+  disabled?: boolean;
   /** Additional classes for the trigger button */
   className?: string;
   /** Additional classes for the dropdown content */
@@ -40,6 +42,7 @@ export const CustomDropdown = ({
   onChange,
   options,
   placeholder = "Select an option",
+  disabled = false,
   className = "",
   contentClassName = "",
   itemClassName = "",
@@ -50,11 +53,14 @@ export const CustomDropdown = ({
   const activeOption = options.find((opt) => opt.value === value);
 
   return (
-    <DropdownMenu onOpenChange={setIsOpen}>
+    <DropdownMenu onOpenChange={setIsOpen} open={disabled ? false : isOpen}>
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className={`w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 flex items-center justify-between gap-2 max-w-full overflow-x-hidden ${className}`}
+          disabled={disabled}
+          className={`w-full p-2 border border-gray-300 rounded-md shadow-sm text-neutral hover:bg-neutral-background-secondary focus:outline-none flex items-center justify-between gap-2 max-w-full overflow-x-hidden ${
+            disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50"
+          } ${className}`}
         >
           <span className="truncate break-words whitespace-normal max-w-full text-left">
             {activeOption ? activeOption.label : placeholder}
@@ -62,7 +68,7 @@ export const CustomDropdown = ({
           <MdArrowDropDown
             className={`w-5 h-5 transition-transform duration-200 ${
               isOpen ? "rotate-180" : "rotate-0"
-            }`}
+            } ${disabled ? "opacity-50" : ""}`}
           />
         </button>
       </DropdownMenuTrigger>

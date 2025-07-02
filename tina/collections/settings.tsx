@@ -1,3 +1,4 @@
+import { BROWSER_TAB_THEME_KEY } from "@/src/components/ui/theme-selector";
 import React from "react";
 import { RedirectItem } from "../customFields/redirect-item";
 
@@ -14,6 +15,8 @@ export const Settings = {
     },
     defaultItem: {
       autoCapitalizeNavigation: true,
+    beforeSubmit: async ({ values }: { values: Record<string, any> }) => {
+      sessionStorage.setItem(BROWSER_TAB_THEME_KEY, values.selectedTheme);
     },
   },
   fields: [
@@ -105,6 +108,22 @@ export const Settings = {
           label: "Forum",
           type: "string",
         },
+      ],
+    },
+    {
+      name: "selectedTheme",
+      label: "Selected Theme",
+      type: "string",
+      ui: {
+        component: "select",
+      },
+      options: [
+        { label: "Default", value: "default" },
+        { label: "Monochrome", value: "monochrome" },
+        { label: "Blossom", value: "blossom" },
+        { label: "Lake", value: "lake" },
+        { label: "Pine", value: "pine" },
+        { label: "Indigo", value: "indigo" },
       ],
     },
     {
