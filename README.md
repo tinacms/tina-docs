@@ -4,6 +4,9 @@
 
 TinaDocs is a complete documentation solution built with [Tina CMS](https://tina.io/) that combines developer-friendly tools with content creator accessibility.
 
+![TinaDocs Starter](./public/docs-starter.png)
+**Figure: Landing Page of TinaDocs**
+
 ## ✨ Why Choose TinaDocs
 
 ### **Rich Feature Set**
@@ -20,6 +23,33 @@ TinaDocs is a complete documentation solution built with [Tina CMS](https://tina
 - **Developer-friendly** - Easy to customize and extend
 - **Content creator-friendly** - Non-technical team members can contribute
 - **SEO optimized** - Built-in best practices for search visibility
+
+---
+
+## 🚀 Quick Start with npx
+
+The fastest way to get started with TinaDocs is using npx:
+
+```bash
+npx {{ TODO }} my-docs --template tinadocs
+```
+
+This command will:
+- Download and set up TinaDocs in a new directory called `my-docs`
+- Prompt you to select your preferred theme during setup
+- Configure the basic project structure
+- Install all necessary dependencies
+
+### **Available Themes**
+
+When using npx, you can choose from these beautiful themes:
+
+- **Default** - TinaCMS-inspired theme with orange accents
+- **Monochrome** - Clean black and white design
+- **Blossom** - Elegant pink/rose color scheme
+- **Lake** - Professional blue color palette
+- **Pine** - Natural green tones
+- **Indigo** - Modern purple/indigo design
 
 ---
 
@@ -70,7 +100,16 @@ Open [http://localhost:3000](http://localhost:3000) to see your docs in action.
 NEXT_PUBLIC_TINA_CLIENT_ID=<get this from app.tina.io>
 TINA_TOKEN=<get this from app.tina.io>
 NEXT_PUBLIC_TINA_BRANCH=<your content branch>
+NEXT_PUBLIC_ENABLE_THEME_SELECTION=<dispaly theme selector>
 ```
+
+**Theme Preview Mode:**
+To enable a theme selector in the UI for previewing all themes, add:
+```env
+NEXT_PUBLIC_ENABLE_THEME_SELECTION=true
+```
+
+> 💡 **Note:** The theme selector allows you to preview different themes in real-time, but these changes are temporary and won't persist when you open a new browser window/tab. To make a theme permanent, update the `Selected Them` field in your Settings through TinaCMS.
 
 ### **Step 5: Build for Production**
 
