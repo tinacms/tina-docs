@@ -105,7 +105,7 @@ export const ThemeSelector = () => {
             </button>
 
             {showTooltip && (
-              <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-neutral-surface border border-neutral-border rounded-lg shadow-lg text-xs text-neutral-text">
+              <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-neutral-surface border border-neutral-border rounded-lg shadow-lg text-xs text-neutral-text min-w-fit">
                 <div className="font-medium mb-2">Theme Selection</div>
                 <p className="mb-2">
                   Theme changes are temporary and will reset when opening in a
