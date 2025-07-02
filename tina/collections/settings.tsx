@@ -12,6 +12,9 @@ export const Settings = {
       create: false,
       delete: false,
     },
+    defaultItem: {
+      autoCapitalizeNavigation: true,
+    },
   },
   fields: [
     {
@@ -63,6 +66,13 @@ export const Settings = {
       name: "docsHomepage",
       label: "Docs Homepage",
       type: "string",
+    },
+    {
+      name: "autoApiTitles",
+      label:
+        "Auto-capitalize API titles in the navigation bar and generated pages",
+      type: "boolean",
+      defaultValue: true,
     },
     {
       name: "defaultOGImage",

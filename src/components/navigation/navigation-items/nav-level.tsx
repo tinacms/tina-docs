@@ -1,10 +1,12 @@
 import { DynamicLink } from "@/components/ui/dynamic-link";
+import settings from "@/content/settings/config.json";
 import { matchActualTarget } from "@/utils/docs/urls";
 import { getUrl } from "@/utils/get-url";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import React from "react";
 import AnimateHeight from "react-animate-height";
+import { titleCase } from "title-case";
 import { PADDING_LEVELS, TRANSITION_DURATION } from "../constants";
 import { NavTitle } from "./nav-title";
 import { hasNestedSlug } from "./utils";
@@ -36,6 +38,62 @@ export const NavLevel: React.FC<NavLevelProps> = ({
     path.split("#")[0] === slug || (slug === "/docs" && path === "/docs/");
 
   const childSelected = hasNestedSlug(categoryData.items, path);
+
+  if (settings.autoApiTitles) {
+    categoryData.title = titleCase(categoryData.title);
+  }
+
+  const httpMethod = () => (
+    <span
+      className={`
+      inline-flex items-center justify-center px-0.5 py-[3px] rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
+      ${
+        categoryData.verb === "get"
+          ? pathname === slug
+            ? "bg-green-100 text-green-800"
+            : "bg-green-100/75 group-hover:bg-green-100 text-green-800"
+          : ""
+      }
+      ${
+        categoryData.verb === "post"
+          ? pathname === slug
+            ? "bg-blue-100 text-blue-800"
+            : "bg-blue-100/75 group-hover:bg-blue-100 text-blue-800"
+          : ""
+      }
+      ${
+        categoryData.verb === "put"
+          ? pathname === slug
+            ? "bg-yellow-100 text-yellow-800"
+            : "bg-yellow-100/75 group-hover:bg-yellow-100 text-yellow-800"
+          : ""
+      }
+      ${
+        categoryData.verb === "delete"
+          ? pathname === slug
+            ? "bg-red-100 text-red-800"
+            : "bg-red-100/75 group-hover:bg-red-100 text-red-800"
+          : ""
+      }
+      ${
+        categoryData.verb === "patch"
+          ? pathname === slug
+            ? "bg-purple-100 text-purple-800"
+            : "bg-purple-100/75 group-hover:bg-purple-100 text-purple-800"
+          : ""
+      }
+      ${
+        !["get", "post", "put", "delete", "patch"].includes(categoryData.verb)
+          ? pathname === slug
+            ? "bg-gray-100 text-gray-800"
+            : "bg-gray-100/75 group-hover:bg-gray-100 text-gray-800"
+          : ""
+      }
+    `}
+    >
+      {categoryData.verb === "delete" ? "DEL" : categoryData.verb.toUpperCase()}
+    </span>
+  );
 
   React.useEffect(() => {
     if (
@@ -99,6 +157,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
           >
             <NavTitle level={level} selected={selected && !childSelected}>
               <span className="flex items-center justify-between font-body w-full">
+                {categoryData.verb && httpMethod()}
                 <span
                   className="flex-1 min-w-0"
                   style={{ overflowWrap: "anywhere" }}
