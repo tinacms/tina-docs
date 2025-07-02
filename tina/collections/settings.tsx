@@ -101,6 +101,17 @@ export const Settings = {
       name: "selectedTheme",
       label: "Selected Theme",
       type: "string",
+      ui: {
+        component: "select",
+      },
+      options: [
+        { label: "Default", value: "default" },
+        { label: "Monochrome", value: "monochrome" },
+        { label: "Blossom", value: "blossom" },
+        { label: "Lake", value: "lake" },
+        { label: "Pine", value: "pine" },
+        { label: "Indigo", value: "indigo" },
+      ],
     },
     {
       name: "redirects",
