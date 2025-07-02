@@ -98,6 +98,11 @@ export const Settings = {
       ],
     },
     {
+      name: "selectedTheme",
+      label: "Selected Theme",
+      type: "string",
+    },
+    {
       name: "redirects",
       label: "Redirects",
       type: "object",
