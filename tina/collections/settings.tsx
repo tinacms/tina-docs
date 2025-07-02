@@ -14,7 +14,7 @@ export const Settings = {
       delete: false,
     },
     beforeSubmit: () => {
-      localStorage.removeItem(BROWSER_TAB_THEME_KEY);
+      sessionStorage.removeItem(BROWSER_TAB_THEME_KEY);
     },
   },
   fields: [
