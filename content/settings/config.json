@@ -16,7 +16,7 @@
     "github": "https://github.com/tinacms/tinacms",
     "forum": "https://tina.io/community"
   },
-  "selectedTheme": "monochrome",
+  "selectedTheme": "default",
   "redirects": [
     {
       "source": "/",
