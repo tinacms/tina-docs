@@ -10,6 +10,6 @@ export const schema = defineSchema({
     docsNavigationBarCollection as Collection,
     //TODO: Investigate why casting as unknown works
     API_Schema_Collection as unknown as Collection,
-    Settings as Collection,
+    Settings as unknown as Collection,
   ],
 });
