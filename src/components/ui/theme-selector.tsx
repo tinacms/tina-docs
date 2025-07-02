@@ -104,24 +104,7 @@ export const ThemeSelector = () => {
               <MdHelpOutline className="w-4 h-4" />
             </button>
 
-            {showTooltip && (
-              <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-neutral-surface border border-neutral-border rounded-lg shadow-lg text-xs text-neutral-text min-w-fit">
-                <div className="font-medium mb-2">Themes Preview</div>
-                <p className="mb-2">
-                  Theme changes are temporary and will reset when opening in a
-                  new browser window or tab.
-                </p>
-                <p className="mb-2">
-                  To make theme changes permanent, add to your{" "}
-                  <code className="bg-neutral-hover px-1 rounded">.env</code>{" "}
-                  file:
-                </p>
-                <code className="block bg-neutral-hover p-2 rounded text-xs font-mono">
-                  NEXT_PUBLIC_DEFAULT_THEME={selectedTheme}
-                </code>
-                <div className="absolute top-full right-2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-neutral-border" />
-              </div>
-            )}
+            {showTooltip && <Tooltip selectedTheme={selectedTheme} />}
           </div>
 
           <button
@@ -171,6 +154,27 @@ export const ThemeSelector = () => {
           </div>
         )}
       </div>
+    </div>
+  );
+};
+
+const Tooltip = ({ selectedTheme }: { selectedTheme: string }) => {
+  return (
+    <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-neutral-surface border border-neutral-border rounded-lg shadow-lg text-xs text-neutral-text min-w-fit">
+      <div className="font-medium mb-2">Theme Preview</div>
+      <p className="mb-2">
+        Theme changes are temporary and will reset when you open a new browser
+        window or tab.
+      </p>
+      <p className="mb-2">
+        To make theme changes permanent, update the{" "}
+        <code className="bg-neutral-hover px-1 rounded">Selected Theme</code>{" "}
+        field in your Settings through TinaCMS:
+      </p>
+      <code className="block bg-neutral-hover p-2 rounded text-xs font-mono">
+        selectedTheme={selectedTheme}
+      </code>
+      <div className="absolute top-full right-2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-neutral-border" />
     </div>
   );
 };
