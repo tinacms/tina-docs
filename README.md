@@ -103,14 +103,6 @@ NEXT_PUBLIC_TINA_BRANCH=<your content branch>
 NEXT_PUBLIC_ENABLE_THEME_SELECTION=<dispaly theme selector>
 ```
 
-**Theme Options for `selectedTheme`:**
-- `default` - TinaCMS-inspired theme (default)
-- `monochrome` - Clean black and white design
-- `blossom` - Elegant pink/rose color scheme
-- `lake` - Professional blue color palette
-- `pine` - Natural green tones
-- `indigo` - Modern purple/indigo design
-
 **Theme Preview Mode:**
 To enable a theme selector in the UI for previewing all themes, add:
 ```env
