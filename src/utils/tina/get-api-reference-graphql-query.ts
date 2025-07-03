@@ -1,4 +1,5 @@
 import type { EndpointData } from "@/src/app/api/process-api-docs/types";
+import { titleCase } from "title-case";
 
 export const getApiReferenceGraphQLQuery = (
   endpoint: EndpointData,
@@ -6,7 +7,7 @@ export const getApiReferenceGraphQLQuery = (
 ) => {
   const { method, path, summary, description } = endpoint;
 
-  const title = summary || `${method} ${path}`;
+  const title = titleCase(summary) || `${method} ${path}`;
   const heading2 = "Endpoint Details";
   const heading3 = "API Reference";
   const processedDescription = description

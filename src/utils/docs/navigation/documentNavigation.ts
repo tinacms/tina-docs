@@ -95,7 +95,6 @@ export interface FormattedNavigation {
     items: SupermenuGroup[];
   }[];
   sha: string;
-  fileRelativePath: string;
   preview: boolean;
 }
 
@@ -157,7 +156,6 @@ export const formatNavigationData = (
   return {
     data: tabsData,
     sha: "",
-    fileRelativePath: "content/navigation-bar/DocsNavigationBar.json",
     preview,
     ctaButtons,
     lightModeLogo,
