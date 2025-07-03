@@ -10,7 +10,7 @@ export const DocsNavigationItems: React.FC<
 
   return (
     <div
-      className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin lg:py-4 lg:pb-8"
+      className="overflow-x-hidden px-0 pb-6 -mr-[1px] scrollbar-thin lg:pb-8"
       ref={navListElem}
     >
       {navItems?.length > 0 &&

@@ -80,6 +80,9 @@ importers:
       tinacms:
         specifier: ^2.7.7
         version: 2.7.7(@types/react@19.0.12)(abstract-level@1.0.4)(immer@10.1.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(scheduler@0.26.0)(sucrase@3.35.0)(typescript@5.8.3)
+      title-case:
+        specifier: ^4.3.2
+        version: 4.3.2
       typescript:
         specifier: 5.8.3
         version: 5.8.3
@@ -99,9 +102,6 @@ importers:
       '@tinacms/cli':
         specifier: ^1.9.8
         version: 1.9.8(@codemirror/language@6.11.0)(@types/node@22.15.30)(@types/react@19.0.12)(abstract-level@1.0.4)(graphql-sock@1.0.1(graphql@15.8.0))(immer@10.1.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(rollup@4.37.0)(scheduler@0.26.0)(sucrase@3.35.0)(terser@5.42.0)
-      '@types/node':
-        specifier: ^22.15.30
-        version: 22.15.30
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.4)
@@ -7535,6 +7535,9 @@ packages:
 
   title-case@3.0.3:
     resolution: {integrity: sha512-e1zGYRvbffpcHIrnuqT0Dh+gEJtDaxDSoG4JAIpq4oDFyooziLBIiYQv0GBT4FUAnUop5uZ1hiIAj7oAF6sOCA==}
+
+  title-case@4.3.2:
+    resolution: {integrity: sha512-I/nkcBo73mO42Idfv08jhInV61IMb61OdIFxk+B4Gu1oBjWBPOLmhZdsli+oJCVaD+86pYQA93cJfFt224ZFAA==}
 
   to-fast-properties@2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
@@ -17005,6 +17008,8 @@ snapshots:
   title-case@3.0.3:
     dependencies:
       tslib: 2.8.1
+
+  title-case@4.3.2: {}
 
   to-fast-properties@2.0.0: {}
 

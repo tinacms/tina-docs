@@ -13,6 +13,9 @@ export const Settings = {
       create: false,
       delete: false,
     },
+    defaultItem: {
+      autoCapitalizeNavigation: true,
+    },
     beforeSubmit: async ({ values }: { values: Record<string, any> }) => {
       sessionStorage.setItem(BROWSER_TAB_THEME_KEY, values.selectedTheme);
     },
@@ -67,6 +70,13 @@ export const Settings = {
       name: "docsHomepage",
       label: "Docs Homepage",
       type: "string",
+    },
+    {
+      name: "autoApiTitles",
+      label:
+        "Auto-capitalize API titles in the navigation bar and generated pages",
+      type: "boolean",
+      defaultValue: true,
     },
     {
       name: "defaultOGImage",
