@@ -1,20 +1,19 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 
-const Accordion = ({
-  docText,
-  image,
-  heading,
-  fullWidth = false,
-}: {
+interface AccordionProps {
   docText: string;
   image: string;
   heading?: string;
   fullWidth?: boolean;
-}) => {
+}
+
+const Accordion = (props) => {
+  const { docText, image, heading, fullWidth = false }: AccordionProps = props;
   const [isExpanded, setIsExpanded] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +28,7 @@ const Accordion = ({
         className={`mb-5 max-w-full overflow-hidden rounded-lg bg-neutral-surface shadow-md transition-[width] duration-700 ease-in-out ${
           fullWidth ? "w-full" : "w-3/4"
         }`}
+        data-tina-field={tinaField(props, "heading")}
       >
         <div
           className="flex cursor-pointer items-center justify-between px-6 py-6"
@@ -53,6 +53,7 @@ const Accordion = ({
               : "max-h-0 overflow-hidden opacity-0"
           } ${image ? "sm:grid-cols-2" : ""}`}
           ref={contentRef}
+          data-tina-field={tinaField(props, "docText")}
         >
           <div className="p-4">
             <TinaMarkdown
@@ -61,7 +62,7 @@ const Accordion = ({
             />
           </div>
           {image && (
-            <div className="p-4">
+            <div className="p-4" data-tina-field={tinaField(props, "image")}>
               <Image
                 src={image}
                 alt="image"
@@ -79,10 +80,7 @@ const Accordion = ({
 
 export default Accordion;
 
-export const AccordionBlock = ({
-  accordionItems,
-  fullWidth = false,
-}: {
+interface AccordionBlockProps {
   fullWidth?: boolean;
   accordionItems: {
     docText: string;
@@ -90,7 +88,10 @@ export const AccordionBlock = ({
     heading?: string;
     fullWidth?: boolean;
   }[];
-}) => {
+}
+
+export const AccordionBlock = (props) => {
+  const { accordionItems, fullWidth = false }: AccordionBlockProps = props;
   const [isExpanded, setIsExpanded] = useState<boolean[]>(
     accordionItems?.map(() => false) || []
   );
@@ -139,6 +140,7 @@ export const AccordionBlock = ({
           <div
             className="flex cursor-pointer items-center justify-between px-6 py-6"
             onClick={() => toggleExpand(index)}
+            data-tina-field={tinaField(props.accordionItems[index], "heading")}
           >
             <h4 className="text-neutral-text text-base font-heading mt-0.5">
               {item.heading || "Click to expand"}
@@ -160,15 +162,28 @@ export const AccordionBlock = ({
             ref={(el: HTMLDivElement | null) => {
               contentRefs.current[index] = el;
             }}
+            data-tina-field={tinaField(props.accordionItems[index], "docText")}
           >
-            <div className="p-4">
+            <div
+              className="p-4"
+              data-tina-field={tinaField(
+                props.accordionItems[index],
+                "docText"
+              )}
+            >
               <TinaMarkdown
                 content={item.docText as any}
                 components={MarkdownComponentMapping}
               />
             </div>
             {item.image && (
-              <div className="p-4">
+              <div
+                className="p-4"
+                data-tina-field={tinaField(
+                  props.accordionItems[index],
+                  "image"
+                )}
+              >
                 <Image
                   src={item.image}
                   alt="image"
