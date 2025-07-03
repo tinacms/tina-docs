@@ -1,5 +1,6 @@
 import { client } from "@/tina/__generated__/client";
 import { createContext, useCallback, useEffect, useState } from "react";
+import { tinaField } from "tinacms/dist/react";
 import { EndpointSection } from "./endpoint-section";
 import type {
   ApiReferenceProps,
@@ -186,6 +187,7 @@ export const ApiReference = (data: ApiReferenceProps) => {
       } transform transition-all duration-700 ease-out ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
+      data-tina-field={tinaField(data, "schemaFile")}
     >
       <SchemaContext.Provider value={schemaDefinitions}>
         {selectedEndpoint ? (
