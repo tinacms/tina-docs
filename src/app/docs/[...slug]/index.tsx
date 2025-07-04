@@ -15,15 +15,6 @@ export default function Document({ props, tinaProps }) {
   const { pageTableOfContents } = props;
 
   const formattedDate = formatDate(documentationData?.last_edited);
-  const previousPage = {
-    slug: documentationData?.previous?.id.slice(7, -4),
-    title: documentationData?.previous?.title,
-  };
-
-  const nextPage = {
-    slug: documentationData?.next?.id.slice(7, -4),
-    title: documentationData?.next?.title,
-  };
 
   // Table of Contents Listener to Highlight Active Section
   const { activeIds, contentRef } = useTocListener(documentationData);
@@ -67,7 +58,6 @@ export default function Document({ props, tinaProps }) {
             Last Edited: {formattedDate}
           </span>
         )}
-        <Pagination prevPage={previousPage} nextPage={nextPage} />
       </div>
       {/* DESKTOP TABLE OF CONTENTS */}
       {documentationData?.tocIsHidden ? null : (

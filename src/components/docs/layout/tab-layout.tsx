@@ -2,6 +2,7 @@
 
 import * as Tabs from "@radix-ui/react-tabs";
 import React from "react";
+import { Pagination } from "../../ui/pagination";
 import { Body } from "./body";
 import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
@@ -52,6 +53,9 @@ export const TabsLayout = ({
         <Sidebar tabs={tabs} />
         <main className="flex-1">
           <Body navigationDocsData={tabs} children={children} />
+          <div className="max-w-6xl">
+            <Pagination docsData={navigationDocsData} />
+          </div>
         </main>
       </div>
     </Tabs.Root>

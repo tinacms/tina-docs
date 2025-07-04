@@ -46,7 +46,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
   const httpMethod = () => (
     <span
       className={`
-      inline-flex items-center justify-center px-0.5 py-[3px] rounded text-xs font-medium mr-1.5 mt-0 flex-shrink-0 w-12
+      inline-flex items-center justify-center px-0.5 py-1 my-2 rounded text-xs font-medium mr-1.5 flex-shrink-0 w-12
       ${
         categoryData.verb === "get"
           ? pathname === slug
@@ -198,30 +198,27 @@ export const NavLevel: React.FC<NavLevelProps> = ({
         )}
       </div>
       {categoryData.items && (
-        <>
-          <div className="mb-1.5" />
-          <AnimateHeight
-            duration={TRANSITION_DURATION}
-            height={expanded ? "auto" : 0}
-          >
-            <div className="relative block">
-              {(categoryData.items || []).map((item: any) => (
-                <div
-                  key={`child-container-${
-                    item.slug ? getUrl(item.slug) + level : item.title + level
-                  }`}
-                >
-                  <NavLevel
-                    navListElem={navListElem}
-                    level={level + 1}
-                    categoryData={item}
-                    onNavigate={onNavigate}
-                  />
-                </div>
-              ))}
-            </div>
-          </AnimateHeight>
-        </>
+        <AnimateHeight
+          duration={TRANSITION_DURATION}
+          height={expanded ? "auto" : 0}
+        >
+          <div className="relative block">
+            {(categoryData.items || []).map((item: any) => (
+              <div
+                key={`child-container-${
+                  item.slug ? getUrl(item.slug) + level : item.title + level
+                }`}
+              >
+                <NavLevel
+                  navListElem={navListElem}
+                  level={level + 1}
+                  categoryData={item}
+                  onNavigate={onNavigate}
+                />
+              </div>
+            ))}
+          </div>
+        </AnimateHeight>
       )}
     </>
   );

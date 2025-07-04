@@ -17,12 +17,12 @@ export const docsCollection = {
   path: "content/docs",
   format: "mdx",
   ui: {
-    beforeSubmit: async ({ values }) => {
-      return {
-        ...values,
-        last_edited: new Date().toISOString(),
-      };
-    },
+    // beforeSubmit: async ({ values }) => {
+    //   return {
+    //     ...values,
+    //     last_edited: new Date().toISOString(),
+    //   };
+    // },
     router: ({ document }) => {
       if (document._sys.filename === "index") {
         return "/";
