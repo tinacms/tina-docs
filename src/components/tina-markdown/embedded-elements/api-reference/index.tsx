@@ -183,7 +183,7 @@ export const ApiReference = (data: ApiReferenceProps) => {
   return (
     <div
       className={`api-reference ${
-        hasEndpoints ? "mb-40" : ""
+        hasEndpoints ? "mb-12" : ""
       } transform transition-all duration-700 ease-out ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}

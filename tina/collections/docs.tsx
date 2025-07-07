@@ -56,18 +56,6 @@ export const docsCollection = {
         "Hide the Table of Contents on this page and expand the content window.",
     },
     {
-      name: "next",
-      label: "Next page",
-      type: "reference",
-      collections: ["docs"],
-    },
-    {
-      name: "previous",
-      label: "Previous page",
-      type: "reference",
-      collections: ["docs"],
-    },
-    {
       type: "rich-text",
       name: "body",
       label: "Body",
