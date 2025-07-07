@@ -23,7 +23,7 @@ export default function Document({ props, tinaProps }) {
     // 73.5% of 100% is ~ 55% of the screenwidth in parent div
     // 26.5% of 100% is ~ 20% of the screenwidth in parent div
     <div className="flex flex-col xl:flex-row gap-4">
-      <div className={"max-w-4xl overflow-hidden break-words mx-8 xl:mx-auto"}>
+      <div className="max-w-4xl overflow-hidden break-words mx-8 xl:mx-auto">
         <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
           <h1
             className="text-brand-primary my-4 text-4xl"

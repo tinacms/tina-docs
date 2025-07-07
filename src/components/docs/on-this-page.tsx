@@ -85,6 +85,21 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
     }
   };
 
+  const handleBackToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.pushState(null, "", window.location.pathname);
+    setActiveId(null);
+    setIsUserScrolling(true);
+
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      setIsUserScrolling(false);
+    }, 1000);
+  };
+
   if (!pageItems || pageItems.length === 0) {
     return null;
   }
@@ -119,6 +134,18 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
             maskRepeat: "no-repeat",
           }}
         >
+          {/* Back to top link */}
+          <div className="flex gap-2 font-light group">
+            <div className="border-r border-1 border-transparent" />
+            <button
+              type="button"
+              onClick={handleBackToTop}
+              className="pl-2 py-1.5 group-hover:text-neutral-text text-neutral-text-secondary text-left"
+            >
+              ← Back to top
+            </button>
+          </div>
+
           {pageItems.map((item, index) => {
             const uniqueId = getIdSyntax(item.text, index);
             return (
