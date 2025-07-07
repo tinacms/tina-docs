@@ -5,6 +5,7 @@ import { MdLightbulb } from "react-icons/md";
 import { MdLock } from "react-icons/md";
 import { MdOutlineCheck } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
+import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown, type TinaMarkdownContent } from "tinacms/dist/rich-text";
 import { MarkdownComponentMapping } from "../markdown-component-mapping";
 
@@ -53,7 +54,8 @@ interface CalloutProps {
   text?: any;
 }
 
-const Callout = ({ body, variant = "warning", text }: CalloutProps) => {
+const Callout = (props) => {
+  const { body, variant = "warning", text }: CalloutProps = props;
   const Icon = icons[variant] || icons.info;
   const variantClass = variants[variant] || variants.info;
   const iconColorClass = iconColors[variant] || iconColors.info;
@@ -63,13 +65,17 @@ const Callout = ({ body, variant = "warning", text }: CalloutProps) => {
       className={`relative overflow-hidden rounded-lg bg-white dark:bg-[#1A202C] border-l-4 my-4 shadow-sm ${variantClass} `}
     >
       <div className="flex items-start gap-3 px-4">
-        <div className="relative top-7 left-1">
+        <div
+          className="relative top-7 left-1"
+          data-tina-field={tinaField(props, "variant")}
+        >
           <Icon className={`${iconColorClass}`} size={20} />
         </div>
         <div
           className={`leading-6 text-neutral-text font-light pt-4 pb-2 ${
             text ? "my-2.5" : ""
           }`}
+          data-tina-field={tinaField(props, "body")}
         >
           <TinaMarkdown
             content={
