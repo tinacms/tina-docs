@@ -93,7 +93,7 @@ module.exports = {
             "linear-gradient(to bottom right, var(--glass-gradient-hover-start), var(--glass-gradient-hover-end))",
         },
         ".grid-cols-docs-layout": {
-          "grid-template-columns": "73.5% 26.5%",
+          "grid-template-columns": "1fr 256px",
         },
       });
     },
