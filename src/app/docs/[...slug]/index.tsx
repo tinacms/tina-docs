@@ -3,6 +3,7 @@
 import { CopyPageDropdown } from "@/components/copy-page-dropdown";
 import { OnThisPage } from "@/components/docs/on-this-page";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
+import { Pagination } from "@/components/ui/pagination";
 import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -21,15 +22,11 @@ export default function Document({ props, tinaProps }) {
   return (
     // 73.5% of 100% is ~ 55% of the screenwidth in parent div
     // 26.5% of 100% is ~ 20% of the screenwidth in parent div
-    <div className="grid grid-cols-1 xl:grid-cols-docs-layout max-w-7xl mx-auto">
-      <div
-        className={`max-w-full overflow-hidden break-words mx-8 ${
-          !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
-        }`}
-      >
+    <div className="flex flex-col xl:flex-row gap-4">
+      <div className={"max-w-4xl overflow-hidden break-words mx-8 xl:mx-auto"}>
         <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
           <h1
-            className="text-brand-primary my-4 font-heading text-4xl"
+            className="text-brand-primary my-4 text-4xl"
             data-tina-field={tinaField(documentationData, "title")}
             data-pagefind-meta="title"
           >
@@ -57,13 +54,15 @@ export default function Document({ props, tinaProps }) {
             Last Edited: {formattedDate}
           </span>
         )}
+        <Pagination />
       </div>
       {/* DESKTOP TABLE OF CONTENTS */}
-      {documentationData?.tocIsHidden ? null : (
-        <div className={"sticky hidden xl:block  top-4 h-fit mx-4"}>
+
+      <div className={"sticky hidden xl:block  top-4 h-fit mx-4 w-72"}>
+        {documentationData?.tocIsHidden ? null : (
           <OnThisPage pageItems={pageTableOfContents} activeids={activeIds} />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

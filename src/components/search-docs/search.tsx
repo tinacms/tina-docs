@@ -113,7 +113,7 @@ export function Search({ className }: { className?: string }) {
       className="relative w-full md:max-w-lg lg:my-4 lg:mb-4"
       ref={searchContainerRef}
     >
-      <div className={`relative md:mr-4 ${className || ""}`}>
+      <div className={`relative md:mr-4 lg:left-16 ${className || ""}`}>
         <input
           type="text"
           value={searchTerm}

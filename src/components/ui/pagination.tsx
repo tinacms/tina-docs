@@ -1,12 +1,14 @@
 import { usePathname } from "next/navigation";
 import React from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { useNavigation } from "../docs/layout/navigation-context";
 import { DynamicLink } from "./dynamic-link";
 
-export function Pagination({ docsData }: { docsData: any }) {
+export function Pagination() {
   const [prevPage, setPrevPage] = React.useState<any>(null);
   const [nextPage, setNextPage] = React.useState<any>(null);
   const pathname = usePathname();
+  const docsData = useNavigation();
 
   React.useEffect(() => {
     if (!docsData?.data) return;
@@ -75,12 +77,12 @@ export function Pagination({ docsData }: { docsData: any }) {
   }, [docsData, pathname]);
 
   return (
-    <div className="grid xl:grid-cols-docs-layout">
+    <div className="max-w-5xl">
       <div className="flex justify-between mt-2 py-4  rounded-lg gap-4 overflow-hidden">
         {prevPage?.slug ? (
           //Slices to remove content/ and .mdx from the filepath
           <DynamicLink href={prevPage.slug.slice(7, -4)} passHref>
-            <div className="group relative block cursor-pointer p-4 text-left transition-all">
+            <div className="group relative block cursor-pointer py-4 text-left transition-all">
               <span className="pl-10 text-sm uppercase opacity-50 group-hover:opacity-100 text-neutral-text-secondary">
                 Previous
               </span>

@@ -4,6 +4,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import React from "react";
 import { Pagination } from "../../ui/pagination";
 import { Body } from "./body";
+import { NavigationProvider } from "./navigation-context";
 import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
 import { findTabWithPath } from "./utils";
@@ -49,15 +50,14 @@ export const TabsLayout = ({
       className="flex flex-col w-full"
     >
       <TopNav tabs={tabs} navigationDocsData={navigationDocsData} />
-      <div className="w-full flex flex-col md:flex-row gap-4 md:p-4 max-w-[2560px] mx-auto">
-        <Sidebar tabs={tabs} />
-        <main className="flex-1">
-          <Body navigationDocsData={tabs} children={children} />
-          <div className="max-w-7xl m-auto">
-            <Pagination docsData={navigationDocsData} />
-          </div>
-        </main>
-      </div>
+      <NavigationProvider navigationData={navigationDocsData}>
+        <div className="w-full flex flex-col md:flex-row gap-4 md:p-4 max-w-[2560px] mx-auto">
+          <Sidebar tabs={tabs} />
+          <main className="flex-1">
+            <Body navigationDocsData={tabs} children={children} />
+          </main>
+        </div>
+      </NavigationProvider>
     </Tabs.Root>
   );
 };
