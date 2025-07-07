@@ -2,7 +2,6 @@
 
 import * as Tabs from "@radix-ui/react-tabs";
 import React from "react";
-import { Pagination } from "../../ui/pagination";
 import { Body } from "./body";
 import { NavigationProvider } from "./navigation-context";
 import { Sidebar } from "./sidebar";

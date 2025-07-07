@@ -77,7 +77,7 @@ export function Pagination() {
   }, [docsData, pathname]);
 
   return (
-    <div className="flex justify-between mt-2 py-4  rounded-lg gap-4 overflow-hidden">
+    <div className="flex justify-between mt-2 py-4 rounded-lg gap-4 w-full">
       {prevPage?.slug ? (
         //Slices to remove content/ and .mdx from the filepath
         <DynamicLink href={prevPage.slug.slice(7, -4)} passHref>

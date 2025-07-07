@@ -20,10 +20,8 @@ export default function Document({ props, tinaProps }) {
   const { activeIds, contentRef } = useTocListener(documentationData);
 
   return (
-    // 73.5% of 100% is ~ 55% of the screenwidth in parent div
-    // 26.5% of 100% is ~ 20% of the screenwidth in parent div
-    <div className="flex flex-col xl:flex-row gap-4">
-      <div className="max-w-4xl overflow-hidden break-words mx-8 xl:mx-auto">
+    <div className="flex flex-col xl:flex-row gap-4 lg:max-w-[calc(100vw-420px)] items-center xl:items-start mx-8">
+      <div className="max-w-3xl overflow-hidden break-words xl:mx-auto w-full">
         <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
           <h1
             className="text-brand-primary my-4 text-4xl"
@@ -58,7 +56,7 @@ export default function Document({ props, tinaProps }) {
       </div>
       {/* DESKTOP TABLE OF CONTENTS */}
 
-      <div className={"sticky hidden xl:block  top-4 h-fit mx-4 w-72"}>
+      <div className={"sticky hidden xl:block  top-4 h-fit mx-4 min-w-64"}>
         {documentationData?.tocIsHidden ? null : (
           <OnThisPage pageItems={pageTableOfContents} activeids={activeIds} />
         )}
