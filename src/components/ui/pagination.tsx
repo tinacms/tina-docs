@@ -48,7 +48,10 @@ export function Pagination({ docsData }: { docsData: any }) {
     };
 
     // Get current slug from pathname
-    const slug = `content${pathname}.mdx`;
+    const slug =
+      pathname === "/docs"
+        ? "content/docs/index.mdx"
+        : `content${pathname}.mdx`;
 
     // Get all pages in sequence
     const allPages = getAllPages();
@@ -72,35 +75,48 @@ export function Pagination({ docsData }: { docsData: any }) {
   }, [docsData, pathname]);
 
   return (
-    <div className="flex justify-between mt-2 py-4  rounded-lg gap-4 overflow-hidden">
-      {prevPage?.slug ? (
-        <DynamicLink href={prevPage.slug.slice(7, -4)} passHref>
-          <div className="group relative block cursor-pointer p-4 text-left transition-all">
-            <span className="pl-10 text-sm uppercase opacity-50">Previous</span>
-            <h5 className="pl m-0 flex items-center text-base leading-[1.3] text-brand-secondary transition-all duration-150 ease-out group-hover:text-brand-primary md:text-xl">
-              <MdChevronLeft className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-brand-primary" />
-              {prevPage.title}
-            </h5>
-          </div>
-        </DynamicLink>
-      ) : (
-        <div />
-      )}
-      {nextPage?.slug ? (
-        <DynamicLink href={nextPage.slug.slice(7, -4)} passHref>
-          <div className="group relative col-start-2 block cursor-pointer p-4 text-right transition-all">
-            <span className="pr-6 text-sm uppercase opacity-50 md:pr-10">
-              Next
-            </span>
-            <h5 className="m-0 flex items-center justify-end text-base leading-[1.3] text-brand-secondary transition-all duration-150 ease-out group-hover:text-brand-primary md:text-xl">
-              {nextPage.title}
-              <MdChevronRight className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-brand-primary" />
-            </h5>
-          </div>
-        </DynamicLink>
-      ) : (
-        <div />
-      )}
+    <div className="grid xl:grid-cols-docs-layout">
+      <div className="flex justify-between mt-2 py-4  rounded-lg gap-4 overflow-hidden">
+        {prevPage?.slug ? (
+          //Slices to remove content/ and .mdx from the filepath
+          <DynamicLink href={prevPage.slug.slice(7, -4)} passHref>
+            <div className="group relative block cursor-pointer p-4 text-left transition-all">
+              <span className="pl-10 text-sm uppercase opacity-50 group-hover:opacity-100 text-neutral-text-secondary">
+                Previous
+              </span>
+              <h5 className="pl m-0 flex items-center font-light leading-[1.3] text-brand-secondary opacity-80 group-hover:opacity-100 transition-all duration-150 ease-out group-hover:text-brand-primary md:text-xl">
+                <MdChevronLeft className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-brand-primary" />
+                <span className="relative brand-secondary-gradient">
+                  {prevPage.title}
+                  <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-gradient-to-r from-brand-secondary-gradient-start to-brand-secondary-gradient-end group-hover:w-full transition-all duration-300 ease-in-out" />
+                </span>
+              </h5>
+            </div>
+          </DynamicLink>
+        ) : (
+          <div />
+        )}
+        {nextPage?.slug ? (
+          //Slices to remove content/ and .mdx from the filepath
+          <DynamicLink href={nextPage.slug.slice(7, -4)} passHref>
+            <div className="group relative col-start-2 block cursor-pointer p-4 text-right transition-all">
+              <span className="pr-6 text-sm uppercase opacity-50 md:pr-10 group-hover:opacity-100 text-neutral-text-secondary">
+                Next
+              </span>
+              <h5 className="m-0 flex items-center justify-end font-light leading-[1.3] text-brand-secondary opacity-80 group-hover:opacity-100 transition-all duration-150 ease-out group-hover:text-brand-primary md:text-xl">
+                <span className="relative brand-secondary-gradient">
+                  {nextPage.title}
+                  <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-gradient-to-r from-brand-secondary-gradient-start to-brand-secondary-gradient-end group-hover:w-full transition-all duration-300 ease-in-out" />
+                </span>
+                <MdChevronRight className="ml-2 size-7 fill-gray-400 transition-all duration-150 ease-out group-hover:fill-brand-primary" />
+              </h5>
+            </div>
+          </DynamicLink>
+        ) : (
+          <div />
+        )}
+      </div>
+      <div />
     </div>
   );
 }

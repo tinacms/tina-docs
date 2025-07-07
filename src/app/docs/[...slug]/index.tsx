@@ -3,7 +3,6 @@
 import { CopyPageDropdown } from "@/components/copy-page-dropdown";
 import { OnThisPage } from "@/components/docs/on-this-page";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
-import { Pagination } from "@/components/ui/pagination";
 import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -22,7 +21,7 @@ export default function Document({ props, tinaProps }) {
   return (
     // 73.5% of 100% is ~ 55% of the screenwidth in parent div
     // 26.5% of 100% is ~ 20% of the screenwidth in parent div
-    <div className="grid grid-cols-1 xl:grid-cols-[73.5%_26.5%]">
+    <div className="grid grid-cols-1 xl:grid-cols-docs-layout max-w-7xl mx-auto">
       <div
         className={`max-w-full overflow-hidden break-words mx-8 ${
           !documentationData?.tocIsHidden ? "xl:col-span-1" : ""
@@ -61,7 +60,7 @@ export default function Document({ props, tinaProps }) {
       </div>
       {/* DESKTOP TABLE OF CONTENTS */}
       {documentationData?.tocIsHidden ? null : (
-        <div className={"sticky hidden xl:block  top-4 h-screen mx-4"}>
+        <div className={"sticky hidden xl:block  top-4 h-fit mx-4"}>
           <OnThisPage pageItems={pageTableOfContents} activeids={activeIds} />
         </div>
       )}

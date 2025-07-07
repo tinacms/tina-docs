@@ -30,8 +30,7 @@ export function getIdSyntax(text: string, index?: number) {
   return index !== undefined ? `${baseId}-${index}` : baseId;
 }
 
-export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
   const tocWrapperRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
@@ -65,13 +64,14 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
 
   const handleLinkClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    id: string
+    id: string,
+    fragment: string
   ) => {
     e.preventDefault();
-    const element = document.getElementById(id);
+    const element = document.getElementById(fragment);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
-      window.history.pushState(null, "", `#${id}`);
+      window.history.pushState(null, "", `#${fragment}`);
       setActiveId(id);
       setIsUserScrolling(true);
 
@@ -95,11 +95,9 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
       data-exclude-from-md
     >
       <div
-        className={`block w-full leading-5 h-auto transition-all duration-400 ease-out ${
-          isOpen
-            ? "max-h-[1500px] transition-all duration-750 ease-in"
-            : "max-h-0 overflow-hidden"
-        } lg:max-h-none`}
+        className={
+          "block w-full leading-5 h-auto transition-all duration-400 ease-out max-h-0 overflow-hidden lg:max-h-none"
+        }
       >
         <span className="hidden lg:flex gap-2 text-base pb-1 bg-transparent leading-none text-brand-primary">
           On this page
@@ -134,7 +132,9 @@ export const OnThisPage = ({ pageItems, activeids }: OnThisPageProps) => {
                 />
                 <a
                   href={`#${uniqueId}`}
-                  onClick={(e) => handleLinkClick(e, uniqueId)}
+                  onClick={(e) =>
+                    handleLinkClick(e, uniqueId, getIdSyntax(item.text))
+                  }
                   className={`${item.type === "h3" ? "pl-6" : "pl-2"} py-1.5 ${
                     activeId === uniqueId
                       ? "text-brand-primary"

@@ -53,7 +53,7 @@ export const TabsLayout = ({
         <Sidebar tabs={tabs} />
         <main className="flex-1">
           <Body navigationDocsData={tabs} children={children} />
-          <div className="max-w-6xl">
+          <div className="w-7xl m-auto">
             <Pagination docsData={navigationDocsData} />
           </div>
         </main>
