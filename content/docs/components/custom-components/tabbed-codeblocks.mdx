@@ -1,6 +1,6 @@
 ---
 title: Tabbed Code Blocks
-last_edited: '2025-07-08T05:16:47.722Z'
+last_edited: '2025-07-08T05:18:01.948Z'
 ---
 
 Tabbed code blocks let you present multiple language variants or configurations side-by-side—ideal for showing equivalent code in JavaScript, TypeScript, Bash, or even specific queries and responses. This improves readability and UX for polyglot dev environments.
@@ -10,13 +10,13 @@ Such like:
 <queryResponseTabs
   query="// JavaScript
   fetch('/api/data')
-    .then(res => res.json())
-    .then(data => console.log(data))"
+  \t .then(res => res.json())
+  .then(data => console.log(data))"
   response="// TypeScript
   async function getData(): Promise<void> {
-    const res = await fetch('/api/data')
-    const data = await res.json()
-    console.log(data)
+  const res = await fetch('/api/data')
+  const data = await res.json()
+  console.log(data)
   }"
   customQueryName="JavaScript"
   customResponseName="TypeScript"
