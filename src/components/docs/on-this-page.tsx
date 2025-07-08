@@ -38,13 +38,19 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
 
   useEffect(() => {
     if (pageItems && pageItems.length > 0) {
-      const firstItemId = getIdSyntax(pageItems[0].text, 0);
-      setActiveId(firstItemId);
+      // Start with Overview active (null) when page loads
+      setActiveId(null);
     }
   }, [pageItems]);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (pageItems.length === 0 || isUserScrolling) return;
+
+    // If we're at the very top, show Overview as active
+    if (latest < 0.05) {
+      setActiveId(null);
+      return;
+    }
 
     const sectionIndex = Math.min(
       Math.floor(latest * pageItems.length),
@@ -114,9 +120,6 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
           "block w-full leading-5 h-auto transition-all duration-400 ease-out max-h-0 overflow-hidden lg:max-h-none"
         }
       >
-        <span className="hidden lg:flex gap-2 text-base pb-1 bg-transparent leading-none text-brand-primary">
-          On this page
-        </span>
         <div
           ref={tocWrapperRef}
           className="max-h-[70vh] py-2 2xl:max-h-[75vh]"
@@ -134,18 +137,26 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
             maskRepeat: "no-repeat",
           }}
         >
-          {/* Back to top link */}
-          <div className="flex gap-2 font-light group">
-            <div className="border-r border-1 border-transparent" />
+          <div className="hidden lg:flex gap-2 font-light group">
+            <div
+              className={`border-r border-1 ${
+                activeId === null
+                  ? "border-brand-primary"
+                  : "border-neutral-border-subtle group-hover:border-neutral-border"
+              }`}
+            />
             <button
               type="button"
               onClick={handleBackToTop}
-              className="pl-2 py-1.5 group-hover:text-neutral-text text-neutral-text-secondary text-left"
+              className={`pl-2 py-1.5 ${
+                activeId === null
+                  ? "text-brand-primary"
+                  : "group-hover:text-neutral-text text-neutral-text-secondary"
+              } text-left`}
             >
-              ← Back to top
+              Overview
             </button>
           </div>
-
           {pageItems.map((item, index) => {
             const uniqueId = getIdSyntax(item.text, index);
             return (

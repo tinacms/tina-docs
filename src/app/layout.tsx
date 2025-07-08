@@ -3,8 +3,12 @@ import AdminLink from "@/components/ui/admin-link";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 import { ThemeSelector } from "@/components/ui/theme-selector";
 import settings from "@/content/settings/config.json";
+import { getDocsNavigation } from "@/utils/docs";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
+
+import { TabsLayout } from "@/components/docs/layout/tab-layout";
+import type React from "react";
 
 const body = Inter({ subsets: ["latin"], variable: "--body-font" });
 const heading = Roboto_Flex({
@@ -40,19 +44,42 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           {isThemeSelectorEnabled && <ThemeSelector />}
-          <Content>{children}</Content>
+          <Content>
+            <DocsMenu>{children}</DocsMenu>
+          </Content>
         </ThemeProvider>
       </body>
     </html>
   );
 }
 
-const Content = ({ children = null }: { children: React.ReactNode }) => (
+const Content = ({ children }: { children?: React.ReactNode }) => (
   <>
     <AdminLink />
     <TailwindIndicator />
     <div className="font-sans flex min-h-screen flex-col bg-background-color">
-      <div className="flex flex-1 flex-col items-center w-full">{children}</div>
+      <div className="flex flex-1 flex-col items-center">{children}</div>
     </div>
   </>
 );
+
+const DocsMenu = async ({ children }: { children?: React.ReactNode }) => {
+  // Fetch navigation data that will be shared across all docs pages
+
+  const navigationDocsData = await getDocsNavigation();
+  const tabs = navigationDocsData.data.map((tab) => ({
+    label: tab.title,
+    content: tab,
+    __typename: tab.__typename,
+  }));
+
+  return (
+    <div className="relative flex flex-col w-full pb-2">
+      <TabsLayout
+        tabs={tabs}
+        children={children}
+        navigationDocsData={navigationDocsData}
+      />
+    </div>
+  );
+};
