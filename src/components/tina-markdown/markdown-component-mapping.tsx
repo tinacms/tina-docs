@@ -7,6 +7,7 @@ import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import Youtube from "./embedded-elements/youtube";
+import Blockquote from "./standard-elements/blockquote";
 import { CodeBlock } from "./standard-elements/code-block/code-block";
 import HeaderFormat from "./standard-elements/header-format";
 import { ImageComponent } from "./standard-elements/image";
@@ -132,12 +133,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   ),
   li: (props) => <li className="mb-2 ml-8 " {...props} />,
   p: (props) => <p className="my-2.5 text-neutral-text" {...props} />,
-  blockquote: (props) => (
-    <Callout
-      text={props.children.props.content}
-      variant={"info" as CalloutVariant}
-    />
-  ),
+  blockquote: (props) => <Blockquote {...props} />,
   a: (props) => (
     <a
       href={props?.url}
