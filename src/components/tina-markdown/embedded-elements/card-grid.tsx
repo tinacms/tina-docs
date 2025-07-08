@@ -40,7 +40,7 @@ export const CardGrid = (data: {
                     {card.linkText ?? "See more"}
                     <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-gradient-to-r from-brand-secondary-gradient-start to-brand-secondary-gradient-end group-hover:w-full transition-all duration-300 ease-in-out" />
                   </span>
-                  <span className="ml-1 brand-secondary-gradient"> ›</span>
+                  <span className="ml-1 mr-2 brand-secondary-gradient"> ›</span>
                 </p>
               )}
             </Link>

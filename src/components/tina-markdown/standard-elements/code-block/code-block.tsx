@@ -116,7 +116,6 @@ export function CodeBlock({
           {isCopied ? <FaCheck size={12} /> : <MdOutlineContentCopy />}
         </button>
       </div>
-
       <div
         className={`shiki w-full overflow-x-auto bg-background-brand-code py-5 px-2 text-sm ${
           showBorder ? "border border-neutral-border-subtle/50 shadow-sm" : ""

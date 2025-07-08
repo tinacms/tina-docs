@@ -86,11 +86,14 @@ module.exports = {
     },
   },
   plugins: [
-    function ({ addUtilities }) {
+    ({ addUtilities }) => {
       addUtilities({
         ".brand-glass-hover-gradient": {
           "background-image":
             "linear-gradient(to bottom right, var(--glass-gradient-hover-start), var(--glass-gradient-hover-end))",
+        },
+        ".grid-cols-docs-layout": {
+          "grid-template-columns": "1fr 256px",
         },
       });
     },

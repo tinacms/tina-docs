@@ -18,7 +18,7 @@ export const ImageComponent = (props) => {
 
   return (
     <span className="my-4 flex flex-col gap-2">
-      <span className="relative mx-auto w-full max-w-xl block">
+      <span className="relative w-full max-w-xl block">
         <span
           className="relative overflow-hidden rounded-xl block"
           style={{

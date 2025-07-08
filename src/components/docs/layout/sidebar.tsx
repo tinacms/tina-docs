@@ -26,7 +26,7 @@ export const Sidebar = ({
   }, []);
 
   return (
-    <div className="sticky hidden brand-glass-gradient lg:block mr-4 min-h-[calc(100vh-8rem)] h-fit w-84 p-4 ml-8 top-4 rounded-2xl dark:border dark:border-neutral-border-subtle/30 shadow-xl">
+    <div className="sticky hidden brand-glass-gradient lg:block mr-4 min-h-[calc(100vh-8rem)] h-fit w-80 p-4 ml-8 top-4 rounded-2xl dark:border dark:border-neutral-border-subtle/30 shadow-xl flex-shrink-0">
       <div className="relative w-full overflow-x-hidden">
         <div
           className="flex transition-transform duration-300 ease-in-out"

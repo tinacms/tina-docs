@@ -35,7 +35,7 @@
     "react-markdown": "^10.1.0",
     "rehype-pretty-code": "^0.14.1",
     "shiki": "^3.6.0",
-    "tinacms": "^2.7.9",
+    "tinacms": "2.7.10",
     "title-case": "^4.3.2",
     "typescript": "5.8.3"
   },
@@ -44,8 +44,7 @@
     "@shikijs/transformers": "^3.6.0",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.8",
-    "@tinacms/cli": "^1.9.9",
-    "@types/node": "^22.15.30",
+    "@tinacms/cli": "^1.9.10",
     "autoprefixer": "^10.4.21",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "next-sitemap": "^4.2.3",

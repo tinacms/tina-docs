@@ -32,7 +32,7 @@ export const ApiNavigationItems: React.FC<
 
   return (
     <div
-      className="overflow-x-hidden py-2 px-0 pb-6 -mr-[1px] scrollbar-thin 2xl:py-4 2xl:px-4 2xl:pb-8"
+      className="overflow-x-hidden px-0 pb-6 -mr-[1px] scrollbar-thin lg:pb-8"
       ref={navListElem}
     >
       {/* Render normal documents first */}

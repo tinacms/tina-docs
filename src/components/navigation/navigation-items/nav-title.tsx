@@ -11,22 +11,22 @@ export const NavTitle: React.FC<NavTitleProps> = ({
   ...props
 }: NavTitleProps) => {
   const baseStyles =
-    "group flex cursor-pointer items-center gap-1 py-0.5 leading-tight transition duration-150 ease-out hover:opacity-100 w-full";
+    "group flex cursor-pointer items-center py-0.5 leading-tight transition duration-150 ease-out hover:opacity-100 w-full";
 
   const headerLevelClasses = {
-    0: `${FONT_WEIGHTS.light} text-neutral-text ${FONT_SIZES.xl} pt-2 opacity-100`,
+    0: `${FONT_WEIGHTS.light} text-neutral-text ${FONT_SIZES.xl} pt-4 opacity-100`,
     1: {
-      default: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pl-3 pt-1 text-neutral-text-secondary hover:text-neutral-text `,
+      default: `${FONT_SIZES.base} ${FONT_WEIGHTS.light} pl-3 pt-1 text-neutral-text-secondary hover:text-neutral-text `,
       selected: `${FONT_SIZES.base} ${FONT_WEIGHTS.semibold} pl-3 pt-1 text-brand-primary `,
       childSelected: `${FONT_SIZES.base} ${FONT_WEIGHTS.normal} pl-3 pt-1  text-neutral-text`,
     },
     2: {
-      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pl-6 opacity-80 pt-0.5 text-neutral-text-secondary hover:text-neutral-text `,
+      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.light} pl-6 opacity-80 pt-0.5 text-neutral-text-secondary hover:text-neutral-text `,
       selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.semibold} pl-6 pt-0.5 text-brand-primary `,
       childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pl-6 pt-1  text-neutral-text`,
     },
     3: {
-      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pl-9 opacity-80 pt-0.5 text-neutral-text    rounded-lg`,
+      default: `${FONT_SIZES.small} ${FONT_WEIGHTS.light} pl-9 opacity-80 pt-0.5 text-neutral-text    rounded-lg`,
       selected: `${FONT_SIZES.small} ${FONT_WEIGHTS.semibold} pl-9 pt-0.5  text-brand-primary`,
       childSelected: `${FONT_SIZES.small} ${FONT_WEIGHTS.normal} pl-9 pt-1  text-neutral-text`,
     },

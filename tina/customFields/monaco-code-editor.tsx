@@ -107,12 +107,13 @@ const MonacoCodeEditor = wrapFieldsWithMeta(({ input }) => {
   };
 
   return (
-    <div className="relative mb-2 mt-0.5 rounded-lg shadow-md border-gray-200 border">
+    <div className="relative mb-2 mt-0.5 rounded-lg shadow-md border-gray-200 border overflow-hidden">
       <style>
         {/* Disable hints that might interfere with UI */}
         {`.monaco-editor .editor-widget {
           display: none !important;
           visibility: hidden !important;
+          padding: 0 1rem !important;
         }`}
       </style>
       <div style={{ height: `${editorHeight}px` }}>

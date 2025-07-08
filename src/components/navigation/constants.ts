@@ -21,7 +21,7 @@ export const FONT_SIZES = {
 };
 
 export const FONT_WEIGHTS = {
-  light: "font-tuner-light",
+  light: "font-light",
   normal: "font-sans",
   medium: "font-[500]",
   semibold: "font-semibold",
