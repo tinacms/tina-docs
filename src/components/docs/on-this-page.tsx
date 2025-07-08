@@ -10,6 +10,8 @@ interface OnThisPageProps {
   activeids: string[];
 }
 
+const PAGE_TOP_SCROLL_THRESHOLD = 0.05;
+
 export const generateMarkdown = (
   tocItems: Array<{ type: string; text: string }>
 ) => {
@@ -47,7 +49,7 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
     if (pageItems.length === 0 || isUserScrolling) return;
 
     // If we're at the very top, show Overview as active
-    if (latest < 0.05) {
+    if (latest < PAGE_TOP_SCROLL_THRESHOLD) {
       setActiveId(null);
       return;
     }

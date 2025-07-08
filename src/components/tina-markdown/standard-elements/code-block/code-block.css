@@ -69,3 +69,7 @@ pre.shiki {
   filter: grayscale(0.3);
   transition: opacity 0.2s, filter 0.2s;
 }
+
+.shiki span.line {
+  margin-right: 1rem;
+}
