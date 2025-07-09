@@ -106,7 +106,7 @@ export const RecipeBlock = (data: {
   };
 
   return (
-    <div className="recipe-block-container relative w-full text-white">
+    <div className="recipe-block-container relative w-full">
       <div className="title-description">
         {title && (
           <h2 className="text-2xl font-medium brand-primary-gradient mb-2 font-heading">
