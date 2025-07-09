@@ -123,8 +123,10 @@ export const RecipeBlock = (data: {
           style={{
             height:
               typeof window !== "undefined" && window.innerWidth >= 1024
-                ? `${LHSheight}px`
-                : `${smAndMbHeight}`,
+                ? LHSheight
+                  ? `${LHSheight}px`
+                  : undefined
+                : smAndMbHeight || undefined,
           }}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
