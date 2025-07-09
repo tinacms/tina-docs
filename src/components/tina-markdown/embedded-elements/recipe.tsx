@@ -2,7 +2,6 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { customHighlightCSS } from "./recipe.constants";
 import CodeBlockWithHighlightLines from "./recipe.helpers";
 
 export const RecipeBlock = (data: {
@@ -26,16 +25,6 @@ export const RecipeBlock = (data: {
   const codeblockRef = useRef<HTMLDivElement>(null);
   const instructionBlockRefs = useRef<HTMLDivElement>(null);
   const instructionRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = customHighlightCSS;
-    document.head.appendChild(style);
-
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
 
   useEffect(() => {
     setLHSheight(`${codeblockRef.current?.offsetHeight}`);
