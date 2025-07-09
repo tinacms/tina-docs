@@ -6,7 +6,7 @@ import "prismjs/plugins/line-highlight/prism-line-highlight";
 import "prismjs/plugins/line-highlight/prism-line-highlight.css";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { MdContentCopy } from "react-icons/md";
 
 const CodeToolbar = ({
   lang,
@@ -17,20 +17,20 @@ const CodeToolbar = ({
   onCopy: () => void;
   tooltipVisible: boolean;
 }) => (
-  <div className="code-toolbar flex items-center justify-between bg-gray-800 px-4 py-2 text-sm font-semibold text-white lg:rounded-t-xl">
-    <span className="font-tuner">{lang || "Unknown"}</span>
-    <div className="relative ml-4 flex items-center space-x-4 overflow-visible">
+  <div className="flex items-center justify-between w-full border-b border-neutral-border-subtle ">
+    <span className="justify-center relative leading-tight text-neutral-text py-[8px] text-base transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6 font-medium">
+      {lang || "Unknown"}
+    </span>
+    <div className="relative ml-4 flex items-center space-x-4 overflow-visible pr-2">
       <button
         type="button"
         onClick={onCopy}
-        className={`relative flex items-center space-x-1 rounded-md  bg-gray-800 px-2 py-1 text-sm transition-colors duration-200 ${
-          tooltipVisible
-            ? "ml-1 rounded-md bg-gray-700 text-white"
-            : "text-white hover:bg-gray-700"
+        className={`flex items-center text-sm font-medium text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer ${
+          tooltipVisible ? "ml-1 rounded-md bg-gray-700 text-white" : ""
         }`}
       >
-        {!tooltipVisible && <DocumentDuplicateIcon className="size-4" />}
-        <span>{!tooltipVisible ? "Copy" : "Copied!"}</span>
+        {!tooltipVisible && <MdContentCopy className="size-4" />}
+        <span>{!tooltipVisible ? "" : "Copied!"}</span>
       </button>
     </div>
   </div>
@@ -45,7 +45,7 @@ interface CodeBlockProps {
 
 const CodeBlockWithHighlightLines = ({
   value,
-  lang = "javascript",
+  lang = "Javascript",
   children,
   highlightLines,
 }: CodeBlockProps) => {
