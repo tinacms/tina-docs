@@ -30,6 +30,24 @@ export const RecipeBlock = (data: {
     setLHSheight(`${codeblockRef.current?.offsetHeight}`);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const isInsideInstructions = target.closest(".instructions");
+
+      if (!isInsideInstructions && clickedInstruction !== null) {
+        setClickedInstruction(null);
+        setHighlightLines("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [clickedInstruction]);
+
   const checkIfBottom = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
     setIsBottomOfInstructions(scrollHeight - scrollTop <= clientHeight + 10);
@@ -59,17 +77,6 @@ export const RecipeBlock = (data: {
         behavior: "smooth",
         block: "nearest",
       });
-    }
-  };
-
-  const handleContainerClick = (event: React.MouseEvent) => {
-    // Check if the click target is not an instruction item
-    const target = event.target as HTMLElement;
-    const isInstructionItem = target.closest(".instruction-item");
-
-    if (!isInstructionItem) {
-      setClickedInstruction(null);
-      setHighlightLines("");
     }
   };
 
@@ -106,10 +113,7 @@ export const RecipeBlock = (data: {
   };
 
   return (
-    <div
-      className="recipe-block-container relative w-full"
-      onClick={handleContainerClick}
-    >
+    <div className="recipe-block-container relative w-full">
       <div className="title-description">
         {title && (
           <h2 className="text-2xl font-medium brand-primary-gradient mb-2 font-heading">
@@ -127,10 +131,9 @@ export const RecipeBlock = (data: {
         <div
           className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-2xl rounded-br-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle border-r-0"
           ref={instructionBlockRefs}
-          onClick={handleContainerClick}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl" />
+            <div className="pointer-events-auto absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-xl" />
             <ChevronDownIcon
               onClick={handleDownArrowClick}
               className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${
