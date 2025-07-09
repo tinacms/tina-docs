@@ -3,7 +3,7 @@ import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
 import { ApiReference } from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
 import { CardGrid } from "./embedded-elements/card-grid";
-import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
+import { CodeTabs } from "./embedded-elements/code-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import TypeDefinition from "./embedded-elements/type-definition";
@@ -17,12 +17,13 @@ import Table from "./standard-elements/table";
 
 type ComponentMapping = {
   youtube: { embedSrc: string; caption?: string; minutes?: string };
-  queryResponseTabs: {
-    query: string;
-    response: string;
-    preselectResponse: boolean;
-    customQueryName?: string;
-    customResponseName?: string;
+  codeTabs: {
+    tabs: {
+      name: string;
+      content: string;
+      id?: string;
+    }[];
+    initialSelectedIndex?: number;
   };
   typeDefinition: {
     property: {
@@ -124,7 +125,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   accordion: (props) => <Accordion {...props} />,
   apiReference: (props) => <ApiReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
-  queryResponseTabs: (props) => <QueryResponseTabs {...props} />,
+  codeTabs: (props) => <CodeTabs {...props} />,
   Callout: (props: { body: TinaMarkdownContent; variant: string }) => (
     <Callout {...props} variant={props.variant as CalloutVariant} />
   ),

@@ -25,7 +25,7 @@ const Accordion = (props) => {
     <div className="flex flex-col justify-center items-center">
       {/* Header */}
       <div
-        className={`mb-5 max-w-full overflow-hidden rounded-lg bg-neutral-surface shadow-md transition-[width] duration-700 ease-in-out border border-neutral-border ${
+        className={`mb-5 max-w-full overflow-hidden rounded-lg bg-neutral-surface shadow-md transition-[width] duration-700 ease-in-out border border-neutral-border/50 ${
           fullWidth ? "w-full" : "w-3/4"
         }`}
         data-tina-field={tinaField(props, "heading")}
@@ -131,7 +131,7 @@ export const AccordionBlock = (props) => {
 
   return (
     <div
-      className={`mx-auto flex flex-col justify-center items-center rounded-lg bg-neutral-surface shadow-md mb-5 border border-neutral-border ${
+      className={`mx-auto flex flex-col justify-center items-center rounded-lg bg-neutral-surface shadow-md mb-5 border border-neutral-border/50 ${
         fullWidth ? "w-full" : "w-3/4"
       }`}
     >
@@ -195,7 +195,7 @@ export const AccordionBlock = (props) => {
             )}
           </div>
           {index < accordionLength - 1 && (
-            <hr className="w-full h-0.5 text-neutral-border" />
+            <hr className="w-full h-0.5 text-neutral-border/50" />
           )}
         </div>
       ))}

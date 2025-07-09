@@ -24,7 +24,7 @@ export const EndpointSection = (
   return (
     <div
       key={endpoint.path + endpoint.method}
-      className="mb-12 dark:bg-neutral-background-secondary dark:border dark:border-neutral-border-subtle/40 bg-glass-gradient-end p-4 rounded-lg shadow-sm"
+      className="mb-12 dark:bg-neutral-background-secondary border border-neutral-border/40 p-4 rounded-lg shadow-md"
     >
       <Header endpoint={endpoint} />
       <>

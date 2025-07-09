@@ -190,7 +190,7 @@
       "title": "API",
       "supermenuGroup": [
         {
-          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"POST:/user\",\"label\":\"POST /user - Create user\",\"method\":\"POST\",\"path\":\"/user\",\"summary\":\"Create user\",\"description\":\"This can only be done by the logged in user.\"}]}",
+          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"POST:/user\",\"label\":\"POST /user - Create user\",\"method\":\"POST\",\"path\":\"/user\",\"summary\":\"Create user\",\"description\":\"This can only be done by the logged in user.\"},{\"id\":\"GET:/user/logout\",\"label\":\"GET /user/logout - Logs out current logged in user session\",\"method\":\"GET\",\"path\":\"/user/logout\",\"summary\":\"Logs out current logged in user session\",\"description\":\"\"}]}",
           "_template": "groupOfApiReferences"
         },
         {

@@ -58,6 +58,10 @@ export const getApiReferenceGraphQLQuery = (
         },
         {
           type: "p",
+          children: [{ type: "text", text: " " }],
+        },
+        {
+          type: "p",
           children: [
             {
               type: "text",

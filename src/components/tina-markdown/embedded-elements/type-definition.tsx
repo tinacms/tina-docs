@@ -41,7 +41,7 @@ export default function TypeDefinition(props) {
     };
 
     return (
-      <div className="bg-neutral-background-secondary rounded-lg shadow-lg my-6 pb-4 pt-2 border-neutral-border border">
+      <div className="bg-neutral-background rounded-lg shadow-lg my-6 py-2 border-neutral-border border">
         {props.property?.map((property, index) => (
           <div key={`property-${index}`}>
             {index !== 0 && (
@@ -52,7 +52,7 @@ export default function TypeDefinition(props) {
         ))}
 
         {props.property?.some((property) => property.required) && (
-          <div className=" mx-6 mt-2 p-4 bg-neutral-background border-neutral-border border rounded-md flex items-start gap-3">
+          <div className=" mx-6 my-2 p-4 bg-neutral-background-secondary border-neutral-border border rounded-md flex items-start gap-3">
             <p className="text-sm text-neutral-text">
               All properties marked as{" "}
               <span className="text-amber-600 font-medium">REQUIRED</span> must

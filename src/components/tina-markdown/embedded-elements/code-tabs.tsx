@@ -5,43 +5,60 @@ import { MdContentCopy } from "react-icons/md";
 import { CodeBlock } from "../standard-elements/code-block/code-block";
 import { CodeBlockSkeleton } from "../standard-elements/code-block/code-block-skeleton";
 
-export const QueryResponseTabs = ({ ...props }) => {
-  const [isQuery, setIsQuery] = useState(!props.preselectResponse);
+interface Tab {
+  name: string;
+  content: string;
+  id?: string;
+}
+
+interface CodeTabsProps {
+  tabs: Tab[];
+  initialSelectedIndex?: number;
+}
+
+export const CodeTabs = ({ tabs, initialSelectedIndex = 0 }: CodeTabsProps) => {
+  const [selectedTabIndex, setSelectedTabIndex] = useState(
+    initialSelectedIndex > tabs.length ? 0 : initialSelectedIndex
+  );
   const [height, setHeight] = useState(0);
   const [hasCopied, setHasCopied] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
-  const queryRef = useRef<HTMLDivElement>(null);
-  const responseRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Initialize tab refs array
+  useEffect(() => {
+    tabRefs.current = tabRefs.current.slice(0, tabs.length);
+  }, [tabs.length]);
 
   useEffect(() => {
     const updateHeight = () => {
-      const activeRef = isQuery ? queryRef : responseRef;
-      if (activeRef.current) {
-        setHeight(activeRef.current.scrollHeight);
+      const activeRef = tabRefs.current[selectedTabIndex];
+      if (activeRef) {
+        setHeight(activeRef.scrollHeight);
       }
     };
     updateHeight();
     const resizeObserver = new ResizeObserver(updateHeight);
-    const activeRef = isQuery ? queryRef : responseRef;
-    if (activeRef.current) {
-      resizeObserver.observe(activeRef.current);
+    const activeRef = tabRefs.current[selectedTabIndex];
+    if (activeRef) {
+      resizeObserver.observe(activeRef);
     }
     return () => {
       resizeObserver.disconnect();
     };
-  }, [isQuery]);
+  }, [selectedTabIndex]);
 
   // Handle tab switching with transition
-  const handleTabSwitch = (newIsQuery: boolean) => {
-    if (newIsQuery !== isQuery) {
-      setIsQuery(newIsQuery);
+  const handleTabSwitch = (newTabIndex: number) => {
+    if (newTabIndex !== selectedTabIndex) {
+      setSelectedTabIndex(newTabIndex);
     }
   };
 
   // Handle the copy action
   const handleCopy = () => {
-    const textToCopy = isQuery ? props.query : props.response;
+    const textToCopy = tabs[selectedTabIndex]?.content;
     navigator.clipboard.writeText(textToCopy || "");
     setHasCopied(true);
     setTimeout(() => setHasCopied(false), 2000);
@@ -54,8 +71,13 @@ export const QueryResponseTabs = ({ ...props }) => {
   const underlineStyling =
     "transition-[width] absolute h-0.5 -bottom-0.25 bg-brand-primary rounded-lg";
 
+  // Early return if no tabs provided
+  if (!tabs || tabs.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="mb-1">
+    <div className="mb-4">
       <style>{`
         .query-response-pre pre,
         .query-response-pre code {
@@ -67,32 +89,25 @@ export const QueryResponseTabs = ({ ...props }) => {
         {/* TOP SECTION w/ Buttons */}
         <div className="flex items-center w-full border-b border-neutral-border-subtle ">
           <div className="flex flex-1 ">
-            <button
-              type="button"
-              onClick={() => handleTabSwitch(true)}
-              className={`${buttonStyling}${
-                isQuery ? "" : activeButtonStyling
-              }${isTransitioning ? " cursor-not-allowed" : " cursor-pointer"}`}
-              disabled={isQuery || isTransitioning}
-            >
-              {props.customQueryName || "Query"}
-              <div
-                className={underlineStyling + (isQuery ? " w-full" : " w-0")}
-              />
-            </button>
-            <button
-              type="button"
-              onClick={() => handleTabSwitch(false)}
-              className={`${buttonStyling}${
-                isQuery ? activeButtonStyling : ""
-              }${isTransitioning ? " cursor-not-allowed" : " cursor-pointer"}`}
-              disabled={!isQuery || isTransitioning}
-            >
-              {props.customResponseName || "Response"}
-              <div
-                className={underlineStyling + (isQuery ? " w-0" : " w-full")}
-              />
-            </button>
+            {tabs.map((tab, index) => (
+              <button
+                key={tab.id || index}
+                type="button"
+                onClick={() => handleTabSwitch(index)}
+                className={`${buttonStyling}${
+                  selectedTabIndex === index ? "" : activeButtonStyling
+                }${isTransitioning ? " cursor-not-allowed" : " cursor-pointer"}`}
+                disabled={selectedTabIndex === index || isTransitioning}
+              >
+                {tab.name}
+                <div
+                  className={
+                    underlineStyling +
+                    (selectedTabIndex === index ? " w-full" : " w-0")
+                  }
+                />
+              </button>
+            ))}
           </div>
 
           {/* Copy Button */}
@@ -106,7 +121,7 @@ export const QueryResponseTabs = ({ ...props }) => {
                   ? "opacity-50 cursor-not-allowed"
                   : "cursor-pointer"
               }`}
-              title={`Copy ${isQuery ? "query" : "response"} code`}
+              title={`Copy ${tabs[selectedTabIndex]?.name.toLowerCase()} code`}
             >
               {hasCopied ? (
                 <>
@@ -122,7 +137,7 @@ export const QueryResponseTabs = ({ ...props }) => {
           </div>
         </div>
 
-        {/* BOTTOM SECTION w/ Query/Response */}
+        {/* BOTTOM SECTION w/ Tab Content */}
         {isTransitioning && <CodeBlockSkeleton hasTabs={true} />}
         <div
           className="overflow-hidden rounded-b-xl"
@@ -139,27 +154,26 @@ export const QueryResponseTabs = ({ ...props }) => {
               whiteSpace: "pre",
             }}
           >
-            {isQuery ? (
-              <div ref={queryRef} className="relative -mt-2">
+            {tabs.map((tab, index) => (
+              <div
+                key={tab.id || index}
+                ref={(el) => {
+                  tabRefs.current[index] = el;
+                }}
+                className="relative -mt-2"
+                style={{
+                  display: selectedTabIndex === index ? "block" : "none",
+                }}
+              >
                 <CodeBlock
-                  value={props.query?.replaceAll("�", " ")}
+                  value={tab.content?.replaceAll("�", " ")}
                   lang="javascript"
                   showCopyButton={false}
                   showBorder={false}
                   setIsTransitioning={setIsTransitioning}
                 />
               </div>
-            ) : (
-              <div ref={responseRef} className="-mt-2 relative">
-                <CodeBlock
-                  value={props.response?.replaceAll("�", " ")}
-                  lang="javascript"
-                  showCopyButton={false}
-                  showBorder={false}
-                  setIsTransitioning={setIsTransitioning}
-                />
-              </div>
-            )}
+            ))}
           </div>
         </div>
       </div>
