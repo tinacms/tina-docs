@@ -132,6 +132,11 @@
                   "title": "Tabbed Code Blocks",
                   "slug": "content/docs/components/custom-components/tabbed-codeblocks.mdx",
                   "_template": "item"
+                },
+                {
+                  "title": "Type Defintion",
+                  "slug": "content/docs/components/custom-components/Type-Definition.mdx",
+                  "_template": "item"
                 }
               ],
               "_template": "items"
