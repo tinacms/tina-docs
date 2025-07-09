@@ -133,7 +133,7 @@ export const RecipeBlock = (data: {
           ref={instructionBlockRefs}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
-            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-xl" />
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-2xl" />
             <ChevronDownIcon
               onClick={handleDownArrowClick}
               className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${
@@ -184,7 +184,7 @@ export const RecipeBlock = (data: {
 
         <div
           ref={codeblockRef}
-          className="flex flex-col top-3 z-10 w-full rounded-b-xl lg:rounded-r-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0"
+          className="flex flex-col top-3 z-10 w-full rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0"
         >
           {code ? (
             <CodeBlockWithHighlightLines
