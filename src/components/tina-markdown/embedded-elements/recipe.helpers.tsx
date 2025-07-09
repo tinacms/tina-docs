@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { MdContentCopy } from "react-icons/md";
 import { createHighlighter } from "shiki";
 import "../standard-elements/code-block/code-block.css";
-import { CodeBlockSkeleton } from "../standard-elements/code-block/code-block-skeleton";
 
 const CodeTab = ({
   lang,

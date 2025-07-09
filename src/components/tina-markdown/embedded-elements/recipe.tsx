@@ -109,9 +109,9 @@ export const RecipeBlock = (data: {
         )}
       </div>
 
-      <div className="content-wrapper flex flex-col lg:flex-row">
+      <div className="content-wrapper flex flex-col lg:flex-row rounded-2xl">
         <div
-          className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-xl rounded-br-xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-xl border border-neutral-border-subtle border-r-0"
+          className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-2xl rounded-br-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle border-r-0"
           ref={instructionBlockRefs}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
@@ -125,7 +125,7 @@ export const RecipeBlock = (data: {
           </div>
 
           <div
-            className="overflow-auto rounded-t-xl rounded-bl-xl lg:rounded-tr-none"
+            className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl lg:rounded-tr-none"
             onScroll={checkIfBottom}
           >
             {instruction?.map((inst, idx) => (
@@ -165,7 +165,7 @@ export const RecipeBlock = (data: {
 
         <div
           ref={codeblockRef}
-          className="flex flex-col top-3 z-10 w-full rounded-b-xl lg:rounded-r-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle border-l-0"
+          className="flex flex-col top-3 z-10 w-full rounded-b-xl lg:rounded-r-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0"
         >
           {code ? (
             <CodeBlockWithHighlightLines
