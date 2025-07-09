@@ -62,6 +62,17 @@ export const RecipeBlock = (data: {
     }
   };
 
+  const handleContainerClick = (event: React.MouseEvent) => {
+    // Check if the click target is not an instruction item
+    const target = event.target as HTMLElement;
+    const isInstructionItem = target.closest(".instruction-item");
+
+    if (!isInstructionItem) {
+      setClickedInstruction(null);
+      setHighlightLines("");
+    }
+  };
+
   const handleDownArrowClick = () => {
     const lastInstruction =
       instructionRefs.current[instructionRefs.current.length - 1];
@@ -95,7 +106,10 @@ export const RecipeBlock = (data: {
   };
 
   return (
-    <div className="recipe-block-container relative w-full">
+    <div
+      className="recipe-block-container relative w-full"
+      onClick={handleContainerClick}
+    >
       <div className="title-description">
         {title && (
           <h2 className="text-2xl font-medium brand-primary-gradient mb-2 font-heading">
@@ -113,6 +127,7 @@ export const RecipeBlock = (data: {
         <div
           className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-2xl rounded-br-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle border-r-0"
           ref={instructionBlockRefs}
+          onClick={handleContainerClick}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl" />
@@ -125,7 +140,7 @@ export const RecipeBlock = (data: {
           </div>
 
           <div
-            className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl lg:rounded-tr-none"
+            className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl rounded-bl-none lg:rounded-tr-none"
             onScroll={checkIfBottom}
           >
             {instruction?.map((inst, idx) => (
@@ -134,15 +149,16 @@ export const RecipeBlock = (data: {
                 ref={(element) => {
                   instructionRefs.current[idx] = element;
                 }}
-                className={`instruction-item cursor-pointer border-y  bg-gray-800 p-4 text-white first:border-t-0 last:border-b-0 border border-neutral-border-subtle
+                className={`instruction-item cursor-pointer border-y  bg-gray-800 p-4 text-white first:border-t-0 last:border-bl-2xl border border-neutral-border-subtle last:rounded-bl-none
                 ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
-                onClick={() =>
+                onClick={(e) => {
+                  e.stopPropagation();
                   handleInstructionClick(
                     idx,
                     inst.codeLineStart,
                     inst.codeLineEnd
-                  )
-                }
+                  );
+                }}
               >
                 <h5 className="font-tuner">{`${idx + 1}. ${
                   inst.header || "Default Header"
