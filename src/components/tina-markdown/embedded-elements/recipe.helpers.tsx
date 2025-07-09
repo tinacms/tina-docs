@@ -26,7 +26,7 @@ const CodeToolbar = ({
         type="button"
         onClick={onCopy}
         className={`flex items-center text-sm font-medium text-neutral-text-secondary transition-colors duration-200 px-2 py-1 rounded hover:bg-white/10 cursor-pointer ${
-          tooltipVisible ? "ml-1 rounded-md bg-gray-700 text-white" : ""
+          tooltipVisible ? "ml-1 rounded-md" : ""
         }`}
       >
         {!tooltipVisible && <MdContentCopy className="size-4" />}
