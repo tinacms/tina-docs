@@ -111,7 +111,7 @@ export const RecipeBlock = (data: {
 
       <div className="content-wrapper flex flex-col lg:flex-row">
         <div
-          className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-xl rounded-br-xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-xl"
+          className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-xl rounded-br-xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-xl border border-neutral-border-subtle border-r-0"
           ref={instructionBlockRefs}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
@@ -134,7 +134,7 @@ export const RecipeBlock = (data: {
                 ref={(element) => {
                   instructionRefs.current[idx] = element;
                 }}
-                className={`instruction-item cursor-pointer border-y border-gray-700 bg-gray-800 p-4 text-white 
+                className={`instruction-item cursor-pointer border-y  bg-gray-800 p-4 text-white first:border-t-0 last:border-b-0 border border-neutral-border-subtle
                 ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
                 onClick={() =>
                   handleInstructionClick(
@@ -165,7 +165,7 @@ export const RecipeBlock = (data: {
 
         <div
           ref={codeblockRef}
-          className="flex flex-col top-3 z-10 w-full rounded-r-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle"
+          className="flex flex-col top-3 z-10 w-full rounded-r-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle border-l-0"
         >
           {code ? (
             <CodeBlockWithHighlightLines
