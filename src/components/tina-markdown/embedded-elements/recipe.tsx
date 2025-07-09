@@ -107,16 +107,16 @@ export const RecipeBlock = (data: {
 
   return (
     <div className="recipe-block-container relative w-full text-white">
-      <div className="title-description px-10">
-        <h2 className="font-tuner text-2xl text-orange-500">
+      <div className="title-description">
+        <h2 className="text-2xl font-medium brand-primary-gradient mb-2 font-heading">
           {title || "Default Title"}
         </h2>
-        <p className="py-2 text-base font-light">
+        <p className="text-neutral-text font-light mb-5 font-body">
           {description || "Default Description"}
         </p>
       </div>
 
-      <div className="content-wrapper flex flex-col items-stretch px-10 lg:flex-row">
+      <div className="content-wrapper flex flex-col items-stretch lg:flex-row">
         <div
           className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-xl rounded-br-xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-xl"
           ref={instructionBlockRefs}
@@ -172,7 +172,7 @@ export const RecipeBlock = (data: {
                   </span>
                 </div>
               </div>
-            )) || <p>No instructions available.</p>}
+            )) || <p className="p-4">No instructions available.</p>}
           </div>
         </div>
 
@@ -199,7 +199,7 @@ export const RecipeBlock = (data: {
               }}
             />
           ) : (
-            <p>No code block available.</p>
+            <p className="p-4">No code block available.</p>
           )}
         </div>
       </div>
