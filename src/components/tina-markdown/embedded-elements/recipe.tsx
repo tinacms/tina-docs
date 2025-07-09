@@ -184,7 +184,7 @@ export const RecipeBlock = (data: {
 
         <div
           ref={codeblockRef}
-          className="flex flex-col top-3 z-10 w-full rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0"
+          className="flex flex-col top-3 z-10 w-full rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0 lg:rounded-bl-none"
         >
           {code ? (
             <CodeBlockWithHighlightLines
