@@ -11,23 +11,21 @@ export default function GlobalError({
   reset: () => void;
 }) {
   return (
-    <RootLayout>
-      <ErrorWrapper
-        errorConfig={{
-          title: "Sorry, Friend!",
-          description: "Something went wrong!",
-          links: [
-            {
-              linkText: "Return to docs",
-              linkUrl: "/docs",
-            },
-            {
-              linkText: "Try again",
-              linkUrl: "",
-            },
-          ],
-        }}
-      />
-    </RootLayout>
+    <ErrorWrapper
+      errorConfig={{
+        title: "Sorry, Friend!",
+        description: "Something went wrong!",
+        links: [
+          {
+            linkText: "Return to docs",
+            linkUrl: "/docs",
+          },
+          {
+            linkText: "Try again",
+            linkUrl: "",
+          },
+        ],
+      }}
+    />
   );
 }

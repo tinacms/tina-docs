@@ -6,6 +6,7 @@ import { CardGrid } from "./embedded-elements/card-grid";
 import { QueryResponseTabs } from "./embedded-elements/query-response-tabs";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
+import TypeDefinition from "./embedded-elements/type-definition";
 import Youtube from "./embedded-elements/youtube";
 import Blockquote from "./standard-elements/blockquote";
 import { CodeBlock } from "./standard-elements/code-block/code-block";
@@ -22,6 +23,15 @@ type ComponentMapping = {
     preselectResponse: boolean;
     customQueryName?: string;
     customResponseName?: string;
+  };
+  typeDefinition: {
+    property: {
+      name: string;
+      description: string;
+      type: string;
+      typeUrl: string;
+      required: boolean;
+    }[];
   };
   blockquote: {
     children: {
@@ -147,11 +157,16 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
       {...props}
     />
   ),
-  mermaid: (props) => <MermaidElement {...props} />,
   img: (props) => <ImageComponent {...props} />,
   table: (props) => <Table {...props} />,
-  code_block: (props) => <CodeBlock {...props} />,
+  code_block: (props) =>
+    props?.lang === "mermaid" ? (
+      <MermaidElement {...props} />
+    ) : (
+      <CodeBlock {...props} />
+    ),
   accordionBlock: (props) => <AccordionBlock {...props} />,
+  typeDefinition: (props) => <TypeDefinition {...props} />,
 };
 
 export default MarkdownComponentMapping;
