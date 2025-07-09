@@ -160,7 +160,7 @@ const CodeBlockWithHighlightLines = ({
   }`;
 
   return (
-    <div className="codeblock-container">
+    <div className="codeblock-container h-full flex flex-col">
       <div className="sticky top-0 z-30">
         <CodeTab
           lang={lang}
@@ -169,7 +169,7 @@ const CodeBlockWithHighlightLines = ({
         />
       </div>
       <div
-        className={`${shikiClassName} w-full overflow-x-auto bg-background-brand-code py-5 px-2 text-sm border border-neutral-border-subtle/50 shadow-sm rounded-b-lg`}
+        className={`${shikiClassName} w-full flex-1 overflow-x-auto bg-background-brand-code py-5 px-2 text-sm border border-neutral-border-subtle/50 shadow-sm rounded-b-lg`}
         style={{
           overflowX: "hidden",
           maxWidth: "100%",
