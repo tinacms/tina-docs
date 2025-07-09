@@ -16,6 +16,8 @@ export const QueryResponseTabsTemplate = {
       label: "Query",
       ui: {
         component: MonacoCodeEditor,
+        format: (val?: string) => val?.replaceAll("�", " "),
+        parse: (val?: string) => val?.replaceAll(" ", "�"),
       },
     },
     {
@@ -24,6 +26,8 @@ export const QueryResponseTabsTemplate = {
       label: "Response",
       ui: {
         component: MonacoCodeEditor,
+        format: (val?: string) => val?.replaceAll("�", " "),
+        parse: (val?: string) => val?.replaceAll(" ", "�"),
       },
     },
     {
