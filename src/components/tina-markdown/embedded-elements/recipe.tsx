@@ -109,18 +109,10 @@ export const RecipeBlock = (data: {
         )}
       </div>
 
-      <div className="content-wrapper flex flex-col items-stretch lg:flex-row">
+      <div className="content-wrapper flex flex-col lg:flex-row">
         <div
           className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-xl rounded-br-xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-xl"
           ref={instructionBlockRefs}
-          style={{
-            height:
-              typeof window !== "undefined" && window.innerWidth >= 1024
-                ? LHSheight
-                  ? `${LHSheight}px`
-                  : undefined
-                : smAndMbHeight || undefined,
-          }}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl" />

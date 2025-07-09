@@ -1,14 +1,16 @@
-import Prism from "prismjs";
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
-
-import "prismjs/plugins/line-highlight/prism-line-highlight";
-import "prismjs/plugins/line-highlight/prism-line-highlight.css";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
-import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+import {
+  transformerNotationDiff,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+} from "@shikijs/transformers";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { MdContentCopy } from "react-icons/md";
+import { createHighlighter } from "shiki";
+import "../standard-elements/code-block/code-block.css";
+import { CodeBlockSkeleton } from "../standard-elements/code-block/code-block-skeleton";
 
-const CodeToolbar = ({
+const CodeTab = ({
   lang,
   onCopy,
   tooltipVisible,
@@ -17,7 +19,7 @@ const CodeToolbar = ({
   onCopy: () => void;
   tooltipVisible: boolean;
 }) => (
-  <div className="flex items-center justify-between w-full border-b border-neutral-border-subtle ">
+  <div className="flex items-center justify-between w-full border-b border-neutral-border-subtle h-full">
     <span className="justify-center relative leading-tight text-neutral-text py-[8px] text-base transition duration-150 ease-out rounded-t-3xl flex items-center gap-1 whitespace-nowrap px-6 font-medium">
       {lang || "Unknown"}
     </span>
@@ -45,23 +47,106 @@ interface CodeBlockProps {
 
 const CodeBlockWithHighlightLines = ({
   value,
-  lang = "Javascript",
+  lang = "javascript",
   children,
   highlightLines,
 }: CodeBlockProps) => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
-  const preRef = useRef<HTMLPreElement>(null);
+  const [html, setHtml] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === "dark";
+
+  const codeToHighlight = typeof children === "string" ? children : value || "";
 
   useEffect(() => {
-    if (preRef.current) {
-      preRef.current.setAttribute("data-line", highlightLines);
-      Prism.highlightAllUnder(preRef.current);
-    }
-  }, [highlightLines]);
+    let isMounted = true;
+
+    const load = async () => {
+      setIsLoading(true);
+
+      if (!codeToHighlight || typeof codeToHighlight !== "string") {
+        if (isMounted) {
+          setHtml("");
+          setIsLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const highlighter = await createHighlighter({
+          themes: ["night-owl", "github-light"],
+          langs: [lang],
+        });
+
+        if (highlighter) {
+          // Add focus notation to the code based on highlightLines
+          let codeWithFocus = codeToHighlight;
+          if (highlightLines) {
+            const lines = codeToHighlight.split("\n");
+            const highlightRanges = highlightLines
+              .split(",")
+              .map((range) => range.trim())
+              .filter((range) => range);
+
+            for (const range of highlightRanges) {
+              if (range.includes("-")) {
+                const [start, end] = range.split("-").map(Number);
+                for (let i = start - 1; i < end && i < lines.length; i++) {
+                  if (lines[i] && !lines[i].includes("// [!code focus]")) {
+                    lines[i] = `${lines[i]} // [!code focus]`;
+                  }
+                }
+              } else {
+                const lineNum = Number.parseInt(range, 10) - 1;
+                if (
+                  lineNum >= 0 &&
+                  lineNum < lines.length &&
+                  lines[lineNum] &&
+                  !lines[lineNum].includes("// [!code focus]")
+                ) {
+                  lines[lineNum] = `${lines[lineNum]} // [!code focus]`;
+                }
+              }
+            }
+            codeWithFocus = lines.join("\n");
+          }
+
+          const code = await highlighter.codeToHtml(codeWithFocus, {
+            lang,
+            theme: isDarkMode ? "night-owl" : "github-light",
+            transformers: [
+              transformerNotationDiff({ matchAlgorithm: "v3" }),
+              transformerNotationHighlight({ matchAlgorithm: "v3" }),
+              transformerNotationFocus({ matchAlgorithm: "v3" }),
+            ],
+            meta: {
+              showLineNumbers: true,
+            },
+          });
+
+          if (isMounted) {
+            setHtml(code);
+            setIsLoading(false);
+          }
+        }
+      } catch (error) {
+        if (isMounted) {
+          setHtml(`<pre><code>${codeToHighlight}</code></pre>`);
+          setIsLoading(false);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [codeToHighlight, lang, isDarkMode, highlightLines]);
 
   const copyToClipboard = () => {
-    const codeToCopy = typeof children === "string" ? children : value || "";
-    navigator.clipboard.writeText(codeToCopy).then(
+    navigator.clipboard.writeText(codeToHighlight).then(
       () => {
         setTooltipVisible(true);
         setTimeout(() => setTooltipVisible(false), 1500);
@@ -70,30 +155,30 @@ const CodeBlockWithHighlightLines = ({
     );
   };
 
+  const shikiClassName = `shiki ${isDarkMode ? "night-owl" : "github-light"} ${
+    highlightLines ? "has-focused" : ""
+  }`;
+
   return (
     <div className="codeblock-container">
       <div className="sticky top-0 z-30">
-        <CodeToolbar
+        <CodeTab
           lang={lang}
           onCopy={copyToClipboard}
           tooltipVisible={tooltipVisible}
         />
       </div>
-      <pre
-        ref={preRef}
-        className="line-numbers"
-        data-line={highlightLines}
+      <div
+        className={`${shikiClassName} w-full overflow-x-auto bg-background-brand-code py-5 px-2 text-sm border border-neutral-border-subtle/50 shadow-sm rounded-b-lg`}
         style={{
           overflowX: "hidden",
           maxWidth: "100%",
           whiteSpace: "pre-wrap",
           wordBreak: "break-word",
         }}
-      >
-        <code className={`language-${lang || "javascript"}`}>
-          {value || children}
-        </code>
-      </pre>
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki output is trusted and already escaped for XSS safety.
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
     </div>
   );
 };
