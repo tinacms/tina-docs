@@ -133,7 +133,7 @@ export const RecipeBlock = (data: {
           ref={instructionBlockRefs}
         >
           <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
-            <div className="pointer-events-auto absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-xl" />
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-xl" />
             <ChevronDownIcon
               onClick={handleDownArrowClick}
               className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${
@@ -152,7 +152,7 @@ export const RecipeBlock = (data: {
                 ref={(element) => {
                   instructionRefs.current[idx] = element;
                 }}
-                className={`instruction-item cursor-pointer border-y  bg-gray-800 p-4 text-white first:border-t-0 last:border-bl-2xl border border-neutral-border-subtle last:rounded-bl-none
+                className={`instruction-item cursor-pointer bg-gray-800 p-4 text-white border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0 last:rounded-bl-none
                 ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
                 onClick={(e) => {
                   e.stopPropagation();
