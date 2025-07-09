@@ -147,10 +147,14 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
       {...props}
     />
   ),
-  mermaid: (props) => <MermaidElement {...props} />,
   img: (props) => <ImageComponent {...props} />,
   table: (props) => <Table {...props} />,
-  code_block: (props) => <CodeBlock {...props} />,
+  code_block: (props) =>
+    props?.lang === "mermaid" ? (
+      <MermaidElement {...props} />
+    ) : (
+      <CodeBlock {...props} />
+    ),
   accordionBlock: (props) => <AccordionBlock {...props} />,
 };
 
