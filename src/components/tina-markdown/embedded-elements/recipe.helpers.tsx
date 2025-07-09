@@ -90,7 +90,9 @@ const CodeBlockWithHighlightLines = ({
           wordBreak: "break-word",
         }}
       >
-        <code className={`language-${lang}`}>{value || children}</code>
+        <code className={`language-${lang || "javascript"}`}>
+          {value || children}
+        </code>
       </pre>
     </div>
   );
