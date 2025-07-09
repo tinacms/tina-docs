@@ -108,12 +108,16 @@ export const RecipeBlock = (data: {
   return (
     <div className="recipe-block-container relative w-full text-white">
       <div className="title-description">
-        <h2 className="text-2xl font-medium brand-primary-gradient mb-2 font-heading">
-          {title || "Default Title"}
-        </h2>
-        <p className="text-neutral-text font-light mb-5 font-body">
-          {description || "Default Description"}
-        </p>
+        {title && (
+          <h2 className="text-2xl font-medium brand-primary-gradient mb-2 font-heading">
+            {title}
+          </h2>
+        )}
+        {description && (
+          <p className="text-neutral-text font-light mb-5 font-body">
+            {description}
+          </p>
+        )}
       </div>
 
       <div className="content-wrapper flex flex-col items-stretch lg:flex-row">
