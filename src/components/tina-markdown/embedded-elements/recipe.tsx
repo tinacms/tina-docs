@@ -129,10 +129,15 @@ export const RecipeBlock = (data: {
 
       <div className="content-wrapper flex flex-col lg:flex-row rounded-2xl">
         <div
-          className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-2xl rounded-br-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle border-r-0"
+          className="instructions relative flex shrink-0 flex-col rounded-t-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle rounded-br-none"
           ref={instructionBlockRefs}
+          style={{ height: smAndMbHeight ? `${LHSheight - 30}px` : "auto" }}
         >
-          <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
+          <div
+            className={`${
+              isBottomOfInstructions ? "hidden" : ""
+            } absolute bottom-0 left-0 right-0 z-10`}
+          >
             <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-2xl" />
             <ChevronDownIcon
               onClick={handleDownArrowClick}
@@ -143,7 +148,7 @@ export const RecipeBlock = (data: {
           </div>
 
           <div
-            className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl rounded-bl-none lg:rounded-tr-none"
+            className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl rounded-bl-none lg:rounded-tr-none flex-1"
             onScroll={checkIfBottom}
           >
             {instruction?.map((inst, idx) => (
