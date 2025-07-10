@@ -23,11 +23,20 @@ export const RecipeBlock = (data: {
     useState<boolean>(false);
 
   const codeblockRef = useRef<HTMLDivElement>(null);
+  const codeContentRef = useRef<HTMLDivElement>(null);
   const instructionBlockRefs = useRef<HTMLDivElement>(null);
   const instructionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    setLHSheight(`${codeblockRef.current?.offsetHeight}`);
+    // Set initial height after a delay to ensure content is rendered
+    const timer = setTimeout(() => {
+      if (codeContentRef.current) {
+        const height = codeContentRef.current.offsetHeight;
+        setLHSheight(`${height}`);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -134,7 +143,7 @@ export const RecipeBlock = (data: {
           style={{
             height: smAndMbHeight
               ? LHSheight && LHSheight > 60
-                ? `${LHSheight - 30}px`
+                ? `${LHSheight}px`
                 : "auto"
               : "auto",
           }}
@@ -143,7 +152,8 @@ export const RecipeBlock = (data: {
             className={`${
               isBottomOfInstructions ||
               instruction?.length === 0 ||
-              !instruction
+              !instruction ||
+              !checkIfScrollable()
                 ? "hidden"
                 : ""
             } absolute bottom-0 left-0 right-0 z-10`}
@@ -151,9 +161,7 @@ export const RecipeBlock = (data: {
             <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-2xl" />
             <ChevronDownIcon
               onClick={handleDownArrowClick}
-              className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${
-                checkIfScrollable() ? "" : "hidden"
-              }`}
+              className="absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md"
             />
           </div>
 
@@ -203,27 +211,29 @@ export const RecipeBlock = (data: {
           ref={codeblockRef}
           className="flex flex-col top-3 z-10 w-full rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0 lg:rounded-bl-none"
         >
-          {code ? (
-            <CodeBlockWithHighlightLines
-              value={code}
-              lang="javascript"
-              highlightLines={highlightLines}
-            />
-          ) : codeblock ? (
-            <TinaMarkdown
-              content={codeblock}
-              components={{
-                code_block: (props) => (
-                  <CodeBlockWithHighlightLines
-                    {...props}
-                    highlightLines={highlightLines}
-                  />
-                ),
-              }}
-            />
-          ) : (
-            <p className="p-4">No code block available.</p>
-          )}
+          <div ref={codeContentRef}>
+            {code ? (
+              <CodeBlockWithHighlightLines
+                value={code}
+                lang="javascript"
+                highlightLines={highlightLines}
+              />
+            ) : codeblock ? (
+              <TinaMarkdown
+                content={codeblock}
+                components={{
+                  code_block: (props) => (
+                    <CodeBlockWithHighlightLines
+                      {...props}
+                      highlightLines={highlightLines}
+                    />
+                  ),
+                }}
+              />
+            ) : (
+              <p className="p-4">No code block available.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
