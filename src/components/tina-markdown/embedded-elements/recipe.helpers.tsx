@@ -53,10 +53,17 @@ const CodeBlockWithHighlightLines = ({
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [html, setHtml] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
-  const isDarkMode = resolvedTheme === "dark";
+
+  // Use a default theme for server-side rendering to prevent hydration mismatch
+  const isDarkMode = mounted ? resolvedTheme === "dark" : false;
 
   const codeToHighlight = typeof children === "string" ? children : value || "";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
