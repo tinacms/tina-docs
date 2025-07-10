@@ -212,10 +212,11 @@ export const RecipeBlock = (data: {
           ref={instructionBlockRefs}
           style={{
             height:
-              typeof window !== "undefined" && window.innerWidth < MD_BREAKPOINT
-                ? LHSheight && LHSheight > MIN_INSTRUCTIONS_HEIGHT
-                  ? `${Number(LHSheight)}px`
-                  : "auto"
+              typeof window !== "undefined" &&
+              window.innerWidth > MD_BREAKPOINT &&
+              LHSheight &&
+              LHSheight > MIN_INSTRUCTIONS_HEIGHT
+                ? `${Number(LHSheight)}px`
                 : "auto",
           }}
         >
