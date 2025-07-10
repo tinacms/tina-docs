@@ -40,6 +40,7 @@ const InstructionsSkeleton = () => (
 );
 
 const MIN_INSTRUCTIONS_HEIGHT = 60;
+const MD_BREAKPOINT = 768;
 
 export const RecipeBlock = (data: {
   title?: string;
@@ -210,11 +211,12 @@ export const RecipeBlock = (data: {
           className="instructions relative flex shrink-0 flex-col rounded-t-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle rounded-br-none"
           ref={instructionBlockRefs}
           style={{
-            height: smAndMbHeight
-              ? LHSheight && LHSheight > MIN_INSTRUCTIONS_HEIGHT
-                ? `${Number(LHSheight) + 2}px`
-                : "auto"
-              : "auto",
+            height:
+              typeof window !== "undefined" && window.innerWidth < MD_BREAKPOINT
+                ? LHSheight && LHSheight > MIN_INSTRUCTIONS_HEIGHT
+                  ? `${Number(LHSheight) + 2}px`
+                  : "auto"
+                : "auto",
           }}
         >
           <div
