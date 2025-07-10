@@ -31,6 +31,7 @@ export const CodeTabsTemplate = {
         defaultItem: {
           name: "Tab",
           content: "const CONTENT_MANAGEMENT = 'Optimized';",
+          language: "text",
         },
       },
       fields: [
@@ -38,6 +39,97 @@ export const CodeTabsTemplate = {
           type: "string",
           name: "name",
           label: "Name",
+        },
+        {
+          type: "string",
+          name: "language",
+          label: "Code Highlighting Language",
+          options: [
+            {
+              value: "text",
+              label: "Plain Text",
+            },
+            {
+              value: "javascript",
+              label: "JavaScript",
+            },
+            {
+              value: "typescript",
+              label: "TypeScript",
+            },
+            {
+              value: "python",
+              label: "Python",
+            },
+            {
+              value: "json",
+              label: "JSON",
+            },
+            {
+              value: "html",
+              label: "HTML",
+            },
+            {
+              value: "css",
+              label: "CSS",
+            },
+            {
+              value: "jsx",
+              label: "JSX",
+            },
+            {
+              value: "tsx",
+              label: "TSX",
+            },
+            {
+              value: "markdown",
+              label: "Markdown",
+            },
+            {
+              value: "shell",
+              label: "Shell",
+            },
+            {
+              value: "sql",
+              label: "SQL",
+            },
+            {
+              value: "graphql",
+              label: "GraphQL",
+            },
+            {
+              value: "java",
+              label: "Java",
+            },
+            {
+              value: "php",
+              label: "PHP",
+            },
+            {
+              value: "cpp",
+              label: "C++",
+            },
+            {
+              value: "yaml",
+              label: "YAML",
+            },
+            {
+              value: "xml",
+              label: "XML",
+            },
+            {
+              value: "scss",
+              label: "SCSS",
+            },
+            {
+              value: "vue",
+              label: "Vue",
+            },
+            {
+              value: "svelte",
+              label: "Svelte",
+            },
+          ],
         },
         {
           type: "string",

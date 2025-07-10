@@ -2,7 +2,7 @@
 seo:
   title: TinaDocs – Type Definition
 title: Type Definition
-last_edited: '2025-07-09T07:19:21.980Z'
+last_edited: '2025-07-10T02:34:50.023Z'
 tocIsHidden: false
 ---
 
@@ -32,4 +32,91 @@ tocIsHidden: false
       required: false
     }
   ]}
+/>
+
+<accordion
+  heading="Click to expand"
+  docText={<>
+    Default Text. Edit me!
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={false}
+/>
+
+<accordionBlock
+  accordionItems={[
+    {
+      heading: "Click to expand",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    },
+    {
+      heading: "Click to expand",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    }
+  ]}
+  fullWidth={true}
+/>
+
+<cardGrid
+  cards={[
+    {
+      title: "Card Title",
+      description: "Card Description",
+      link: "https://www.google.com",
+      linkText: "Search now"
+    },
+    {
+      title: "Card Title",
+      description: "Card Description",
+      link: "https://www.google.com",
+      linkText: "Search now"
+    },
+    {
+      title: "Card Title",
+      description: "Card Description",
+      link: "https://www.google.com",
+      linkText: "Search now"
+    },
+    {
+      title: "Card Title",
+      description: "Card Description",
+      link: "https://www.google.com",
+      linkText: "Search now"
+    }
+  ]}
+/>
+
+<scrollShowcase
+  showcaseItems={[
+    {
+      title: "Title",
+      image: "/img/rico-replacement.jpg",
+      content: "Default Text. Edit me!\n",
+      useAsSubsection: false
+    },
+    {
+      title: "Title",
+      image: "/img/rico-replacement.jpg",
+      content: "Default Text. Edit me!\n",
+      useAsSubsection: false
+    },
+    {
+      title: "Title",
+      image: "/img/rico-replacement.jpg",
+      content: "Default Text. Edit me!\n",
+      useAsSubsection: false
+    }
+  ]}
+/>
+
+<youtube embedSrc="https://www.youtube.com/embed/CsCQS7HIBv0?si=os9ona92O2VMOl-V" caption="Seth goes over the basics of using TinaCMS" minutes="2" />
+
+<codeTabs
+  tabs={[
+    { name: "Query", content: "const CONTENT_MANAGEMENT = 'Optimized';" },
+    { name: "Response", content: "const LLAMAS = '100';" }
+  ]}
+  initialSelectedIndex={0}
 />

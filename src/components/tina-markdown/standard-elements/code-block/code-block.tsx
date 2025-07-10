@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
-import { createHighlighter } from "shiki";
 import "./code-block.css";
-import {
-  transformerNotationDiff,
-  transformerNotationFocus,
-  transformerNotationHighlight,
-} from "@shikijs/transformers";
 import { useTheme } from "next-themes";
 import { FaCheck } from "react-icons/fa";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { CodeBlockSkeleton } from "./code-block-skeleton";
+import { shikiSingleton } from "./shiki-singleton";
 
 export function CodeBlock({
   value,
@@ -45,27 +40,17 @@ export function CodeBlock({
         return;
       }
 
-      const highlighter = await createHighlighter({
-        themes: ["night-owl", "github-light"],
-        langs: [lang],
-      });
-
-      if (highlighter) {
-        const code = await highlighter?.codeToHtml(value, {
-          lang,
-          theme: isDarkMode ? "night-owl" : "github-light",
-          transformers: [
-            transformerNotationDiff({ matchAlgorithm: "v3" }),
-            transformerNotationHighlight({ matchAlgorithm: "v3" }),
-            transformerNotationFocus({ matchAlgorithm: "v3" }),
-          ],
-          meta: {
-            showLineNumbers: true,
-          },
-        });
+      try {
+        const code = await shikiSingleton.codeToHtml(value, lang, isDarkMode);
 
         if (isMounted) {
           setHtml(code);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        if (isMounted) {
+          // Fallback to plain text if highlighting fails
+          setHtml(`<pre><code>${value}</code></pre>`);
           setIsLoading(false);
         }
       }

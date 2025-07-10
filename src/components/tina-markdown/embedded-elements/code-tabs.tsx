@@ -2,6 +2,7 @@ import { CheckIcon as CheckIconOutline } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 import { MdContentCopy } from "react-icons/md";
+import { tinaField } from "tinacms/dist/react";
 import { CodeBlock } from "../standard-elements/code-block/code-block";
 import { CodeBlockSkeleton } from "../standard-elements/code-block/code-block-skeleton";
 
@@ -9,6 +10,7 @@ interface Tab {
   name: string;
   content: string;
   id?: string;
+  language?: string;
 }
 
 interface CodeTabsProps {
@@ -77,7 +79,7 @@ export const CodeTabs = ({ tabs, initialSelectedIndex = 0 }: CodeTabsProps) => {
   }
 
   return (
-    <div className="mb-4">
+    <div className="my-8">
       <style>{`
         .query-response-pre pre,
         .query-response-pre code {
@@ -85,9 +87,9 @@ export const CodeTabs = ({ tabs, initialSelectedIndex = 0 }: CodeTabsProps) => {
           tab-size: 2;
         }
       `}</style>
-      <div className="flex flex-col top-3 z-10 w-full rounded-xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle">
+      <div className="flex flex-col z-10 w-full rounded-xl py-0 bg-neutral-background shadow-lg border border-neutral-border">
         {/* TOP SECTION w/ Buttons */}
-        <div className="flex items-center w-full border-b border-neutral-border-subtle ">
+        <div className="flex items-center w-full border-b border-neutral-border ">
           <div className="flex flex-1 ">
             {tabs.map((tab, index) => (
               <button
@@ -167,7 +169,7 @@ export const CodeTabs = ({ tabs, initialSelectedIndex = 0 }: CodeTabsProps) => {
               >
                 <CodeBlock
                   value={tab.content?.replaceAll("�", " ")}
-                  lang="javascript"
+                  lang={tab.language ?? "text"}
                   showCopyButton={false}
                   showBorder={false}
                   setIsTransitioning={setIsTransitioning}

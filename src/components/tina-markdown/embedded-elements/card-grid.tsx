@@ -9,6 +9,8 @@ export const CardGrid = (data: {
     linkText: string;
   }[];
 }) => {
+  const cardClasses =
+    "relative border border-neutral-border bg-neutral-background/75 rounded-lg group p-6  shadow-lg hover:bg-gradient-to-br hover:from-transparent hover:via-transparent hover:to-brand-secondary-hover/15 dark:hover:bg-gradient-to-br dark:hover:from-transparent dark:hover:via-brand-secondary/10 dark:hover:to-brand-secondary/50 transition-all duration-300";
   return (
     <div className="my-8 grid grid-cols-1 rounded-lg gap-4 lg:grid-cols-2">
       {data.cards?.map((card, index) => {
@@ -16,7 +18,7 @@ export const CardGrid = (data: {
           return (
             <Link
               href={card.link}
-              className="relative border border-neutral-border/50 bg-neutral-background/75 rounded-lg group p-6  shadow-lg hover:bg-gradient-to-br hover:from-transparent hover:via-transparent hover:to-brand-secondary-hover/15 dark:hover:bg-gradient-to-br dark:hover:from-transparent dark:hover:via-brand-secondary/10 dark:hover:to-brand-secondary/50 transition-all duration-300"
+              className={cardClasses}
               key={`card-${index}-${card.title}`}
             >
               <h2
@@ -47,10 +49,7 @@ export const CardGrid = (data: {
           );
         }
         return (
-          <div
-            className="bg-neutral-background/75 border border-neutral-border/50 rounded-lg p-6 shadow-lg hover:bg-gradient-to-br hover:from-transparent hover:via-seafoam/25 hover:to-seafoam dark:hover:bg-gradient-to-br dark:hover:from-transparent dark:hover:via-brand-secondary/10 dark:hover:to-brand-secondary/50 transition-all duration-300"
-            key={`card-${index}-${card.title}`}
-          >
+          <div className={cardClasses} key={`card-${index}-${card.title}`}>
             <h2
               className="text-2xl font-medium brand-primary-gradient mb-2 font-heading"
               data-tina-field={tinaField(data.cards[index], "title")}

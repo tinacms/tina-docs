@@ -1,3 +1,5 @@
+import { tinaField } from "tinacms/dist/react";
+
 export default function TypeDefinition(props) {
   {
     const propertyItem = (property) => {
@@ -5,7 +7,10 @@ export default function TypeDefinition(props) {
         <div className="space-y-4 py-2 px-6">
           <div className="flex flex-col md:flex-row md:items-start gap-2">
             <div className="w-full md:w-1/3">
-              <div className="font-heading text-lg text-neutral-text break-normal max-w-full inline-block">
+              <div
+                className="font-heading text-lg text-neutral-text break-normal max-w-full inline-block"
+                data-tina-field={tinaField(property, "name")}
+              >
                 {property?.name?.replace(/([A-Z])/g, "\u200B$1")}
               </div>
               <div className="mb-1">
@@ -21,7 +26,8 @@ export default function TypeDefinition(props) {
             </div>
             <div className="w-full md:w-2/3">
               <div
-                className={`text-sm mb-0.5 ${property.typeUrl ? "underline decoration-neutral-text hover:decoration-neutral-text/20 text-neutral-text hover:text-neutral-text/50" : "text-neutral-text"}`}
+                data-tina-field={tinaField(property, "typeUrl")}
+                className={`w-fit text-sm mb-0.5 ${property.typeUrl ? "underline decoration-neutral-text hover:decoration-neutral-text/20 text-neutral-text hover:text-neutral-text/50" : "text-neutral-text"}`}
               >
                 {property.typeUrl ? (
                   <a href={property.typeUrl} rel="noopener noreferrer">
@@ -31,7 +37,10 @@ export default function TypeDefinition(props) {
                   property.type
                 )}
               </div>
-              <p className="text-neutral-text-secondary text-sm">
+              <p
+                className="text-neutral-text-secondary text-sm w-fit"
+                data-tina-field={tinaField(property, "description")}
+              >
                 {property.description}
               </p>
             </div>
