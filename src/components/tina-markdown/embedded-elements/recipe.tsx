@@ -183,7 +183,9 @@ export const RecipeBlock = (data: {
                   </span>
                 </div>
               </div>
-            )) || <p className="p-4">No instructions available.</p>}
+            )) || (
+              <p className="p-4 text-white py-4">No instructions available.</p>
+            )}
           </div>
         </div>
 
