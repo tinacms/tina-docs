@@ -109,6 +109,11 @@
               "title": "Custom Components",
               "items": [
                 {
+                  "title": "Code Accordion",
+                  "slug": "content/docs/components/code-accordion.mdx",
+                  "_template": "item"
+                },
+                {
                   "title": "Overview",
                   "slug": "content/docs/components/custom-components/overview.mdx",
                   "_template": "item"
