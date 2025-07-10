@@ -4,6 +4,41 @@ import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import CodeBlockWithHighlightLines from "./recipe.helpers";
 
+// Skeleton components
+const CodeBlockSkeleton = () => (
+  <div className="codeblock-container h-full flex flex-col">
+    <div className="sticky top-0 z-30">
+      <div className="flex items-center justify-between w-full border-b border-neutral-border-subtle h-full">
+        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-24 mx-6" />
+        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-16 mr-2" />
+      </div>
+    </div>
+    <div className="w-full flex-1 bg-background-brand-code py-5 px-2 text-sm border border-neutral-border-subtle/50 shadow-sm rounded-b-xl lg:rounded-bl-none md:rounded-br-xl h-full">
+      <div className="space-y-3">
+        {[...Array(2)].map((_, i) => (
+          <div key={i} className="flex items-center space-x-4">
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-8" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse flex-1" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const InstructionsSkeleton = () => (
+  <div>
+    {[...Array(2)].map((_, i) => (
+      <div
+        key={i}
+        className="bg-gray-800 p-4 border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0"
+      >
+        <div className="h-4 bg-gray-600 rounded animate-pulse w-1/2" />
+      </div>
+    ))}
+  </div>
+);
+
 export const RecipeBlock = (data: {
   title?: string;
   description?: string;
@@ -21,6 +56,7 @@ export const RecipeBlock = (data: {
   const [LHSheight, setLHSheight] = useState<string | null>(null);
   const [isBottomOfInstructions, setIsBottomOfInstructions] =
     useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const codeblockRef = useRef<HTMLDivElement>(null);
   const codeContentRef = useRef<HTMLDivElement>(null);
@@ -33,6 +69,7 @@ export const RecipeBlock = (data: {
       if (codeContentRef.current) {
         const height = codeContentRef.current.offsetHeight;
         setLHSheight(`${height}`);
+        setIsLoading(false);
       }
     }, 200);
 
@@ -199,40 +236,46 @@ export const RecipeBlock = (data: {
             className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl rounded-bl-none lg:rounded-tr-none flex-1"
             onScroll={checkIfBottom}
           >
-            {instruction?.map((inst, idx) => (
-              <div
-                key={`instruction-${idx}`}
-                ref={(element) => {
-                  instructionRefs.current[idx] = element;
-                }}
-                className={`instruction-item cursor-pointer bg-gray-800 p-4 text-white border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0 last:rounded-bl-none
-                ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleInstructionClick(
-                    idx,
-                    inst.codeLineStart,
-                    inst.codeLineEnd
-                  );
-                }}
-              >
-                <h5 className="font-tuner">{`${idx + 1}. ${
-                  inst.header || "Default Header"
-                }`}</h5>
+            {isLoading ? (
+              <InstructionsSkeleton />
+            ) : (
+              instruction?.map((inst, idx) => (
                 <div
-                  className={`overflow-auto transition-all ease-in-out ${
-                    clickedInstruction === idx
-                      ? "max-h-full opacity-100 duration-500"
-                      : "max-h-0 opacity-0 duration-0"
-                  }`}
+                  key={`instruction-${idx}`}
+                  ref={(element) => {
+                    instructionRefs.current[idx] = element;
+                  }}
+                  className={`instruction-item cursor-pointer bg-gray-800 p-4 text-white border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0 last:rounded-bl-none
+                  ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleInstructionClick(
+                      idx,
+                      inst.codeLineStart,
+                      inst.codeLineEnd
+                    );
+                  }}
                 >
-                  <span className="mt-2">
-                    {inst.itemDescription || "Default Item Description"}
-                  </span>
+                  <h5 className="font-tuner">{`${idx + 1}. ${
+                    inst.header || "Default Header"
+                  }`}</h5>
+                  <div
+                    className={`overflow-auto transition-all ease-in-out ${
+                      clickedInstruction === idx
+                        ? "max-h-full opacity-100 duration-500"
+                        : "max-h-0 opacity-0 duration-0"
+                    }`}
+                  >
+                    <span className="mt-2">
+                      {inst.itemDescription || "Default Item Description"}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )) || (
-              <p className="p-4 text-white py-4">No instructions available.</p>
+              )) || (
+                <p className="p-4 text-white py-4">
+                  No instructions available.
+                </p>
+              )
             )}
           </div>
         </div>
@@ -242,7 +285,9 @@ export const RecipeBlock = (data: {
           className="flex flex-col top-3 z-10 w-full rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0 lg:rounded-bl-none"
         >
           <div ref={codeContentRef}>
-            {code ? (
+            {isLoading ? (
+              <CodeBlockSkeleton />
+            ) : code ? (
               <CodeBlockWithHighlightLines
                 value={code}
                 lang="javascript"
