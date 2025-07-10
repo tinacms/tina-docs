@@ -142,7 +142,7 @@ export const QueryResponseTabs = ({ ...props }) => {
             {isQuery ? (
               <div ref={queryRef} className="relative -mt-2">
                 <CodeBlock
-                  value={props.query}
+                  value={props.query?.replaceAll("�", " ")}
                   lang="javascript"
                   showCopyButton={false}
                   showBorder={false}
@@ -152,7 +152,7 @@ export const QueryResponseTabs = ({ ...props }) => {
             ) : (
               <div ref={responseRef} className="-mt-2 relative">
                 <CodeBlock
-                  value={props.response}
+                  value={props.response?.replaceAll("�", " ")}
                   lang="javascript"
                   showCopyButton={false}
                   showBorder={false}

@@ -35,7 +35,7 @@ export const TopNav = ({
   };
 
   return (
-    <div className="mb-2 md:mb-4 w-full lg:px-8 py-1 dark:bg-glass-gradient-end dark:border-b dark:border-neutral-border-subtle/60 shadow-md">
+    <div className="border border-neutral-border/50 mb-2 md:mb-4 w-full lg:px-8 py-1 dark:bg-glass-gradient-end dark:border-b dark:border-neutral-border-subtle/60 shadow-md/5">
       <div className="max-w-[2560px] mx-auto flex items-center justify-between lg:py-0 py-2">
         <div className="flex">
           <NavbarLogo navigationDocsData={[navigationDocsData]} />
