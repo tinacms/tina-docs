@@ -276,9 +276,9 @@ export const RecipeBlock = (data: {
                           : "max-h-0 opacity-0 duration-0"
                       }`}
                     >
-                      <span className="mt-2">
+                      <p className="mt-2 text-sm text-gray-300 leading-relaxed">
                         {inst.itemDescription || "Default Item Description"}
-                      </span>
+                      </p>
                     </div>
                   </div>
                 )) || (
