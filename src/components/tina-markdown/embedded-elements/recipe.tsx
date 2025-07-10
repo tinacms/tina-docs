@@ -141,7 +141,11 @@ export const RecipeBlock = (data: {
         >
           <div
             className={`${
-              isBottomOfInstructions ? "hidden" : ""
+              isBottomOfInstructions ||
+              instruction?.length === 0 ||
+              !instruction
+                ? "hidden"
+                : ""
             } absolute bottom-0 left-0 right-0 z-10`}
           >
             <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-2xl" />
