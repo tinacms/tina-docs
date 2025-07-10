@@ -39,6 +39,36 @@ export const RecipeBlock = (data: {
     return () => clearTimeout(timer);
   }, []);
 
+  // Monitor code content height changes
+  useEffect(() => {
+    if (!codeContentRef.current) return;
+
+    let timeoutId: NodeJS.Timeout;
+    let lastHeight = 0;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const newHeight = entry.contentRect.height;
+
+        // Only update if height changed significantly (more than 10px)
+        if (Math.abs(newHeight - lastHeight) > 10) {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            setLHSheight(`${newHeight}`);
+            lastHeight = newHeight;
+          }, 100);
+        }
+      }
+    });
+
+    resizeObserver.observe(codeContentRef.current);
+
+    return () => {
+      clearTimeout(timeoutId);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
