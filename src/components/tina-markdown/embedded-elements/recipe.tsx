@@ -67,7 +67,7 @@ export const RecipeBlock = (data: {
     // Set initial height after a delay to ensure content is rendered
     const timer = setTimeout(() => {
       if (codeContentRef.current) {
-        const height = codeContentRef.current.offsetHeight;
+        const height = Math.round(codeContentRef.current.offsetHeight);
         setLHSheight(`${height}`);
         setIsLoading(false);
       }
@@ -91,7 +91,7 @@ export const RecipeBlock = (data: {
         if (Math.abs(newHeight - lastHeight) > 10) {
           clearTimeout(timeoutId);
           timeoutId = setTimeout(() => {
-            setLHSheight(`${newHeight}`);
+            setLHSheight(`${Math.round(newHeight)}`);
             lastHeight = newHeight;
           }, 100);
         }
@@ -210,7 +210,7 @@ export const RecipeBlock = (data: {
           style={{
             height: smAndMbHeight
               ? LHSheight && LHSheight > 60
-                ? `${LHSheight}px`
+                ? `${Number(LHSheight) + 2}px`
                 : "auto"
               : "auto",
           }}
