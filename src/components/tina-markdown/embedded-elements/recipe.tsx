@@ -236,47 +236,57 @@ export const RecipeBlock = (data: {
             className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl rounded-bl-none lg:rounded-tr-none flex-1"
             onScroll={checkIfBottom}
           >
-            {isLoading ? (
-              <InstructionsSkeleton />
-            ) : (
-              instruction?.map((inst, idx) => (
-                <div
-                  key={`instruction-${idx}`}
-                  ref={(element) => {
-                    instructionRefs.current[idx] = element;
-                  }}
-                  className={`instruction-item cursor-pointer bg-gray-800 p-4 text-white border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0 last:rounded-bl-none
-                  ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleInstructionClick(
-                      idx,
-                      inst.codeLineStart,
-                      inst.codeLineEnd
-                    );
-                  }}
-                >
-                  <h5 className="font-tuner">{`${idx + 1}. ${
-                    inst.header || "Default Header"
-                  }`}</h5>
+            <div
+              className={`transition-opacity duration-300 ${
+                isLoading ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              {isLoading && <InstructionsSkeleton />}
+            </div>
+            <div
+              className={`transition-opacity duration-300 ${
+                isLoading ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isLoading &&
+                (instruction?.map((inst, idx) => (
                   <div
-                    className={`overflow-auto transition-all ease-in-out ${
-                      clickedInstruction === idx
-                        ? "max-h-full opacity-100 duration-500"
-                        : "max-h-0 opacity-0 duration-0"
-                    }`}
+                    key={`instruction-${idx}`}
+                    ref={(element) => {
+                      instructionRefs.current[idx] = element;
+                    }}
+                    className={`instruction-item cursor-pointer bg-gray-800 p-4 text-white border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0 last:rounded-bl-none
+                  ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleInstructionClick(
+                        idx,
+                        inst.codeLineStart,
+                        inst.codeLineEnd
+                      );
+                    }}
                   >
-                    <span className="mt-2">
-                      {inst.itemDescription || "Default Item Description"}
-                    </span>
+                    <h5 className="font-tuner">{`${idx + 1}. ${
+                      inst.header || "Default Header"
+                    }`}</h5>
+                    <div
+                      className={`overflow-auto transition-all ease-in-out ${
+                        clickedInstruction === idx
+                          ? "max-h-full opacity-100 duration-500"
+                          : "max-h-0 opacity-0 duration-0"
+                      }`}
+                    >
+                      <span className="mt-2">
+                        {inst.itemDescription || "Default Item Description"}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )) || (
-                <p className="p-4 text-white py-4">
-                  No instructions available.
-                </p>
-              )
-            )}
+                )) || (
+                  <p className="p-4 text-white py-4">
+                    No instructions available.
+                  </p>
+                ))}
+            </div>
           </div>
         </div>
 
@@ -285,29 +295,41 @@ export const RecipeBlock = (data: {
           className="flex flex-col top-3 z-10 w-full rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0 lg:rounded-bl-none"
         >
           <div ref={codeContentRef}>
-            {isLoading ? (
-              <CodeBlockSkeleton />
-            ) : code ? (
-              <CodeBlockWithHighlightLines
-                value={code}
-                lang="javascript"
-                highlightLines={highlightLines}
-              />
-            ) : codeblock ? (
-              <TinaMarkdown
-                content={codeblock}
-                components={{
-                  code_block: (props) => (
-                    <CodeBlockWithHighlightLines
-                      {...props}
-                      highlightLines={highlightLines}
-                    />
-                  ),
-                }}
-              />
-            ) : (
-              <p className="p-4">No code block available.</p>
-            )}
+            <div
+              className={`transition-opacity duration-300 ${
+                isLoading ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              {isLoading && <CodeBlockSkeleton />}
+            </div>
+            <div
+              className={`transition-opacity duration-300 ${
+                isLoading ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isLoading &&
+                (code ? (
+                  <CodeBlockWithHighlightLines
+                    value={code}
+                    lang="javascript"
+                    highlightLines={highlightLines}
+                  />
+                ) : codeblock ? (
+                  <TinaMarkdown
+                    content={codeblock}
+                    components={{
+                      code_block: (props) => (
+                        <CodeBlockWithHighlightLines
+                          {...props}
+                          highlightLines={highlightLines}
+                        />
+                      ),
+                    }}
+                  />
+                ) : (
+                  <p className="p-4">No code block available.</p>
+                ))}
+            </div>
           </div>
         </div>
       </div>
