@@ -216,7 +216,7 @@ export const RecipeBlock = (data: {
               window.innerWidth > MD_BREAKPOINT &&
               LHSheight &&
               LHSheight > MIN_INSTRUCTIONS_HEIGHT
-                ? `${Number(LHSheight)}px`
+                ? `${Number(LHSheight) + 2}px`
                 : "auto",
           }}
         >
