@@ -131,7 +131,13 @@ export const RecipeBlock = (data: {
         <div
           className="instructions relative flex shrink-0 flex-col rounded-t-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle rounded-br-none"
           ref={instructionBlockRefs}
-          style={{ height: smAndMbHeight ? `${LHSheight - 30}px` : "auto" }}
+          style={{
+            height: smAndMbHeight
+              ? LHSheight && LHSheight > 60
+                ? `${LHSheight - 30}px`
+                : "auto"
+              : "auto",
+          }}
         >
           <div
             className={`${
