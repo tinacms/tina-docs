@@ -214,7 +214,7 @@ export const RecipeBlock = (data: {
             height:
               typeof window !== "undefined" && window.innerWidth < MD_BREAKPOINT
                 ? LHSheight && LHSheight > MIN_INSTRUCTIONS_HEIGHT
-                  ? `${Number(LHSheight) + 2}px`
+                  ? `${Number(LHSheight)}px`
                   : "auto"
                 : "auto",
           }}
@@ -296,7 +296,7 @@ export const RecipeBlock = (data: {
 
         <div
           ref={codeblockRef}
-          className="flex flex-col top-3 z-10 w-[66%] rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0"
+          className="flex flex-col top-3 z-10 h-fit lg:w-[66%] rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0"
         >
           <div ref={codeContentRef}>
             <div
