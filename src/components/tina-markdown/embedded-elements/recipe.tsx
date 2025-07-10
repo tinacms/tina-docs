@@ -39,6 +39,8 @@ const InstructionsSkeleton = () => (
   </div>
 );
 
+const MIN_INSTRUCTIONS_HEIGHT = 60;
+
 export const RecipeBlock = (data: {
   title?: string;
   description?: string;
@@ -209,7 +211,7 @@ export const RecipeBlock = (data: {
           ref={instructionBlockRefs}
           style={{
             height: smAndMbHeight
-              ? LHSheight && LHSheight > 60
+              ? LHSheight && LHSheight > MIN_INSTRUCTIONS_HEIGHT
                 ? `${Number(LHSheight) + 2}px`
                 : "auto"
               : "auto",
