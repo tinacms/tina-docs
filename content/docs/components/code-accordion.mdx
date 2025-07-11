@@ -1,0 +1,79 @@
+---
+title: Code Accordion
+last_edited: '2025-07-10T06:42:18.731Z'
+---
+
+<recipe
+  code="let todoList = [];
+
+  function addTask(task) {
+  todoList.push({ task: task, completed: false });
+  console.log(`Added: &#x22;${task}&#x22;`);
+  }
+
+  function completeTask(index) {
+  if (todoList[index]) {
+  todoList[index].completed = true;
+  console.log(`Completed: &#x22;${todoList[index].task}&#x22;`);
+  } else {
+  console.log(&#x22;Invalid task index.&#x22;);
+  }
+  }
+  function showTasks() {
+  console.log(&#x22;\nTo-Do List:&#x22;);
+  todoList.forEach((item, index) => {
+  const status = item.completed ? &#x22;✅&#x22; : &#x22;❌&#x22;;
+  console.log(`${index + 1}. ${status} ${item.task}`);
+  });
+  }
+
+  addTask(&#x22;Buy groceries&#x22;);
+  addTask(&#x22;Finish project&#x22;);
+  addTask(&#x22;Read a book&#x22;);
+
+  showTasks();
+
+  completeTask(1);
+
+  showTasks();
+  "
+  title=""
+  description="Perfect for tutorials, API documentation, or any scenario where you want to guide users through code examples with numbered steps that correspond to specific lines of code. The component takes in a title, description, code content, and an array of instruction objects (each with headers, descriptions, and code line ranges to highlight)."
+  instruction={[
+    {
+      header: "Initializing the To-Do List javascript Copy Edit",
+      itemDescription:
+        "This line creates an empty array named todoList which will hold all the tasks. Each task added to this list will be stored as an object containing two properties: the task description and its completion status.",
+      codeLineStart: 1,
+      codeLineEnd: 1
+    },
+    {
+      header: "Function to Add a Task javascript Copy Edit",
+      itemDescription:
+        "This function allows adding a new task to the todoList. It accepts a task description as a parameter, creates a task object with completed set to false, and adds it to the array. It also logs a confirmation message showing the added task.",
+      codeLineStart: 3,
+      codeLineEnd: 6
+    },
+    {
+      header: "Function to Mark a Task as Completed javascript Copy Edit",
+      codeLineStart: 8,
+      codeLineEnd: 15,
+      itemDescription:
+        "This function marks a specific task as completed. It accepts the task’s index as a parameter. If the index is valid, it updates the completed property to true and logs a message confirming the completion. If the index is invalid, it displays an error message."
+    },
+    {
+      header: "Function to Display All Tasks javascript Copy Edit",
+      itemDescription:
+        "This function prints all tasks in the console along with their status. It loops through the todoList using .forEach(). For each task, it displays the index (starting from 1), a checkmark (✅) if completed or a cross (❌) if pending, followed by the task description.",
+      codeLineStart: 16,
+      codeLineEnd: 22
+    },
+    {
+      header: "Example Usage (Function Calls)",
+      itemDescription:
+        "This section demonstrates how to use the above functions. It adds three tasks, displays the list, marks the second task (index 1) as completed, and displays the updated task list again.",
+      codeLineStart: 24,
+      codeLineEnd: 32
+    }
+  ]}
+/>

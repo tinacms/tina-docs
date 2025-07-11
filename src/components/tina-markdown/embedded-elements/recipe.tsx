@@ -2,8 +2,45 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { customHighlightCSS } from "./recipe.constants";
 import CodeBlockWithHighlightLines from "./recipe.helpers";
+
+// Skeleton components
+const CodeBlockSkeleton = () => (
+  <div className="codeblock-container h-full flex flex-col">
+    <div className="sticky top-0 z-30">
+      <div className="flex items-center justify-between w-full border-b border-neutral-border-subtle h-full">
+        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-24 mx-6" />
+        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-16 mr-2" />
+      </div>
+    </div>
+    <div className="w-full flex-1 bg-background-brand-code py-5 px-2 text-sm border border-neutral-border-subtle/50 shadow-sm rounded-b-xl lg:rounded-bl-none md:rounded-br-xl h-full">
+      <div className="space-y-3">
+        {[...Array(2)].map((_, i) => (
+          <div key={i} className="flex items-center space-x-4">
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-8" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse flex-1" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const InstructionsSkeleton = () => (
+  <div>
+    {[...Array(2)].map((_, i) => (
+      <div
+        key={i}
+        className="bg-gray-800 p-4 border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0"
+      >
+        <div className="h-4 bg-gray-600 rounded animate-pulse w-1/2" />
+      </div>
+    ))}
+  </div>
+);
+
+const MIN_INSTRUCTIONS_HEIGHT = 60;
+const MD_BREAKPOINT = 768;
 
 export const RecipeBlock = (data: {
   title?: string;
@@ -22,24 +59,73 @@ export const RecipeBlock = (data: {
   const [LHSheight, setLHSheight] = useState<string | null>(null);
   const [isBottomOfInstructions, setIsBottomOfInstructions] =
     useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const codeblockRef = useRef<HTMLDivElement>(null);
+  const codeContentRef = useRef<HTMLDivElement>(null);
   const instructionBlockRefs = useRef<HTMLDivElement>(null);
   const instructionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = customHighlightCSS;
-    document.head.appendChild(style);
+    // Set initial height after a delay to ensure content is rendered
+    const timer = setTimeout(() => {
+      if (codeContentRef.current) {
+        const height = Math.round(codeContentRef.current.offsetHeight);
+        setLHSheight(`${height}`);
+        setIsLoading(false);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Monitor code content height changes
+  useEffect(() => {
+    if (!codeContentRef.current) return;
+
+    let timeoutId: NodeJS.Timeout;
+    let lastHeight = 0;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const newHeight = entry.contentRect.height;
+
+        // Only update if height changed significantly (more than 10px)
+        if (Math.abs(newHeight - lastHeight) > 10) {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            setLHSheight(`${Math.round(newHeight)}`);
+            lastHeight = newHeight;
+          }, 100);
+        }
+      }
+    });
+
+    resizeObserver.observe(codeContentRef.current);
 
     return () => {
-      document.head.removeChild(style);
+      clearTimeout(timeoutId);
+      resizeObserver.disconnect();
     };
   }, []);
 
   useEffect(() => {
-    setLHSheight(`${codeblockRef.current?.offsetHeight}`);
-  }, []);
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const isInsideInstructions = target.closest(".instructions");
+
+      if (!isInsideInstructions && clickedInstruction !== null) {
+        setClickedInstruction(null);
+        setHighlightLines("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [clickedInstruction]);
 
   const checkIfBottom = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
@@ -106,101 +192,150 @@ export const RecipeBlock = (data: {
   };
 
   return (
-    <div className="recipe-block-container relative w-full text-white">
-      <div className="title-description px-10">
-        <h2 className="font-tuner text-2xl text-orange-500">
-          {title || "Default Title"}
-        </h2>
-        <p className="py-2 text-base font-light">
-          {description || "Default Description"}
-        </p>
+    <div className="recipe-block-container relative w-full">
+      <div className="title-description">
+        {title && (
+          <h2 className="text-2xl font-medium brand-primary-gradient mb-2 font-heading">
+            {title}
+          </h2>
+        )}
+        {description && (
+          <p className="text-neutral-text font-light mb-5 font-body">
+            {description}
+          </p>
+        )}
       </div>
 
-      <div className="content-wrapper flex flex-col items-stretch px-10 lg:flex-row">
+      <div className="content-wrapper flex flex-col lg:flex-row rounded-2xl">
         <div
-          className="instructions max-h-50vh relative flex shrink-0 grow flex-col rounded-t-xl rounded-br-xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-xl"
+          className="instructions relative flex shrink-0 flex-col rounded-t-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle rounded-br-none"
           ref={instructionBlockRefs}
           style={{
             height:
-              typeof window !== "undefined" && window.innerWidth >= 1024
-                ? `${LHSheight}px`
-                : `${smAndMbHeight}`,
+              typeof window !== "undefined" &&
+              window.innerWidth > MD_BREAKPOINT &&
+              LHSheight &&
+              LHSheight > MIN_INSTRUCTIONS_HEIGHT
+                ? `${Number(LHSheight) + 2}px`
+                : "auto",
           }}
         >
-          <div className={`${isBottomOfInstructions ? "hidden" : ""}`}>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-60 lg:rounded-bl-xl" />
+          <div
+            className={`${
+              isBottomOfInstructions ||
+              instruction?.length === 0 ||
+              !instruction ||
+              !checkIfScrollable()
+                ? "hidden"
+                : ""
+            } absolute bottom-0 left-0 right-0 z-10`}
+          >
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-2xl" />
             <ChevronDownIcon
               onClick={handleDownArrowClick}
-              className={`absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md${
-                checkIfScrollable() ? "" : "hidden"
-              }`}
+              className="absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md"
             />
           </div>
 
           <div
-            className="overflow-auto rounded-t-xl rounded-bl-xl lg:rounded-tr-none"
+            className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl rounded-bl-none lg:rounded-tr-none flex-1"
             onScroll={checkIfBottom}
           >
-            {instruction?.map((inst, idx) => (
-              <div
-                key={`instruction-${idx}`}
-                ref={(element) => {
-                  instructionRefs.current[idx] = element;
-                }}
-                className={`instruction-item cursor-pointer border-y border-gray-700 bg-gray-800 p-4 text-white 
-                ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
-                onClick={() =>
-                  handleInstructionClick(
-                    idx,
-                    inst.codeLineStart,
-                    inst.codeLineEnd
-                  )
-                }
-              >
-                <h5 className="font-tuner">{`${idx + 1}. ${
-                  inst.header || "Default Header"
-                }`}</h5>
-                <div
-                  className={`overflow-auto transition-all ease-in-out ${
-                    clickedInstruction === idx
-                      ? "max-h-full opacity-100 duration-500"
-                      : "max-h-0 opacity-0 duration-0"
-                  }`}
-                >
-                  <span className="mt-2">
-                    {inst.itemDescription || "Default Item Description"}
-                  </span>
-                </div>
-              </div>
-            )) || <p>No instructions available.</p>}
+            <div
+              className={`transition-opacity duration-300 ${
+                isLoading ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              {isLoading && <InstructionsSkeleton />}
+            </div>
+            <div
+              className={`transition-opacity duration-300 ${
+                isLoading ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isLoading &&
+                (instruction?.map((inst, idx) => (
+                  <div
+                    key={`instruction-${idx}`}
+                    ref={(element) => {
+                      instructionRefs.current[idx] = element;
+                    }}
+                    className={`instruction-item cursor-pointer bg-gray-800 p-4 text-white border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0 last:rounded-bl-none
+                  ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleInstructionClick(
+                        idx,
+                        inst.codeLineStart,
+                        inst.codeLineEnd
+                      );
+                    }}
+                  >
+                    <h5 className="font-tuner">{`${idx + 1}. ${
+                      inst.header || "Default Header"
+                    }`}</h5>
+                    <div
+                      className={`overflow-auto transition-all ease-in-out ${
+                        clickedInstruction === idx
+                          ? "max-h-full opacity-100 duration-500"
+                          : "max-h-0 opacity-0 duration-0"
+                      }`}
+                    >
+                      <p className="mt-2 text-sm text-gray-300 leading-relaxed">
+                        {inst.itemDescription || "Default Item Description"}
+                      </p>
+                    </div>
+                  </div>
+                )) || (
+                  <p className="p-4 text-white py-4">
+                    No instructions available.
+                  </p>
+                ))}
+            </div>
           </div>
         </div>
 
         <div
           ref={codeblockRef}
-          className="codeblock max-h-50vh overflow-auto rounded-b-xl bg-gray-800 lg:w-2/3 lg:rounded-bl-none lg:rounded-tr-xl "
+          className="flex flex-col top-3 z-10 h-fit lg:w-[66%] rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0 lg:rounded-bl-none"
         >
-          {code ? (
-            <CodeBlockWithHighlightLines
-              value={code}
-              lang="javascript"
-              highlightLines={highlightLines}
-            />
-          ) : codeblock ? (
-            <TinaMarkdown
-              content={codeblock}
-              components={{
-                code_block: (props) => (
+          <div ref={codeContentRef}>
+            <div
+              className={`transition-opacity duration-300 ${
+                isLoading ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              {isLoading && <CodeBlockSkeleton />}
+            </div>
+            <div
+              className={`transition-opacity duration-300 ${
+                isLoading ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isLoading &&
+                (code ? (
                   <CodeBlockWithHighlightLines
-                    {...props}
+                    value={code}
+                    lang="javascript"
                     highlightLines={highlightLines}
                   />
-                ),
-              }}
-            />
-          ) : (
-            <p>No code block available.</p>
-          )}
+                ) : codeblock ? (
+                  <TinaMarkdown
+                    content={codeblock}
+                    components={{
+                      code_block: (props) => (
+                        <CodeBlockWithHighlightLines
+                          {...props}
+                          highlightLines={highlightLines}
+                        />
+                      ),
+                    }}
+                  />
+                ) : (
+                  <p className="p-4">No code block available.</p>
+                ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
