@@ -4,16 +4,40 @@ seo:
   title: Uploads an Image
   description: 'API endpoint for POST /pet/{petId}/uploadImage'
 title: Uploads an Image
-last_edited: '2025-07-09T06:50:41.857Z'
+last_edited: '2025-07-11T01:56:49.608Z'
 ---
+
+This endpoint allows you to upload an image file for a specific pet in your store. Images will be associated with the pet identified by the `petId` parameter.
 
 ## Endpoint Details
 
 **Method:** `POST`
 
- 
-
 **Path:** `/pet/{petId}/uploadImage`
+
+This endpoint accepts multipart form data with an image file and optional metadata. The `petId` must correspond to an existing pet in your store. Supported image formats include JPEG, PNG, and GIF with a maximum file size of 10MB.
+
+<codeTabs
+  tabs={[
+    {
+      name: "cURL",
+      content:
+        "curl --request POST \\\n  --url https://petstore.swagger.io/v2/pet/123/uploadImage \\\n  --header 'Content-Type: multipart/form-data' \\\n  --header 'Authorization: Bearer <token>' \\\n  --form 'file=@pet-photo.jpg' \\\n  --form 'additionalMetadata=Profile picture for Fluffy'",
+      language: "shell"
+    },
+    { 
+      name: "PHP", 
+      content: "<?php\n$petId = 123;\n$file = new CURLFile('pet-photo.jpg', 'image/jpeg');\n\n$data = [\n    'file' => $file,\n    'additionalMetadata' => 'Profile picture for Fluffy'\n];\n\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, \"https://petstore.swagger.io/v2/pet/{$petId}/uploadImage\");\ncurl_setopt($ch, CURLOPT_POST, true);\ncurl_setopt($ch, CURLOPT_POSTFIELDS, $data);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\n\n$response = curl_exec($ch);\ncurl_close($ch);",
+      language: "php"
+    },
+    {
+      name: "Javascript",
+      content: "const petId = 123;\nconst formData = new FormData();\nconst fileInput = document.querySelector('#imageFile');\n\nformData.append('file', fileInput.files[0]);\nformData.append('additionalMetadata', 'Profile picture for Fluffy');\n\nfetch(`https://petstore.swagger.io/v2/pet/${petId}/uploadImage`, {\n  method: 'POST',\n  headers: {\n    'Authorization': 'Bearer <token>'\n  },\n  body: formData\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+      language: "javascript"
+    }
+  ]}
+  initialSelectedIndex={0}
+/>
 
 ## API Reference
 

@@ -28,7 +28,7 @@ type ComponentMapping = {
   typeDefinition: {
     property: {
       name: string;
-      description: string;
+      description: TinaMarkdownContent;
       type: string;
       typeUrl: string;
       required: boolean;
@@ -111,12 +111,6 @@ type CalloutVariant =
   | "lock"
   | "api";
 
-interface CalloutComponentProps {
-  variant?: CalloutVariant;
-  body?: TinaMarkdownContent;
-  text?: any;
-}
-
 export const MarkdownComponentMapping: Components<ComponentMapping> = {
   // Our embeds we can inject via MDX
   scrollShowcase: (props) => <ScrollBasedShowcase {...props} />,
@@ -139,6 +133,9 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   ul: (props) => (
     <ul className="my-4 ml-2 list-disc text-neutral-text" {...props} />
   ),
+  hr: (props) => (
+    <hr className="w-[50%] h-0.25 bg-neutral-text-secondary text-transparent ml-4 my-8" />
+  ),
   ol: (props) => (
     <ol className="my-4 ml-2 list-decimal text-neutral-text" {...props} />
   ),
@@ -154,7 +151,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   ),
   code: (props) => (
     <code
-      className="rounded border-y-neutral-border bg-neutral-surface shadow-sm px-1 py-0.5 text-brand-primary"
+      className="rounded border-y-neutral-border bg-neutral-surface shadow-sm px-1 py-0.5 text-brand-primary border border-neutral-border"
       {...props}
     />
   ),

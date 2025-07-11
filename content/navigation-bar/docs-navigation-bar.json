@@ -9,6 +9,11 @@
           "title": "Introduction",
           "items": [
             {
+              "title": "Example",
+              "slug": "content/docs/Test-example-doc.mdx",
+              "_template": "item"
+            },
+            {
               "title": "Quickstart",
               "slug": "content/docs/index.mdx",
               "_template": "item"

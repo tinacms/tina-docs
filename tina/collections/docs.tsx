@@ -62,6 +62,7 @@ export const docsCollection = {
       label: "Body",
       toolbarOverride: [
         "heading",
+        "hr",
         "link",
         "image",
         "quote",

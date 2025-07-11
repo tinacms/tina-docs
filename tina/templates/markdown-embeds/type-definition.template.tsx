@@ -21,7 +21,7 @@ export const TypeDefinitionTemplate = {
           label: "Name",
         },
         {
-          type: "string",
+          type: "rich-text",
           name: "description",
           label: "Description",
         },

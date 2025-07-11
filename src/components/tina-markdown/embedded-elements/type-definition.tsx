@@ -1,4 +1,6 @@
 import { tinaField } from "tinacms/dist/react";
+import { TinaMarkdown } from "tinacms/dist/rich-text";
+import MarkdownComponentMapping from "../markdown-component-mapping";
 
 export default function TypeDefinition(props) {
   {
@@ -37,12 +39,15 @@ export default function TypeDefinition(props) {
                   property.type
                 )}
               </div>
-              <p
+              <div
                 className="text-neutral-text-secondary text-sm w-fit"
                 data-tina-field={tinaField(property, "description")}
               >
-                {property.description}
-              </p>
+                <TinaMarkdown
+                  content={property.description}
+                  components={MarkdownComponentMapping}
+                />
+              </div>
             </div>
           </div>
         </div>

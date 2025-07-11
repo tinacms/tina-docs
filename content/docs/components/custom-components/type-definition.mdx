@@ -1,122 +1,211 @@
 ---
 seo:
   title: TinaDocs – Type Definition
-title: Type Definition
-last_edited: '2025-07-10T02:34:50.023Z'
+title: Location Ref
+last_edited: '2025-07-11T00:55:36.325Z'
 tocIsHidden: false
 ---
+
+> API reference for location references in Plate.
+
+Location references are objects that keep specific locations (paths, points, or ranges) in a document synced over time as new operations are applied to the editor.
+
+You can access their `current` property at any time for the up-to-date location value. You can access their `current` property at any time for the up-to-date location value.
+
+## Types
+
+***
+
+#### `PathRef`
+
+Path reference objects keep a specific path in a document synced over time. Created using `editor.api.pathRef`.
 
 <typeDefinition
   property={[
     {
-      name: "Test",
-      description: "This describes what the thing does",
-      type: "Object<Tabbed Code Block>",
-      required: false,
+      name: "current",
+      description: "The current path value, updated as operations are applied.\n",
+      type: "Path | null",
+      required: true,
       experimental: false,
-      typeUrl: "/docs/components/mermaid-diagrams#flowcharts"
+      typeUrl: ""
     },
     {
-      name: "Test",
-      description: "Some description",
-      type: "String",
+      name: "affinity",
+      description:
+        "The direction to prefer when transforming the path:\n\n* 'forward': Prefer the position after inserted content\n* 'backward': Prefer the position before inserted content\n* null: No preference\n",
+      type: "'forward' | 'backward' | null",
       required: false,
-      experimental: true
+      experimental: false
     },
-    { name: "Other", description: "This is some other thing", type: "Unknown" },
     {
-      name: "Test",
-      description: "some final test",
-      type: "Number",
-      typeUrl: "test",
-      required: false
+      name: "unref( )",
+      description:
+        "Call this when you no longer need to sync this path. Returns the final path value.\n",
+      type: "( ) => Path | null"
     }
   ]}
 />
 
-<accordion
-  heading="Click to expand"
-  docText={<>
-    Default Text. Edit me!
-  </>}
-  image="/img/rico-replacement.jpg"
-  fullWidth={false}
-/>
+#### `PointRef`
 
-<accordionBlock
-  accordionItems={[
-    {
-      heading: "Click to expand",
-      docText: "Default Text. Edit me!\n",
-      image: "/img/rico-replacement.jpg"
-    },
-    {
-      heading: "Click to expand",
-      docText: "Default Text. Edit me!\n",
-      image: "/img/rico-replacement.jpg"
-    }
-  ]}
-  fullWidth={true}
-/>
+Point reference objects keep a specific point in a document synced over time. Created using `editor.api.pointRef`.
 
-<cardGrid
-  cards={[
+<typeDefinition
+  property={[
     {
-      title: "Card Title",
-      description: "Card Description",
-      link: "https://www.google.com",
-      linkText: "Search now"
+      name: "current",
+      description:
+        "The current point value, updated as operations are applied.\n",
+      type: "Point | null",
+      required: true,
+      experimental: false,
+      typeUrl: ""
     },
     {
-      title: "Card Title",
-      description: "Card Description",
-      link: "https://www.google.com",
-      linkText: "Search now"
+      name: "affinity",
+      description:
+        "The direction to prefer when transforming the point:\n\n* 'forward': Prefer the position after inserted content\n* 'backward': Prefer the position before inserted content\n* null: No preference\n",
+      type: "'forward' | 'backward' | null",
+      required: false,
+      experimental: false
     },
     {
-      title: "Card Title",
-      description: "Card Description",
-      link: "https://www.google.com",
-      linkText: "Search now"
-    },
-    {
-      title: "Card Title",
-      description: "Card Description",
-      link: "https://www.google.com",
-      linkText: "Search now"
+      name: "unref( )",
+      description:
+        "Call this when you no longer need to sync this point. Returns the final point value.\n",
+      type: "( ) => Point | null"
     }
   ]}
 />
 
-<scrollShowcase
-  showcaseItems={[
+#### `RangeRef`
+
+Range reference objects keep a specific range in a document synced over time. Created using `editor.api.rangeRef`.
+
+<typeDefinition
+  property={[
     {
-      title: "Title",
-      image: "/img/rico-replacement.jpg",
-      content: "Default Text. Edit me!\n",
-      useAsSubsection: false
+      name: "current",
+      description:
+        "The current range value, updated as operations are applied.\n",
+      type: "TRange | null",
+      required: true,
+      experimental: false,
+      typeUrl: ""
     },
     {
-      title: "Title",
-      image: "/img/rico-replacement.jpg",
-      content: "Default Text. Edit me!\n",
-      useAsSubsection: false
+      name: "affinity",
+      description:
+        "The direction to prefer when transforming the range:\n\n* 'forward': Both points prefer after inserted content\n* 'backward': Both points prefer before inserted content\n* 'inward': Range tends to stay same size when content is inserted at edges\n* 'outward': Range tends to grow when content is inserted at edges\n* null: No preference\n",
+      type: "'forward' | 'backward' | 'inward' | 'outward' | null",
+      required: false,
+      experimental: false
     },
     {
-      title: "Title",
-      image: "/img/rico-replacement.jpg",
-      content: "Default Text. Edit me!\n",
-      useAsSubsection: false
+      name: "unref( )",
+      description:
+        "Call this when you no longer need to sync this range. Returns the final range value.\n",
+      type: "( ) => TRange | null"
     }
   ]}
 />
 
-<youtube embedSrc="https://www.youtube.com/embed/CsCQS7HIBv0?si=os9ona92O2VMOl-V" caption="Seth goes over the basics of using TinaCMS" minutes="2" />
+Example usage of a RangeRef:
 
-<codeTabs
-  tabs={[
-    { name: "Query", content: "const CONTENT_MANAGEMENT = 'Optimized';" },
-    { name: "Response", content: "const LLAMAS = '100';" }
+```typescript
+const selectionRef = editor.api.rangeRef(editor.selection, {
+  affinity: 'inward',
+})
+// Operations that might change the selection
+Transforms.unwrapNodes(editor)
+// Restore the selection using the ref
+Transforms.select(editor, selectionRef.unref())
+```
+
+## `PathRefApi`
+
+***
+
+#### `transform`
+
+Transform a path reference by an operation.
+
+<typeDefinition
+  property={[
+    {
+      name: "ref",
+      description: "The path reference to transform.\n",
+      type: "PathRef",
+      required: true,
+      experimental: false,
+      typeUrl: ""
+    },
+    {
+      name: "op",
+      description:
+        "The operation to apply. The editor calls this automatically as needed.\n",
+      type: "Operation",
+      required: true,
+      experimental: false
+    }
   ]}
-  initialSelectedIndex={0}
+/>
+
+## `PointRefApi`
+
+***
+
+#### `transform`
+
+Transform a point reference by an operation.
+
+<typeDefinition
+  property={[
+    {
+      name: "ref",
+      description: "The point reference to transform.\n",
+      type: "PointRef",
+      required: true,
+      experimental: false,
+      typeUrl: ""
+    },
+    {
+      name: "op",
+      description:
+        "The operation to apply. The editor calls this automatically as needed.\n",
+      type: "Operation",
+      required: true,
+      experimental: false
+    }
+  ]}
+/>
+
+## `RangeRefApi`
+
+***
+
+#### `transform`
+
+Transform a range reference by an operation.
+
+<typeDefinition
+  property={[
+    {
+      name: "ref",
+      description: "The range reference to transform.\n",
+      type: "RangeRef",
+      required: true,
+      experimental: false,
+      typeUrl: ""
+    },
+    {
+      name: "op",
+      description:
+        "The operation to apply. The editor calls this automatically as needed.\n",
+      type: "Operation",
+      required: true,
+      experimental: false
+    }
+  ]}
 />

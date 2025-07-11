@@ -1,0 +1,309 @@
+---
+title: Building Your First React Component
+last_edited: '2025-07-11T02:10:17.408Z'
+seo:
+  title: "Building Your First React Component - Step by Step Tutorial"
+  description: "Learn how to create, style, and test your first React component with this comprehensive beginner-friendly tutorial."
+---
+
+Welcome to this step-by-step tutorial! By the end of this guide, you'll have created a fully functional React component with styling, state management, and basic testing.
+
+<calloutBlock
+  variant="info"
+  heading="Prerequisites"
+  text="Before starting this tutorial, make sure you have Node.js installed and basic knowledge of JavaScript and HTML."
+/>
+
+## What You'll Learn
+
+- How to create a functional React component
+- Managing component state with hooks
+- Styling components with CSS modules
+- Writing basic component tests
+- Best practices for component structure
+
+## Step 1: Setting Up Your Component
+
+Let's start by creating a simple `UserCard` component that displays user information.
+
+```jsx
+// components/UserCard.jsx
+import React, { useState } from 'react';
+import styles from './UserCard.module.css';
+
+const UserCard = ({ user }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className={styles.userCard}>
+      <div className={styles.header}>
+        <img 
+          src={user.avatar} 
+          alt={`${user.name}'s avatar`}
+          className={styles.avatar}
+        />
+        <div className={styles.info}>
+          <h3 className={styles.name}>{user.name}</h3>
+          <p className={styles.role}>{user.role}</p>
+        </div>
+      </div>
+      
+      <button 
+        className={styles.toggleButton}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        {isExpanded ? 'Show Less' : 'Show More'}
+      </button>
+      
+      {isExpanded && (
+        <div className={styles.details}>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Department:</strong> {user.department}</p>
+          <p><strong>Bio:</strong> {user.bio}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default UserCard;
+```
+
+<calloutBlock
+  variant="tip"
+  heading="Pro Tip"
+  text="Always use destructuring for props to make your component interface clear and avoid repetitive prop.property syntax."
+/>
+
+## Step 2: Adding Styles
+
+Create a CSS module to style your component:
+
+```css
+/* components/UserCard.module.css */
+.userCard {
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.userCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+}
+
+.name {
+  margin: 0 0 4px 0;
+  color: #2d3748;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.role {
+  margin: 0;
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.toggleButton {
+  background: #3182ce;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.toggleButton:hover {
+  background: #2c5aa0;
+}
+
+.details {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.details p {
+  margin: 8px 0;
+  color: #4a5568;
+}
+```
+
+## Step 3: Using Your Component
+
+Now let's see how to use your `UserCard` component in a parent component:
+
+```jsx
+// App.jsx
+import React from 'react';
+import UserCard from './components/UserCard';
+
+const App = () => {
+  const sampleUsers = [
+    {
+      id: 1,
+      name: "Sarah Johnson",
+      role: "Frontend Developer",
+      email: "sarah.johnson@example.com",
+      department: "Engineering",
+      bio: "Passionate about creating beautiful, accessible user interfaces with modern web technologies.",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150"
+    },
+    {
+      id: 2,
+      name: "Michael Chen",
+      role: "UX Designer",
+      email: "michael.chen@example.com",
+      department: "Design",
+      bio: "Focused on user-centered design and creating intuitive digital experiences.",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150"
+    }
+  ];
+
+  return (
+    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
+      <h1>Team Directory</h1>
+      {sampleUsers.map(user => (
+        <UserCard key={user.id} user={user} />
+      ))}
+    </div>
+  );
+};
+
+export default App;
+```
+
+<calloutBlock
+  variant="warning"
+  heading="Important"
+  text="Always provide a unique `key` prop when rendering lists of components to help React efficiently update the DOM."
+/>
+
+## Step 4: Adding Tests
+
+Let's write a simple test for our component using Jest and React Testing Library:
+
+```jsx
+// __tests__/UserCard.test.jsx
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import UserCard from '../components/UserCard';
+
+const mockUser = {
+  name: "John Doe",
+  role: "Developer",
+  email: "john@example.com",
+  department: "Engineering",
+  bio: "A passionate developer",
+  avatar: "https://example.com/avatar.jpg"
+};
+
+describe('UserCard Component', () => {
+  test('renders user information correctly', () => {
+    render(<UserCard user={mockUser} />);
+    
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Developer')).toBeInTheDocument();
+    expect(screen.getByText('Show More')).toBeInTheDocument();
+  });
+
+  test('toggles expanded view when button is clicked', () => {
+    render(<UserCard user={mockUser} />);
+    
+    const toggleButton = screen.getByText('Show More');
+    
+    // Initially, details should not be visible
+    expect(screen.queryByText('john@example.com')).not.toBeInTheDocument();
+    
+    // Click to expand
+    fireEvent.click(toggleButton);
+    
+    // Details should now be visible
+    expect(screen.getByText('john@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Show Less')).toBeInTheDocument();
+  });
+
+  test('displays user avatar with correct alt text', () => {
+    render(<UserCard user={mockUser} />);
+    
+    const avatar = screen.getByAltText("John Doe's avatar");
+    expect(avatar).toHaveAttribute('src', mockUser.avatar);
+  });
+});
+```
+
+## Step 5: Advanced Features
+
+<accordionBlock
+  fullWidth={true}
+  accordionItems={[
+    {
+      heading: "Adding PropTypes Validation",
+      docText: "For better development experience, add PropTypes to validate your component props:\n\n```jsx\nimport PropTypes from 'prop-types';\n\nUserCard.propTypes = {\n  user: PropTypes.shape({\n    name: PropTypes.string.isRequired,\n    role: PropTypes.string.isRequired,\n    email: PropTypes.string.isRequired,\n    department: PropTypes.string.isRequired,\n    bio: PropTypes.string.isRequired,\n    avatar: PropTypes.string.isRequired\n  }).isRequired\n};\n```"
+    },
+    {
+      heading: "Performance Optimization",
+      docText: "Use React.memo to prevent unnecessary re-renders:\n\n```jsx\nimport React, { useState, memo } from 'react';\n\nconst UserCard = memo(({ user }) => {\n  // Component logic here\n});\n\n// Only re-render if user prop changes\nexport default UserCard;\n```"
+    },
+    {
+      heading: "Accessibility Improvements",
+      docText: "Enhance accessibility with proper ARIA attributes:\n\n```jsx\n<button \n  className={styles.toggleButton}\n  onClick={() => setIsExpanded(!isExpanded)}\n  aria-expanded={isExpanded}\n  aria-controls=\"user-details\"\n>\n  {isExpanded ? 'Show Less' : 'Show More'}\n</button>\n\n{isExpanded && (\n  <div \n    id=\"user-details\" \n    className={styles.details}\n    role=\"region\"\n    aria-label=\"User details\"\n  >\n    {/* Details content */}\n  </div>\n)}\n```"
+    }
+  ]}
+/>
+
+## What's Next?
+
+Congratulations! You've successfully created a reusable React component with:
+
+✅ State management with hooks  
+✅ CSS module styling  
+✅ Interactive functionality  
+✅ Basic testing  
+✅ Accessibility considerations  
+
+### Suggested Next Steps
+
+1. **Add TypeScript** - Convert your component to TypeScript for better type safety
+2. **Implement Error Boundaries** - Handle component errors gracefully
+3. **Add Storybook** - Document your component with interactive examples
+4. **Create Custom Hooks** - Extract reusable logic into custom hooks
+
+<calloutBlock
+  variant="success"
+  heading="Tutorial Complete!"
+  text="You now have a solid foundation for building React components. Practice by creating more components and exploring advanced React patterns."
+/>
+
+## Additional Resources
+
+- [React Official Documentation](https://react.dev)
+- [React Testing Library Guide](https://testing-library.com/docs/react-testing-library/intro/)
+- [CSS Modules Documentation](https://github.com/css-modules/css-modules)
+- [Accessibility Guidelines](https://www.w3.org/WAI/ARIA/apg/)
+

@@ -72,6 +72,11 @@ export const AccordionBlockTemplate = {
       list: true,
       fields: AccordionItemFields,
       ui: {
+        itemProps: (item) => {
+          return {
+            label: item.heading ?? "Accordion Item",
+          };
+        },
         defaultItem: {
           heading: "Click to expand",
           docText: {
