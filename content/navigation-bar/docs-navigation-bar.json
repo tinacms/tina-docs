@@ -9,17 +9,12 @@
           "title": "Introduction",
           "items": [
             {
-              "title": "Example",
-              "slug": "content/docs/Test-example-doc.mdx",
-              "_template": "item"
-            },
-            {
               "title": "Quickstart",
               "slug": "content/docs/index.mdx",
               "_template": "item"
             },
             {
-              "title": "Take Back your Docs",
+              "title": "Showcase",
               "slug": "content/docs/introduction/take-back-your-docs.mdx",
               "_template": "item"
             }
@@ -29,30 +24,24 @@
           "title": "TinaDocs & TinaCMS",
           "items": [
             {
-              "title": "Editing Content",
+              "title": "What is TinaCMS?",
+              "slug": "content/docs/tinacms/what-is-tinacms.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "How Does TinaCMS Work?",
+              "slug": "content/docs/tinacms/how-does-tinacms-work.mdx",
+              "_template": "item"
+            },
+            {
+              "title": "Usage – Editing",
               "slug": "content/docs/tinadocs-and-tinacms/editing-content.mdx",
               "_template": "item"
             },
             {
-              "title": "Adding a New Document",
+              "title": "Usage – Developers",
               "slug": "content/docs/tinadocs-and-tinacms/adding-a-new-document.mdx",
               "_template": "item"
-            },
-            {
-              "title": "Learning TinaCMS",
-              "items": [
-                {
-                  "title": "Learn TinaCMS",
-                  "slug": "content/docs/customising/learn-tinacms.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Further Technical References",
-                  "slug": "content/docs/customising/technical-reference.mdx",
-                  "_template": "item"
-                }
-              ],
-              "_template": "items"
             },
             {
               "title": "The Datalayer",

@@ -31,6 +31,19 @@ export const docsCollection = {
       const slug = document._sys.breadcrumbs.join("/");
       return `/docs/${slug}`;
     },
+    filename: {
+      slugify: (values) => {
+        return (
+          values?.title
+            ?.toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, "") // Remove special characters except spaces and dashes
+            .replace(/\s+/g, "-") // Replace spaces with dashes
+            .replace(/-+/g, "-") // Replace multiple dashes with single dash
+            .replace(/^-|-$/g, "") || // Remove leading/trailing dashes
+          ""
+        );
+      },
+    },
   },
   fields: [
     SeoInformation,
@@ -60,22 +73,6 @@ export const docsCollection = {
       type: "rich-text",
       name: "body",
       label: "Body",
-      toolbarOverride: [
-        "heading",
-        "hr",
-        "link",
-        "image",
-        "quote",
-        "ul",
-        "ol",
-        "bold",
-        "italic",
-        "code",
-        "codeBlock",
-        "mermaid",
-        "table",
-        "embed",
-      ],
       isBody: true,
       templates: [
         ScrollShowcaseTemplate as Template,

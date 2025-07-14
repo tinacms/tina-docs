@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 
 interface AccordionProps {
@@ -184,13 +185,19 @@ export const AccordionBlock = (props) => {
                   "image"
                 )}
               >
-                <Image
+                <ImageOverlayWrapper
                   src={item.image}
                   alt="image"
-                  className="rounded-lg"
-                  width={500}
-                  height={500}
-                />
+                  caption={item?.heading}
+                >
+                  <Image
+                    src={item.image}
+                    alt="image"
+                    className="rounded-lg"
+                    width={500}
+                    height={500}
+                  />
+                </ImageOverlayWrapper>
               </div>
             )}
           </div>

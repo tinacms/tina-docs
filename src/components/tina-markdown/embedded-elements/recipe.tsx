@@ -40,7 +40,6 @@ const InstructionsSkeleton = () => (
 );
 
 const MIN_INSTRUCTIONS_HEIGHT = 60;
-const MD_BREAKPOINT = 768;
 
 export const RecipeBlock = (data: {
   title?: string;
@@ -55,11 +54,11 @@ export const RecipeBlock = (data: {
   const [clickedInstruction, setClickedInstruction] = useState<number | null>(
     null
   );
-  //LHSheight is the height used for the instructions block when the screen is >= 1024px
-  const [LHSheight, setLHSheight] = useState<string | null>(null);
+  const [codeHeight, setCodeHeight] = useState<number | null>(null);
   const [isBottomOfInstructions, setIsBottomOfInstructions] =
     useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   const codeblockRef = useRef<HTMLDivElement>(null);
   const codeContentRef = useRef<HTMLDivElement>(null);
@@ -71,12 +70,24 @@ export const RecipeBlock = (data: {
     const timer = setTimeout(() => {
       if (codeContentRef.current) {
         const height = Math.round(codeContentRef.current.offsetHeight);
-        setLHSheight(`${height}`);
+        setCodeHeight(height);
         setIsLoading(false);
       }
     }, 200);
 
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    // Set initial value
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Monitor code content height changes
@@ -94,7 +105,7 @@ export const RecipeBlock = (data: {
         if (Math.abs(newHeight - lastHeight) > 10) {
           clearTimeout(timeoutId);
           timeoutId = setTimeout(() => {
-            setLHSheight(`${Math.round(newHeight)}`);
+            setCodeHeight(Math.round(newHeight));
             lastHeight = newHeight;
           }, 100);
         }
@@ -151,7 +162,8 @@ export const RecipeBlock = (data: {
       });
     }
 
-    if (window.innerWidth < 1024 && instructionRefs.current[index]) {
+    // On mobile, scroll to instruction
+    if (isMobile && instructionRefs.current[index]) {
       instructionRefs.current[index].scrollIntoView({
         behavior: "smooth",
         block: "nearest",
@@ -170,25 +182,34 @@ export const RecipeBlock = (data: {
     }
   };
 
-  //height used for the instructions container when the screen is < 1024px. Maintains 1:2 ratio of instruction to code
-  const smAndMbHeight = LHSheight ? `${Number(LHSheight) / 2}px` : null;
-
   const calculateInstructionsHeight = () => {
     return instructionRefs.current.reduce((total, ref) => {
       return total + (ref?.offsetHeight || 0);
     }, 0);
   };
 
-  const checkIfScrollable = () => {
-    if (typeof window !== "undefined" && window.innerWidth < 1024) {
-      return (
-        calculateInstructionsHeight() >=
-        Number.parseInt(smAndMbHeight || "0", 10)
-      );
+  const getInstructionsHeight = () => {
+    // Mobile: Use reasonable max height
+    if (isMobile) {
+      return "300px"; // Fixed reasonable height for mobile
     }
-    return (
-      calculateInstructionsHeight() > Number.parseInt(LHSheight || "0", 10)
-    );
+
+    // Desktop: Match code height but with minimum
+    if (codeHeight && codeHeight > MIN_INSTRUCTIONS_HEIGHT) {
+      return `${codeHeight + 2}px`;
+    }
+
+    return "auto";
+  };
+
+  const checkIfScrollable = () => {
+    const instructionsHeight = calculateInstructionsHeight();
+
+    if (isMobile) {
+      return instructionsHeight >= 300; // Mobile fixed height
+    }
+
+    return instructionsHeight > (codeHeight || 0);
   };
 
   return (
@@ -206,18 +227,13 @@ export const RecipeBlock = (data: {
         )}
       </div>
 
-      <div className="content-wrapper flex flex-col lg:flex-row rounded-2xl">
+      <div className="content-wrapper flex flex-col lg:flex-row rounded-2xl overflow-hidden border border-neutral-border">
         <div
-          className="instructions relative flex shrink-0 flex-col rounded-t-2xl bg-gray-800 lg:w-1/3 lg:rounded-r-none lg:rounded-bl-2xl border border-neutral-border-subtle rounded-br-none"
+          className="instructions relative flex shrink-0 flex-col bg-neutral-background-secondary lg:w-1/3 lg:border-r lg:border-b-0 border-b border-neutral-border"
           ref={instructionBlockRefs}
           style={{
-            height:
-              typeof window !== "undefined" &&
-              window.innerWidth > MD_BREAKPOINT &&
-              LHSheight &&
-              LHSheight > MIN_INSTRUCTIONS_HEIGHT
-                ? `${Number(LHSheight) + 2}px`
-                : "auto",
+            height: getInstructionsHeight(),
+            maxHeight: isMobile ? "300px" : "none",
           }}
         >
           <div
@@ -226,21 +242,15 @@ export const RecipeBlock = (data: {
               instruction?.length === 0 ||
               !instruction ||
               !checkIfScrollable()
-                ? "hidden"
+                ? "opacity-0"
                 : ""
-            } absolute bottom-0 left-0 right-0 z-10`}
+            } absolute bottom-0 left-0 right-0 z-10 transition-all duration-300 pointer-events-none`}
           >
-            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60 lg:rounded-bl-2xl" />
-            <ChevronDownIcon
-              onClick={handleDownArrowClick}
-              className="absolute bottom-4 left-1/2 size-7 -translate-x-1/2 cursor-pointer text-xl text-white shadow-md"
-            />
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-60" />
+            <ChevronDownIcon className="absolute bottom-4 left-1/2 size-7 -translate-x-1/2 text-xl text-white" />
           </div>
 
-          <div
-            className="overflow-auto rounded-t-2xl lg:rounded-bl-2xl rounded-bl-none lg:rounded-tr-none flex-1"
-            onScroll={checkIfBottom}
-          >
+          <div className="flex-1 overflow-auto" onScroll={checkIfBottom}>
             <div
               className={`transition-opacity duration-300 ${
                 isLoading ? "opacity-100" : "opacity-0"
@@ -260,8 +270,8 @@ export const RecipeBlock = (data: {
                     ref={(element) => {
                       instructionRefs.current[idx] = element;
                     }}
-                    className={`instruction-item cursor-pointer bg-gray-800 p-4 text-white border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0 last:rounded-bl-none
-                  ${clickedInstruction === idx ? "bg-slate-600" : ""}`}
+                    className={`instruction-item cursor-pointer bg-neutral-background-secondary p-4 text-neutral-text border border-neutral-border-subtle border-x-0 first:border-t-0 last:border-b-0 last:rounded-bl-none
+                  ${clickedInstruction === idx ? "bg-brand-primary-contrast" : ""}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleInstructionClick(
@@ -271,7 +281,7 @@ export const RecipeBlock = (data: {
                       );
                     }}
                   >
-                    <h5 className="font-tuner">{`${idx + 1}. ${
+                    <h5 className="font-light">{`${idx + 1}. ${
                       inst.header || "Default Header"
                     }`}</h5>
                     <div
@@ -281,13 +291,13 @@ export const RecipeBlock = (data: {
                           : "max-h-0 opacity-0 duration-0"
                       }`}
                     >
-                      <p className="mt-2 text-sm text-gray-300 leading-relaxed">
+                      <p className="mt-2 text-sm text-neutral-text-secondary leading-relaxed">
                         {inst.itemDescription || "Default Item Description"}
                       </p>
                     </div>
                   </div>
                 )) || (
-                  <p className="p-4 text-white py-4">
+                  <p className="p-4 text-neutral-text-secondary py-4">
                     No instructions available.
                   </p>
                 ))}
@@ -297,7 +307,7 @@ export const RecipeBlock = (data: {
 
         <div
           ref={codeblockRef}
-          className="flex flex-col top-3 z-10 h-fit lg:w-[66%] rounded-b-2xl lg:rounded-r-2xl py-0 bg-neutral-background shadow-sm border border-neutral-border-subtle lg:border-l-0 lg:rounded-bl-none"
+          className="flex flex-col z-10 h-full lg:w-2/3 py-0 bg-neutral-background overflow-auto"
         >
           <div ref={codeContentRef}>
             <div
@@ -312,6 +322,13 @@ export const RecipeBlock = (data: {
                 isLoading ? "opacity-0" : "opacity-100"
               }`}
             >
+              <style>
+                {`
+                  .shiki {
+                    overflow-x: auto !important;
+                  }
+                `}
+              </style>
               {!isLoading &&
                 (code ? (
                   <CodeBlockWithHighlightLines

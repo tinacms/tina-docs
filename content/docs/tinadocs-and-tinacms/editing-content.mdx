@@ -1,11 +1,11 @@
 ---
-title: Editing Content
-last_edited: '2025-05-23T06:34:11.772Z'
+title: Usage – Editor
+last_edited: '2025-07-14T00:07:36.483Z'
 ---
 
-Now our site is up and running, let's start using the **no-code editing window**.
+> These instructions assume you've already deployed your site – if you created it with the TinaCloud QuickStart, this has all been done for you.
 
-We've set up **visual editing** in this starter so you can view changes on your page live.
+Let's get to grips with the **no-code editing workflow** in production.
 
 <Callout
   body={<>
@@ -16,117 +16,78 @@ We've set up **visual editing** in this starter so you can view changes on your 
 
 <youtube embedSrc="https://www.youtube.com/embed/CsCQS7HIBv0?si=os9ona92O2VMOl-V" caption="Seth goes over the basics of using TinaCMS" minutes="2" />
 
-## Running your Project
+## First Steps…
 
-The TinaCMS editor has two modes:
+1. You'll need a GitHub account, if you don't have one – create one and come back.
+2. Add your account to the project in TinaCloud (or ask your admins to add you).
 
-1. **Local Development Mode**: When running your site locally for development
-2. **Production Mode**: When using the deployed version of your site
+## Making Edits
 
-In local development mode, changes are saved directly to files in your local repository. In production mode (with TinaCloud), changes are committed directly to your Git repository.
+1. Go to the [/admin](/admin#/~/docs/tinadocs-and-tinacms/editing-content) route of your website
+2. Change the content in one of the fields and watch your site preview update in real time. This is called **visual editing**.
+3. Press save.
 
-## Accessing the Editor
+<Callout
+  body={<>
+    This will automatically trigger an update to your site, unless you have [editorial workflow](https://tina.io/editorial-workflow) features enabled (giving teams a Git based approval workflow).
+  </>}
+  variant="warning"
+/>
 
-The TinaCMS editor is available at the `/admin` route of your site.
+> **Note:** these kinds of updates shouldn't create any downtime, depending on your deployment pipeline.
 
-Here's how to access the editor in different environments:
+## Editing a Specific Page
 
-* **Local Development**:
-  * Run `pnpm run dev` in your terminal
-  * Visit `http://localhost:3000/admin`
-  * Changes are saved to your local files
-* **Production**:
-  * Visit `https://<DOMAIN>/admin`on your deployed site
-  * If you are hosting your site with TinaCloud you will be asked to log in
-  * If you self-host you will be prompted to plug in your own authentication credentials
+### Collections Menu
 
-Once on this route, you will see a pencil icon in the top left hand side of the screen. Click to open it.
+You can either look through all your pages via the **collections menu**, or turn on edit mode for a specific page.
 
-## The Initial Editing Interface
+To go to the collections menu, go to your [/admin](/admin) route, then open the sidebar and follow the below graphic.
 
-Once the editor is open you will be prompted with numerous fields representing the content on this page. The layout of these fields is dictated by the schema of this collection.
+![](</Documents (1).png> "Accessing a specific page via the collections menu")
 
-![](/img/tina-editor-example.png "Example Slide-out Editor")
+Clicking on any of the above documents will take you to the visual editor for that page.
 
-Here we can make edits to the content of our file and witness the changes in real time (WYSIWYG)
+### By URL
 
-## Editing Other Files
+Alternatively, you can access the editor for a page you're on by updating the url.
 
-Whilst we can navigate through our files with the admin route prefixed, we can also use the editor to edit other files. 
+Between the **domain** and **the path** of the page you want to edit, add `/admin/#/~/` to take you to the live editor for that page.![](</Untitled design (10).png> "Going to the edit route on a particular URL")
 
-You'll notice on the top left of the open editor there is a menu button (indicated by the three lines icon).
+## Adding a New Page
 
-Clicking it will open another slide-out showing your Collections. You can think of each collection as a  structured data type (or different table in your database). 
+To create a new doc, go to the Docs collection and click “Add File”.
 
-Out of the box, all files on the docs route will be stored in your docs collection. If you click on the Docscollection you will see all of your other files in this project in a file directory structure. Navigate through and find the file you want to edit.
+Folders can be organised as you see fit, and this file path controls the url of that document.
 
-## The Editing Interface
+> For example, a document, `A.mdx` in the folder `/B` can be accessed at `DOMAIN/docs/B/A`.
 
-> **Visual Editing**: TinaCMS offers a powerful visual editing experience where you can see your changes in real-time. This works alongside the standard document editor and provides a WYSIWYG approach to content editing. Toggle between form mode and visual mode to get the best of both worlds.
+![](</Untitled design (11).png> "Adding a new page via the collections menu")
 
-The TinaCMS editing interface consists of several key components:
+<Callout
+  body={<>
+    All documents will be exposed, regardless of whether they're included in the navigation bar or not.
+  </>}
+  variant="warning"
+/>
 
-1. **Collections Navigation**: The sidebar lists all your content collections (blog posts, pages, etc.) – basically each one has a unique data definition. This is useful to distinguish between different page structures in your project.
-2. **Document List**: Displays all documents within a selected collection
-3. **Document Editor**: The form for editing a specific document
-4. **Media Manager**: For uploading and managing media files
+## Managing the Navigation Bar
 
-### Making and Saving Changes
+To edit the navigation bar on the left hand side of your screen, you will need to go into a different collection - called Navigation Bar
 
-1. Select a collection from the sidebar
-2. Choose a document to edit
-3. Make your desired changes in the form
-4. Click "Save" to commit your changes
+![](/img/navigation-collection-example.png "Navigation Bar Collection Example")
 
-When working locally, changes are saved directly to your local file system. When using TinaCloud, changes are committed to your GitHub repository.
+Out of the box you will see a series of pre-created 'groups', this is how you will be able to split up all the content in your documentation site.
 
-### Understanding Tina's Data Management
+To create a new empty group click on the blue plus button. With your new group created click into it to modify its name and content.
 
-TinaCMS takes a unique approach to content management:
+By clicking the plus icon in this group, you can now choose to add a document item to the collection or another level of nesting by creating a sub-group.
 
-#### Git-Based Content Storage
+Choosing item will create an undefined item, to modify it click into it.
 
-Unlike traditional CMSs with databases, TinaCMS stores all your content as files in your GitHub repository:
+Now you can choose the name that this document will have in the navigation bar and the specific file you want this navigation item to render in the Page value.
 
-* **Markdown (.md)**: For simple content
-* **MDX (.mdx)**: For Markdown with JSX components
-* **JSON (.json)**: For structured data
-* **YAML front matter**: For document metadata
-
-For example, this documentation page is stored as an MDX file with YAML front matter:
-
-```mdx
----
-title: Editing Content via the CMS
-last_edited: '2025-04-28T02:24:07.977Z'
----
-
-Now our site is up and running, let's start using the **no-code editing window**.
-
-We've set up **visual editing** in this starter so you can view changes on your page live.
-```
-
-### How Changes Are Saved
-
-When you save changes in TinaCMS:
-
-1. **Local Development**: Changes are written directly to your local file system
-2. **Production with TinaCloud**: Changes are committed to your Git repository through the following process:
-   * The change is sent to TinaCloud and indexed
-   * TinaCloud creates a commit in your repository
-   * Your site is rebuilt with the new content
-
-For collaborative workflows, TinaCloud can be configured to create pull requests instead of direct commits, allowing for content review.
-
-### Advanced Editing Features
-
-TinaCMS includes several advanced features to enhance your editing experience:
-
-* **Visual Editing**: Edit content directly on your site with side-by-side preview
-* **Rich Text Editor**: Format text with a WYSIWYG editor
-* **Media Management**: Upload and manage images and other media files
-* **References**: Create relationships between different content types
-* **Custom Fields**: Create specialized editing components for specific content types
+Click save and you have now made added, edited and inserted your new document into your site 🎉
 
 ### Next Steps
 
