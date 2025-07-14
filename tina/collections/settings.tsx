@@ -73,8 +73,9 @@ export const Settings = {
     },
     {
       name: "autoApiTitles",
-      label:
-        "Auto-capitalize API titles in the navigation bar and generated pages",
+      label: "Auto-Capitalize Titles",
+      description:
+        "Auto-capitalize titles in the navigation bar and generated API pages",
       type: "boolean",
       defaultValue: true,
     },

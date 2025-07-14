@@ -1,15 +1,17 @@
 import type { Template } from "tinacms";
+import { titleCase } from "title-case";
 
 export const itemTemplate: Template = {
   label: "Item",
   name: "item",
   ui: {
     itemProps: (item) => {
-      return { label: `🔗 ${item?.title ?? "Unnamed Menu Item"}` };
+      return {
+        label: `🔗 ${titleCase(item?.slug?.split("/").at(-1).split(".").at(0).replaceAll("-", " ")) ?? "Unnamed Menu Item"}`,
+      };
     },
   },
   fields: [
-    { name: "title", label: "Name", type: "string" },
     { name: "slug", label: "Page", type: "reference", collections: ["docs"] },
   ],
 };

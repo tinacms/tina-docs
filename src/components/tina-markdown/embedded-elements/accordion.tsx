@@ -155,7 +155,7 @@ export const AccordionBlock = (props) => {
             </div>
           </div>
           <div
-            className={`grid gap-4 overflow-scroll transition-all duration-700 ease-in-out ${
+            className={`grid gap-4 transition-all duration-700 ease-in-out ${
               isExpanded[index]
                 ? "max-h-[2000px] opacity-100"
                 : "max-h-0 overflow-hidden opacity-0"

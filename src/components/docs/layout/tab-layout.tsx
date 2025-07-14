@@ -1,5 +1,7 @@
 "use client";
 
+import { formatNavigationData } from "@/src/utils/docs/navigation/documentNavigation";
+import type { NavigationBarData } from "@/src/utils/docs/navigation/documentNavigation";
 import * as Tabs from "@radix-ui/react-tabs";
 import React from "react";
 import { Body } from "./body";
@@ -9,15 +11,32 @@ import { TopNav } from "./top-nav";
 import { findTabWithPath } from "./utils";
 
 export const TabsLayout = ({
-  tabs,
-  children,
-  navigationDocsData,
+  props: { children },
+  tinaProps,
 }: {
-  tabs: { label: string; content: any }[];
-  children: React.ReactNode;
-  navigationDocsData: any;
+  props: {
+    children: React.ReactNode;
+  };
+  tinaProps: any;
 }) => {
-  const [selectedTab, setSelectedTab] = React.useState(tabs[0].label);
+  const [navigationDocsData, setNavigationDocsData] = React.useState({});
+  const [tabs, setTabs] = React.useState([]);
+  const [selectedTab, setSelectedTab] = React.useState();
+
+  React.useEffect(() => {
+    const formattedNavData = formatNavigationData(
+      tinaProps.data as NavigationBarData,
+      false
+    );
+    setNavigationDocsData(formattedNavData);
+    const tabs = formattedNavData.data.map((tab) => ({
+      label: tab.title,
+      content: tab,
+      __typename: tab.__typename,
+    }));
+    setTabs(tabs);
+    setSelectedTab(tabs[0]);
+  }, [tinaProps.data]);
 
   React.useEffect(() => {
     // Find the tab that contains the current path

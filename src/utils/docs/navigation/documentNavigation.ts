@@ -162,22 +162,3 @@ export const formatNavigationData = (
     darkModeLogo,
   };
 };
-
-/**
- * Fetches and formats the documentation navigation structure
- *
- * @param preview - Whether to fetch in preview mode
- * @returns Formatted navigation structure with proper slugs
- */
-export const getDocsNavigation = async (
-  preview = false
-): Promise<FormattedNavigation> => {
-  const navigationData = await client.queries.navigationBar({
-    relativePath: "docs-navigation-bar.json",
-  });
-
-  return formatNavigationData(
-    navigationData.data as NavigationBarData,
-    preview
-  );
-};

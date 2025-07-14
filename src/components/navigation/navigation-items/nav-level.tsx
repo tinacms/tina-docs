@@ -39,7 +39,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
 
   const childSelected = hasNestedSlug(categoryData.items, path);
 
-  if (settings.autoApiTitles) {
+  if (settings.autoApiTitles && categoryData.verb) {
     categoryData.title = titleCase(categoryData.title);
   }
 
@@ -162,7 +162,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
                   className="flex-1 min-w-0"
                   style={{ overflowWrap: "anywhere" }}
                 >
-                  {categoryData.title}
+                  {categoryData.slug.title || categoryData.title}
                 </span>
                 <ChevronRightIcon className="ml-2 flex-shrink-0 opacity-0 w-5 h-auto" />
               </span>
