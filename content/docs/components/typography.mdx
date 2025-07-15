@@ -1,23 +1,55 @@
 ---
-title: Typography
-last_edited: '2025-07-09T04:11:01.996Z'
+title: Styling
+last_edited: '2025-07-15T06:15:08.690Z'
 ---
 
-TinaDocs comes with a flexible, clean typographic system that ensures consistency across your documentation. Whether you're writing Markdown content, hardcoding layout components, or extending with custom blocks, TinaDocs gives you the tools to apply consistent and customizable text styles.
+TinaDocs is opinionated when it comes to the style of its documentation. You can change this as you see fit.
 
-TinaCMS uses all standard markdown syntax for titles
+## Colours and Theming
 
-You can modify the size of any text in the rich-text editor in the rich-text tool-bar.
+There are 6 built colour pre-sets.
 
-## Writing with Markdown
+These are based on the [radix design system](https://www.radix-ui.com/colors) colours.
 
-Whilst TinaDocs stores all of your content in Markdown all editing is done through a rich-text editor powered by [Plate](https://platejs.org/). This toolbar allows you to apply common formatting with ease, which is all automatically transformed into Markdown behind the scenes.
+![](</Untitled design (14).png> "Choose your starter")
 
-* Titles use standard Markdown syntax (#)
-* You can change font size via headling levels in the toolbar
+You can test these out locally, or configure which theme is selected via the Tina settings.
+
+### Adding a New Theme
+
+We recommend modifying an existing theme rather than creating new theme options.
+
+You can find this configuration in `src/styles/global.css`
+
+You can specify  a new theme in addition to those shown, you'll need to update…
+
+* The Tina collection with the new option at `tina/collections/settings.tsx`
+* The theme selector, `src/components/ui/theme-selector.tsx`
+* The styles file with the new theme, at `src/styles/global.css`
+
+## Typography
+
+TinaDocs comes with a flexible, clean typographic system.
+
+### Writing with Markdown
+
+The data behind TinaCMS is markdown, so some concepts such as text colour and font size don't exist natively. All editing is done through a rich-text editor powered by [Plate](https://platejs.org/), that still gives you a word-like editing experience.
+
+Everything transforms into markdown behind the scenes.
+
+* Titles use standard Markdown syntax (#).
+* You can change font size via headling levels in the toolbar.
 * Inline formatting maps 1:1 with Markdown.
+* Empty lines aren't available, if this is a problem either modify the `<hr>` element in the markdown mapping to be transparent, or add margins where necessary.
 
-## Base Style Sizing
+<Callout
+  body={<>
+    Markdown forces you to certain conventions,  which creates content consistency.
+  </>}
+  variant="info"
+/>
+
+### Base Style Sizing
 
 TinaDocs uses semantic HTML tags styled with TailwindCSS utility classes to maintain hierarchical sizing.
 
@@ -31,3 +63,49 @@ TinaDocs uses semantic HTML tags styled with TailwindCSS utility classes to main
 | p        | 16px (1rem)     | Body Text                |
 | li/ul/ol | 16px (1rem)     | Lists                    |
 | code     | 16px (1rem)     | Inline code              |
+
+Tina uses [Tailwind CSS](https://tailwindcss.com/) to style components, giving you a powerful and flexible way to customize your site's appearance.
+
+## Favicon
+
+A favicon is the small icon that appears in your browser tab, bookmarks, and on mobile home screens.
+
+TinaDocs supports custom favicons so you can brand your documentation site to match your product.
+
+1. Open the codebase of your new site
+2. Navigate to the public/ directory
+3. Delete the existing favicon.ico
+4. Insert your own logo image into the public/ directory
+5. Rename it to favicon.xxx
+
+<Callout
+  body={<>
+    Replace 'xxx' with your file type. Supported file types are .ico, .png and .svg
+  </>}
+  variant="warning"
+/>
+
+## Custom Styling
+
+Styling for components or the overall site requires modifying the code, but is straightforward.
+
+### Using Tailwind CSS
+
+You can customize your site's styling by:
+
+1. Modifying your `tailwind.config.js` file to update colors, fonts, spacing, and other design tokens
+2. Applying Tailwind utility classes directly to components
+3. Creating custom CSS in your project that extends Tailwind's capabilities
+
+For a complete guide to Tailwind's capabilities, refer to the [official Tailwind CSS documentation](https://tailwindcss.com/docs).
+
+### Component-Specific Styling
+
+You can customize the appearance of specific Tina components – the tailwind in the `/app` router and embeds (`/components/tina-markdown`) directories can be updated to match your colour scheme and UI standards.
+
+TinaCMS itself is only coupled to the props defining data for components.
+
+```jsx
+// Example: Customizing a Tina component
+<TinaComponent className="bg-blue-500 text-white rounded-lg shadow-md" />
+```

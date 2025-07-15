@@ -1,51 +1,129 @@
 ---
-title: Lists and Tables
-last_edited: '2025-05-26T00:23:34.753Z'
+title: Text Components
+last_edited: '2025-07-15T06:03:35.691Z'
 ---
 
-Lists in TinaDocs are created using standard Markdown syntax and can be styled or extended using Tailwind and React overrides.
+Three embedded components – accordions, callouts and cards are available out of the box.
 
-TinaDocs also supports basic markdown tables, which are ideal for presenting simple data like features. They can be added by clicking the three dots in the rich-text toolbar and clicking the table icon.
+<Callout
+  body={<>
+    We can embed non-standard features into our markdown with the power of [MDX](https://mdxjs.com/).
+  </>}
+  variant="idea"
+/>
 
-Lists can be directly inserted from the rich-text toolbar using the bulleted or numbered lists buttons or automatically in the body by using "\*", "-" and "1."
+## Using Embedded Components
 
-## Lists
+You can see and add an Embed from the rich-text editor toolbar.
 
-We can order our lists:
+![](</Untitled design (15).png> "Access the embed tab of the toolbar.")
 
-1. First Item
-2. Second Item
-3. Third Item
+## Cards
 
-Our keep them unordered:
+Cards can be used to showcase information or as links.
 
-* First Item
-* Second Item
-* Third Item
+They highlight on hover based on the theme.
 
-## Customizing Lists
+<cardGrid
+  cards={[
+    {
+      title: "Pine",
+      description: "Linked card.",
+      link: "https://www.google.com",
+      linkText: "Search now"
+    },
+    {
+      title: "Indigo",
+      description: "This card doesn't link anywhere.",
+      link: "",
+      linkText: ""
+    },
+    { title: "Blossom", description: "🌸", link: "", linkText: "" },
+    { title: "Lake", description: "🏞️", link: "", linkText: "Search now" }
+  ]}
+/>
 
-You can override the lists rendering using the components prop in the \<TinaMarkdown/> function.
+## Accordions
 
-```javascript
-<TinaMarkdown
-  content={content}
-  components={{
-    ul: (props) => <ul className="ml-5 list-disc text-blue-700" {...props} />,
-    li: (props) => <li className="mb-2" {...props}/>,
-  }}
-```
+Collapsible content areas.
 
-## Tables
+This is ideal for FAQs, advanced explanations, or progressive disclosure UI patterns.
 
-Tables have an interesting markdown syntax which can be confusing to some, it looks like such:
+### Multi-accordion
 
-```
-| Feature    | Free Plan | Pro Plan |
-| -----------| ----------| ---------|
-| Hosting    | ✓         | ✓        |
-| API Access | ✗         | ✓        |
-| Support    | Email     | Priority |
-```
+You can block all of your accordions with the option to have them as full-width or half-width.
 
-However, TinaCMS' extension of PlateJS allows users to skip the funky styling and use the table feature in the rich-text editor.
+<accordionBlock
+  fullWidth={true}
+  accordionItems={[
+    {
+      heading: "Click to expand",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    },
+    {
+      heading: "Click to expand",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    }
+  ]}
+/>
+
+### Individual Accordion
+
+Accordions can also exist standalone.
+
+<accordion
+  heading="Click to expand"
+  docText={<>
+    Default Text. Edit me!
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={true}
+/>
+
+## Callouts
+
+Callouts are similar to block-quotes, to add a note or indication outside the normal content flow.
+
+<Callout
+  body={<>
+    Multiple variants exist to convey different messaging.
+  </>}
+  variant="success"
+/>
+
+<Callout
+  body={<>
+    Some callouts indicate potential issues to users.
+  </>}
+  variant="warning"
+/>
+
+<Callout
+  body={<>
+    Some callouts indicate existing issues, or negative examples.
+  </>}
+  variant="error"
+/>
+
+<Callout
+  body={<>
+    Some are just for a note or tip.
+  </>}
+  variant="idea"
+/>
+
+<Callout
+  body={<>
+    Security related callouts exist too 👮.
+  </>}
+  variant="lock"
+/>
+
+<Callout
+  body={<>
+    …or some other specific options!
+  </>}
+  variant="api"
+/>

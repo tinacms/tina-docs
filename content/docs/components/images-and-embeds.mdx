@@ -1,25 +1,75 @@
 ---
-title: Images and Embeds
-last_edited: '2025-05-23T07:42:09.560Z'
+title: Markdown Elements
+last_edited: '2025-07-15T05:00:20.940Z'
 ---
 
-Add images and HTML embeds through the rich-text toolbar.
+Markdown natively contains some key elements including images, tables, lists, etc.
+
+These have been styled when parsed into your page to match the overall theme.
+
+## Text Formatting
+
+With the base editor we can add [links](/), **bold**, *italic* and ~~strikethrough~~ formatting.
+
+### Inline Code
+
+Using a singular backtick we can wrap small bits of `code`.
+
+## Lists
+
+Lists in markdown are indicated with `*`, `-` or `1.`.
+
+We can order our lists:
+
+1. First Item
+2. Second Item
+
+Our keep them unordered:
+
+* First Item
+* Second Item
+
+## Block-quotes
+
+Proceed a line with > to create a block-quote.
+
+> Block-quotes are useful to give tips or notes.
+
+## Tables
+
+The markdown syntax for tables is as below.
+
+```
+| Feature    | Free Plan | Pro Plan |
+| -----------| ----------| ---------|
+| Hosting    | ✓         | ✓        |
+| API Access | ✗         | ✓        |
+| Support    | Email     | Priority |
+```
+
+However, TinaCMS' extension of PlateJS allows you to skip manual styling and created tables via the toolbar.
+
+| Feature     | TinaCMS          | Others            |
+| ----------- | ---------------- | ----------------- |
+| Cool Team   | ✓                | ✗                 |
+| Open Source | ✓                | ✗                 |
+| Mascot      | Super cool llama | Nothing, probably |
 
 ## Images
 
-Adding visual content to your site has never been easier - to do so click on the picture icon in the toolbar and you'll be able to upload, select, and pick from images in your repositories media library
+When editing, click on the picture icon in the toolbar and you'll be able to upload, select, and pick from images in your repositories media library.
 
-![](/img/rico-replacement.jpg)
+Click into the image to manage alt text and captions.
 
-## Embeds
+Users can click on the image in your documentation to view a full-screen version for accessibility.
 
-We also support a series of embeds so you can insert video formatted content in a more optimized way. 
+![](/img/rico-replacement.jpg "This is an example llama")
 
-Got ideas for any other embeds you want to see? Let us know on our [Discord](https://discord.com/invite/zumN63Ybpf)
+### Videos
 
-### YouTube Embeds
+You can also embed YouTube videos in your documentation site.
 
-To embed a YouTube video in your documentation site, click on the three dots in your tool-bar, click 'Embed' and select YouTube video.
+Click on the three dots in your tool-bar, click 'Embed' and select YouTube video.
 
 You can click into these embed objects to modify their fields (i.e Video URL, Captions etc)
 

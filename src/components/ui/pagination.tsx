@@ -22,7 +22,7 @@ export function Pagination() {
           if (item.slug) {
             flattened.push({
               slug: item.slug.id,
-              title: item.title,
+              title: item.slug.title,
             });
           }
           if (item.items) {

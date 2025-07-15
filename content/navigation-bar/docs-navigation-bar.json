@@ -19,7 +19,7 @@
           ]
         },
         {
-          "title": "TinaDocs & TinaCMS",
+          "title": "Using TinaCMS",
           "items": [
             {
               "slug": "content/docs/tinacms/what-is-tinacms.mdx",
@@ -36,29 +36,11 @@
             {
               "slug": "content/docs/tinadocs-and-tinacms/adding-a-new-document.mdx",
               "_template": "item"
-            },
-            {
-              "title": "The Datalayer",
-              "items": [
-                {
-                  "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/overview.mdx",
-                  "_template": "item"
-                },
-                {
-                  "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
-                  "_template": "item"
-                },
-                {
-                  "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
-                  "_template": "item"
-                }
-              ],
-              "_template": "items"
             }
           ]
         },
         {
-          "title": "Components",
+          "title": "TinaDocs Features",
           "items": [
             {
               "slug": "content/docs/components/overview.mdx",
@@ -85,50 +67,7 @@
               "_template": "item"
             },
             {
-              "title": "Custom Components",
-              "items": [
-                {
-                  "slug": "content/docs/components/custom-components/overview.mdx",
-                  "_template": "item"
-                },
-                {
-                  "slug": "content/docs/components/custom-components/accordions.mdx",
-                  "_template": "item"
-                },
-                {
-                  "slug": "content/docs/components/custom-components/card-grid.mdx",
-                  "_template": "item"
-                },
-                {
-                  "slug": "content/docs/components/custom-components/callouts.mdx",
-                  "_template": "item"
-                },
-                {
-                  "slug": "content/docs/components/custom-components/tabbed-codeblocks.mdx",
-                  "_template": "item"
-                },
-                {
-                  "slug": "content/docs/components/code-accordion.mdx",
-                  "_template": "item"
-                },
-                {
-                  "slug": "content/docs/components/custom-components/type-definition.mdx",
-                  "_template": "item"
-                }
-              ],
-              "_template": "items"
-            }
-          ]
-        },
-        {
-          "title": "Customization & Themes",
-          "items": [
-            {
-              "slug": "content/docs/customization-and-themes/overview.mdx",
-              "_template": "item"
-            },
-            {
-              "slug": "content/docs/customising/updating-the-styling.mdx",
+              "slug": "content/docs/api-doc-generation.mdx",
               "_template": "item"
             },
             {
@@ -138,16 +77,30 @@
             {
               "slug": "content/docs/customization-and-themes/redirects.mdx",
               "_template": "item"
-            },
-            {
-              "slug": "content/docs/customization-and-themes/favicon.mdx",
-              "_template": "item"
             }
           ]
         },
         {
-          "title": "Deployment",
+          "title": "Going Live",
           "items": [
+            {
+              "title": "TinaCloud",
+              "items": [
+                {
+                  "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/overview.mdx",
+                  "_template": "item"
+                },
+                {
+                  "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
+                  "_template": "item"
+                },
+                {
+                  "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
+                  "_template": "item"
+                }
+              ],
+              "_template": "items"
+            },
             {
               "slug": "content/docs/set-up/deploying-your-docs.mdx",
               "_template": "item"
@@ -173,6 +126,14 @@
             },
             {
               "slug": "content/docs/api-references.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/components/custom-components/type-definition.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/Test-example-doc.mdx",
               "_template": "item"
             }
           ],

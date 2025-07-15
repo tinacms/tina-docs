@@ -227,7 +227,7 @@ export const RecipeBlock = (data: {
         )}
       </div>
 
-      <div className="content-wrapper flex flex-col lg:flex-row rounded-2xl overflow-hidden border border-neutral-border">
+      <div className="content-wrapper flex flex-col lg:flex-row rounded-2xl overflow-hidden border border-neutral-border shadow-md">
         <div
           className="instructions relative flex shrink-0 flex-col bg-neutral-background-secondary lg:w-1/3 lg:border-r lg:border-b-0 border-b border-neutral-border"
           ref={instructionBlockRefs}
@@ -332,7 +332,7 @@ export const RecipeBlock = (data: {
               {!isLoading &&
                 (code ? (
                   <CodeBlockWithHighlightLines
-                    value={code}
+                    value={code.replaceAll("�", " ")}
                     lang="javascript"
                     highlightLines={highlightLines}
                   />

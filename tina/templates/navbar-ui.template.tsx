@@ -7,7 +7,7 @@ export const itemTemplate: Template = {
   ui: {
     itemProps: (item) => {
       return {
-        label: `🔗 ${titleCase(item?.slug?.split("/").at(-1).split(".").at(0).replaceAll("-", " ")) ?? "Unnamed Menu Item"}`,
+        label: `🔗 ${titleCase(item?.slug?.split("/").at(-1).split(".").at(0).replaceAll("-", " ") ?? "Unnamed Menu Item")}`,
       };
     },
   },

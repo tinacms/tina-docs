@@ -1,12 +1,7 @@
-import {
-  transformerNotationDiff,
-  transformerNotationFocus,
-  transformerNotationHighlight,
-} from "@shikijs/transformers";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { MdContentCopy } from "react-icons/md";
-import { createHighlighter } from "shiki";
+import { shikiSingleton } from "../standard-elements/code-block/shiki-singleton";
 import "../standard-elements/code-block/code-block.css";
 
 const CodeTab = ({
@@ -80,61 +75,45 @@ const CodeBlockWithHighlightLines = ({
       }
 
       try {
-        const highlighter = await createHighlighter({
-          themes: ["night-owl", "github-light"],
-          langs: [lang],
-        });
+        // Add focus notation to the code based on highlightLines
+        let codeWithFocus = codeToHighlight;
+        if (highlightLines) {
+          const lines = codeToHighlight.split("\n");
+          const highlightRanges = highlightLines
+            .split(",")
+            .map((range) => range.trim())
+            .filter((range) => range);
 
-        if (highlighter) {
-          // Add focus notation to the code based on highlightLines
-          let codeWithFocus = codeToHighlight;
-          if (highlightLines) {
-            const lines = codeToHighlight.split("\n");
-            const highlightRanges = highlightLines
-              .split(",")
-              .map((range) => range.trim())
-              .filter((range) => range);
-
-            for (const range of highlightRanges) {
+          // Process ranges in reverse order to avoid index shifting when inserting
+          const sortedRanges = highlightRanges
+            .map((range) => {
               if (range.includes("-")) {
                 const [start, end] = range.split("-").map(Number);
-                for (let i = start - 1; i < end && i < lines.length; i++) {
-                  if (lines[i] && !lines[i].includes("// [!code focus]")) {
-                    lines[i] = `${lines[i]} // [!code focus]`;
-                  }
-                }
-              } else {
-                const lineNum = Number.parseInt(range, 10) - 1;
-                if (
-                  lineNum >= 0 &&
-                  lineNum < lines.length &&
-                  lines[lineNum] &&
-                  !lines[lineNum].includes("// [!code focus]")
-                ) {
-                  lines[lineNum] = `${lines[lineNum]} // [!code focus]`;
-                }
+                return { start: start - 1, count: end - start + 1 };
               }
-            }
-            codeWithFocus = lines.join("\n");
+              const lineNum = Number.parseInt(range, 10) - 1;
+              return { start: lineNum, count: 1 };
+            })
+            .filter((r) => r.start >= 0 && r.start < lines.length)
+            .sort((a, b) => b.start - a.start); // Sort in reverse order
+
+          for (const { start, count } of sortedRanges) {
+            // Insert the focus notation comment before the target line
+            lines.splice(start, 0, `// [!code focus:${count}]`);
           }
 
-          const code = await highlighter.codeToHtml(codeWithFocus, {
-            lang,
-            theme: isDarkMode ? "night-owl" : "github-light",
-            transformers: [
-              transformerNotationDiff({ matchAlgorithm: "v3" }),
-              transformerNotationHighlight({ matchAlgorithm: "v3" }),
-              transformerNotationFocus({ matchAlgorithm: "v3" }),
-            ],
-            meta: {
-              showLineNumbers: true,
-            },
-          });
+          codeWithFocus = lines.join("\n");
+        }
 
-          if (isMounted) {
-            setHtml(code);
-            setIsLoading(false);
-          }
+        const code = await shikiSingleton.codeToHtml(
+          codeWithFocus,
+          lang,
+          isDarkMode
+        );
+
+        if (isMounted) {
+          setHtml(code);
+          setIsLoading(false);
         }
       } catch (error) {
         if (isMounted) {

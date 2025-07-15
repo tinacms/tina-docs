@@ -1,8 +1,96 @@
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 
-/* DEFAULT THEME */
+/* DEFAULT MONOCHROME THEME */
 :root {
+  /* Tailwind Slate's */
+  --brand-primary: #0f172a;
+  --brand-primary-hover: #334155;
+  --brand-primary-light: #b7c5d8;
+  --brand-primary-text: #0f172a;
+  --brand-primary-contrast: #334155;
+
+  --brand-primary-gradient-start: #0f172a;
+  --brand-primary-gradient-end: #0f172a;
+
+  --brand-secondary: #0f172a;
+  --brand-secondary-hover: #334155;
+  --brand-secondary-light: #b5becd;
+  --brand-secondary-text: #0f172a;
+  --brand-secondary-contrast: #334155;
+
+  --brand-secondary-gradient-start: #0f172a;
+  --brand-secondary-gradient-end: #0f172a;
+
+  --brand-tertiary: #0f172a;
+  --brand-tertiary-hover: #334155;
+  --brand-tertiary-light: #64748b;
+  --brand-tertiary-text: #0f172a;
+  --brand-tertiary-contrast: #334155;
+
+  --brand-tertiary-gradient-start:  #0f172a;
+  --brand-tertiary-gradient-end: #0f172a;
+
+  --glass-gradient-start: rgba(255, 255, 255, 0.1);
+  --glass-gradient-end: rgba(255, 255, 255, 0.4);
+
+  --neutral-background: #F8FAFC;
+  --neutral-background-secondary: #F1F5F9;
+  --neutral-surface: #FFFFFF;
+  --neutral-text: #3E4342;
+  --neutral-text-secondary: #64748B;
+  --neutral-border: #CBD5E1;
+  --neutral-border-subtle: #e2e8f0;
+
+  --background-color: #f8fafc;
+  --background-brand-code: #ffffff;
+}
+
+.dark {
+  --brand-primary: #f1f5f9;
+  --brand-primary-hover: #94a3b8;
+  --brand-primary-light: #4f555e;
+  --brand-primary-text: #f1f5f9;
+  --brand-primary-contrast: #f1f5f9;
+
+  --brand-primary-gradient-start: #f1f5f9;
+  --brand-primary-gradient-end: #f1f5f9;
+
+  --brand-secondary: #f1f5f9;
+  --brand-secondary-hover: #94a3b8;
+  --brand-secondary-light: #4b4f53;
+  --brand-secondary-text: #f1f5f9;
+  --brand-secondary-contrast: #f1f5f9;
+
+  --brand-secondary-gradient-start: #f1f5f9;
+  --brand-secondary-gradient-end: #f1f5f9;
+
+  --brand-tertiary: #f1f5f9;
+  --brand-tertiary-hover: #94a3b8;
+  --brand-tertiary-light: #cbd5e1;
+  --brand-tertiary-text: #f1f5f9;
+  --brand-tertiary-contrast: #f1f5f9;
+
+  --brand-tertiary-gradient-start:  #f1f5f9;
+  --brand-tertiary-gradient-end: #f1f5f9;
+
+  --glass-gradient-start: rgba(51, 65, 85, 0.25);
+  --glass-gradient-end: rgba(29,44,108,0.0);
+
+  --neutral-background: #0f172a;
+  --neutral-surface: #1A202C;
+  --neutral-background-secondary: #1F2937;
+  --neutral-text: #F9FAFB;
+  --neutral-text-secondary: #9CA3AF;
+  --neutral-border: #64748b;
+  --neutral-border-subtle: #4B5563;
+
+  --background-color: #020617;
+  --background-brand-code: #011627;
+}
+
+/* TINACMS THEME */
+.theme-tina {
   --brand-primary: #EC4815;
   --brand-primary-hover: #D13F13;
   --brand-primary-light: #FFD3c1;
@@ -37,19 +125,18 @@
   --neutral-background-secondary: #F1F5F9;
   --neutral-background-quaternary: #E2E8F0;
   --neutral-background-quinary: #F1F5F9;
-  --neutral-surface: #FFFFFF;
+  --neutral-surface: #faebe5;
   --neutral-text: #0f172a;
   --neutral-text-secondary: #64748b;
   --neutral-border: #CBD5E1;
   --neutral-border-subtle: #e2e8f0;
 
-  --background-color: #e4f6f9;
+  --background-color: #e4f6f969;
   --glass-hover-gradient-start: oklch(98.5% 0 0);
   --glass-hover-gradient-end: oklch(95.6% 0.045 203.388);
-  --background-brand-code: #ffffff;
 }
 
-.dark {
+.theme-tina.dark {
   --brand-primary: #FF6A2D;
   --brand-primary-hover: #FF814C;
   --brand-primary-light: #7a230b;
@@ -93,94 +180,6 @@
 
   --background-color: #051619;
 
-  --background-brand-code: #011627;
-
-}
-
-/* MONOCHROME THEME */
-.theme-monochrome {
-  /* Tailwind Slate's */
-  --brand-primary: #0f172a;
-  --brand-primary-hover: #334155;
-  --brand-primary-light: #b7c5d8;
-  --brand-primary-text: #0f172a;
-  --brand-primary-contrast: #334155;
-
-  --brand-primary-gradient-start: #0f172a;
-  --brand-primary-gradient-end: #0f172a;
-
-  --brand-secondary: #0f172a;
-  --brand-secondary-hover: #334155;
-  --brand-secondary-light: #b5becd;
-  --brand-secondary-text: #0f172a;
-  --brand-secondary-contrast: #334155;
-
-  --brand-secondary-gradient-start: #0f172a;
-  --brand-secondary-gradient-end: #0f172a;
-
-  --brand-tertiary: #0f172a;
-  --brand-tertiary-hover: #334155;
-  --brand-tertiary-light: #64748b;
-  --brand-tertiary-text: #0f172a;
-  --brand-tertiary-contrast: #334155;
-
-  --brand-tertiary-gradient-start:  #0f172a;
-  --brand-tertiary-gradient-end: #0f172a;
-
-  --glass-gradient-start: rgba(255, 255, 255, 0.1);
-  --glass-gradient-end: rgba(255, 255, 255, 0.4);
-
-  --neutral-background: #F8FAFC;
-  --neutral-background-secondary: #F1F5F9;
-  --neutral-surface: #FFFFFF;
-  --neutral-text: #3E4342;
-  --neutral-text-secondary: #64748B;
-  --neutral-border: #CBD5E1;
-  --neutral-border-subtle: #e2e8f0;
-
-  --background-color: #f8fafc;
-}
-
-.theme-monochrome.dark {
-  --brand-primary: #f1f5f9;
-  --brand-primary-hover: #94a3b8;
-  --brand-primary-light: #4f555e;
-  --brand-primary-text: #f1f5f9;
-  --brand-primary-contrast: #f1f5f9;
-
-  --brand-primary-gradient-start: #f1f5f9;
-  --brand-primary-gradient-end: #f1f5f9;
-
-  --brand-secondary: #f1f5f9;
-  --brand-secondary-hover: #94a3b8;
-  --brand-secondary-light: #4b4f53;
-  --brand-secondary-text: #f1f5f9;
-  --brand-secondary-contrast: #f1f5f9;
-
-  --brand-secondary-gradient-start: #f1f5f9;
-  --brand-secondary-gradient-end: #f1f5f9;
-
-  --brand-tertiary: #f1f5f9;
-  --brand-tertiary-hover: #94a3b8;
-  --brand-tertiary-light: #cbd5e1;
-  --brand-tertiary-text: #f1f5f9;
-  --brand-tertiary-contrast: #f1f5f9;
-
-  --brand-tertiary-gradient-start:  #f1f5f9;
-  --brand-tertiary-gradient-end: #f1f5f9;
-
-  --glass-gradient-start: rgba(51, 65, 85, 0.25);
-  --glass-gradient-end: rgba(29,44,108,0.0);
-
-  --neutral-background: #0f172a;
-  --neutral-surface: #1A202C;
-  --neutral-background-secondary: #1F2937;
-  --neutral-text: #F9FAFB;
-  --neutral-text-secondary: #9CA3AF;
-  --neutral-border: #64748b;
-  --neutral-border-subtle: #4B5563;
-
-  --background-color: #020617;
 }
 
 .theme-blossom {

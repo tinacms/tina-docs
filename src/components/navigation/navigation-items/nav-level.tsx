@@ -46,7 +46,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
   const httpMethod = () => (
     <span
       className={`
-      inline-flex items-center justify-center px-0.5 py-1 my-2 rounded text-xs font-medium mr-1.5 flex-shrink-0 w-12
+      inline-flex items-center justify-center px-0.5 py-1 my-1 rounded text-xs font-medium mr-1.5 flex-shrink-0 w-12
       ${
         categoryData.verb === "get"
           ? pathname === slug

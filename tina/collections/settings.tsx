@@ -121,7 +121,7 @@ export const Settings = {
       },
       options: [
         { label: "Default", value: "default" },
-        { label: "Monochrome", value: "monochrome" },
+        { label: "Tina", value: "tina" },
         { label: "Blossom", value: "blossom" },
         { label: "Lake", value: "lake" },
         { label: "Pine", value: "pine" },

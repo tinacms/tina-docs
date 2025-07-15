@@ -1,51 +1,47 @@
 ---
-title: Code Blocks
-last_edited: '2025-06-05T23:55:15.658Z'
+title: Custom Components
+last_edited: '2025-07-15T06:02:42.242Z'
 ---
 
-TinaDocs supports both inline code snippets and fenced code blocks, letting you document examples, commands, and source code with clarity and flexibility.
+You can add you own components as an embed, similar to the text and code components.
 
-## Inline Code
+**This flexibility is one of the key reasons to use TinaCMS and this package.**
 
-Using a singular backtick we can wrap small bits of code as a code\_block
+## The Technical Side of Component Rendering
 
-Example: Use `npm run dev` to start the local server
+All content written in the body of your documentation is stored as the rich-text data-type.
 
-## Fenced Code Blocks
+This data-type is broken down into a hierarchical abstract syntax tree (AST).
 
-For multiline code samples, use triple backticks. Where we can also specify which language is used in the fenced code block.
+This data can be parsed into a `<TinaMarkdown>` object to populate it with data:
 
 ```javascript
-js function greet(name) {
-  return `Hello, ${name}!`
+import MarkdownComponentMapping from "@/markdown-component-mapping";
+
+<TinaMarkdown
+  content={documentionData?.body} // [!code highlight]
+  components={MarkdownComponentMapping}
+/>
+```
+
+After this, the `MarkdownComponentMapping` is used to parse each object from the AST data into their corresponding React components based on node type, allowing you to override default rendering behaviour for elements like headings, links, code blocks, and more.
+
+### Example
+
+```javascript
+import { TinaMarkdown } from 'tinacms/dist/rich-text'
+
+export const CustomMarkdown = ({ content }) => {
+  return (
+    <TinaMarkdown
+      content={content}
+      components={{
+        h2: (props) => <h2 className="text-2xl text-blue-600" {...props} />,
+        a: (props) => <a className="underline text-red-500" {...props} />,
+        code_block: (props) => <pre className="bg-black text-white p-2">{props.children}</pre>,
+      }}
+    />
+  )
 }
-```
 
-## Syntax Highlighting
-
-TinaDocs uses [Shiki](https://shiki.style/) to power code block rendering, because of this you are able to also use [Shiki's Transformer Notation](https://shiki.style/guide/transformers) for special highlighting.
-
-```javascript
-console.log('This is a highlighted block') // [!code highlight]
-
-It uses "[!code highlight]" in a comment after the code
-```
-
-## Diff Highlighting
-
-```javascript
-console.log('This is a negative diff') // [!code --]
-console.log('This is a positive diff') // [!code ++]
-
-It uses "[!code --]" or "[!code ++]" in a comment after the code
-```
-
-## Focused Highlighting
-
-```javascript
-console.log('Junk Code');
-console.log('Focused Code'); // [!code focus]
-console.log('More hidden code');
-
-It uses "[!code focus]" in a comment after the code
 ```
