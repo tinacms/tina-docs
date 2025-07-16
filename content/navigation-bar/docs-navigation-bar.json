@@ -9,11 +9,11 @@
           "title": "Introduction",
           "items": [
             {
-              "slug": "content/docs/index.mdx",
+              "slug": "content/docs/welcome-to-tinadocs.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/introduction/take-back-your-docs.mdx",
+              "slug": "content/docs/introduction/showcase.mdx",
               "_template": "item"
             }
           ]
@@ -30,11 +30,11 @@
               "_template": "item"
             },
             {
-              "slug": "content/docs/tinadocs-and-tinacms/editing-content.mdx",
+              "slug": "content/docs/tinadocs-and-tinacms/usage-editors.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/tinadocs-and-tinacms/adding-a-new-document.mdx",
+              "slug": "content/docs/tinadocs-and-tinacms/usage-developers.mdx",
               "_template": "item"
             }
           ]
@@ -43,39 +43,39 @@
           "title": "TinaDocs Features",
           "items": [
             {
-              "slug": "content/docs/components/overview.mdx",
+              "slug": "content/docs/components/feature-list.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/typography.mdx",
+              "slug": "content/docs/components/styling.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/images-and-embeds.mdx",
+              "slug": "content/docs/components/markdown-elements.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/lists-and-tables.mdx",
+              "slug": "content/docs/components/text-components.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/mermaid-diagrams.mdx",
+              "slug": "content/docs/components/code-components.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/code-blocks.mdx",
+              "slug": "content/docs/components/custom-components.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/api-doc-generation.mdx",
+              "slug": "content/docs/openapi-spec-docs.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/customization-and-themes/seo.mdx",
+              "slug": "content/docs/customization-and-themes/search-engine-optimization-seo.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/customization-and-themes/redirects.mdx",
+              "slug": "content/docs/customization-and-themes/redirect-management.mdx",
               "_template": "item"
             }
           ]
@@ -87,15 +87,15 @@
               "title": "TinaCloud",
               "items": [
                 {
-                  "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/overview.mdx",
+                  "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/what-is-a-datalayer.mdx",
                   "_template": "item"
                 },
                 {
-                  "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
+                  "slug": "content/docs/set-up/configuring-tinacloud.mdx",
                   "_template": "item"
                 },
                 {
-                  "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
+                  "slug": "content/docs/set-up/self-hosting/custom-datalayer.mdx",
                   "_template": "item"
                 }
               ],
@@ -125,15 +125,15 @@
               "_template": "item"
             },
             {
-              "slug": "content/docs/api-references.mdx",
+              "slug": "content/docs/pet-store-all-routes.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/custom-components/type-definition.mdx",
+              "slug": "content/docs/components/custom-components/library-api-example.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/Test-example-doc.mdx",
+              "slug": "content/docs/internal-document-example.mdx",
               "_template": "item"
             }
           ],
