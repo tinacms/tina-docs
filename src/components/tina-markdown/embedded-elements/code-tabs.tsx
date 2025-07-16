@@ -91,7 +91,7 @@ export const CodeTabs = ({ tabs, initialSelectedIndex = 0 }: CodeTabsProps) => {
         {/* TOP SECTION w/ Buttons */}
         <div className="flex items-center w-full border-b border-neutral-border ">
           <div className="flex flex-1 ">
-            {tabs.map((tab, index) => (
+            {tabs?.map((tab, index) => (
               <button
                 key={tab.id || index}
                 type="button"

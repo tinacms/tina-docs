@@ -322,13 +322,6 @@ export const RecipeBlock = (data: {
                 isLoading ? "opacity-0" : "opacity-100"
               }`}
             >
-              <style>
-                {`
-                  .shiki {
-                    overflow-x: auto !important;
-                  }
-                `}
-              </style>
               {!isLoading &&
                 (code ? (
                   <CodeBlockWithHighlightLines
