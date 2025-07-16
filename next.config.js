@@ -35,7 +35,8 @@ module.exports = {
       },
       {
         source: "/",
-        destination: "https://www.tina.io",
+        destination:
+          "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/",
       },
     ];
   },
