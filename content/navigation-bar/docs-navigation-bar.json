@@ -9,7 +9,7 @@
           "title": "Introduction",
           "items": [
             {
-              "slug": "content/docs/welcome-to-tinadocs.mdx",
+              "slug": "content/docs/index.mdx",
               "_template": "item"
             },
             {
