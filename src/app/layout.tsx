@@ -3,12 +3,13 @@ import AdminLink from "@/components/ui/admin-link";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 import { ThemeSelector } from "@/components/ui/theme-selector";
 import settings from "@/content/settings/config.json";
-import { getDocsNavigation } from "@/utils/docs";
+import client from "@/tina/__generated__/client";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 
 import { TabsLayout } from "@/components/docs/layout/tab-layout";
 import type React from "react";
+import { TinaClient } from "./tina-client";
 
 const body = Inter({ subsets: ["latin"], variable: "--body-font" });
 const heading = Roboto_Flex({
@@ -66,19 +67,20 @@ const Content = ({ children }: { children?: React.ReactNode }) => (
 const DocsMenu = async ({ children }: { children?: React.ReactNode }) => {
   // Fetch navigation data that will be shared across all docs pages
 
-  const navigationDocsData = await getDocsNavigation();
-  const tabs = navigationDocsData.data.map((tab) => ({
-    label: tab.title,
-    content: tab,
-    __typename: tab.__typename,
-  }));
+  const navigationData = await client.queries.navigationBar({
+    relativePath: "docs-navigation-bar.json",
+  });
 
   return (
     <div className="relative flex flex-col w-full pb-2">
-      <TabsLayout
-        tabs={tabs}
-        children={children}
-        navigationDocsData={navigationDocsData}
+      <TinaClient
+        props={{
+          query: navigationData.query,
+          variables: navigationData.variables,
+          data: navigationData.data,
+          children,
+        }}
+        Component={TabsLayout}
       />
     </div>
   );

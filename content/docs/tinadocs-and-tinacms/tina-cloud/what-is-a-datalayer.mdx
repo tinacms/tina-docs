@@ -1,0 +1,58 @@
+---
+title: What is a Datalayer?
+last_edited: '2025-07-15T06:58:38.904Z'
+---
+
+The Datalayer is a critical component of TinaCMS that acts as the bridge between your content files and the TinaCMS editing interface. It provides:
+
+1. Content Indexing: Indexes your content files to enable fast queries and searching
+2. GraphQL API: Generates a GraphQL API based on your content model
+3. Authentication: Manages user authentication for the editing interface
+4. Storage: Handles content storage and retrieval from your repository
+
+## TinaCloud vs Self-Hosting
+
+TinaCMS offers two approaches for implementing the datalayer:
+
+### TinaCloud (recommended)
+
+TinaCloud is a managed service that handles the Datalayer for you, providing:
+
+* Automatic content indexing
+* User authentication and management
+* Seamless GitHub integration
+* No need to maintain your own infrastructure
+
+This is ideal for most projects and is the quickest way to get started.
+
+A free option also exists for small-scale projects.
+
+### Self-Hosted
+
+The self-hosted option allows you to run the datalayer on your own infrastructure, giving you:
+
+* Complete control over your data
+* Custom authentication providers
+* Support for custom Git providers
+* Integration with your own database
+
+### When to choose Self-Hosted
+
+Consider self-hosting the Datalayer when:
+
+* You need to use a Git provider other than GitHub
+* You want to use a custom database for content indexing
+* You need a custom authentication system
+* You have specific compliance or security requirements
+* You have the resources to manage and work with custom hosting infrastructure.
+
+#### Components of a Self-Hosted Datalayer
+
+To self-host the Datalayer, you'll need to configure:
+
+1. Backend Host: A server to run the Datalayer (e.g., Next.js, Vercel Functions)
+2. Database Adapter: A database to store and index content (e.g., MongoDB, Vercel KV)
+3. Git Provider: A service to store and manage content files (e.g., GitHub, custom Git provider)
+4. Auth Provider: A system to authenticate users (e.g., Auth.js, Clerk)
+
+For detailed instructions on setting up a self-hosted Datalayer, see our [Self-Hosting Guide](http://localhost:3000/docs/set-up/self-hosting/getting-started).

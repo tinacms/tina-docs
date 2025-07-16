@@ -1,0 +1,69 @@
+---
+title: Usage – Developers
+last_edited: '2025-07-15T00:16:15.119Z'
+---
+
+<Callout
+  body={<>
+    We recommend reading the previous page on usage for editors before moving onto this one. This page is focused on the local development experience.
+  </>}
+  variant="idea"
+/>
+
+The TinaCMS editor has two modes:
+
+1. **Local Development Mode**: When running your site locally for development
+2. **Production Mode**: When using the deployed version of your site
+
+In local development mode, changes are saved directly to files in your local repository.
+
+In production mode (with TinaCloud), changes are committed directly to your Git repository.
+
+## Local Mode
+
+The TinaCMS editor is available at the `/admin` route of your site (for example, `http://localhost:3000/admin`).
+
+Run the below command from the terminal in your project directory to boot up the application.
+
+```shell
+pnpm dev
+```
+
+This will run the TinaCMS local server as well as the NextJS front-end.
+
+The editing UI is the same as in production, but you can safely test any model or content changes that are out of the ordinary.
+
+### ⚠️ The **tina-lock.json** File
+
+The `tina-lock.json` must be **checked into source control and pushed to your repo**.
+
+It contains a compiled schema used to resolve content documents, and should be updated after any local content or schema changes.
+
+Run `pnpm dev` locally to trigger an update to this file.
+
+## Testing Production Mode
+
+You can also test a production instance of your application, hooked up to TinaCloud.
+
+This may be useful in a pinch to pick up hard-to-find issues.
+
+1. Update your local .env file with:
+   1. `TINA_TOKEN` from TinaCloud
+   2. `NEXT_PUBLIC_TINA_CLIENT_ID` from TinaCloud
+   3. `NEXT_PUBLIC_TINA_BRANCH` if using branch based editing
+   4. `NEXT_PUBLIC_SITE_URL` to `localhost:3000`
+2. Run the build and start scripts.
+
+```shell
+pnpm build && pnpm start
+```
+
+## Next Steps
+
+Once you're familiar with the basic editing interface, you might want to:
+
+1. Customize your content schema
+2. Create custom field components
+3. Configure advanced validation
+
+For more details on the editing experience, check out the [official TinaCMS documentation](https://tina.io/docs/using-tina-editor).

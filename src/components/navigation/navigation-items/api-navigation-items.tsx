@@ -1,5 +1,6 @@
 import { getUrl } from "@/utils/get-url";
 import React from "react";
+import { titleCase } from "title-case";
 import { NavLevel } from "./nav-level";
 import type { ApiEndpoint, DocsNavProps } from "./types";
 import { getEndpointSlug, getTagSlug, processApiGroups } from "./utils";
@@ -20,7 +21,7 @@ export const ApiNavigationItems: React.FC<
   const processedApiGroups = React.useMemo(() => {
     return Object.entries(safeApiGroups).map(([tag, endpoints]) => {
       return {
-        title: tag,
+        title: titleCase(tag),
         items: (endpoints || []).map((endpoint) => ({
           title: endpoint.summary,
           slug: `/docs/api-documentation/${getTagSlug(tag)}/${getEndpointSlug(endpoint.method, endpoint.path)}`,

@@ -1,0 +1,47 @@
+---
+title: How Does TinaCMS Work?
+last_edited: '2025-07-12T22:32:27.382Z'
+---
+
+TinaCMS is a feature-rich and somewhat complex tool.
+
+If you just want a docs solution, feel free to skip over this chapter. If you yearn for knowledge, read on….
+
+## The TinaCMS Frontend
+
+The TinaCMS front-end is 2 fold:
+
+1. An editing portal that runs on the same port as your website, by default at the `/admin/index.html` route.
+2. Your content model definition (we call it your schema) and other configuration… this control what fields you get when editing your website.
+
+![](</img/docs-assets/tinacms-admin-portal.png> "Access the content portal on the /admin/index.html route of your website")
+
+## The TinaCMS Backend
+
+The TinaCMS Backend is your GraphQL content API.
+
+Think of this as a database and server that indexes your flat Git files for efficient fetching and exposes the endpoints.
+
+![](</img/docs-assets/tinacms-data-flow.png> "Data moves from GitHub to your website via the TinaCMS Backend")
+
+This set-up can be achieved with TinaCloud – a paid offering from the TinaCMS team, or by using your own database.
+
+> During local development, a local version of the server is running that allows for the same editing experience offline.
+
+## Learn More About TinaCMS
+
+This kit won't go deep into TinaCMS other than basic usage – [their docs](https://tina.io/docs) have more info.
+
+Some useful links are highlighted below…
+
+### The Beginner Series
+
+There's a series of intro tutorials called [the Beginner Series](https://tina.io/docs/beginner-tutorials/tutorial-overview) that teach you to integrate a website with the CMS, giving you a full website builder feature set (dragging blocks around a page, live previews and click to edit functionality).
+
+### Usage Docs
+
+Some useful reference docs include…
+
+* What is [markdown vs mdx ](https://tina.io/docs/editing/markdown)and what is the supported [markdown spec](https://tina.io/docs/reference/markdown-spec)
+* Setup guide for [AI powered auto-translations and internationalization](https://tina.io/docs/guides/internationalization) (if useful for your project)
+* Media options, including [repo-based (Git) media](https://tina.io/docs/reference/media/repo-based) and [external media stores](https://tina.io/docs/reference/media/external/authentication)

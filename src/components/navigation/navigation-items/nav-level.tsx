@@ -39,14 +39,14 @@ export const NavLevel: React.FC<NavLevelProps> = ({
 
   const childSelected = hasNestedSlug(categoryData.items, path);
 
-  if (settings.autoApiTitles) {
+  if (settings.autoApiTitles && categoryData.verb) {
     categoryData.title = titleCase(categoryData.title);
   }
 
   const httpMethod = () => (
     <span
       className={`
-      inline-flex items-center justify-center px-0.5 py-1 my-2 rounded text-xs font-medium mr-1.5 flex-shrink-0 w-12
+      inline-flex items-center justify-center px-0.5 py-1 my-1 rounded text-xs font-medium mr-1.5 flex-shrink-0 w-12
       ${
         categoryData.verb === "get"
           ? pathname === slug
@@ -162,7 +162,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
                   className="flex-1 min-w-0"
                   style={{ overflowWrap: "anywhere" }}
                 >
-                  {categoryData.title}
+                  {categoryData.slug.title || categoryData.title}
                 </span>
                 <ChevronRightIcon className="ml-2 flex-shrink-0 opacity-0 w-5 h-auto" />
               </span>

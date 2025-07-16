@@ -9,180 +9,99 @@
           "title": "Introduction",
           "items": [
             {
-              "title": "Quickstart",
               "slug": "content/docs/index.mdx",
               "_template": "item"
             },
             {
-              "title": "Take Back your Docs",
-              "slug": "content/docs/introduction/take-back-your-docs.mdx",
+              "slug": "content/docs/introduction/showcase.mdx",
               "_template": "item"
             }
           ]
         },
         {
-          "title": "TinaDocs & TinaCMS",
+          "title": "Using TinaCMS",
           "items": [
             {
-              "title": "Editing Content",
-              "slug": "content/docs/tinadocs-and-tinacms/editing-content.mdx",
+              "slug": "content/docs/tinacms/what-is-tinacms.mdx",
               "_template": "item"
             },
             {
-              "title": "Adding a New Document",
-              "slug": "content/docs/tinadocs-and-tinacms/adding-a-new-document.mdx",
+              "slug": "content/docs/tinacms/how-does-tinacms-work.mdx",
               "_template": "item"
             },
             {
-              "title": "Learning TinaCMS",
+              "slug": "content/docs/tinadocs-and-tinacms/usage-editors.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/tinadocs-and-tinacms/usage-developers.mdx",
+              "_template": "item"
+            }
+          ]
+        },
+        {
+          "title": "TinaDocs Features",
+          "items": [
+            {
+              "slug": "content/docs/components/feature-list.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/components/styling.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/components/markdown-elements.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/components/text-components.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/components/code-components.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/components/custom-components.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/openapi-spec-docs.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/customization-and-themes/search-engine-optimization-seo.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/customization-and-themes/redirect-management.mdx",
+              "_template": "item"
+            }
+          ]
+        },
+        {
+          "title": "Going Live",
+          "items": [
+            {
+              "title": "TinaCloud",
               "items": [
                 {
-                  "title": "Learn TinaCMS",
-                  "slug": "content/docs/customising/learn-tinacms.mdx",
+                  "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/what-is-a-datalayer.mdx",
                   "_template": "item"
                 },
                 {
-                  "title": "Further Technical References",
-                  "slug": "content/docs/customising/technical-reference.mdx",
+                  "slug": "content/docs/set-up/configuring-tinacloud.mdx",
+                  "_template": "item"
+                },
+                {
+                  "slug": "content/docs/set-up/self-hosting/custom-datalayer.mdx",
                   "_template": "item"
                 }
               ],
               "_template": "items"
             },
             {
-              "title": "The Datalayer",
-              "items": [
-                {
-                  "title": "Overview",
-                  "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/overview.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Setting up TinaCloud",
-                  "slug": "content/docs/set-up/setting-up-tinacloud.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Configuring your own Datalayer",
-                  "slug": "content/docs/set-up/self-hosting/own-datalayer.mdx",
-                  "_template": "item"
-                }
-              ],
-              "_template": "items"
-            }
-          ]
-        },
-        {
-          "title": "Components",
-          "items": [
-            {
-              "title": "Overview",
-              "slug": "content/docs/components/overview.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Typography",
-              "slug": "content/docs/components/typography.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Image and Embeds",
-              "slug": "content/docs/components/images-and-embeds.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Lists and Tables",
-              "slug": "content/docs/components/lists-and-tables.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Mermaid Diagrams",
-              "slug": "content/docs/components/mermaid-diagrams.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Code Blocks",
-              "slug": "content/docs/components/code-blocks.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Custom Components",
-              "items": [
-                {
-                  "title": "Overview",
-                  "slug": "content/docs/components/custom-components/overview.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Accordions",
-                  "slug": "content/docs/components/custom-components/accordions.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Card Grid",
-                  "slug": "content/docs/components/custom-components/card-grid.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Callouts",
-                  "slug": "content/docs/components/custom-components/callouts.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Tabbed Code Blocks",
-                  "slug": "content/docs/components/custom-components/tabbed-codeblocks.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Code Accordion",
-                  "slug": "content/docs/components/code-accordion.mdx",
-                  "_template": "item"
-                },
-                {
-                  "title": "Type Defintion",
-                  "slug": "content/docs/components/custom-components/type-definition.mdx",
-                  "_template": "item"
-                }
-              ],
-              "_template": "items"
-            }
-          ]
-        },
-        {
-          "title": "Customization & Themes",
-          "items": [
-            {
-              "title": "Overview",
-              "slug": "content/docs/customization-and-themes/overview.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Updating the Styling",
-              "slug": "content/docs/customising/updating-the-styling.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "SEO",
-              "slug": "content/docs/customization-and-themes/seo.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "Redirects",
-              "slug": "content/docs/customization-and-themes/redirects.mdx",
-              "_template": "item"
-            },
-            {
-              "title": "FavIcon",
-              "slug": "content/docs/customization-and-themes/favicon.mdx",
-              "_template": "item"
-            }
-          ]
-        },
-        {
-          "title": "Deployment",
-          "items": [
-            {
-              "title": "Deploying your Site",
               "slug": "content/docs/set-up/deploying-your-docs.mdx",
               "_template": "item"
             }
@@ -195,20 +114,26 @@
       "title": "API",
       "supermenuGroup": [
         {
-          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"POST:/user\",\"label\":\"POST /user - Create user\",\"method\":\"POST\",\"path\":\"/user\",\"summary\":\"Create user\",\"description\":\"This can only be done by the logged in user.\"}]}",
+          "apiGroup": "{\"schema\":\"Swagger-Petstore.json\",\"tag\":\"user\",\"endpoints\":[{\"id\":\"POST:/user\",\"label\":\"POST /user - Create user\",\"method\":\"POST\",\"path\":\"/user\",\"summary\":\"Create user\",\"description\":\"This can only be done by the logged in user.\"},{\"id\":\"GET:/user/logout\",\"label\":\"GET /user/logout - Logs out current logged in user session\",\"method\":\"GET\",\"path\":\"/user/logout\",\"summary\":\"Logs out current logged in user session\",\"description\":\"\"}]}",
           "_template": "groupOfApiReferences"
         },
         {
           "title": "Introduction",
           "items": [
             {
-              "title": "Overview",
               "slug": "content/docs/api-documentation/overview.mdx",
               "_template": "item"
             },
             {
-              "title": "Reference",
-              "slug": "content/docs/api-references.mdx",
+              "slug": "content/docs/pet-store-all-routes.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/components/custom-components/library-api-example.mdx",
+              "_template": "item"
+            },
+            {
+              "slug": "content/docs/internal-document-example.mdx",
               "_template": "item"
             }
           ],

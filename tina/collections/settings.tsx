@@ -73,8 +73,9 @@ export const Settings = {
     },
     {
       name: "autoApiTitles",
-      label:
-        "Auto-capitalize API titles in the navigation bar and generated pages",
+      label: "Auto-Capitalize Titles",
+      description:
+        "Auto-capitalize titles in the navigation bar and generated API pages",
       type: "boolean",
       defaultValue: true,
     },
@@ -120,7 +121,7 @@ export const Settings = {
       },
       options: [
         { label: "Default", value: "default" },
-        { label: "Monochrome", value: "monochrome" },
+        { label: "Tina", value: "tina" },
         { label: "Blossom", value: "blossom" },
         { label: "Lake", value: "lake" },
         { label: "Pine", value: "pine" },

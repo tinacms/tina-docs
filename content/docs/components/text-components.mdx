@@ -1,0 +1,129 @@
+---
+title: Text Components
+last_edited: '2025-07-15T06:03:35.691Z'
+---
+
+Three embedded components – accordions, callouts and cards are available out of the box.
+
+<Callout
+  body={<>
+    We can embed non-standard features into our markdown with the power of [MDX](https://mdxjs.com/).
+  </>}
+  variant="idea"
+/>
+
+## Using Embedded Components
+
+You can see and add an Embed from the rich-text editor toolbar.
+
+![](</img/docs-assets/embed-toolbar-access.png> "Access the embed tab of the toolbar.")
+
+## Cards
+
+Cards can be used to showcase information or as links.
+
+They highlight on hover based on the theme.
+
+<cardGrid
+  cards={[
+    {
+      title: "Pine",
+      description: "Linked card.",
+      link: "https://www.google.com",
+      linkText: "Search now"
+    },
+    {
+      title: "Indigo",
+      description: "This card doesn't link anywhere.",
+      link: "",
+      linkText: ""
+    },
+    { title: "Blossom", description: "🌸", link: "", linkText: "" },
+    { title: "Lake", description: "🏞️", link: "", linkText: "Search now" }
+  ]}
+/>
+
+## Accordions
+
+Collapsible content areas.
+
+This is ideal for FAQs, advanced explanations, or progressive disclosure UI patterns.
+
+### Multi-accordion
+
+You can block all of your accordions with the option to have them as full-width or half-width.
+
+<accordionBlock
+  fullWidth={true}
+  accordionItems={[
+    {
+      heading: "Click to expand",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    },
+    {
+      heading: "Click to expand",
+      docText: "Default Text. Edit me!\n",
+      image: "/img/rico-replacement.jpg"
+    }
+  ]}
+/>
+
+### Individual Accordion
+
+Accordions can also exist standalone.
+
+<accordion
+  heading="Click to expand"
+  docText={<>
+    Default Text. Edit me!
+  </>}
+  image="/img/rico-replacement.jpg"
+  fullWidth={true}
+/>
+
+## Callouts
+
+Callouts are similar to block-quotes, to add a note or indication outside the normal content flow.
+
+<Callout
+  body={<>
+    Multiple variants exist to convey different messaging.
+  </>}
+  variant="success"
+/>
+
+<Callout
+  body={<>
+    Some callouts indicate potential issues to users.
+  </>}
+  variant="warning"
+/>
+
+<Callout
+  body={<>
+    Some callouts indicate existing issues, or negative examples.
+  </>}
+  variant="error"
+/>
+
+<Callout
+  body={<>
+    Some are just for a note or tip.
+  </>}
+  variant="idea"
+/>
+
+<Callout
+  body={<>
+    Security related callouts exist too 👮.
+  </>}
+  variant="lock"
+/>
+
+<Callout
+  body={<>
+    …or some other specific options!
+  </>}
+  variant="api"
+/>

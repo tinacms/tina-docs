@@ -1,0 +1,47 @@
+---
+title: Custom Components
+last_edited: '2025-07-15T06:02:42.242Z'
+---
+
+You can add you own components as an embed, similar to the text and code components.
+
+**This flexibility is one of the key reasons to use TinaCMS and this package.**
+
+## The Technical Side of Component Rendering
+
+All content written in the body of your documentation is stored as the rich-text data-type.
+
+This data-type is broken down into a hierarchical abstract syntax tree (AST).
+
+This data can be parsed into a `<TinaMarkdown>` object to populate it with data:
+
+```javascript
+import MarkdownComponentMapping from "@/markdown-component-mapping";
+
+<TinaMarkdown
+  content={documentionData?.body} // [!code highlight]
+  components={MarkdownComponentMapping}
+/>
+```
+
+After this, the `MarkdownComponentMapping` is used to parse each object from the AST data into their corresponding React components based on node type, allowing you to override default rendering behaviour for elements like headings, links, code blocks, and more.
+
+### Example
+
+```javascript
+import { TinaMarkdown } from 'tinacms/dist/rich-text'
+
+export const CustomMarkdown = ({ content }) => {
+  return (
+    <TinaMarkdown
+      content={content}
+      components={{
+        h2: (props) => <h2 className="text-2xl text-blue-600" {...props} />,
+        a: (props) => <a className="underline text-red-500" {...props} />,
+        code_block: (props) => <pre className="bg-black text-white p-2">{props.children}</pre>,
+      }}
+    />
+  )
+}
+
+```

@@ -1,0 +1,42 @@
+---
+title: OpenAPI Spec Docs
+last_edited: '2025-07-15T07:30:50.546Z'
+---
+
+TinaDocs includes features to auto-generate docs pages based on an OpenAPI spec.
+
+You can also choose to use the same components to create API pages manually.
+
+## Upload a Specification
+
+There's a unique collection for storing OpenAPI specifications, and they can be managed independently.
+
+![](</img/docs-assets/api-spec-upload.png> "Uploading a spec via the API Schema collection")
+
+## Using Specification Data
+
+You can read from the specification inline via the API Reference component or generate sections of the nav-bar based on available routes.
+
+### Inline
+
+Select a schema from the dropdown, and all routes will be shown – you can further select a singular route to be used for the component.
+
+![](</img/docs-assets/api-endpoint-selection.png> "Selecting a specific endpoint from the API Reference component")
+
+### Page Generation
+
+You can generate entire directories to match your spec – marked and colour coded based on route.
+
+1. Create a Tab with the “API Tab” Template.
+2. Create a Supermenu Group with the “Group of API References” Template.
+3. Choose the spec to be used, and check endpoints to be included.
+4. Press save for generation.
+
+![](</img/docs-assets/menu-generation-from-spec.png> "Generating a menu group and pages from a specification")
+
+<Callout
+  body={<>
+    If you have any “Group of API References” with checked options in the Navbar settings, saving will regenerate the documents.
+  </>}
+  variant="warning"
+/>

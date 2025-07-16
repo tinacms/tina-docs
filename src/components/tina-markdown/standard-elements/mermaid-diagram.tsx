@@ -57,7 +57,10 @@ function MermaidDiagramClient(data: { value?: string }) {
 
   return (
     <div contentEditable={false}>
-      <div ref={mermaidRef} className="mermaid-container">
+      <div
+        ref={mermaidRef}
+        className="mermaid-container dark:bg-brand-primary-contrast w-fit rounded-md p-4"
+      >
         <pre className="mermaid">{value}</pre>
       </div>
     </div>

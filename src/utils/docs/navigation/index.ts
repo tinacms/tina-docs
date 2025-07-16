@@ -3,4 +3,4 @@
  */
 export { getTableOfContents } from "./tableOfContents";
 export { createTocListener, useTocListener } from "./tocListener";
-export { getDocsNavigation, formatNavigationData } from "./documentNavigation";
+export { formatNavigationData } from "./documentNavigation";

@@ -54,18 +54,56 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
       return;
     }
 
-    const sectionIndex = Math.min(
-      Math.floor(latest * pageItems.length),
-      pageItems.length - 1
-    );
+    // Get header positions and normalize them to match the motion value (0-1)
+    const documentHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    let newActiveId: string | null = null;
 
-    if (sectionIndex >= 0) {
-      const newActiveId = getIdSyntax(
-        pageItems[sectionIndex].text,
-        sectionIndex
-      );
-      setActiveId(newActiveId);
+    // Build list of headers with actual positions
+    const headersWithPositions = pageItems
+      .map((item, index) => {
+        const headerId = formatHeaderId(item.text);
+        const element = headerId ? document.getElementById(headerId) : null;
+        return {
+          id: getIdSyntax(item.text, index),
+          element,
+          offsetTop: element ? element.offsetTop : 0,
+          index,
+        };
+      })
+      .filter((header) => header.element);
+
+    // Calculate raw normalized positions, then rescale to ensure all headers are reachable
+    const rawPositions = headersWithPositions.map(
+      (h) => h.offsetTop / documentHeight
+    );
+    const maxRawPosition = Math.max(...rawPositions);
+    const scaleFactor = maxRawPosition > 0.95 ? 0.95 / maxRawPosition : 1;
+
+    const headers = headersWithPositions.map((header, idx) => ({
+      ...header,
+      normalizedPosition: rawPositions[idx] * scaleFactor,
+    }));
+
+    // Find the active header based on normalized scroll position
+    for (let i = headers.length - 1; i >= 0; i--) {
+      const header = headers[i];
+      if (header.normalizedPosition <= latest) {
+        newActiveId = header.id;
+        break;
+      }
     }
+
+    // If no header is found, use the first one if we're past the top threshold
+    if (
+      !newActiveId &&
+      headers.length > 0 &&
+      latest > PAGE_TOP_SCROLL_THRESHOLD
+    ) {
+      newActiveId = headers[0].id;
+    }
+
+    setActiveId(newActiveId);
   });
 
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -78,7 +116,10 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
     e.preventDefault();
     const element = document.getElementById(fragment);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      window.scrollTo({
+        top: element.offsetTop - 45,
+        behavior: "smooth",
+      });
       window.history.pushState(null, "", `#${fragment}`);
       setActiveId(id);
       setIsUserScrolling(true);
@@ -173,7 +214,11 @@ export const OnThisPage = ({ pageItems }: OnThisPageProps) => {
                 <a
                   href={`#${uniqueId}`}
                   onClick={(e) =>
-                    handleLinkClick(e, uniqueId, getIdSyntax(item.text))
+                    handleLinkClick(
+                      e,
+                      uniqueId,
+                      formatHeaderId(item.text) || ""
+                    )
                   }
                   className={`${item.type === "h3" ? "pl-6" : "pl-2"} py-1.5 ${
                     activeId === uniqueId

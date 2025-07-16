@@ -1,0 +1,54 @@
+---
+title: Custom Datalayer
+last_edited: '2025-07-15T06:59:09.720Z'
+---
+
+Setting up your own datalayer gives you complete control over how TinaCMS interacts with your content. This guide provides an overview of the key components and concepts.
+
+## Core Components
+
+When self-hosting the TinaCMS datalayer, you'll need to configure four main components:
+
+### 1. Backend Host
+
+The backend host is where your datalayer API will run. Common options include:
+
+* Next.js API routes
+* Vercel Serverless Functions
+* Netlify Functions
+
+### 2. Database Adapter
+
+The database adapter determines where your content index is stored. Options include:
+
+* MongoDB
+* Vercel KV
+* Custom database solutions
+
+Learn more in the [official Database Adapter documentation](https://tina.io/docs/reference/self-hosted/database-adapter/overview).
+
+### 3. Git Provider
+
+The Git provider manages how your content files are stored and retrieved. Options include:
+
+* GitHub
+* Custom Git providers
+
+Learn more in the [official Git Provider documentation](https://tina.io/docs/reference/self-hosted/git-provider/overview).
+
+### 4. Auth Provider
+
+The auth provider handles user authentication for your CMS. Options include:
+
+* Auth.js (formerly NextAuth.js)
+* Clerk
+* TinaCloud auth
+* Custom auth solutions
+
+Learn more in the [official Auth Provider documentation](https://tina.io/docs/reference/self-hosted/auth-provider/overview).
+
+## Getting Started
+
+For complete step-by-step instructions on configuring your own datalayer, we recommend following the [official TinaCMS Self-Hosting documentation](https://tina.io/docs/self-hosted/overview).
+
+The official documentation provides detailed examples, code snippets, and best practices for setting up each component of your custom datalayer.

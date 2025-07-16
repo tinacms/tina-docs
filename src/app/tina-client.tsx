@@ -7,10 +7,11 @@ export type UseTinaProps = {
   query: string;
   variables: Record<string, unknown>;
   data: Record<string, unknown>;
+  forceExperimental?: string;
 };
 
 export type TinaClientProps<T> = {
-  props: UseTinaProps & T;
+  props: UseTinaProps & T & any;
   Component: React.FC<{
     tinaProps: { data: Record<string, unknown> };
     props: {
@@ -28,6 +29,9 @@ export function TinaClient<T>({ props, Component }: TinaClientProps<T>) {
     query: props.query,
     variables: props.variables,
     data: props.data,
+    experimental___selectFormByFormId() {
+      return props.forceExperimental;
+    },
   });
 
   return <Component tinaProps={{ data }} props={{ ...props }} />;

@@ -73,3 +73,7 @@ pre.shiki {
 .shiki span.line {
   margin-right: 1rem;
 }
+
+.shiki {
+  overflow-x: auto !important;
+}

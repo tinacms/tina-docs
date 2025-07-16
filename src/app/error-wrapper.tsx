@@ -44,7 +44,7 @@ const ErrorWrapper = ({
         <div className="mx-auto max-w-[65vw] md:max-w-none">
           <div className="relative aspect-square overflow-hidden flex items-center justify-center">
             <Image
-              src="/img/rico-replacement.jpg"
+              src="/img/404-image.jpg"
               alt="404 Llama"
               className="rounded-3xl object-cover"
               width={364}

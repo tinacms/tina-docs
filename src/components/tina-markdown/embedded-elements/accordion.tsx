@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 
 interface AccordionProps {
@@ -25,7 +26,7 @@ const Accordion = (props) => {
     <div className="flex flex-col justify-center items-center">
       {/* Header */}
       <div
-        className={`mb-5 max-w-full overflow-hidden rounded-lg bg-neutral-surface shadow-md transition-[width] duration-700 ease-in-out border border-neutral-border ${
+        className={`mb-5 max-w-full overflow-hidden rounded-lg bg-neutral-background shadow-md transition-[width] duration-700 ease-in-out border border-neutral-border ${
           fullWidth ? "w-full" : "w-3/4"
         }`}
         data-tina-field={tinaField(props, "heading")}
@@ -123,7 +124,7 @@ export const AccordionBlock = (props) => {
   // If accordionItems is undefined or empty, return empty div or loading state
   if (!accordionItems || accordionItems.length === 0) {
     return (
-      <div className="flex flex-col justify-center items-center rounded-lg bg-white/40 shadow-lg mb-5 p-4">
+      <div className="flex flex-col justify-center items-center rounded-lg bg-white/40 shadow-lg mb-5 p-4 border border-neutral-border">
         No accordion items
       </div>
     );
@@ -131,7 +132,7 @@ export const AccordionBlock = (props) => {
 
   return (
     <div
-      className={`mx-auto flex flex-col justify-center items-center rounded-lg bg-neutral-surface shadow-md mb-5 border border-neutral-border ${
+      className={`mx-auto flex flex-col justify-center items-center rounded-lg bg-neutral-background shadow-md mb-5 border border-neutral-border ${
         fullWidth ? "w-full" : "w-3/4"
       }`}
     >
@@ -154,7 +155,7 @@ export const AccordionBlock = (props) => {
             </div>
           </div>
           <div
-            className={`grid gap-4  transition-all duration-700 ease-in-out ${
+            className={`grid gap-4 transition-all duration-700 ease-in-out ${
               isExpanded[index]
                 ? "max-h-[2000px] opacity-100"
                 : "max-h-0 overflow-hidden opacity-0"
@@ -165,7 +166,7 @@ export const AccordionBlock = (props) => {
             data-tina-field={tinaField(props.accordionItems[index], "docText")}
           >
             <div
-              className="p-4"
+              className="px-4"
               data-tina-field={tinaField(
                 props.accordionItems[index],
                 "docText"
@@ -184,18 +185,24 @@ export const AccordionBlock = (props) => {
                   "image"
                 )}
               >
-                <Image
+                <ImageOverlayWrapper
                   src={item.image}
                   alt="image"
-                  className="rounded-lg"
-                  width={500}
-                  height={500}
-                />
+                  caption={item?.heading}
+                >
+                  <Image
+                    src={item.image}
+                    alt="image"
+                    className="rounded-lg"
+                    width={500}
+                    height={500}
+                  />
+                </ImageOverlayWrapper>
               </div>
             )}
           </div>
           {index < accordionLength - 1 && (
-            <hr className="w-full h-0.5 text-neutral-border" />
+            <hr className="w-full h-0.5 text-neutral-border/50" />
           )}
         </div>
       ))}

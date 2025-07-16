@@ -1,0 +1,104 @@
+---
+title: Usage – Editors
+last_edited: '2025-07-15T00:15:32.898Z'
+---
+
+> These instructions assume you've already deployed your site – if you created it with the TinaCloud QuickStart, this has all been done for you.
+
+Let's get to grips with the **no-code editing workflow** in production.
+
+<Callout
+  body={<>
+    Prefer to watch a video? Follow the one provided.
+  </>}
+  variant="idea"
+/>
+
+<youtube embedSrc="https://www.youtube.com/embed/CsCQS7HIBv0?si=os9ona92O2VMOl-V" caption="Seth goes over the basics of using TinaCMS" minutes="2" />
+
+## First Steps…
+
+1. You'll need a GitHub account, if you don't have one – create one and come back.
+2. Add your account to the project in TinaCloud (or ask your admins to add you).
+
+## Making Edits
+
+1. Go to the [/admin](/admin#/~/docs/tinadocs-and-tinacms/editing-content) route of your website
+2. Change the content in one of the fields and watch your site preview update in real time. This is called **visual editing**.
+3. Press save.
+
+<Callout
+  body={<>
+    This will automatically trigger an update to your site, unless you have [editorial workflow](https://tina.io/editorial-workflow) features enabled (giving teams a Git based approval workflow).
+  </>}
+  variant="warning"
+/>
+
+> **Note:** these kinds of updates shouldn't create any downtime, depending on your deployment pipeline.
+
+## Editing a Specific Page
+
+### Collections Menu
+
+You can either look through all your pages via the **collections menu**, or turn on edit mode for a specific page.
+
+To go to the collections menu, go to your [/admin](/admin) route, then open the sidebar and follow the below graphic.
+
+![](</img/docs-assets/collections-menu-access.png> "Accessing a specific page via the collections menu")
+
+Clicking on any of the above documents will take you to the visual editor for that page.
+
+### By URL
+
+Alternatively, you can access the editor for a page you're on by updating the url.
+
+Between the **domain** and **the path** of the page you want to edit, add `/admin/#/~/` to take you to the live editor for that page.![](</img/docs-assets/edit-route-navigation.png> "Going to the edit route on a particular URL")
+
+## Adding a New Page
+
+To create a new doc, go to the Docs collection and click “Add File”.
+
+Folders can be organised as you see fit, and this file path controls the url of that document.
+
+> For example, a document, `A.mdx` in the folder `/B` can be accessed at `DOMAIN/docs/B/A`.
+
+![](</img/docs-assets/add-new-page-collections.png> "Adding a new page via the collections menu")
+
+<Callout
+  body={<>
+    All documents will be exposed, regardless of whether they're included in the navigation bar or not.
+  </>}
+  variant="warning"
+/>
+
+## Managing the Navigation Bar
+
+Docs are organised in tabs and then menus within each tab.
+
+You can manage this from the Navigation Bar collection.
+
+### Adding a New Tab
+
+When adding a new tab, there are two options – either an API tab and a Docs tab.
+
+* **Docs Tab** – allows you to reference documents in a tree structure to create a navigation structure.
+* **API Tab** – includes the option to add auto-generated documents from an OpenAPI spec to your sidebar, in addition to regular documents.
+
+<Callout
+  body={<>
+    Currently, saving the Navigation Bar collection will re-generate these API Tab documents.
+  </>}
+  variant="warning"
+/>
+
+![](/img/docs-assets/navigation-new-tab.png "Adding a new tab via the Navigation Bar collection")
+
+### Menu Structure Changes
+
+The menu structure is controlled as an tree-like object inside each Tab.
+
+At each level of the menu, you can choose between a sub-menu or a document file to create the nested navigation structure.
+
+![](</img/docs-assets/menu-tree-structure.png> "Inside the Tab object exists your menu tree structure")
+
+Documents are labelled in the sidebar based on their title field, and menu groups can be given custom names.

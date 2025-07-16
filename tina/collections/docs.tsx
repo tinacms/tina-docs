@@ -4,7 +4,7 @@ import AccordionTemplate, {
 import { ApiReferenceTemplate } from "@/tina/templates/markdown-embeds/api-reference.template";
 import CalloutTemplate from "@/tina/templates/markdown-embeds/callout.template";
 import CardGridTemplate from "@/tina/templates/markdown-embeds/card-grid.template";
-import QueryResponseTabsTemplate from "@/tina/templates/markdown-embeds/query-response-tabs.template";
+import CodeTabsTemplate from "@/tina/templates/markdown-embeds/code-tabs.template";
 import RecipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
 import ScrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
 import { TypeDefinitionTemplate } from "@/tina/templates/markdown-embeds/type-definition.template";
@@ -30,6 +30,19 @@ export const docsCollection = {
       }
       const slug = document._sys.breadcrumbs.join("/");
       return `/docs/${slug}`;
+    },
+    filename: {
+      slugify: (values) => {
+        return (
+          values?.title
+            ?.toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, "") // Remove special characters except spaces and dashes
+            .replace(/\s+/g, "-") // Replace spaces with dashes
+            .replace(/-+/g, "-") // Replace multiple dashes with single dash
+            .replace(/^-|-$/g, "") || // Remove leading/trailing dashes
+          ""
+        );
+      },
     },
   },
   fields: [
@@ -60,21 +73,6 @@ export const docsCollection = {
       type: "rich-text",
       name: "body",
       label: "Body",
-      toolbarOverride: [
-        "heading",
-        "link",
-        "image",
-        "quote",
-        "ul",
-        "ol",
-        "bold",
-        "italic",
-        "code",
-        "codeBlock",
-        "mermaid",
-        "table",
-        "embed",
-      ],
       isBody: true,
       templates: [
         ScrollShowcaseTemplate as Template,
@@ -84,7 +82,7 @@ export const docsCollection = {
         AccordionBlockTemplate as Template,
         ApiReferenceTemplate as Template,
         YoutubeTemplate as Template,
-        QueryResponseTabsTemplate as Template,
+        CodeTabsTemplate as Template,
         CalloutTemplate as Template,
         TypeDefinitionTemplate as Template,
       ],

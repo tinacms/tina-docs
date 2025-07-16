@@ -20,6 +20,8 @@ export const RecipeTemplate = {
       label: "Code",
       ui: {
         component: MonacoCodeEditor,
+        format: (val?: string) => val?.replaceAll("�", " "),
+        parse: (val?: string) => val?.replaceAll(" ", "�"),
       },
     },
     {

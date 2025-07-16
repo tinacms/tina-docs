@@ -47,6 +47,7 @@ export default async function DocsPage() {
         data: data.data,
         pageTableOfContents,
         documentationData: data,
+        forceExperimental: data.variables.relativePath,
       }}
     />
   );

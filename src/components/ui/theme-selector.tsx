@@ -4,15 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { MdHelpOutline } from "react-icons/md";
 
-const themes = ["default", "monochrome", "blossom", "lake", "pine", "indigo"];
+const themes = ["default", "tina", "blossom", "lake", "pine", "indigo"];
 
 export const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
 
 // Default theme colors from root
 const DEFAULT_COLORS = {
-  background: "#ecf8fb",
-  text: "#EC4815",
-  border: "#EC4815",
+  background: "#FFFFFF",
+  text: "#000000",
+  border: "#000000",
 };
 
 export const ThemeSelector = () => {

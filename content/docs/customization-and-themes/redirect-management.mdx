@@ -1,0 +1,49 @@
+---
+seo:
+  title: Managing Redirects with TinaDocs
+  description: Learn how to set up and manage redirects using TinaDocs and TinaCMS.
+title: Redirect Managment
+last_edited: '2025-07-15T06:53:56.004Z'
+---
+
+TinaDocs is built on top of **NextJS**, which supports static and dynamic redirects through the `next.config.js` file located at the root of your project.
+
+This allows for seamless integration of redirect rules during the build process, ensuring that your routes behave as expected across environments.
+
+## Setting Up Your Redirects
+
+To update or add your redirects using the TinaCMS admin interface, follow these steps:
+
+1. Navigate to the \`/admin\` route of your site.
+2. In the sidebar, click on **Settings**.
+3. Scroll down to the bottom of the Settings page.
+4. Look for the **Redirects** section.
+5. Click **+ Add New** to create a new redirect, or click an existing one to modify it.
+
+![](</img/docs-assets/redirect-editor-interface.png> "Adding a redirect via the editor")
+
+Each redirect entry typically includes:
+
+* **Source Path** (from)
+* **Destination Path** (to)
+* **Permanent** (boolean flag for 301 vs 302)
+* **Conditions** (optional advanced rules)
+
+### Code-Defined Redirects
+
+Here's what a redirect entry might look like in `next.config.js` if manually defined:
+
+```javascript
+// next.config.js
+module.exports = {
+  async redirects() {
+    return \[
+      {
+        source: '/old-route',
+        destination: '/new-route',
+        permanent: true,
+      },
+    ];
+  },
+};
+```
