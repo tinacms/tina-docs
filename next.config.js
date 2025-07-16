@@ -38,6 +38,16 @@ module.exports = {
         destination:
           "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/",
       },
+      {
+        source: "/docs/:path*",
+        destination:
+          "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/docs/:path*",
+      },
+      {
+        source: "/:path*",
+        destination:
+          "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/:path*",
+      },
     ];
   },
 
