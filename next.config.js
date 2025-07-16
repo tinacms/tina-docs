@@ -33,6 +33,10 @@ module.exports = {
         source: "/admin",
         destination: "/admin/index.html",
       },
+      {
+        source: "/",
+        destination: "https://www.tina.io",
+      },
     ];
   },
 

@@ -18,11 +18,5 @@
     "forum": "https://tina.io/community"
   },
   "selectedTheme": "default",
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/docs",
-      "permanent": true
-    }
-  ]
+  "redirects": []
 }
