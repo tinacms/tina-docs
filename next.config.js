@@ -44,7 +44,7 @@ module.exports = {
           "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/docs/:path*",
       },
       {
-        source: "/((?!_next|api|admin|favicon.ico|robots.txt|sitemap.xml).*)",
+        source: "/((?!api|admin|favicon.ico|robots.txt|sitemap.xml).*)",
         destination:
           "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/:path*",
       },
