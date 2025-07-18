@@ -8,6 +8,7 @@ module.exports = {
     remotePatterns: [],
     unoptimized: true,
   },
+  basePath: "/docs",
 
   // Optimize serverless functions
   experimental: {},
@@ -32,6 +33,21 @@ module.exports = {
       {
         source: "/admin",
         destination: "/admin/index.html",
+      },
+      {
+        source: "/",
+        destination:
+          "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/",
+      },
+      {
+        source: "/docs/:path*",
+        destination:
+          "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/docs/:path*",
+      },
+      {
+        source: "/((?!api|admin|favicon.ico|robots.txt|sitemap.xml).*)",
+        destination:
+          "https://tina-io-git-test-poc-tina-docs-tinacms.vercel.app/:path*",
       },
     ];
   },
