@@ -8,6 +8,7 @@ module.exports = {
     remotePatterns: [],
     unoptimized: true,
   },
+  basePath: "/docs",
 
   // Optimize serverless functions
   experimental: {},
