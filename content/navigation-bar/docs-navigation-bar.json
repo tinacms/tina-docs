@@ -30,6 +30,10 @@
               "_template": "item"
             },
             {
+              "slug": "content/docs/tinacms/example.mdx",
+              "_template": "item"
+            },
+            {
               "slug": "content/docs/tinadocs-and-tinacms/usage-editors.mdx",
               "_template": "item"
             },
