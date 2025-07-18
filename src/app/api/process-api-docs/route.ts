@@ -3,20 +3,22 @@ import { type NextRequest, NextResponse } from "next/server";
 import { generateMdxFiles } from "./generate-mdx-files";
 import type { GroupApiData } from "./types";
 
+const isDev = process.env.NODE_ENV === "development";
+
 export async function POST(request: NextRequest) {
   try {
     const { data } = await request.json();
     const authHeader = request.headers.get("authorization");
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!isDev && (!authHeader || !authHeader.startsWith("Bearer "))) {
       return NextResponse.json(
         { error: "Missing Authorization token" },
         { status: 401 }
       );
     }
 
-    const token = authHeader.replace("Bearer ", "");
-    const client = new TinaGraphQLClient(token);
+    const token = authHeader?.replace("Bearer ", "");
+    const client = new TinaGraphQLClient(token || "");
 
     const tabs = data?.tabs || [];
 
