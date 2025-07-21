@@ -29,7 +29,7 @@ export const ApiNavigationItems: React.FC<
             endpoint.path
           )}`,
           verb: endpoint.method.toLowerCase(),
-          endpoint_slug: getEndpointSlug(endpoint.method, endpoint.path),
+          endpoint_slug: getEndpointSlug("", endpoint.path),
         })),
       };
     });
