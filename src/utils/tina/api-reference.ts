@@ -8,69 +8,19 @@ import type { TinaGraphQLClient } from "./tina-graphql-client";
 
 // Helper function to compare documents excluding last_edited
 const compareDocuments = (existingDoc: any, newData: any): boolean => {
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log("🔍 Starting document comparison...");
-
-  // Compare title
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log(
-    `📝 Title comparison: "${existingDoc.title}" vs "${newData.title}"`
-  );
   if (existingDoc.title !== newData.title) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-    console.log("❌ Title mismatch");
     return false;
   }
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log("✅ Title matches");
 
-  // Compare SEO
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log(
-    `🔍 SEO title comparison: "${existingDoc.seo?.title}" vs "${newData.seo?.title}"`
-  );
   if (existingDoc.seo?.title !== newData.seo?.title) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-    console.log("❌ SEO title mismatch");
     return false;
   }
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log("✅ SEO title matches");
 
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log(
-    `🔍 SEO description comparison: "${existingDoc.seo?.description}" vs "${newData.seo?.description}"`
-  );
   if (existingDoc.seo?.description !== newData.seo?.description) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-    console.log("❌ SEO description mismatch");
     return false;
   }
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log("✅ SEO description matches");
-
-  // Compare body structure (deep comparison)
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log("🔍 Starting body comparison...");
-
-  // Log the structure of both documents for debugging
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log(
-    "📋 Existing document structure:",
-    JSON.stringify(existingDoc.body, null, 2)
-  );
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log(
-    "📋 New document structure:",
-    JSON.stringify(newData.body, null, 2)
-  );
 
   const compareBody = (existing: any, newBody: any, path = "body"): boolean => {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-    console.log(
-      `🔍 Comparing at ${path}: type "${existing.type}" vs "${newBody.type}"`
-    );
-
     if (existing.type !== newBody.type) {
       // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
       console.log(`❌ Type mismatch at ${path}`);
@@ -156,65 +106,12 @@ const compareDocuments = (existingDoc: any, newData: any): boolean => {
       }
     }
 
-    if (existing.text !== newBody.text) {
-      // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-      console.log(
-        `❌ Text mismatch at ${path}: "${existing.text}" vs "${newBody.text}"`
-      );
-      return false;
-    }
-
-    if (existing.bold !== newBody.bold) {
-      // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-      console.log(
-        `❌ Bold mismatch at ${path}: ${existing.bold} vs ${newBody.bold}`
-      );
-      return false;
-    }
-
-    if (existing.code !== newBody.code) {
-      // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-      console.log(
-        `❌ Code mismatch at ${path}: ${existing.code} vs ${newBody.code}`
-      );
-      return false;
-    }
-
-    if (existing.name !== newBody.name) {
-      // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-      console.log(
-        `❌ Name mismatch at ${path}: "${existing.name}" vs "${newBody.name}"`
-      );
-      return false;
-    }
-
-    // Compare props
-    if (existing.props && newBody.props) {
-      // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-      console.log(
-        `🔍 Props comparison at ${path}:`,
-        existing.props,
-        "vs",
-        newBody.props
-      );
-
-      if (existing.props.schemaFile !== newBody.props.schemaFile) {
-        // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-        console.log(
-          `❌ SchemaFile mismatch at ${path}: "${existing.props.schemaFile}" vs "${newBody.props.schemaFile}"`
-        );
-        return false;
-      }
-    }
-
     // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
     console.log(`✅ ${path} matches`);
     return true;
   };
 
   if (!compareBody(existingDoc.body, newData.body)) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-    console.log("❌ Body content mismatch");
     return false;
   }
 
