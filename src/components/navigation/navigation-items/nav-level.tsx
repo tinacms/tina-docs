@@ -30,6 +30,8 @@ export const NavLevel: React.FC<NavLevelProps> = ({
   const pathname = usePathname();
   const path = pathname || "";
 
+  // If there is only one endpoint slug, use it as the default title
+  // This will be used only when endpoint title is not set
   const defaultTitle =
     endpoint_slug?.length === 1
       ? titleCase(endpoint_slug[0]?.replace(/-/g, " "))
