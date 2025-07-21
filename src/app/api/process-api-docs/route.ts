@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const allCreatedFiles: string[] = [];
-
+    const allSkippedFiles: string[] = [];
     for (const item of tabs) {
       if (item._template === "apiTab") {
         // Process API groups within this tab
@@ -44,8 +44,12 @@ export async function POST(request: NextRequest) {
                   : group.apiGroup;
 
               // Generate files for this group
-              const createdFiles = await generateMdxFiles(groupData, client);
+              const { createdFiles, skippedFiles } = await generateMdxFiles(
+                groupData,
+                client
+              );
               allCreatedFiles.push(...createdFiles);
+              allSkippedFiles.push(...skippedFiles);
             } catch (error) {
               // Continue processing other groups
             }
@@ -59,6 +63,7 @@ export async function POST(request: NextRequest) {
       message: `Processed ${tabs.length} navigation tabs`,
       totalFilesCreated: allCreatedFiles.length,
       createdFiles: allCreatedFiles,
+      skippedFiles: allSkippedFiles,
     });
   } catch (error) {
     return NextResponse.json(

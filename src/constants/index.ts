@@ -35,29 +35,7 @@ query GetDocByRelativePath($relativePath: String!) {
             canonicalUrl
         }
         last_edited
-        body {
-            type
-            children {
-                type
-                text
-                bold
-                code
-                name
-                props {
-                    schemaFile
-                }
-                children {
-                    type
-                    text
-                    bold
-                    code
-                    name
-                    props {
-                        schemaFile
-                    }
-                }
-            }
-        }
+        body
         _sys {
             filename
             relativePath
