@@ -16,6 +16,7 @@ interface NavLevelProps {
   categoryData: any;
   level?: number;
   onNavigate?: () => void;
+  endpoint_slug?: string[];
 }
 
 export const NavLevel: React.FC<NavLevelProps> = ({
@@ -23,13 +24,16 @@ export const NavLevel: React.FC<NavLevelProps> = ({
   categoryData,
   level = 0,
   onNavigate,
+  endpoint_slug,
 }) => {
   const navLevelElem = React.useRef(null);
   const pathname = usePathname();
   const path = pathname || "";
-  const defaultTitle = titleCase(
-    path.split("/").pop()?.replace(/-/g, " ") || ""
-  );
+
+  const defaultTitle =
+    endpoint_slug?.length === 1
+      ? titleCase(endpoint_slug[0]?.replace(/-/g, " "))
+      : "";
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
@@ -219,6 +223,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
                   level={level + 1}
                   categoryData={item}
                   onNavigate={onNavigate}
+                  endpoint_slug={endpoint_slug}
                 />
               </div>
             ))}
