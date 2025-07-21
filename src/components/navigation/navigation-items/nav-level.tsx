@@ -27,6 +27,9 @@ export const NavLevel: React.FC<NavLevelProps> = ({
   const navLevelElem = React.useRef(null);
   const pathname = usePathname();
   const path = pathname || "";
+  const defaultTitle = titleCase(
+    path.split("/").pop()?.replace(/-/g, " ") || ""
+  );
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
@@ -162,7 +165,9 @@ export const NavLevel: React.FC<NavLevelProps> = ({
                   className="flex-1 min-w-0"
                   style={{ overflowWrap: "anywhere" }}
                 >
-                  {categoryData.slug.title || categoryData.title}
+                  {categoryData.slug.title ||
+                    categoryData.title ||
+                    defaultTitle}
                 </span>
                 <ChevronRightIcon className="ml-2 flex-shrink-0 opacity-0 w-5 h-auto" />
               </span>
