@@ -1,6 +1,7 @@
 import { BROWSER_TAB_THEME_KEY } from "@/src/components/ui/theme-selector";
 import React from "react";
 import { RedirectItem } from "../customFields/redirect-item";
+import { ThemeSelector } from "../customFields/theme-selector";
 
 export const Settings = {
   name: "settings",
@@ -21,6 +22,68 @@ export const Settings = {
     },
   },
   fields: [
+    {
+      name: "selectedTheme",
+      label: "Selected Theme",
+      description: "Choose your website's visual theme with color previews",
+      type: "string",
+      ui: {
+        component: ThemeSelector,
+      },
+    },
+    {
+      name: "redirects",
+      label: "Redirects",
+      type: "object",
+      list: true,
+      ui: {
+        itemProps: (item) => {
+          return {
+            label:
+              item.source && item.destination ? (
+                <RedirectItem
+                  source={item.source}
+                  destination={item.destination}
+                  permanent={item.permanent}
+                />
+              ) : (
+                "Add Redirect"
+              ),
+          };
+        },
+      },
+      fields: [
+        {
+          name: "source",
+          label: "Source",
+          type: "string",
+          ui: {
+            validate: (value) => {
+              if (!value?.startsWith("/")) {
+                return "Source path must start with /";
+              }
+            },
+          },
+        },
+        {
+          name: "destination",
+          label: "Destination",
+          type: "string",
+          ui: {
+            validate: (value) => {
+              if (!value?.startsWith("/")) {
+                return "Destination path must start with /";
+              }
+            },
+          },
+        },
+        {
+          name: "permanent",
+          label: "Permanent",
+          type: "boolean",
+        },
+      ],
+    },
     {
       name: "title",
       label: "Title",
@@ -109,75 +172,6 @@ export const Settings = {
           name: "forum",
           label: "Forum",
           type: "string",
-        },
-      ],
-    },
-    {
-      name: "selectedTheme",
-      label: "Selected Theme",
-      type: "string",
-      ui: {
-        component: "select",
-      },
-      options: [
-        { label: "Default", value: "default" },
-        { label: "Tina", value: "tina" },
-        { label: "Blossom", value: "blossom" },
-        { label: "Lake", value: "lake" },
-        { label: "Pine", value: "pine" },
-        { label: "Indigo", value: "indigo" },
-      ],
-    },
-    {
-      name: "redirects",
-      label: "Redirects",
-      type: "object",
-      list: true,
-      ui: {
-        itemProps: (item) => {
-          return {
-            label:
-              item.source && item.destination ? (
-                <RedirectItem
-                  source={item.source}
-                  destination={item.destination}
-                  permanent={item.permanent}
-                />
-              ) : (
-                "Add Redirect"
-              ),
-          };
-        },
-      },
-      fields: [
-        {
-          name: "source",
-          label: "Source",
-          type: "string",
-          ui: {
-            validate: (value) => {
-              if (!value?.startsWith("/")) {
-                return "Source path must start with /";
-              }
-            },
-          },
-        },
-        {
-          name: "destination",
-          label: "Destination",
-          type: "string",
-          ui: {
-            validate: (value) => {
-              if (!value?.startsWith("/")) {
-                return "Destination path must start with /";
-              }
-            },
-          },
-        },
-        {
-          name: "permanent",
-          label: "Permanent",
-          type: "boolean",
         },
       ],
     },
