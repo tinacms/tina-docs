@@ -145,16 +145,6 @@
         }
       ],
       "_template": "apiTab"
-    },
-    {
-      "title": "Test",
-      "supermenuGroup": [
-        {
-          "apiGroup": "{\"schema\":\"spec.json\",\"tag\":\"Assessments\",\"endpoints\":[{\"id\":\"GET:/api/projects/Assessments/{id}\",\"label\":\"GET /api/projects/Assessments/{id} - \",\"method\":\"GET\",\"path\":\"/api/projects/Assessments/{id}\",\"summary\":\"\",\"description\":\"\"},{\"id\":\"DELETE:/api/projects/Assessments/{id}\",\"label\":\"DELETE /api/projects/Assessments/{id} - \",\"method\":\"DELETE\",\"path\":\"/api/projects/Assessments/{id}\",\"summary\":\"\",\"description\":\"\"}]}",
-          "_template": "groupOfApiReferences"
-        }
-      ],
-      "_template": "apiTab"
     }
   ],
   "ctaButtons": {
