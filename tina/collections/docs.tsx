@@ -22,6 +22,7 @@ export const docsCollection = {
       return {
         ...values,
         last_edited: new Date().toISOString(),
+        auto_generated: false,
       };
     },
     router: ({ document }) => {
