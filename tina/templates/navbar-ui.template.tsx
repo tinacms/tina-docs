@@ -19,7 +19,7 @@ export const itemTemplate: Template = {
       name: "slug",
       label: "Page",
       type: "reference",
-      collections: ["docs", "apiDocumentation"],
+      collections: ["docs"],
     },
   ],
 };
