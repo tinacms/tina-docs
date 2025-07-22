@@ -25,6 +25,19 @@ export const apiDocumentCollection = {
       },
     },
     {
+      type: "boolean",
+      name: "auto_generated",
+      label: "Auto Generated",
+      ui: {
+        readOnly: true,
+        beforeSubmit: (data) => {
+          data.auto_generated = "false";
+          return data;
+        },
+      },
+      defaultValue: "false",
+    },
+    {
       type: "rich-text",
       name: "body",
       label: "Body",

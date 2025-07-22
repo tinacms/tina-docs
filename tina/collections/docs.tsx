@@ -64,6 +64,15 @@ export const docsCollection = {
     },
     {
       type: "boolean",
+      name: "auto_generated",
+      label: "Auto Generated",
+      description: "Indicates if this document was automatically generated",
+      ui: {
+        component: "hidden",
+      },
+    },
+    {
+      type: "boolean",
       name: "tocIsHidden",
       label: "Hide Table of Contents",
       description:

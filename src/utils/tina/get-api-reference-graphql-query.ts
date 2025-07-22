@@ -23,6 +23,7 @@ export const getApiReferenceGraphQLQuery = (
       title,
       description: descriptionText,
     },
+    auto_generated: true,
     last_edited: new Date().toISOString(),
     body: {
       type: "root",

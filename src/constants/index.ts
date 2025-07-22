@@ -29,11 +29,13 @@ query GetDocByRelativePath($relativePath: String!) {
     docs(relativePath: $relativePath) {
         id
         title
+        auto_generated
         seo {
             title
             description
             canonicalUrl
         }
+        auto_generated
         last_edited
         body
         _sys {

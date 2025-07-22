@@ -37,6 +37,10 @@ export const createOrUpdateAPIReference = async (
       // Get the new data that would be created
       const newData = await getApiReferenceGraphQLQuery(endpoint, schema);
 
+      if (!existingDoc.docs.auto_generated) {
+        return "skipped";
+      }
+
       // Compare all fields except last_edited
       const isIdentical = compareMarkdown(existingDoc.docs, newData);
 
