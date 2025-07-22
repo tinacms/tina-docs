@@ -12,7 +12,7 @@ import { NavTitle } from "./nav-title";
 import { hasNestedSlug } from "./utils";
 
 interface NavLevelProps {
-  navListElem?: React.RefObject<HTMLDivElement>;
+  navListElem?: React.RefObject<HTMLDivElement | null>;
   categoryData: any;
   level?: number;
   onNavigate?: () => void;
@@ -26,7 +26,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
   onNavigate,
   endpoint_slug,
 }) => {
-  const navLevelElem = React.useRef(null);
+  const navLevelElem = React.useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const path = pathname || "";
 
@@ -111,14 +111,15 @@ export const NavLevel: React.FC<NavLevelProps> = ({
       navListElem.current &&
       selected
     ) {
-      const scrollOffset = navListElem.current.scrollTop;
-      const navListOffset = navListElem.current.getBoundingClientRect().top;
-      const navListHeight = navListElem.current.offsetHeight;
-      const navItemOffset = navLevelElem.current.getBoundingClientRect().top;
+      const scrollOffset = navListElem.current?.scrollTop || 0;
+      const navListOffset =
+        navListElem.current?.getBoundingClientRect()?.top || 0;
+      const navListHeight = navListElem.current?.offsetHeight || 0;
+      const navItemOffset = navLevelElem.current?.getBoundingClientRect()?.top;
       const elementOutOfView =
         navItemOffset - navListOffset > navListHeight + scrollOffset;
 
-      if (elementOutOfView) {
+      if (elementOutOfView && navLevelElem.current) {
         navLevelElem.current.scrollIntoView({
           behavior: "auto",
           block: "center",
