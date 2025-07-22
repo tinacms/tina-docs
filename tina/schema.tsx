@@ -1,5 +1,6 @@
 import { type Collection, defineSchema } from "tinacms";
 import API_Schema_Collection from "./collections/API-schema";
+import { apiDocumentCollection } from "./collections/api-document";
 import docsCollection from "./collections/docs";
 import docsNavigationBarCollection from "./collections/navigation-bar";
 import { Settings } from "./collections/settings";
@@ -10,6 +11,7 @@ export const schema = defineSchema({
     docsNavigationBarCollection as Collection,
     //TODO: Investigate why casting as unknown works
     API_Schema_Collection as unknown as Collection,
+    apiDocumentCollection as Collection,
     Settings as unknown as Collection,
   ],
 });
