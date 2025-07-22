@@ -69,11 +69,11 @@ const ThemeOption = ({ theme, isSelected, onClick, key }) => {
   return (
     <div
       className={`
-        relative p-4 rounded-lg border cursor-pointer transition-all duration-200 bg-white shadow-sm
+        relative p-4 rounded-lg border cursor-pointer transition-all duration-200 bg-white max-w-sm hover:shadow-md
         ${
           isSelected
-            ? "border-blue-500 "
-            : "border-gray-200 hover:border-gray-300 hover:shadow-md"
+            ? "border-blue-500 shadow-md"
+            : "border-gray-200 hover:border-gray-300 shadow-sm"
         }
       `}
       onClick={onClick}
@@ -134,7 +134,7 @@ export const ThemeSelector = wrapFieldsWithMeta(({ input, field }) => {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         {themes.map((theme) => (
           <ThemeOption
             key={`theme-${theme.value}`}
