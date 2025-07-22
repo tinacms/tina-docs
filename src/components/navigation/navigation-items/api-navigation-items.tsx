@@ -48,10 +48,10 @@ export const ApiNavigationItems: React.FC<
               categoryData.slug
                 ? getUrl(categoryData.slug)
                 : categoryData.title
-                ? categoryData.title
-                : categoryData.id
-                ? categoryData.id
-                : `item-${index}`
+                  ? categoryData.title
+                  : categoryData.id
+                    ? categoryData.id
+                    : `item-${index}`
             }`}
           >
             <NavLevel
