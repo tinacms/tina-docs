@@ -29,7 +29,7 @@ export const ApiNavigationItems: React.FC<
             endpoint.path
           )}`,
           verb: endpoint.method.toLowerCase(),
-          endpoint_slug: getEndpointSlug("", endpoint.path),
+          endpoint_slug: getEndpointSlug(endpoint.method, endpoint.path),
         })),
       };
     });
@@ -58,6 +58,9 @@ export const ApiNavigationItems: React.FC<
               navListElem={navListElem}
               categoryData={categoryData}
               onNavigate={onNavigate}
+              endpoint_slug={categoryData.items?.map(
+                (item: any) => item.endpoint_slug
+              )}
             />
           </div>
         ))}

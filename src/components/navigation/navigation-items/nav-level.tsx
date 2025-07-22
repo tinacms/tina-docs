@@ -16,8 +16,18 @@ interface NavLevelProps {
   categoryData: any;
   level?: number;
   onNavigate?: () => void;
-  endpoint_slug?: string[];
+  endpoint_slug?: string | string[];
 }
+
+const getEndpointSlug = (endpoint_slug: string | string[] | undefined) => {
+  if (!endpoint_slug) return "";
+  if (typeof endpoint_slug === "string") {
+    return titleCase(endpoint_slug?.replace(/-/g, " "));
+  }
+  return endpoint_slug.length === 1
+    ? titleCase(endpoint_slug[0]?.replace(/-/g, " "))
+    : "";
+};
 
 export const NavLevel: React.FC<NavLevelProps> = ({
   navListElem,
@@ -32,10 +42,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
 
   // If there is only one endpoint slug, use it as the default title
   // This will be used only when endpoint title is not set
-  const defaultTitle =
-    endpoint_slug?.length === 1
-      ? titleCase(endpoint_slug[0]?.replace(/-/g, " "))
-      : "";
+  const defaultTitle = getEndpointSlug(endpoint_slug);
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
@@ -215,7 +222,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
           height={expanded ? "auto" : 0}
         >
           <div className="relative block">
-            {(categoryData.items || []).map((item: any) => (
+            {(categoryData.items || []).map((item: any, index: number) => (
               <div
                 key={`child-container-${
                   item.slug ? getUrl(item.slug) + level : item.title + level
@@ -226,7 +233,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
                   level={level + 1}
                   categoryData={item}
                   onNavigate={onNavigate}
-                  endpoint_slug={endpoint_slug}
+                  endpoint_slug={endpoint_slug?.[index]}
                 />
               </div>
             ))}
