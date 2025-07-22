@@ -6,6 +6,14 @@ export const apiDocumentCollection = {
   label: "API Documentation",
   path: "content/docs/api-documentation",
   format: "mdx",
+  ui: {
+    beforeSubmit: async ({ values }) => {
+      return {
+        ...values,
+        auto_generated: false,
+      };
+    },
+  },
 
   fields: [
     SeoInformation,
@@ -29,13 +37,8 @@ export const apiDocumentCollection = {
       name: "auto_generated",
       label: "Auto Generated",
       ui: {
-        readOnly: true,
-        beforeSubmit: (data) => {
-          data.auto_generated = "false";
-          return data;
-        },
+        component: "hidden",
       },
-      defaultValue: "false",
     },
     {
       type: "rich-text",
