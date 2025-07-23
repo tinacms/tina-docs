@@ -1,3 +1,5 @@
+// This file is listed in the lint ignore configuration because it's used for logging client-side document comparisons.
+
 // Types for better readability
 interface DocumentData {
   title: string;
@@ -18,8 +20,7 @@ export const compareMarkdown = (
   existingDoc: DocumentData,
   newData: DocumentData
 ): boolean => {
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
-  console.log("🔍 Starting document comparison...");
+  console.log(`🔍 Starting document comparison for ${existingDoc.title}`);
 
   // Compare basic fields first
   if (!compareBasicFields(existingDoc, newData)) {
@@ -31,7 +32,6 @@ export const compareMarkdown = (
     return false;
   }
 
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
   console.log("✅ All comparisons passed - documents are identical");
   return true;
 };
@@ -42,19 +42,16 @@ const compareBasicFields = (
   newData: DocumentData
 ): boolean => {
   if (existingDoc.title !== newData.title) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
     console.log("❌ Title mismatch");
     return false;
   }
 
   if (existingDoc.seo?.title !== newData.seo?.title) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
     console.log("❌ SEO title mismatch");
     return false;
   }
 
   if (existingDoc.seo?.description !== newData.seo?.description) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
     console.log("❌ SEO description mismatch");
     return false;
   }
@@ -80,7 +77,6 @@ const compareChildren = (
   newChildren: BodyNode[],
   path: string
 ): boolean => {
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
   console.log(
     `🔍 Children count at ${path}: ${existing.length} vs ${newChildren.length}`
   );
@@ -89,7 +85,6 @@ const compareChildren = (
   if (path === "body") {
     const countDifference = Math.abs(existing.length - newChildren.length);
     if (countDifference <= 2) {
-      // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
       console.log(
         `⚠️  Children count difference at root level (${existing.length} vs ${newChildren.length}), but within acceptable range`
       );
@@ -99,24 +94,20 @@ const compareChildren = (
         !hasEssentialApiReferenceElements(existing) ||
         !hasEssentialApiReferenceElements(newChildren)
       ) {
-        // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
         console.log("❌ Missing essential elements at root level");
         return false;
       }
 
-      // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
       console.log("✅ Essential elements present in both documents");
       return true;
     }
 
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
     console.log(`❌ Children count mismatch at ${path}`);
     return false;
   }
 
   // For non-root levels, do exact comparison
   if (existing.length !== newChildren.length) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
     console.log(`❌ Children count mismatch at ${path}`);
     return false;
   }
@@ -140,7 +131,6 @@ const compareBodyNode = (
   path: string
 ): boolean => {
   if (existing.type !== newNode.type) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
     console.log(`❌ Type mismatch at ${path}`);
     return false;
   }
@@ -152,12 +142,10 @@ const compareBodyNode = (
 
   // If only one has children, they don't match
   if (existing.children || newNode.children) {
-    // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
     console.log(`❌ Children mismatch at ${path}`);
     return false;
   }
 
-  // biome-ignore lint/suspicious/noConsole: Debug logging for comparison
   console.log(`✅ ${path} matches`);
   return true;
 };

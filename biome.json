@@ -11,7 +11,8 @@
       "coverage/**",
       "tina/__generated__/**",
       "tina/tina-lock.json",
-      "src/styles/**"
+      "src/styles/**",
+      "src/utils/tina/compare-markdown.ts"
     ]
   },
   "formatter": {
