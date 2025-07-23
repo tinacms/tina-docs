@@ -75,21 +75,15 @@ export const ImageOverlayWrapper = ({
             <div className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center p-8">
               <div className="relative flex flex-col items-center justify-center">
                 <div
-                  className="relative max-w-[80vw] max-h-[80vh] overflow-hidden rounded-lg"
+                  className="relative w-[80vw] h-[80vh] overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Image
                     src={src}
                     alt={alt}
-                    width={0}
-                    height={0}
-                    sizes="(max-width: 768px) 90vw, (max-width: 1200px) 80vw, 70vw"
-                    style={{
-                      width: "auto",
-                      height: "auto",
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                    }}
+                    layout="fill"
+                    objectFit="contain"
+                    objectPosition="center"
                     priority
                   />
                 </div>
