@@ -128,7 +128,7 @@ export const ThemeSelector = () => {
         </div>
 
         {isOpen && (
-          <div className="absolute bottom-full left-0 right-0 mb-1 bg-neutral-surface rounded-md border border-neutral-border shadow-lg overflow-hidden w-[120px]">
+          <div className="absolute bottom-full left-0 right-0 mb-1 bg-neutral-surface rounded-md border border-neutral-border shadow-lg overflow-hidden w-[150px]">
             {themes.map((t) => (
               <button
                 type="button"
