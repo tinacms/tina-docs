@@ -55,10 +55,11 @@ When using npx, you can choose from these beautiful themes:
 
 ## 📖 How to Use TinaDocs
 
-There are two ways you can use TinaDocs.
+There are two ways you can use TinaDocs:
 
-1. For developers – as a launching point to develops a highly custom docs solution. TinaCMS is based on markdown. Use this code as a basis to [implement custom components](https://tina.io/docs/reference/types/rendering-markdown#linking-to-react-components) to be used in MDX to fit your use case. Follow the Getting Started guide below.
-2. Quickest experience – use as is and deploy in minutes via TinaCloud for a docs setup that you still hold all the keys and data for, and get to using right away.
+• **For developers** – as a launching point to develops a highly custom docs solution. TinaCMS is based on markdown. Use this code as a basis to [implement custom components](https://tina.io/docs/reference/types/rendering-markdown#linking-to-react-components) to be used in MDX to fit your use case. Follow the Getting Started guide below.
+
+• **Quickest experience** – use as is and deploy in minutes via TinaCloud for a docs setup that you still hold all the keys and data for, and get to using right away.
 
 
 > 💡 TinaCMS integrates tighly with GitHub, and has a powerful [editorial workflow](https://tina.io/docs/tina-cloud/editorial-workflow) based on GitHub's branch protection features.
@@ -119,25 +120,35 @@ pnpm build
 
 ---
 
+## 🚀 Deployment
+
+### **Step 6: Deploy to Vercel** 
+
+TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.io/docs/tina-cloud/deployment-options/vercel) for detailed instructions.
+
+---
+
 ## 🔍 Search Setup
 
 TinaDocs includes fast search powered by [Pagefind](https://pagefind.app/), which indexes your content during the build process.
 
-### **Step 6: Generate Search Index**
+### **How to Build the Search Index**
+
+To generate or update the search index, run:
+
 
 ```bash
 pnpm build-local-pagefind
 ```
+This command:
 
-The search index updates automatically with each build and is stored in `public/pagefind/`.
+- Builds the project
 
----
+- Generates the search index
 
-## 🚀 Deployment
+- Saves the index files to `public/pagefind/`
 
-### **Step 7: Deploy to Vercel** 
-
-TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.io/docs/tina-cloud/deployment-options/vercel) for detailed instructions.
+The search index is automatically updated every time you run the build.
 
 ---
 
