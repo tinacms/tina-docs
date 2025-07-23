@@ -44,7 +44,7 @@ This command will:
 
 When using npx, you can choose from these beautiful themes:
 
-- **Default** - Clean black and white design
+- **Monochrome** - Clean black and white design
 - **Tina** - TinaCMS-inspired theme with orange accents
 - **Blossom** - Elegant pink/rose color scheme
 - **Lake** - Professional blue color palette

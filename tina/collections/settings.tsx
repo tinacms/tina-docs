@@ -120,7 +120,7 @@ export const Settings = {
         component: "select",
       },
       options: [
-        { label: "Default", value: "default" },
+        { label: "Monochrome", value: "monochrome" },
         { label: "Tina", value: "tina" },
         { label: "Blossom", value: "blossom" },
         { label: "Lake", value: "lake" },

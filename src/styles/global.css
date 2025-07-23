@@ -1,8 +1,23 @@
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 
+/* Add smooth transitions for theme changes */
+html {
+  transition: 
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+}
+
+/* Smooth transitions for theme variables */
+* {
+  transition: 
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+}
+
 /* DEFAULT MONOCHROME THEME */
-:root {
+:root, .theme-monochrome{
   /* Tailwind Slate's */
   --brand-primary: #0f172a;
   --brand-primary-hover: #334155;
@@ -46,7 +61,7 @@
   --background-brand-code: #ffffff;
 }
 
-.dark {
+.dark, .theme-monochrome.dark {
   --brand-primary: #f1f5f9;
   --brand-primary-hover: #94a3b8;
   --brand-primary-light: #4f555e;

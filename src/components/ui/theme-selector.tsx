@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { MdHelpOutline } from "react-icons/md";
 
-const themes = ["default", "tina", "blossom", "lake", "pine", "indigo"];
+const themes = ["monochrome", "tina", "blossom", "lake", "pine", "indigo"];
 
 export const BROWSER_TAB_THEME_KEY = "browser-tab-theme";
 
@@ -68,9 +68,13 @@ export const ThemeSelector = () => {
   useEffect(() => {
     if (mounted && selectedTheme) {
       const isDark = resolvedTheme === "dark";
-      document.documentElement.className = `theme-${selectedTheme}${
-        isDark ? " dark" : ""
-      }`;
+      const newClassName = `theme-${selectedTheme}${isDark ? " dark" : ""}`;
+
+      // Only update if the theme has actually changed to avoid unnecessary DOM manipulation
+      if (document.documentElement.className !== newClassName) {
+        document.documentElement.className = newClassName;
+      }
+
       sessionStorage.setItem(BROWSER_TAB_THEME_KEY, selectedTheme);
     }
   }, [selectedTheme, resolvedTheme, mounted]);
@@ -110,7 +114,7 @@ export const ThemeSelector = () => {
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="w-[120px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-1 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
+            className="w-[150px] rounded-md border border-neutral-border bg-neutral-surface px-3 py-1 text-sm text-neutral-text focus:outline-none focus:ring-2 focus:ring-brand-primary flex items-center justify-between cursor-pointer"
           >
             <span className="truncate">
               {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)}

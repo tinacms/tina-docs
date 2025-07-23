@@ -36,6 +36,30 @@ export default function RootLayout({
         <meta name="theme-color" content="#E6FAF8" />
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        {/* Prevent theme flash by applying stored theme before React hydrates */}
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Required to prevent theme FOUC */}
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required to prevent theme FOUC
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const storedTheme = sessionStorage.getItem('browser-tab-theme');
+                  if (storedTheme) {
+                    const themes = ['monochrome', 'tina', 'blossom', 'lake', 'pine', 'indigo'];
+                    if (themes.includes(storedTheme)) {
+                      document.documentElement.className = document.documentElement.className
+                        .replace(/theme-\\w+/g, '') + ' theme-' + storedTheme;
+                    }
+                  }
+                } catch (e) {
+                  // Silently fail if sessionStorage is not available
+                }
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={`${body.variable} ${heading.variable}`}>
         <ThemeProvider
