@@ -24,8 +24,12 @@ export const ApiNavigationItems: React.FC<
         title: titleCase(tag),
         items: (endpoints || []).map((endpoint) => ({
           title: endpoint.summary,
-          slug: `/docs/api-documentation/${getTagSlug(tag)}/${getEndpointSlug(endpoint.method, endpoint.path)}`,
+          slug: `/docs/api-documentation/${getTagSlug(tag)}/${getEndpointSlug(
+            endpoint.method,
+            endpoint.path
+          )}`,
           verb: endpoint.method.toLowerCase(),
+          endpoint_slug: getEndpointSlug(endpoint.method, endpoint.path),
         })),
       };
     });
@@ -54,6 +58,9 @@ export const ApiNavigationItems: React.FC<
               navListElem={navListElem}
               categoryData={categoryData}
               onNavigate={onNavigate}
+              endpoint_slug={categoryData.items?.map(
+                (item: any) => item.endpoint_slug
+              )}
             />
           </div>
         ))}
@@ -65,6 +72,9 @@ export const ApiNavigationItems: React.FC<
             navListElem={navListElem}
             categoryData={categoryData}
             onNavigate={onNavigate}
+            endpoint_slug={categoryData.items?.map(
+              (item: any) => item.endpoint_slug
+            )}
           />
         </div>
       ))}

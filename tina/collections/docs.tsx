@@ -22,6 +22,7 @@ export const docsCollection = {
       return {
         ...values,
         last_edited: new Date().toISOString(),
+        auto_generated: false,
       };
     },
     router: ({ document }) => {
@@ -58,6 +59,15 @@ export const docsCollection = {
       type: "string",
       name: "last_edited",
       label: "Last Edited",
+      ui: {
+        component: "hidden",
+      },
+    },
+    {
+      type: "boolean",
+      name: "auto_generated",
+      label: "Auto Generated",
+      description: "Indicates if this document was automatically generated",
       ui: {
         component: "hidden",
       },

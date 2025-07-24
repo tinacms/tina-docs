@@ -7,12 +7,20 @@ export const itemTemplate: Template = {
   ui: {
     itemProps: (item) => {
       return {
-        label: `🔗 ${titleCase(item?.slug?.split("/").at(-1).split(".").at(0).replaceAll("-", " ") ?? "Unnamed Menu Item")}`,
+        label: `🔗 ${titleCase(
+          item?.slug?.split("/").at(-1).split(".").at(0).replaceAll("-", " ") ??
+            "Unnamed Menu Item"
+        )}`,
       };
     },
   },
   fields: [
-    { name: "slug", label: "Page", type: "reference", collections: ["docs"] },
+    {
+      name: "slug",
+      label: "Page",
+      type: "reference",
+      collections: ["docs"],
+    },
   ],
 };
 

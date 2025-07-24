@@ -12,21 +12,37 @@ import { NavTitle } from "./nav-title";
 import { hasNestedSlug } from "./utils";
 
 interface NavLevelProps {
-  navListElem?: React.RefObject<HTMLDivElement>;
+  navListElem?: React.RefObject<HTMLDivElement | null>;
   categoryData: any;
   level?: number;
   onNavigate?: () => void;
+  endpoint_slug?: string | string[];
 }
+
+const getEndpointSlug = (endpoint_slug: string | string[] | undefined) => {
+  if (!endpoint_slug) return "";
+  if (typeof endpoint_slug === "string") {
+    return titleCase(endpoint_slug?.replace(/-/g, " "));
+  }
+  return endpoint_slug.length === 1
+    ? titleCase(endpoint_slug[0]?.replace(/-/g, " "))
+    : "";
+};
 
 export const NavLevel: React.FC<NavLevelProps> = ({
   navListElem,
   categoryData,
   level = 0,
   onNavigate,
+  endpoint_slug,
 }) => {
-  const navLevelElem = React.useRef(null);
+  const navLevelElem = React.useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const path = pathname || "";
+
+  // If there is only one endpoint slug, use it as the default title
+  // This will be used only when endpoint title is not set
+  const defaultTitle = getEndpointSlug(endpoint_slug);
   const slug = getUrl(categoryData.slug).replace(/\/$/, "");
   const [expanded, setExpanded] = React.useState(
     matchActualTarget(slug || getUrl(categoryData.href), path) ||
@@ -102,14 +118,15 @@ export const NavLevel: React.FC<NavLevelProps> = ({
       navListElem.current &&
       selected
     ) {
-      const scrollOffset = navListElem.current.scrollTop;
-      const navListOffset = navListElem.current.getBoundingClientRect().top;
-      const navListHeight = navListElem.current.offsetHeight;
-      const navItemOffset = navLevelElem.current.getBoundingClientRect().top;
+      const scrollOffset = navListElem.current?.scrollTop || 0;
+      const navListOffset =
+        navListElem.current?.getBoundingClientRect()?.top || 0;
+      const navListHeight = navListElem.current?.offsetHeight || 0;
+      const navItemOffset = navLevelElem.current?.getBoundingClientRect()?.top;
       const elementOutOfView =
         navItemOffset - navListOffset > navListHeight + scrollOffset;
 
-      if (elementOutOfView) {
+      if (elementOutOfView && navLevelElem.current) {
         navLevelElem.current.scrollIntoView({
           behavior: "auto",
           block: "center",
@@ -162,7 +179,9 @@ export const NavLevel: React.FC<NavLevelProps> = ({
                   className="flex-1 min-w-0"
                   style={{ overflowWrap: "anywhere" }}
                 >
-                  {categoryData.slug.title || categoryData.title}
+                  {categoryData.slug.title ||
+                    categoryData.title ||
+                    defaultTitle}
                 </span>
                 <ChevronRightIcon className="ml-2 flex-shrink-0 opacity-0 w-5 h-auto" />
               </span>
@@ -203,7 +222,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
           height={expanded ? "auto" : 0}
         >
           <div className="relative block">
-            {(categoryData.items || []).map((item: any) => (
+            {(categoryData.items || []).map((item: any, index: number) => (
               <div
                 key={`child-container-${
                   item.slug ? getUrl(item.slug) + level : item.title + level
@@ -214,6 +233,7 @@ export const NavLevel: React.FC<NavLevelProps> = ({
                   level={level + 1}
                   categoryData={item}
                   onNavigate={onNavigate}
+                  endpoint_slug={endpoint_slug?.[index]}
                 />
               </div>
             ))}

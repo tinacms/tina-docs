@@ -26,12 +26,14 @@ export async function generateMdxFiles(
     endpoints: EndpointData[];
   },
   client: TinaGraphQLClient
-): Promise<string[]> {
-  if (!groupData.endpoints?.length) return [];
+): Promise<{ createdFiles: string[]; skippedFiles: string[] }> {
+  if (!groupData.endpoints?.length)
+    return { createdFiles: [], skippedFiles: [] };
 
   const { tag, schema, endpoints } = groupData;
   const basePath = `api-documentation/${sanitizeFileName(tag)}`;
   const createdFiles: string[] = [];
+  const skippedFiles: string[] = [];
   const errors: string[] = [];
 
   for (const endpoint of endpoints) {
@@ -39,7 +41,7 @@ export async function generateMdxFiles(
     const relativePath = `${basePath}/${fileName}.mdx`;
 
     try {
-      await createOrUpdateAPIReference(
+      const result = await createOrUpdateAPIReference(
         client,
         relativePath,
         collection,
@@ -47,7 +49,11 @@ export async function generateMdxFiles(
         schema
       );
 
-      createdFiles.push(relativePath);
+      if (result === "created" || result === "updated") {
+        createdFiles.push(relativePath);
+      } else if (result === "skipped") {
+        skippedFiles.push(relativePath);
+      }
     } catch (error: any) {
       errors.push(
         `Failed to handle ${endpoint.method} ${endpoint.path}: ${error.message}`
@@ -60,5 +66,5 @@ export async function generateMdxFiles(
     console.error("API Doc Generation Errors:\n", errors.join("\n"));
   }
 
-  return createdFiles;
+  return { createdFiles, skippedFiles };
 }

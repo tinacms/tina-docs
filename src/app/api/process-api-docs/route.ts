@@ -3,20 +3,22 @@ import { type NextRequest, NextResponse } from "next/server";
 import { generateMdxFiles } from "./generate-mdx-files";
 import type { GroupApiData } from "./types";
 
+const isDev = process.env.NODE_ENV === "development";
+
 export async function POST(request: NextRequest) {
   try {
     const { data } = await request.json();
     const authHeader = request.headers.get("authorization");
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!isDev && (!authHeader || !authHeader.startsWith("Bearer "))) {
       return NextResponse.json(
         { error: "Missing Authorization token" },
         { status: 401 }
       );
     }
 
-    const token = authHeader.replace("Bearer ", "");
-    const client = new TinaGraphQLClient(token);
+    const token = authHeader?.replace("Bearer ", "");
+    const client = new TinaGraphQLClient(token || "");
 
     const tabs = data?.tabs || [];
 
@@ -28,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const allCreatedFiles: string[] = [];
-
+    const allSkippedFiles: string[] = [];
     for (const item of tabs) {
       if (item._template === "apiTab") {
         // Process API groups within this tab
@@ -42,8 +44,12 @@ export async function POST(request: NextRequest) {
                   : group.apiGroup;
 
               // Generate files for this group
-              const createdFiles = await generateMdxFiles(groupData, client);
+              const { createdFiles, skippedFiles } = await generateMdxFiles(
+                groupData,
+                client
+              );
               allCreatedFiles.push(...createdFiles);
+              allSkippedFiles.push(...skippedFiles);
             } catch (error) {
               // Continue processing other groups
             }
@@ -57,6 +63,7 @@ export async function POST(request: NextRequest) {
       message: `Processed ${tabs.length} navigation tabs`,
       totalFilesCreated: allCreatedFiles.length,
       createdFiles: allCreatedFiles,
+      skippedFiles: allSkippedFiles,
     });
   } catch (error) {
     return NextResponse.json(

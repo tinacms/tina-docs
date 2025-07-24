@@ -10,19 +10,19 @@ export const getApiReferenceGraphQLQuery = (
   const title = titleCase(summary) || `${method} ${path}`;
   const heading2 = "Endpoint Details";
   const heading3 = "API Reference";
-  const processedDescription = description
-    ?.replace(/\n/g, " ")
-    .replace(/\{([^}]*)\}/g, "`{$1}`");
+  const processedDescription =
+    description?.replace(/\n/g, " ").replace(/\{([^}]*)\}/g, "`{$1}`") || "";
   const descriptionText =
     processedDescription || `API endpoint for ${method} ${path}`;
   const schemaProp = `${schema}|${method}:${path}`;
 
   return {
-    title,
+    title: String(title),
     seo: {
-      title,
-      description: descriptionText,
+      title: String(title),
+      description: String(descriptionText),
     },
+    auto_generated: true,
     last_edited: new Date().toISOString(),
     body: {
       type: "root",
@@ -32,13 +32,13 @@ export const getApiReferenceGraphQLQuery = (
           children: [
             {
               type: "text",
-              text: processedDescription,
+              text: String(processedDescription),
             },
           ],
         },
         {
           type: "h2",
-          children: [{ type: "text", text: heading2 }],
+          children: [{ type: "text", text: String(heading2) }],
         },
         {
           type: "p",
@@ -51,7 +51,7 @@ export const getApiReferenceGraphQLQuery = (
             { type: "text", text: " " },
             {
               type: "text",
-              text: method,
+              text: String(method),
               code: true,
             },
           ],
@@ -71,21 +71,21 @@ export const getApiReferenceGraphQLQuery = (
             { type: "text", text: " " },
             {
               type: "text",
-              text: path,
+              text: String(path),
               code: true,
             },
           ],
         },
         {
           type: "h2",
-          children: [{ type: "text", text: heading3 }],
+          children: [{ type: "text", text: String(heading3) }],
         },
         {
           type: "mdxJsxFlowElement",
           name: "apiReference",
           children: [{ type: "text", text: "" }],
           props: {
-            schemaFile: schemaProp,
+            schemaFile: String(schemaProp),
           },
         },
       ],

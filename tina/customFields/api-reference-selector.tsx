@@ -400,14 +400,21 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                     {selectedEndpoints.length} endpoint
                     {selectedEndpoints.length !== 1 ? "s" : ""} selected
                     <br />
-                    Files will be generated when you save this form using{" "}
-                    <span className="underline">TinaCMS GraphQL</span>
+                    Files will be generated using{" "}
+                    <span className="underline">TinaCMS GraphQL</span> when you
+                    hit save.
                   </div>
                 </div>
               )}
             </div>
           )}
 
+          {selectedEndpoints.length > 0 && (
+            <p className="text-xs text-black bg-yellow-100 p-2 rounded-md mb-4 break-all overflow-x-auto whitespace-pre">
+              Following are the endpoint(s) that will have their mdx files
+              generated.
+            </p>
+          )}
           <div className="mt-2 p-3 bg-gray-100 rounded text-xs text-gray-700 font-mono break-all overflow-x-auto whitespace-pre">
             {JSON.stringify(
               {

@@ -24,6 +24,28 @@ mutation DeleteDocument($collection: String!, $relativePath: String!) {
 }
 `;
 
+export const GET_DOC_BY_RELATIVE_PATH_QUERY = `
+query GetDocByRelativePath($relativePath: String!) {
+    docs(relativePath: $relativePath) {
+        id
+        title
+        auto_generated
+        seo {
+            title
+            description
+            canonicalUrl
+        }
+        auto_generated
+        last_edited
+        body
+        _sys {
+            filename
+            relativePath
+        }
+    }
+}
+`;
+
 export const GET_ALL_DOCS_QUERY = `
 query GetAllDocs {
     docsConnection {
