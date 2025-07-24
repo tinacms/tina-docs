@@ -91,6 +91,7 @@ Open [http://localhost:3000](http://localhost:3000) to see your docs in action.
 1. **Add your docs to GitHub**: Push your local repository to GitHub if you haven't already
 2. **Create a TinaCloud account**: Sign up at [app.tina.io](https://app.tina.io)
 3. **Link your repository**: Connect your GitHub repository to TinaCloud through the dashboard
+Note: if you don’t see your repo in the list, click the button “Configure your TinaCloud permissions on GitHub” at the bottom of the page
 
 ### **Step 4: Configure Environment**
 
