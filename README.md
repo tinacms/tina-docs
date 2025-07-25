@@ -51,6 +51,8 @@ When using npx, you can choose from these beautiful themes:
 - **Pine** - Natural green tones
 - **Indigo** - Modern purple/indigo design
 
+---
+
 ## 📖 How to Use TinaDocs
 
 There are two ways you can use TinaDocs:
