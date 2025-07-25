@@ -179,7 +179,7 @@ export const ThemeSelector = wrapFieldsWithMeta(({ input, field }) => {
               You can create your own custom themes by modifying the CSS
               variables in the global stylesheet. See the{" "}
               <a
-                href="https://github.com/tinacms/tina-docs#-custom-theming"
+                href="https://github.com/tinacms/tina-docs#custom-theming"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800 underline font-medium"
