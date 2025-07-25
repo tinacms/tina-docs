@@ -51,6 +51,106 @@ When using npx, you can choose from these beautiful themes:
 - **Pine** - Natural green tones
 - **Indigo** - Modern purple/indigo design
 
+## 📖 How to Use TinaDocs
+
+There are two ways you can use TinaDocs:
+
+• **For developers** – as a launching point to develops a highly custom docs solution. TinaCMS is based on markdown. Use this code as a basis to [implement custom components](https://tina.io/docs/reference/types/rendering-markdown#linking-to-react-components) to be used in MDX to fit your use case. Follow the Getting Started guide below.
+
+• **Quickest experience** – use as is and deploy in minutes via TinaCloud for a docs setup that you still hold all the keys and data for, and get to using right away.
+
+
+> 💡 TinaCMS integrates tighly with GitHub, and has a powerful [editorial workflow](https://tina.io/docs/tina-cloud/editorial-workflow) based on GitHub's branch protection features.
+
+## 🛠️ Getting Started
+
+### **Step 1: Install Dependencies**
+
+> 💡 We recommend `pnpm` for faster installs. [Learn why pnpm is great](https://www.ssw.com.au/rules/best-package-manager-for-node/) for Node.js projects.
+
+```bash
+pnpm install
+```
+
+### **Step 2: Start Development Server**
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to see your docs in action.
+
+---
+
+## 🌐 Production Setup
+
+### **Step 3: Set Up GitHub and TinaCloud**
+
+1. **Add your docs to GitHub**: Push your local repository to GitHub if you haven't already  
+2. **Create a TinaCloud account**: Sign up at [app.tina.io](https://app.tina.io)  
+3. **Link your repository**: Connect your GitHub repository to TinaCloud through the dashboard  
+Note: if you don’t see your repo in the list, click the button “Configure your TinaCloud permissions on GitHub” at the bottom of the page
+
+### **Step 4: Configure Environment**
+
+1. Rename `.env.example` to `.env`
+2. Add your Tina credentials:
+
+```env
+NEXT_PUBLIC_TINA_CLIENT_ID=<get this from app.tina.io>
+TINA_TOKEN=<get this from app.tina.io>
+NEXT_PUBLIC_TINA_BRANCH=<your content branch>
+NEXT_PUBLIC_ENABLE_THEME_SELECTION=<dispaly theme selector>
+```
+
+**Theme Preview Mode:**
+To enable a theme selector in the UI for previewing all themes, add:
+```env
+NEXT_PUBLIC_ENABLE_THEME_SELECTION=true
+```
+
+> 💡 **Note:** The theme selector allows you to preview different themes in real-time, but these changes are temporary and won't persist when you open a new browser window/tab. To make a theme permanent, update the `Selected Them` field in your Settings through TinaCMS.
+
+### **Step 5: Build for Production**
+
+```bash
+pnpm build
+```
+
+---
+
+## 🚀 Deployment
+
+### **Step 6: Deploy to Vercel** 
+
+TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.io/docs/tina-cloud/deployment-options/vercel) for detailed instructions.
+
+---
+
+## 🔍 Search Setup
+
+TinaDocs includes fast search powered by [Pagefind](https://pagefind.app/), which indexes your content during the build process.
+
+### **How to Build the Search Index**
+
+To generate or update the search index, run:
+
+
+```bash
+pnpm build-local-pagefind
+```
+This command:
+
+- Builds the project
+
+- Generates the search index
+
+- Saves the index files to `public/pagefind/`
+
+The search index is automatically updated every time you run the build.
+
+---
+
 ### **Custom Theming**
 
 Want to create your own custom theme? TinaDocs includes a comprehensive theming system that allows you to create custom color schemes. See the [Custom Theming section](#-custom-theming) below for detailed instructions on how to create and implement your own themes.
@@ -231,106 +331,6 @@ The existing themes demonstrate different approaches:
 - **Indigo**: Modern purple/violet design
 
 Each theme includes comprehensive color variations for different UI states and accessibility considerations.
-
----
-
-## 📖 How to Use TinaDocs
-
-There are two ways you can use TinaDocs:
-
-• **For developers** – as a launching point to develops a highly custom docs solution. TinaCMS is based on markdown. Use this code as a basis to [implement custom components](https://tina.io/docs/reference/types/rendering-markdown#linking-to-react-components) to be used in MDX to fit your use case. Follow the Getting Started guide below.
-
-• **Quickest experience** – use as is and deploy in minutes via TinaCloud for a docs setup that you still hold all the keys and data for, and get to using right away.
-
-
-> 💡 TinaCMS integrates tighly with GitHub, and has a powerful [editorial workflow](https://tina.io/docs/tina-cloud/editorial-workflow) based on GitHub's branch protection features.
-
-## 🛠️ Getting Started
-
-### **Step 1: Install Dependencies**
-
-> 💡 We recommend `pnpm` for faster installs. [Learn why pnpm is great](https://www.ssw.com.au/rules/best-package-manager-for-node/) for Node.js projects.
-
-```bash
-pnpm install
-```
-
-### **Step 2: Start Development Server**
-
-```bash
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see your docs in action.
-
----
-
-## 🌐 Production Setup
-
-### **Step 3: Set Up GitHub and TinaCloud**
-
-1. **Add your docs to GitHub**: Push your local repository to GitHub if you haven't already  
-2. **Create a TinaCloud account**: Sign up at [app.tina.io](https://app.tina.io)  
-3. **Link your repository**: Connect your GitHub repository to TinaCloud through the dashboard  
-Note: if you don’t see your repo in the list, click the button “Configure your TinaCloud permissions on GitHub” at the bottom of the page
-
-### **Step 4: Configure Environment**
-
-1. Rename `.env.example` to `.env`
-2. Add your Tina credentials:
-
-```env
-NEXT_PUBLIC_TINA_CLIENT_ID=<get this from app.tina.io>
-TINA_TOKEN=<get this from app.tina.io>
-NEXT_PUBLIC_TINA_BRANCH=<your content branch>
-NEXT_PUBLIC_ENABLE_THEME_SELECTION=<dispaly theme selector>
-```
-
-**Theme Preview Mode:**
-To enable a theme selector in the UI for previewing all themes, add:
-```env
-NEXT_PUBLIC_ENABLE_THEME_SELECTION=true
-```
-
-> 💡 **Note:** The theme selector allows you to preview different themes in real-time, but these changes are temporary and won't persist when you open a new browser window/tab. To make a theme permanent, update the `Selected Them` field in your Settings through TinaCMS.
-
-### **Step 5: Build for Production**
-
-```bash
-pnpm build
-```
-
----
-
-## 🚀 Deployment
-
-### **Step 6: Deploy to Vercel** 
-
-TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.io/docs/tina-cloud/deployment-options/vercel) for detailed instructions.
-
----
-
-## 🔍 Search Setup
-
-TinaDocs includes fast search powered by [Pagefind](https://pagefind.app/), which indexes your content during the build process.
-
-### **How to Build the Search Index**
-
-To generate or update the search index, run:
-
-
-```bash
-pnpm build-local-pagefind
-```
-This command:
-
-- Builds the project
-
-- Generates the search index
-
-- Saves the index files to `public/pagefind/`
-
-The search index is automatically updated every time you run the build.
 
 ---
 
