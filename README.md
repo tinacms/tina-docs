@@ -51,6 +51,187 @@ When using npx, you can choose from these beautiful themes:
 - **Pine** - Natural green tones
 - **Indigo** - Modern purple/indigo design
 
+### **Custom Theming**
+
+Want to create your own custom theme? TinaDocs includes a comprehensive theming system that allows you to create custom color schemes. See the [Custom Theming section](#-custom-theming) below for detailed instructions on how to create and implement your own themes.
+
+---
+
+## 🎨 Custom Theming
+
+TinaDocs includes a comprehensive theming system that allows you to create custom color schemes. The theme system is built on CSS custom properties (variables) and supports both light and dark modes.
+
+### **How Themes Work**
+
+Themes in TinaDocs are implemented using CSS custom properties defined in `src/styles/global.css`. Each theme has:
+
+- **Brand colors** (primary, secondary, tertiary) with hover states and gradients
+- **Neutral colors** for backgrounds, text, and borders
+- **Glass effects** for modern UI elements
+- **Dark mode variants** for each theme
+
+### **Theme Structure**
+
+Each theme follows this pattern in `global.css`:
+
+```css
+/* LIGHT MODE */
+.theme-your-theme {
+  --brand-primary: #your-primary-color;
+  --brand-primary-hover: #your-primary-hover;
+  --brand-primary-light: #your-primary-light;
+  --brand-primary-text: #your-primary-text;
+  --brand-primary-contrast: #your-primary-contrast;
+  
+  --brand-primary-gradient-start: #your-gradient-start;
+  --brand-primary-gradient-end: #your-gradient-end;
+  
+  /* ... more brand colors ... */
+  
+  --neutral-background: #your-background;
+  --neutral-surface: #your-surface;
+  --neutral-text: #your-text;
+  --neutral-border: #your-border;
+  
+  --background-color: #your-page-background;
+}
+
+/* DARK MODE */
+.theme-your-theme.dark {
+  /* Dark mode variants of all the above colors */
+}
+```
+
+### **Creating a Custom Theme**
+
+To create a new custom theme, follow these steps:
+
+#### **1. Add CSS Variables to `src/styles/global.css`**
+
+Add your theme's CSS variables after the existing themes:
+
+```css
+/* YOUR CUSTOM THEME */
+.theme-custom {
+  --brand-primary: #your-primary-color;
+  --brand-primary-hover: #your-primary-hover;
+  --brand-primary-light: #your-primary-light;
+  --brand-primary-text: #your-primary-text;
+  --brand-primary-contrast: #your-primary-contrast;
+  
+  --brand-primary-gradient-start: #your-gradient-start;
+  --brand-primary-gradient-end: #your-gradient-end;
+  
+  --brand-secondary: #your-secondary-color;
+  --brand-secondary-hover: #your-secondary-hover;
+  --brand-secondary-light: #your-secondary-light;
+  --brand-secondary-text: #your-secondary-text;
+  --brand-secondary-contrast: #your-secondary-contrast;
+  
+  --brand-secondary-gradient-start: #your-secondary-gradient-start;
+  --brand-secondary-gradient-end: #your-secondary-gradient-end;
+  
+  --brand-tertiary: #your-tertiary-color;
+  --brand-tertiary-hover: #your-tertiary-hover;
+  --brand-tertiary-light: #your-tertiary-light;
+  --brand-tertiary-text: #your-tertiary-text;
+  --brand-tertiary-contrast: #your-tertiary-contrast;
+  
+  --brand-tertiary-gradient-start: #your-tertiary-gradient-start;
+  --brand-tertiary-gradient-end: #your-tertiary-gradient-end;
+  
+  --glass-gradient-start: rgba(255, 255, 255, 0.1);
+  --glass-gradient-end: rgba(255, 255, 255, 0.4);
+  
+  --neutral-background: #your-background;
+  --neutral-background-secondary: #your-secondary-background;
+  --neutral-surface: #your-surface;
+  --neutral-text: #your-text;
+  --neutral-text-secondary: #your-secondary-text;
+  --neutral-border: #your-border;
+  --neutral-border-subtle: #your-subtle-border;
+  
+  --background-color: #your-page-background;
+}
+
+.theme-custom.dark {
+  /* Dark mode variants - invert or adjust colors for dark mode */
+  --brand-primary: #your-dark-primary;
+  --brand-primary-hover: #your-dark-primary-hover;
+  /* ... continue with all other variables ... */
+  
+  --neutral-background: #your-dark-background;
+  --neutral-surface: #your-dark-surface;
+  --neutral-text: #your-dark-text;
+  /* ... etc ... */
+}
+```
+
+#### **2. Add Theme to TinaCMS Selector**
+
+Update `tina/customFields/theme-selector.tsx` to include your new theme:
+
+```typescript
+const themes = [
+  // ... existing themes ...
+  {
+    value: "custom",
+    label: "Custom",
+    description: "Your custom theme description",
+    colors: {
+      primary: "#your-primary-color",
+      secondary: "#your-secondary-color", 
+      accent: "#your-accent-color",
+    },
+  },
+];
+```
+
+#### **3. Add Theme to UI Selector**
+
+Update `src/components/ui/theme-selector.tsx` to include your theme in the themes array:
+
+```typescript
+const themes = ["default", "tina", "blossom", "lake", "pine", "indigo", "custom"];
+```
+
+#### **4. Apply Your Theme**
+
+1. **Temporary preview**: Use the theme selector in the UI (if enabled)
+2. **Permanent change**: Update the "Selected Theme" field in TinaCMS Settings
+
+### **Color Guidelines**
+
+When creating custom themes, consider these guidelines:
+
+- **Primary colors**: Use for main actions, links, and important UI elements
+- **Secondary colors**: Use for supporting elements and secondary actions  
+- **Tertiary colors**: Use for accents and highlights
+- **Neutral colors**: Ensure good contrast ratios for accessibility
+- **Dark mode**: Test your theme in both light and dark modes
+
+### **Theme Testing**
+
+To test your custom theme:
+
+1. Enable theme preview: `NEXT_PUBLIC_ENABLE_THEME_SELECTION=true`
+2. Use the theme selector in the bottom-right corner
+3. Test in both light and dark modes
+4. Verify accessibility with sufficient contrast ratios
+
+### **Theme Examples**
+
+The existing themes demonstrate different approaches:
+
+- **Default**: Minimalist monochrome design
+- **Tina**: Brand-focused with orange and blue
+- **Blossom**: Warm, elegant pink tones
+- **Lake**: Professional blue palette
+- **Pine**: Natural, organic green theme
+- **Indigo**: Modern purple/violet design
+
+Each theme includes comprehensive color variations for different UI states and accessibility considerations.
+
 ---
 
 ## 📖 How to Use TinaDocs
