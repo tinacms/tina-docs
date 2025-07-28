@@ -5,12 +5,15 @@ const redirects = require("./content/settings/config.json")?.redirects || [];
 
 module.exports = {
   images: {
-    remotePatterns: [],
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "assets.tina.io",
+        port: "",
+      },
+    ],
   },
 
-  // Optimize serverless functions
-  experimental: {},
   outputFileTracingIncludes: {
     "/api/**/*": [],
   },
