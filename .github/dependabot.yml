@@ -27,5 +27,13 @@ updates:
     commit-message:
       prefix: "⬆️ NPM"
     rebase-strategy: auto
+    allow:
+      - dependency-name: "tinacms"
+      - dependency-name: "@tinacms/*"
     ignore:
       - dependency-name: "yup"
+    groups:
+      tinacms:
+        patterns:
+          - "@tinacms/*"
+          - "tinacms"
