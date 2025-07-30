@@ -100,7 +100,7 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} export
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
-          NEXT_PUBLIC_TINA_BRANCH: ${{ github.head_ref }}
+          NEXT_PUBLIC_TINA_BRANCH: ${{ github.ref_name }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
       - name: Upload artifact
