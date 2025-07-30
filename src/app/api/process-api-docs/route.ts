@@ -3,6 +3,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { generateMdxFiles } from "./generate-mdx-files";
 import type { GroupApiData } from "./types";
 
+export const dynamic =
+  process.env.EXPORT_MODE === "static" ? "force-static" : "auto";
+
 const isDev = process.env.NODE_ENV === "development";
 
 export async function POST(request: NextRequest) {
