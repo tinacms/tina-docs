@@ -49,7 +49,7 @@ export const ImageComponent = (props) => {
         </span>
       </ImageOverlayWrapper>
       {props?.caption && (
-        <span className="font-tuner text-sm text-neutral-text-secondary block">
+        <span className="font-tuner text-sm text-neutral-text-secondary block text-center md:text-left">
           Figure: {props.caption}
         </span>
       )}

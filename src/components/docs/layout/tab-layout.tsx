@@ -3,6 +3,7 @@
 import { formatNavigationData } from "@/src/utils/docs/navigation/documentNavigation";
 import type { NavigationBarData } from "@/src/utils/docs/navigation/documentNavigation";
 import * as Tabs from "@radix-ui/react-tabs";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { Body } from "./body";
 import { NavigationProvider } from "./navigation-context";
@@ -22,6 +23,7 @@ export const TabsLayout = ({
   const [navigationDocsData, setNavigationDocsData] = React.useState({});
   const [tabs, setTabs] = React.useState([]);
   const [selectedTab, setSelectedTab] = React.useState();
+  const pathname = usePathname();
 
   React.useEffect(() => {
     const formattedNavData = formatNavigationData(
@@ -40,9 +42,9 @@ export const TabsLayout = ({
 
   React.useEffect(() => {
     // Find the tab that contains the current path
+    if (!tabs.length || !pathname) return;
 
-    const path = window.location.pathname;
-    const initialTab = findTabWithPath(tabs, path);
+    const initialTab = findTabWithPath(tabs, pathname);
     setSelectedTab(initialTab);
     // Dispatch initial tab change with index
     const initialIndex = tabs.findIndex((tab) => tab.label === initialTab);
@@ -51,7 +53,7 @@ export const TabsLayout = ({
         detail: { value: initialIndex.toString() },
       })
     );
-  }, [tabs]);
+  }, [tabs, pathname]);
 
   const handleTabChange = (value: string) => {
     setSelectedTab(value);
