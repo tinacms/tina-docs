@@ -2,9 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { NextResponse } from "next/server";
 
-export const dynamic =
-  process.env.EXPORT_MODE === "static" ? "force-static" : "auto";
-
 export async function GET() {
   try {
     const schemasDir = path.join(process.cwd(), "content", "apiSchema");

@@ -2,9 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 
-export const dynamic =
-  process.env.EXPORT_MODE === "static" ? "force-static" : "auto";
-
 /**
  * Recursively deletes all files and subdirectories in a directory
  */

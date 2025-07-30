@@ -2,9 +2,6 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
 
-export const dynamic =
-  process.env.EXPORT_MODE === "static" ? "force-static" : "auto";
-
 const isDev = process.env.NODE_ENV === "development";
 
 export async function POST(req: NextRequest) {
