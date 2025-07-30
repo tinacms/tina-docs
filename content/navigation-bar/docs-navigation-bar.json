@@ -75,6 +75,10 @@
               "_template": "item"
             },
             {
+              "slug": "content/docs/tinadocs-features/path-management.mdx",
+              "_template": "item"
+            },
+            {
               "slug": "content/docs/tinadocs-features/redirect-management.mdx",
               "_template": "item"
             }

@@ -1,6 +1,7 @@
 ---
 title: Code Components
-last_edited: '2025-07-15T05:50:24.413Z'
+last_edited: '2025-07-30T02:30:04.636Z'
+auto_generated: false
 ---
 
 Several components have been implemented to help out with software documentation.
@@ -146,6 +147,30 @@ Perfect for tutorials, API documentation, or any scenario where you want to guid
 Takes data directly from an OpenAPI spec to populate this component with schema, responses and examples.
 
 <apiReference schemaFile="Swagger-Petstore.json|GET:/user/login" />
+
+## Directory
+
+To convey code architecture or organisation conventions, showing users folder structures helps convey structural ideas that can be tricky to explain textually.
+
+The editing experience is smooth with a tailored drag-and-drop interface.
+
+<fileStructure
+  fileStructure={[
+    { id: "zm0xmlefo", name: "Folder A", type: "folder", parentId: null },
+    { id: "d7bw8ns62", name: "File A.txt", type: "file", parentId: "zm0xmlefo" },
+    {
+      id: "xaiajws95",
+      name: "Subfolder A",
+      type: "folder",
+      parentId: "zm0xmlefo"
+    },
+    { id: "xv64qw84k", name: "Folder B", type: "folder", parentId: null },
+    { id: "beqrd40u0", name: "Subfolder", type: "folder", parentId: "xv64qw84k" },
+    { id: "yijaqtwhg", name: "File B.txt", type: "file", parentId: "beqrd40u0" },
+    { id: "hfv48qb0z", name: "Home Route File.txt", type: "file", parentId: null }
+  ]}
+  caption="An example file structure"
+/>
 
 ## Mermaid
 

@@ -5,6 +5,7 @@ import { ApiReferenceTemplate } from "@/tina/templates/markdown-embeds/api-refer
 import CalloutTemplate from "@/tina/templates/markdown-embeds/callout.template";
 import CardGridTemplate from "@/tina/templates/markdown-embeds/card-grid.template";
 import CodeTabsTemplate from "@/tina/templates/markdown-embeds/code-tabs.template";
+import { FileStructureTemplate } from "@/tina/templates/markdown-embeds/file-structure.template";
 import RecipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
 import ScrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
 import { TypeDefinitionTemplate } from "@/tina/templates/markdown-embeds/type-definition.template";
@@ -95,6 +96,7 @@ export const docsCollection = {
         CodeTabsTemplate as Template,
         CalloutTemplate as Template,
         TypeDefinitionTemplate as Template,
+        FileStructureTemplate as unknown as Template,
       ],
     },
   ],

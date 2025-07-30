@@ -1,0 +1,61 @@
+---
+title: Path Management
+last_edited: '2025-07-30T04:27:09.275Z'
+auto_generated: false
+---
+
+TinaDocs utilizes **NextJS** to create your sitemap at build time.
+
+By default, the relative URL is controlled by the filepath of each document, with one special case for the home route.
+
+<Callout
+  body={<>
+    With access to the code, static builds can be modified to select the path based on other factors, such as the navigation bar.
+    
+    This is controlled in `/src/app/docs/[...slug]/page.tsx`.
+  </>}
+  variant="idea"
+/>
+
+## Choosing Paths
+
+It's easiest to choose the filepath for a document at time of creation. Select “Add File” in the Collections menu from the directory where you want your new file located.
+
+See the simple example below.
+
+<fileStructure
+  fileStructure={[
+    { id: "c1sbhudkd", name: "content", type: "folder", parentId: null },
+    { id: "zgmygdri2", name: "docs", type: "folder", parentId: "c1sbhudkd" },
+    { id: "zualtmn8t", name: "file-a.mdx", type: "file", parentId: "zgmygdri2" },
+    {
+      id: "hs6l2trxy",
+      name: "subsection",
+      type: "folder",
+      parentId: "zgmygdri2"
+    },
+    { id: "0z5fdtnn4", name: "file-b.mdx", type: "file", parentId: "hs6l2trxy" },
+    { id: "lm7t4d4p6", name: "src", type: "folder", parentId: null },
+    { id: "qgv8bk8n4", name: "tina", type: "folder", parentId: null },
+    { id: "tmc6ek24f", name: "package.json", type: "file", parentId: null }
+  ]}
+  caption="The TinaDocs file structure with example content"
+/>
+
+As per the above (note that `.mdx` extensions are automatically stripped from URLs)…
+
+* the document `file-a.mdx` is accessible at `/docs/file-a`
+* the document `file-b.mdx` is accessible at `/docs/subsection/file-b`
+
+<Callout
+  body={<>
+    You can also have multiple files with the same name in different directories.
+  </>}
+  variant="info"
+/>
+
+## The Home Route
+
+The file at `/content/docs/index.mdx` is handled independently and serves as the landing page.
+
+This will be statically built at `/docs` (home route) of your project.
