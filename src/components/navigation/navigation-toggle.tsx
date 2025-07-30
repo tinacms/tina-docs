@@ -40,6 +40,12 @@ export const NavigationDropdownContent = ({
     __typename: option.__typename,
   }));
 
+  // Update selected value when pathname changes
+  useEffect(() => {
+    const newSelectedValue = findTabWithPath(tocData, path);
+    setSelectedValue(newSelectedValue);
+  }, [path, tocData]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
