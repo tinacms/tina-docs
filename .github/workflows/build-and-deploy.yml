@@ -96,11 +96,11 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
-      - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} build
+      - name: Build with Next.js & TinaCMS
+        run: ${{ steps.detect-package-manager.outputs.runner }} export
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
-          NEXT_PUBLIC_TINA_BRANCH: ${{ github.ref_name }}
+          NEXT_PUBLIC_TINA_BRANCH: ${{ github.head_ref }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
       - name: Upload artifact
