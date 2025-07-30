@@ -4,6 +4,7 @@ import { ApiReference } from "./embedded-elements/api-reference";
 import Callout from "./embedded-elements/callout";
 import { CardGrid } from "./embedded-elements/card-grid";
 import { CodeTabs } from "./embedded-elements/code-tabs";
+import { FileStructure } from "./embedded-elements/file-structure";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import TypeDefinition from "./embedded-elements/type-definition";
@@ -100,6 +101,14 @@ type ComponentMapping = {
       fullWidth?: boolean;
     }[];
   };
+  fileStructure: {
+    fileStructure: {
+      id: string;
+      name: string;
+      type: "file" | "folder";
+      parentId: string | null;
+    }[];
+  };
 };
 
 type CalloutVariant =
@@ -165,6 +174,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
     ),
   accordionBlock: (props) => <AccordionBlock {...props} />,
   typeDefinition: (props) => <TypeDefinition {...props} />,
+  fileStructure: (props) => <FileStructure {...props} />,
 };
 
 export default MarkdownComponentMapping;
