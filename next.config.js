@@ -3,7 +3,19 @@ const redirects = require("./content/settings/config.json")?.redirects || [];
 
 /** @type {import('next').NextConfig} */
 
+const isStatic = process.env.EXPORT_MODE === "static";
+
+const extraConfig = {};
+
+if (isStatic) {
+  extraConfig.output = "export";
+  extraConfig.trailingSlash = true;
+  extraConfig.skipTrailingSlashRedirect = true;
+  extraConfig.distDir = "out";
+}
+
 module.exports = {
+  ...extraConfig,
   images: {
     remotePatterns: [
       {
