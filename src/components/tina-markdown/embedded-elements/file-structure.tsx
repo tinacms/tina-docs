@@ -172,7 +172,7 @@ export const FileStructure = ({
 
   return (
     <div className="my-8">
-      <div className="bg-neutral-background border border-neutral-border rounded-xl overflow-hidden shadow-md">
+      <div className="bg-background-brand-code border border-neutral-border rounded-xl overflow-hidden shadow-md">
         {/* File Tree */}
         <div className="p-4 font-mono text-sm overflow-x-scroll mr-4">
           {treeNodes.map((node) => (
