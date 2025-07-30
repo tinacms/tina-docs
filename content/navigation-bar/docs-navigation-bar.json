@@ -22,19 +22,19 @@
           "title": "Using TinaCMS",
           "items": [
             {
-              "slug": "content/docs/tinacms/what-is-tinacms.mdx",
+              "slug": "content/docs/using-tinacms/what-is-tinacms.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/tinacms/how-does-tinacms-work.mdx",
+              "slug": "content/docs/using-tinacms/how-does-tinacms-work.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/tinadocs-and-tinacms/usage-editors.mdx",
+              "slug": "content/docs/using-tinacms/usage-editors.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/tinadocs-and-tinacms/usage-developers.mdx",
+              "slug": "content/docs/using-tinacms/usage-developers.mdx",
               "_template": "item"
             }
           ]
@@ -43,39 +43,39 @@
           "title": "TinaDocs Features",
           "items": [
             {
-              "slug": "content/docs/components/feature-list.mdx",
+              "slug": "content/docs/tinadocs-features/feature-list.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/styling.mdx",
+              "slug": "content/docs/tinadocs-features/styling.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/markdown-elements.mdx",
+              "slug": "content/docs/tinadocs-features/markdown-elements.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/text-components.mdx",
+              "slug": "content/docs/tinadocs-features/text-components.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/code-components.mdx",
+              "slug": "content/docs/tinadocs-features/code-components.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/custom-components.mdx",
+              "slug": "content/docs/tinadocs-features/custom-components.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/openapi-spec-docs.mdx",
+              "slug": "content/docs/tinadocs-features/openapi-spec-docs.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/customization-and-themes/search-engine-optimization-seo.mdx",
+              "slug": "content/docs/tinadocs-features/search-engine-optimization-seo.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/customization-and-themes/redirect-management.mdx",
+              "slug": "content/docs/tinadocs-features/redirect-management.mdx",
               "_template": "item"
             }
           ]
@@ -87,22 +87,22 @@
               "title": "TinaCloud",
               "items": [
                 {
-                  "slug": "content/docs/tinadocs-and-tinacms/tina-cloud/what-is-a-datalayer.mdx",
+                  "slug": "content/docs/going-live/tinacloud/what-is-a-datalayer.mdx",
                   "_template": "item"
                 },
                 {
-                  "slug": "content/docs/set-up/configuring-tinacloud.mdx",
+                  "slug": "content/docs/going-live/tinacloud/configuring-tinacloud.mdx",
                   "_template": "item"
                 },
                 {
-                  "slug": "content/docs/set-up/self-hosting/custom-datalayer.mdx",
+                  "slug": "content/docs/going-live/tinacloud/custom-datalayer.mdx",
                   "_template": "item"
                 }
               ],
               "_template": "items"
             },
             {
-              "slug": "content/docs/set-up/deploying-your-docs.mdx",
+              "slug": "content/docs/going-live/deploying-your-docs.mdx",
               "_template": "item"
             }
           ]
@@ -125,15 +125,15 @@
               "_template": "item"
             },
             {
-              "slug": "content/docs/pet-store-all-routes.mdx",
+              "slug": "content/docs/examples/pet-store-all-routes.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/components/custom-components/library-api-example.mdx",
+              "slug": "content/docs/examples/library-api-example.mdx",
               "_template": "item"
             },
             {
-              "slug": "content/docs/internal-document-example.mdx",
+              "slug": "content/docs/examples/internal-document-example.mdx",
               "_template": "item"
             }
           ],
