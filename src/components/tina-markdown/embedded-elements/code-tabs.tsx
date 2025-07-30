@@ -2,7 +2,6 @@ import { CheckIcon as CheckIconOutline } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 import { MdContentCopy } from "react-icons/md";
-import { tinaField } from "tinacms/dist/react";
 import { CodeBlock } from "../standard-elements/code-block/code-block";
 import { CodeBlockSkeleton } from "../standard-elements/code-block/code-block-skeleton";
 

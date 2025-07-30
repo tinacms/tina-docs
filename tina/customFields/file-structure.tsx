@@ -178,7 +178,7 @@ export const FileStructureField = wrapFieldsWithMeta(({ input }) => {
         {/* File Tree */}
         <div className="p-4 min-h-[200px] font-mono text-sm">
           {treeNodes.length === 0 ? (
-            <div className="text-center text-gray-500 py-8">
+            <div className="text-center text-gray-500 py-8 max-w-full break-words text-wrap">
               <div className="mb-2">No files or folders yet</div>
               <div className="text-xs">
                 Click "Add Folder" or "Add File" to get started

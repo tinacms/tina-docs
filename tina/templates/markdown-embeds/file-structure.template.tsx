@@ -35,5 +35,11 @@ export const FileStructureTemplate = {
         },
       ],
     },
+    {
+      type: "string",
+      name: "caption",
+      label: "Caption",
+      description: "Optional caption that appears under the component",
+    },
   ],
 };

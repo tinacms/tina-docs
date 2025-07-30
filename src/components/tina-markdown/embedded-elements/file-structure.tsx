@@ -6,6 +6,7 @@ import {
   FolderOpenIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { tinaField } from "tinacms/dist/react";
 
 interface FileItem {
   id: string;
@@ -16,6 +17,7 @@ interface FileItem {
 
 interface FileStructureProps {
   fileStructure: FileItem[];
+  caption?: string;
 }
 
 interface TreeNode extends FileItem {
@@ -148,9 +150,12 @@ const FileTreeItem = ({
   );
 };
 
-export const FileStructure = ({ fileStructure }: FileStructureProps) => {
+export const FileStructure = ({
+  fileStructure,
+  caption,
+}: FileStructureProps) => {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set()
+    new Set(fileStructure?.map((item) => item.id) ?? [])
   );
 
   const toggleFolder = (id: string) => {
@@ -180,6 +185,11 @@ export const FileStructure = ({ fileStructure }: FileStructureProps) => {
           ))}
         </div>
       </div>
+      {caption && (
+        <div className="font-tuner text-sm text-neutral-text-secondary mt-2">
+          Figure: {caption}
+        </div>
+      )}
     </div>
   );
 };
