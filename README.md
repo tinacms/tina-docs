@@ -92,6 +92,7 @@ Open [http://localhost:3000](http://localhost:3000) to see your docs in action.
 2. **Create a TinaCloud account**: Sign up at [app.tina.io](https://app.tina.io)  
 3. **Link your repository**: Connect your GitHub repository to TinaCloud through the dashboard  
 Note: if you don’t see your repo in the list, click the button “Configure your TinaCloud permissions on GitHub” at the bottom of the page
+4. **Sync Media**: In your TinaCloud project, click on Media and then "Sync Media". This will import your media files (like images) from your GitHub repository into Tina’s Media Manager so they’re available in the visual editor.
 
 ### **Step 4: Configure Environment**
 
@@ -102,7 +103,7 @@ Note: if you don’t see your repo in the list, click the button “Configure yo
 NEXT_PUBLIC_TINA_CLIENT_ID=<get this from app.tina.io>
 TINA_TOKEN=<get this from app.tina.io>
 NEXT_PUBLIC_TINA_BRANCH=<your content branch>
-NEXT_PUBLIC_ENABLE_THEME_SELECTION=<dispaly theme selector>
+NEXT_PUBLIC_ENABLE_THEME_SELECTION=<display theme selector>
 ```
 
 **Theme Preview Mode:**
