@@ -13,14 +13,26 @@ const siteUrl =
     : settings.siteUrl;
 
 export async function generateStaticParams() {
-  const contentDir = "./content/docs/";
-  const files = await fg(`${contentDir}**/*.mdx`);
-  return files
-    .filter((file) => !file.endsWith("index.mdx"))
-    .map((file) => {
-      const path = file.substring(contentDir.length, file.length - 4); // Remove "./content/docs/" and ".mdx"
-      return { slug: path.split("/") };
+  let pageListData = await client.queries.docsConnection();
+  const allPagesListData = pageListData;
+
+  while (pageListData.data.docsConnection.pageInfo.hasNextPage) {
+    const lastCursor = pageListData.data.docsConnection.pageInfo.endCursor;
+    pageListData = await client.queries.docsConnection({
+      after: lastCursor,
     });
+
+    allPagesListData.data.docsConnection.edges?.push(
+      ...(pageListData.data.docsConnection.edges || [])
+    );
+  }
+
+  const pages =
+    allPagesListData.data.docsConnection.edges?.map((page) => ({
+      filename: page?.node?._sys.filename,
+    })) || [];
+
+  return pages;
 }
 
 export async function generateMetadata({
