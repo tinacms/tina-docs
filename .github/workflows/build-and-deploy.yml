@@ -6,7 +6,7 @@ name: Deploy Next.js site to Pages
 
 on:
   # Runs on pushes targeting the default branch
-  push:
+  pull_request:
     branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -97,16 +97,24 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Build with Next.js & TinaCMS
-        run: ${{ steps.detect-package-manager.outputs.runner }} export
+        run: EXPORT_MODE=static,UNOPTIMIZED_IMAGES=true ${{ steps.detect-package-manager.outputs.runner }} build
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
-          NEXT_PUBLIC_TINA_BRANCH: ${{ github.ref_name }}
+          NEXT_PUBLIC_TINA_BRANCH: ${{ github.head_ref }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+
+      - name: Verify build output
+        run: |
+          echo "Checking if dist directory exists..."
+          ls -la
+          if [ -d "./dist" ]; then
+            echo "✅ dist directory exists"
+            ls -la ./dist
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./.next
+          path: ./dist
 
   # Deployment job
   deploy:
