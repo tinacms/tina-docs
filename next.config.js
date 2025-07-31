@@ -11,7 +11,6 @@ if (isStatic) {
   extraConfig.output = "export";
   extraConfig.trailingSlash = true;
   extraConfig.skipTrailingSlashRedirect = true;
-  extraConfig.distDir = "dist";
 }
 
 module.exports = {
