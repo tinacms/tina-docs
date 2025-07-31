@@ -4,7 +4,6 @@ import { fetchTinaData } from "@/services/tina/fetch-tina-data";
 import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
-import fg from "fast-glob";
 import Document from ".";
 
 const siteUrl =
