@@ -171,7 +171,7 @@ export const ThemeSelector = wrapFieldsWithMeta(({ input, field }) => {
         </div>
       </div>
       {/* Instructions for custom themes */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-wrap">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
             <svg
