@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type FC } from "react";
 import { wrapFieldsWithMeta } from "tinacms";
 
 // Theme definitions with their color palettes
@@ -65,7 +65,22 @@ const themes = [
   },
 ];
 
-const ThemeOption = ({ theme, isSelected, onClick, key }) => {
+interface ThemeOptionProps {
+  theme: {
+    value: string;
+    label: string;
+    description: string;
+    colors: {
+      primary: string;
+      secondary: string;
+      accent: string;
+    };
+  };
+  isSelected: boolean;
+  onClick: () => void;
+}
+
+const ThemeOption: FC<ThemeOptionProps> = ({ theme, isSelected, onClick }) => {
   return (
     <div
       className={`
@@ -135,9 +150,9 @@ export const ThemeSelector = wrapFieldsWithMeta(({ input, field }) => {
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {themes.map((theme) => (
+        {themes.map((theme, index) => (
           <ThemeOption
-            key={`theme-${theme.value}`}
+            key={`theme-${theme.value}-${index}`}
             theme={theme}
             isSelected={currentValue === theme.value}
             onClick={() => handleThemeChange(theme.value)}
@@ -156,7 +171,7 @@ export const ThemeSelector = wrapFieldsWithMeta(({ input, field }) => {
         </div>
       </div>
       {/* Instructions for custom themes */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-wrap">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
             <svg
