@@ -67,7 +67,7 @@ const Content = ({ children }: { children?: React.ReactNode }) => (
 const DocsMenu = async ({ children }: { children?: React.ReactNode }) => {
   // Fetch navigation data that will be shared across all docs pages
 
-  const navigationData = await client.queries.navigationBar({
+  const navigationData = await client.queries.minimisedNavigationBarFetch({
     relativePath: "docs-navigation-bar.json",
   });
 
