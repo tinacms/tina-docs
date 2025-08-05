@@ -30,7 +30,7 @@ export function TinaClient<T>({ props, Component }: TinaClientProps<T>) {
     variables: props.variables,
     data: props.data,
     experimental___selectFormByFormId() {
-      return props.forceExperimental;
+      return `content/docs/${props.forceExperimental}`;
     },
   });
 
