@@ -1,0 +1,234 @@
+fragment MinimisedNavigationBarParts on NavigationBar {
+  __typename
+  lightModeLogo
+  darkModeLogo
+  tabs {
+    __typename
+    ... on NavigationBarTabsDocsTab {
+      title
+      supermenuGroup {
+        __typename
+        title
+        items {
+          __typename
+          ... on NavigationBarTabsDocsTabSupermenuGroupItemsItems {
+            title
+            items {
+              __typename
+              ... on NavigationBarTabsDocsTabSupermenuGroupItemsItemsItemsItems {
+                title
+                items {
+                  __typename
+                  ... on NavigationBarTabsDocsTabSupermenuGroupItemsItemsItemsItemsItemsItems {
+                    title
+                    items {
+                      __typename
+                      ... on NavigationBarTabsDocsTabSupermenuGroupItemsItemsItemsItemsItemsItemsItemsItem {
+                        slug {
+                          ... on Docs {
+                            __typename
+                            seo {
+                              __typename
+                              title
+                              description
+                              canonicalUrl
+                              ogImage
+                            }
+                            title
+                            last_edited
+                            auto_generated
+                            tocIsHidden
+                          }
+                          ... on Document {
+                            _sys {
+                              filename
+                              basename
+                              hasReferences
+                              breadcrumbs
+                              path
+                              relativePath
+                              extension
+                            }
+                            id
+                          }
+                        }
+                      }
+                    }
+                  }
+                  ... on NavigationBarTabsDocsTabSupermenuGroupItemsItemsItemsItemsItemsItem {
+                    slug {
+                      ... on Docs {
+                        __typename
+                        seo {
+                          __typename
+                          title
+                          description
+                          canonicalUrl
+                          ogImage
+                        }
+                        title
+                        last_edited
+                        auto_generated
+                        tocIsHidden
+                      }
+                      ... on Document {
+                        _sys {
+                          filename
+                          basename
+                          hasReferences
+                          breadcrumbs
+                          path
+                          relativePath
+                          extension
+                        }
+                        id
+                      }
+                    }
+                  }
+                }
+              }
+              ... on NavigationBarTabsDocsTabSupermenuGroupItemsItemsItemsItem {
+                slug {
+                  ... on Docs {
+                    __typename
+                    seo {
+                      __typename
+                      title
+                      description
+                      canonicalUrl
+                      ogImage
+                    }
+                    title
+                    last_edited
+                    auto_generated
+                    tocIsHidden
+                  }
+                  ... on Document {
+                    _sys {
+                      filename
+                      basename
+                      hasReferences
+                      breadcrumbs
+                      path
+                      relativePath
+                      extension
+                    }
+                    id
+                  }
+                }
+              }
+            }
+          }
+          ... on NavigationBarTabsDocsTabSupermenuGroupItemsItem {
+            slug {
+              ... on Docs {
+                __typename
+                seo {
+                  __typename
+                  title
+                  description
+                  canonicalUrl
+                  ogImage
+                }
+                title
+                last_edited
+                auto_generated
+                tocIsHidden
+              }
+              ... on Document {
+                _sys {
+                  filename
+                  basename
+                  hasReferences
+                  breadcrumbs
+                  path
+                  relativePath
+                  extension
+                }
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+    ... on NavigationBarTabsApiTab {
+      title
+      supermenuGroup {
+        __typename
+        ... on NavigationBarTabsApiTabSupermenuGroupDocumentSubMenu {
+          title
+          items {
+            __typename
+            ... on NavigationBarTabsApiTabSupermenuGroupDocumentSubMenuItemsItem {
+              slug {
+                ... on Docs {
+                  __typename
+                  seo {
+                    __typename
+                    title
+                    description
+                    canonicalUrl
+                    ogImage
+                  }
+                  title
+                  last_edited
+                  auto_generated
+                  tocIsHidden
+                }
+                ... on Document {
+                  _sys {
+                    filename
+                    basename
+                    hasReferences
+                    breadcrumbs
+                    path
+                    relativePath
+                    extension
+                  }
+                  id
+                }
+              }
+            }
+          }
+        }
+        ... on NavigationBarTabsApiTabSupermenuGroupGroupOfApiReferences {
+          apiGroup
+        }
+      }
+    }
+  }
+  ctaButtons {
+    __typename
+    button1 {
+      __typename
+      label
+      link
+      variant
+    }
+    button2 {
+      __typename
+      label
+      link
+      variant
+    }
+  }
+}
+
+query minimisedNavigationBarFetch($relativePath: String!) {
+  navigationBar(relativePath: $relativePath) {
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+    ...MinimisedNavigationBarParts
+  }
+}
