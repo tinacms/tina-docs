@@ -167,8 +167,9 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   ) => {
     setLoadingTags(true);
     try {
-      const { tags: tagsList, apiSchema } =
-        await loadTagsForSchema(schemaFilename);
+      const { tags: tagsList, apiSchema } = await loadTagsForSchema(
+        schemaFilename
+      );
       setTags(tagsList);
       setLoadingTags(false);
 
@@ -195,8 +196,10 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     setTags([]);
     setEndpoints([]);
 
-    // Update form state once at the end
-    input.onChange(JSON.stringify({ schema, tag: "", endpoints: [] }));
+    // Update form state with a slight delay to avoid dropdown disruption
+    setTimeout(() => {
+      input.onChange(JSON.stringify({ schema, tag: "", endpoints: [] }));
+    }, 0);
 
     if (!schema) {
       setLoadingTags(false);
@@ -214,10 +217,12 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     setSelectedTag(tag);
     setEndpoints([]);
 
-    // Update form state once
-    input.onChange(
-      JSON.stringify({ schema: selectedSchema, tag, endpoints: [] })
-    );
+    // Update form state with a slight delay to avoid dropdown disruption
+    setTimeout(() => {
+      input.onChange(
+        JSON.stringify({ schema: selectedSchema, tag, endpoints: [] })
+      );
+    }, 0);
 
     if (!tag || !selectedSchema) {
       setLoadingEndpoints(false);
@@ -285,8 +290,8 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
-                ? "No schemas available"
-                : "Select a schema"
+              ? "No schemas available"
+              : "Select a schema"
           }
           className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
