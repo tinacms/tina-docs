@@ -63,9 +63,38 @@ const loadTagsForSchema = async (schemaFilename: string) => {
 };
 
 /**
+ * Validates if an API path follows the simple pattern like /something/api/{id}
+ * and doesn't contain special characters
+ */
+const isValidApiPath = (path: string): boolean => {
+  // Check for special characters (excluding alphanumeric, forward slash, curly braces, hyphens, and underscores)
+  const specialCharRegex = /[^a-zA-Z0-9\/\{\}\-_]/;
+  if (specialCharRegex.test(path)) {
+    return false;
+  }
+
+  // Check if path follows simple API pattern: /something/api/{id} or similar
+  // Allow paths like:
+  // - /api/pets
+  // - /api/pets/{id}
+  // - /api/users/{userId}
+  // - /store/inventory
+  // - /user/{username}
+  const validPathRegex =
+    /^\/[a-zA-Z0-9\-_]+(\/[a-zA-Z0-9\-_]+)*(\/\{[a-zA-Z0-9\-_]+\})*$/;
+
+  return validPathRegex.test(path);
+};
+
+/**
  * Loads endpoints for a specific tag from API schema
  */
-const loadEndpointsForTag = (apiSchema: any, tag: string, hasTags = true) => {
+const loadEndpointsForTag = (
+  apiSchema: any,
+  tag: string,
+  setIsValidPath: (isValid: boolean) => void,
+  hasTags = true
+) => {
   const endpointsList: {
     id: string;
     label: string;
@@ -76,6 +105,11 @@ const loadEndpointsForTag = (apiSchema: any, tag: string, hasTags = true) => {
   }[] = [];
 
   for (const path in apiSchema.paths) {
+    // Skip invalid paths that don't follow the simple API pattern
+    if (!isValidApiPath(path)) {
+      setIsValidPath(false);
+    }
+
     for (const method in apiSchema.paths[path]) {
       const op = apiSchema.paths[path][method];
       const endpoint = {
@@ -124,6 +158,7 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [generatingFiles, setGeneratingFiles] = React.useState(false);
   const [lastSavedValue, setLastSavedValue] = React.useState<string>("");
   const [initialLoad, setInitialLoad] = React.useState(true);
+  const [isValidPath, setIsValidPath] = React.useState<boolean | null>(null);
 
   const isLocalMode = detectLocalMode();
   const parsedValue = parseFieldValue(input.value);
@@ -176,12 +211,21 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       // If we also have a selected tag, load endpoints
       if (currentTag && apiSchema) {
         setLoadingEndpoints(true);
-        const endpointsList = loadEndpointsForTag(apiSchema, currentTag);
+        const endpointsList = loadEndpointsForTag(
+          apiSchema,
+          currentTag,
+          setIsValidPath
+        );
         setEndpoints(endpointsList);
         setLoadingEndpoints(false);
       } else if (apiSchema && !currentTag) {
         setLoadingEndpoints(true);
-        const endpointsList = loadEndpointsForTag(apiSchema, "", false);
+        const endpointsList = loadEndpointsForTag(
+          apiSchema,
+          "",
+          setIsValidPath,
+          false
+        );
         setEndpoints(endpointsList);
         setLoadingEndpoints(false);
       }
@@ -238,7 +282,11 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const { apiSchema } = await loadTagsForSchema(selectedSchema);
       if (apiSchema) {
         setLoadingEndpoints(true);
-        const endpointsList = loadEndpointsForTag(apiSchema, tag);
+        const endpointsList = loadEndpointsForTag(
+          apiSchema,
+          tag,
+          setIsValidPath
+        );
         setEndpoints(endpointsList);
         setLoadingEndpoints(false);
       }
@@ -339,116 +387,113 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           )}
         </div>
       )}
-      {selectedTag ||
-        (!hasTag && hasTag !== null && (
-          <div>
-            <div className="flex items-center mb-3">
-              <label className="font-bold text-slate-800 text-base mr-4">
-                Endpoints
-              </label>
-              <button
-                type="button"
-                onClick={handleSelectAll}
-                disabled={loadingEndpoints}
-                className="ml-auto px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold text-sm shadow hover:bg-blue-700 transition-colors border border-blue-700 disabled:opacity-50"
-              >
-                Select All
-              </button>
+      {(selectedTag || hasTag === false) && (
+        <div>
+          <div className="flex items-center mb-3">
+            <label className="font-bold text-slate-800 text-base mr-4">
+              Endpoints
+            </label>
+            <button
+              type="button"
+              onClick={handleSelectAll}
+              disabled={loadingEndpoints}
+              className="ml-auto px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold text-sm shadow hover:bg-blue-700 transition-colors border border-blue-700 disabled:opacity-50"
+            >
+              Select All
+            </button>
+          </div>
+          {loadingEndpoints ? (
+            <div className="text-slate-400 text-sm mb-4">
+              Loading endpoints...
             </div>
-            {loadingEndpoints ? (
-              <div className="text-slate-400 text-sm mb-4">
-                Loading endpoints...
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto overflow-x-auto border border-gray-200 rounded-lg bg-slate-50 p-4 mb-4">
-                {endpoints.map((ep) => (
-                  <label
-                    key={ep.id}
-                    className={`flex items-center rounded-md px-2 py-2 cursor-pointer transition-colors border ${
-                      selectedEndpoints.some(
-                        (selected) => selected.id === ep.id
-                      )
-                        ? "bg-indigo-50 border-indigo-400 shadow"
-                        : "bg-white border-gray-200"
-                    } hover:bg-indigo-100`}
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto overflow-x-auto border border-gray-200 rounded-lg bg-slate-50 p-4 mb-4">
+              {endpoints.map((ep) => (
+                <label
+                  key={ep.id}
+                  className={`flex items-center rounded-md px-2 py-2 cursor-pointer transition-colors border ${
+                    selectedEndpoints.some((selected) => selected.id === ep.id)
+                      ? "bg-indigo-50 border-indigo-400 shadow"
+                      : "bg-white border-gray-200"
+                  } hover:bg-indigo-100`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedEndpoints.some(
+                      (selected) => selected.id === ep.id
+                    )}
+                    onChange={() => handleEndpointCheckbox(ep.id)}
+                    className="accent-indigo-600 mr-3 cursor-pointer"
+                  />
+                  <span
+                    className="text-slate-700 text-sm font-medium truncate"
+                    style={{ maxWidth: "14rem", display: "inline-block" }}
+                    title={ep.label}
                   >
-                    <input
-                      type="checkbox"
-                      checked={selectedEndpoints.some(
-                        (selected) => selected.id === ep.id
-                      )}
-                      onChange={() => handleEndpointCheckbox(ep.id)}
-                      className="accent-indigo-600 mr-3 cursor-pointer"
-                    />
-                    <span
-                      className="text-slate-700 text-sm font-medium truncate"
-                      style={{ maxWidth: "14rem", display: "inline-block" }}
-                      title={ep.label}
-                    >
-                      {ep.label}
-                    </span>
-                  </label>
-                ))}
-                {endpoints.length === 0 && (
-                  <div className="text-slate-400 text-sm col-span-2">
-                    No endpoints found for this tag.
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Form Save Generation Status */}
-            {selectedEndpoints.length > 0 && (
-              <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
-                {generatingFiles ? (
-                  <div className="flex items-center text-green-700">
-                    <span className="inline-block mr-2 animate-spin">⏳</span>
-                    <span className="text-sm font-medium">
-                      {isLocalMode
-                        ? "Generating MDX files locally..."
-                        : "Creating files via TinaCMS..."}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="text-green-700">
-                    <div className="flex items-center mb-1">
-                      <span className="inline-block mr-2">💾</span>
-                      <span className="text-sm font-medium">
-                        Ready for Save & Generate
-                      </span>
-                    </div>
-                    <div className="text-xs text-green-600">
-                      {selectedEndpoints.length} endpoint
-                      {selectedEndpoints.length !== 1 ? "s" : ""} selected
-                      <br />
-                      Files will be generated using{" "}
-                      <span className="underline">TinaCMS GraphQL</span> when
-                      you hit save.
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {selectedEndpoints.length > 0 && (
-              <p className="text-xs text-black bg-yellow-100 p-2 rounded-md mb-4 break-all overflow-x-auto whitespace-pre">
-                Following are the endpoint(s) that will have their mdx files
-                generated.
-              </p>
-            )}
-            <div className="mt-2 p-3 bg-gray-100 rounded text-xs text-gray-700 font-mono break-all overflow-x-auto whitespace-pre">
-              {JSON.stringify(
-                {
-                  schema: selectedSchema,
-                  tag: selectedTag,
-                  endpoints: selectedEndpoints,
-                },
-                null,
-                2
+                    {ep.label}
+                  </span>
+                </label>
+              ))}
+              {endpoints.length === 0 && (
+                <div className="text-slate-400 text-sm col-span-2">
+                  No endpoints found for this tag.
+                </div>
               )}
             </div>
+          )}
+
+          {/* Form Save Generation Status */}
+          {selectedEndpoints.length > 0 && (
+            <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
+              {generatingFiles ? (
+                <div className="flex items-center text-green-700">
+                  <span className="inline-block mr-2 animate-spin">⏳</span>
+                  <span className="text-sm font-medium">
+                    {isLocalMode
+                      ? "Generating MDX files locally..."
+                      : "Creating files via TinaCMS..."}
+                  </span>
+                </div>
+              ) : (
+                <div className="text-green-700">
+                  <div className="flex items-center mb-1">
+                    <span className="inline-block mr-2">💾</span>
+                    <span className="text-sm font-medium">
+                      Ready for Save & Generate
+                    </span>
+                  </div>
+                  <div className="text-xs text-green-600">
+                    {selectedEndpoints.length} endpoint
+                    {selectedEndpoints.length !== 1 ? "s" : ""} selected
+                    <br />
+                    Files will be generated using{" "}
+                    <span className="underline">TinaCMS GraphQL</span> when you
+                    hit save.
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {selectedEndpoints.length > 0 && (
+            <p className="text-xs text-black bg-yellow-100 p-2 rounded-md mb-4 break-all overflow-x-auto whitespace-pre">
+              Following are the endpoint(s) that will have their mdx files
+              generated.
+            </p>
+          )}
+          <div className="mt-2 p-3 bg-gray-100 rounded text-xs text-gray-700 font-mono break-all overflow-x-auto whitespace-pre">
+            {JSON.stringify(
+              {
+                schema: selectedSchema,
+                tag: selectedTag,
+                endpoints: selectedEndpoints,
+              },
+              null,
+              2
+            )}
           </div>
-        ))}
+        </div>
+      )}
     </div>
   );
 });
