@@ -142,11 +142,6 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         setSelectedSchema(currentSchema);
         setSelectedTag(currentTag);
 
-        // If we have existing data, load tags and endpoints
-        if (currentSchema) {
-          await loadTagsAndEndpoints(currentSchema, currentTag);
-        }
-
         // Mark initial load as complete and set the last saved value
         setInitialLoad(false);
         setLastSavedValue(input.value || "");
