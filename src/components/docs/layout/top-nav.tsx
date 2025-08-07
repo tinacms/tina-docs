@@ -61,6 +61,7 @@ export const TopNav = ({
                 {ctaButtons.button1?.label && ctaButtons.button1?.link && (
                   <Link
                     href={ctaButtons.button1.link}
+                    target="_blank"
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${getButtonClasses(
                       ctaButtons.button1.variant
                     )}`}
@@ -71,6 +72,7 @@ export const TopNav = ({
                 {ctaButtons.button2?.label && ctaButtons.button2?.link && (
                   <Link
                     href={ctaButtons.button2.link}
+                    target="_blank"
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${getButtonClasses(
                       ctaButtons.button2.variant
                     )}`}
