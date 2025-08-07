@@ -107,7 +107,6 @@ const loadEndpointsForTag = (
   }[] = [];
 
   for (const path in apiSchema.paths) {
-    // Skip invalid paths that don't follow the simple API pattern
     if (!isValidApiPath(path)) {
       setIsValidPath(false);
     }
@@ -122,6 +121,8 @@ const loadEndpointsForTag = (
         summary: op.summary || "",
         description: op.description || "",
       };
+
+      // If we don't have tags, we show all endpoints
       if (!hasTags) {
         endpointsList.push(endpoint);
       } else if (hasTags && op.tags?.includes(tag)) {
@@ -183,7 +184,7 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         setSelectedSchema(currentSchema);
         setSelectedTag(currentTag);
 
-        // If we have existing data, load tags and endpoints
+        // If we have existing data, load tags and endpoints only once
         if (currentSchema && hasTag === null) {
           await loadTagsAndEndpoints(currentSchema, currentTag);
         }
@@ -209,29 +210,25 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     setLoadingTags(true);
     setIsValidPath(null);
     try {
-      const { tags: tagsList, apiSchema } =
-        await loadTagsForSchema(schemaFilename);
+      const { tags: tagsList, apiSchema } = await loadTagsForSchema(
+        schemaFilename
+      );
       setTags(tagsList);
       setHasTag(tagsList.length > 0);
       setLoadingTags(false);
 
       // If we also have a selected tag, load endpoints
-      if (currentTag && apiSchema) {
+      if (apiSchema) {
         setLoadingEndpoints(true);
+
+        const tag = currentTag ?? "";
+        const hasTag = !!currentTag;
+
         const endpointsList = loadEndpointsForTag(
           apiSchema,
-          currentTag,
-          setIsValidPath
-        );
-        setEndpoints(endpointsList);
-        setLoadingEndpoints(false);
-      } else if (apiSchema && !currentTag) {
-        setLoadingEndpoints(true);
-        const endpointsList = loadEndpointsForTag(
-          apiSchema,
-          "",
+          tag,
           setIsValidPath,
-          false
+          hasTag
         );
         setEndpoints(endpointsList);
         setLoadingEndpoints(false);
@@ -351,8 +348,8 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
-                ? "No schemas available"
-                : "Select a schema"
+              ? "No schemas available"
+              : "Select a schema"
           }
           className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
