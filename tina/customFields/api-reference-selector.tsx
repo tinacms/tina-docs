@@ -65,7 +65,7 @@ const loadTagsForSchema = async (schemaFilename: string) => {
 /**
  * Loads endpoints for a specific tag from API schema
  */
-const loadEndpointsForTag = (apiSchema: any, tag: string) => {
+const loadEndpointsForTag = (apiSchema: any, tag: string, hasTag = true) => {
   const endpointsList: {
     id: string;
     label: string;
@@ -78,15 +78,18 @@ const loadEndpointsForTag = (apiSchema: any, tag: string) => {
   for (const path in apiSchema.paths) {
     for (const method in apiSchema.paths[path]) {
       const op = apiSchema.paths[path][method];
-      if (op.tags?.includes(tag)) {
-        endpointsList.push({
-          id: `${method.toUpperCase()}:${path}`,
-          label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
-          method: method.toUpperCase(),
-          path,
-          summary: op.summary || "",
-          description: op.description || "",
-        });
+      const endpoint = {
+        id: `${method.toUpperCase()}:${path}`,
+        label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
+        method: method.toUpperCase(),
+        path,
+        summary: op.summary || "",
+        description: op.description || "",
+      };
+      if (!hasTag) {
+        endpointsList.push(endpoint);
+      } else if (hasTag && op.tags?.includes(tag)) {
+        endpointsList.push(endpoint);
       }
     }
   }
