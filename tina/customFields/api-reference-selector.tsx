@@ -66,22 +66,24 @@ const loadTagsForSchema = async (schemaFilename: string) => {
  * Validates if an API path follows the simple pattern like /something/api/{id}
  * and doesn't contain special characters
  */
-const isValidApiPath = (path: string): boolean => {
-  // Check for special characters (excluding alphanumeric, forward slash, curly braces, hyphens, and underscores)
+const isValidApiPath = (input: string): boolean => {
+  // Extract just the path if input contains an HTTP method
+  const pathMatch = input.match(
+    /^\s*(GET|POST|PUT|DELETE|PATCH|OPTIONS|HEAD)?\s*(\/[^\s]*)/i
+  );
+  if (!pathMatch) return false;
+
+  const path = pathMatch[2]; // e.g., "/api/projects/{id}/TogglePreferredNoiseLevelMeasurement"
+
+  // Reject special characters not allowed in paths
   const specialCharRegex = /[^a-zA-Z0-9\/\{\}\-_]/;
   if (specialCharRegex.test(path)) {
     return false;
   }
 
-  // Check if path follows simple API pattern: /something/api/{id} or similar
-  // Allow paths like:
-  // - /api/pets
-  // - /api/pets/{id}
-  // - /api/users/{userId}
-  // - /store/inventory
-  // - /user/{username}
+  // Allow multiple segments including path params anywhere
   const validPathRegex =
-    /^\/[a-zA-Z0-9\-_]+(\/[a-zA-Z0-9\-_]+)*(\/\{[a-zA-Z0-9\-_]+\})*$/;
+    /^\/([a-zA-Z0-9\-_]+|\{[a-zA-Z0-9\-_]+\})(\/([a-zA-Z0-9\-_]+|\{[a-zA-Z0-9\-_]+\}))*$/;
 
   return validPathRegex.test(path);
 };
@@ -200,6 +202,7 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     currentTag?: string
   ) => {
     setLoadingTags(true);
+    setIsValidPath(null);
     try {
       const { tags: tagsList, apiSchema } = await loadTagsForSchema(
         schemaFilename
@@ -242,6 +245,7 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     setSelectedSchema(schema);
     setSelectedTag("");
+    setIsValidPath(null);
     setTags([]);
     setEndpoints([]);
 
@@ -396,18 +400,30 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             <button
               type="button"
               onClick={handleSelectAll}
-              disabled={loadingEndpoints}
-              className="ml-auto px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold text-sm shadow hover:bg-blue-700 transition-colors border border-blue-700 disabled:opacity-50"
+              disabled={loadingEndpoints || isValidPath === false}
+              className={`ml-auto px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold text-sm shadow hover:bg-blue-700 transition-colors border border-blue-700 disabled:opacity-50 ${
+                isValidPath === false ? "cursor-not-allowed" : ""
+              }`}
             >
               Select All
             </button>
           </div>
+          {!loadingEndpoints && isValidPath === false && (
+            <div className="text-red-600 text-sm mb-4 p-2 bg-red-50 border border-red-200 rounded-md text-wrap">
+              Unsupported Schema format detected. Please check the README for
+              the selected path and see the supported.
+            </div>
+          )}
           {loadingEndpoints ? (
             <div className="text-slate-400 text-sm mb-4">
               Loading endpoints...
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto overflow-x-auto border border-gray-200 rounded-lg bg-slate-50 p-4 mb-4">
+            <div
+              className={`grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto overflow-x-auto border border-gray-200 rounded-lg bg-slate-50 p-4 mb-4 ${
+                isValidPath === false ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
               {endpoints.map((ep) => (
                 <label
                   key={ep.id}
@@ -415,7 +431,9 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                     selectedEndpoints.some((selected) => selected.id === ep.id)
                       ? "bg-indigo-50 border-indigo-400 shadow"
                       : "bg-white border-gray-200"
-                  } hover:bg-indigo-100`}
+                  } hover:bg-indigo-100 ${
+                    isValidPath === false ? "cursor-not-allowed" : ""
+                  }`}
                 >
                   <input
                     type="checkbox"
@@ -423,10 +441,17 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                       (selected) => selected.id === ep.id
                     )}
                     onChange={() => handleEndpointCheckbox(ep.id)}
-                    className="accent-indigo-600 mr-3 cursor-pointer"
+                    className={`accent-indigo-600 mr-3 ${
+                      isValidPath === false
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
+                    disabled={isValidPath === false}
                   />
                   <span
-                    className="text-slate-700 text-sm font-medium truncate"
+                    className={`text-slate-700 text-sm font-medium truncate ${
+                      isValidPath === false ? "cursor-not-allowed" : ""
+                    }`}
                     style={{ maxWidth: "14rem", display: "inline-block" }}
                     title={ep.label}
                   >
