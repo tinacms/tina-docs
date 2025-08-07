@@ -315,20 +315,28 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       </div>
       {selectedSchema && (
         <div className="mb-6">
-          <label className="font-bold text-slate-800 text-base mb-2 block">
-            Group/Tag
-          </label>
-          <CustomDropdown
-            options={tags.map((tag) => ({
-              value: tag,
-              label: tag,
-            }))}
-            value={selectedTag}
-            onChange={handleTagChange}
-            disabled={loadingTags}
-            placeholder={loadingTags ? "Loading tags..." : "Select a tag"}
-            className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          {hasTag || hasTag === null ? (
+            <>
+              <label className="font-bold text-slate-800 text-base mb-2 block">
+                Group/Tag
+              </label>
+              <CustomDropdown
+                options={tags.map((tag) => ({
+                  value: tag,
+                  label: tag,
+                }))}
+                value={selectedTag}
+                onChange={handleTagChange}
+                disabled={loadingTags}
+                placeholder={loadingTags ? "Loading tags..." : "Select a tag"}
+                className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </>
+          ) : (
+            <div className="text-red-600 text-sm mt-1 border border-red-300 p-2 rounded-md">
+              ⚠️ No tags found for this schema.
+            </div>
+          )}
         </div>
       )}
       {selectedTag ||
