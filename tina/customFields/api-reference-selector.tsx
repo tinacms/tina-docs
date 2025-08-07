@@ -183,6 +183,11 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         setSelectedSchema(currentSchema);
         setSelectedTag(currentTag);
 
+        // If we have existing data, load tags and endpoints
+        if (currentSchema && hasTag === null) {
+          await loadTagsAndEndpoints(currentSchema, currentTag);
+        }
+
         // Mark initial load as complete and set the last saved value
         setInitialLoad(false);
         setLastSavedValue(input.value || "");
@@ -195,7 +200,7 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     };
 
     loadInitialData();
-  }, [parsedValue.schema, parsedValue.tag, input.value]);
+  }, [parsedValue.schema, parsedValue.tag, input.value, hasTag]);
 
   const loadTagsAndEndpoints = async (
     schemaFilename: string,
