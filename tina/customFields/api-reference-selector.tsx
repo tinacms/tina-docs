@@ -210,9 +210,8 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     setLoadingTags(true);
     setIsValidPath(null);
     try {
-      const { tags: tagsList, apiSchema } = await loadTagsForSchema(
-        schemaFilename
-      );
+      const { tags: tagsList, apiSchema } =
+        await loadTagsForSchema(schemaFilename);
       setTags(tagsList);
       setHasTag(tagsList.length > 0);
       setLoadingTags(false);
@@ -348,8 +347,8 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
-              ? "No schemas available"
-              : "Select a schema"
+                ? "No schemas available"
+                : "Select a schema"
           }
           className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
