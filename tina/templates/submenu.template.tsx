@@ -1,7 +1,10 @@
 import type { Template } from "tinacms";
 import { itemTemplate } from "./navbar-ui.template";
 
-const createMenuTemplate = (templates: Template[], level: number): Template => ({
+const createMenuTemplate = (
+  templates: Template[],
+  level: number
+): Template => ({
   label: "Submenu",
   name: "items",
   ui: {
@@ -22,13 +25,13 @@ const createMenuTemplate = (templates: Template[], level: number): Template => (
 });
 
 const thirdLevelSubmenu: Template = createMenuTemplate([itemTemplate], 3);
-const secondLevelSubmenu: Template = createMenuTemplate([
-  thirdLevelSubmenu,
-  itemTemplate,
-], 2);
-export const submenuTemplate: Template = createMenuTemplate([
-  secondLevelSubmenu,
-  itemTemplate,
-], 1  );
+const secondLevelSubmenu: Template = createMenuTemplate(
+  [thirdLevelSubmenu, itemTemplate],
+  2
+);
+export const submenuTemplate: Template = createMenuTemplate(
+  [secondLevelSubmenu, itemTemplate],
+  1
+);
 
 export default submenuTemplate;

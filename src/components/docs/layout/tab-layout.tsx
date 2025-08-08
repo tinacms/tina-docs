@@ -39,7 +39,7 @@ export const TabsLayout = ({
     }));
     setTabs(tabs);
     setSelectedTab(tabs[0]);
-    setObjectOfSelectedTab(tabs[0])
+    setObjectOfSelectedTab(tabs[0]);
   }, [tinaProps.data]);
 
   React.useEffect(() => {
@@ -78,7 +78,10 @@ export const TabsLayout = ({
           <Sidebar tabs={tabs} />
           <main className="flex-1">
             {selectedTab && (
-              <Body navigationDocsData={objectOfSelectedTab?.content} children={children} />
+              <Body
+                navigationDocsData={objectOfSelectedTab?.content}
+                children={children}
+              />
             )}
           </main>
         </div>

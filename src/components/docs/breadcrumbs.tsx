@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 interface BreadcrumbItem {
@@ -188,7 +188,7 @@ export const BreadCrumbs = ({
 
               {isClickable ? (
                 <Link
-                  href={crumb.url!}
+                  href={crumb?.url || "/"}
                   className="text-sm uppercase text-neutral-text-secondary hover:text-brand-primary transition-all duration-300 cursor-pointer"
                 >
                   {crumb.title}
