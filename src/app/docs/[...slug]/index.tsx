@@ -1,6 +1,8 @@
 "use client";
 
 import { CopyPageDropdown } from "@/components/copy-page-dropdown";
+import { BreadCrumbs } from "@/components/docs/breadcrumbs";
+import { useNavigation } from "@/components/docs/layout/navigation-context";
 import { OnThisPage } from "@/components/docs/on-this-page";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { Pagination } from "@/components/ui/pagination";
@@ -10,6 +12,8 @@ import { TinaMarkdown } from "tinacms/dist/rich-text";
 
 export default function Document({ props, tinaProps }) {
   const { data } = tinaProps;
+  const navigationData = useNavigation();
+
 
   const documentationData = data.docs;
   const { pageTableOfContents } = props;
@@ -38,6 +42,7 @@ export default function Document({ props, tinaProps }) {
         }`}
       >
         <div className="overflow-hidden break-words mx-8">
+          <BreadCrumbs navigationDocsData={navigationData} />
           <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
             <h1
               className="text-brand-primary my-4 font-heading text-4xl"

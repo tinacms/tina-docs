@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import React from "react";
 import Link from "next/link";
+import React from "react";
 
 interface BreadcrumbItem {
   title: string;
@@ -80,7 +80,8 @@ export const BreadCrumbs = ({
 
           if (normalizedCurrentPath === normalizedItemUrl) {
             // This is the current page - no URL needed
-            return [{ title: item.slug.title || item.title || "Untitled" }];
+            const title = item.slug?.title || item.title || "Untitled";
+            return [{ title }];
           }
         }
       }
@@ -113,40 +114,49 @@ export const BreadCrumbs = ({
   ): BreadcrumbItem[] => {
     const trail: BreadcrumbItem[] = [];
 
-    if (
-      !navigationData ||
-      typeof navigationData !== "object" ||
-      !Array.isArray(navigationData.items) ||
-      !currentPath
-    ) {
+    if (!navigationData || !currentPath) {
       return trail;
     }
 
-    // Search through supermenu groups
-    for (const supermenuGroup of navigationData.items) {
-      if (
-        !supermenuGroup ||
-        !supermenuGroup.items ||
-        !Array.isArray(supermenuGroup.items)
-      ) {
+    // Check if navigationData has a 'data' property (formatted navigation structure)
+    const tabsData = navigationData.data || [];
+
+    if (!Array.isArray(tabsData)) {
+      return trail;
+    }
+
+    // Search through all tabs to find the current page
+    for (const tab of tabsData) {
+      if (!tab || !tab.items || !Array.isArray(tab.items)) {
         continue;
       }
 
-      // Check if the current page exists in this supermenu group
-      const foundInGroup = searchInItems(supermenuGroup.items, currentPath);
-
-      if (foundInGroup.length > 0) {
-        // Add the supermenu group title with link to its first page
-        if (supermenuGroup.title) {
-          const firstPageUrl = findFirstPageUrl(supermenuGroup.items);
-          trail.push({
-            title: supermenuGroup.title,
-            url: firstPageUrl || undefined,
-          });
+      // Search through supermenu groups in this tab
+      for (const supermenuGroup of tab.items) {
+        if (
+          !supermenuGroup ||
+          !supermenuGroup.items ||
+          !Array.isArray(supermenuGroup.items)
+        ) {
+          continue;
         }
-        // Add any nested group titles and the final page title
-        trail.push(...foundInGroup);
-        break;
+
+        // Check if the current page exists in this supermenu group
+        const foundInGroup = searchInItems(supermenuGroup.items, currentPath);
+
+        if (foundInGroup.length > 0) {
+          // Add the supermenu group title with link to its first page
+          if (supermenuGroup.title) {
+            const firstPageUrl = findFirstPageUrl(supermenuGroup.items);
+            trail.push({
+              title: supermenuGroup.title,
+              url: firstPageUrl || undefined,
+            });
+          }
+          // Add any nested group titles and the final page title
+          trail.push(...foundInGroup);
+          return trail; // Found it, return early
+        }
       }
     }
 
@@ -154,15 +164,19 @@ export const BreadCrumbs = ({
   };
 
   const currentPath = usePathname();
+
+
   const breadcrumbs = findBreadcrumbTrail(navigationDocsData, currentPath);
+
+  
 
   if (!navigationDocsData || breadcrumbs.length === 0) {
     return null;
   }
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="max-w-5xl mx-auto flex items-center space-x-2 text-sm text-brand-primary-light">
+    <nav aria-label="Breadcrumb" className="mb-2">
+      <ol className="flex items-center space-x-2 text-sm text-brand-primary-light">
         {breadcrumbs.map((crumb, index) => {
           const isLast = index === breadcrumbs.length - 1;
           const isClickable = !isLast && crumb.url;
