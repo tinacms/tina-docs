@@ -2,6 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import React from "react";
+import Link from "next/link";
+
+interface BreadcrumbItem {
+  title: string;
+  url?: string; 
+}
 
 export const BreadCrumbs = ({
   navigationDocsData,
@@ -12,37 +18,47 @@ export const BreadCrumbs = ({
   const getUrlFromSlug = (slug: any): string => {
     if (typeof slug === "string") return slug;
     if (slug && typeof slug === "object" && slug._sys?.relativePath) {
-      // Transform relativePath (e.g. "introduction/showcase.mdx") into URL path (e.g. "/docs/introduction/showcase")
       return `/docs/${slug._sys.relativePath.replace(/\.mdx$/, "")}`;
     }
     if (slug && typeof slug === "object" && slug.id) {
-      // Transform id (e.g. "content/docs/introduction/showcase.mdx") into URL path
       return slug.id.replace(/^content\//, "/").replace(/\.mdx$/, "");
     }
     return "";
   };
 
-  // Recursive function to search through nested items
-  const searchInItems = (items: any[], currentPath: string): string[] => {
-    if (!Array.isArray(items) || !currentPath) {
-      return [];
+  // Find the first page URL in a list of items (recursively)
+  const findFirstPageUrl = (items: any[]): string | null => {
+    if (!Array.isArray(items)) return null;
+
+    for (const item of items) {
+      // If this item has a slug, it's a page - return its URL
+      if (item.slug) {
+        return getUrlFromSlug(item.slug);
+      }
+
+      // If this item has nested items, search recursively
+      if (item.items && Array.isArray(item.items)) {
+        const nestedUrl = findFirstPageUrl(item.items);
+        if (nestedUrl) return nestedUrl;
+      }
     }
 
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+    return null;
+  };
 
+  // Recursive function to search through nested items and return breadcrumb items
+  const searchInItems = (items: any[], currentPath: string): BreadcrumbItem[] => {
+    if (!Array.isArray(items) || !currentPath) return [];
+
+    for (const item of items) {
       if (!item) continue;
 
       // Check if this item has a slug that matches the current page
       if (item.slug) {
         const itemUrl = getUrlFromSlug(item.slug);
-
-        if (
-          itemUrl &&
-          (currentPath === itemUrl || currentPath === itemUrl + "/")
-        ) {
-          const result = [item.slug.title || item.title || "Untitled"];
-          return result;
+        if (itemUrl && (currentPath === itemUrl || currentPath === itemUrl + "/")) {
+          // This is the current page - no URL needed
+          return [{ title: item.slug.title || item.title || "Untitled" }];
         }
       }
 
@@ -50,9 +66,16 @@ export const BreadCrumbs = ({
       if (item.items && Array.isArray(item.items)) {
         const nestedResult = searchInItems(item.items, currentPath);
         if (nestedResult.length > 0) {
-          const result = [item.title || "Untitled", ...nestedResult];
-          // Include this item's title in the breadcrumb trail
-          return result;
+          // Found the current page in nested items
+          // Add this item's title with a link to its first page
+          const firstPageUrl = findFirstPageUrl(item.items);
+          return [
+            { 
+              title: item.title || "Untitled", 
+              url: firstPageUrl || undefined 
+            },
+            ...nestedResult
+          ];
         }
       }
     }
@@ -64,10 +87,9 @@ export const BreadCrumbs = ({
   const findBreadcrumbTrail = (
     navigationData: any,
     currentPath: string
-  ): string[] => {
-    const trail: string[] = [];
+  ): BreadcrumbItem[] => {
+    const trail: BreadcrumbItem[] = [];
 
-    // Defensive checks for invalid data
     if (
       !navigationData ||
       typeof navigationData !== "object" ||
@@ -77,10 +99,8 @@ export const BreadCrumbs = ({
       return trail;
     }
 
-    // Search through supermenu groups (navigationData.items instead of navigationData.content.items)
-    for (let i = 0; i < navigationData.items.length; i++) {
-      const supermenuGroup = navigationData.items[i];
-
+    // Search through supermenu groups
+    for (const supermenuGroup of navigationData.items) {
       if (
         !supermenuGroup ||
         !supermenuGroup.items ||
@@ -93,9 +113,13 @@ export const BreadCrumbs = ({
       const foundInGroup = searchInItems(supermenuGroup.items, currentPath);
 
       if (foundInGroup.length > 0) {
-        // Add the supermenu group title
+        // Add the supermenu group title with link to its first page
         if (supermenuGroup.title) {
-          trail.push(supermenuGroup.title);
+          const firstPageUrl = findFirstPageUrl(supermenuGroup.items);
+          trail.push({
+            title: supermenuGroup.title,
+            url: firstPageUrl || undefined
+          });
         }
         // Add any nested group titles and the final page title
         trail.push(...foundInGroup);
@@ -106,41 +130,49 @@ export const BreadCrumbs = ({
     return trail;
   };
 
-  // Get current pathname using Next.js hook
   const currentPath = usePathname();
-
-  // Get the breadcrumb trail for the current page
   const breadcrumbs = findBreadcrumbTrail(navigationDocsData, currentPath);
 
-  if (navigationDocsData) {
-  }
-
-  // Don't render if we don't have valid navigation data or enough breadcrumbs to show
   if (!navigationDocsData || breadcrumbs.length === 0) {
     return null;
   }
 
   return (
     <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="flex items-center space-x-2 text-sm text-gray-600">
-        {breadcrumbs.map((crumb, index) => (
-          <li key={index} className="flex items-center">
-            {index > 0 && (
-              <span className="mx-2 text-gray-400" aria-hidden="true">
-                ›
-              </span>
-            )}
-            <span
-              className={`${
-                index === breadcrumbs.length - 1
-                  ? "font-medium text-gray-900"
-                  : "text-gray-500"
-              } uppercase tracking-wide`}
-            >
-              {crumb}
-            </span>
-          </li>
-        ))}
+      <ol className="max-w-5xl mx-auto flex items-center space-x-2 text-sm text-brand-primary-light">
+        {breadcrumbs.map((crumb, index) => {
+          const isLast = index === breadcrumbs.length - 1;
+          const isClickable = !isLast && crumb.url;
+
+          return (
+            <li key={index} className="flex items-center">
+              {index > 0 && (
+                <span className="mx-2 text-brand-primary" aria-hidden="true">
+                  ›
+                </span>
+              )}
+              
+              {isClickable ? (
+                <Link
+                  href={crumb.url!}
+                  className="text-sm uppercase text-neutral-text-secondary hover:text-brand-primary transition-all duration-300 cursor-pointer"
+                >
+                  {crumb.title}
+                </Link>
+              ) : (
+                <span
+                  className={`text-sm uppercase tracking-wide ${
+                    isLast
+                      ? "font-medium text-neutral-text"
+                      : "text-neutral-text-secondary"
+                  }`}
+                >
+                  {crumb.title}
+                </span>
+              )}
+            </li>
+          );
+        })}
       </ol>
     </nav>
   );
