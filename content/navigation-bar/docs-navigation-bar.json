@@ -91,22 +91,6 @@
               "title": "TinaCloud",
               "items": [
                 {
-                  "title": "Group 2",
-                  "items": [
-                    {
-                      "title": "Group 3 ",
-                      "items": [
-                        {
-                          "slug": "content/docs/using-tinacms/usage-developers.mdx",
-                          "_template": "item"
-                        }
-                      ],
-                      "_template": "items"
-                    }
-                  ],
-                  "_template": "items"
-                },
-                {
                   "slug": "content/docs/going-live/tinacloud/what-is-a-datalayer.mdx",
                   "_template": "item"
                 },

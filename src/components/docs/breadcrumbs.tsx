@@ -6,7 +6,7 @@ import Link from "next/link";
 
 interface BreadcrumbItem {
   title: string;
-  url?: string; 
+  url?: string;
 }
 
 export const BreadCrumbs = ({
@@ -16,11 +16,25 @@ export const BreadCrumbs = ({
 }) => {
   // Helper function to extract a clean URL path from a slug object
   const getUrlFromSlug = (slug: any): string => {
-    if (typeof slug === "string") return slug;
+    if (typeof slug === "string") {
+      // Handle special case for docs homepage
+      if (slug === "content/docs/index.mdx") {
+        return "/docs";
+      }
+      return slug;
+    }
     if (slug && typeof slug === "object" && slug._sys?.relativePath) {
+      // Handle special case for docs homepage
+      if (slug._sys.relativePath === "index.mdx") {
+        return "/docs";
+      }
       return `/docs/${slug._sys.relativePath.replace(/\.mdx$/, "")}`;
     }
     if (slug && typeof slug === "object" && slug.id) {
+      // Handle special case for docs homepage
+      if (slug.id === "content/docs/index.mdx") {
+        return "/docs";
+      }
       return slug.id.replace(/^content\//, "/").replace(/\.mdx$/, "");
     }
     return "";
@@ -47,7 +61,10 @@ export const BreadCrumbs = ({
   };
 
   // Recursive function to search through nested items and return breadcrumb items
-  const searchInItems = (items: any[], currentPath: string): BreadcrumbItem[] => {
+  const searchInItems = (
+    items: any[],
+    currentPath: string
+  ): BreadcrumbItem[] => {
     if (!Array.isArray(items) || !currentPath) return [];
 
     for (const item of items) {
@@ -56,9 +73,15 @@ export const BreadCrumbs = ({
       // Check if this item has a slug that matches the current page
       if (item.slug) {
         const itemUrl = getUrlFromSlug(item.slug);
-        if (itemUrl && (currentPath === itemUrl || currentPath === itemUrl + "/")) {
-          // This is the current page - no URL needed
-          return [{ title: item.slug.title || item.title || "Untitled" }];
+        if (itemUrl) {
+          // Normalize URLs for comparison (remove trailing slashes)
+          const normalizedCurrentPath = currentPath.replace(/\/$/, "") || "/";
+          const normalizedItemUrl = itemUrl.replace(/\/$/, "") || "/";
+
+          if (normalizedCurrentPath === normalizedItemUrl) {
+            // This is the current page - no URL needed
+            return [{ title: item.slug.title || item.title || "Untitled" }];
+          }
         }
       }
 
@@ -70,11 +93,11 @@ export const BreadCrumbs = ({
           // Add this item's title with a link to its first page
           const firstPageUrl = findFirstPageUrl(item.items);
           return [
-            { 
-              title: item.title || "Untitled", 
-              url: firstPageUrl || undefined 
+            {
+              title: item.title || "Untitled",
+              url: firstPageUrl || undefined,
             },
-            ...nestedResult
+            ...nestedResult,
           ];
         }
       }
@@ -118,7 +141,7 @@ export const BreadCrumbs = ({
           const firstPageUrl = findFirstPageUrl(supermenuGroup.items);
           trail.push({
             title: supermenuGroup.title,
-            url: firstPageUrl || undefined
+            url: firstPageUrl || undefined,
           });
         }
         // Add any nested group titles and the final page title
@@ -151,7 +174,7 @@ export const BreadCrumbs = ({
                   ›
                 </span>
               )}
-              
+
               {isClickable ? (
                 <Link
                   href={crumb.url!}
