@@ -23,6 +23,7 @@ export const TabsLayout = ({
   const [navigationDocsData, setNavigationDocsData] = React.useState({});
   const [tabs, setTabs] = React.useState([]);
   const [selectedTab, setSelectedTab] = React.useState();
+  const [objectOfSelectedTab, setObjectOfSelectedTab] = React.useState();
   const pathname = usePathname();
 
   React.useEffect(() => {
@@ -38,6 +39,7 @@ export const TabsLayout = ({
     }));
     setTabs(tabs);
     setSelectedTab(tabs[0]);
+    setObjectOfSelectedTab(tabs[0]);
   }, [tinaProps.data]);
 
   React.useEffect(() => {
@@ -57,6 +59,7 @@ export const TabsLayout = ({
 
   const handleTabChange = (value: string) => {
     setSelectedTab(value);
+    setObjectOfSelectedTab(value);
     const newIndex = tabs.findIndex((tab) => tab.label === value);
     window.dispatchEvent(
       new CustomEvent("tabChange", { detail: { value: newIndex.toString() } })
@@ -74,7 +77,12 @@ export const TabsLayout = ({
         <div className="w-full flex flex-col md:flex-row gap-4 md:p-4 max-w-[2560px] mx-auto">
           <Sidebar tabs={tabs} />
           <main className="flex-1">
-            <Body navigationDocsData={tabs} children={children} />
+            {selectedTab && (
+              <Body
+                navigationDocsData={objectOfSelectedTab?.content}
+                children={children}
+              />
+            )}
           </main>
         </div>
       </NavigationProvider>

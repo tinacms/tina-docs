@@ -1,5 +1,3 @@
-import { Breadcrumbs } from "@/components/docs/breadcrumbs";
-
 export const Body = ({
   navigationDocsData,
   children,
@@ -9,7 +7,6 @@ export const Body = ({
 }) => {
   return (
     <>
-      <Breadcrumbs navItems={navigationDocsData} />
       <div data-pagefind-body id="doc-content">
         {children}
       </div>
