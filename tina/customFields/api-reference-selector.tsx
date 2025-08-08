@@ -210,8 +210,9 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     setLoadingTags(true);
     setIsValidPath(null);
     try {
-      const { tags: tagsList, apiSchema } =
-        await loadTagsForSchema(schemaFilename);
+      const { tags: tagsList, apiSchema } = await loadTagsForSchema(
+        schemaFilename
+      );
       setTags(tagsList);
       setHasTag(tagsList.length > 0);
       setLoadingTags(false);
@@ -347,8 +348,8 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             loadingSchemas
               ? "Loading schemas..."
               : schemas.length === 0
-                ? "No schemas available"
-                : "Select a schema"
+              ? "No schemas available"
+              : "Select a schema"
           }
           className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
@@ -411,7 +412,16 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
           {!loadingEndpoints && isValidPath === false && (
             <div className="text-red-600 text-sm mb-4 p-2 bg-red-50 border border-red-200 rounded-md text-wrap">
               Unsupported Schema format detected. Please check the README for
-              the selected path and see the supported.
+              supported endpoint configurations{" "}
+              <a
+                href="https://github.com/tinacms/tina-docs/tree/main?tab=readme-ov-file#api-documentation"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                Read more
+              </a>
+              .
             </div>
           )}
           {loadingEndpoints ? (
