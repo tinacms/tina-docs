@@ -337,6 +337,29 @@ Each theme includes comprehensive color variations for different UI states and a
 
 ---
 
+## 🛠️ Utility Scripts
+
+TinaDocs includes helpful utility scripts to manage your documentation project:
+
+### **API Documentation Cleanup**
+
+Clean up auto-generated API documentation while preserving manual content:
+
+```bash
+pnpm run cleanup
+```
+
+**What it does:**
+- ✅ Completely removes the entire API documentation directory
+- ✅ Removes all example documentation files
+- ✅ Removes docs-assets and landing-assets image directories
+- ✅ Completely removes the API tab from navigation
+- ✅ Validates project structure before running
+
+For detailed information about available scripts, see [`scripts/README.md`](./scripts/README.md).
+
+---
+
 ## 📚 Learn More
 
 - [Tina Documentation](https://tina.io/docs) - Explore Tina's full capabilities
