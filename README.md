@@ -341,19 +341,19 @@ Each theme includes comprehensive color variations for different UI states and a
 
 TinaDocs includes helpful utility scripts to manage your documentation project:
 
-### **API Documentation Cleanup**
+### **Documentation Reset**
 
-Clean up auto-generated API documentation while preserving manual content:
+Completely reset your documentation structure to start fresh:
 
 ```bash
 pnpm run cleanup
 ```
 
 **What it does:**
-- ✅ Completely removes the entire API documentation directory
-- ✅ Removes all example documentation files
+- ✅ Removes all directories within `content/docs/` (preserves only `index.mdx`)
 - ✅ Removes docs-assets and landing-assets image directories
 - ✅ Completely removes the API tab from navigation
+- ✅ Provides a clean documentation slate for new content
 - ✅ Validates project structure before running
 
 For detailed information about available scripts, see [`scripts/README.md`](./scripts/README.md).

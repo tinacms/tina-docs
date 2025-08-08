@@ -2,16 +2,16 @@
 
 This directory contains utility scripts to help you manage your TinaDocs project.
 
-## API Documentation Cleanup
+## Documentation Reset
 
-The `cleanup` script helps you clean up auto-generated API documentation while preserving manually created overview and example files.
+The `cleanup` script provides a complete documentation reset, removing all content directories while preserving only the main index page.
 
 ### What it does
 
-- ✅ **Completely deletes** the entire `api-documentation/` directory
-- ✅ **Deletes** all example documentation files in `docs/examples/`
+- ✅ **Deletes all directories** within `content/docs/` (preserves only `index.mdx`)
 - ✅ **Deletes** image asset directories (`docs-assets/` and `landing-assets/`)
 - ✅ **Completely removes** the API tab from navigation
+- ✅ **Provides** a completely clean documentation slate
 - ✅ **Validates** that you're in a TinaDocs project before running
 
 ### Usage
@@ -23,22 +23,28 @@ pnpm run cleanup
 ### When to use this script
 
 Use this script when you:
-- Want to remove auto-generated API documentation from OpenAPI specs
-- Need to clean up example documentation files
-- Want to keep only the API overview documentation
-- Are migrating from auto-generated to manual API docs
-- Want to start fresh with a clean documentation structure
+- Want to completely reset your documentation structure
+- Need to remove all existing content and start fresh
+- Are setting up a new project from the TinaDocs template
+- Want to clear out example/demo content
+- Need a clean slate for new documentation
 
 ### What gets preserved
 
 The script preserves:
-- All other documentation outside the API and examples sections
+- `content/docs/index.mdx` (main landing page)
+- All other files outside the docs directory
 
 ### What gets removed
 
 The script removes:
-- The entire `content/docs/api-documentation/` directory and all its contents
-- The entire `content/docs/examples/` directory and all its files
+- ALL directories within `content/docs/` including:
+  - `api-documentation/` 
+  - `examples/`
+  - `tinadocs-features/`
+  - `using-tinacms/`
+  - `introduction/`
+  - `going-live/`
 - The `public/img/docs-assets/` directory and all its images
 - The `public/img/landing-assets/` directory and all its images
 - The complete API tab from navigation
@@ -73,8 +79,7 @@ The script removes:
 🎉 Cleanup completed!
 
 📊 Summary:
-• Deleted entire API documentation directory (1 files)
-• Deleted examples: pet-store-all-routes.mdx, library-api-example.mdx, internal-document-example.mdx (3 files)
+• Deleted docs directories: api-documentation, examples, tinadocs-features, using-tinacms, introduction, going-live (85+ files)
 • Deleted image directories: docs-assets, landing-assets (31 files)
 • Navigation updated successfully
 ```
