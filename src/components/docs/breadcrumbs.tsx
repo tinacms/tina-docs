@@ -165,10 +165,7 @@ export const BreadCrumbs = ({
 
   const currentPath = usePathname();
 
-
   const breadcrumbs = findBreadcrumbTrail(navigationDocsData, currentPath);
-
-  
 
   if (!navigationDocsData || breadcrumbs.length === 0) {
     return null;
