@@ -10,11 +10,10 @@
  *   pnpm run cleanup
  *
  * What it does:
- * 1. Deletes the entire API documentation directory
- * 2. Deletes all example documentation files
- * 3. Deletes docs-assets and landing-assets image folders
- * 4. Completely removes the API tab from navigation
- * 5. Cleans up all API-related content
+ * 1. Deletes all directories within content/docs/ (preserves only index.mdx)
+ * 2. Deletes docs-assets and landing-assets image folders
+ * 3. Cleans up navigation to only show the main index page
+ * 4. Provides a completely clean documentation slate
  */
 
 const fs = require("fs");
@@ -23,8 +22,7 @@ const path = require("path");
 console.log("🧹 TinaDocs API Documentation Cleanup\n");
 
 // Paths (relative to project root)
-const apiDocsPath = path.join(process.cwd(), "content/docs/api-documentation");
-const examplesPath = path.join(process.cwd(), "content/docs/examples");
+const docsPath = path.join(process.cwd(), "content/docs");
 const docsAssetsPath = path.join(process.cwd(), "public/img/docs-assets");
 const landingAssetsPath = path.join(process.cwd(), "public/img/landing-assets");
 const navigationPath = path.join(
@@ -105,7 +103,7 @@ function deleteDirectory(dirPath) {
 }
 
 /**
- * Update navigation to completely remove API tab
+ * Update navigation to clean up all references to deleted directories
  */
 function updateNavigation() {
   console.log("📝 Updating navigation...");
@@ -119,26 +117,59 @@ function updateNavigation() {
     // Read the navigation file
     const navigationData = JSON.parse(fs.readFileSync(navigationPath, "utf8"));
 
-    // Find and remove the API tab completely
-    const originalTabCount = navigationData.tabs?.length || 0;
+    let updatesCount = 0;
 
+    // Remove API tab completely
+    const originalTabCount = navigationData.tabs?.length || 0;
     if (navigationData.tabs) {
       navigationData.tabs = navigationData.tabs.filter(
         (tab) => tab.title !== "API"
       );
     }
+    const apiTabsRemoved =
+      originalTabCount - (navigationData.tabs?.length || 0);
+    updatesCount += apiTabsRemoved;
 
-    const newTabCount = navigationData.tabs?.length || 0;
-    const removedTabs = originalTabCount - newTabCount;
+    // Clean up Docs tab - remove all groups except Introduction with only index.mdx
+    const docsTab = navigationData.tabs?.find((tab) => tab.title === "Docs");
+    if (docsTab && docsTab.supermenuGroup) {
+      console.log(
+        `   🔍 Found Docs tab with ${docsTab.supermenuGroup.length} menu groups`
+      );
 
-    if (removedTabs > 0) {
-      console.log(`   🗑️  Completely removed API tab from navigation`);
+      // Keep only Introduction group with only index.mdx
+      const originalGroupCount = docsTab.supermenuGroup.length;
+      docsTab.supermenuGroup = [
+        {
+          title: "Introduction",
+          items: [
+            {
+              slug: "content/docs/index.mdx",
+              _template: "item",
+            },
+          ],
+        },
+      ];
+
+      const removedGroups = originalGroupCount - docsTab.supermenuGroup.length;
+      updatesCount += removedGroups;
+
+      console.log(
+        `   🗑️  Cleaned up Docs navigation (removed ${removedGroups} groups)`
+      );
+      console.log(`   ✅ Navigation now only shows index.mdx`);
+    }
+
+    if (updatesCount > 0) {
+      if (apiTabsRemoved > 0) {
+        console.log(`   🗑️  Completely removed API tab from navigation`);
+      }
 
       // Write back to file
       fs.writeFileSync(navigationPath, JSON.stringify(navigationData, null, 2));
       console.log("✅ Navigation updated successfully\n");
     } else {
-      console.log("   ℹ️  No API tab found to remove\n");
+      console.log("   ℹ️  No navigation updates needed\n");
     }
 
     return true;
@@ -149,104 +180,78 @@ function updateNavigation() {
 }
 
 /**
- * Clean up examples directory
+ * Clean up all directories within content/docs/ while preserving index.mdx
  */
-function cleanupExamplesDirectory() {
-  if (!fs.existsSync(examplesPath)) {
-    console.log("⚠️  Examples directory not found - nothing to clean up");
-    return { deleted: [], fileCount: 0 };
+function cleanupDocsDirectories() {
+  if (!fs.existsSync(docsPath)) {
+    console.log("⚠️  Docs directory not found - nothing to clean up");
+    return { deletedDirectories: [], totalFiles: 0 };
   }
 
-  console.log(
-    `🗑️  Deleting examples directory: ${path.relative(
-      process.cwd(),
-      examplesPath
-    )}`
-  );
+  console.log("🗑️  Cleaning up docs directories (preserving index.mdx)...\n");
+
+  const results = { deletedDirectories: [], totalFiles: 0 };
 
   try {
-    const files = fs.readdirSync(examplesPath);
-    const deletedFiles = [];
-    let fileCount = 0;
+    const items = fs.readdirSync(docsPath);
 
-    // Delete each file
-    files.forEach((file) => {
-      const filePath = path.join(examplesPath, file);
-      const stat = fs.statSync(filePath);
+    items.forEach((item) => {
+      const itemPath = path.join(docsPath, item);
+      const stat = fs.statSync(itemPath);
 
-      if (stat.isFile()) {
-        console.log(`   📄 Deleting file: ${file}`);
-        fs.unlinkSync(filePath);
-        deletedFiles.push(file);
-        fileCount++;
+      if (stat.isDirectory()) {
+        console.log(
+          `🗑️  Deleting directory: ${path.relative(process.cwd(), itemPath)}`
+        );
+
+        // Count files in this directory recursively
+        let fileCount = 0;
+        function countFiles(dirPath) {
+          try {
+            const dirItems = fs.readdirSync(dirPath);
+            dirItems.forEach((dirItem) => {
+              const dirItemPath = path.join(dirPath, dirItem);
+              const dirItemStat = fs.statSync(dirItemPath);
+              if (dirItemStat.isFile()) {
+                fileCount++;
+                console.log(
+                  `   📄 Deleting file: ${path.relative(itemPath, dirItemPath)}`
+                );
+              } else if (dirItemStat.isDirectory()) {
+                countFiles(dirItemPath);
+              }
+            });
+          } catch (error) {
+            console.error(
+              `   ⚠️  Error reading directory ${dirPath}:`,
+              error.message
+            );
+          }
+        }
+
+        countFiles(itemPath);
+
+        // Delete the directory
+        if (deleteDirectory(itemPath)) {
+          console.log(`✅ Directory deleted: ${item} (${fileCount} files)\n`);
+          results.deletedDirectories.push(item);
+          results.totalFiles += fileCount;
+        }
+      } else if (stat.isFile() && item !== "index.mdx") {
+        // Delete any other files in docs root (but preserve index.mdx)
+        console.log(`🗑️  Deleting file: ${item}`);
+        fs.unlinkSync(itemPath);
+        console.log(`✅ File deleted: ${item}\n`);
+        results.totalFiles += 1;
+      } else if (item === "index.mdx") {
+        console.log(`✅ Preserving: ${item}`);
       }
     });
 
-    // Remove the now-empty directory
-    fs.rmdirSync(examplesPath);
-    console.log(`✅ Examples directory deleted (${fileCount} files)\n`);
-
-    return { deleted: deletedFiles, fileCount };
+    return results;
   } catch (error) {
-    console.error(`❌ Error deleting examples directory:`, error.message);
-    return { deleted: [], fileCount: 0 };
-  }
-}
-
-/**
- * Clean up the entire API documentation directory
- */
-function cleanupApiDirectory() {
-  if (!fs.existsSync(apiDocsPath)) {
-    console.log(
-      "⚠️  API documentation directory not found - nothing to clean up"
-    );
-    return { deleted: false, fileCount: 0 };
-  }
-
-  console.log(
-    `🗑️  Deleting entire API documentation directory: ${path.relative(
-      process.cwd(),
-      apiDocsPath
-    )}`
-  );
-
-  try {
-    // Count files recursively before deleting
-    let fileCount = 0;
-    function countFiles(dirPath) {
-      const items = fs.readdirSync(dirPath);
-      items.forEach((item) => {
-        const itemPath = path.join(dirPath, item);
-        const stat = fs.statSync(itemPath);
-        if (stat.isFile()) {
-          fileCount++;
-          console.log(
-            `   📄 Deleting file: ${path.relative(apiDocsPath, itemPath)}`
-          );
-        } else if (stat.isDirectory()) {
-          countFiles(itemPath);
-        }
-      });
-    }
-
-    countFiles(apiDocsPath);
-
-    // Delete the entire directory
-    if (deleteDirectory(apiDocsPath)) {
-      console.log(
-        `✅ API documentation directory completely deleted (${fileCount} files)\n`
-      );
-      return { deleted: true, fileCount };
-    } else {
-      return { deleted: false, fileCount: 0 };
-    }
-  } catch (error) {
-    console.error(
-      `❌ Error deleting API documentation directory:`,
-      error.message
-    );
-    return { deleted: false, fileCount: 0 };
+    console.error(`❌ Error cleaning up docs directories:`, error.message);
+    return { deletedDirectories: [], totalFiles: 0 };
   }
 }
 
@@ -338,13 +343,9 @@ function cleanup() {
     // Validate we're in a TinaDocs project
     validateTinaDocsProject();
 
-    // Clean up entire API documentation directory
-    const { deleted: apiDeleted, fileCount: apiFileCount } =
-      cleanupApiDirectory();
-
-    // Clean up examples directory
-    const { deleted: deletedExamples, fileCount: exampleFileCount } =
-      cleanupExamplesDirectory();
+    // Clean up all docs directories (preserve only index.mdx)
+    const { deletedDirectories: deletedDocs, totalFiles: docsFileCount } =
+      cleanupDocsDirectories();
 
     // Clean up image asset directories
     const { deletedDirectories: deletedImageDirs, totalFiles: imageFileCount } =
@@ -357,22 +358,14 @@ function cleanup() {
     console.log("🎉 Cleanup completed!\n");
     console.log("📊 Summary:");
 
-    if (apiDeleted) {
+    if (deletedDocs.length > 0) {
       console.log(
-        `• Deleted entire API documentation directory (${apiFileCount} files)`
-      );
-    } else {
-      console.log("• No API documentation directory was deleted (none found)");
-    }
-
-    if (deletedExamples.length > 0) {
-      console.log(
-        `• Deleted examples: ${deletedExamples.join(
+        `• Deleted docs directories: ${deletedDocs.join(
           ", "
-        )} (${exampleFileCount} files)`
+        )} (${docsFileCount} files)`
       );
     } else {
-      console.log("• No examples were deleted (none found)");
+      console.log("• No docs directories were deleted (none found)");
     }
 
     if (deletedImageDirs.length > 0) {
@@ -414,13 +407,12 @@ if (process.argv.includes("--help") || process.argv.includes("-h")) {
   console.log("  --help, -h    Show this help message");
   console.log("\nDescription:");
   console.log(
-    "  Removes auto-generated API documentation directories and example files"
+    "  Removes all documentation directories while preserving index.mdx"
   );
   console.log(
-    "  Deletes the entire api-documentation directory, examples directory,"
+    "  Deletes all folders in content/docs/ and image asset directories."
   );
-  console.log("  and docs-assets/landing-assets image directories.");
-  console.log("  Also completely removes the API tab from navigation.");
+  console.log("  Also cleans up navigation to only show the main index page.");
   process.exit(0);
 }
 
