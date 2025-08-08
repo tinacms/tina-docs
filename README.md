@@ -345,4 +345,34 @@ Each theme includes comprehensive color variations for different UI states and a
 
 ---
 
+### API Documentation
+
+TinaDocs provides comprehensive API documentation capabilities powered by OpenAPI specifications. Generate beautiful, interactive API documentation directly from your OpenAPI/Swagger JSON files.
+
+#### **Supported Features**
+
+**🔄 Dynamic Content Management**
+- **Upload OpenAPI specs** - Import your API specifications through TinaCMS
+- **Auto-generated navigation** - Create menu structures based on API tags and endpoints
+- **Bulk page generation** - Generate entire documentation sections from your spec
+- **Real-time updates** - Update documentation when your API spec changes
+
+#### **What's Not Supported**
+
+Currently, TinaDocs does not support:
+- **Header configuration APIs** - Custom header management endpoints
+- **WebSocket APIs** - Real-time communication endpoints
+- **GraphQL schemas** - GraphQL introspection schemas (use REST API docs instead)
+
+#### **Getting Started with API Docs**
+
+1. **Upload your OpenAPI spec** through the API Schema collection in TinaCMS
+2. **Create API reference pages** using the API Reference component
+3. **Generate navigation structure** with the "Group of API References" template
+4. **Customize the display** by selecting specific endpoints and tags
+
+For detailed instructions, see the [API Documentation Guide](content/docs/api-documentation/overview.mdx) and [OpenAPI Spec Documentation](content/docs/tinadocs-features/openapi-spec-docs.mdx).
+
+---
+
 **Ready to improve your documentation?** Give TinaDocs a try!
