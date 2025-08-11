@@ -29,10 +29,8 @@ export async function generateStaticParams() {
 
     const pages =
       allPagesListData.data.docsConnection.edges?.map((page) => {
-        const filename = page?.node?._sys.path;
-        // Remove .mdx extension and content/docs/ prefix, then split by / to create slug array
-        const slugWithoutExtension = filename?.replace(/\.mdx$/, "");
-        // Remove the "content/docs/" prefix from the path
+        const path = page?.node?._sys.path;
+        const slugWithoutExtension = path?.replace(/\.mdx$/, "");
         const pathWithoutPrefix = slugWithoutExtension?.replace(
           /^content\/docs\//,
           ""
@@ -46,6 +44,8 @@ export async function generateStaticParams() {
 
     return pages;
   } catch (error) {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
+    console.error("Error in generateStaticParams:", error);
     return [];
   }
 }
@@ -88,50 +88,22 @@ export default async function DocsPage({
 }: {
   params: Promise<{ slug: string[] }>;
 }) {
-  try {
-    const dynamicParams = await params;
-    const slug = dynamicParams?.slug?.join("/");
+  const dynamicParams = await params;
+  const slug = dynamicParams?.slug?.join("/");
+  const data = await getData(slug);
+  const pageTableOfContents = getTableOfContents(data?.data.docs.body);
 
-    const data = await getData(slug);
-
-    if (!data?.data?.docs) {
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">Page Not Found</h1>
-            <p className="text-gray-600">
-              The page you're looking for doesn't exist.
-            </p>
-          </div>
-        </div>
-      );
-    }
-
-    const pageTableOfContents = getTableOfContents(data?.data.docs.body);
-
-    return (
-      <TinaClient
-        Component={Document}
-        props={{
-          query: data.query,
-          variables: data.variables,
-          data: data.data,
-          pageTableOfContents,
-          documentationData: data,
-          forceExperimental: data.variables.relativePath,
-        }}
-      />
-    );
-  } catch (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Something went wrong</h1>
-          <p className="text-gray-600">
-            We're having trouble loading this page.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <TinaClient
+      Component={Document}
+      props={{
+        query: data?.query,
+        variables: data?.variables,
+        data: data?.data,
+        pageTableOfContents,
+        documentationData: data,
+        forceExperimental: data?.variables?.relativePath,
+      }}
+    />
+  );
 }
