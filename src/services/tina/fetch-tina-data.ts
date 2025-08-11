@@ -22,18 +22,10 @@ export async function fetchTinaData<T, V>(
       relativePath: filename ? `${filename}.${type}` : "",
     } as V;
 
-    console.log("Fetching Tina data for:", filename);
-
     const response = await queryFunction(variables);
 
-    console.log("Tina data fetched successfully for:", filename);
-
     return response;
-  } catch (error) {
-    console.error("Error fetching Tina data for:", filename, error);
-
-    // During static generation, we should throw the error instead of calling notFound()
-    // This allows the calling code to handle it appropriately
-    throw error;
+  } catch {
+    notFound();
   }
 }
