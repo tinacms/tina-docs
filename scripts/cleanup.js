@@ -11,9 +11,11 @@
  *
  * What it does:
  * 1. Deletes all directories within content/docs/ (preserves only index.mdx)
- * 2. Deletes docs-assets and landing-assets image folders
- * 3. Cleans up navigation to only show the main index page
- * 4. Provides a completely clean documentation slate
+ * 2. Deletes all files in content/apiSchema/ (API spec files)
+ * 3. Deletes docs-assets and landing-assets image folders
+ * 4. Clears Next.js cache (.next folder) to prevent stale page references
+ * 5. Cleans up navigation to only show the main index page
+ * 6. Provides a completely clean documentation slate
  */
 
 const fs = require("fs");
@@ -23,8 +25,10 @@ console.log("🧹 TinaDocs API Documentation Cleanup\n");
 
 // Paths (relative to project root)
 const docsPath = path.join(process.cwd(), "content/docs");
+const apiSchemaPath = path.join(process.cwd(), "content/apiSchema");
 const docsAssetsPath = path.join(process.cwd(), "public/img/docs-assets");
 const landingAssetsPath = path.join(process.cwd(), "public/img/landing-assets");
+const nextCachePath = path.join(process.cwd(), ".next");
 const navigationPath = path.join(
   process.cwd(),
   "content/navigation-bar/docs-navigation-bar.json"
@@ -336,6 +340,81 @@ function cleanupImageAssets() {
 }
 
 /**
+ * Clean up API schema files
+ */
+function cleanupApiSchema() {
+  console.log("📄 Cleaning API schema files...");
+
+  if (!fs.existsSync(apiSchemaPath)) {
+    console.log("   ⚠️  API schema directory not found - skipping\n");
+    return { deletedFiles: 0 };
+  }
+
+  try {
+    const files = fs.readdirSync(apiSchemaPath);
+    let deletedFiles = 0;
+
+    for (const file of files) {
+      const filePath = path.join(apiSchemaPath, file);
+      const stat = fs.statSync(filePath);
+
+      if (stat.isFile()) {
+        fs.unlinkSync(filePath);
+        deletedFiles++;
+        console.log(`   🗑️  Deleted: ${file}`);
+      }
+    }
+
+    if (deletedFiles > 0) {
+      console.log(`   ✅ Cleaned up ${deletedFiles} API schema file(s)\n`);
+    } else {
+      console.log("   ℹ️  No files found to delete\n");
+    }
+
+    return { deletedFiles };
+  } catch (error) {
+    console.error(`   ❌ Error cleaning API schema: ${error.message}\n`);
+    return { deletedFiles: 0 };
+  }
+}
+
+/**
+ * Clean up Next.js cache directory
+ */
+function cleanupNextCache() {
+  console.log("🗂️  Cleaning Next.js cache...");
+
+  if (!fs.existsSync(nextCachePath)) {
+    console.log("   ℹ️  No .next folder found (cache already clean)\n");
+    return false;
+  }
+
+  try {
+    // Count files in .next before deletion
+    let fileCount = 0;
+    function countFiles(dir) {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        if (entry.isDirectory()) {
+          countFiles(path.join(dir, entry.name));
+        } else {
+          fileCount++;
+        }
+      }
+    }
+    countFiles(nextCachePath);
+
+    // Delete the .next directory
+    fs.rmSync(nextCachePath, { recursive: true, force: true });
+    console.log(`   ✅ Deleted .next cache directory (${fileCount} files)\n`);
+    return true;
+  } catch (error) {
+    console.error(`   ❌ Error deleting .next cache: ${error.message}\n`);
+    return false;
+  }
+}
+
+/**
  * Main cleanup function
  */
 function cleanup() {
@@ -347,9 +426,15 @@ function cleanup() {
     const { deletedDirectories: deletedDocs, totalFiles: docsFileCount } =
       cleanupDocsDirectories();
 
+    // Clean up API schema files
+    const { deletedFiles: apiSchemaFileCount } = cleanupApiSchema();
+
     // Clean up image asset directories
     const { deletedDirectories: deletedImageDirs, totalFiles: imageFileCount } =
       cleanupImageAssets();
+
+    // Clean up Next.js cache
+    const nextCacheDeleted = cleanupNextCache();
 
     // Update navigation
     const navigationUpdated = updateNavigation();
@@ -368,6 +453,12 @@ function cleanup() {
       console.log("• No docs directories were deleted (none found)");
     }
 
+    if (apiSchemaFileCount > 0) {
+      console.log(`• Deleted API schema files: ${apiSchemaFileCount} files`);
+    } else {
+      console.log("• No API schema files were deleted (none found)");
+    }
+
     if (deletedImageDirs.length > 0) {
       console.log(
         `• Deleted image directories: ${deletedImageDirs.join(
@@ -384,8 +475,19 @@ function cleanup() {
       console.log("• Navigation update skipped or failed");
     }
 
+    if (nextCacheDeleted) {
+      console.log("• Next.js cache cleared successfully");
+    } else {
+      console.log("• Next.js cache clearing skipped (no cache found)");
+    }
+
     console.log("\n💡 Next steps:");
     console.log("   • Review the changes in your editor");
+    if (nextCacheDeleted) {
+      console.log("   • Restart your dev server: pnpm dev");
+    } else {
+      console.log("   • Start/restart your dev server: pnpm dev");
+    }
     console.log("   • Test your documentation site");
     console.log("   • Commit the changes to version control");
   } catch (error) {
@@ -409,9 +511,9 @@ if (process.argv.includes("--help") || process.argv.includes("-h")) {
   console.log(
     "  Removes all documentation directories while preserving index.mdx"
   );
-  console.log(
-    "  Deletes all folders in content/docs/ and image asset directories."
-  );
+  console.log("  Deletes all folders in content/docs/ and API schema files.");
+  console.log("  Deletes image asset directories.");
+  console.log("  Clears Next.js cache to prevent stale page references.");
   console.log("  Also cleans up navigation to only show the main index page.");
   process.exit(0);
 }

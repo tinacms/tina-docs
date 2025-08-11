@@ -351,10 +351,14 @@ pnpm run cleanup
 
 **What it does:**
 - ✅ Removes all directories within `content/docs/` (preserves only `index.mdx`)
+- ✅ Removes all API schema files in `content/apiSchema/`
 - ✅ Removes docs-assets and landing-assets image directories
 - ✅ Completely removes the API tab from navigation
+- ✅ Clears Next.js cache (`.next` folder) to prevent stale page references
 - ✅ Provides a clean documentation slate for new content
 - ✅ Validates project structure before running
+
+> **⚠️ Important:** After running cleanup, you must restart your development server with `pnpm dev` to ensure Next.js rebuilds the site without cached references to deleted pages.
 
 For detailed information about available scripts, see [`scripts/README.md`](./scripts/README.md).
 
