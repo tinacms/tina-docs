@@ -6,8 +6,6 @@ import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from ".";
 
-export const dynamic = "force-static";
-
 const siteUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
@@ -32,9 +30,14 @@ export async function generateStaticParams() {
     const pages =
       allPagesListData.data.docsConnection.edges?.map((page) => {
         const filename = page?.node?._sys.path;
-        // Remove .mdx extension and split by / to create slug array
+        // Remove .mdx extension and content/docs/ prefix, then split by / to create slug array
         const slugWithoutExtension = filename?.replace(/\.mdx$/, "");
-        const slugArray = slugWithoutExtension?.split("/") || [];
+        // Remove the "content/docs/" prefix from the path
+        const pathWithoutPrefix = slugWithoutExtension?.replace(
+          /^content\/docs\//,
+          ""
+        );
+        const slugArray = pathWithoutPrefix?.split("/") || [];
 
         return {
           slug: slugArray,
@@ -76,7 +79,7 @@ async function getData(slug: string) {
     const data = await fetchTinaData(client.queries.docs, slug);
     return data;
   } catch (error) {
-    throw error;
+    return null;
   }
 }
 
@@ -120,8 +123,6 @@ export default async function DocsPage({
       />
     );
   } catch (error) {
-    console.error("Error rendering page:", error);
-    // Return a fallback UI instead of throwing
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
