@@ -15,7 +15,8 @@
  * 3. Deletes docs-assets and landing-assets image folders
  * 4. Clears Next.js cache (.next folder) to prevent stale page references
  * 5. Cleans up navigation to only show the main index page
- * 6. Provides a completely clean documentation slate
+ * 6. Rewrites index.mdx with clean slate instructions and admin link
+ * 7. Provides a completely clean documentation slate
  */
 
 const fs = require("fs");
@@ -415,6 +416,70 @@ function cleanupNextCache() {
 }
 
 /**
+ * Rewrite index.mdx after successful cleanup
+ */
+function rewriteIndexMdx() {
+  console.log("📝 Updating index.mdx for clean slate...");
+
+  const indexPath = path.join(process.cwd(), "content/docs/index.mdx");
+
+  if (!fs.existsSync(indexPath)) {
+    console.log("   ⚠️  index.mdx not found - skipping rewrite\n");
+    return false;
+  }
+
+  try {
+    // Read current content
+    const currentContent = fs.readFileSync(indexPath, "utf8");
+
+    // Extract front matter and intro content (lines 1-15)
+    const lines = currentContent.split("\n");
+    const frontMatterEnd = lines.findIndex(
+      (line, index) => index > 0 && line.trim() === "---"
+    );
+
+    if (frontMatterEnd === -1) {
+      console.log("   ❌ Could not find front matter - skipping rewrite\n");
+      return false;
+    }
+
+    // Find the end of the intro content (line that contains "GitHub repository")
+    const introEndIndex = lines.findIndex((line) =>
+      line.includes(
+        "GitHub repository—versioned, portable, and fully under your control."
+      )
+    );
+
+    if (introEndIndex === -1) {
+      console.log(
+        "   ❌ Could not find intro content end - skipping rewrite\n"
+      );
+      return false;
+    }
+
+    // Preserve front matter and intro content
+    const preservedLines = lines.slice(0, introEndIndex + 1);
+    const preservedContent = preservedLines.join("\n");
+
+    // New content for post-cleanup (TinaCMS-compatible)
+    const newContent =
+      "\n\n## Clean Slate Ready!\n\nCongratulations! You've successfully reset your TinaDocs project and now have a clean slate to work with.\n\n### What's Next?\n\n**Start creating your documentation:**\n\n1. **Open the TinaCMS Admin Interface** at: http://localhost:3000/admin\n\n2. **Begin editing your content** using TinaCMS's visual editor\n\n3. **Add new pages** and organize your documentation structure\n\n4. **Customize your site** to match your project's needs\n\n### Quick Tips\n\n- **Create new pages** through the TinaCMS admin interface\n- **Organize content** using TinaCMS's folder structure\n- **Preview changes** instantly as you edit\n- **Commit changes** to your repository when ready\n\n> **Need help getting started?** Check out the [TinaCMS documentation](https://tina.io/docs/) for detailed guides and tutorials.\n\n**Happy documenting!**\n";
+
+    // Combine preserved content with new content
+    const finalContent = preservedContent + newContent;
+
+    // Write the updated content
+    fs.writeFileSync(indexPath, finalContent);
+
+    console.log("   ✅ Updated index.mdx with clean slate instructions\n");
+    return true;
+  } catch (error) {
+    console.error(`   ❌ Error rewriting index.mdx: ${error.message}\n`);
+    return false;
+  }
+}
+
+/**
  * Main cleanup function
  */
 function cleanup() {
@@ -438,6 +503,9 @@ function cleanup() {
 
     // Update navigation
     const navigationUpdated = updateNavigation();
+
+    // Rewrite index.mdx for clean slate
+    const indexUpdated = rewriteIndexMdx();
 
     // Summary
     console.log("🎉 Cleanup completed!\n");
@@ -481,12 +549,23 @@ function cleanup() {
       console.log("• Next.js cache clearing skipped (no cache found)");
     }
 
+    if (indexUpdated) {
+      console.log("• Index page updated with clean slate instructions");
+    } else {
+      console.log("• Index page update skipped or failed");
+    }
+
     console.log("\n💡 Next steps:");
     console.log("   • Review the changes in your editor");
     if (nextCacheDeleted) {
       console.log("   • Restart your dev server: pnpm dev");
     } else {
       console.log("   • Start/restart your dev server: pnpm dev");
+    }
+    if (indexUpdated) {
+      console.log(
+        "   • Visit http://localhost:3000/admin to start editing content"
+      );
     }
     console.log("   • Test your documentation site");
     console.log("   • Commit the changes to version control");
@@ -514,7 +593,10 @@ if (process.argv.includes("--help") || process.argv.includes("-h")) {
   console.log("  Deletes all folders in content/docs/ and API schema files.");
   console.log("  Deletes image asset directories.");
   console.log("  Clears Next.js cache to prevent stale page references.");
-  console.log("  Also cleans up navigation to only show the main index page.");
+  console.log("  Cleans up navigation to only show the main index page.");
+  console.log(
+    "  Rewrites index.mdx with clean slate instructions and admin link."
+  );
   process.exit(0);
 }
 
