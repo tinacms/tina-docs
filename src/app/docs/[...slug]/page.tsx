@@ -57,6 +57,30 @@ export async function generateStaticParams() {
   }
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}) {
+  const dynamicParams = await params;
+  const slug = dynamicParams?.slug?.join("/");
+  const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
+
+  if (!data.docs.seo) {
+    data.docs.seo = {
+      __typename: "DocsSeo",
+      canonicalUrl: `${siteUrl}/docs/${slug}`,
+    };
+  } else if (!data.docs.seo?.canonicalUrl) {
+    data.docs.seo.canonicalUrl = `${siteUrl}/docs/${slug}`;
+  }
+
+  return getSeo(data.docs.seo, {
+    pageTitle: data.docs.title,
+    body: data.docs.body,
+  });
+}
+
 async function getData(slug: string) {
   try {
     console.log("Fetching data for slug:", slug);
