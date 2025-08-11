@@ -75,12 +75,8 @@ export async function generateMetadata({
 }
 
 async function getData(slug: string) {
-  try {
-    const data = await fetchTinaData(client.queries.docs, slug);
-    return data;
-  } catch (error) {
-    return null;
-  }
+  const data = await fetchTinaData(client.queries.docs, slug);
+  return data;
 }
 
 export default async function DocsPage({
@@ -97,12 +93,12 @@ export default async function DocsPage({
     <TinaClient
       Component={Document}
       props={{
-        query: data?.query,
-        variables: data?.variables,
-        data: data?.data,
+        query: data.query,
+        variables: data.variables,
+        data: data.data,
         pageTableOfContents,
         documentationData: data,
-        forceExperimental: data?.variables?.relativePath,
+        forceExperimental: data.variables.relativePath,
       }}
     />
   );
