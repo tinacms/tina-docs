@@ -15,8 +15,6 @@ const siteUrl =
 
 export async function generateStaticParams() {
   try {
-    console.log("Starting generateStaticParams...");
-
     let pageListData = await client.queries.docsConnection();
     const allPagesListData = pageListData;
 
@@ -34,25 +32,17 @@ export async function generateStaticParams() {
     const pages =
       allPagesListData.data.docsConnection.edges?.map((page) => {
         const filename = page?.node?._sys.path;
-        console.log(
-          "🚀 ~ generateStaticParams ~ page?.node?._sys:",
-          page?.node?._sys
-        );
         // Remove .mdx extension and split by / to create slug array
         const slugWithoutExtension = filename?.replace(/\.mdx$/, "");
         const slugArray = slugWithoutExtension?.split("/") || [];
-
-        console.log("Processing page:", filename, "-> slug:", slugArray);
 
         return {
           slug: slugArray,
         };
       }) || [];
 
-    console.log("Generated static params:", pages.length, "pages");
     return pages;
   } catch (error) {
-    console.error("Error in generateStaticParams:", error);
     return [];
   }
 }
@@ -64,7 +54,7 @@ export async function generateMetadata({
 }) {
   const dynamicParams = await params;
   const slug = dynamicParams?.slug?.join("/");
-  const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
+  const { data } = await fetchTinaData(client.queries.docs, slug);
 
   if (!data.docs.seo) {
     data.docs.seo = {
@@ -83,12 +73,9 @@ export async function generateMetadata({
 
 async function getData(slug: string) {
   try {
-    console.log("Fetching data for slug:", slug);
     const data = await fetchTinaData(client.queries.docs, slug);
-    console.log("Data fetched successfully for slug:", slug);
     return data;
   } catch (error) {
-    console.error("Error fetching data for slug:", slug, error);
     throw error;
   }
 }
@@ -102,13 +89,9 @@ export default async function DocsPage({
     const dynamicParams = await params;
     const slug = dynamicParams?.slug?.join("/");
 
-    console.log("Rendering page for slug:", slug);
-
     const data = await getData(slug);
 
     if (!data?.data?.docs) {
-      console.error("No docs data found for slug:", slug);
-      // Instead of throwing an error, return a 404 page
       return (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
