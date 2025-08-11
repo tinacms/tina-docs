@@ -27,16 +27,9 @@ export async function generateStaticParams() {
   }
 
   const pages =
-    allPagesListData.data.docsConnection.edges?.map((page) => {
-      const filename = page?.node?._sys.filename;
-      // Remove .mdx extension and split by / to create slug array
-      const slugWithoutExtension = filename?.replace(/\.mdx$/, "");
-      const slugArray = slugWithoutExtension?.split("/") || [];
-
-      return {
-        slug: slugArray,
-      };
-    }) || [];
+    allPagesListData.data.docsConnection.edges?.map((page) => ({
+      slug: page?.node?._sys.filename,
+    })) || [];
 
   return pages;
 }
