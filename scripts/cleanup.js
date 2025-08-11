@@ -23,6 +23,16 @@ const fs = require("fs");
 const path = require("path");
 
 console.log("🧹 TinaDocs API Documentation Cleanup\n");
+console.log(
+  "🚨 WARNING: This will PERMANENTLY DELETE all documentation content!"
+);
+console.log("   - All directories in content/docs/ (except index.mdx)");
+console.log("   - All API schema files");
+console.log("   - All image assets");
+console.log("   - Navigation links");
+console.log("   - Next.js cache");
+console.log("\n❌ If you've made changes, they will be DELETED!");
+console.log("✅ Only run this if you want a completely clean slate.\n");
 
 // Paths (relative to project root)
 const docsPath = path.join(process.cwd(), "content/docs");

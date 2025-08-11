@@ -22,14 +22,34 @@ The `cleanup` script provides a complete documentation reset, removing all conte
 pnpm run cleanup
 ```
 
+> **🚨 CRITICAL WARNING - READ BEFORE RUNNING:**
+> 
+> **This script PERMANENTLY DELETES all documentation content and cannot be undone.**
+> 
+> ❌ **DO NOT RUN if you've already made changes** - it will DELETE your work
+> ✅ **DO RUN FIRST** if you want a clean slate, then make your changes
+> ✅ **COMMIT TO GIT** before running if you want to preserve existing changes
+> 
+> **This action is irreversible unless you have version control backups.**
+
 ### When to use this script
 
 Use this script when you:
-- Want to completely reset your documentation structure
-- Need to remove all existing content and start fresh
-- Are setting up a new project from the TinaDocs template
-- Want to clear out example/demo content
-- Need a clean slate for new documentation
+- Want to completely reset your documentation structure **BEFORE making any changes**
+- Need to remove all existing content and start fresh **from the beginning**
+- Are setting up a new project from the TinaDocs template **as your first step**
+- Want to clear out example/demo content **before adding your own**
+- Need a clean slate for new documentation **at project start**
+
+### When NOT to use this script
+
+❌ **DO NOT USE** if you have:
+- Already written your own documentation content
+- Made customizations to the example files
+- Added your own pages or sections
+- Started working on your documentation project
+
+⚠️ **Use with extreme caution** if you have made ANY changes to the documentation.
 
 ### What gets preserved
 

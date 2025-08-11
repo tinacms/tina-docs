@@ -358,6 +358,16 @@ pnpm run cleanup
 - ✅ Provides a clean documentation slate for new content
 - ✅ Validates project structure before running
 
+> **🚨 CRITICAL WARNING:** 
+> 
+> **This command PERMANENTLY DELETES all documentation content.**
+> 
+> - ❌ **If you've already made changes**, running cleanup will DELETE your work
+> - ✅ **Run cleanup FIRST** if you want a clean slate, then make your changes
+> - ✅ **Commit your changes to git** before running cleanup if you want to preserve them
+> 
+> **This action cannot be undone unless you have committed your changes to version control.**
+
 > **⚠️ Important:** After running cleanup, you must restart your development server with `pnpm dev` to ensure Next.js rebuilds the site without cached references to deleted pages.
 
 For detailed information about available scripts, see [`scripts/README.md`](./scripts/README.md).
