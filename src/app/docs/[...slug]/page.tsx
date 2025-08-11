@@ -33,7 +33,11 @@ export async function generateStaticParams() {
 
     const pages =
       allPagesListData.data.docsConnection.edges?.map((page) => {
-        const filename = page?.node?._sys.filename;
+        const filename = page?.node?._sys.path;
+        console.log(
+          "🚀 ~ generateStaticParams ~ page?.node?._sys:",
+          page?.node?._sys
+        );
         // Remove .mdx extension and split by / to create slug array
         const slugWithoutExtension = filename?.replace(/\.mdx$/, "");
         const slugArray = slugWithoutExtension?.split("/") || [];
@@ -49,12 +53,7 @@ export async function generateStaticParams() {
     return pages;
   } catch (error) {
     console.error("Error in generateStaticParams:", error);
-    // Return a minimal set of pages to prevent build failure
-    return [
-      { slug: ["index"] },
-      { slug: ["using-tinacms", "usage-developers"] },
-      { slug: ["using-tinacms", "usage-editors"] },
-    ];
+    return [];
   }
 }
 
