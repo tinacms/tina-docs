@@ -12,26 +12,42 @@ const siteUrl =
     : settings.siteUrl;
 
 export async function generateStaticParams() {
-  let pageListData = await client.queries.docsConnection();
-  const allPagesListData = pageListData;
+  try {
+    let pageListData = await client.queries.docsConnection();
+    const allPagesListData = pageListData;
 
-  while (pageListData.data.docsConnection.pageInfo.hasNextPage) {
-    const lastCursor = pageListData.data.docsConnection.pageInfo.endCursor;
-    pageListData = await client.queries.docsConnection({
-      after: lastCursor,
-    });
+    while (pageListData.data.docsConnection.pageInfo.hasNextPage) {
+      const lastCursor = pageListData.data.docsConnection.pageInfo.endCursor;
+      pageListData = await client.queries.docsConnection({
+        after: lastCursor,
+      });
 
-    allPagesListData.data.docsConnection.edges?.push(
-      ...(pageListData.data.docsConnection.edges || [])
-    );
+      allPagesListData.data.docsConnection.edges?.push(
+        ...(pageListData.data.docsConnection.edges || [])
+      );
+    }
+
+    const pages =
+      allPagesListData.data.docsConnection.edges?.map((page) => {
+        const path = page?.node?._sys.path;
+        const slugWithoutExtension = path?.replace(/\.mdx$/, "");
+        const pathWithoutPrefix = slugWithoutExtension?.replace(
+          /^content\/docs\//,
+          ""
+        );
+        const slugArray = pathWithoutPrefix?.split("/") || [];
+
+        return {
+          slug: slugArray,
+        };
+      }) || [];
+
+    return pages;
+  } catch (error) {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
+    console.error("Error in generateStaticParams:", error);
+    return [];
   }
-
-  const pages =
-    allPagesListData.data.docsConnection.edges?.map((page) => ({
-      filename: page?.node?._sys.filename,
-    })) || [];
-
-  return pages;
 }
 
 export async function generateMetadata({
@@ -41,7 +57,7 @@ export async function generateMetadata({
 }) {
   const dynamicParams = await params;
   const slug = dynamicParams?.slug?.join("/");
-  const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
+  const { data } = await fetchTinaData(client.queries.docs, slug);
 
   if (!data.docs.seo) {
     data.docs.seo = {
