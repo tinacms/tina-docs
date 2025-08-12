@@ -362,6 +362,7 @@ pnpm run cleanup
 - ✅ Clears Next.js cache (`.next` folder) to prevent stale page references
 - ✅ Provides a clean documentation slate for new content
 - ✅ Validates project structure before running
+- ✅ **Requires interactive confirmation** - asks for explicit "yes" to proceed
 
 > **🚨 CRITICAL WARNING:** 
 > 

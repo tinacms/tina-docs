@@ -21,6 +21,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const readline = require("readline");
 
 console.log("🧹 TinaDocs API Documentation Cleanup\n");
 console.log(
@@ -33,6 +34,41 @@ console.log("   - Navigation links");
 console.log("   - Next.js cache");
 console.log("\n❌ If you've made changes, they will be DELETED!");
 console.log("✅ Only run this if you want a completely clean slate.\n");
+
+/**
+ * Prompt user for confirmation before proceeding with cleanup
+ */
+function askForConfirmation() {
+  return new Promise((resolve) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    console.log("🔍 Do you want to proceed with the cleanup?");
+    console.log("   Type 'yes' or 'y' to continue");
+    console.log("   Type 'no' or 'n' to cancel");
+
+    rl.question("\n👉 Your choice (yes/no): ", (answer) => {
+      rl.close();
+
+      const normalizedAnswer = answer.toLowerCase().trim();
+      if (normalizedAnswer === "yes" || normalizedAnswer === "y") {
+        console.log("\n✅ Proceeding with cleanup...\n");
+        resolve(true);
+      } else if (normalizedAnswer === "no" || normalizedAnswer === "n") {
+        console.log("\n❌ Cleanup cancelled. No changes were made.");
+        resolve(false);
+      } else {
+        console.log(
+          "\n⚠️  Invalid input. Please type 'yes', 'y', 'no', or 'n'."
+        );
+        // Recursively ask again for invalid input
+        askForConfirmation().then(resolve);
+      }
+    });
+  });
+}
 
 // Paths (relative to project root)
 const docsPath = path.join(process.cwd(), "content/docs");
@@ -492,10 +528,16 @@ function rewriteIndexMdx() {
 /**
  * Main cleanup function
  */
-function cleanup() {
+async function cleanup() {
   try {
     // Validate we're in a TinaDocs project
     validateTinaDocsProject();
+
+    // Ask for user confirmation before proceeding
+    const shouldProceed = await askForConfirmation();
+    if (!shouldProceed) {
+      process.exit(0);
+    }
 
     // Clean up all docs directories (preserve only index.mdx)
     const { deletedDirectories: deletedDocs, totalFiles: docsFileCount } =
@@ -611,4 +653,6 @@ if (process.argv.includes("--help") || process.argv.includes("-h")) {
 }
 
 // Run the cleanup
-cleanup();
+(async () => {
+  await cleanup();
+})();

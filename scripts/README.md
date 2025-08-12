@@ -15,6 +15,7 @@ The `cleanup` script provides a complete documentation reset, removing all conte
 - ✅ **Completely removes** the API tab from navigation
 - ✅ **Provides** a completely clean documentation slate
 - ✅ **Validates** that you're in a TinaDocs project before running
+- ✅ **Requires interactive confirmation** - asks for explicit "yes" to proceed
 
 ### Usage
 
@@ -91,7 +92,25 @@ The script removes:
 ```
 🧹 TinaDocs API Documentation Cleanup
 
+🚨 WARNING: This will PERMANENTLY DELETE all documentation content!
+   - All directories in content/docs/ (except index.mdx)
+   - All API schema files
+   - All image assets
+   - Navigation links
+   - Next.js cache
+
+❌ If you've made changes, they will be DELETED!
+✅ Only run this if you want a completely clean slate.
+
 ✅ TinaDocs project detected
+
+🔍 Do you want to proceed with the cleanup?
+   Type 'yes' or 'y' to continue
+   Type 'no' or 'n' to cancel
+
+👉 Your choice (yes/no): yes
+
+✅ Proceeding with cleanup...
 
 🗑️  Cleaning up docs directories (preserving index.mdx)...
 🗑️  Deleting directory: content/docs/api-documentation
