@@ -106,6 +106,11 @@ NEXT_PUBLIC_TINA_BRANCH=<your content branch>
 NEXT_PUBLIC_ENABLE_THEME_SELECTION=<display theme selector>
 ```
 
+If you want to test `pnpm build` locally, you need to add:
+```env
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
 **Theme Preview Mode:**
 To enable a theme selector in the UI for previewing all themes, add:
 ```env
