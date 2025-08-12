@@ -4,6 +4,7 @@ import { matchActualTarget } from "@/utils/docs/urls";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { useNavigation } from "./layout/navigation-context";
 
 export interface DocsNavProps {
   navItems: any;
@@ -44,31 +45,37 @@ const getNestedBreadcrumbs = (
   return [];
 };
 
-export function Breadcrumbs({ navItems }: DocsNavProps) {
+export function Breadcrumbs() {
   const pathname = usePathname();
-  const breadcrumbs = getNestedBreadcrumbs(navItems, pathname || "") || [];
+  const docsData = useNavigation();
+  const breadcrumbs =
+    getNestedBreadcrumbs(docsData?.data, pathname || "") || [];
+  console.log(breadcrumbs);
+  return <div>Breadcrumbs</div>;
+  // const pathname = usePathname();
+  // const breadcrumbs = getNestedBreadcrumbs(navItems, pathname || "") || [];
 
-  return (
-    <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
-      {breadcrumbs.map((breadcrumb, i) => {
-        const url = getUrlFromSlug(breadcrumb.slug);
-        return (
-          <li key={`breadcrumb-${url}-${i}`} className="m-0 flex items-center">
-            {i !== 0 && (
-              <ChevronRightIcon
-                className="mx-2 text-gray-400 size-5"
-                aria-hidden="true"
-              />
-            )}
-            <a
-              href={url}
-              className="text-sm uppercase text-gray-500 transition-opacity duration-150 hover:text-orange-500"
-            >
-              {breadcrumb.title || breadcrumb.category}
-            </a>
-          </li>
-        );
-      })}
-    </ul>
-  );
+  // return (
+  //   <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
+  //     {breadcrumbs.map((breadcrumb, i) => {
+  //       const url = getUrlFromSlug(breadcrumb.slug);
+  //       return (
+  //         <li key={`breadcrumb-${url}-${i}`} className="m-0 flex items-center">
+  //           {i !== 0 && (
+  //             <ChevronRightIcon
+  //               className="mx-2 text-gray-400 size-5"
+  //               aria-hidden="true"
+  //             />
+  //           )}
+  //           <a
+  //             href={url}
+  //             className="text-sm uppercase text-gray-500 transition-opacity duration-150 hover:text-orange-500"
+  //           >
+  //             {breadcrumb.title || breadcrumb.category}
+  //           </a>
+  //         </li>
+  //       );
+  //     })}
+  //   </ul>
+  // );
 }

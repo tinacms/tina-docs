@@ -1,7 +1,6 @@
 "use client"; // Error boundaries must be Client Components
 import ErrorWrapper from "./error-wrapper";
 import "@/styles/global.css";
-import RootLayout from "./layout";
 
 export default function GlobalError({
   error,

@@ -9,7 +9,6 @@ export const Body = ({
 }) => {
   return (
     <>
-      <Breadcrumbs navItems={navigationDocsData} />
       <div data-pagefind-body id="doc-content">
         {children}
       </div>

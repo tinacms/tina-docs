@@ -1,6 +1,7 @@
 "use client";
 
 import { CopyPageDropdown } from "@/components/copy-page-dropdown";
+import { Breadcrumbs } from "@/components/docs/breadcrumbs";
 import { OnThisPage } from "@/components/docs/on-this-page";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { Pagination } from "@/components/ui/pagination";
@@ -15,15 +16,6 @@ export default function Document({ props, tinaProps }) {
   const { pageTableOfContents } = props;
 
   const formattedDate = formatDate(documentationData?.last_edited);
-  const previousPage = {
-    slug: documentationData?.previous?.id.slice(7, -4),
-    title: documentationData?.previous?.title,
-  };
-
-  const nextPage = {
-    slug: documentationData?.next?.id.slice(7, -4),
-    title: documentationData?.next?.title,
-  };
 
   // Table of Contents Listener to Highlight Active Section
   const { activeIds, contentRef } = useTocListener(documentationData);
@@ -38,6 +30,7 @@ export default function Document({ props, tinaProps }) {
         }`}
       >
         <div className="overflow-hidden break-words mx-8">
+          <Breadcrumbs />
           <div className="flex flex-col-reverse lg:flex-row lg:items-center justify-between w-full gap-2">
             <h1
               className="text-brand-primary my-4 font-heading text-4xl"
