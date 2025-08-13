@@ -63,9 +63,40 @@ const loadTagsForSchema = async (schemaFilename: string) => {
 };
 
 /**
+ * Validates if an API path follows the simple pattern like /something/api/{id}
+ * and doesn't contain special characters
+ */
+const isValidApiPath = (input: string): boolean => {
+  // Extract just the path if input contains an HTTP method
+  const pathMatch = input.match(
+    /^\s*(GET|POST|PUT|DELETE|PATCH|OPTIONS|HEAD)?\s*(\/[^\s]*)/i
+  );
+  if (!pathMatch) return false;
+
+  const path = pathMatch[2]; // e.g., "/api/projects/{id}/TogglePreferredNoiseLevelMeasurement"
+
+  // Reject special characters not allowed in paths
+  const specialCharRegex = /[^a-zA-Z0-9\/\{\}\-_]/;
+  if (specialCharRegex.test(path)) {
+    return false;
+  }
+
+  // Allow multiple segments including path params anywhere
+  const validPathRegex =
+    /^\/([a-zA-Z0-9\-_]+|\{[a-zA-Z0-9\-_]+\})(\/([a-zA-Z0-9\-_]+|\{[a-zA-Z0-9\-_]+\}))*$/;
+
+  return validPathRegex.test(path);
+};
+
+/**
  * Loads endpoints for a specific tag from API schema
  */
-const loadEndpointsForTag = (apiSchema: any, tag: string) => {
+const loadEndpointsForTag = (
+  apiSchema: any,
+  tag: string,
+  setIsValidPath: (isValid: boolean) => void,
+  hasTags = true
+) => {
   const endpointsList: {
     id: string;
     label: string;
@@ -76,17 +107,26 @@ const loadEndpointsForTag = (apiSchema: any, tag: string) => {
   }[] = [];
 
   for (const path in apiSchema.paths) {
+    if (!isValidApiPath(path)) {
+      setIsValidPath(false);
+    }
+
     for (const method in apiSchema.paths[path]) {
       const op = apiSchema.paths[path][method];
-      if (op.tags?.includes(tag)) {
-        endpointsList.push({
-          id: `${method.toUpperCase()}:${path}`,
-          label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
-          method: method.toUpperCase(),
-          path,
-          summary: op.summary || "",
-          description: op.description || "",
-        });
+      const endpoint = {
+        id: `${method.toUpperCase()}:${path}`,
+        label: `${method.toUpperCase()} ${path} - ${op.summary || ""}`,
+        method: method.toUpperCase(),
+        path,
+        summary: op.summary || "",
+        description: op.description || "",
+      };
+
+      // If we don't have tags, we show all endpoints
+      if (!hasTags) {
+        endpointsList.push(endpoint);
+      } else if (hasTags && op.tags?.includes(tag)) {
+        endpointsList.push(endpoint);
       }
     }
   }
@@ -117,9 +157,11 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
   const [loadingEndpoints, setLoadingEndpoints] = React.useState(false);
   const [selectedSchema, setSelectedSchema] = React.useState("");
   const [selectedTag, setSelectedTag] = React.useState("");
+  const [hasTag, setHasTag] = React.useState<boolean | null>(null);
   const [generatingFiles, setGeneratingFiles] = React.useState(false);
   const [lastSavedValue, setLastSavedValue] = React.useState<string>("");
   const [initialLoad, setInitialLoad] = React.useState(true);
+  const [isValidPath, setIsValidPath] = React.useState<boolean | null>(null);
 
   const isLocalMode = detectLocalMode();
   const parsedValue = parseFieldValue(input.value);
@@ -142,8 +184,8 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
         setSelectedSchema(currentSchema);
         setSelectedTag(currentTag);
 
-        // If we have existing data, load tags and endpoints
-        if (currentSchema) {
+        // If we have existing data, load tags and endpoints only once
+        if (currentSchema && hasTag === null) {
           await loadTagsAndEndpoints(currentSchema, currentTag);
         }
 
@@ -159,23 +201,34 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     };
 
     loadInitialData();
-  }, [parsedValue.schema, parsedValue.tag, input.value]);
+  }, [parsedValue.schema, parsedValue.tag, input.value, hasTag]);
 
   const loadTagsAndEndpoints = async (
     schemaFilename: string,
     currentTag?: string
   ) => {
     setLoadingTags(true);
+    setIsValidPath(null);
     try {
       const { tags: tagsList, apiSchema } =
         await loadTagsForSchema(schemaFilename);
       setTags(tagsList);
+      setHasTag(tagsList.length > 0);
       setLoadingTags(false);
 
       // If we also have a selected tag, load endpoints
-      if (currentTag && apiSchema) {
+      if (apiSchema) {
         setLoadingEndpoints(true);
-        const endpointsList = loadEndpointsForTag(apiSchema, currentTag);
+
+        const tag = currentTag ?? "";
+        const hasTag = !!currentTag;
+
+        const endpointsList = loadEndpointsForTag(
+          apiSchema,
+          tag,
+          setIsValidPath,
+          hasTag
+        );
         setEndpoints(endpointsList);
         setLoadingEndpoints(false);
       }
@@ -192,11 +245,14 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
 
     setSelectedSchema(schema);
     setSelectedTag("");
+    setIsValidPath(null);
     setTags([]);
     setEndpoints([]);
 
-    // Update form state once at the end
-    input.onChange(JSON.stringify({ schema, tag: "", endpoints: [] }));
+    // Update form state with a slight delay to avoid dropdown disruption
+    setTimeout(() => {
+      input.onChange(JSON.stringify({ schema, tag: "", endpoints: [] }));
+    }, 0);
 
     if (!schema) {
       setLoadingTags(false);
@@ -214,10 +270,12 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
     setSelectedTag(tag);
     setEndpoints([]);
 
-    // Update form state once
-    input.onChange(
-      JSON.stringify({ schema: selectedSchema, tag, endpoints: [] })
-    );
+    // Update form state with a slight delay to avoid dropdown disruption
+    setTimeout(() => {
+      input.onChange(
+        JSON.stringify({ schema: selectedSchema, tag, endpoints: [] })
+      );
+    }, 0);
 
     if (!tag || !selectedSchema) {
       setLoadingEndpoints(false);
@@ -228,7 +286,11 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       const { apiSchema } = await loadTagsForSchema(selectedSchema);
       if (apiSchema) {
         setLoadingEndpoints(true);
-        const endpointsList = loadEndpointsForTag(apiSchema, tag);
+        const endpointsList = loadEndpointsForTag(
+          apiSchema,
+          tag,
+          setIsValidPath
+        );
         setEndpoints(endpointsList);
         setLoadingEndpoints(false);
       }
@@ -305,23 +367,31 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
       </div>
       {selectedSchema && (
         <div className="mb-6">
-          <label className="font-bold text-slate-800 text-base mb-2 block">
-            Group/Tag
-          </label>
-          <CustomDropdown
-            options={tags.map((tag) => ({
-              value: tag,
-              label: tag,
-            }))}
-            value={selectedTag}
-            onChange={handleTagChange}
-            disabled={loadingTags}
-            placeholder={loadingTags ? "Loading tags..." : "Select a tag"}
-            className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          {hasTag || hasTag === null ? (
+            <>
+              <label className="font-bold text-slate-800 text-base mb-2 block">
+                Group/Tag
+              </label>
+              <CustomDropdown
+                options={tags.map((tag) => ({
+                  value: tag,
+                  label: tag,
+                }))}
+                value={selectedTag}
+                onChange={handleTagChange}
+                disabled={loadingTags}
+                placeholder={loadingTags ? "Loading tags..." : "Select a tag"}
+                className="w-full px-4 py-2 rounded-lg border border-slate-300 text-base bg-slate-50 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </>
+          ) : (
+            <div className="text-red-600 text-sm mt-1 border border-red-300 p-2 rounded-md">
+              ⚠️ No tags found for this schema.
+            </div>
+          )}
         </div>
       )}
-      {selectedTag && (
+      {(selectedTag || hasTag === false) && (
         <div>
           <div className="flex items-center mb-3">
             <label className="font-bold text-slate-800 text-base mr-4">
@@ -330,18 +400,39 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
             <button
               type="button"
               onClick={handleSelectAll}
-              disabled={loadingEndpoints}
-              className="ml-auto px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold text-sm shadow hover:bg-blue-700 transition-colors border border-blue-700 disabled:opacity-50"
+              disabled={loadingEndpoints || isValidPath === false}
+              className={`ml-auto px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold text-sm shadow hover:bg-blue-700 transition-colors border border-blue-700 disabled:opacity-50 ${
+                isValidPath === false ? "cursor-not-allowed" : ""
+              }`}
             >
               Select All
             </button>
           </div>
+          {!loadingEndpoints && isValidPath === false && (
+            <div className="text-red-600 text-sm mb-4 p-2 bg-red-50 border border-red-200 rounded-md text-wrap">
+              Unsupported Schema format detected. Please check the README for
+              supported endpoint configurations{" "}
+              <a
+                href="https://github.com/tinacms/tina-docs/tree/main?tab=readme-ov-file#api-documentation"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                Read more
+              </a>
+              .
+            </div>
+          )}
           {loadingEndpoints ? (
             <div className="text-slate-400 text-sm mb-4">
               Loading endpoints...
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto overflow-x-auto border border-gray-200 rounded-lg bg-slate-50 p-4 mb-4">
+            <div
+              className={`grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto overflow-x-auto border border-gray-200 rounded-lg bg-slate-50 p-4 mb-4 ${
+                isValidPath === false ? "opacity-50 cursor-not-allowed " : ""
+              }`}
+            >
               {endpoints.map((ep) => (
                 <label
                   key={ep.id}
@@ -349,7 +440,9 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                     selectedEndpoints.some((selected) => selected.id === ep.id)
                       ? "bg-indigo-50 border-indigo-400 shadow"
                       : "bg-white border-gray-200"
-                  } hover:bg-indigo-100`}
+                  } hover:bg-indigo-100 ${
+                    isValidPath === false ? "cursor-not-allowed" : ""
+                  }`}
                 >
                   <input
                     type="checkbox"
@@ -357,10 +450,17 @@ export const ApiReferencesSelector = wrapFieldsWithMeta((props: any) => {
                       (selected) => selected.id === ep.id
                     )}
                     onChange={() => handleEndpointCheckbox(ep.id)}
-                    className="accent-indigo-600 mr-3 cursor-pointer"
+                    className={`accent-indigo-600 mr-3 ${
+                      isValidPath === false
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
+                    disabled={isValidPath === false}
                   />
                   <span
-                    className="text-slate-700 text-sm font-medium truncate"
+                    className={`text-slate-700 text-sm font-medium truncate ${
+                      isValidPath === false ? "cursor-not-allowed" : ""
+                    }`}
                     style={{ maxWidth: "14rem", display: "inline-block" }}
                     title={ep.label}
                   >
