@@ -106,6 +106,11 @@ NEXT_PUBLIC_TINA_BRANCH=<your content branch>
 NEXT_PUBLIC_ENABLE_THEME_SELECTION=<display theme selector>
 ```
 
+If you want to test `pnpm build` locally, you need to add:
+```env
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
 **Theme Preview Mode:**
 To enable a theme selector in the UI for previewing all themes, add:
 ```env
@@ -334,6 +339,44 @@ The existing themes demonstrate different approaches:
 - **Indigo**: Modern purple/violet design
 
 Each theme includes comprehensive color variations for different UI states and accessibility considerations.
+
+---
+
+## 🛠️ Utility Scripts
+
+TinaDocs includes helpful utility scripts to manage your documentation project:
+
+### **Documentation Reset**
+
+Completely reset your documentation structure to start fresh:
+
+```bash
+pnpm run cleanup
+```
+
+**What it does:**
+- ✅ Removes all directories within `content/docs/` (preserves only `index.mdx`)
+- ✅ Removes all API schema files in `content/apiSchema/`
+- ✅ Removes docs-assets and landing-assets image directories
+- ✅ Completely removes the API tab from navigation
+- ✅ Clears Next.js cache (`.next` folder) to prevent stale page references
+- ✅ Provides a clean documentation slate for new content
+- ✅ Validates project structure before running
+- ✅ **Requires interactive confirmation** - asks for explicit "yes" to proceed
+
+> **🚨 CRITICAL WARNING:** 
+> 
+> **This command PERMANENTLY DELETES all documentation content.**
+> 
+> - ❌ **If you've already made changes**, running cleanup will DELETE your work
+> - ✅ **Run cleanup FIRST** if you want a clean slate, then make your changes
+> - ✅ **Commit your changes to git** before running cleanup if you want to preserve them
+> 
+> **This action cannot be undone unless you have committed your changes to version control.**
+
+> **⚠️ Important:** After running cleanup, you must restart your development server with `pnpm dev` to ensure Next.js rebuilds the site without cached references to deleted pages.
+
+For detailed information about available scripts, see [`scripts/README.md`](./scripts/README.md).
 
 ---
 

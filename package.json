@@ -10,7 +10,8 @@
     "export": "tinacms build && EXPORT_MODE=static,UNOPTIMIZED_IMAGES=true next build",
     "start": "tinacms build && next start",
     "lint": "biome check src/ tina/",
-    "lint:fix": "biome check src/ tina/ --fix"
+    "lint:fix": "biome check src/ tina/ --fix",
+    "cleanup": "node scripts/cleanup.js"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
