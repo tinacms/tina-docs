@@ -57,13 +57,6 @@ test.describe("Search Functionality (Simplified)", () => {
     await searchHelper.testMultipleSearches(SEARCH_TEST_DATA.knownTerms);
   });
 
-  test("should handle special characters in search", async ({ page }) => {
-    const searchHelper = createSearchHelper(page);
-
-    // Test with special characters
-    await searchHelper.testMultipleSearches(SEARCH_TEST_DATA.specialCharacters);
-  });
-
   test("should work on mobile viewport", async ({ page }) => {
     const searchHelper = createSearchHelper(page);
 

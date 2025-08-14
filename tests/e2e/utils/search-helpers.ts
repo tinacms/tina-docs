@@ -42,14 +42,18 @@ export class SearchHelper {
    * Get search results container
    */
   getSearchResultsContainer() {
-    return this.page.locator('div[class*="searchResultsContainer"]');
+    // Look for the search results container by its position and structure
+    // It's an absolute positioned div that contains search results
+    return this.page.locator(
+      'div.absolute:has(h3, div:has-text("No Llamas Found"), h4:has-text("Mustering"))'
+    );
   }
 
   /**
    * Get "No Llamas Found" message
    */
   getNoResultsMessage() {
-    return this.page.locator('div:has-text("No Llamas Found")');
+    return this.page.locator('div:has-text("No Llamas Found...")');
   }
 
   /**
