@@ -6,10 +6,8 @@ export const Body = ({
   children: React.ReactNode;
 }) => {
   return (
-    <>
-      <div data-pagefind-body id="doc-content">
-        {children}
-      </div>
-    </>
+    <div data-pagefind-body id="doc-content">
+      {children}
+    </div>
   );
 };
