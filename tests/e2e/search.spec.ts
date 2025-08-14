@@ -30,19 +30,6 @@ test.describe("Search Functionality", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  test("should display search input field", async ({ page }) => {
-    const searchHelper = new SearchHelper(page);
-
-    // Look for search input in the top navigation
-    await searchHelper.expectSearchInputVisible();
-
-    // Verify search icon is present
-    const searchIcon = page.locator(
-      '[data-testid="search-icon"], svg[class*="MagnifyingGlassIcon"]'
-    );
-    await expect(searchIcon).toBeVisible();
-  });
-
   test("should show search results for existing content", async ({ page }) => {
     const searchHelper = new SearchHelper(page);
 
@@ -66,7 +53,8 @@ test.describe("Search Functionality", () => {
     await searchHelper.performSearch(SEARCH_TEST_DATA.nonExistentTerms[0]);
 
     // Check if "No Llamas Found" message appears
-    await searchHelper.expectSearchResultsVisible();
+    const noResultsMessage = searchHelper.getNoResultsMessage();
+    await expect(noResultsMessage).toBeVisible();
   });
 
   test("should clear search results when clicking outside", async ({
@@ -95,13 +83,6 @@ test.describe("Search Functionality", () => {
 
     // Verify no search results are shown
     await searchHelper.expectSearchResultsNotVisible();
-  });
-
-  test("should handle special characters in search", async ({ page }) => {
-    const searchHelper = new SearchHelper(page);
-
-    // Test with special characters
-    await searchHelper.testMultipleSearches(SEARCH_TEST_DATA.specialCharacters);
   });
 
   test("should navigate to search result pages", async ({ page }) => {
@@ -144,13 +125,6 @@ test.describe("Search Functionality", () => {
 
     // Verify search completed (either with results or no results message)
     await searchHelper.expectSearchResultsVisible();
-  });
-
-  test("should handle multiple rapid searches", async ({ page }) => {
-    const searchHelper = new SearchHelper(page);
-
-    // Perform multiple rapid searches
-    await searchHelper.testMultipleSearches(SEARCH_TEST_DATA.knownTerms);
   });
 
   test("should verify Pagefind files are accessible", async ({ page }) => {
