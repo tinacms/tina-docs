@@ -130,7 +130,7 @@ export class SearchHelper {
     const pagefindIndexResponse = await this.page.request.get(
       isDev
         ? "http://localhost:3000/pagefind/pagefind-ui.js"
-        : `${process.env.BASE_URL}/_next/static/pagefind/pagefind-index.json`
+        : `${process.env.BASE_URL}/_next/static/pagefind/pagefind-ui.js`
     );
 
     expect(pagefindIndexResponse.status()).toBe(200);
