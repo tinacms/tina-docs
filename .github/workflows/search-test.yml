@@ -41,7 +41,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run search tests
-        run: pnpm test:search-simplified
+        run: pnpm test
         env:
           BASE_URL: ${{ inputs.base_url }}
 
