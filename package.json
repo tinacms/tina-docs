@@ -11,7 +11,15 @@
     "start": "tinacms build && next start",
     "lint": "biome check src/ tina/",
     "lint:fix": "biome check src/ tina/ --fix",
-    "cleanup": "node scripts/cleanup.js"
+    "cleanup": "node scripts/cleanup.js",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:search": "playwright test search",
+    "test:search-simplified": "playwright test search-simplified",
+    "test:preview": "playwright test",
+    "test:preview-search": "playwright test --baseURL=$PREVIEW_URL search"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -43,10 +51,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.54.2",
     "@shikijs/transformers": "^3.6.0",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.8",
     "@tinacms/cli": "^1.10.1",
+    "@types/node": "^24.2.1",
     "autoprefixer": "^10.4.21",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "next-sitemap": "^4.2.3",
