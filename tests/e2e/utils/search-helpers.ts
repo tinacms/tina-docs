@@ -42,25 +42,26 @@ export class SearchHelper {
    * Get search results container
    */
   getSearchResultsContainer() {
-    // Look for the search results container by its position and structure
-    // It's an absolute positioned div that contains search results
-    return this.page.locator(
-      'div.absolute:has(h3, div:has-text("No Llamas Found"), h4:has-text("Mustering"))'
-    );
+    // Use the data-testid attribute for reliable selection
+    return this.page.locator('[data-testid="search-results-container"]');
   }
 
   /**
    * Get "No Llamas Found" message
    */
   getNoResultsMessage() {
-    return this.page.locator('div:has-text("No Llamas Found...")');
+    // Use the data-testid attribute for reliable selection
+    return this.page.locator('[data-testid="no-results-message"]');
   }
 
   /**
    * Get loading message
    */
   getLoadingMessage() {
-    return this.page.locator('div:has-text("Mustering all the Llamas")');
+    // Look for the loading message within the search results container
+    return this.page.locator(
+      '[data-testid="search-results-container"] h4:has-text("Mustering all the Llamas")'
+    );
   }
 
   /**
