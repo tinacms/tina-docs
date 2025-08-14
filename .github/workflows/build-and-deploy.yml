@@ -108,6 +108,12 @@ jobs:
         with:
           path: ./.next
 
+  search-tests:
+    needs: build
+    uses: ./.github/workflows/search-test.yml
+    with:
+      base_url: https://tina-docs-red.vercel.app/
+
   # Deployment job
   deploy:
     environment:
