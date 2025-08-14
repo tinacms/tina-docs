@@ -16,7 +16,7 @@ on:
 
 jobs:
   test-search:
-    name: Test Search
+    name: Test Search Functionality
     runs-on: ubuntu-latest
     
     steps:
@@ -39,11 +39,6 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-
-      - name: Wait for deployment to be ready
-        run: |
-          echo "Waiting for deployment to be ready..."
-          sleep 60
 
       - name: Run search tests
         run: pnpm test:search-simplified

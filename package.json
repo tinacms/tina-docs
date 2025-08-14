@@ -13,13 +13,7 @@
     "lint:fix": "biome check src/ tina/ --fix",
     "cleanup": "node scripts/cleanup.js",
     "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug",
-    "test:search": "playwright test search",
-    "test:search-simplified": "playwright test search-simplified",
-    "test:preview": "playwright test",
-    "test:preview-search": "playwright test --baseURL=$PREVIEW_URL search"
+    "test:ui": "playwright test --ui"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
