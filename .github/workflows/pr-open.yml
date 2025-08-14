@@ -43,3 +43,9 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  search-tests:
+    uses: ./.github/workflows/search-test.yml
+    needs: build
+    with:
+      base_url: https://tina-docs-git-${{ github.head_ref }}.vercel.app
