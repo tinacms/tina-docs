@@ -106,10 +106,10 @@ export class SearchHelper {
   }
 
   /**
-   * Clear search by clicking outside
+   * Clear search by clicking the copy button
    */
   async clearSearch() {
-    await this.page.click("body");
+    await this.page.click('button:has-text("Copy")');
   }
 
   /**
