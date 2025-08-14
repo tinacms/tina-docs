@@ -22,7 +22,10 @@ export function SearchResults({
 }: SearchResultsProps) {
   if (isLoading) {
     return (
-      <div className={searchResultsContainer} data-testid="search-results-container">
+      <div
+        className={searchResultsContainer}
+        data-testid="search-results-container"
+      >
         <h4 className="text-brand-primary font-bold my-2">
           Mustering all the Llamas...
         </h4>
@@ -32,7 +35,10 @@ export function SearchResults({
 
   if (results.length > 0) {
     return (
-      <div className={searchResultsContainer} data-testid="search-results-container">
+      <div
+        className={searchResultsContainer}
+        data-testid="search-results-container"
+      >
         {results.map((result, index) => (
           <Link
             key={index}
@@ -57,8 +63,14 @@ export function SearchResults({
 
   if (searchTerm.length > 0) {
     return (
-      <div className={searchResultsContainer} data-testid="search-results-container">
-        <div className="py-2 px-4 text-md font-inter font-semibold text-gray-500 text-bold" data-testid="no-results-message">
+      <div
+        className={searchResultsContainer}
+        data-testid="search-results-container"
+      >
+        <div
+          className="py-2 px-4 text-md font-inter font-semibold text-gray-500 text-bold"
+          data-testid="no-results-message"
+        >
           No Llamas Found...
         </div>
       </div>
