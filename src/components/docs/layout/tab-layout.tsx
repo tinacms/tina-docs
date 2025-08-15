@@ -77,12 +77,10 @@ export const TabsLayout = ({
         <div className="w-full flex flex-col md:flex-row gap-4 md:p-4 max-w-[2560px] mx-auto">
           <Sidebar tabs={tabs} />
           <main className="flex-1">
-            {selectedTab && (
-              <Body
-                navigationDocsData={objectOfSelectedTab?.content}
-                children={children}
-              />
-            )}
+            <Body
+              navigationDocsData={objectOfSelectedTab?.content}
+              children={children}
+            />
           </main>
         </div>
       </NavigationProvider>

@@ -1,0 +1,84 @@
+name: Search Functionality Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Base URL to test (required)'
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      base_url:
+        description: 'Base URL to test (required)'
+        required: true
+        type: string
+
+jobs:
+  test-search:
+    name: Test Search Functionality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run search tests
+        run: pnpm test
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
+  report-results:
+    name: Report Test Results
+    runs-on: ubuntu-latest
+    needs: [test-search]
+    if: always()
+    
+    steps:
+      - name: Download test results
+        uses: actions/download-artifact@v4
+        with:
+          path: test-results/
+
+      - name: Create test summary
+        run: |
+          echo "## Search Functionality Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "test-results/test-results/test-results/results.json" ]; then
+            echo "### Search Tests ✅" >> $GITHUB_STEP_SUMMARY
+            echo "Search tests completed successfully." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Search Tests ❌" >> $GITHUB_STEP_SUMMARY
+            echo "Search tests failed or were not run." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check the artifacts for detailed test reports." >> $GITHUB_STEP_SUMMARY

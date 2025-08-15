@@ -44,3 +44,5 @@ yarn-error.log*
 #sitemaps
 /public/sitemap.xml
 /public/sitemap-0.xml
+/playwright-report
+/test-results
