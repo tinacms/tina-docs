@@ -28,31 +28,16 @@ The search tests verify that the Pagefind-based search functionality works corre
    pnpm dev
    ```
 
-2. **Run tests against local server:**
-   ```bash
-   pnpm test:local
-   ```
-
-3. **Run specific search tests:**
-   ```bash
-   pnpm test:search-simplified
-   ```
-
-4. **Run tests with UI (for debugging):**
+2. **Run tests with UI (for debugging):**
    ```bash
    pnpm test:ui
-   ```
-
-5. **Run tests in headed mode (see browser):**
-   ```bash
-   pnpm test:headed
    ```
 
 ### Preview/Production Testing
 
 1. **Test against a specific URL:**
    ```bash
-   PREVIEW_URL=https://your-preview-url.com pnpm test:preview
+   PREVIEW_URL=https://your-preview-url.com pnpm test
    ```
 
 2. **Run all tests:**
@@ -66,12 +51,8 @@ The search tests verify that the Pagefind-based search functionality works corre
 - ✅ Search input field is visible
 - ✅ Search returns results for existing content
 - ✅ Search shows "No Llamas Found" for non-existent content
-- ✅ Search results are clickable and navigate correctly
-
-### User Experience
 - ✅ Search clears when clicking outside
 - ✅ Empty search input is handled gracefully
-- ✅ Special characters in search terms are handled
 - ✅ Multiple rapid searches work correctly
 
 ### Technical Verification
@@ -81,7 +62,6 @@ The search tests verify that the Pagefind-based search functionality works corre
 
 ### Performance
 - ✅ Search performance is measured and reported
-- ✅ Pagefind index files are valid JSON
 
 ## GitHub Actions Integration
 
@@ -89,13 +69,6 @@ The tests are automatically run in GitHub Actions on:
 
 1. **Pull Requests** - Tests run against Vercel preview deployments
 2. **Manual Workflow** - Can test against any preview URL
-
-### Workflow Jobs
-
-- `test-search-local` - Builds and tests locally
-- `test-search-preview` - Tests against provided preview URL
-- `test-search-vercel-preview` - Tests against Vercel preview deployments
-- `report-results` - Creates summary report
 
 ## Configuration
 
@@ -107,7 +80,7 @@ The tests are automatically run in GitHub Actions on:
 ### Playwright Configuration
 
 See `playwright.config.ts` for:
-- Browser configurations (Chrome, Firefox, Safari, Mobile)
+- Browser configurations (Chrome)
 - Test timeouts and retries
 - Screenshot and video capture settings
 - Report generation
