@@ -91,7 +91,7 @@ export const ThemeSelector = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 bg-neutral-surface p-1 rounded-lg shadow-lg">
+    <div className="bg-neutral-surface p-1 rounded-lg shadow-lg">
       <div className="relative" ref={dropdownRef}>
         <div className="flex items-center gap-2">
           <div className="relative" ref={tooltipRef}>
