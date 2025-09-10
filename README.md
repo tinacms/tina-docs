@@ -31,7 +31,7 @@ TinaDocs is a complete documentation solution built with [Tina CMS](https://tina
 The fastest way to get started with TinaDocs is using npx:
 
 ```bash
-npx {{ TODO }} my-docs --template tinadocs
+npx create-tina-app@latest
 ```
 
 This command will:
