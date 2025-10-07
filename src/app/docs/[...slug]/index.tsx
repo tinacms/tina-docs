@@ -6,6 +6,7 @@ import { useNavigation } from "@/components/docs/layout/navigation-context";
 import { OnThisPage } from "@/components/docs/on-this-page";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { Pagination } from "@/components/ui/pagination";
+import GitHubMetadata from "@/src/components/page-metadata/github-metadata";
 import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
@@ -55,6 +56,8 @@ export default function Document({ props, tinaProps }) {
             </h1>
             <CopyPageDropdown className="self-end mb-2 md:mb-0" />
           </div>
+          <GitHubMetadata path={documentationData?.id} />
+
           {/* CONTENT */}
           <div
             ref={contentRef}

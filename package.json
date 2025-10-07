@@ -21,6 +21,7 @@
     "@radix-ui/react-dropdown-menu": "^2.1.15",
     "@radix-ui/react-tabs": "^1.1.12",
     "copy-to-clipboard": "^3.3.3",
+    "date-fns": "^4.1.0",
     "fast-glob": "^3.3.3",
     "html-to-md": "^0.8.8",
     "lodash": "^4.17.21",
