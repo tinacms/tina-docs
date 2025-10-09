@@ -7,14 +7,15 @@ on:
         description: 'Base URL to test (required)'
         required: true
         type: string
-      NEXT_PUBLIC_BASE_PATH:
-        description: 'Base path to test (required)'
-        required: true
-        type: string
+
   workflow_call:
     inputs:
       base_url:
         description: 'Base URL to test (required)'
+        required: true
+        type: string
+      NEXT_PUBLIC_BASE_PATH:
+        description: 'Base path (required)'
         required: true
         type: string
 
