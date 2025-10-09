@@ -7,6 +7,10 @@ on:
         description: 'Base URL to test (required)'
         required: true
         type: string
+      NEXT_PUBLIC_BASE_PATH:
+        description: 'Base path to test (required)'
+        required: true
+        type: string
   workflow_call:
     inputs:
       base_url:
@@ -44,6 +48,7 @@ jobs:
         run: pnpm test
         env:
           BASE_URL: ${{ inputs.base_url }}
+          NEXT_PUBLIC_BASE_PATH: ${{ inputs.NEXT_PUBLIC_BASE_PATH || '' }}
 
       - name: Upload test results
         if: always()

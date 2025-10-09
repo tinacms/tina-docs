@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build sample
+
+    outputs:
+      NEXT_PUBLIC_BASE_PATH: ${{ steps.setup-base-path.outputs.NEXT_PUBLIC_BASE_PATH }}
+
     steps:
       - uses: actions/checkout@v4
       - name: Setup node
@@ -41,6 +45,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v2
+        with:
+          path: ./.github
+
+      - name: Setup Base Path
+        id: setup-base-path
+        run: |
+          echo "NEXT_PUBLIC_BASE_PATH=${{ env.NEXT_PUBLIC_BASE_PATH }}" >> $env:GITHUB_OUTPUT
+
       - name: Build
         run: pnpm build
 
@@ -49,3 +63,4 @@ jobs:
     uses: ./.github/workflows/search-test.yml
     with:
       base_url: https://tina-docs-git-${{ github.head_ref }}-tinacms.vercel.app
+      NEXT_PUBLIC_BASE_PATH: ${{ needs.build.outputs.NEXT_PUBLIC_BASE_PATH }}
