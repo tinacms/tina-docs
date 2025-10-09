@@ -1,6 +1,12 @@
 {
   "selectedTheme": "default",
-  "redirects": [],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/docs",
+      "permanent": true
+    }
+  ],
   "title": "Tina",
   "description": "TinaCMS is a fully open-source headless CMS that supports Git",
   "seoDefaultTitle": "TinaCMS – Headless CMS with GitHub & Markdown Support",
