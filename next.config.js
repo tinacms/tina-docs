@@ -60,7 +60,6 @@ module.exports = {
       source: redirect.source,
       destination: redirect.destination,
       permanent: redirect.permanent,
-      basePath: false, // Prevent automatic basePath prefixing
     }));
   },
 
