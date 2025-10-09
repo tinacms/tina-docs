@@ -122,7 +122,7 @@ export class SearchHelper {
     const pagefindJsResponse = await this.page.request.get(
       isDev
         ? "http://localhost:3000/pagefind/pagefind.js"
-        : `${process.env.BASE_URL}/_next/static/pagefind/pagefind.js`
+        : `${process.env.BASE_URL}/tinadocs/_next/static/pagefind/pagefind.js`
     );
     expect(pagefindJsResponse.status()).toBe(200);
 
@@ -130,7 +130,7 @@ export class SearchHelper {
     const pagefindIndexResponse = await this.page.request.get(
       isDev
         ? "http://localhost:3000/pagefind/pagefind-ui.js"
-        : `${process.env.BASE_URL}/_next/static/pagefind/pagefind-ui.js`
+        : `${process.env.BASE_URL}/tinadocs/_next/static/pagefind/pagefind-ui.js`
     );
 
     expect(pagefindIndexResponse.status()).toBe(200);
