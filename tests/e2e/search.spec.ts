@@ -24,7 +24,7 @@ const KNOWN_CONTENT = {
 test.describe("Search Functionality", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the docs page before each test
-    await page.goto("/docs");
+    await page.goto("/tinadocs/docs");
 
     // Wait for the page to load completely
     await page.waitForLoadState("networkidle");

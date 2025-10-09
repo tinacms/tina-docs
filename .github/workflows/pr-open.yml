@@ -48,4 +48,4 @@ jobs:
     needs: build
     uses: ./.github/workflows/search-test.yml
     with:
-      base_url: https://tina-docs-git-${{ github.head_ref }}-tinacms.vercel.app/tinadocs
+      base_url: https://tina-docs-git-${{ github.head_ref }}-tinacms.vercel.app
