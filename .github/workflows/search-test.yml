@@ -7,7 +7,6 @@ on:
         description: 'Base URL to test (required)'
         required: true
         type: string
-
   workflow_call:
     inputs:
       base_url:
