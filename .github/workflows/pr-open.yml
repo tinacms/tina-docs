@@ -10,6 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build sample
+    
 
     outputs:
       NEXT_PUBLIC_BASE_PATH: ${{ steps.setup-base-path.outputs.NEXT_PUBLIC_BASE_PATH }}
@@ -53,8 +54,7 @@ jobs:
       - name: Setup Base Path
         id: setup-base-path
         run: |
-          echo ${{ env.NEXT_PUBLIC_BASE_PATH }}
-          echo "NEXT_PUBLIC_BASE_PATH=${{ env.NEXT_PUBLIC_BASE_PATH }}" >> $env:GITHUB_OUTPUT
+          echo "NEXT_PUBLIC_BASE_PATH=${{ env.NEXT_PUBLIC_BASE_PATH }}" >> $GITHUB_OUTPUT
 
       - name: Build
         run: pnpm build
