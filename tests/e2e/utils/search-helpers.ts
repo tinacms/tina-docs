@@ -8,7 +8,7 @@ export class SearchHelper {
    * Navigate to the docs page and wait for it to load
    */
   async navigateToDocs() {
-    await this.page.goto("/tinadocs/docs");
+    await this.page.goto(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/docs`);
     await this.page.waitForLoadState("networkidle");
   }
 
