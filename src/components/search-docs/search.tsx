@@ -7,7 +7,9 @@ import { SearchResults } from "./search-results";
 const isDev = process.env.NODE_ENV === "development";
 // In development, the pagefind-entry.json is served from the root of the project.
 // In production, it is served from the _next/static/pagefind directory.
-const pagefindPath = isDev ? "/pagefind" : "/_next/static/pagefind";
+const pagefindPath = isDev
+  ? "/pagefind"
+  : `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/_next/static/pagefind`;
 
 export function Search({ className }: { className?: string }) {
   const [searchTerm, setSearchTerm] = useState("");
