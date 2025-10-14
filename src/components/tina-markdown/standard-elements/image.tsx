@@ -36,9 +36,7 @@ export const ImageComponent = (props) => {
             }}
           >
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${
-                props?.url || ""
-              }`}
+              src={props?.url || ""}
               alt={props?.alt || ""}
               title={props?.caption || ""}
               fill
