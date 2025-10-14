@@ -186,9 +186,7 @@ export const AccordionBlock = (props) => {
                 )}
               >
                 <ImageOverlayWrapper
-                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${
-                    item.image
-                  }`}
+                  src={item.image}
                   alt="image"
                   caption={item?.heading}
                 >
