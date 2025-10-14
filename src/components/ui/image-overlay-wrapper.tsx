@@ -79,7 +79,7 @@ export const ImageOverlayWrapper = ({
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${src}`}
+                    src={`${src}`}
                     alt={alt}
                     layout="fill"
                     objectFit="contain"
