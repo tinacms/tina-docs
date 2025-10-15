@@ -8,6 +8,7 @@ module.exports = {
   output: "standalone",
   outDir: "public/doc",
 
+  generateIndexSitemap: false,
   robotsTxtOptions: {
     policies: [
       {
