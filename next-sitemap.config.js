@@ -7,6 +7,7 @@ module.exports = {
   generateRobotsTxt: true,
   output: "standalone",
   outDir: "public/doc",
+  generateIndexSitemap: false,
   robotsTxtOptions: {
     policies: [
       {
