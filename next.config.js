@@ -50,6 +50,10 @@ module.exports = {
   async rewrites() {
     return [
       {
+        source: "/docs/sitemap.xml",
+        destination: "/sitemap.xml",
+      },
+      {
         source: "/admin",
         destination: "/admin/index.html",
       },
