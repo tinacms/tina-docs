@@ -6,6 +6,8 @@ module.exports = {
   sitemapSize: 5000,
   generateRobotsTxt: true,
   output: "standalone",
+  outDir: "public/doc",
+  generateIndexSitemap: false,
   robotsTxtOptions: {
     policies: [
       {
