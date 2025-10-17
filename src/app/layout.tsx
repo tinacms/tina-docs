@@ -1,7 +1,6 @@
 import "@/styles/global.css";
 import AdminLink from "@/components/ui/admin-link";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
-import { ThemeSelector } from "@/components/ui/theme-selector";
 import settings from "@/content/settings/config.json";
 import client from "@/tina/__generated__/client";
 import { ThemeProvider } from "next-themes";
@@ -44,7 +43,6 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange={false}
         >
-          {isThemeSelectorEnabled && <ThemeSelector />}
           <Content>
             <DocsMenu>{children}</DocsMenu>
           </Content>
