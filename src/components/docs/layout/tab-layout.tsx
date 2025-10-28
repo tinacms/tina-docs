@@ -10,6 +10,7 @@ import { NavigationProvider } from "./navigation-context";
 import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
 import { findTabWithPath } from "./utils";
+import { DocsFooter } from "../footer";
 
 export const TabsLayout = ({
   props: { children },
@@ -83,6 +84,7 @@ export const TabsLayout = ({
             />
           </main>
         </div>
+        <DocsFooter />
       </NavigationProvider>
     </Tabs.Root>
   );
