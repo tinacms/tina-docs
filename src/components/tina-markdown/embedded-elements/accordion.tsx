@@ -62,24 +62,28 @@ const Accordion = (props) => {
               components={MarkdownComponentMapping}
             />
           </div>
-          {image && (
-            <div className="p-4" data-tina-field={tinaField(props, "image")}>
+            {image && (
+              <div
+                className="p-4"
+                data-tina-field={tinaField(props, "image")}
+              >
                 <ImageOverlayWrapper
                   src={image}
                   alt="image"
                   caption={heading}
                 >
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${image}`}
-                alt="image"
-                className="rounded-lg"
-                width={500}
-                height={500}
-              />
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${
+                      image
+                    }`}
+                    alt="image"
+                    className="rounded-lg"
+                    width={500}
+                    height={500}
+                  />
                 </ImageOverlayWrapper>
-
-            </div>
-          )}
+              </div>
+            )}
         </div>
       </div>
     </div>
