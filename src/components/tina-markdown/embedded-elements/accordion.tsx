@@ -64,13 +64,15 @@ const Accordion = (props) => {
           </div>
           {image && (
             <div className="p-4" data-tina-field={tinaField(props, "image")}>
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${image}`}
-                alt="image"
-                className="rounded-lg"
-                width={500}
-                height={500}
-              />
+              <ImageOverlayWrapper src={image} alt="image" caption={heading}>
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${image}`}
+                  alt="image"
+                  className="rounded-lg"
+                  width={500}
+                  height={500}
+                />
+              </ImageOverlayWrapper>
             </div>
           )}
         </div>
