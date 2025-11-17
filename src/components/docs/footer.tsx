@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
 import { ThemeSelector } from "@/components/ui/theme-selector";
+import Image from "next/image";
+import Link from "next/link";
 
 export const DocsFooter = () => {
   return (
@@ -8,7 +8,7 @@ export const DocsFooter = () => {
       <div className="flex justify-between items-center max-w-[2560px] mx-auto px-4">
         {/* Left: Empty space for balance */}
         <div className="flex-1" />
-        
+
         {/* Center: Powered by TinaCMS */}
         <div className="flex justify-center items-center flex-1">
           <Link
