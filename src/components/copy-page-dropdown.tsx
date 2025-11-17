@@ -84,7 +84,11 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
     const filename = `${pathname}.md`;
 
     try {
-      const res = await fetch("/api/export-md", {
+      // Include basePath if configured
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+      const apiUrl = `${basePath}/api/export-md`;
+
+      const res = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: markdown, filename }),
