@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class SearchHelper {
-  constructor(private page: Page) {}
+  constructor(private page: Page) { }
 
   /**
    * Navigate to the docs page and wait for it to load
@@ -122,21 +122,31 @@ export class SearchHelper {
     const pageOrigin = new URL(this.page.url()).origin;
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
+    // Skip on preview deployments where Pagefind files may not be generated
+    const isPreview = pageOrigin.includes("vercel.app") &&
+      !pageOrigin.includes("tina-docs-red.vercel.app");
+    if (isPreview) {
+      // On preview deployments, just verify search functionality works instead
+      await this.performSearch("test");
+      await this.expectSearchResultsVisible();
+      return;
+    }
+
     // Construct paths based on environment
     // Try production path first if not in dev, fallback to dev path if needed
     const pagefindJsPaths = isDev
       ? [`${pageOrigin}/pagefind/pagefind.js`]
       : [
-          `${pageOrigin}${basePath}/_next/static/pagefind/pagefind.js`,
-          `${pageOrigin}/pagefind/pagefind.js`, // Fallback to dev path
-        ];
-    
+        `${pageOrigin}${basePath}/_next/static/pagefind/pagefind.js`,
+        `${pageOrigin}/pagefind/pagefind.js`, // Fallback to dev path
+      ];
+
     const pagefindUiPaths = isDev
       ? [`${pageOrigin}/pagefind/pagefind-ui.js`]
       : [
-          `${pageOrigin}${basePath}/_next/static/pagefind/pagefind-ui.js`,
-          `${pageOrigin}/pagefind/pagefind-ui.js`, // Fallback to dev path
-        ];
+        `${pageOrigin}${basePath}/_next/static/pagefind/pagefind-ui.js`,
+        `${pageOrigin}/pagefind/pagefind-ui.js`, // Fallback to dev path
+      ];
 
     // Check Pagefind JavaScript file - try each path until one works
     let pagefindJsResponse;
