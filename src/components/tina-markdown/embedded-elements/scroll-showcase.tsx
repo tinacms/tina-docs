@@ -161,7 +161,9 @@ export function ScrollBasedShowcase(data: {
                     On larger screens, the separate container is used. */}
                 {item.image && (
                   <Image
-                    src={item.image}
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${
+                      item.image
+                    }`}
                     alt={item.title}
                     width={500}
                     height={300}
@@ -177,7 +179,9 @@ export function ScrollBasedShowcase(data: {
         <div className="relative hidden w-full flex-1 overflow-hidden md:block">
           {activeImageSrc && (
             <Image
-              src={activeImageSrc}
+              src={`${
+                process.env.NEXT_PUBLIC_BASE_PATH || ""
+              }${activeImageSrc}`}
               alt=""
               width={500}
               height={300}

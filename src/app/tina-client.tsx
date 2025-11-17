@@ -25,14 +25,20 @@ export type TinaClientProps<T> = {
 };
 
 export function TinaClient<T>({ props, Component }: TinaClientProps<T>) {
-  const { data } = useTina({
-    query: props.query,
-    variables: props.variables,
-    data: props.data,
-    experimental___selectFormByFormId() {
-      return `content/docs/${props.forceExperimental}`;
-    },
-  });
+  const { data } = props.forceExperimental
+    ? useTina({
+        query: props.query,
+        variables: props.variables,
+        data: props.data,
+        experimental___selectFormByFormId() {
+          return `content/docs/${props.forceExperimental}`;
+        },
+      })
+    : useTina({
+        query: props.query,
+        variables: props.variables,
+        data: props.data,
+      });
 
   return <Component tinaProps={{ data }} props={{ ...props }} />;
 }

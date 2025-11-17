@@ -4,6 +4,9 @@ const redirects = require("./content/settings/config.json")?.redirects || [];
 /** @type {import('next').NextConfig} */
 
 const isStatic = process.env.EXPORT_MODE === "static";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const assetPrefix =
+  process.env.NEXT_PUBLIC_ASSET_PREFIX || basePath || undefined;
 
 const extraConfig = {};
 
@@ -15,7 +18,10 @@ if (isStatic) {
 
 module.exports = {
   ...extraConfig,
+  basePath,
+  assetPrefix,
   images: {
+    path: `${assetPrefix}/_next/image`,
     remotePatterns: [
       {
         protocol: "https",

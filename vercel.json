@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/tinadocs",
+      "permanent": true
+    }
+  ]
+}
