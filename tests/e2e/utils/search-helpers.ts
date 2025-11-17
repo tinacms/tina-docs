@@ -118,25 +118,27 @@ export class SearchHelper {
   async verifyPagefindFilesAccessible() {
     const isDev = this.page.url().includes("localhost");
 
+    // Get the base URL from the current page to handle basePath correctly
+    const currentUrl = new URL(this.page.url());
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const baseUrl = isDev
+      ? "http://localhost:3000"
+      : `${currentUrl.protocol}//${currentUrl.host}`;
+
     // Check Pagefind JavaScript file
-    const pagefindJsResponse = await this.page.request.get(
-      isDev
-        ? "http://localhost:3000/pagefind/pagefind.js"
-        : `${process.env.BASE_URL}${
-            process.env.NEXT_PUBLIC_BASE_PATH ?? ""
-          }/_next/static/pagefind/pagefind.js`
-    );
+    const pagefindJsUrl = isDev
+      ? "http://localhost:3000/pagefind/pagefind.js"
+      : `${baseUrl}${basePath}/_next/static/pagefind/pagefind.js`;
+
+    const pagefindJsResponse = await this.page.request.get(pagefindJsUrl);
     expect(pagefindJsResponse.status()).toBe(200);
 
     // Check Pagefind index file
-    const pagefindIndexResponse = await this.page.request.get(
-      isDev
-        ? "http://localhost:3000/pagefind/pagefind-ui.js"
-        : `${process.env.BASE_URL}${
-            process.env.NEXT_PUBLIC_BASE_PATH ?? ""
-          }/_next/static/pagefind/pagefind-ui.js`
-    );
+    const pagefindIndexUrl = isDev
+      ? "http://localhost:3000/pagefind/pagefind-ui.js"
+      : `${baseUrl}${basePath}/_next/static/pagefind/pagefind-ui.js`;
 
+    const pagefindIndexResponse = await this.page.request.get(pagefindIndexUrl);
     expect(pagefindIndexResponse.status()).toBe(200);
   }
 
