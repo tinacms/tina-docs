@@ -5,12 +5,12 @@ import type { NavigationBarData } from "@/src/utils/docs/navigation/documentNavi
 import * as Tabs from "@radix-ui/react-tabs";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { DocsFooter } from "../footer";
 import { Body } from "./body";
 import { NavigationProvider } from "./navigation-context";
 import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
 import { findTabWithPath } from "./utils";
-import { DocsFooter } from "../footer";
 
 export const TabsLayout = ({
   props: { children },
