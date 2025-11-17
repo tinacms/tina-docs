@@ -5,12 +5,8 @@ import Link from "next/link";
 export const DocsFooter = () => {
   return (
     <footer className="w-full py-8 mt-16 border-t border-gray-200 dark:border-gray-700">
-      <div className="flex justify-between items-center max-w-[2560px] mx-auto px-4">
-        {/* Left: Empty space for balance */}
-        <div className="flex-1" />
+      <div className='max-w-[2560px] mx-auto px-4 flex items-center justify-center'>
 
-        {/* Center: Powered by TinaCMS */}
-        <div className="flex justify-center items-center flex-1">
           <Link
             href="https://tina.io/"
             target="_blank"
@@ -28,18 +24,14 @@ export const DocsFooter = () => {
               Powered by TinaCMS
             </span>
           </Link>
-        </div>
 
-        {/* Right: Theme Selector */}
-        <div className="flex-1 flex justify-end">
-          <div className="relative">
+          <div className='ml-auto'>
             {(process.env.NODE_ENV === "development" ||
               process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true") && (
               <ThemeSelector />
             )}
           </div>
         </div>
-      </div>
     </footer>
   );
 };
