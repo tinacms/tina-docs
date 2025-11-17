@@ -43,7 +43,7 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       mermaid:
-        specifier: ^11.12.1
+        specifier: ^11.6.0
         version: 11.12.1
       monaco-editor:
         specifier: ^0.52.2
