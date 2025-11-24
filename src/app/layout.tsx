@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 
 import { TabsLayout } from "@/components/docs/layout/tab-layout";
+import { Footer } from "@/components/docs/footer";
 import type React from "react";
 import { TinaClient } from "./tina-client";
 
@@ -58,6 +59,7 @@ const Content = ({ children }: { children?: React.ReactNode }) => (
     <TailwindIndicator />
     <div className="font-sans flex min-h-screen flex-col bg-background-color">
       <div className="flex flex-1 flex-col items-center">{children}</div>
+      <Footer />
     </div>
   </>
 );
