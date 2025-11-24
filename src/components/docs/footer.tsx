@@ -1,4 +1,5 @@
 import { ThemeSelector } from "@/components/ui/theme-selector";
+import { isThemeSelectorEnabled } from "@/app/layout";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -24,10 +25,7 @@ export const Footer = () => {
           </span>
         </Link>
         <div className="absolute right-4">
-          {(process.env.NODE_ENV === "development" ||
-            process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true") && (
-            <ThemeSelector />
-          )}
+          {isThemeSelectorEnabled && <ThemeSelector />}
         </div>
       </div>
     </footer>

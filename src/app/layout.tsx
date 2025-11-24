@@ -19,7 +19,7 @@ const heading = Roboto_Flex({
   variable: "--heading-font",
 });
 
-const isThemeSelectorEnabled =
+export const isThemeSelectorEnabled =
   process.env.NODE_ENV === "development" ||
   process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
 
