@@ -1,5 +1,5 @@
-import { ThemeSelector } from "@/components/ui/theme-selector";
 import { isThemeSelectorEnabled } from "@/app/layout";
+import { ThemeSelector } from "@/components/ui/theme-selector";
 import Image from "next/image";
 import Link from "next/link";
 

@@ -6,8 +6,8 @@ import client from "@/tina/__generated__/client";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 
-import { TabsLayout } from "@/components/docs/layout/tab-layout";
 import { Footer } from "@/components/docs/footer";
+import { TabsLayout } from "@/components/docs/layout/tab-layout";
 import type React from "react";
 import { TinaClient } from "./tina-client";
 
