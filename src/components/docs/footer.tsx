@@ -2,7 +2,7 @@ import { ThemeSelector } from "@/components/ui/theme-selector";
 import Image from "next/image";
 import Link from "next/link";
 
-export const DocsFooter = () => {
+export const Footer = () => {
   return (
     <footer className="w-full py-8 mt-16 border-t border-gray-200 dark:border-gray-700">
       <div className="max-w-[2560px] mx-auto px-4 flex items-center justify-center">

@@ -5,7 +5,7 @@ import type { NavigationBarData } from "@/src/utils/docs/navigation/documentNavi
 import * as Tabs from "@radix-ui/react-tabs";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { DocsFooter } from "../footer";
+import { Footer } from "../footer";
 import { Body } from "./body";
 import { NavigationProvider } from "./navigation-context";
 import { Sidebar } from "./sidebar";
@@ -84,7 +84,7 @@ export const TabsLayout = ({
             />
           </main>
         </div>
-        <DocsFooter />
+        <Footer />
       </NavigationProvider>
     </Tabs.Root>
   );
