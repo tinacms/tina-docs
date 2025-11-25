@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class SearchHelper {
-  constructor(private page: Page) { }
+  constructor(private page: Page) {}
 
   /**
    * Navigate to the docs page and wait for it to load
@@ -116,61 +116,28 @@ export class SearchHelper {
    * Verify Pagefind files are accessible
    */
   async verifyPagefindFilesAccessible() {
-    // Determine if we're in dev mode by checking BASE_URL or page origin
-    const baseUrl = process.env.BASE_URL || "http://localhost:3000";
-    const isDev = baseUrl.includes("localhost") || this.page.url().includes("localhost");
-    const pageOrigin = new URL(this.page.url()).origin;
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const isDev = this.page.url().includes("localhost");
 
-    // Skip on preview deployments where Pagefind files may not be generated
-    const isPreview = pageOrigin.includes("vercel.app") &&
-      !pageOrigin.includes("tina-docs-red.vercel.app");
-    if (isPreview) {
-      // On preview deployments, just verify search functionality works instead
-      await this.performSearch("test");
-      await this.expectSearchResultsVisible();
-      return;
-    }
+    // Check Pagefind JavaScript file
+    const pagefindJsResponse = await this.page.request.get(
+      isDev
+        ? "http://localhost:3000/pagefind/pagefind.js"
+        : `${process.env.BASE_URL}${
+            process.env.NEXT_PUBLIC_BASE_PATH ?? ""
+          }/_next/static/pagefind/pagefind.js`
+    );
+    expect(pagefindJsResponse.status()).toBe(200);
 
-    // Construct paths based on environment
-    // Try production path first if not in dev, fallback to dev path if needed
-    const pagefindJsPaths = isDev
-      ? [`${pageOrigin}/pagefind/pagefind.js`]
-      : [
-        `${pageOrigin}${basePath}/_next/static/pagefind/pagefind.js`,
-        `${pageOrigin}/pagefind/pagefind.js`, // Fallback to dev path
-      ];
+    // Check Pagefind index file
+    const pagefindIndexResponse = await this.page.request.get(
+      isDev
+        ? "http://localhost:3000/pagefind/pagefind-ui.js"
+        : `${process.env.BASE_URL}${
+            process.env.NEXT_PUBLIC_BASE_PATH ?? ""
+          }/_next/static/pagefind/pagefind-ui.js`
+    );
 
-    const pagefindUiPaths = isDev
-      ? [`${pageOrigin}/pagefind/pagefind-ui.js`]
-      : [
-        `${pageOrigin}${basePath}/_next/static/pagefind/pagefind-ui.js`,
-        `${pageOrigin}/pagefind/pagefind-ui.js`, // Fallback to dev path
-      ];
-
-    // Check Pagefind JavaScript file - try each path until one works
-    let pagefindJsResponse;
-    let pagefindJsFound = false;
-    for (const path of pagefindJsPaths) {
-      pagefindJsResponse = await this.page.request.get(path);
-      if (pagefindJsResponse.status() === 200) {
-        pagefindJsFound = true;
-        break;
-      }
-    }
-    expect(pagefindJsFound, `Pagefind JS file not found at any of: ${pagefindJsPaths.join(", ")}`).toBe(true);
-
-    // Check Pagefind UI file - try each path until one works
-    let pagefindUiResponse;
-    let pagefindUiFound = false;
-    for (const path of pagefindUiPaths) {
-      pagefindUiResponse = await this.page.request.get(path);
-      if (pagefindUiResponse.status() === 200) {
-        pagefindUiFound = true;
-        break;
-      }
-    }
-    expect(pagefindUiFound, `Pagefind UI file not found at any of: ${pagefindUiPaths.join(", ")}`).toBe(true);
+    expect(pagefindIndexResponse.status()).toBe(200);
   }
 
   /**
