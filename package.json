@@ -40,7 +40,7 @@
     "react-markdown": "^10.1.0",
     "rehype-pretty-code": "^0.14.1",
     "shiki": "^3.6.0",
-    "tinacms": "2.9.3",
+    "tinacms": "3.0.0",
     "title-case": "^4.3.2",
     "typescript": "5.8.3"
   },
@@ -50,7 +50,7 @@
     "@shikijs/transformers": "^3.6.0",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.8",
-    "@tinacms/cli": "^1.12.2",
+    "@tinacms/cli": "^2.0.0",
     "@types/node": "^24.2.1",
     "autoprefixer": "^10.4.21",
     "monaco-editor-webpack-plugin": "^7.1.0",
@@ -61,14 +61,5 @@
     "tailwindcss": "^4.1.8",
     "worker-loader": "^3.0.8"
   },
-  "packageManager": "pnpm@9.15.2",
-  "pnpm": {
-    "overrides": {
-      "mermaid": "^11.6.0",
-      "dompurify": "^3.2.4",
-      "jsonpath-plus": "^10.3.0",
-      "esbuild": "^0.25.0",
-      "lodash.set": "npm:lodash@^4.17.21"
-    }
-  }
+  "packageManager": "pnpm@9.15.2"
 }

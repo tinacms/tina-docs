@@ -28,6 +28,10 @@ test.describe("Search Functionality", () => {
 
     // Wait for the page to load completely
     await page.waitForLoadState("networkidle");
+
+    // Wait for the search input to be available (client component hydration)
+    const searchInput = page.locator('input[placeholder="Search..."]');
+    await searchInput.waitFor({ state: "visible", timeout: 10000 });
   });
 
   test("should show search results for existing content", async ({ page }) => {
@@ -114,6 +118,8 @@ test.describe("Search Functionality", () => {
 
     // Start typing to trigger search
     const searchInput = searchHelper.getSearchInput();
+    // Ensure the input is visible before interacting
+    await searchInput.waitFor({ state: "visible", timeout: 10000 });
     await searchInput.fill(SEARCH_TEST_DATA.knownTerms[0]);
 
     // Check for loading indicator (if implemented)

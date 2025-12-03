@@ -10,6 +10,9 @@ export class SearchHelper {
   async navigateToDocs() {
     await this.page.goto(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/docs`);
     await this.page.waitForLoadState("networkidle");
+    // Wait for the search input to be available (client component hydration)
+    const searchInput = this.getSearchInput();
+    await searchInput.waitFor({ state: "attached", timeout: 10000 });
   }
 
   /**
@@ -24,6 +27,9 @@ export class SearchHelper {
    */
   async performSearch(searchTerm: string) {
     const searchInput = this.getSearchInput();
+    // Wait for the search input to be visible and attached to the DOM
+    // This is important because the Search component is a client component that needs to hydrate
+    await searchInput.waitFor({ state: "visible", timeout: 10000 });
     await searchInput.fill(searchTerm);
     await searchInput.press("Enter");
 
