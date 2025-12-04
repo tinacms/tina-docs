@@ -14,7 +14,7 @@ jobs:
       NEXT_PUBLIC_BASE_PATH: ${{ steps.setup-base-path.outputs.NEXT_PUBLIC_BASE_PATH }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup node
         uses: actions/setup-node@v4
         with:
