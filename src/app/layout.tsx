@@ -1,12 +1,12 @@
 import "@/styles/global.css";
 import AdminLink from "@/components/ui/admin-link";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
-import { ThemeSelector } from "@/components/ui/theme-selector";
 import settings from "@/content/settings/config.json";
 import client from "@/tina/__generated__/client";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 
+import { Footer } from "@/components/docs/footer";
 import { TabsLayout } from "@/components/docs/layout/tab-layout";
 import type React from "react";
 import { TinaClient } from "./tina-client";
@@ -19,7 +19,7 @@ const heading = Roboto_Flex({
   variable: "--heading-font",
 });
 
-const isThemeSelectorEnabled =
+export const isThemeSelectorEnabled =
   process.env.NODE_ENV === "development" ||
   process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
 
@@ -44,7 +44,6 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange={false}
         >
-          {isThemeSelectorEnabled && <ThemeSelector />}
           <Content>
             <DocsMenu>{children}</DocsMenu>
           </Content>
@@ -60,6 +59,7 @@ const Content = ({ children }: { children?: React.ReactNode }) => (
     <TailwindIndicator />
     <div className="font-sans flex min-h-screen flex-col bg-background-color">
       <div className="flex flex-1 flex-col items-center">{children}</div>
+      <Footer />
     </div>
   </>
 );
