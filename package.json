@@ -41,7 +41,7 @@
     "react-markdown": "^10.1.0",
     "rehype-pretty-code": "^0.14.1",
     "shiki": "^3.6.0",
-    "tinacms": "3.0.0",
+    "tinacms": "3.1.1",
     "title-case": "^4.3.2",
     "typescript": "5.8.3"
   },
