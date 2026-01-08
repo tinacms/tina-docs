@@ -6,6 +6,7 @@ import settings from "@/content/settings/config.json";
 import client from "@/tina/__generated__/client";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 import { TabsLayout } from "@/components/docs/layout/tab-layout";
 import type React from "react";
@@ -24,6 +25,7 @@ const isThemeSelectorEnabled =
   process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
 
 const theme = settings.selectedTheme || "default";
+const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
 export default function RootLayout({
   children = null,
@@ -38,6 +40,7 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <body className={`${body.variable} ${heading.variable}`}>
+        {gtmId && <GoogleTagManager gtmId={gtmId} />}
         <ThemeProvider
           attribute="class"
           defaultTheme={theme}
