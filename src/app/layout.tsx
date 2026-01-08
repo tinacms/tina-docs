@@ -4,12 +4,15 @@ import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 import { ThemeSelector } from "@/components/ui/theme-selector";
 import settings from "@/content/settings/config.json";
 import client from "@/tina/__generated__/client";
+import { GoogleTagManager } from "@next/third-parties/google";
 import { ThemeProvider } from "next-themes";
 import { Inter, Roboto_Flex } from "next/font/google";
 
 import { TabsLayout } from "@/components/docs/layout/tab-layout";
 import type React from "react";
 import { TinaClient } from "./tina-client";
+
+const isDev = process.env.NODE_ENV === "development";
 
 const body = Inter({ subsets: ["latin"], variable: "--body-font" });
 const heading = Roboto_Flex({
@@ -20,10 +23,10 @@ const heading = Roboto_Flex({
 });
 
 const isThemeSelectorEnabled =
-  process.env.NODE_ENV === "development" ||
-  process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
+  isDev || process.env.NEXT_PUBLIC_ENABLE_THEME_SELECTION === "true";
 
 const theme = settings.selectedTheme || "default";
+const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
 export default function RootLayout({
   children = null,
@@ -38,6 +41,12 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <body className={`${body.variable} ${heading.variable}`}>
+        {!isDev && gtmId && (
+          <GoogleTagManager
+            gtmId={gtmId}
+            gtmScriptUrl="https://www.googletagmanager.com/gtm.js"
+          />
+        )}
         <ThemeProvider
           attribute="class"
           defaultTheme={theme}
