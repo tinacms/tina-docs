@@ -129,12 +129,12 @@ export const ApiReference = (data: ApiReferenceProps) => {
           const response = await fetch(
             `/api/api-schema?relativePath=${encodeURIComponent(schemaPath)}`
           );
-          
+
           if (!response.ok) {
             setEmptySchema();
             return;
           }
-          
+
           const data = await response.json();
           schemaJson = data.schema;
         } catch (error) {
