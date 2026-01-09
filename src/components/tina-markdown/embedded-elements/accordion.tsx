@@ -198,6 +198,7 @@ export const AccordionBlock = (props) => {
                     className="rounded-lg"
                     width={500}
                     height={500}
+                    unoptimized
                   />
                 </ImageOverlayWrapper>
               </div>
