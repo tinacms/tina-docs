@@ -17,16 +17,22 @@ export async function GET(request: NextRequest) {
       relativePath: relativePath,
     });
 
+    // Check if the result has the expected data
+    if (!result.data.apiSchema?.apiSchema) {
+      return NextResponse.json(
+        { error: "API schema data not found" },
+        { status: 404 }
+      );
+    }
+
     // Parse the schema JSON
     const schemaJson = JSON.parse(result.data.apiSchema.apiSchema);
 
     return NextResponse.json({ schema: schemaJson });
   } catch (error) {
-    console.error("Error fetching API schema:", error);
     return NextResponse.json(
       { error: "Failed to fetch API schema" },
       { status: 500 }
     );
   }
 }
-
