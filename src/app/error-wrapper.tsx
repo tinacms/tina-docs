@@ -51,6 +51,7 @@ const ErrorWrapper = ({
               className="rounded-3xl object-cover"
               width={364}
               height={364}
+              unoptimized={process.env.NODE_ENV === "development"}
             />
           </div>
         </div>
