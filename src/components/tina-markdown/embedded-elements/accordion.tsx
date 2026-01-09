@@ -66,11 +66,7 @@ const Accordion = (props) => {
             <div className="p-4" data-tina-field={tinaField(props, "image")}>
               <ImageOverlayWrapper src={image} alt="image" caption={heading}>
                 <Image
-                  src={
-                    image.startsWith("http")
-                      ? image
-                      : `${process.env.NEXT_PUBLIC_BASE_PATH || ""}${image}`
-                  }
+                  src={image}
                   alt="image"
                   className="rounded-lg"
                   width={500}
@@ -198,14 +194,13 @@ export const AccordionBlock = (props) => {
                 >
                   <Image
                     src={
-                      item.image.startsWith("http")
-                        ? item.image
-                        : `${process.env.NEXT_PUBLIC_BASE_PATH || ""}${item.image}`
+                      item.image.startsWith("http") ? item.image : item.image
                     }
                     alt="image"
                     className="rounded-lg"
                     width={500}
                     height={500}
+                    unoptimized
                   />
                 </ImageOverlayWrapper>
               </div>
