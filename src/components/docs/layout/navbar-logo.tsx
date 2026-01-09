@@ -32,7 +32,6 @@ export const NavbarLogo = ({ navigationDocsData }: NavbarLogoProps) => {
               className="object-contain"
               priority
               sizes="(max-width: 768px) 90px, 120px"
-              unoptimized={process.env.NODE_ENV === "development"}
             />
             {/* Preload the other logo */}
             <Image
@@ -41,7 +40,6 @@ export const NavbarLogo = ({ navigationDocsData }: NavbarLogoProps) => {
               fill
               className="hidden"
               priority
-              unoptimized={process.env.NODE_ENV === "development"}
             />
           </>
         ) : (

@@ -85,7 +85,6 @@ export const ImageOverlayWrapper = ({
                     objectFit="contain"
                     objectPosition="center"
                     priority
-                    unoptimized={process.env.NODE_ENV === "development"}
                   />
                 </div>
 

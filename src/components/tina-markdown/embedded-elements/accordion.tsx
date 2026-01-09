@@ -75,7 +75,6 @@ const Accordion = (props) => {
                   className="rounded-lg"
                   width={500}
                   height={500}
-                  unoptimized={process.env.NODE_ENV === "development"}
                 />
               </ImageOverlayWrapper>
             </div>
@@ -207,7 +206,6 @@ export const AccordionBlock = (props) => {
                     className="rounded-lg"
                     width={500}
                     height={500}
-                    unoptimized={process.env.NODE_ENV === "development"}
                   />
                 </ImageOverlayWrapper>
               </div>

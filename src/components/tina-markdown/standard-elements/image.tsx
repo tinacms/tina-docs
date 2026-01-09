@@ -44,7 +44,6 @@ export const ImageComponent = (props) => {
               style={{ objectFit: "contain" }}
               onLoad={handleImageLoad}
               priority
-              unoptimized={process.env.NODE_ENV === "development"}
             />
           </span>
         </span>

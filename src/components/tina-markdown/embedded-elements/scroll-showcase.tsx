@@ -168,7 +168,6 @@ export function ScrollBasedShowcase(data: {
                     width={500}
                     height={300}
                     className="my-8 block md:hidden"
-                    unoptimized={process.env.NODE_ENV === "development"}
                   />
                 )}
               </div>
@@ -194,7 +193,6 @@ export function ScrollBasedShowcase(data: {
                     ?.offset || 0) + 100,
                 transform: "translateY(-50%)",
               }}
-              unoptimized={process.env.NODE_ENV === "development"}
             />
           )}
         </div>
