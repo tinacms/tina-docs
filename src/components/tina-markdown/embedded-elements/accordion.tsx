@@ -193,14 +193,11 @@ export const AccordionBlock = (props) => {
                   caption={item?.heading}
                 >
                   <Image
-                    src={
-                      item.image.startsWith("http") ? item.image : item.image
-                    }
+                    src={item.image}
                     alt="image"
                     className="rounded-lg"
                     width={500}
                     height={500}
-                    unoptimized
                   />
                 </ImageOverlayWrapper>
               </div>
