@@ -36,6 +36,7 @@ export const ImageOverlayWrapper = ({
 }: ImageOverlayWrapperProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,8 +59,16 @@ export const ImageOverlayWrapper = ({
     }
   }, [isOpen]);
 
-  const openOverlay = () => setIsOpen(true);
+  const openOverlay = () => {
+    setIsOpen(true);
+    setIsLoading(true); // Reset loading state when opening overlay
+  };
+
   const closeOverlay = () => setIsOpen(false);
+
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
@@ -94,12 +103,25 @@ export const ImageOverlayWrapper = ({
                   className="relative w-[80vw] h-[80vh] overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
+                  {/* Loading skeleton */}
+                  {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-neutral-background-secondary/50 rounded-lg">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 border-4 border-brand-primary border-t-transparent rounded-full animate-spin" />
+                        <p className="text-neutral-text-secondary text-sm">
+                          Loading image...
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
                   <Image
                     loader={customImageLoader}
                     src={src}
                     alt={alt}
                     fill
                     style={{ objectFit: "contain", objectPosition: "center" }}
+                    onLoad={handleImageLoad}
                   />
                 </div>
 
