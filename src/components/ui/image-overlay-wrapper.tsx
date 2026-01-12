@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { type ImageLoader } from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { MdClose } from "react-icons/md";
@@ -11,6 +11,13 @@ interface ImageOverlayWrapperProps {
   alt: string;
   caption?: string;
 }
+
+// Custom image loader to bypass Next.js image optimization
+const customImageLoader: ImageLoader = ({ src, width, quality }) => {
+  // If the src already includes query parameters, append with &, otherwise use ?
+  const separator = src.includes("?") ? "&" : "?";
+  return `${src}${separator}w=${width}&q=${quality || 75}`;
+};
 
 export const ImageOverlayWrapper = ({
   children,
@@ -79,12 +86,11 @@ export const ImageOverlayWrapper = ({
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Image
+                    loader={customImageLoader}
                     src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${src}`}
                     alt={alt}
-                    layout="fill"
-                    objectFit="contain"
-                    objectPosition="center"
-                    unoptimized
+                    fill
+                    style={{ objectFit: "contain", objectPosition: "center" }}
                   />
                 </div>
 
