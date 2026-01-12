@@ -84,7 +84,6 @@ export const ImageOverlayWrapper = ({
                     layout="fill"
                     objectFit="contain"
                     objectPosition="center"
-                    priority
                   />
                 </div>
 
