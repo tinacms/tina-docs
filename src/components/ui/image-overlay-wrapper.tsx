@@ -14,9 +14,18 @@ interface ImageOverlayWrapperProps {
 
 // Custom image loader to bypass Next.js image optimization
 const customImageLoader: ImageLoader = ({ src, width, quality }) => {
+  // If it's already an absolute URL (starts with http:// or https://), return as-is
+  if (src.startsWith("http://") || src.startsWith("https://")) {
+    return src;
+  }
+
+  // For relative paths, prepend the base path if it exists
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const fullSrc = `${basePath}${src}`;
+
   // If the src already includes query parameters, append with &, otherwise use ?
-  const separator = src.includes("?") ? "&" : "?";
-  return `${src}${separator}w=${width}&q=${quality || 75}`;
+  const separator = fullSrc.includes("?") ? "&" : "?";
+  return `${fullSrc}${separator}w=${width}&q=${quality || 75}`;
 };
 
 export const ImageOverlayWrapper = ({
@@ -87,7 +96,7 @@ export const ImageOverlayWrapper = ({
                 >
                   <Image
                     loader={customImageLoader}
-                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${src}`}
+                    src={src}
                     alt={alt}
                     fill
                     style={{ objectFit: "contain", objectPosition: "center" }}
