@@ -127,7 +127,7 @@ export const ApiReference = (data: ApiReferenceProps) => {
         let schemaJson: any;
         try {
           const response = await fetch(
-            `/api/api-schema?relativePath=${encodeURIComponent(schemaPath)}`
+            `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/api/api-schema?relativePath=${encodeURIComponent(schemaPath)}`
           );
 
           if (!response.ok) {
