@@ -21,7 +21,7 @@ module.exports = {
   basePath,
   assetPrefix,
   images: {
-    path: `${assetPrefix}/_next/image`,
+    ...(assetPrefix && { path: `${assetPrefix}/_next/image` }),
     remotePatterns: [
       {
         protocol: "https",
