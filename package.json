@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "predev": "node scripts/check-pagefind.js",
     "dev": "tinacms dev -c \"next dev --turbopack\"",
     "build": "echo 'Starting TinaCMS build...' && tinacms build && echo 'TinaCMS build completed. Starting Next.js build...' && next build",
     "postbuild": "npx pagefind --site .next --output-path .next/static/pagefind && next-sitemap",
@@ -41,7 +42,7 @@
     "react-markdown": "^10.1.0",
     "rehype-pretty-code": "^0.14.1",
     "shiki": "^3.6.0",
-    "tinacms": "^3.3.1",
+    "tinacms": "^3.4.1",
     "title-case": "^4.3.2",
     "typescript": "5.8.3"
   },
@@ -51,7 +52,7 @@
     "@shikijs/transformers": "^3.6.0",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.8",
-    "@tinacms/cli": "^2.1.1",
+    "@tinacms/cli": "^2.1.5",
     "@types/node": "^24.2.1",
     "autoprefixer": "^10.4.21",
     "monaco-editor-webpack-plugin": "^7.1.0",
