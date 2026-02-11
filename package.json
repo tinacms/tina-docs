@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "predev": "node scripts/check-pagefind.js",
     "dev": "tinacms dev -c \"next dev --turbopack\"",
     "build": "echo 'Starting TinaCMS build...' && tinacms build && echo 'TinaCMS build completed. Starting Next.js build...' && next build",
     "postbuild": "npx pagefind --site .next --output-path .next/static/pagefind && next-sitemap",
