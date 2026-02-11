@@ -1,3 +1,8 @@
+import {
+  ImageWithMetadataFields,
+} from "../../collections/image-metadata";
+import { ImageWithMetadataField } from "../../customFields/image-with-metadata";
+
 export const ScrollShowcaseTemplate = {
   label: "Scroll Showcase",
   name: "scrollShowcase",
@@ -10,7 +15,10 @@ export const ScrollShowcaseTemplate = {
       ui: {
         defaultItem: {
           title: "Title",
-          image: "/img/rico-replacement.jpg",
+          image: {
+            src: "/img/rico-replacement.jpg",
+            alt: "",
+          },
           content: {
             type: "root",
             children: [
@@ -35,9 +43,13 @@ export const ScrollShowcaseTemplate = {
       },
       fields: [
         {
-          type: "image",
-          label: "Image",
           name: "image",
+          label: "Image",
+          type: "object",
+          fields: ImageWithMetadataFields,
+          ui: {
+            component: ImageWithMetadataField,
+          },
         },
         {
           type: "string",

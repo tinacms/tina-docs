@@ -5,6 +5,7 @@ import Callout from "./embedded-elements/callout";
 import { CardGrid } from "./embedded-elements/card-grid";
 import { CodeTabs } from "./embedded-elements/code-tabs";
 import { FileStructure } from "./embedded-elements/file-structure";
+import { PreloadedImage } from "./embedded-elements/preloaded-image";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import TypeDefinition from "./embedded-elements/type-definition";
@@ -109,6 +110,15 @@ type ComponentMapping = {
       parentId: string | null;
     }[];
   };
+  preloadedImage: {
+    image: {
+      src: string;
+      width?: number;
+      height?: number;
+      alt?: string;
+    };
+    caption?: string;
+  };
 };
 
 type CalloutVariant =
@@ -129,6 +139,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   apiReference: (props) => <ApiReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
   codeTabs: (props) => <CodeTabs {...props} />,
+  preloadedImage: (props) => <PreloadedImage {...props} />,
   Callout: (props: { body: TinaMarkdownContent; variant: string }) => (
     <Callout {...props} variant={props.variant as CalloutVariant} />
   ),

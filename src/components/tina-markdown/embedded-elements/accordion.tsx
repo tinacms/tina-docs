@@ -1,9 +1,8 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
+import { TinaImage } from "../../ui/tina-image";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 
 interface AccordionProps {
@@ -64,19 +63,27 @@ const Accordion = (props) => {
           </div>
           {image && (
             <div className="p-4" data-tina-field={tinaField(props, "image")}>
-              <ImageOverlayWrapper src={image} alt="image" caption={heading}>
-                <Image
-                  src={
-                    image.startsWith("http")
-                      ? image
-                      : `${process.env.NEXT_PUBLIC_BASE_PATH || ""}${image}`
-                  }
-                  alt="image"
-                  className="rounded-lg"
-                  width={500}
-                  height={500}
-                />
-              </ImageOverlayWrapper>
+              <TinaImage
+                src={typeof image === "string" ? image : image.src || image}
+                alt={
+                  typeof image === "string"
+                    ? "image"
+                    : image.alt || heading || "image"
+                }
+                caption={heading}
+                enableLightbox={true}
+                className="rounded-lg"
+                width={
+                  typeof image === "object" && image.width
+                    ? image.width
+                    : 500
+                }
+                height={
+                  typeof image === "object" && image.height
+                    ? image.height
+                    : 500
+                }
+              />
             </div>
           )}
         </div>
@@ -191,23 +198,31 @@ export const AccordionBlock = (props) => {
                   "image"
                 )}
               >
-                <ImageOverlayWrapper
-                  src={item.image}
-                  alt="image"
+                <TinaImage
+                  src={
+                    typeof item.image === "string"
+                      ? item.image
+                      : item.image.src || item.image
+                  }
+                  alt={
+                    typeof item.image === "string"
+                      ? "image"
+                      : item.image.alt || item?.heading || "image"
+                  }
                   caption={item?.heading}
-                >
-                  <Image
-                    src={
-                      item.image.startsWith("http")
-                        ? item.image
-                        : `${process.env.NEXT_PUBLIC_BASE_PATH || ""}${item.image}`
-                    }
-                    alt="image"
-                    className="rounded-lg"
-                    width={500}
-                    height={500}
-                  />
-                </ImageOverlayWrapper>
+                  enableLightbox={true}
+                  className="rounded-lg"
+                  width={
+                    typeof item.image === "object" && item.image.width
+                      ? item.image.width
+                      : 500
+                  }
+                  height={
+                    typeof item.image === "object" && item.image.height
+                      ? item.image.height
+                      : 500
+                  }
+                />
               </div>
             )}
           </div>

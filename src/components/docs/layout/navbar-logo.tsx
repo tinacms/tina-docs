@@ -1,9 +1,9 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { TinaImage } from "@/components/ui/tina-image";
 
 interface NavbarLogoProps {
   navigationDocsData: any;
@@ -25,18 +25,20 @@ export const NavbarLogo = ({ navigationDocsData }: NavbarLogoProps) => {
       <div className="relative md:w-[120px] w-[90px] h-[40px]">
         {mounted ? (
           <>
-            <Image
+            <TinaImage
               src={resolvedTheme === "dark" ? darkLogo : lightLogo}
               alt="Logo"
+              enableLightbox={false}
               fill
               className="object-contain"
               priority
               sizes="(max-width: 768px) 90px, 120px"
             />
             {/* Preload the other logo */}
-            <Image
+            <TinaImage
               src={resolvedTheme === "dark" ? lightLogo : darkLogo}
               alt=""
+              enableLightbox={false}
               fill
               className="hidden"
               priority
