@@ -2,6 +2,218 @@
 
 This directory contains utility scripts to help you manage your TinaDocs project.
 
+## Image Migration
+
+The `migrate-images` script automatically migrates images in your MDX content to the new ImageMetadata format with dimensions.
+
+### What it does
+
+- ✅ **Scans all MDX files** in `content/docs/`
+- ✅ **Finds accordion and scrollShowcase blocks** with image fields
+- ✅ **Converts inline markdown images** to preloaded image components
+- ✅ **Loads each image** to get its actual dimensions
+- ✅ **Converts string image paths** to ImageMetadata objects with width/height
+- ✅ **Creates backups** of all modified files (`.backup` extension)
+- ✅ **Supports multiple formats**: PNG, JPEG, GIF, WebP
+- ✅ **Handles both local and remote images**
+
+### Usage
+
+```bash
+pnpm run migrate-images
+```
+
+### What gets migrated
+
+The script migrates three types of images:
+
+#### 1. Accordion blocks
+**Before:**
+```jsx
+<accordion
+  image="/img/example.png"
+  title="Example"
+/>
+```
+
+**After:**
+```jsx
+<accordion
+  image={{
+    src: "/img/example.png",
+    width: 1200,
+    height: 800,
+    alt: ""
+  }}
+  title="Example"
+/>
+```
+
+#### 2. ScrollShowcase blocks
+**Before:**
+```jsx
+<scrollShowcase showcaseItems={[
+  {
+    title: "Example",
+    image: "/img/example.png"
+  }
+]} />
+```
+
+**After:**
+```jsx
+<scrollShowcase showcaseItems={[
+  {
+    title: "Example",
+    image: {
+      src: "/img/example.png",
+      width: 1920,
+      height: 1080,
+      alt: ""
+    }
+  }
+]} />
+```
+
+#### 3. Inline markdown images
+**Before:**
+```markdown
+![Alt text](/img/example.png "Caption text")
+```
+
+**After:**
+```jsx
+<preloadedImage
+  image={{
+    src: "/img/example.png",
+    width: 1920,
+    height: 1080,
+    alt: "Alt text"
+  }}
+  caption="Caption text"
+/>
+```
+
+This converts regular markdown images to optimized preloaded images that prevent layout shift and improve Core Web Vitals.
+
+### Safety features
+
+- ✅ Creates `.backup` files before modifying
+- ✅ Preserves original file if no images found
+- ✅ Handles errors gracefully (skips problematic images)
+- ✅ Provides detailed progress and summary
+- ✅ Non-destructive (backups can be restored)
+
+### Example output
+
+```
+🖼️  TinaDocs Image Migration
+
+Scanning for MDX files...
+
+Found 15 MDX files
+
+Processing: content/docs/introduction/showcase.mdx
+  📷 Found showcase image: /img/docs-assets/showcase-example-1.png
+  ✅ Migrated: 1920x1080
+  📷 Found showcase image: /img/docs-assets/showcase-example-2.png
+  ✅ Migrated: 1920x1080
+  💾 Backup created: showcase.mdx.backup
+  ✅ Updated with 2 image(s)
+
+Processing: content/docs/getting-started.mdx
+  📷 Found inline image: /img/docs-assets/setup.png
+  ✅ Migrated to preloadedImage: 1600x900
+  📷 Found accordion image: /img/example.jpg
+  ✅ Migrated: 1200x800
+  💾 Backup created: getting-started.mdx.backup
+  ✅ Updated with 2 image(s)
+
+🎉 Migration completed!
+
+📊 Summary:
+  • Files scanned: 15
+  • Files modified: 3
+  • Images migrated: 7
+
+💡 Tip: Backup files (.backup) have been created. You can delete them once you've verified the migration.
+```
+
+### After migration
+
+1. Review the changes in your MDX files
+2. Test your site to ensure images display correctly
+3. Delete `.backup` files using the cleanup script (see below)
+4. Commit the changes to version control
+
+---
+
+## Backup Cleanup
+
+The `cleanup-backups` script removes all `.backup` files created by the image migration script.
+
+### What it does
+
+- ✅ **Scans for backup files** in `content/docs/`
+- ✅ **Lists all backups** with file sizes
+- ✅ **Asks for confirmation** before deletion
+- ✅ **Safely removes** backup files
+- ✅ **Provides summary** of deleted files
+
+### Usage
+
+```bash
+pnpm run cleanup-backups
+```
+
+### Safety features
+
+- ✅ Lists all files before deletion
+- ✅ Shows file sizes for review
+- ✅ Requires explicit confirmation
+- ✅ Handles errors gracefully
+- ✅ Provides detailed summary
+
+### Example output
+
+```
+🧹 TinaDocs Backup Cleanup
+
+Scanning for backup files...
+
+Backup files found:
+  • content/docs/introduction/showcase.mdx.backup (12.45 KB)
+  • content/docs/getting-started.mdx.backup (8.32 KB)
+
+⚠️  Found 2 backup file(s)
+
+Do you want to delete these files?
+  Type 'yes' or 'y' to continue
+  Type 'no' or 'n' to cancel
+
+👉 Your choice (yes/no): yes
+
+Deleting backup files...
+
+  ✅ Deleted: content/docs/introduction/showcase.mdx.backup
+  ✅ Deleted: content/docs/getting-started.mdx.backup
+
+🎉 Cleanup completed!
+
+📊 Summary:
+  • Backup files found: 2
+  • Successfully deleted: 2
+```
+
+### When to use
+
+- After verifying migrated images work correctly
+- Before committing changes to version control
+- To clean up your repository
+- When you're confident the migration was successful
+
+---
+
 ## Documentation Reset
 
 The `cleanup` script provides a complete documentation reset, removing all content directories while preserving only the main index page.
@@ -114,77 +326,17 @@ The script removes:
 
 🗑️  Cleaning up docs directories (preserving index.mdx)...
 🗑️  Deleting directory: content/docs/api-documentation
-   📄 Deleting file: overview.mdx
-   📄 Deleting file: pet/get-pet-findbystatus.mdx
-   (... more files)
-✅ Directory deleted: api-documentation (9 files)
-
-📄 Cleaning API schema files...
-   🗑️  Deleted: Swagger-Petstore.json
-   🗑️  Deleted: spec.json
-   ✅ Cleaned up 2 API schema file(s)
-
-🗑️  Deleting docs-assets directory: public/img/docs-assets
-   📄 Deleting file: api-spec-upload.png
-   (... more files)
-✅ docs-assets directory deleted (27 files)
-
-🗂️  Cleaning Next.js cache...
-   ✅ Deleted .next cache directory (1346 files)
-
-📝 Updating navigation...
-   🔍 Found Docs tab with 4 menu groups
-   🗑️  Cleaned up Docs navigation (removed 3 groups)
-   ✅ Navigation now only shows index.mdx
-   🗑️  Completely removed API tab from navigation
-✅ Navigation updated successfully
+   ✅ Deleted 8 files
 
 🎉 Cleanup completed!
 
 📊 Summary:
-• Deleted docs directories: api-documentation, examples, going-live, introduction, tinadocs-features, using-tinacms (31 files)
+• Deleted docs directories: api-documentation, examples, tinadocs-features (45 files)
 • Deleted API schema files: 2 files
 • Deleted image directories: docs-assets, landing-assets (31 files)
 • Navigation updated successfully
-• Next.js cache cleared successfully
+• Next.js cache cleared
+• Index page rewritten with clean slate instructions
 
-💡 Next steps:
-   • Review the changes in your editor
-   • Restart your dev server: pnpm dev
-   • Test your documentation site
-   • Commit the changes to version control
+✅ Your TinaDocs project is now ready for fresh content!
 ```
-
-### Troubleshooting
-
-If you encounter issues:
-
-1. **"This doesn't appear to be a TinaDocs project"**
-   - Make sure you're running the script from your project root
-   - Verify you have `content/docs/` and `tina/` directories
-
-2. **"Navigation update failed"**
-   - Check that `content/navigation-bar/docs-navigation-bar.json` exists
-   - Ensure the file is valid JSON
-
-3. **Permission errors**
-   - Make sure you have write permissions to the project directory
-   - Check permissions for `content/`, `public/`, and `.next` directories
-
-4. **"API schema directory not found"**
-   - This is normal if your project doesn't have API schema files
-   - The script will skip this step safely
-
-### After running the script
-
-1. Review the changes in your editor
-2. **Restart your dev server**: `pnpm dev` (required to clear Next.js cache)
-3. Test your documentation site
-4. Commit the changes to version control
-5. Update any links or references to the deleted documentation
-
-> **Important:** You must restart your development server after running cleanup to ensure Next.js rebuilds the site without cached references to deleted pages.
-
----
-
-For more TinaDocs utilities and documentation, visit [TinaDocs GitHub](https://github.com/tinacms/tina-docs).

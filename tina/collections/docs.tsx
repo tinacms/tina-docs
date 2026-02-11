@@ -6,6 +6,7 @@ import CalloutTemplate from "@/tina/templates/markdown-embeds/callout.template";
 import CardGridTemplate from "@/tina/templates/markdown-embeds/card-grid.template";
 import CodeTabsTemplate from "@/tina/templates/markdown-embeds/code-tabs.template";
 import { FileStructureTemplate } from "@/tina/templates/markdown-embeds/file-structure.template";
+import { PreloadedImageTemplate } from "@/tina/templates/markdown-embeds/preloaded-image.template";
 import RecipeTemplate from "@/tina/templates/markdown-embeds/recipe.template";
 import ScrollShowcaseTemplate from "@/tina/templates/markdown-embeds/scroll-showcase.template";
 import { TypeDefinitionTemplate } from "@/tina/templates/markdown-embeds/type-definition.template";
@@ -97,6 +98,7 @@ export const docsCollection = {
         CalloutTemplate as Template,
         TypeDefinitionTemplate as Template,
         FileStructureTemplate as unknown as Template,
+        PreloadedImageTemplate as Template,
       ],
     },
   ],

@@ -1,3 +1,8 @@
+import ImageWithMetadata, {
+  ImageWithMetadataFields,
+} from "../../collections/image-metadata";
+import { ImageWithMetadataField } from "../../customFields/image-with-metadata";
+
 const AccordionItemFields = [
   {
     name: "heading",
@@ -14,8 +19,12 @@ const AccordionItemFields = [
   },
   {
     name: "image",
-    label: "image",
-    type: "image",
+    label: "Image",
+    type: "object",
+    fields: ImageWithMetadataFields,
+    ui: {
+      component: ImageWithMetadataField,
+    },
   },
 ];
 
@@ -40,7 +49,10 @@ export const AccordionTemplate = {
           },
         ],
       },
-      image: "/img/rico-replacement.jpg",
+      image: {
+        src: "/img/rico-replacement.jpg",
+        alt: "",
+      },
       fullWidth: false,
     },
   },
@@ -93,7 +105,10 @@ export const AccordionBlockTemplate = {
               },
             ],
           },
-          image: "/img/rico-replacement.jpg",
+          image: {
+            src: "/img/rico-replacement.jpg",
+            alt: "",
+          },
         },
       },
     },

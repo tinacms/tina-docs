@@ -1,7 +1,7 @@
-import Image from "next/image";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { TinaImage } from "../../ui/tina-image";
 import {
   type Item,
   createListener,
@@ -160,15 +160,27 @@ export function ScrollBasedShowcase(data: {
                 {/* This image is only shown on mobile (md:hidden).
                     On larger screens, the separate container is used. */}
                 {item.image && (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${
-                      item.image
-                    }`}
-                    alt={item.title}
-                    width={500}
-                    height={300}
-                    className="my-8 block md:hidden"
-                  />
+                  <div className="my-8 block md:hidden">
+                    <TinaImage
+                      src={
+                        typeof item.image === "string"
+                          ? item.image
+                          : item.image.src || item.image
+                      }
+                      alt={item.title}
+                      enableLightbox={false}
+                      width={
+                        typeof item.image === "object" && item.image.width
+                          ? item.image.width
+                          : 500
+                      }
+                      height={
+                        typeof item.image === "object" && item.image.height
+                          ? item.image.height
+                          : 300
+                      }
+                    />
+                  </div>
                 )}
               </div>
             );
@@ -178,13 +190,7 @@ export function ScrollBasedShowcase(data: {
         {/* This image container is only displayed on md+ */}
         <div className="relative hidden w-full flex-1 overflow-hidden md:block">
           {activeImageSrc && (
-            <Image
-              src={`${
-                process.env.NEXT_PUBLIC_BASE_PATH || ""
-              }${activeImageSrc}`}
-              alt=""
-              width={500}
-              height={300}
+            <div
               className="w-100 absolute right-0 rounded-lg transition-all duration-1000 ease-in-out"
               style={{
                 opacity: activeIds.length ? 1 : 0,
@@ -193,7 +199,27 @@ export function ScrollBasedShowcase(data: {
                     ?.offset || 0) + 100,
                 transform: "translateY(-50%)",
               }}
-            />
+            >
+              <TinaImage
+                src={
+                  typeof activeImageSrc === "string"
+                    ? activeImageSrc
+                    : activeImageSrc.src || activeImageSrc
+                }
+                alt=""
+                enableLightbox={false}
+                width={
+                  typeof activeImageSrc === "object" && activeImageSrc.width
+                    ? activeImageSrc.width
+                    : 500
+                }
+                height={
+                  typeof activeImageSrc === "object" && activeImageSrc.height
+                    ? activeImageSrc.height
+                    : 300
+                }
+              />
+            </div>
           )}
         </div>
       </div>

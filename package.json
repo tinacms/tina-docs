@@ -11,6 +11,8 @@
     "start": "tinacms build && next start",
     "lint": "biome check src/ tina/",
     "lint:fix": "biome check src/ tina/ --fix",
+    "migrate-images": "node scripts/migrate-images.js",
+    "cleanup-backups": "node scripts/cleanup-backups.js",
     "cleanup": "node scripts/cleanup.js",
     "test": "playwright test",
     "test:ui": "playwright test --ui"
