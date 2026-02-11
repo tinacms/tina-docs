@@ -1,0 +1,10 @@
+file:///Users/isaacssw/Developer/Work%20%F0%9F%92%BC/SSW.Repos/TinaDocs/tina-docs/node_modules/.pnpm/@tinacms+cli@2.1.5_@codemirror+language@6.0.0_@types+node@24.2.1_@types+react@19.2.9_abstract_e67xy3tvmv3ky7wlhlzpglhz3q/node_modules/@tinacms/cli/dist/index.js:1251
+      throw new Error(
+      ^
+Error: Tina Dev server is already in use. Datalayer server is busy on port 9000
+    at Server.<anonymous> (file:///Users/isaacssw/Developer/Work%20%F0%9F%92%BC/SSW.Repos/TinaDocs/tina-docs/node_modules/.pnpm/@tinacms+cli@2.1.5_@codemirror+language@6.0.0_@types+node@24.2.1_@types+react@19.2.9_abstract_e67xy3tvmv3ky7wlhlzpglhz3q/node_modules/@tinacms/cli/dist/index.js:1251:13)
+    at Object.onceWrapper (node:events:633:26)
+    at Server.emit (node:events:518:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Node.js v22.18.0

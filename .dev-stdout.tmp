@@ -1,0 +1,4 @@
+> tina-docs@0.0.1 dev /Users/isaacssw/Developer/Work 💼/SSW.Repos/TinaDocs/tina-docs
+> tinacms dev -c "next dev --turbopack"
+🦙 TinaCMS Dev Server is initializing...
+ ELIFECYCLE  Command failed with exit code 1.
