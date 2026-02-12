@@ -68,6 +68,10 @@ export async function GET(request: NextRequest) {
     // Fetch the latest commit
     const commitsResponse = await fetch(apiUrl, { headers });
 
+    if (!commitsResponse.ok) {
+      throw new Error(`GitHub API error: ${commitsResponse.status}`);
+    }
+
     const commits: GitHubCommit[] = await commitsResponse.json();
 
     if (!commits || commits.length === 0) {
