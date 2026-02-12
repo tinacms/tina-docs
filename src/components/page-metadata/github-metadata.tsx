@@ -10,9 +10,9 @@ import { useGitHubMetadata } from "@/src/contexts/github-metadata-context";
 export default function GitHubMetadata({
   className = "",
 }: Omit<GitHubMetadataProps, "path">) {
-  const { data, error } = useGitHubMetadata();
+  const { data } = useGitHubMetadata();
 
-  if (error || !data) {
+  if (!data) {
     return (
       <div className={`text-slate-400 text-sm ${className}`}>
         Unable to load last updated info

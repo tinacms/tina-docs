@@ -35,7 +35,6 @@ export interface GitHubMetadataResponse {
 
 interface GitHubMetadataContextType {
   data: GitHubMetadataResponse | null;
-  error: string | null;
 }
 
 const GitHubMetadataContext = createContext<GitHubMetadataContextType | undefined>(undefined);
@@ -43,14 +42,12 @@ const GitHubMetadataContext = createContext<GitHubMetadataContextType | undefine
 export function GitHubMetadataProvider({
   children,
   data,
-  error,
 }: {
   children: React.ReactNode;
   data: GitHubMetadataResponse | null;
-  error: string | null;
 }) {
   return (
-    <GitHubMetadataContext.Provider value={{ data, error }}>
+    <GitHubMetadataContext.Provider value={{ data }}>
       {children}
     </GitHubMetadataContext.Provider>
   );

@@ -3,24 +3,20 @@ import type { GitHubMetadataResponse, GitHubCommit } from "@/src/contexts/github
 
 export async function fetchGitHubMetadata(
   path?: string
-): Promise<{ data: GitHubMetadataResponse | null; error: string | null }> {
+): Promise<GitHubMetadataResponse | null> {
   try {
     const owner = GithubConfig.Owner;
     const repo = GithubConfig.Repo;
     const githubToken = GithubConfig.Accesstoken;
 
     if (!owner || !repo) {
-      return {
-        data: null,
-        error: "GitHub owner and repo must be configured",
-      };
+      console.error("GitHub owner and repo must be configured");
+      return null;
     }
 
     if (!githubToken) {
-      return {
-        data: null,
-        error: "GitHub token is not configured",
-      };
+      console.error("GitHub token is not configured");
+      return null;
     }
 
     const headers: HeadersInit = {
@@ -41,19 +37,15 @@ export async function fetchGitHubMetadata(
     });
 
     if (!commitsResponse.ok) {
-      return {
-        data: null,
-        error: `GitHub API error: ${commitsResponse.status}`,
-      };
+      console.error(`GitHub API error: ${commitsResponse.status}`);
+      return null;
     }
 
     const commits: GitHubCommit[] = await commitsResponse.json();
 
     if (!commits || commits.length === 0) {
-      return {
-        data: null,
-        error: "No commits found",
-      };
+      console.error("No commits found");
+      return null;
     }
 
     const latestCommit = commits[0];
@@ -106,19 +98,12 @@ export async function fetchGitHubMetadata(
       : `https://github.com/${owner}/${repo}/commits`;
 
     return {
-      data: {
-        latestCommit,
-        firstCommit,
-        historyUrl,
-      },
-      error: null,
+      latestCommit,
+      firstCommit,
+      historyUrl,
     };
   } catch (error) {
     console.error("Error fetching GitHub metadata:", error);
-    return {
-      data: null,
-      error:
-        error instanceof Error ? error.message : "Failed to fetch metadata",
-    };
+    return null;
   }
 }

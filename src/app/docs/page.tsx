@@ -46,10 +46,10 @@ export default async function DocsPage() {
   const hasGithubConfig = !!GithubConfig.Accesstoken && !!GithubConfig.Owner && !!GithubConfig.Repo;
   const githubMetadata = hasGithubConfig 
     ? await fetchGitHubMetadata(data?.data.docs.id)
-    : { data: null, error: "GitHub configuration not found" };
+    : null;
   
   return (
-    <GitHubMetadataProvider data={githubMetadata.data} error={githubMetadata.error}>
+    <GitHubMetadataProvider data={githubMetadata}>
       <TinaClient
         Component={Document}
         props={{
