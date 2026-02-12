@@ -39,15 +39,13 @@ export async function GET(request: NextRequest) {
 
     const owner = GithubConfig.Owner
     const repo = GithubConfig.Repo
+    const githubToken = GithubConfig.Accesstoken;
 
     if(!owner || !repo) {
         throw new Error("GITHUB_OWNER and GITHUB_REPO must be set in environment secrets");
     }
 
     const path = searchParams.get("path");
-
-    // GitHub API token from environment variable (optional but recommended for higher rate limits)
-    const githubToken = GithubConfig.Accesstoken;
 
     const headers: HeadersInit = {
       Accept: "application/vnd.github.v3+json",
