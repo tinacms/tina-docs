@@ -8,8 +8,6 @@ import { getRelativeTime } from "./timeUtils";
 import type { GitHubMetadataProps, GitHubMetadataResponse } from "./type";
 
 export default function GitHubMetadata({
-  owner = "tinacms",
-  repo = "tina-docs",
   path,
   className = "",
 }: GitHubMetadataProps) {
@@ -23,10 +21,7 @@ export default function GitHubMetadata({
         setLoading(true);
         setError(null);
 
-        const params = new URLSearchParams({
-          owner,
-          repo,
-        });
+        const params = new URLSearchParams();
 
         if (path) {
           params.append("path", path);
@@ -54,7 +49,7 @@ export default function GitHubMetadata({
     };
 
     fetchGitHubMetadata();
-  }, [owner, repo, path]);
+  }, [path]);
 
   if (loading) {
     return (

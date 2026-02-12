@@ -17,7 +17,6 @@ export default function Document({ props, tinaProps }) {
 
   const documentationData = data.docs;
   const { pageTableOfContents } = props;
-
   const formattedDate = formatDate(documentationData?.last_edited);
   const previousPage = {
     slug: documentationData?.previous?.id.slice(7, -4),
@@ -56,9 +55,9 @@ export default function Document({ props, tinaProps }) {
             </h1>
             <CopyPageDropdown className="self-end mb-2 md:mb-0" />
           </div>
-          {process.env.NEXT_PUBLIC_GITHUB_TOKEN && (
+          {props.hasGithubConfig &&
             <GitHubMetadata path={documentationData?.id} />
-          )}
+          }
 
           {/* CONTENT */}
           <div

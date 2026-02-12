@@ -5,6 +5,7 @@ import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from ".";
+import GithubConfig from "@/src/utils/githubConfig";
 
 const siteUrl =
   process.env.NODE_ENV === "development"
@@ -89,6 +90,7 @@ export default async function DocsPage({
   const data = await getData(slug);
   const pageTableOfContents = getTableOfContents(data?.data.docs.body);
 
+
   return (
     <TinaClient
       Component={Document}
@@ -96,6 +98,7 @@ export default async function DocsPage({
         query: data.query,
         variables: data.variables,
         data: data.data,
+        hasGithubConfig : !!GithubConfig.Accesstoken && !!GithubConfig.Owner && !!GithubConfig.Repo,
         pageTableOfContents,
         documentationData: data,
         forceExperimental: data.variables.relativePath,
