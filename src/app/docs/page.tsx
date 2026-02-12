@@ -5,6 +5,7 @@ import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from "./[...slug]";
+import GithubConfig from "@/src/utils/githubConfig";
 
 const siteUrl =
   process.env.NODE_ENV === "development"
@@ -46,6 +47,7 @@ export default async function DocsPage() {
         variables: data.variables,
         data: data.data,
         pageTableOfContents,
+        hasGithubConfig : !!GithubConfig.Accesstoken && !!GithubConfig.Owner && !!GithubConfig.Repo,
         documentationData: data,
         forceExperimental: data.variables.relativePath,
       }}
