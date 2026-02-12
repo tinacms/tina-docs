@@ -6,6 +6,8 @@ import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from ".";
 import GithubConfig from "@/src/utils/githubConfig";
+import { GitHubMetadataProvider } from "@/src/contexts/github-metadata-context";
+import { fetchGitHubMetadata } from "@/src/services/github/fetch-github-metadata";
 
 const siteUrl =
   process.env.NODE_ENV === "development"
@@ -90,19 +92,26 @@ export default async function DocsPage({
   const data = await getData(slug);
   const pageTableOfContents = getTableOfContents(data?.data.docs.body);
 
+  // Fetch GitHub metadata server-side
+  const hasGithubConfig = !!GithubConfig.Accesstoken && !!GithubConfig.Owner && !!GithubConfig.Repo;
+  const githubMetadata = hasGithubConfig 
+    ? await fetchGitHubMetadata(data?.data.docs.id)
+    : { data: null, error: "GitHub configuration not found" };
 
   return (
-    <TinaClient
-      Component={Document}
-      props={{
-        query: data.query,
-        variables: data.variables,
-        data: data.data,
-        hasGithubConfig : !!GithubConfig.Accesstoken && !!GithubConfig.Owner && !!GithubConfig.Repo,
-        pageTableOfContents,
-        documentationData: data,
-        forceExperimental: data.variables.relativePath,
-      }}
-    />
+    <GitHubMetadataProvider data={githubMetadata.data} error={githubMetadata.error}>
+      <TinaClient
+        Component={Document}
+        props={{
+          query: data.query,
+          variables: data.variables,
+          data: data.data,
+          hasGithubConfig,
+          pageTableOfContents,
+          documentationData: data,
+          forceExperimental: data.variables.relativePath,
+        }}
+      />
+    </GitHubMetadataProvider>
   );
 }
