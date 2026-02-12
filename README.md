@@ -119,6 +119,16 @@ NEXT_PUBLIC_ENABLE_THEME_SELECTION=true
 
 > 💡 **Note:** The theme selector allows you to preview different themes in real-time, but these changes are temporary and won't persist when you open a new browser window/tab. To make a theme permanent, update the `Selected Them` field in your Settings through TinaCMS.
 
+**GitHub Metadata (Optional):**
+To enable the GitHub metadata component that shows commit history and last updated information on documentation pages, add:
+```env
+GITHUB_TOKEN=<your GitHub personal access token>
+GITHUB_OWNER=<your GitHub username or organization>
+GITHUB_REPO=<your repository name>
+```
+
+> 💡 **Note:** The `GITHUB_TOKEN` field is optional. However, if you choose to provide it, you must also provide `GITHUB_OWNER` and `GITHUB_REPO`. If you're deploying to Vercel, the `GITHUB_OWNER` and `GITHUB_REPO` fields will be automatically populated from Vercel's environment variables (`VERCEL_GIT_REPO_OWNER` and `VERCEL_GIT_REPO_SLUG`), so you only need to provide the `GITHUB_TOKEN`.
+
 ### **Step 5: Build for Production**
 
 ```bash
