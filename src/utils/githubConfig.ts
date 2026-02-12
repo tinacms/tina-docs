@@ -15,4 +15,8 @@ export default class GithubConfig {
     {
         return process.env.GITHUB_REPO || process.env.VERCEL_GIT_REPO_SLUG;
     }
+    static get IsConfigured()
+    {
+        return !!this.Accesstoken && !!this.Owner && !!this.Repo;
+    }
 }
