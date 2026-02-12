@@ -33,7 +33,7 @@ export default function GitHubMetadata({
         }
 
         const response = await fetch(
-          `https://tina.io/api/github-metadata?${params.toString()}`
+          `/api/github-metadata?${params.toString()}`
         );
 
         if (!response.ok) {

@@ -56,7 +56,9 @@ export default function Document({ props, tinaProps }) {
             </h1>
             <CopyPageDropdown className="self-end mb-2 md:mb-0" />
           </div>
-          <GitHubMetadata path={documentationData?.id} />
+          {process.env.NEXT_PUBLIC_GITHUB_TOKEN && (
+            <GitHubMetadata path={documentationData?.id} />
+          )}
 
           {/* CONTENT */}
           <div
