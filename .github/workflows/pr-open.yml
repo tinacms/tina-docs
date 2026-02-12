@@ -65,7 +65,7 @@ jobs:
       - name: Slugify branch name
         id: slug
         run: |
-          SLUG=$(echo "${{ github.head_ref }}" | tr '/' '-' | tr '[:upper:]' '[:lower:]')
+          SLUG=$(echo "${{ github.head_ref }}" | tr '/' '-' | tr -d '.' | tr '[:upper:]' '[:lower:]')
           echo "slug=$SLUG" >> $GITHUB_OUTPUT
 
   search-tests:
