@@ -2,6 +2,14 @@
 
 This file provides guidance to AI coding agents working in this repository.
 
+## About TinaDocs
+
+TinaDocs is a **public starter/template** — anyone can fork it and deploy their own documentation site. Keep this in mind when making changes:
+
+- Never hardcode deployment-specific values (URLs, org names, branding). Use environment variables or TinaCMS settings instead.
+- New features that not every user will want must be toggleable via TinaCMS settings or environment variables — don't assume all consumers want the same feature set.
+- Avoid dependencies on specific hosting providers. Support multiple deployment modes (Vercel, GitHub Pages, static export).
+
 ## Architecture
 
 TinaDocs is a documentation platform built on **Next.js 15 (App Router)** with **TinaCMS** for git-based content management, **Pagefind** for static search, and **Tailwind CSS** with a 6-theme system.
