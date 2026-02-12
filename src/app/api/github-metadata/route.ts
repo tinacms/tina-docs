@@ -48,7 +48,6 @@ export async function GET(request: NextRequest) {
     const path = searchParams.get("path");
 
     const headers: HeadersInit = {
-      Accept: "application/vnd.github.v3+json",
       "User-Agent": repo,
     };
 
@@ -67,7 +66,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch the latest commit
-    const commitsResponse = await fetch(apiUrl);
+    const commitsResponse = await fetch(apiUrl, { headers });
 
     const commits: GitHubCommit[] = await commitsResponse.json();
 
@@ -95,7 +94,7 @@ export async function GET(request: NextRequest) {
     } else {
       // For repo-wide, fetch commits in reverse order
       const firstCommitUrl = `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1&sha=HEAD`;
-      const firstCommitResponse = await fetch(firstCommitUrl);
+      const firstCommitResponse = await fetch(firstCommitUrl, { headers });
 
       if (firstCommitResponse.ok) {
         const firstCommits: GitHubCommit[] = await firstCommitResponse.json();
@@ -103,7 +102,7 @@ export async function GET(request: NextRequest) {
           // Get the very first commit by traversing to the root
           try {
             const rootCommitUrl = `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`;
-            const rootResponse = await fetch(rootCommitUrl);
+            const rootResponse = await fetch(rootCommitUrl, { headers });
             if (rootResponse.ok) {
               const rootCommits: GitHubCommit[] = await rootResponse.json();
               // This is a simplified approach - for a more accurate first commit,
