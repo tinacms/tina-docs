@@ -29,12 +29,16 @@ export default class GithubConfig {
         const repo = this.Repo;
         const githubToken = this.Accesstoken;
 
-        if (!owner || !repo) {
-          throw new Error("GitHub owner and repo must be configured");
+        if (!owner) {
+          throw new Error("GitHub metadata error: GITHUB_OWNER environment variable is not set. See README for setup instructions.");
+        }
+
+        if (!repo) {
+          throw new Error("GitHub metadata error: GITHUB_REPO environment variable is not set. See README for setup instructions.");
         }
 
         if (!githubToken) {
-          throw new Error("GitHub token is not configured");
+          throw new Error("GitHub metadata error: GITHUB_TOKEN environment variable is not set. See README for setup instructions.");
         }
 
         const headers: HeadersInit = {
@@ -51,16 +55,16 @@ export default class GithubConfig {
         // Fetch the latest commit
         const commitsResponse = await fetch(apiUrl, { 
           headers,
-        });
+          });
 
         if (!commitsResponse.ok) {
-          throw new Error(`GitHub API error: ${commitsResponse.status}`);
+          throw new Error(`GitHub API error: ${commitsResponse.status}. Verify that GITHUB_TOKEN, GITHUB_OWNER, and GITHUB_REPO are correctly configured. See README for setup instructions.`); 
         }
 
         const commits: GitHubCommit[] = await commitsResponse.json();
 
         if (!commits || commits.length === 0) {
-          throw new Error("No commits found");
+          throw new Error("No commits found for the specified path");
         }
 
         const latestCommit = commits[0];
