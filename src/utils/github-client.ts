@@ -21,6 +21,20 @@ export default class GithubConfig {
     return !!this.Accesstoken && !!this.Owner && !!this.Repo;
   }
 
+  /**
+   * Fetches GitHub metadata including commit history for a given file path.
+   * 
+   * @param path - Optional file path to fetch metadata for. If omitted, fetches repo-wide metadata.
+   * @returns Promise resolving to GitHubMetadataResponse with commit information, or null if an error occurs.
+   * 
+   * @precondition GITHUB_TOKEN environment variable must be set with a valid GitHub personal access token (classic) with 'public_repo' scope.
+   * @precondition GITHUB_OWNER environment variable (or VERCEL_GIT_REPO_OWNER) must be set with the repository owner/organization name.
+   * @precondition GITHUB_REPO environment variable (or VERCEL_GIT_REPO_SLUG) must be set with the repository name.
+   * 
+   * @throws Error if any required environment variables are not set.
+   * 
+   * @see README.md for detailed setup instructions.
+   */
   static async fetchMetadata(path?: string): Promise<GitHubMetadataResponse> {
     const owner = this.Owner;
     const repo = this.Repo;
