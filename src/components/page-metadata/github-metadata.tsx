@@ -5,7 +5,7 @@ import Link from "next/link";
 import { FaHistory } from "react-icons/fa";
 import { getRelativeTime } from "./timeUtils";
 import type { GitHubMetadataProps } from "./type";
-import { useGitHubMetadata } from "@/src/contexts/github-metadata-context";
+import { useGitHubMetadata } from "@/src/components/page-metadata/github-metadata-context";
 
 export default function GitHubMetadata({
   className = "",

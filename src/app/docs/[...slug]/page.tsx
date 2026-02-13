@@ -6,7 +6,7 @@ import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from ".";
 import GithubConfig from "@/src/utils/github-client";
-import { GitHubMetadataProvider } from "@/src/contexts/github-metadata-context";
+import { GitHubMetadataProvider } from "@/src/components/page-metadata/github-metadata-context";
 
 const siteUrl =
   process.env.NODE_ENV === "development"

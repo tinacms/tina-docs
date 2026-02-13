@@ -1,4 +1,4 @@
-import type { GitHubMetadataResponse, GitHubCommit } from "@/src/contexts/github-metadata-context";
+import type { GitHubMetadataResponse, GitHubCommit } from "@/src/components/page-metadata/github-metadata-context";
 
 /**
  * GithubConfig class provides access to GitHub-related configuration values.
