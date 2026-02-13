@@ -41,7 +41,6 @@ export default async function DocsPage() {
   const data = await getData();
   const pageTableOfContents = getTableOfContents(data?.data.docs.body);
 
-  // Fetch GitHub metadata server-side
   const githubMetadata = GitHubClient.IsConfigured
     ? await GitHubClient.fetchMetadata(data?.data.docs.id)
     : null;
