@@ -24,20 +24,17 @@ export default class GithubConfig {
 
     static async fetchMetadata(
       path?: string
-    ): Promise<GitHubMetadataResponse | null> {
-      try {
+    ): Promise<GitHubMetadataResponse> {
         const owner = this.Owner;
         const repo = this.Repo;
         const githubToken = this.Accesstoken;
 
         if (!owner || !repo) {
-          console.error("GitHub owner and repo must be configured");
-          return null;
+          throw new Error("GitHub owner and repo must be configured");
         }
 
         if (!githubToken) {
-          console.error("GitHub token is not configured");
-          return null;
+          throw new Error("GitHub token is not configured");
         }
 
         const headers: HeadersInit = {
@@ -58,15 +55,13 @@ export default class GithubConfig {
         });
 
         if (!commitsResponse.ok) {
-          console.error(`GitHub API error: ${commitsResponse.status}`);
-          return null;
+          throw new Error(`GitHub API error: ${commitsResponse.status}`);
         }
 
         const commits: GitHubCommit[] = await commitsResponse.json();
 
         if (!commits || commits.length === 0) {
-          console.error("No commits found");
-          return null;
+          throw new Error("No commits found");
         }
 
         const latestCommit = commits[0];
@@ -96,7 +91,6 @@ export default class GithubConfig {
           if (firstCommitResponse.ok) {
             const firstCommits: GitHubCommit[] = await firstCommitResponse.json();
             if (firstCommits.length > 0) {
-              try {
                 const rootCommitUrl = `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`;
                 const rootResponse = await fetch(rootCommitUrl, { 
                   headers,
@@ -106,9 +100,6 @@ export default class GithubConfig {
                   const rootCommits: GitHubCommit[] = await rootResponse.json();
                   firstCommit = rootCommits.length > 0 ? rootCommits[0] : null;
                 }
-              } catch (err) {
-                console.error("Error fetching first commit:", err);
-              }
             }
           }
         }
@@ -123,9 +114,5 @@ export default class GithubConfig {
           firstCommit,
           historyUrl,
         };
-      } catch (error) {
-        console.error("Error fetching GitHub metadata:", error);
-        return null;
-      }
     }
 }
