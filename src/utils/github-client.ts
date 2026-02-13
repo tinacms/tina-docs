@@ -51,7 +51,6 @@ export default class GithubConfig {
         // Fetch the latest commit
         const commitsResponse = await fetch(apiUrl, { 
           headers,
-          next: { revalidate: 3600 } // Cache for 1 hour
         });
 
         if (!commitsResponse.ok) {
@@ -71,7 +70,6 @@ export default class GithubConfig {
           const allCommitsUrl = `${apiUrl}&per_page=100`;
           const allCommitsResponse = await fetch(allCommitsUrl, { 
             headers,
-            next: { revalidate: 3600 }
           });
 
           if (allCommitsResponse.ok) {
@@ -85,7 +83,6 @@ export default class GithubConfig {
           const firstCommitUrl = `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1&sha=HEAD`;
           const firstCommitResponse = await fetch(firstCommitUrl, { 
             headers,
-            next: { revalidate: 3600 }
           });
 
           if (firstCommitResponse.ok) {
@@ -94,7 +91,6 @@ export default class GithubConfig {
                 const rootCommitUrl = `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`;
                 const rootResponse = await fetch(rootCommitUrl, { 
                   headers,
-                  next: { revalidate: 3600 }
                 });
                 if (rootResponse.ok) {
                   const rootCommits: GitHubCommit[] = await rootResponse.json();
