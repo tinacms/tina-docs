@@ -55,9 +55,7 @@ export default function Document({ props, tinaProps }) {
             </h1>
             <CopyPageDropdown className="self-end mb-2 md:mb-0" />
           </div>
-          {props.hasGithubConfig &&
-            <GitHubMetadata />
-          }
+          {props.hasGithubConfig && <GitHubMetadata />}
 
           {/* CONTENT */}
           <div

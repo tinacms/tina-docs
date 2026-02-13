@@ -37,7 +37,9 @@ interface GitHubMetadataContextType {
   data: GitHubMetadataResponse | null;
 }
 
-const GitHubMetadataContext = createContext<GitHubMetadataContextType | undefined>(undefined);
+const GitHubMetadataContext = createContext<
+  GitHubMetadataContextType | undefined
+>(undefined);
 
 export function GitHubMetadataProvider({
   children,
@@ -56,7 +58,9 @@ export function GitHubMetadataProvider({
 export function useGitHubMetadata() {
   const context = useContext(GitHubMetadataContext);
   if (context === undefined) {
-    throw new Error("useGitHubMetadata must be used within a GitHubMetadataProvider");
+    throw new Error(
+      "useGitHubMetadata must be used within a GitHubMetadataProvider"
+    );
   }
   return context;
 }

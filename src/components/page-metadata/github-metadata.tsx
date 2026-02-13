@@ -1,11 +1,11 @@
 "use client";
 
+import { useGitHubMetadata } from "@/src/components/page-metadata/github-metadata-context";
 import { formatDate } from "date-fns";
 import Link from "next/link";
 import { FaHistory } from "react-icons/fa";
 import { getRelativeTime } from "./timeUtils";
 import type { GitHubMetadataProps } from "./type";
-import { useGitHubMetadata } from "@/src/components/page-metadata/github-metadata-context";
 
 export default function GitHubMetadata({
   className = "",

@@ -37,12 +37,14 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
 
-    const owner = GithubConfig.Owner
-    const repo = GithubConfig.Repo
+    const owner = GithubConfig.Owner;
+    const repo = GithubConfig.Repo;
     const githubToken = GithubConfig.Accesstoken;
 
-    if(!owner || !repo) {
-        throw new Error("GITHUB_OWNER and GITHUB_REPO must be set in environment secrets");
+    if (!owner || !repo) {
+      throw new Error(
+        "GITHUB_OWNER and GITHUB_REPO must be set in environment secrets"
+      );
     }
 
     const path = searchParams.get("path");
@@ -51,8 +53,8 @@ export async function GET(request: NextRequest) {
       "User-Agent": repo,
     };
 
-    if(!githubToken) {
-        throw new Error("GITHUB_TOKEN is not set in environment secrets");
+    if (!githubToken) {
+      throw new Error("GITHUB_TOKEN is not set in environment secrets");
     }
 
     if (githubToken) {
@@ -75,10 +77,7 @@ export async function GET(request: NextRequest) {
     const commits: GitHubCommit[] = await commitsResponse.json();
 
     if (!commits || commits.length === 0) {
-      return NextResponse.json(
-        { error: "No commits found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "No commits found" }, { status: 404 });
     }
 
     const latestCommit = commits[0];
@@ -87,7 +86,7 @@ export async function GET(request: NextRequest) {
 
     if (path) {
       const allCommitsUrl = `${apiUrl}&per_page=100`;
-      const allCommitsResponse = await fetch(allCommitsUrl, );
+      const allCommitsResponse = await fetch(allCommitsUrl);
 
       if (allCommitsResponse.ok) {
         const allCommits: GitHubCommit[] = await allCommitsResponse.json();

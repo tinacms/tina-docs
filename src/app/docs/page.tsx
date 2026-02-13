@@ -1,12 +1,12 @@
 import { TinaClient } from "@/app/tina-client";
 import settings from "@/content/siteConfig.json";
 import { fetchTinaData } from "@/services/tina/fetch-tina-data";
+import { GitHubMetadataProvider } from "@/src/components/page-metadata/github-metadata-context";
+import GitHubClient from "@/src/utils/github-client";
 import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from "./[...slug]";
-import GitHubClient from "@/src/utils/github-client";
-import { GitHubMetadataProvider } from "@/src/components/page-metadata/github-metadata-context";
 
 const siteUrl =
   process.env.NODE_ENV === "development"
@@ -40,12 +40,12 @@ async function getData() {
 export default async function DocsPage() {
   const data = await getData();
   const pageTableOfContents = getTableOfContents(data?.data.docs.body);
-  
+
   // Fetch GitHub metadata server-side
-  const githubMetadata = GitHubClient.IsConfigured 
+  const githubMetadata = GitHubClient.IsConfigured
     ? await GitHubClient.fetchMetadata(data?.data.docs.id)
     : null;
-  
+
   return (
     <GitHubMetadataProvider data={githubMetadata}>
       <TinaClient
@@ -55,7 +55,7 @@ export default async function DocsPage() {
           variables: data.variables,
           data: data.data,
           pageTableOfContents,
-          hasGithubConfig : GitHubClient.IsConfigured,
+          hasGithubConfig: GitHubClient.IsConfigured,
           documentationData: data,
           forceExperimental: data.variables.relativePath,
         }}

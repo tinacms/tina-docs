@@ -1,12 +1,12 @@
 import { TinaClient } from "@/app/tina-client";
 import settings from "@/content/siteConfig.json";
 import { fetchTinaData } from "@/services/tina/fetch-tina-data";
+import { GitHubMetadataProvider } from "@/src/components/page-metadata/github-metadata-context";
+import GithubConfig from "@/src/utils/github-client";
 import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from ".";
-import GithubConfig from "@/src/utils/github-client";
-import { GitHubMetadataProvider } from "@/src/components/page-metadata/github-metadata-context";
 
 const siteUrl =
   process.env.NODE_ENV === "development"
@@ -93,7 +93,7 @@ export default async function DocsPage({
 
   // Fetch GitHub metadata server-side
   const hasGithubConfig = GithubConfig.IsConfigured;
-  const githubMetadata = hasGithubConfig 
+  const githubMetadata = hasGithubConfig
     ? await GithubConfig.fetchMetadata(data?.data.docs.id)
     : null;
 
