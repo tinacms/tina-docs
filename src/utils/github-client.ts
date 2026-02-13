@@ -7,21 +7,21 @@ import type {
  * GithubConfig class provides access to GitHub-related configuration values.
  * These values are typically set in environment variables.
  */
-export default class GithubConfig {
-  static get Accesstoken() {
+export const GithubConfig = {
+  get Accesstoken() {
     return process.env.GITHUB_TOKEN;
-  }
-  static get Owner() {
+  },
+  get Owner() {
     return process.env.GITHUB_OWNER || process.env.VERCEL_GIT_REPO_OWNER;
-  }
-  static get Repo() {
+  },
+  get Repo() {
     return process.env.GITHUB_REPO || process.env.VERCEL_GIT_REPO_SLUG;
-  }
-  static get IsConfigured() {
+  },
+  get IsConfigured() {
     return (
       !!GithubConfig.Accesstoken && !!GithubConfig.Owner && !!GithubConfig.Repo
     );
-  }
+  },
 
   /**
    * Fetches GitHub metadata including commit history for a given file path.
@@ -37,7 +37,7 @@ export default class GithubConfig {
    *
    * @see README.md for detailed setup instructions.
    */
-  static async fetchMetadata(path?: string): Promise<GitHubMetadataResponse> {
+  async fetchMetadata(path?: string): Promise<GitHubMetadataResponse> {
     const owner = GithubConfig.Owner;
     const repo = GithubConfig.Repo;
     const githubToken = GithubConfig.Accesstoken;
@@ -133,5 +133,7 @@ export default class GithubConfig {
       firstCommit,
       historyUrl,
     };
-  }
-}
+  },
+} as const;
+
+export default GithubConfig;
