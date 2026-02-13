@@ -18,7 +18,9 @@ export default class GithubConfig {
     return process.env.GITHUB_REPO || process.env.VERCEL_GIT_REPO_SLUG;
   }
   static get IsConfigured() {
-    return !!this.Accesstoken && !!this.Owner && !!this.Repo;
+    return (
+      !!GithubConfig.Accesstoken && !!GithubConfig.Owner && !!GithubConfig.Repo
+    );
   }
 
   /**
@@ -36,9 +38,9 @@ export default class GithubConfig {
    * @see README.md for detailed setup instructions.
    */
   static async fetchMetadata(path?: string): Promise<GitHubMetadataResponse> {
-    const owner = this.Owner;
-    const repo = this.Repo;
-    const githubToken = this.Accesstoken;
+    const owner = GithubConfig.Owner;
+    const repo = GithubConfig.Repo;
+    const githubToken = GithubConfig.Accesstoken;
 
     if (!owner) {
       throw new Error(
