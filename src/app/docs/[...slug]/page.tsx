@@ -92,8 +92,7 @@ export default async function DocsPage({
   const pageTableOfContents = getTableOfContents(data?.data.docs.body);
 
   // Fetch GitHub metadata server-side
-  const hasGithubConfig = GithubConfig.IsConfigured;
-  const githubMetadata = hasGithubConfig
+  const githubMetadata = GithubConfig.IsConfigured
     ? await GithubConfig.fetchMetadata(data?.data.docs.id)
     : null;
 
@@ -105,7 +104,7 @@ export default async function DocsPage({
           query: data.query,
           variables: data.variables,
           data: data.data,
-          hasGithubConfig,
+          hasGithubConfig: GithubConfig.IsConfigured,
           pageTableOfContents,
           documentationData: data,
           forceExperimental: data.variables.relativePath,
