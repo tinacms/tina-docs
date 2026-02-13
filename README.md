@@ -119,7 +119,32 @@ NEXT_PUBLIC_ENABLE_THEME_SELECTION=true
 
 > 💡 **Note:** The theme selector allows you to preview different themes in real-time, but these changes are temporary and won't persist when you open a new browser window/tab. To make a theme permanent, update the `Selected Them` field in your Settings through TinaCMS.
 
-### **Step 5: Build for Production**
+### **Step 5 (Optional): Enable GitHub Metadata**
+
+To display commit history and last updated information on your documentation pages:
+
+
+1. Create a GitHub personal access token:
+   - Go to [GitHub Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
+   - Click "Generate new token (classic)"
+   - Set the scope to `public_repo`
+   - Choose an expiration setting:
+     - Select "No expiration" for a permanent token, OR
+     - Choose an expiration period and set up a process to regenerate the token before it expires
+   - Generate the token and add it to your `.env` file
+
+2. Add the following to your `.env` file & deployment settings:
+
+```env
+GITHUB_TOKEN=<your GitHub personal access token>
+GITHUB_OWNER=<your GitHub username or organization>
+GITHUB_REPO=<your repository name>
+```
+
+> 💡 **Note:** The `GITHUB_TOKEN` field is optional. However, if you choose to provide it, you must also provide `GITHUB_OWNER` and `GITHUB_REPO`. If you're deploying to Vercel, the `GITHUB_OWNER` and `GITHUB_REPO` fields will be automatically populated from Vercel's environment variables (`VERCEL_GIT_REPO_OWNER` and `VERCEL_GIT_REPO_SLUG`), so you only need to provide the `GITHUB_TOKEN`.
+
+
+### **Step 6: Build for Production**
 
 ```bash
 pnpm build
@@ -129,7 +154,7 @@ pnpm build
 
 ## 🚀 Deployment
 
-### **Step 6: Deploy to Vercel** 
+### **Step 7: Deploy to Vercel** 
 
 TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.io/docs/tina-cloud/deployment-options/vercel) for detailed instructions.
 
