@@ -76,14 +76,14 @@ export default class GithubConfig {
 
     if (!commitsResponse.ok) {
       throw new Error(
-        `GitHub API error: ${commitsResponse.status}. Verify that GITHUB_TOKEN, GITHUB_OWNER, and GITHUB_REPO are correctly configured. See README for setup instructions.`
+        `GitHub API error: ${commitsResponse.status}.`
       );
     }
 
     const commits: GitHubCommit[] = await commitsResponse.json();
 
     if (!commits || commits.length === 0) {
-      throw new Error("No commits found for the specified path");
+      throw new Error("No commits found for the specified path.");
     }
 
     const latestCommit = commits[0];
