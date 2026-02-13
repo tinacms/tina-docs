@@ -5,9 +5,8 @@ import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from "./[...slug]";
-import GithubConfig from "@/src/utils/githubConfig";
+import GitHubClient from "@/src/utils/github-client";
 import { GitHubMetadataProvider } from "@/src/contexts/github-metadata-context";
-import { fetchGitHubMetadata } from "@/src/services/github/fetch-github-metadata";
 
 const siteUrl =
   process.env.NODE_ENV === "development"
@@ -43,9 +42,8 @@ export default async function DocsPage() {
   const pageTableOfContents = getTableOfContents(data?.data.docs.body);
   
   // Fetch GitHub metadata server-side
-  const hasGithubConfig = GithubConfig.IsConfigured;
-  const githubMetadata = hasGithubConfig 
-    ? await fetchGitHubMetadata(data?.data.docs.id)
+  const githubMetadata = GitHubClient.IsConfigured 
+    ? await GitHubClient.fetchMetadata(data?.data.docs.id)
     : null;
   
   return (
@@ -57,7 +55,7 @@ export default async function DocsPage() {
           variables: data.variables,
           data: data.data,
           pageTableOfContents,
-          hasGithubConfig,
+          hasGithubConfig : GitHubClient.IsConfigured,
           documentationData: data,
           forceExperimental: data.variables.relativePath,
         }}

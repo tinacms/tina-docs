@@ -1,4 +1,4 @@
-import GithubConfig from "@/src/utils/githubConfig";
+import GithubConfig from "@/src/utils/github-client";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
