@@ -1,6 +1,8 @@
 import { TinaClient } from "@/app/tina-client";
 import settings from "@/content/siteConfig.json";
 import { fetchTinaData } from "@/services/tina/fetch-tina-data";
+import { GitHubMetadataProvider } from "@/src/components/page-metadata/github-metadata-context";
+import GitHubClient from "@/src/utils/github-client";
 import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
 import { getSeo } from "@/utils/metadata/getSeo";
@@ -38,17 +40,25 @@ async function getData() {
 export default async function DocsPage() {
   const data = await getData();
   const pageTableOfContents = getTableOfContents(data?.data.docs.body);
+
+  const githubMetadata = GitHubClient.IsConfigured
+    ? await GitHubClient.fetchMetadata(data?.data.docs.id)
+    : null;
+
   return (
-    <TinaClient
-      Component={Document}
-      props={{
-        query: data.query,
-        variables: data.variables,
-        data: data.data,
-        pageTableOfContents,
-        documentationData: data,
-        forceExperimental: data.variables.relativePath,
-      }}
-    />
+    <GitHubMetadataProvider data={githubMetadata}>
+      <TinaClient
+        Component={Document}
+        props={{
+          query: data.query,
+          variables: data.variables,
+          data: data.data,
+          pageTableOfContents,
+          hasGithubConfig: GitHubClient.IsConfigured,
+          documentationData: data,
+          forceExperimental: data.variables.relativePath,
+        }}
+      />
+    </GitHubMetadataProvider>
   );
 }
