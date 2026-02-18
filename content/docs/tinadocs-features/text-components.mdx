@@ -4,7 +4,7 @@ last_edited: '2025-10-27T10:01:36.180Z'
 auto_generated: false
 ---
 
-Multiple embedded components – accordions, callouts, cards, and preloaded images are available out of the box.
+Multiple embedded components – accordions, callouts, and cards are available out of the box.
 
 <Callout
   body={<>
@@ -17,15 +17,7 @@ Multiple embedded components – accordions, callouts, cards, and preloaded imag
 
 You can see and add an Embed from the rich-text editor toolbar.
 
-<preloadedImage
-  image={{
-    src: "/img/docs-assets/embed-toolbar-access.png",
-    width: 1675,
-    height: 674,
-    alt: ""
-  }}
-  caption="Access the embed tab of the toolbar."
-/>
+![TinaCMS rich-text editor toolbar showing the embed tab](/img/docs-assets/embed-toolbar-access.png "Access the embed tab of the toolbar.")
 
 ## Cards
 
@@ -72,7 +64,7 @@ You can block all of your accordions with the option to have them as full-width 
         src: "/img/rico-replacement.jpg",
         width: 1408,
         height: 768,
-        alt: ""
+        alt: "Example llama image in a multi-accordion"
       }
     },
     {
@@ -82,7 +74,7 @@ You can block all of your accordions with the option to have them as full-width 
         src: "/img/rico-replacement.jpg",
         width: 1408,
         height: 768,
-        alt: ""
+        alt: "Example llama image in a multi-accordion"
       }
     }
   ]}
@@ -101,7 +93,7 @@ Accordions can also exist standalone.
     src: "/img/rico-replacement.jpg",
     width: 1408,
     height: 768,
-    alt: ""
+    alt: "Example llama image in a standalone accordion"
   }}
   fullWidth={true}
 />
@@ -152,78 +144,3 @@ Callouts are similar to block-quotes, to add a note or indication outside the no
   variant="api"
 />
 
-## Preloaded Images
-
-Preloaded images are optimized image components that prevent layout shift by storing dimensions with the image. This improves Core Web Vitals and provides a better user experience.
-
-### Why Use Preloaded Images?
-
-Regular markdown images (`![alt](path)`) load dimensions at runtime, which can cause:
-- Layout shift as the page loads (poor CLS score)
-- Slower initial render
-- Flickering content
-
-Preloaded images solve this by:
-- ✅ Storing width and height with the image
-- ✅ Preventing layout shift (better CLS)
-- ✅ Showing a loading skeleton while loading
-- ✅ Smooth fade-in transition when loaded
-- ✅ Built-in lightbox support
-
-### Regular Markdown Image vs Preloaded Image
-
-**Regular markdown image** (loads dimensions at runtime):
-
-<preloadedImage
-  image={{
-    src: "/img/docs-assets/embed-toolbar-access.png",
-    width: 1675,
-    height: 674,
-    alt: ""
-  }}
-  caption="Regular markdown image - loads dimensions at runtime"
-/>
-
-**Preloaded image** (dimensions stored, no layout shift):
-
-<preloadedImage
-  image={{
-    src: "/img/docs-assets/embed-toolbar-access.png",
-    width: 1920,
-    height: 1080,
-    alt: "Preloaded image with dimensions"
-  }}
-  caption="Preloaded image - dimensions stored, smooth loading"
-/>
-
-### Loading States
-
-Both image types show a loading skeleton while the image loads:
-- Regular images: Load skeleton + fetch dimensions
-- Preloaded images: Load skeleton only (dimensions already known)
-
-### When to Use Each Type
-
-**Use regular markdown images** when:
-- Quick documentation or notes
-- Image optimization is not critical
-- You don't mind runtime dimension loading
-
-**Use preloaded images** when:
-- Page performance matters (Core Web Vitals)
-- Professional documentation
-- Preventing layout shift is important
-- You want consistent loading experience
-
-### Adding Preloaded Images
-
-You can add preloaded images from the rich-text editor toolbar's embed menu.
-
-For detailed information about image optimization, migration scripts, and best practices, see the [Image Management](/docs/tinadocs-features/image-management) guide.
-
-<Callout
-  body={<>
-    📸 **Learn More:** The [Image Management](/docs/tinadocs-features/image-management) page covers TinaCloud image storage, migration scripts, performance optimization, and best practices for working with images in TinaDocs.
-  </>}
-  variant="idea"
-/>

@@ -13,7 +13,7 @@
  *
  * What it does:
  * 1. Scans all MDX files in content/docs/
- * 2. Finds accordion and scrollShowcase blocks with image fields
+ * 2. Finds accordion and scrollShowcase blocks with string image fields
  * 3. Loads each image to get its dimensions
  * 4. Converts string image paths to ImageMetadata objects with width/height
  * 5. Updates the MDX files with the new format
@@ -229,7 +229,7 @@ async function migrateImagesInFile(filePath) {
 
         // Replace the old format with the new one
         const oldImageValue = `image="${imagePath}"`;
-        newContent = newContent.replace(oldImageValue, newImageValue);
+        newContent = newContent.replaceAll(oldImageValue, newImageValue);
 
         modified = true;
         migrations.push({
@@ -276,7 +276,7 @@ async function migrateImagesInFile(filePath) {
 
         // Replace the old format with the new one
         const oldImageValue = `image: "${imagePath}"`;
-        newContent = newContent.replace(oldImageValue, newImageValue);
+        newContent = newContent.replaceAll(oldImageValue, newImageValue);
 
         modified = true;
         migrations.push({
@@ -291,47 +291,6 @@ async function migrateImagesInFile(filePath) {
           `  ${colors.yellow}⚠️  Could not load image: ${error.message}${colors.reset}`
         );
       }
-    }
-  }
-
-  // Match inline markdown images: ![alt](path "caption")
-  const inlineImageRegex = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)/g;
-  const inlineMatches = [...content.matchAll(inlineImageRegex)];
-
-  for (const match of inlineMatches) {
-    const [fullMatch, alt, imagePath, caption] = match;
-
-    try {
-      console.log(`  📷 Found inline image: ${imagePath}`);
-      const dimensions = await getImageDimensions(imagePath);
-
-      // Create the preloadedImage component
-      const preloadedImageBlock = `<preloadedImage
-  image={{
-    src: "${imagePath}",
-    width: ${dimensions.width},
-    height: ${dimensions.height},
-    alt: "${alt || ""}"
-  }}${caption ? `\n  caption="${caption}"` : ""}
-/>`;
-
-      // Replace the markdown image with the component
-      newContent = newContent.replace(fullMatch, preloadedImageBlock);
-
-      modified = true;
-      migrations.push({
-        path: imagePath,
-        dimensions,
-        type: "inline",
-      });
-
-      console.log(
-        `  ✅ Migrated to preloadedImage: ${dimensions.width}x${dimensions.height}`
-      );
-    } catch (error) {
-      console.log(
-        `  ${colors.yellow}⚠️  Could not load inline image: ${error.message}${colors.reset}`
-      );
     }
   }
 

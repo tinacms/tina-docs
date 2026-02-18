@@ -1,17 +1,16 @@
 "use client";
 
-import { getImagePath } from "@/utils/image-path";
+import {
+  type ImageMetadata,
+  getImagePath,
+  normalizeImage,
+} from "@/utils/image-path";
 import Image, { type ImageProps } from "next/image";
 import { useState } from "react";
 import { ImageErrorState } from "./image-error-state";
 import { ImageOverlayWrapper } from "./image-overlay-wrapper";
 
-export interface ImageMetadata {
-  src: string;
-  width?: number;
-  height?: number;
-  alt?: string;
-}
+export type { ImageMetadata };
 
 export interface TinaImageProps extends Omit<ImageProps, "src" | "alt"> {
   /**
@@ -47,16 +46,14 @@ export const TinaImage = ({
   height,
   fill,
   priority,
+  style,
   ...restProps
 }: TinaImageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
   // Normalize src to ImageMetadata format
-  const imageData: ImageMetadata =
-    typeof src === "string"
-      ? { src, alt, width: width as number, height: height as number }
-      : { alt, ...src };
+  const imageData = normalizeImage(src, alt);
 
   // Resolve the image path with base path handling
   const resolvedSrc = getImagePath(imageData.src);
@@ -67,14 +64,6 @@ export const TinaImage = ({
     fill !== undefined
       ? fill
       : !(imageData.width && imageData.height) && !(width && height);
-
-  // Calculate aspect ratio for skeleton
-  const aspectRatio =
-    imageData.width && imageData.height
-      ? `${imageData.width}/${imageData.height}`
-      : width && height
-        ? `${width}/${height}`
-        : "16/9"; // Default aspect ratio
 
   // Build the image element with loading state
   // Use span instead of div to avoid hydration errors when inside <p> tags
@@ -98,12 +87,11 @@ export const TinaImage = ({
         priority={priority}
         className={className}
         style={{
-          ...restProps.style,
+          ...style,
           opacity: isLoading || hasError ? 0 : 1,
           transition: "opacity 0.3s ease-in-out",
         }}
         onLoad={() => setIsLoading(false)}
-        onLoadingComplete={() => setIsLoading(false)}
         onError={() => {
           setIsLoading(false);
           setHasError(true);
@@ -113,8 +101,15 @@ export const TinaImage = ({
     </span>
   );
 
-  // If lightbox is enabled and image is loaded without errors, wrap with ImageOverlayWrapper
-  if (enableLightbox && !isLoading && !hasError) {
+  const captionElement = caption ? (
+    <span className="font-tuner text-sm text-neutral-text-secondary block text-left mt-2">
+      Figure: {caption}
+    </span>
+  ) : null;
+
+  // Always render the lightbox wrapper to avoid re-mounting the Image on load.
+  // The wrapper handles its own disabled state visually.
+  if (enableLightbox) {
     return (
       <>
         <ImageOverlayWrapper
@@ -124,24 +119,15 @@ export const TinaImage = ({
         >
           {imageElement}
         </ImageOverlayWrapper>
-        {caption && (
-          <span className="font-tuner text-sm text-neutral-text-secondary block text-left mt-2">
-            Figure: {caption}
-          </span>
-        )}
+        {captionElement}
       </>
     );
   }
 
-  // Return without lightbox wrapper
   return (
     <>
       {imageElement}
-      {caption && (
-        <span className="font-tuner text-sm text-neutral-text-secondary block text-left mt-2">
-          Figure: {caption}
-        </span>
-      )}
+      {captionElement}
     </>
   );
 };

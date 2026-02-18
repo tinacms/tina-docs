@@ -2,12 +2,13 @@ import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { type ImageMetadata, normalizeImage } from "@/utils/image-path";
 import { TinaImage } from "../../ui/tina-image";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 
 interface AccordionProps {
   docText: string;
-  image: string;
+  image: string | ImageMetadata;
   heading?: string;
   fullWidth?: boolean;
 }
@@ -20,6 +21,8 @@ const Accordion = (props) => {
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
+
+  const imageData = image ? normalizeImage(image, heading || "image") : null;
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -61,27 +64,21 @@ const Accordion = (props) => {
               components={MarkdownComponentMapping}
             />
           </div>
-          {image && (
+          {imageData && (
             <div className="p-4" data-tina-field={tinaField(props, "image")}>
               <TinaImage
-                src={typeof image === "string" ? image : image.src || image}
-                alt={
-                  typeof image === "string"
-                    ? "image"
-                    : image.alt || heading || "image"
-                }
+                src={imageData}
+                alt={imageData.alt || heading || "image"}
                 caption={heading}
                 enableLightbox={true}
                 className="rounded-lg"
-                width={
-                  typeof image === "object" && image.width
-                    ? image.width
-                    : 500
-                }
-                height={
-                  typeof image === "object" && image.height
-                    ? image.height
-                    : 500
+                fill={!imageData.width || !imageData.height}
+                width={imageData.width}
+                height={imageData.height}
+                style={
+                  imageData.width
+                    ? { width: "100%", height: "auto" }
+                    : undefined
                 }
               />
             </div>
@@ -98,7 +95,7 @@ interface AccordionBlockProps {
   fullWidth?: boolean;
   accordionItems: {
     docText: string;
-    image: string;
+    image: string | ImageMetadata;
     heading?: string;
     fullWidth?: boolean;
   }[];
@@ -149,88 +146,90 @@ export const AccordionBlock = (props) => {
         fullWidth ? "w-full" : "w-3/4"
       }`}
     >
-      {accordionItems.map((item, index) => (
-        <div key={index} className="w-full">
-          <div
-            className="flex cursor-pointer items-center justify-between px-6 py-6"
-            onClick={() => toggleExpand(index)}
-            data-tina-field={tinaField(props.accordionItems[index], "heading")}
-          >
-            <h4 className="text-neutral-text text-base font-heading mt-0.5">
-              {item.heading || "Click to expand"}
-            </h4>
-            <div>
-              {isExpanded[index] ? (
-                <MinusIcon className="size-5 text-neutral-text" />
-              ) : (
-                <PlusIcon className="size-5 text-neutral-text" />
-              )}
-            </div>
-          </div>
-          <div
-            className={`grid gap-4 transition-all duration-700 ease-in-out ${
-              isExpanded[index]
-                ? "max-h-[2000px] opacity-100"
-                : "max-h-0 overflow-hidden opacity-0"
-            } ${item.image ? "sm:grid-cols-2" : ""}`}
-            ref={(el: HTMLDivElement | null) => {
-              contentRefs.current[index] = el;
-            }}
-            data-tina-field={tinaField(props.accordionItems[index], "docText")}
-          >
+      {accordionItems.map((item, index) => {
+        const imageData = item.image
+          ? normalizeImage(item.image, item.heading || "image")
+          : null;
+
+        return (
+          <div key={index} className="w-full">
             <div
-              className="px-4"
+              className="flex cursor-pointer items-center justify-between px-6 py-6"
+              onClick={() => toggleExpand(index)}
+              data-tina-field={tinaField(
+                props.accordionItems[index],
+                "heading"
+              )}
+            >
+              <h4 className="text-neutral-text text-base font-heading mt-0.5">
+                {item.heading || "Click to expand"}
+              </h4>
+              <div>
+                {isExpanded[index] ? (
+                  <MinusIcon className="size-5 text-neutral-text" />
+                ) : (
+                  <PlusIcon className="size-5 text-neutral-text" />
+                )}
+              </div>
+            </div>
+            <div
+              className={`grid gap-4 transition-all duration-700 ease-in-out ${
+                isExpanded[index]
+                  ? "max-h-[2000px] opacity-100"
+                  : "max-h-0 overflow-hidden opacity-0"
+              } ${item.image ? "sm:grid-cols-2" : ""}`}
+              ref={(el: HTMLDivElement | null) => {
+                contentRefs.current[index] = el;
+              }}
               data-tina-field={tinaField(
                 props.accordionItems[index],
                 "docText"
               )}
             >
-              <TinaMarkdown
-                content={item.docText as any}
-                components={MarkdownComponentMapping}
-              />
-            </div>
-            {item.image && (
               <div
-                className="p-4"
+                className="px-4"
                 data-tina-field={tinaField(
                   props.accordionItems[index],
-                  "image"
+                  "docText"
                 )}
               >
-                <TinaImage
-                  src={
-                    typeof item.image === "string"
-                      ? item.image
-                      : item.image.src || item.image
-                  }
-                  alt={
-                    typeof item.image === "string"
-                      ? "image"
-                      : item.image.alt || item?.heading || "image"
-                  }
-                  caption={item?.heading}
-                  enableLightbox={true}
-                  className="rounded-lg"
-                  width={
-                    typeof item.image === "object" && item.image.width
-                      ? item.image.width
-                      : 500
-                  }
-                  height={
-                    typeof item.image === "object" && item.image.height
-                      ? item.image.height
-                      : 500
-                  }
+                <TinaMarkdown
+                  content={item.docText as any}
+                  components={MarkdownComponentMapping}
                 />
               </div>
+              {imageData && (
+                <div
+                  className="p-4"
+                  data-tina-field={tinaField(
+                    props.accordionItems[index],
+                    "image"
+                  )}
+                >
+                  <TinaImage
+                    src={imageData}
+                    alt={imageData.alt || item?.heading || "image"}
+                    caption={item?.heading}
+                    enableLightbox={true}
+                    className="rounded-lg"
+                    fill={!imageData.width || !imageData.height}
+                    width={imageData.width}
+                    height={imageData.height}
+                    style={
+                      imageData.width
+                        ? { width: "100%", height: "auto" }
+                        : undefined
+                    }
+                  />
+                </div>
+              )}
+            </div>
+            {index < accordionLength - 1 && (
+              <hr className="w-full h-0.5 text-neutral-border/50" />
             )}
           </div>
-          {index < accordionLength - 1 && (
-            <hr className="w-full h-0.5 text-neutral-border/50" />
-          )}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

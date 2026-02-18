@@ -1,6 +1,4 @@
-import ImageWithMetadata, {
-  ImageWithMetadataFields,
-} from "../../collections/image-metadata";
+import { ImageWithMetadataFields } from "../../collections/image-metadata";
 import { ImageWithMetadataField } from "../../customFields/image-with-metadata";
 
 const AccordionItemFields = [

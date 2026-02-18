@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 import { ImageField, wrapFieldsWithMeta } from "tinacms";
-import type { TinaField } from "tinacms";
 
 interface ImageMetadataValue {
   src?: string;
@@ -180,56 +179,7 @@ export const ImageWithMetadataField = wrapFieldsWithMeta((props: any) => {
         </div>
       )}
 
-      {/* Hidden fields for width and height (these are stored but not editable) */}
-      <input type="hidden" value={currentValue.width || ""} />
-      <input type="hidden" value={currentValue.height || ""} />
     </div>
   );
 });
 
-/**
- * Reusable field definition for images with metadata.
- * Use this in your TinaCMS schema definitions.
- *
- * Example:
- * {
- *   type: "object",
- *   name: "heroImage",
- *   label: "Hero Image",
- *   fields: ImageWithMetadataFields,
- *   ui: { component: ImageWithMetadataField }
- * }
- */
-export const ImageWithMetadataFields: TinaField[] = [
-  {
-    type: "image",
-    name: "src",
-    label: "Image",
-    required: true,
-  },
-  {
-    type: "string",
-    name: "alt",
-    label: "Alt Text",
-    description: "Describe the image for accessibility",
-    required: true,
-  },
-  {
-    type: "number",
-    name: "width",
-    label: "Width",
-    description: "Automatically captured on upload",
-    ui: {
-      component: () => null, // Hidden field
-    },
-  },
-  {
-    type: "number",
-    name: "height",
-    label: "Height",
-    description: "Automatically captured on upload",
-    ui: {
-      component: () => null, // Hidden field
-    },
-  },
-];

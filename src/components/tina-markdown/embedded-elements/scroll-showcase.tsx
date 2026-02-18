@@ -1,6 +1,7 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { type ImageMetadata, normalizeImage } from "@/utils/image-path";
 import { TinaImage } from "../../ui/tina-image";
 import {
   type Item,
@@ -12,7 +13,7 @@ import {
 export function ScrollBasedShowcase(data: {
   showcaseItems: {
     title: string;
-    image: string;
+    image: string | ImageMetadata;
     content: any;
     useAsSubsection?: boolean;
   }[];
@@ -21,7 +22,9 @@ export function ScrollBasedShowcase(data: {
   const componentRef = useRef<HTMLDivElement>(null);
   const headingRefs = useRef<(HTMLHeadingElement | null)[]>([]);
   const [activeIds, setActiveIds] = useState<string[]>([]);
-  const [activeImageSrc, setActiveImageSrc] = useState<string>("");
+  const [activeImageSrc, setActiveImageSrc] = useState<
+    string | ImageMetadata
+  >("");
 
   const windowSize = useWindowSize();
 
@@ -79,6 +82,10 @@ export function ScrollBasedShowcase(data: {
     }
   }, [activeIds, headings]);
 
+  const activeImage = activeImageSrc
+    ? normalizeImage(activeImageSrc)
+    : null;
+
   return (
     <div
       ref={componentRef}
@@ -93,6 +100,9 @@ export function ScrollBasedShowcase(data: {
           {data.showcaseItems?.map((item, index) => {
             const itemId = `${item.title}-${index}`;
             const isFocused = activeIds.includes(itemId);
+            const imageData = item.image
+              ? normalizeImage(item.image, item.title)
+              : null;
 
             return (
               <div
@@ -159,25 +169,19 @@ export function ScrollBasedShowcase(data: {
 
                 {/* This image is only shown on mobile (md:hidden).
                     On larger screens, the separate container is used. */}
-                {item.image && (
+                {imageData && (
                   <div className="my-8 block md:hidden">
                     <TinaImage
-                      src={
-                        typeof item.image === "string"
-                          ? item.image
-                          : item.image.src || item.image
-                      }
+                      src={imageData}
                       alt={item.title}
                       enableLightbox={false}
-                      width={
-                        typeof item.image === "object" && item.image.width
-                          ? item.image.width
-                          : 500
-                      }
-                      height={
-                        typeof item.image === "object" && item.image.height
-                          ? item.image.height
-                          : 300
+                      fill={!imageData.width || !imageData.height}
+                      width={imageData.width}
+                      height={imageData.height}
+                      style={
+                        imageData.width
+                          ? { width: "100%", height: "auto" }
+                          : undefined
                       }
                     />
                   </div>
@@ -189,7 +193,7 @@ export function ScrollBasedShowcase(data: {
 
         {/* This image container is only displayed on md+ */}
         <div className="relative hidden w-full flex-1 overflow-hidden md:block">
-          {activeImageSrc && (
+          {activeImage && (
             <div
               className="w-100 absolute right-0 rounded-lg transition-all duration-1000 ease-in-out"
               style={{
@@ -201,22 +205,16 @@ export function ScrollBasedShowcase(data: {
               }}
             >
               <TinaImage
-                src={
-                  typeof activeImageSrc === "string"
-                    ? activeImageSrc
-                    : activeImageSrc.src || activeImageSrc
-                }
+                src={activeImage}
                 alt=""
                 enableLightbox={false}
-                width={
-                  typeof activeImageSrc === "object" && activeImageSrc.width
-                    ? activeImageSrc.width
-                    : 500
-                }
-                height={
-                  typeof activeImageSrc === "object" && activeImageSrc.height
-                    ? activeImageSrc.height
-                    : 300
+                fill={!activeImage.width || !activeImage.height}
+                width={activeImage.width}
+                height={activeImage.height}
+                style={
+                  activeImage.width
+                    ? { width: "100%", height: "auto" }
+                    : undefined
                 }
               />
             </div>
