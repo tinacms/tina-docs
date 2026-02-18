@@ -13,19 +13,17 @@ interface ImageOverlayWrapperProps {
   caption?: string;
 }
 
-// Custom image loader to bypass Next.js image optimization for the lightbox.
-// For external URLs (like TinaCloud), return the URL as-is since they handle
-// their own optimization. For local images, append width/quality params.
-const customImageLoader: ImageLoader = ({ src, width, quality }) => {
+// Custom image loader for local images only - serves files directly
+// with width/quality params (which the local server ignores).
+const localImageLoader: ImageLoader = ({ src, width, quality }) => {
   const fullSrc = getImagePath(src);
-
-  if (fullSrc.startsWith("http://") || fullSrc.startsWith("https://")) {
-    return fullSrc;
-  }
-
   const separator = fullSrc.includes("?") ? "&" : "?";
   return `${fullSrc}${separator}w=${width}&q=${quality || 75}`;
 };
+
+function isExternalUrl(url: string): boolean {
+  return url.startsWith("http://") || url.startsWith("https://");
+}
 
 export const ImageOverlayWrapper = ({
   children,
@@ -75,6 +73,10 @@ export const ImageOverlayWrapper = ({
     }
   };
 
+  // For external URLs (TinaCloud), let Next.js handle via /_next/image proxy.
+  // For local images, use the custom loader to serve files directly.
+  const isExternal = isExternalUrl(src);
+
   const overlay =
     isOpen && mounted
       ? createPortal(
@@ -108,7 +110,7 @@ export const ImageOverlayWrapper = ({
                   )}
 
                   <Image
-                    loader={customImageLoader}
+                    {...(isExternal ? {} : { loader: localImageLoader })}
                     src={src}
                     alt={alt}
                     fill
