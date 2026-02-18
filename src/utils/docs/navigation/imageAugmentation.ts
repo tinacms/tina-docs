@@ -102,18 +102,33 @@ function getImageDimensionsFromBuffer(
 }
 
 /**
- * Resolve a local image URL to an absolute file path under `public/`.
- * Returns `null` for external URLs or data URIs.
+ * Resolve an image URL to an absolute file path under `public/`.
+ * Handles both local paths (/img/foo.png) and TinaCloud CDN URLs
+ * (https://assets.tina.io/{project-id}/img/foo.png) by extracting
+ * the path portion and looking it up locally.
+ * Returns `null` for data URIs or unresolvable URLs.
  */
 function resolveImagePath(url: string): string | null {
-  if (
-    url.startsWith("http://") ||
-    url.startsWith("https://") ||
-    url.startsWith("data:")
-  ) {
+  if (url.startsWith("data:")) {
     return null;
   }
+
   const publicDir = path.join(process.cwd(), "public");
+
+  // TinaCloud CDN URLs: https://assets.tina.io/{project-id}/path/to/image.png
+  const tinaCloudMatch = url.match(
+    /^https?:\/\/assets\.tina\.io\/[^/]+\/(.+)$/
+  );
+  if (tinaCloudMatch) {
+    return path.join(publicDir, tinaCloudMatch[1]);
+  }
+
+  // Skip other external URLs
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return null;
+  }
+
+  // Local path
   return path.join(publicDir, url);
 }
 

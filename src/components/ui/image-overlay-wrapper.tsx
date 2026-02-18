@@ -148,7 +148,7 @@ export const ImageOverlayWrapper = ({
       <button
         type="button"
         onClick={openOverlay}
-        className="cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-90 border-none bg-transparent p-0 md:block w-full flex justify-center"
+        className="cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-90 border-none bg-transparent p-0 md:block w-full h-full flex justify-center"
         aria-label={`Open image overlay: ${alt}`}
       >
         {children}
