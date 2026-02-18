@@ -77,7 +77,7 @@ export const ImageOverlayWrapper = ({
           <div
             ref={overlayRef}
             tabIndex={-1}
-            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-lg outline-none"
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-lg outline-none animate-fade-in"
             onClick={closeOverlay}
             onKeyDown={handleKeyDown}
           >
@@ -111,6 +111,8 @@ export const ImageOverlayWrapper = ({
                     style={{
                       objectFit: "contain",
                       objectPosition: "center",
+                      opacity: isLoading ? 0 : 1,
+                      transition: "opacity 0.3s ease-in-out",
                     }}
                     onLoad={handleImageLoad}
                   />
