@@ -13,12 +13,16 @@ interface ImageOverlayWrapperProps {
   caption?: string;
 }
 
-// Custom image loader to bypass Next.js image optimization
+// Custom image loader to bypass Next.js image optimization for the lightbox.
+// For external URLs (like TinaCloud), return the URL as-is since they handle
+// their own optimization. For local images, append width/quality params.
 const customImageLoader: ImageLoader = ({ src, width, quality }) => {
-  // Use the centralized image path utility
   const fullSrc = getImagePath(src);
 
-  // If the src already includes query parameters, append with &, otherwise use ?
+  if (fullSrc.startsWith("http://") || fullSrc.startsWith("https://")) {
+    return fullSrc;
+  }
+
   const separator = fullSrc.includes("?") ? "&" : "?";
   return `${fullSrc}${separator}w=${width}&q=${quality || 75}`;
 };
@@ -148,7 +152,7 @@ export const ImageOverlayWrapper = ({
       <button
         type="button"
         onClick={openOverlay}
-        className="cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-90 border-none bg-transparent p-0 md:block w-full h-full flex justify-center"
+        className="cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-90 border-none bg-transparent p-0 md:block w-full flex justify-center"
         aria-label={`Open image overlay: ${alt}`}
       >
         {children}

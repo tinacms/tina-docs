@@ -44,7 +44,7 @@ export const ImageComponent = (props: {
         ) : (
           <span
             className="relative overflow-hidden rounded-xl block w-full"
-            style={{ aspectRatio: "16/9", minHeight: "200px" }}
+            style={{ paddingBottom: "56.25%", height: 0 }}
           >
             <TinaImage
               src={imageSrc}
