@@ -140,9 +140,6 @@ export function augmentBodyImageDimensions(body: AstNode): void {
           if (dims) {
             node.width = dims.width;
             node.height = dims.height;
-            console.log(
-              `[imageAugmentation] ${node.url} → ${dims.width}x${dims.height}`
-            );
           }
         } catch {
           // Skip images that can't be read

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { TinaImage } from "@/components/ui/tina-image";
+import Link from "next/link";
 
 const ErrorWrapper = ({
   errorConfig,

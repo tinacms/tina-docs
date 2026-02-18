@@ -130,7 +130,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   apiReference: (props) => <ApiReference {...props} />,
   youtube: (props) => <Youtube {...props} />,
   codeTabs: (props) => <CodeTabs {...props} />,
-Callout: (props: { body: TinaMarkdownContent; variant: string }) => (
+  Callout: (props: { body: TinaMarkdownContent; variant: string }) => (
     <Callout {...props} variant={props.variant as CalloutVariant} />
   ),
   // Our default markdown components

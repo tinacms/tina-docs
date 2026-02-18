@@ -178,8 +178,6 @@ export const ImageWithMetadataField = wrapFieldsWithMeta((props: any) => {
           {currentValue.height}px
         </div>
       )}
-
     </div>
   );
 });
-

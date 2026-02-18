@@ -18,53 +18,44 @@ export const ImageComponent = (props: {
 
   const hasDimensions = !!(props?.width && props?.height);
 
-  // When dimensions are available (injected at build time), use explicit sizing.
-  // Otherwise fall back to fill mode (during live CMS editing or external URLs).
-  const aspectRatio = hasDimensions
-    ? `${props.width}/${props.height}`
-    : "16/9";
-
   return (
     <span className="my-6 flex flex-col gap-2">
       <span className="relative w-full max-w-2xl block">
-        <span
-          className="relative overflow-hidden rounded-xl block"
-          style={{
-            aspectRatio: aspectRatio,
-            width: "100%",
-            height: "auto",
-          }}
-        >
+        {hasDimensions ? (
           <TinaImage
-            src={
-              hasDimensions
-                ? {
-                    src: imageSrc,
-                    width: props.width,
-                    height: props.height,
-                    alt: imageAlt,
-                  }
-                : imageSrc
-            }
+            src={{
+              src: imageSrc,
+              width: props.width,
+              height: props.height,
+              alt: imageAlt,
+            }}
             alt={imageAlt}
             enableLightbox={true}
-            fill={!hasDimensions}
-            width={hasDimensions ? props.width : undefined}
-            height={hasDimensions ? props.height : undefined}
+            width={props.width}
+            height={props.height}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
-            style={
-              hasDimensions
-                ? {
-                    objectFit: "contain",
-                    width: "100%",
-                    height: "auto",
-                  }
-                : {
-                    objectFit: "contain",
-                  }
-            }
+            className="rounded-xl"
+            style={{
+              objectFit: "contain",
+              width: "100%",
+              height: "auto",
+            }}
           />
-        </span>
+        ) : (
+          <span
+            className="relative overflow-hidden rounded-xl block w-full"
+            style={{ aspectRatio: "16/9", minHeight: "200px" }}
+          >
+            <TinaImage
+              src={imageSrc}
+              alt={imageAlt}
+              enableLightbox={true}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
+              style={{ objectFit: "contain" }}
+            />
+          </span>
+        )}
       </span>
       {imageCaption && (
         <span className="font-tuner text-sm text-neutral-text-secondary block text-left">

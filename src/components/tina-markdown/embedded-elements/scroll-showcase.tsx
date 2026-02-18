@@ -1,7 +1,7 @@
+import { type ImageMetadata, normalizeImage } from "@/utils/image-path";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { type ImageMetadata, normalizeImage } from "@/utils/image-path";
 import { TinaImage } from "../../ui/tina-image";
 import {
   type Item,
@@ -22,9 +22,9 @@ export function ScrollBasedShowcase(data: {
   const componentRef = useRef<HTMLDivElement>(null);
   const headingRefs = useRef<(HTMLHeadingElement | null)[]>([]);
   const [activeIds, setActiveIds] = useState<string[]>([]);
-  const [activeImageSrc, setActiveImageSrc] = useState<
-    string | ImageMetadata
-  >("");
+  const [activeImageSrc, setActiveImageSrc] = useState<string | ImageMetadata>(
+    ""
+  );
 
   const windowSize = useWindowSize();
 
@@ -82,9 +82,7 @@ export function ScrollBasedShowcase(data: {
     }
   }, [activeIds, headings]);
 
-  const activeImage = activeImageSrc
-    ? normalizeImage(activeImageSrc)
-    : null;
+  const activeImage = activeImageSrc ? normalizeImage(activeImageSrc) : null;
 
   return (
     <div

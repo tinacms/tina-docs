@@ -1,9 +1,9 @@
 "use client";
 
+import { TinaImage } from "@/components/ui/tina-image";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { TinaImage } from "@/components/ui/tina-image";
 
 interface NavbarLogoProps {
   navigationDocsData: any;

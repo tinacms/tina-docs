@@ -3,7 +3,7 @@ import { ImageWithMetadataField } from "../customFields/image-with-metadata";
 /**
  * Reusable TinaCMS schema object type for images with metadata.
  * Captures width, height, and alt text alongside the image path.
- * 
+ *
  * Usage in templates:
  * {
  *   name: "image",

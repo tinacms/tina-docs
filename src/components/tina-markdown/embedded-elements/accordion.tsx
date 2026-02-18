@@ -1,8 +1,8 @@
+import { type ImageMetadata, normalizeImage } from "@/utils/image-path";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { type ImageMetadata, normalizeImage } from "@/utils/image-path";
 import { TinaImage } from "../../ui/tina-image";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 
