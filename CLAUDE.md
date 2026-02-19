@@ -34,6 +34,8 @@ Key files:
 - `src/components/tina-markdown/standard-elements/image.tsx` - Image renderer (no runtime detection)
 - `src/app/docs/[...slug]/page.tsx` - Calls augmentation
 
+**TinaCloud URL coupling:** TinaCMS rewrites inline rich-text image URLs to TinaCloud CDN paths (`https://assets.tina.io/{project-id}/...`) in production. The augmentation utility extracts the local path from these URLs via regex. If TinaCloud changes their URL format, update the regex in `imageAugmentation.ts`. Object-type image fields (accordion, showcase) keep local paths and are unaffected.
+
 **Exception:** Accordion and scroll-showcase components use `ImageMetadata` objects (with `src`, `width`, `height`, `alt`) because TinaCMS auto-captures dimensions via the custom field on upload. See `tina/customFields/image-with-metadata.tsx`.
 
 ### TinaCMS Content Model

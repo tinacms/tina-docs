@@ -10,8 +10,6 @@ import { useState } from "react";
 import { ImageErrorState } from "./image-error-state";
 import { ImageOverlayWrapper } from "./image-overlay-wrapper";
 
-export type { ImageMetadata };
-
 export interface TinaImageProps extends Omit<ImageProps, "src" | "alt"> {
   /**
    * Image source - can be a string path or an ImageMetadata object
@@ -76,7 +74,7 @@ export const TinaImage = ({
       )}
 
       {/* Error state */}
-      {hasError && <ImageErrorState alt={imageData.alt || alt} size="small" />}
+      {hasError && <ImageErrorState alt={imageData.alt || alt} />}
 
       <Image
         src={resolvedSrc}

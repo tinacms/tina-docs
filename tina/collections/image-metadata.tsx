@@ -1,16 +1,9 @@
-import { ImageWithMetadataField } from "../customFields/image-with-metadata";
-
 /**
- * Reusable TinaCMS schema object type for images with metadata.
+ * Reusable TinaCMS schema fields for images with metadata.
  * Captures width, height, and alt text alongside the image path.
  *
- * Usage in templates:
- * {
- *   name: "image",
- *   label: "Image",
- *   type: "object",
- *   ...ImageWithMetadataFields
- * }
+ * Used by accordion and scroll-showcase templates alongside
+ * the ImageWithMetadataField custom component.
  */
 export const ImageWithMetadataFields = [
   {
@@ -44,18 +37,3 @@ export const ImageWithMetadataFields = [
     description: "Describe the image for accessibility",
   },
 ];
-
-/**
- * Complete object type definition for ImageWithMetadata
- */
-export const ImageWithMetadata = {
-  type: "object",
-  name: "imageMetadata",
-  label: "Image with Metadata",
-  fields: ImageWithMetadataFields,
-  ui: {
-    component: ImageWithMetadataField,
-  },
-};
-
-export default ImageWithMetadata;

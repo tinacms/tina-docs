@@ -4,213 +4,35 @@ This directory contains utility scripts to help you manage your TinaDocs project
 
 ## Image Migration
 
-The `migrate-images` script automatically migrates images in your MDX content to the new ImageMetadata format with dimensions.
+The `migrate-images.js` script migrates accordion and scrollShowcase image fields from plain string paths to `ImageMetadata` objects with dimensions.
 
-### What it does
-
-- ✅ **Scans all MDX files** in `content/docs/`
-- ✅ **Finds accordion and scrollShowcase blocks** with image fields
-- ✅ **Converts inline markdown images** to preloaded image components
-- ✅ **Loads each image** to get its actual dimensions
-- ✅ **Converts string image paths** to ImageMetadata objects with width/height
-- ✅ **Creates backups** of all modified files (`.backup` extension)
-- ✅ **Supports multiple formats**: PNG, JPEG, GIF, WebP
-- ✅ **Handles both local and remote images**
+This is a one-time migration script. Standard markdown images (`![]()`) do **not** need migration — their dimensions are injected automatically at build time via `augmentBodyImageDimensions`.
 
 ### Usage
 
 ```bash
-pnpm run migrate-images
+node scripts/migrate-images.js
 ```
 
 ### What gets migrated
 
-The script migrates three types of images:
-
-#### 1. Accordion blocks
-**Before:**
+#### Accordion blocks
 ```jsx
-<accordion
-  image="/img/example.png"
-  title="Example"
-/>
+// Before
+<accordion image="/img/example.png" title="Example" />
+
+// After
+<accordion image={{ src: "/img/example.png", width: 1200, height: 800, alt: "" }} title="Example" />
 ```
 
-**After:**
+#### ScrollShowcase blocks
 ```jsx
-<accordion
-  image={{
-    src: "/img/example.png",
-    width: 1200,
-    height: 800,
-    alt: ""
-  }}
-  title="Example"
-/>
+// Before
+{ title: "Example", image: "/img/example.png" }
+
+// After
+{ title: "Example", image: { src: "/img/example.png", width: 1920, height: 1080, alt: "" } }
 ```
-
-#### 2. ScrollShowcase blocks
-**Before:**
-```jsx
-<scrollShowcase showcaseItems={[
-  {
-    title: "Example",
-    image: "/img/example.png"
-  }
-]} />
-```
-
-**After:**
-```jsx
-<scrollShowcase showcaseItems={[
-  {
-    title: "Example",
-    image: {
-      src: "/img/example.png",
-      width: 1920,
-      height: 1080,
-      alt: ""
-    }
-  }
-]} />
-```
-
-#### 3. Inline markdown images
-**Before:**
-```markdown
-![Alt text](/img/example.png "Caption text")
-```
-
-**After:**
-```jsx
-<preloadedImage
-  image={{
-    src: "/img/example.png",
-    width: 1920,
-    height: 1080,
-    alt: "Alt text"
-  }}
-  caption="Caption text"
-/>
-```
-
-This converts regular markdown images to optimized preloaded images that prevent layout shift and improve Core Web Vitals.
-
-### Safety features
-
-- ✅ Creates `.backup` files before modifying
-- ✅ Preserves original file if no images found
-- ✅ Handles errors gracefully (skips problematic images)
-- ✅ Provides detailed progress and summary
-- ✅ Non-destructive (backups can be restored)
-
-### Example output
-
-```
-🖼️  TinaDocs Image Migration
-
-Scanning for MDX files...
-
-Found 15 MDX files
-
-Processing: content/docs/introduction/showcase.mdx
-  📷 Found showcase image: /img/docs-assets/showcase-example-1.png
-  ✅ Migrated: 1920x1080
-  📷 Found showcase image: /img/docs-assets/showcase-example-2.png
-  ✅ Migrated: 1920x1080
-  💾 Backup created: showcase.mdx.backup
-  ✅ Updated with 2 image(s)
-
-Processing: content/docs/getting-started.mdx
-  📷 Found inline image: /img/docs-assets/setup.png
-  ✅ Migrated to preloadedImage: 1600x900
-  📷 Found accordion image: /img/example.jpg
-  ✅ Migrated: 1200x800
-  💾 Backup created: getting-started.mdx.backup
-  ✅ Updated with 2 image(s)
-
-🎉 Migration completed!
-
-📊 Summary:
-  • Files scanned: 15
-  • Files modified: 3
-  • Images migrated: 7
-
-💡 Tip: Backup files (.backup) have been created. You can delete them once you've verified the migration.
-```
-
-### After migration
-
-1. Review the changes in your MDX files
-2. Test your site to ensure images display correctly
-3. Delete `.backup` files using the cleanup script (see below)
-4. Commit the changes to version control
-
----
-
-## Backup Cleanup
-
-The `cleanup-backups` script removes all `.backup` files created by the image migration script.
-
-### What it does
-
-- ✅ **Scans for backup files** in `content/docs/`
-- ✅ **Lists all backups** with file sizes
-- ✅ **Asks for confirmation** before deletion
-- ✅ **Safely removes** backup files
-- ✅ **Provides summary** of deleted files
-
-### Usage
-
-```bash
-pnpm run cleanup-backups
-```
-
-### Safety features
-
-- ✅ Lists all files before deletion
-- ✅ Shows file sizes for review
-- ✅ Requires explicit confirmation
-- ✅ Handles errors gracefully
-- ✅ Provides detailed summary
-
-### Example output
-
-```
-🧹 TinaDocs Backup Cleanup
-
-Scanning for backup files...
-
-Backup files found:
-  • content/docs/introduction/showcase.mdx.backup (12.45 KB)
-  • content/docs/getting-started.mdx.backup (8.32 KB)
-
-⚠️  Found 2 backup file(s)
-
-Do you want to delete these files?
-  Type 'yes' or 'y' to continue
-  Type 'no' or 'n' to cancel
-
-👉 Your choice (yes/no): yes
-
-Deleting backup files...
-
-  ✅ Deleted: content/docs/introduction/showcase.mdx.backup
-  ✅ Deleted: content/docs/getting-started.mdx.backup
-
-🎉 Cleanup completed!
-
-📊 Summary:
-  • Backup files found: 2
-  • Successfully deleted: 2
-```
-
-### When to use
-
-- After verifying migrated images work correctly
-- Before committing changes to version control
-- To clean up your repository
-- When you're confident the migration was successful
 
 ---
 

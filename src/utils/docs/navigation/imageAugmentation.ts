@@ -107,6 +107,18 @@ function getImageDimensionsFromBuffer(
  * (https://assets.tina.io/{project-id}/img/foo.png) by extracting
  * the path portion and looking it up locally.
  * Returns `null` for data URIs or unresolvable URLs.
+ *
+ * NOTE on TinaCloud URL coupling:
+ * TinaCMS treats inline rich-text images (from markdown `![]()`) differently
+ * from object-type images (e.g. accordion/showcase `image` fields).
+ * In production, inline images are served via TinaCloud CDN URLs like
+ * `https://assets.tina.io/{project-id}/img/foo.png`, even though the same
+ * file exists locally in `public/img/foo.png`. Object-type images retain
+ * their local paths (e.g. `/img/foo.png`).
+ *
+ * This means we need to extract the path from TinaCloud URLs to look up
+ * dimensions locally. If TinaCloud changes their URL structure, this regex
+ * will need updating. See: https://tina.io/docs/reference/media/overview/
  */
 function resolveImagePath(url: string): string | null {
   if (url.startsWith("data:")) {
@@ -116,6 +128,8 @@ function resolveImagePath(url: string): string | null {
   const publicDir = path.join(process.cwd(), "public");
 
   // TinaCloud CDN URLs: https://assets.tina.io/{project-id}/path/to/image.png
+  // Inline rich-text images get rewritten to these URLs in production builds.
+  // We extract the path after the project ID to find the file locally in public/.
   const tinaCloudMatch = url.match(
     /^https?:\/\/assets\.tina\.io\/[^/]+\/(.+)$/
   );
@@ -123,12 +137,12 @@ function resolveImagePath(url: string): string | null {
     return path.join(publicDir, tinaCloudMatch[1]);
   }
 
-  // Skip other external URLs
+  // Skip other external URLs (non-TinaCloud)
   if (url.startsWith("http://") || url.startsWith("https://")) {
     return null;
   }
 
-  // Local path
+  // Local path (used during local dev and for object-type image fields)
   return path.join(publicDir, url);
 }
 

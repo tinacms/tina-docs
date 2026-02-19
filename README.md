@@ -394,9 +394,13 @@ page.tsx (server) → reads body AST → finds img nodes → reads file dimensio
 - `src/components/tina-markdown/standard-elements/image.tsx` - Client-side image renderer
 - `src/app/docs/[...slug]/page.tsx` - Calls augmentation before passing data to client
 
+### **TinaCloud URL Handling**
+
+TinaCMS rewrites inline rich-text image URLs (from markdown `![]()`) to TinaCloud CDN URLs in production (e.g. `https://assets.tina.io/{project-id}/img/foo.png`). The augmentation utility extracts the path from these URLs to look up the file locally in `public/`. Object-type image fields (accordion, scroll-showcase) retain their local paths and are unaffected.
+
 ### **Fallback Behavior**
 
-- **External URLs** (http/https): Rendered in `fill` mode with a 16:9 aspect ratio container
+- **External URLs** (non-TinaCloud http/https): Rendered in `fill` mode with a 16:9 aspect ratio container
 - **Missing files**: Skipped gracefully, rendered in `fill` mode
 - **Live CMS editing**: `useTina` returns fresh data without augmented dimensions, so images use `fill` mode during editing (CLS during editing is not a user-facing concern)
 
