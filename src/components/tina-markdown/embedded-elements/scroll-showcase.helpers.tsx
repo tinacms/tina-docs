@@ -1,3 +1,4 @@
+import type { ImageMetadata } from "@/utils/image-path";
 import type React from "react";
 import { useEffect, useState } from "react";
 
@@ -5,7 +6,7 @@ export interface Item {
   id?: string;
   offset?: number;
   level?: string;
-  src?: string;
+  src?: string | ImageMetadata;
 }
 
 /** UseWindowSize Hook */

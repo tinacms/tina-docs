@@ -5,6 +5,7 @@ import { GitHubMetadataProvider } from "@/src/components/page-metadata/github-me
 import GitHubClient from "@/src/utils/github-client";
 import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
+import { augmentBodyImageDimensions } from "@/utils/docs/navigation/imageAugmentation";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from "./[...slug]";
 
@@ -39,6 +40,7 @@ async function getData() {
 
 export default async function DocsPage() {
   const data = await getData();
+  augmentBodyImageDimensions(data.data.docs.body);
   const pageTableOfContents = getTableOfContents(data?.data.docs.body);
 
   const githubMetadata = GitHubClient.IsConfigured
