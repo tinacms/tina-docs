@@ -2,40 +2,6 @@
 
 This directory contains utility scripts to help you manage your TinaDocs project.
 
-## Image Migration
-
-The `migrate-images.js` script migrates accordion and scrollShowcase image fields from plain string paths to `ImageMetadata` objects with dimensions.
-
-This is a one-time migration script. Standard markdown images (`![]()`) do **not** need migration — their dimensions are injected automatically at build time via `augmentBodyImageDimensions`.
-
-### Usage
-
-```bash
-node scripts/migrate-images.js
-```
-
-### What gets migrated
-
-#### Accordion blocks
-```jsx
-// Before
-<accordion image="/img/example.png" title="Example" />
-
-// After
-<accordion image={{ src: "/img/example.png", width: 1200, height: 800, alt: "" }} title="Example" />
-```
-
-#### ScrollShowcase blocks
-```jsx
-// Before
-{ title: "Example", image: "/img/example.png" }
-
-// After
-{ title: "Example", image: { src: "/img/example.png", width: 1920, height: 1080, alt: "" } }
-```
-
----
-
 ## Documentation Reset
 
 The `cleanup` script provides a complete documentation reset, removing all content directories while preserving only the main index page.
