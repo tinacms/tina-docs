@@ -1,5 +1,6 @@
 "use client";
 
+import { getImagePath } from "@/utils/image-path";
 import Image, { type ImageLoader } from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -12,21 +13,17 @@ interface ImageOverlayWrapperProps {
   caption?: string;
 }
 
-// Custom image loader to bypass Next.js image optimization
-const customImageLoader: ImageLoader = ({ src, width, quality }) => {
-  // If it's already an absolute URL (starts with http:// or https://), return as-is
-  if (src.startsWith("http://") || src.startsWith("https://")) {
-    return src;
-  }
-
-  // For relative paths, prepend the base path if it exists
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const fullSrc = `${basePath}${src}`;
-
-  // If the src already includes query parameters, append with &, otherwise use ?
+// Custom image loader for local images only - serves files directly
+// with width/quality params (which the local server ignores).
+const localImageLoader: ImageLoader = ({ src, width, quality }) => {
+  const fullSrc = getImagePath(src);
   const separator = fullSrc.includes("?") ? "&" : "?";
   return `${fullSrc}${separator}w=${width}&q=${quality || 75}`;
 };
+
+function isExternalUrl(url: string): boolean {
+  return url.startsWith("http://") || url.startsWith("https://");
+}
 
 export const ImageOverlayWrapper = ({
   children,
@@ -76,13 +73,17 @@ export const ImageOverlayWrapper = ({
     }
   };
 
+  // For external URLs (TinaCloud), let Next.js handle via /_next/image proxy.
+  // For local images, use the custom loader to serve files directly.
+  const isExternal = isExternalUrl(src);
+
   const overlay =
     isOpen && mounted
       ? createPortal(
           <div
             ref={overlayRef}
             tabIndex={-1}
-            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-lg outline-none"
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-lg outline-none animate-fade-in"
             onClick={closeOverlay}
             onKeyDown={handleKeyDown}
           >
@@ -105,22 +106,20 @@ export const ImageOverlayWrapper = ({
                 >
                   {/* Loading skeleton */}
                   {isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-neutral-background-secondary/50 rounded-lg">
-                      <div className="flex flex-col items-center gap-3">
-                        <div className="w-12 h-12 border-4 border-brand-primary border-t-transparent rounded-full animate-spin" />
-                        <p className="text-neutral-text-secondary text-sm">
-                          Loading image...
-                        </p>
-                      </div>
-                    </div>
+                    <div className="absolute inset-0 bg-neutral-background-secondary animate-pulse rounded-lg" />
                   )}
 
                   <Image
-                    loader={customImageLoader}
+                    {...(isExternal ? {} : { loader: localImageLoader })}
                     src={src}
                     alt={alt}
                     fill
-                    style={{ objectFit: "contain", objectPosition: "center" }}
+                    style={{
+                      objectFit: "contain",
+                      objectPosition: "center",
+                      opacity: isLoading ? 0 : 1,
+                      transition: "opacity 0.3s ease-in-out",
+                    }}
                     onLoad={handleImageLoad}
                   />
                 </div>

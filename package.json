@@ -26,6 +26,7 @@
     "date-fns": "^4.1.0",
     "fast-glob": "^3.3.3",
     "html-to-md": "^0.8.8",
+    "image-size": "^2.0.2",
     "lodash": "^4.17.21",
     "mermaid": "^11.6.0",
     "monaco-editor": "^0.52.2",

@@ -1,3 +1,4 @@
+import type { ImageMetadata } from "@/utils/image-path";
 import type { Components, TinaMarkdownContent } from "tinacms/dist/rich-text";
 import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
 import { ApiReference } from "./embedded-elements/api-reference";
@@ -57,7 +58,7 @@ type ComponentMapping = {
 
   accordion: {
     docText: string;
-    image: string;
+    image: string | ImageMetadata;
     heading?: string;
     fullWidth?: boolean;
   };
@@ -96,7 +97,7 @@ type ComponentMapping = {
   accordionBlock: {
     accordionItems: {
       docText: string;
-      image: string;
+      image: string | ImageMetadata;
       heading?: string;
       fullWidth?: boolean;
     }[];

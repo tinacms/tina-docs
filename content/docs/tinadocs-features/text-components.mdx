@@ -17,7 +17,7 @@ Three embedded components – accordions, callouts and cards are available out o
 
 You can see and add an Embed from the rich-text editor toolbar.
 
-![](/img/docs-assets/embed-toolbar-access.png "Access the embed tab of the toolbar.")
+![TinaCMS rich-text editor toolbar showing the embed tab](/img/docs-assets/embed-toolbar-access.png "Access the embed tab of the toolbar.")
 
 ## Cards
 
@@ -60,12 +60,22 @@ You can block all of your accordions with the option to have them as full-width 
     {
       heading: "Click to expand",
       docText: "Default Text. Edit me!\n",
-      image: "/img/rico-replacement.jpg"
+      image: {
+        src: "/img/rico-replacement.jpg",
+        width: 1408,
+        height: 768,
+        alt: "Example llama image in a multi-accordion"
+      }
     },
     {
       heading: "Click to expand",
       docText: "Default Text. Edit me!\n",
-      image: "/img/rico-replacement.jpg"
+      image: {
+        src: "/img/rico-replacement.jpg",
+        width: 1408,
+        height: 768,
+        alt: "Example llama image in a multi-accordion"
+      }
     }
   ]}
 />
@@ -79,7 +89,12 @@ Accordions can also exist standalone.
   docText={<>
     Default Text. Edit me!
   </>}
-  image="/img/rico-replacement.jpg"
+  image={{
+    src: "/img/rico-replacement.jpg",
+    width: 1408,
+    height: 768,
+    alt: "Example llama image in a standalone accordion"
+  }}
   fullWidth={true}
 />
 
@@ -128,3 +143,4 @@ Callouts are similar to block-quotes, to add a note or indication outside the no
   </>}
   variant="api"
 />
+
