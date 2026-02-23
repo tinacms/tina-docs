@@ -1,6 +1,6 @@
 "use client";
 
-import { TinaImage } from "@/components/ui/tina-image";
+import Image from "next/image";
 import Link from "next/link";
 
 const ErrorWrapper = ({
@@ -43,10 +43,11 @@ const ErrorWrapper = ({
         </div>
         <div className="mx-auto max-w-[65vw] md:max-w-none">
           <div className="relative aspect-square overflow-hidden flex items-center justify-center">
-            <TinaImage
-              src="/img/404-image.jpg"
+            <Image
+              src={`${
+                process.env.NEXT_PUBLIC_BASE_PATH || ""
+              }/img/404-image.jpg`}
               alt="404 Llama"
-              enableLightbox={false}
               className="rounded-3xl object-cover"
               width={364}
               height={364}

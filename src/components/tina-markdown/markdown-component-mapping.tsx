@@ -75,7 +75,7 @@ type ComponentMapping = {
   };
   scrollShowcase: {
     showcaseItems: {
-      image: string | ImageMetadata;
+      image: string;
       title: string;
       useAsSubsection: boolean;
       content: string;

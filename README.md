@@ -367,49 +367,6 @@ Each theme includes comprehensive color variations for different UI states and a
 
 ---
 
-## 🖼️ Image Handling
-
-TinaDocs automatically optimizes images to prevent layout shift (CLS) without requiring any special syntax from content authors.
-
-### **How It Works**
-
-Content authors use standard markdown image syntax:
-
-```markdown
-![Alt text](/img/example.png "Optional caption")
-```
-
-At build time, the server component (`page.tsx`) walks the TinaCMS rich-text AST, finds `img` nodes pointing to local files in `public/`, reads their dimensions from disk, and injects `width`/`height` into the AST. The client-side `ImageComponent` then renders with explicit dimensions, eliminating layout shift.
-
-### **Data Flow**
-
-```
-page.tsx (server) → reads body AST → finds img nodes → reads file dimensions via fs
-    → augmented AST passed to TinaClient → TinaMarkdown → ImageComponent receives width/height as props
-```
-
-### **Key Files**
-
-- `src/utils/docs/navigation/imageAugmentation.ts` - Build-time dimension injection utility
-- `src/components/tina-markdown/standard-elements/image.tsx` - Client-side image renderer
-- `src/app/docs/[...slug]/page.tsx` - Calls augmentation before passing data to client
-
-### **TinaCloud URL Handling**
-
-TinaCMS rewrites inline rich-text image URLs (from markdown `![]()`) to TinaCloud CDN URLs in production (e.g. `https://assets.tina.io/{project-id}/img/foo.png`). The augmentation utility extracts the path from these URLs to look up the file locally in `public/`. Object-type image fields (accordion, scroll-showcase) retain their local paths and are unaffected.
-
-### **Fallback Behavior**
-
-- **External URLs** (non-TinaCloud http/https): Rendered in `fill` mode with a 16:9 aspect ratio container
-- **Missing files**: Skipped gracefully, rendered in `fill` mode
-- **Live CMS editing**: `useTina` returns fresh data without augmented dimensions, so images use `fill` mode during editing (CLS during editing is not a user-facing concern)
-
-### **Structured Components**
-
-Accordion and scroll-showcase components use a separate `ImageMetadata` pattern where TinaCMS auto-captures dimensions via a custom field on upload. This is handled by the existing `image-with-metadata.tsx` custom field.
-
----
-
 ## 🛠️ Utility Scripts
 
 TinaDocs includes helpful utility scripts to manage your documentation project:

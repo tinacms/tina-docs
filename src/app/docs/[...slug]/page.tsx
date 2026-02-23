@@ -5,7 +5,7 @@ import { GitHubMetadataProvider } from "@/src/components/page-metadata/github-me
 import GithubConfig from "@/src/utils/github-client";
 import client from "@/tina/__generated__/client";
 import { getTableOfContents } from "@/utils/docs";
-import { augmentBodyImageDimensions } from "@/utils/docs/navigation/imageAugmentation";
+import { augmentBodyImageDimensions } from "@/utils/docs/imageAugmentation";
 import { getSeo } from "@/utils/metadata/getSeo";
 import Document from ".";
 

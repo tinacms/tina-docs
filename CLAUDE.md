@@ -30,7 +30,7 @@ Image dimensions are injected at build time via AST augmentation in the server c
 4. During live CMS editing, dimensions aren't available - `ImageComponent` falls back to `fill` mode
 
 Key files:
-- `src/utils/docs/navigation/imageAugmentation.ts` - Build-time dimension injection
+- `src/utils/docs/imageAugmentation.ts` - Build-time dimension injection
 - `src/components/tina-markdown/standard-elements/image.tsx` - Image renderer (no runtime detection)
 - `src/app/docs/[...slug]/page.tsx` - Calls augmentation
 
