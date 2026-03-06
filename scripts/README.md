@@ -114,17 +114,77 @@ The script removes:
 
 🗑️  Cleaning up docs directories (preserving index.mdx)...
 🗑️  Deleting directory: content/docs/api-documentation
-   ✅ Deleted 8 files
+   📄 Deleting file: overview.mdx
+   📄 Deleting file: pet/get-pet-findbystatus.mdx
+   (... more files)
+✅ Directory deleted: api-documentation (9 files)
+
+📄 Cleaning API schema files...
+   🗑️  Deleted: Swagger-Petstore.json
+   🗑️  Deleted: spec.json
+   ✅ Cleaned up 2 API schema file(s)
+
+🗑️  Deleting docs-assets directory: public/img/docs-assets
+   📄 Deleting file: api-spec-upload.png
+   (... more files)
+✅ docs-assets directory deleted (27 files)
+
+🗂️  Cleaning Next.js cache...
+   ✅ Deleted .next cache directory (1346 files)
+
+📝 Updating navigation...
+   🔍 Found Docs tab with 4 menu groups
+   🗑️  Cleaned up Docs navigation (removed 3 groups)
+   ✅ Navigation now only shows index.mdx
+   🗑️  Completely removed API tab from navigation
+✅ Navigation updated successfully
 
 🎉 Cleanup completed!
 
 📊 Summary:
-• Deleted docs directories: api-documentation, examples, tinadocs-features (45 files)
+• Deleted docs directories: api-documentation, examples, going-live, introduction, tinadocs-features, using-tinacms (31 files)
 • Deleted API schema files: 2 files
 • Deleted image directories: docs-assets, landing-assets (31 files)
 • Navigation updated successfully
-• Next.js cache cleared
-• Index page rewritten with clean slate instructions
+• Next.js cache cleared successfully
 
-✅ Your TinaDocs project is now ready for fresh content!
+💡 Next steps:
+   • Review the changes in your editor
+   • Restart your dev server: pnpm dev
+   • Test your documentation site
+   • Commit the changes to version control
 ```
+
+### Troubleshooting
+
+If you encounter issues:
+
+1. **"This doesn't appear to be a TinaDocs project"**
+   - Make sure you're running the script from your project root
+   - Verify you have `content/docs/` and `tina/` directories
+
+2. **"Navigation update failed"**
+   - Check that `content/navigation-bar/docs-navigation-bar.json` exists
+   - Ensure the file is valid JSON
+
+3. **Permission errors**
+   - Make sure you have write permissions to the project directory
+   - Check permissions for `content/`, `public/`, and `.next` directories
+
+4. **"API schema directory not found"**
+   - This is normal if your project doesn't have API schema files
+   - The script will skip this step safely
+
+### After running the script
+
+1. Review the changes in your editor
+2. **Restart your dev server**: `pnpm dev` (required to clear Next.js cache)
+3. Test your documentation site
+4. Commit the changes to version control
+5. Update any links or references to the deleted documentation
+
+> **Important:** You must restart your development server after running cleanup to ensure Next.js rebuilds the site without cached references to deleted pages.
+
+---
+
+For more TinaDocs utilities and documentation, visit [TinaDocs GitHub](https://github.com/tinacms/tina-docs).
