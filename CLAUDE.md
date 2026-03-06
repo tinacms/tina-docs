@@ -16,27 +16,24 @@ TinaDocs is a documentation site built with Next.js (App Router) and TinaCMS. Co
 
 ### Image Strategy
 
-**Do NOT create special image embed components.** Standard markdown images are used everywhere:
+Images use the `imageEmbed` TinaCMS embed template — a first-class structured content block with explicit fields:
 
-```markdown
-![Alt text](/img/example.png "Optional caption")
+```mdx
+<imageEmbed image={{ src: "/img/example.png", alt: "Alt text" }} caption="Caption text" />
 ```
 
-Image dimensions are injected at build time via AST augmentation in the server component, not at runtime. The flow:
-
-1. `page.tsx` (server component) fetches TinaCMS data
-2. `augmentBodyImageDimensions()` walks the AST, reads image files from `public/`, injects `width`/`height`
-3. `ImageComponent` receives dimensions as props and renders with explicit sizing (no CLS)
-4. During live CMS editing, dimensions aren't available - `ImageComponent` falls back to `fill` mode
+The `ImageWithMetadataField` custom field auto-captures `width`/`height` when an image is uploaded in the CMS editor. The component renders with explicit dimensions (no CLS) or falls back to `fill` mode when dimensions aren't available.
 
 Key files:
-- `src/utils/docs/imageAugmentation.ts` - Build-time dimension injection
-- `src/components/tina-markdown/standard-elements/image.tsx` - Image renderer (no runtime detection)
-- `src/app/docs/[...slug]/page.tsx` - Calls augmentation
+- `tina/templates/markdown-embeds/image-embed.template.tsx` - Embed template definition
+- `src/components/tina-markdown/embedded-elements/image-embed.tsx` - Image renderer
+- `tina/collections/image-metadata.tsx` - Reusable `ImageWithMetadataFields` schema
+- `tina/customFields/image-with-metadata.tsx` - Auto-captures dimensions on upload
+- `src/components/ui/image-overlay-wrapper.tsx` - Lightbox overlay
 
-**TinaCloud URL coupling:** TinaCMS rewrites inline rich-text image URLs to TinaCloud CDN paths (`https://assets.tina.io/{project-id}/...`) in production. The augmentation utility extracts the local path from these URLs via regex. If TinaCloud changes their URL format, update the regex in `imageAugmentation.ts`. Object-type image fields (accordion, showcase) keep local paths and are unaffected.
+**TinaCloud URL coupling:** TinaCMS may rewrite image URLs to TinaCloud CDN paths (`https://assets.tina.io/{project-id}/...`) in production. The image-embed component extracts the local path via regex. If TinaCloud changes their URL format, update `TINA_CLOUD_ASSET_REGEX` in `image-embed.tsx`.
 
-**Exception:** Accordion and scroll-showcase components use `ImageMetadata` objects (with `src`, `width`, `height`, `alt`) because TinaCMS auto-captures dimensions via the custom field on upload. See `tina/customFields/image-with-metadata.tsx`.
+Accordion components also use `ImageWithMetadataFields` for structured image data with auto-dimension capture.
 
 ### TinaCMS Content Model
 

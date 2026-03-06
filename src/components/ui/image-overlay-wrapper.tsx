@@ -1,6 +1,5 @@
 "use client";
 
-import { getImagePath } from "@/utils/image-path";
 import Image, { type ImageLoader } from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -16,7 +15,11 @@ interface ImageOverlayWrapperProps {
 // Custom image loader for local images only - serves files directly
 // with width/quality params (which the local server ignores).
 const localImageLoader: ImageLoader = ({ src, width, quality }) => {
-  const fullSrc = getImagePath(src);
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const fullSrc =
+    src.startsWith("http") || src.startsWith("data:")
+      ? src
+      : `${basePath}${src}`;
   const separator = fullSrc.includes("?") ? "&" : "?";
   return `${fullSrc}${separator}w=${width}&q=${quality || 75}`;
 };

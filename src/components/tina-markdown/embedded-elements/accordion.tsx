@@ -1,16 +1,35 @@
-import { type ImageMetadata, normalizeImage } from "@/utils/image-path";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { TinaImage } from "../../ui/tina-image";
+import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
 import MarkdownComponentMapping from "../markdown-component-mapping";
+
+interface ImageMetadata {
+  src: string;
+  width?: number;
+  height?: number;
+  alt?: string;
+}
 
 interface AccordionProps {
   docText: string;
   image: string | ImageMetadata;
   heading?: string;
   fullWidth?: boolean;
+}
+
+function resolveImage(image: string | ImageMetadata): ImageMetadata | null {
+  if (!image) return null;
+  if (typeof image === "string") return { src: image };
+  return image;
+}
+
+function resolveImageSrc(src: string): string {
+  if (src.startsWith("http") || src.startsWith("data:")) return src;
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  return `${basePath}${src}`;
 }
 
 const Accordion = (props) => {
@@ -22,7 +41,7 @@ const Accordion = (props) => {
     setIsExpanded(!isExpanded);
   };
 
-  const imageData = image ? normalizeImage(image, heading || "image") : null;
+  const imageData = image ? resolveImage(image) : null;
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -66,21 +85,24 @@ const Accordion = (props) => {
           </div>
           {imageData && (
             <div className="p-4" data-tina-field={tinaField(props, "image")}>
-              <TinaImage
-                src={imageData}
+              <ImageOverlayWrapper
+                src={imageData.src}
                 alt={imageData.alt || heading || "image"}
                 caption={heading}
-                enableLightbox={true}
-                className="rounded-lg"
-                fill={!imageData.width || !imageData.height}
-                width={imageData.width}
-                height={imageData.height}
-                style={
-                  imageData.width
-                    ? { width: "100%", height: "auto" }
-                    : undefined
-                }
-              />
+              >
+                <Image
+                  src={resolveImageSrc(imageData.src)}
+                  alt={imageData.alt || heading || "image"}
+                  className="rounded-lg"
+                  {...(imageData.width && imageData.height
+                    ? {
+                        width: imageData.width,
+                        height: imageData.height,
+                        style: { width: "100%", height: "auto" },
+                      }
+                    : { width: 500, height: 500 })}
+                />
+              </ImageOverlayWrapper>
             </div>
           )}
         </div>
@@ -147,9 +169,7 @@ export const AccordionBlock = (props) => {
       }`}
     >
       {accordionItems.map((item, index) => {
-        const imageData = item.image
-          ? normalizeImage(item.image, item.heading || "image")
-          : null;
+        const imageData = item.image ? resolveImage(item.image) : null;
 
         return (
           <div key={index} className="w-full">
@@ -206,21 +226,24 @@ export const AccordionBlock = (props) => {
                     "image"
                   )}
                 >
-                  <TinaImage
-                    src={imageData}
+                  <ImageOverlayWrapper
+                    src={imageData.src}
                     alt={imageData.alt || item?.heading || "image"}
                     caption={item?.heading}
-                    enableLightbox={true}
-                    className="rounded-lg"
-                    fill={!imageData.width || !imageData.height}
-                    width={imageData.width}
-                    height={imageData.height}
-                    style={
-                      imageData.width
-                        ? { width: "100%", height: "auto" }
-                        : undefined
-                    }
-                  />
+                  >
+                    <Image
+                      src={resolveImageSrc(imageData.src)}
+                      alt={imageData.alt || item?.heading || "image"}
+                      className="rounded-lg"
+                      {...(imageData.width && imageData.height
+                        ? {
+                            width: imageData.width,
+                            height: imageData.height,
+                            style: { width: "100%", height: "auto" },
+                          }
+                        : { width: 500, height: 500 })}
+                    />
+                  </ImageOverlayWrapper>
                 </div>
               )}
             </div>
