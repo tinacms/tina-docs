@@ -15,6 +15,12 @@ import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
 import { findTabWithPath } from "./utils";
 
+type TabItem = {
+  label: string;
+  content: { title: string; __typename: string; items: SupermenuGroup[] };
+  __typename: string;
+};
+
 export const TabsLayout = ({
   props: { children },
   tinaProps,
@@ -24,13 +30,9 @@ export const TabsLayout = ({
   };
   tinaProps: any;
 }) => {
-  type TabItem = {
-    label: string;
-    content: { title: string; __typename: string; items: SupermenuGroup[] };
-    __typename: string;
-  };
-  const [navigationDocsData, setNavigationDocsData] =
-    React.useState<FormattedNavigation>({});
+  const [navigationDocsData, setNavigationDocsData] = React.useState<
+    FormattedNavigation | undefined
+  >();
   const [tabs, setTabs] = React.useState<TabItem[]>([]);
   const [selectedTab, setSelectedTab] = React.useState<string | undefined>();
   const [objectOfSelectedTab, setObjectOfSelectedTab] = React.useState<
@@ -50,7 +52,7 @@ export const TabsLayout = ({
       __typename: tab.__typename,
     }));
     setTabs(tabs);
-    setSelectedTab(tabs[0]);
+    setSelectedTab(tabs[0]?.label);
     setObjectOfSelectedTab(tabs[0]);
   }, [tinaProps.data]);
 
@@ -71,7 +73,7 @@ export const TabsLayout = ({
 
   const handleTabChange = (value: string) => {
     setSelectedTab(value);
-    setObjectOfSelectedTab(value);
+    setObjectOfSelectedTab(tabs.find((tab) => tab.label === value));
     const newIndex = tabs.findIndex((tab) => tab.label === value);
     window.dispatchEvent(
       new CustomEvent("tabChange", { detail: { value: newIndex.toString() } })
