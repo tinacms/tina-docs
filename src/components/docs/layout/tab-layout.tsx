@@ -2,6 +2,7 @@
 
 import { formatNavigationData } from "@/src/utils/docs/navigation/documentNavigation";
 import type {
+  FormattedNavigation,
   NavigationBarData,
   SupermenuGroup,
 } from "@/src/utils/docs/navigation/documentNavigation";
@@ -28,9 +29,8 @@ export const TabsLayout = ({
     content: { title: string; __typename: string; items: SupermenuGroup[] };
     __typename: string;
   };
-  const [navigationDocsData, setNavigationDocsData] = React.useState<
-    Record<string, unknown>
-  >({});
+  const [navigationDocsData, setNavigationDocsData] =
+    React.useState<FormattedNavigation>({});
   const [tabs, setTabs] = React.useState<TabItem[]>([]);
   const [selectedTab, setSelectedTab] = React.useState<string | undefined>();
   const [objectOfSelectedTab, setObjectOfSelectedTab] = React.useState<
