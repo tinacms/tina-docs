@@ -22,11 +22,11 @@ export const ThemeSelector = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const [selectedTheme, setSelectedTheme] = useState(() => {
+  const [selectedTheme, setSelectedTheme] = useState<string>(() => {
     if (typeof window !== "undefined") {
-      return sessionStorage.getItem(BROWSER_TAB_THEME_KEY) || theme;
+      return sessionStorage.getItem(BROWSER_TAB_THEME_KEY) || theme || "default";
     }
-    return theme;
+    return theme || "default";
   });
 
   // Close dropdown when clicking outside
@@ -61,7 +61,7 @@ export const ThemeSelector = () => {
       // If theme is not in our list, it means it's a dark/light mode change
       setSelectedTheme(selectedTheme);
     } else {
-      setSelectedTheme(theme);
+      setSelectedTheme(theme || "default");
     }
   }, [theme, selectedTheme]);
 
@@ -104,7 +104,7 @@ export const ThemeSelector = () => {
               <MdHelpOutline className="w-4 h-4" />
             </button>
 
-            {showTooltip && <Tooltip selectedTheme={selectedTheme} />}
+            {showTooltip && selectedTheme && <Tooltip selectedTheme={selectedTheme} />}
           </div>
 
           <button
