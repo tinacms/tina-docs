@@ -24,7 +24,9 @@ export const ThemeSelector = () => {
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [selectedTheme, setSelectedTheme] = useState<string>(() => {
     if (typeof window !== "undefined") {
-      return sessionStorage.getItem(BROWSER_TAB_THEME_KEY) || theme || "default";
+      return (
+        sessionStorage.getItem(BROWSER_TAB_THEME_KEY) || theme || "default"
+      );
     }
     return theme || "default";
   });
@@ -104,7 +106,9 @@ export const ThemeSelector = () => {
               <MdHelpOutline className="w-4 h-4" />
             </button>
 
-            {showTooltip && selectedTheme && <Tooltip selectedTheme={selectedTheme} />}
+            {showTooltip && selectedTheme && (
+              <Tooltip selectedTheme={selectedTheme} />
+            )}
           </div>
 
           <button
