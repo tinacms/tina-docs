@@ -28,7 +28,7 @@ export const TabsLayout = ({
   props: {
     children: React.ReactNode;
   };
-  tinaProps: { data: NavigationBarData };
+  tinaProps: { data: Record<string, unknown> };
 }) => {
   const [navigationDocsData, setNavigationDocsData] = React.useState<
     FormattedNavigation | undefined
@@ -42,7 +42,7 @@ export const TabsLayout = ({
 
   React.useEffect(() => {
     const formattedNavData = formatNavigationData(
-      tinaProps.data as NavigationBarData,
+      tinaProps.data as unknown as NavigationBarData,
       false
     );
     setNavigationDocsData(formattedNavData);

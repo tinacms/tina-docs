@@ -8,8 +8,14 @@ import MarkdownComponentMapping from "@/components/tina-markdown/markdown-compon
 import { Pagination } from "@/components/ui/pagination";
 import GitHubMetadata from "@/src/components/page-metadata/github-metadata";
 import { formatDate, useTocListener } from "@/utils/docs";
+import type { DocsQuery } from "@/tina/__generated__/types";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+
+type DocsData = DocsQuery["docs"] & {
+  previous?: { id: string; title: string } | null;
+  next?: { id: string; title: string } | null;
+};
 
 type DocumentProps = {
   props: {
@@ -24,9 +30,9 @@ export default function Document({ props, tinaProps }: DocumentProps) {
   const { data } = tinaProps;
   const navigationData = useNavigation();
 
-  const documentationData = data.docs;
+  const documentationData = (data as DocsQuery).docs as DocsData;
   const { pageTableOfContents } = props;
-  const formattedDate = formatDate(documentationData?.last_edited);
+  const formattedDate = formatDate(documentationData?.last_edited ?? null);
   const previousPage = {
     slug: documentationData?.previous?.id.slice(7, -4),
     title: documentationData?.previous?.title,
