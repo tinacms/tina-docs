@@ -84,10 +84,10 @@ const DocsMenu = async ({ children }: { children?: React.ReactNode }) => {
     <div className="relative flex flex-col w-full pb-2">
       <TinaClient
         props={{
+          children,
           query: navigationData.query,
           variables: navigationData.variables,
           data: navigationData.data,
-          children,
         }}
         Component={TabsLayout}
       />

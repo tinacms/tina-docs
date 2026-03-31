@@ -7,17 +7,32 @@ import { OnThisPage } from "@/components/docs/on-this-page";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { Pagination } from "@/components/ui/pagination";
 import GitHubMetadata from "@/src/components/page-metadata/github-metadata";
+import type { DocsQuery } from "@/tina/__generated__/types";
 import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
-export default function Document({ props, tinaProps }) {
+type DocsData = DocsQuery["docs"] & {
+  previous?: { id: string; title: string } | null;
+  next?: { id: string; title: string } | null;
+};
+
+type DocumentProps = {
+  props: {
+    pageTableOfContents: Array<{ type: string; text: string }>;
+    hasGithubConfig: boolean;
+    documentationData: Record<string, unknown>;
+  };
+  tinaProps: { data: Record<string, unknown> };
+};
+
+export default function Document({ props, tinaProps }: DocumentProps) {
   const { data } = tinaProps;
   const navigationData = useNavigation();
 
-  const documentationData = data.docs;
+  const documentationData = (data as DocsQuery).docs as DocsData;
   const { pageTableOfContents } = props;
-  const formattedDate = formatDate(documentationData?.last_edited);
+  const formattedDate = formatDate(documentationData?.last_edited ?? null);
   const previousPage = {
     slug: documentationData?.previous?.id.slice(7, -4),
     title: documentationData?.previous?.title,

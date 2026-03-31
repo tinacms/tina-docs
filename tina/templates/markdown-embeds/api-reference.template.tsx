@@ -149,7 +149,7 @@ const SchemaSelector = (props: any) => {
         input.value.split("|")[0],
         schemas
       );
-      setSchemaDetails(details);
+      setSchemaDetails(details ?? null);
       setLoadingDetails(false);
     };
 
@@ -175,7 +175,7 @@ const SchemaSelector = (props: any) => {
         input.value.split("|")[0],
         schemas
       );
-      setSchemaDetails(details);
+      setSchemaDetails(details ?? null);
       setLoadingDetails(false);
     }
     setSelectedEndpoint("");
