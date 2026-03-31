@@ -7,8 +7,8 @@ import { OnThisPage } from "@/components/docs/on-this-page";
 import MarkdownComponentMapping from "@/components/tina-markdown/markdown-component-mapping";
 import { Pagination } from "@/components/ui/pagination";
 import GitHubMetadata from "@/src/components/page-metadata/github-metadata";
-import { formatDate, useTocListener } from "@/utils/docs";
 import type { DocsQuery } from "@/tina/__generated__/types";
+import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
