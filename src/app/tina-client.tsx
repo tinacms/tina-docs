@@ -11,8 +11,11 @@ export type UseTinaProps = {
 };
 
 export type TinaClientProps<T> = {
-  props: UseTinaProps & T & any;
-  Component: React.FC<any>;
+  props: UseTinaProps & T;
+  Component: React.ComponentType<{
+    tinaProps: { data: Record<string, unknown> };
+    props: UseTinaProps & T;
+  }>;
 };
 
 export function TinaClient<T>({ props, Component }: TinaClientProps<T>) {

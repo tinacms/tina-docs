@@ -11,7 +11,16 @@ import { formatDate, useTocListener } from "@/utils/docs";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 
-export default function Document({ props, tinaProps }) {
+type DocumentProps = {
+  props: {
+    pageTableOfContents: Array<{ type: string; text: string }>;
+    hasGithubConfig: boolean;
+    documentationData: Record<string, unknown>;
+  };
+  tinaProps: { data: Record<string, unknown> };
+};
+
+export default function Document({ props, tinaProps }: DocumentProps) {
   const { data } = tinaProps;
   const navigationData = useNavigation();
 

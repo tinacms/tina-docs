@@ -28,7 +28,7 @@ export const TabsLayout = ({
   props: {
     children: React.ReactNode;
   };
-  tinaProps: any;
+  tinaProps: { data: NavigationBarData };
 }) => {
   const [navigationDocsData, setNavigationDocsData] = React.useState<
     FormattedNavigation | undefined
