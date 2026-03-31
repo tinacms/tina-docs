@@ -12,16 +12,7 @@ export type UseTinaProps = {
 
 export type TinaClientProps<T> = {
   props: UseTinaProps & T & any;
-  Component: React.FC<{
-    tinaProps: { data: Record<string, unknown> };
-    props: {
-      query: string;
-      variables: Record<string, unknown>;
-      data: Record<string, unknown>;
-      pageTableOfContents: Record<string, unknown>;
-      documentationData: Record<string, unknown>;
-    };
-  }>;
+  Component: React.FC<any>;
 };
 
 export function TinaClient<T>({ props, Component }: TinaClientProps<T>) {
