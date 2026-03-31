@@ -1,7 +1,7 @@
 "use client";
 
 import { formatNavigationData } from "@/src/utils/docs/navigation/documentNavigation";
-import type { NavigationBarData } from "@/src/utils/docs/navigation/documentNavigation";
+import type { NavigationBarData, SupermenuGroup } from "@/src/utils/docs/navigation/documentNavigation";
 import * as Tabs from "@radix-ui/react-tabs";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -20,10 +20,11 @@ export const TabsLayout = ({
   };
   tinaProps: any;
 }) => {
-  const [navigationDocsData, setNavigationDocsData] = React.useState({});
-  const [tabs, setTabs] = React.useState([]);
-  const [selectedTab, setSelectedTab] = React.useState();
-  const [objectOfSelectedTab, setObjectOfSelectedTab] = React.useState();
+  type TabItem = { label: string; content: { title: string; __typename: string; items: SupermenuGroup[] }; __typename: string };
+  const [navigationDocsData, setNavigationDocsData] = React.useState<Record<string, unknown>>({});
+  const [tabs, setTabs] = React.useState<TabItem[]>([]);
+  const [selectedTab, setSelectedTab] = React.useState<string | undefined>();
+  const [objectOfSelectedTab, setObjectOfSelectedTab] = React.useState<TabItem | undefined>();
   const pathname = usePathname();
 
   React.useEffect(() => {
