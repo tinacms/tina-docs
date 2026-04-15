@@ -1,5 +1,6 @@
 "use client";
 
+import { resolveImageSrc } from "@/utils/resolve-image-src";
 import Image from "next/image";
 import { useState } from "react";
 import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
@@ -13,18 +14,6 @@ function normalizeSrc(src: string): string {
     return `/${match[1]}`;
   }
   return src;
-}
-
-function resolveImagePath(src: string): string {
-  if (
-    src.startsWith("http://") ||
-    src.startsWith("https://") ||
-    src.startsWith("data:")
-  ) {
-    return src;
-  }
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  return `${basePath}${src}`;
 }
 
 interface ImageEmbedProps {
@@ -48,7 +37,7 @@ const ImageEmbed = ({
   if (!image?.src) return null;
 
   const localSrc = normalizeSrc(image.src);
-  const resolvedSrc = resolveImagePath(localSrc);
+  const resolvedSrc = resolveImageSrc(localSrc);
   const alt = image.alt || caption || "";
   const hasDimensions = !!(image.width && image.height);
 

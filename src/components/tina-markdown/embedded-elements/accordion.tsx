@@ -1,3 +1,4 @@
+import { resolveImageSrc } from "@/utils/resolve-image-src";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -15,21 +16,9 @@ interface ImageMetadata {
 
 interface AccordionProps {
   docText: string;
-  image: string | ImageMetadata;
+  image: ImageMetadata;
   heading?: string;
   fullWidth?: boolean;
-}
-
-function resolveImage(image: string | ImageMetadata): ImageMetadata | null {
-  if (!image) return null;
-  if (typeof image === "string") return { src: image };
-  return image;
-}
-
-function resolveImageSrc(src: string): string {
-  if (src.startsWith("http") || src.startsWith("data:")) return src;
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  return `${basePath}${src}`;
 }
 
 const Accordion = (props) => {
@@ -41,7 +30,7 @@ const Accordion = (props) => {
     setIsExpanded(!isExpanded);
   };
 
-  const imageData = image ? resolveImage(image) : null;
+  const imageData = image?.src ? image : null;
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -117,7 +106,7 @@ interface AccordionBlockProps {
   fullWidth?: boolean;
   accordionItems: {
     docText: string;
-    image: string | ImageMetadata;
+    image: ImageMetadata;
     heading?: string;
     fullWidth?: boolean;
   }[];
@@ -169,7 +158,7 @@ export const AccordionBlock = (props) => {
       }`}
     >
       {accordionItems.map((item, index) => {
-        const imageData = item.image ? resolveImage(item.image) : null;
+        const imageData = item.image?.src ? item.image : null;
 
         return (
           <div key={index} className="w-full">
