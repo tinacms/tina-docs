@@ -15,7 +15,7 @@ export const TopNav = ({
   tabs: { label: string; content: any }[];
   navigationDocsData: any;
 }) => {
-  const ctaButtons = navigationDocsData.ctaButtons;
+  const ctaButtons = navigationDocsData?.ctaButtons;
   const hasButtons = ctaButtons && (ctaButtons.button1 || ctaButtons.button2);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 

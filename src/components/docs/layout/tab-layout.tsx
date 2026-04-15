@@ -1,7 +1,11 @@
 "use client";
 
 import { formatNavigationData } from "@/src/utils/docs/navigation/documentNavigation";
-import type { NavigationBarData } from "@/src/utils/docs/navigation/documentNavigation";
+import type {
+  FormattedNavigation,
+  NavigationBarData,
+  SupermenuGroup,
+} from "@/src/utils/docs/navigation/documentNavigation";
 import * as Tabs from "@radix-ui/react-tabs";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -11,6 +15,12 @@ import { Sidebar } from "./sidebar";
 import { TopNav } from "./top-nav";
 import { findTabWithPath } from "./utils";
 
+type TabItem = {
+  label: string;
+  content: { title: string; __typename: string; items: SupermenuGroup[] };
+  __typename: string;
+};
+
 export const TabsLayout = ({
   props: { children },
   tinaProps,
@@ -18,17 +28,21 @@ export const TabsLayout = ({
   props: {
     children: React.ReactNode;
   };
-  tinaProps: any;
+  tinaProps: { data: Record<string, unknown> };
 }) => {
-  const [navigationDocsData, setNavigationDocsData] = React.useState({});
-  const [tabs, setTabs] = React.useState([]);
-  const [selectedTab, setSelectedTab] = React.useState();
-  const [objectOfSelectedTab, setObjectOfSelectedTab] = React.useState();
+  const [navigationDocsData, setNavigationDocsData] = React.useState<
+    FormattedNavigation | undefined
+  >();
+  const [tabs, setTabs] = React.useState<TabItem[]>([]);
+  const [selectedTab, setSelectedTab] = React.useState<string | undefined>();
+  const [objectOfSelectedTab, setObjectOfSelectedTab] = React.useState<
+    TabItem | undefined
+  >();
   const pathname = usePathname();
 
   React.useEffect(() => {
     const formattedNavData = formatNavigationData(
-      tinaProps.data as NavigationBarData,
+      tinaProps.data as unknown as NavigationBarData,
       false
     );
     setNavigationDocsData(formattedNavData);
@@ -38,7 +52,7 @@ export const TabsLayout = ({
       __typename: tab.__typename,
     }));
     setTabs(tabs);
-    setSelectedTab(tabs[0]);
+    setSelectedTab(tabs[0]?.label);
     setObjectOfSelectedTab(tabs[0]);
   }, [tinaProps.data]);
 
@@ -59,7 +73,7 @@ export const TabsLayout = ({
 
   const handleTabChange = (value: string) => {
     setSelectedTab(value);
-    setObjectOfSelectedTab(value);
+    setObjectOfSelectedTab(tabs.find((tab) => tab.label === value));
     const newIndex = tabs.findIndex((tab) => tab.label === value);
     window.dispatchEvent(
       new CustomEvent("tabChange", { detail: { value: newIndex.toString() } })

@@ -26,10 +26,11 @@ function createHeadings(
   );
 
   for (const heading of htmlElements ?? []) {
+    const el = heading as HTMLElement;
     headings.push({
-      id: heading.id,
-      offset: heading.offsetTop,
-      level: heading.tagName,
+      id: el.id,
+      offset: el.offsetTop,
+      level: el.tagName,
     });
   }
   return headings;

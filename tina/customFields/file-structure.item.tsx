@@ -278,7 +278,6 @@ export const FileTreeItem = ({
         isExpanded &&
         node.children.map((child) => (
           <FileTreeItem
-            // @ts-expect-error - key is not a prop of FileTreeItemProps, false positive
             key={child.id}
             node={child}
             editState={{ editingId, setEditingId }}
