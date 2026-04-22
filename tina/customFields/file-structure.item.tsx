@@ -277,17 +277,16 @@ export const FileTreeItem = ({
       {node.type === "folder" &&
         isExpanded &&
         node.children.map((child) => (
-          <React.Fragment key={child.id}>
-            <FileTreeItem
-              node={child}
-              editState={{ editingId, setEditingId }}
-              dragActions={{ dragState, setDragState }}
-              treeState={{ expandedFolders, toggleFolder }}
-              onUpdate={onUpdate}
-              onDelete={onDelete}
-              onMove={onMove}
-            />
-          </React.Fragment>
+          <FileTreeItem
+            key={child.id}
+            node={child}
+            editState={{ editingId, setEditingId }}
+            dragActions={{ dragState, setDragState }}
+            treeState={{ expandedFolders, toggleFolder }}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
+            onMove={onMove}
+          />
         ))}
     </div>
   );
