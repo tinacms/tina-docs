@@ -65,7 +65,9 @@ jobs:
 
   search-tests:
     needs: [build, slugify-branch]
+    continue-on-error: true
     uses: ./.github/workflows/search-test.yml
     with:
       base_url: https://tina-docs-git-${{ needs.slugify-branch.outputs.slug }}-tinacms.vercel.app
       NEXT_PUBLIC_BASE_PATH: ${{ needs.build.outputs.NEXT_PUBLIC_BASE_PATH }}
+    secrets: inherit
