@@ -46,6 +46,17 @@
     "title-case": "^4.3.2",
     "typescript": "5.8.3"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "@tailwindcss/oxide",
+      "better-sqlite3",
+      "core-js",
+      "esbuild",
+      "protobufjs",
+      "sharp"
+    ]
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@playwright/test": "^1.54.2",
