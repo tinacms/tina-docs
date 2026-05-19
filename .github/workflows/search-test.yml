@@ -49,9 +49,9 @@ jobs:
           URL="${BASE_URL}${NEXT_PUBLIC_BASE_PATH}/docs"
           echo "Waiting for $URL to be ready..."
           for i in $(seq 1 30); do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || true)
-            if [ "$STATUS" = "200" ]; then
-              echo "Deployment is ready (attempt $i)"
+            STATUS=$(curl -sL -o /dev/null -w "%{http_code}" "$URL" || true)
+            if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 500 ]; then
+              echo "Deployment is ready (attempt $i, status $STATUS)"
               exit 0
             fi
             echo "Attempt $i: got $STATUS, retrying in 10s..."
