@@ -68,7 +68,6 @@ jobs:
         env:
           BASE_URL: ${{ inputs.base_url }}
           NEXT_PUBLIC_BASE_PATH: ${{ inputs.NEXT_PUBLIC_BASE_PATH || '' }}
-          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
       - name: Upload test results
         if: always()

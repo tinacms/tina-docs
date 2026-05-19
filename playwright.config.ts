@@ -25,14 +25,6 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
-    ...(process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-      ? {
-          extraHTTPHeaders: {
-            "x-vercel-protection-bypass":
-              process.env.VERCEL_AUTOMATION_BYPASS_SECRET,
-          },
-        }
-      : {}),
   },
 
   /* Configure projects for major browsers */
