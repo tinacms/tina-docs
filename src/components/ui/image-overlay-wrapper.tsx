@@ -12,21 +12,12 @@ interface ImageOverlayWrapperProps {
   caption?: string;
 }
 
-// Custom image loader for local images only - serves files directly
-// with width/quality params (which the local server ignores).
-const localImageLoader: ImageLoader = ({ src, width, quality }) => {
+const imageLoader: ImageLoader = ({ src, width, quality }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const fullSrc =
-    src.startsWith("http") || src.startsWith("data:")
-      ? src
-      : `${basePath}${src}`;
+  const fullSrc = src.startsWith("http") ? src : `${basePath}${src}`;
   const separator = fullSrc.includes("?") ? "&" : "?";
   return `${fullSrc}${separator}w=${width}&q=${quality || 75}`;
 };
-
-function isExternalUrl(url: string): boolean {
-  return url.startsWith("http://") || url.startsWith("https://");
-}
 
 export const ImageOverlayWrapper = ({
   children,
@@ -76,10 +67,6 @@ export const ImageOverlayWrapper = ({
     }
   };
 
-  // For external URLs (TinaCloud), let Next.js handle via /_next/image proxy.
-  // For local images, use the custom loader to serve files directly.
-  const isExternal = isExternalUrl(src);
-
   const overlay =
     isOpen && mounted
       ? createPortal(
@@ -113,7 +100,7 @@ export const ImageOverlayWrapper = ({
                   )}
 
                   <Image
-                    {...(isExternal ? {} : { loader: localImageLoader })}
+                    loader={imageLoader}
                     src={src}
                     alt={alt}
                     fill

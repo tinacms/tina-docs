@@ -1,7 +1,6 @@
 "use client";
 
 import type { ImageMetadata } from "@/tina/collections/image-metadata";
-import { resolveImageSrc } from "@/utils/resolve-image-src";
 import Image from "next/image";
 import { useState } from "react";
 import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
@@ -21,7 +20,10 @@ const ImageEmbed = ({
 
   if (!image?.src) return null;
 
-  const resolvedSrc = resolveImageSrc(image.src);
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const resolvedSrc = image.src.startsWith("http")
+    ? image.src
+    : `${basePath}${image.src}`;
   const alt = image.alt || caption || "";
   const hasDimensions = !!(image.width && image.height);
 
