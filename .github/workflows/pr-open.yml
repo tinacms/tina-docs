@@ -38,6 +38,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Load .env file
+        # Pinned to SHA instead of @v2 — third-party action from an individual maintainer
         uses: xom9ikk/dotenv@eff1dce037c4c0143cc4180a810511024c2560c0
         with:
           path: ./.github
