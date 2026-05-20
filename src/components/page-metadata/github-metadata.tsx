@@ -38,7 +38,7 @@ export default function GitHubMetadata({
       <div className="flex sm:flex-row flex-col sm:items-center gap-2">
         <span>
           Last updated by{" "}
-          <span className="font-bold text-black">
+          <span className="font-bold text-neutral-text">
             {latestCommit.commit.author.name}
           </span>
           {` ${lastUpdateInRelativeTime}.`}
@@ -49,7 +49,7 @@ export default function GitHubMetadata({
             target="_blank"
             title={tooltipContent}
             rel="noopener noreferrer"
-            className="text-black hover:text-orange-600 underline flex flex-row items-center gap-1.5"
+            className="text-neutral-text hover:text-orange-600 underline flex flex-row items-center gap-1.5"
           >
             See history
             <FaHistory className="w-3 h-3" />

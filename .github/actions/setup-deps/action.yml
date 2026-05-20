@@ -1,0 +1,55 @@
+name: Setup dependencies
+description: Detect package manager, setup Node.js, and install dependencies
+
+inputs:
+  node-version-file:
+    description: File to read Node.js version from
+    default: .nvmrc
+  pnpm-version:
+    description: pnpm version to use if pnpm is detected
+    default: "9.15.2"
+
+outputs:
+  manager:
+    description: Detected package manager (pnpm, yarn, or npm)
+    value: ${{ steps.detect.outputs.manager }}
+  runner:
+    description: Command prefix for running scripts
+    value: ${{ steps.detect.outputs.runner }}
+
+runs:
+  using: composite
+  steps:
+    - name: Detect package manager
+      id: detect
+      shell: bash
+      run: |
+        if [ -f "pnpm-lock.yaml" ]; then
+          echo "manager=pnpm" >> $GITHUB_OUTPUT
+          echo "command=install --frozen-lockfile" >> $GITHUB_OUTPUT
+          echo "runner=pnpm" >> $GITHUB_OUTPUT
+        elif [ -f "yarn.lock" ]; then
+          echo "manager=yarn" >> $GITHUB_OUTPUT
+          echo "command=install --frozen-lockfile" >> $GITHUB_OUTPUT
+          echo "runner=yarn" >> $GITHUB_OUTPUT
+        else
+          echo "manager=npm" >> $GITHUB_OUTPUT
+          echo "command=ci" >> $GITHUB_OUTPUT
+          echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Setup pnpm
+      if: steps.detect.outputs.manager == 'pnpm'
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ${{ inputs.node-version-file }}
+        cache: ${{ steps.detect.outputs.manager }}
+
+    - name: Install dependencies
+      shell: bash
+      run: ${{ steps.detect.outputs.manager }} ${{ steps.detect.outputs.command }}
