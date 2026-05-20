@@ -37,5 +37,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Load .env file
+        uses: xom9ikk/dotenv@eff1dce037c4c0143cc4180a810511024c2560c0
+        with:
+          path: ./.github
+
       - name: Build
         run: pnpm build
