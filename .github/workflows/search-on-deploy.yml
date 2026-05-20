@@ -11,4 +11,4 @@ jobs:
     uses: ./.github/workflows/search-test.yml
     with:
       base_url: ${{ github.event.deployment_status.target_url }}
-      NEXT_PUBLIC_BASE_PATH: /tinadocs
+      NEXT_PUBLIC_BASE_PATH: ${{ vars.NEXT_PUBLIC_BASE_PATH || '' }}

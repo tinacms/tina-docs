@@ -10,8 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build sample
-    outputs:
-      NEXT_PUBLIC_BASE_PATH: ${{ steps.setup-base-path.outputs.NEXT_PUBLIC_BASE_PATH }}
 
     steps:
       - uses: actions/checkout@v4
@@ -39,27 +37,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Load .env file
-        uses: xom9ikk/dotenv@eff1dce037c4c0143cc4180a810511024c2560c0
-        with:
-          path: ./.github
-
-      - name: Setup Base Path
-        id: setup-base-path
-        run: |
-          echo "NEXT_PUBLIC_BASE_PATH=${{ env.NEXT_PUBLIC_BASE_PATH }}" >> $GITHUB_OUTPUT
-
       - name: Build
         run: pnpm build
-
-  slugify-branch:
-    runs-on: ubuntu-latest
-    outputs:
-      slug: ${{ steps.slug.outputs.slug }}
-    steps:
-      - name: Slugify branch name
-        id: slug
-        run: |
-          SLUG=$(echo "${{ github.head_ref }}" | tr '/' '-' | tr -d '.' | tr '[:upper:]' '[:lower:]')
-          echo "slug=$SLUG" >> $GITHUB_OUTPUT
-

@@ -14,8 +14,9 @@ on:
         required: true
         type: string
       NEXT_PUBLIC_BASE_PATH:
-        description: 'Base path (required)'
-        required: true
+        description: 'Base path for the site'
+        required: false
+        default: ''
         type: string
 
 jobs:
