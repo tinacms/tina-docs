@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup dependencies
+        id: setup
         uses: ./.github/actions/setup-deps
 
       - name: Restore Next.js cache
@@ -32,4 +33,4 @@ jobs:
           path: ./.github
 
       - name: Build
-        run: pnpm build
+        run: ${{ steps.setup.outputs.runner }} build

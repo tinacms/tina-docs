@@ -29,13 +29,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup dependencies
+        id: setup
         uses: ./.github/actions/setup-deps
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
       - name: Run search tests
-        run: pnpm test
+        run: ${{ steps.setup.outputs.runner }} test
         env:
           BASE_URL: ${{ inputs.base_url }}
           NEXT_PUBLIC_BASE_PATH: ${{ inputs.NEXT_PUBLIC_BASE_PATH || '' }}
