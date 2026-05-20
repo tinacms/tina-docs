@@ -31,8 +31,6 @@ Key files:
 - `tina/customFields/image-with-metadata.tsx` - Auto-captures dimensions on upload
 - `src/components/ui/image-overlay-wrapper.tsx` - Lightbox overlay
 
-**TinaCloud URL coupling:** TinaCMS may rewrite image URLs to TinaCloud CDN paths (`https://assets.tina.io/{project-id}/...`) in production. The image-embed component extracts the local path via regex. If TinaCloud changes their URL format, update `TINA_CLOUD_ASSET_REGEX` in `image-embed.tsx`.
-
 Accordion components also use `ImageWithMetadataFields` for structured image data with auto-dimension capture.
 
 ### TinaCMS Content Model

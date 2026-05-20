@@ -1,10 +1,7 @@
 "use client";
 
 import type { ImageMetadata } from "@/tina/collections/image-metadata";
-import {
-  normalizeTinaCloudSrc,
-  resolveImageSrc,
-} from "@/utils/resolve-image-src";
+import { resolveImageSrc } from "@/utils/resolve-image-src";
 import Image from "next/image";
 import { useState } from "react";
 import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
@@ -24,8 +21,7 @@ const ImageEmbed = ({
 
   if (!image?.src) return null;
 
-  const localSrc = normalizeTinaCloudSrc(image.src);
-  const resolvedSrc = resolveImageSrc(localSrc);
+  const resolvedSrc = resolveImageSrc(image.src);
   const alt = image.alt || caption || "";
   const hasDimensions = !!(image.width && image.height);
 
@@ -83,7 +79,7 @@ const ImageEmbed = ({
       {disableLightbox ? (
         imageElement
       ) : (
-        <ImageOverlayWrapper src={localSrc} alt={alt} caption={caption}>
+        <ImageOverlayWrapper src={image.src} alt={alt} caption={caption}>
           {imageElement}
         </ImageOverlayWrapper>
       )}
