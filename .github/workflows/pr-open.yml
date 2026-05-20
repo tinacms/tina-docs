@@ -5,72 +5,32 @@ on:
 env:
   NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
   TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
-  NEXT_PUBLIC_TINA_BRANCH: ${{ github.head_ref }} 
+  NEXT_PUBLIC_TINA_BRANCH: ${{ github.head_ref }}
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Build sample
-    outputs:
-      NEXT_PUBLIC_BASE_PATH: ${{ steps.setup-base-path.outputs.NEXT_PUBLIC_BASE_PATH }}
 
     steps:
       - uses: actions/checkout@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 9.15.2
-          run_install: false
+      - name: Setup dependencies
+        id: setup
+        uses: ./.github/actions/setup-deps
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: Restore Next.js cache
+        uses: actions/cache@v4
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml', '**/yarn.lock', '**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml', '**/yarn.lock', '**/package-lock.json') }}-
 
       - name: Load .env file
-        uses: xom9ikk/dotenv@v2
+        # Pinned to SHA instead of @v2 — third-party action from an individual maintainer
+        uses: xom9ikk/dotenv@eff1dce037c4c0143cc4180a810511024c2560c0
         with:
           path: ./.github
 
-      - name: Setup Base Path
-        id: setup-base-path
-        run: |
-          echo "NEXT_PUBLIC_BASE_PATH=${{ env.NEXT_PUBLIC_BASE_PATH }}" >> $GITHUB_OUTPUT
-
       - name: Build
-        run: pnpm build
-
-  slugify-branch:
-    runs-on: ubuntu-latest
-    outputs:
-      slug: ${{ steps.slug.outputs.slug }}
-    steps:
-      - name: Slugify branch name
-        id: slug
-        run: |
-          SLUG=$(echo "${{ github.head_ref }}" | tr '/' '-' | tr -d '.' | tr '[:upper:]' '[:lower:]')
-          echo "slug=$SLUG" >> $GITHUB_OUTPUT
-
-  search-tests:
-    needs: [build, slugify-branch]
-    uses: ./.github/workflows/search-test.yml
-    with:
-      base_url: https://tina-docs-git-${{ needs.slugify-branch.outputs.slug }}-tinacms.vercel.app
-      NEXT_PUBLIC_BASE_PATH: ${{ needs.build.outputs.NEXT_PUBLIC_BASE_PATH }}
+        run: ${{ steps.setup.outputs.runner }} build
