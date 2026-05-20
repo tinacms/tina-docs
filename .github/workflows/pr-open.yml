@@ -69,3 +69,4 @@ jobs:
     with:
       base_url: https://tina-docs-git-${{ needs.slugify-branch.outputs.slug }}-tinacms.vercel.app
       NEXT_PUBLIC_BASE_PATH: ${{ needs.build.outputs.NEXT_PUBLIC_BASE_PATH }}
+      commit_sha: ${{ github.event.pull_request.head.sha }}

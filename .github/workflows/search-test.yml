@@ -17,6 +17,10 @@ on:
         description: 'Base path (required)'
         required: true
         type: string
+      commit_sha:
+        description: 'Commit SHA to wait for (uses GitHub Deployments API)'
+        required: false
+        type: string
 
 jobs:
   test-search:
@@ -45,23 +49,32 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Wait for deployment to be ready
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT_SHA: ${{ inputs.commit_sha }}
+          REPO: ${{ github.repository }}
         run: |
-          URL="${BASE_URL}${NEXT_PUBLIC_BASE_PATH}/docs"
-          echo "Waiting for $URL to be ready..."
-          for i in $(seq 1 30); do
-            STATUS=$(curl -sL -o /dev/null -w "%{http_code}" "$URL" || true)
-            if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 500 ]; then
-              echo "Deployment is ready (attempt $i, status $STATUS)"
-              exit 0
+          if [ -z "$COMMIT_SHA" ]; then
+            echo "No commit SHA provided, skipping deployment wait"
+            exit 0
+          fi
+          echo "Waiting for Vercel deployment of ${COMMIT_SHA:0:7}..."
+          for i in $(seq 1 60); do
+            DEPLOYMENT_ID=$(gh api "repos/$REPO/deployments?sha=$COMMIT_SHA&environment=Preview&per_page=1" --jq '.[0].id // empty' 2>/dev/null)
+            if [ -n "$DEPLOYMENT_ID" ]; then
+              STATE=$(gh api "repos/$REPO/deployments/$DEPLOYMENT_ID/statuses?per_page=1" --jq '.[0].state // empty' 2>/dev/null)
+              if [ "$STATE" = "success" ]; then
+                echo "Deployment is ready (attempt $i)"
+                exit 0
+              fi
+              echo "Attempt $i: state=$STATE"
+            else
+              echo "Attempt $i: no deployment found yet"
             fi
-            echo "Attempt $i: got $STATUS, retrying in 10s..."
-            sleep 10
+            sleep 5
           done
           echo "Deployment not ready after 5 minutes"
           exit 1
-        env:
-          BASE_URL: ${{ inputs.base_url }}
-          NEXT_PUBLIC_BASE_PATH: ${{ inputs.NEXT_PUBLIC_BASE_PATH || '' }}
 
       - name: Run search tests
         run: pnpm test
