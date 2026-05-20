@@ -1,0 +1,14 @@
+name: Search Tests on Deploy
+
+on:
+  deployment_status:
+
+jobs:
+  search-tests:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment_status.environment == 'Preview'
+    uses: ./.github/workflows/search-test.yml
+    with:
+      base_url: ${{ github.event.deployment_status.target_url }}
+      NEXT_PUBLIC_BASE_PATH: /tinadocs
