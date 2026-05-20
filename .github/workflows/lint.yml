@@ -13,21 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.2
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup dependencies
+        id: setup
+        uses: ./.github/actions/setup-deps
 
       - name: Run Biome Lint & Formatter
-        run: pnpm lint src/ tina/
-
+        run: ${{ steps.setup.outputs.runner }} lint src/ tina/
