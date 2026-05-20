@@ -14,7 +14,7 @@ interface ImageOverlayWrapperProps {
 
 const imageLoader: ImageLoader = ({ src, width, quality }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const fullSrc = src.startsWith("http") ? src : `${basePath}${src}`;
+  const fullSrc = `${basePath}${src}`;
   const separator = fullSrc.includes("?") ? "&" : "?";
   return `${fullSrc}${separator}w=${width}&q=${quality || 75}`;
 };

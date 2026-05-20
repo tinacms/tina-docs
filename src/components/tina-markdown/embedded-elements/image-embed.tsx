@@ -21,9 +21,7 @@ const ImageEmbed = ({
   if (!image?.src) return null;
 
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const resolvedSrc = image.src.startsWith("http")
-    ? image.src
-    : `${basePath}${image.src}`;
+  const resolvedSrc = `${basePath}${image.src}`;
   const alt = image.alt || caption || "";
   const hasDimensions = !!(image.width && image.height);
 
