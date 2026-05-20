@@ -118,11 +118,16 @@ export const ImageWithMetadataField = wrapFieldsWithMeta((props: any) => {
     },
   };
 
+  const displayBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const imageFieldProps = {
     ...srcFieldProps,
     field: {
       ...srcFieldProps.field,
-      label: " ", // Hides the label and avoids fallback to the form object key
+      label: " ",
+    },
+    input: {
+      ...srcFieldProps.input,
+      value: currentValue.src ? `${displayBasePath}${currentValue.src}` : "",
     },
   };
 
