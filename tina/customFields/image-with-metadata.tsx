@@ -65,8 +65,9 @@ export const ImageWithMetadataField = wrapFieldsWithMeta((props: any) => {
         previousSrcRef.current = newSrc;
 
         try {
+          const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
           const img = new Image();
-          img.src = newSrc;
+          img.src = `${basePath}${newSrc}`;
           await img.decode();
 
           input.onChange({
