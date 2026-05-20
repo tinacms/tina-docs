@@ -1,28 +1,16 @@
 "use client";
 
-import { resolveImageSrc } from "@/utils/resolve-image-src";
+import type { ImageMetadata } from "@/tina/collections/image-metadata";
+import {
+  normalizeTinaCloudSrc,
+  resolveImageSrc,
+} from "@/utils/resolve-image-src";
 import Image from "next/image";
 import { useState } from "react";
 import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
 
-const TINA_CLOUD_ASSET_REGEX = /^https?:\/\/assets\.tina\.io\/[^/]+\/(.+)$/;
-
-/** Extract local path from TinaCloud CDN URLs, or return the path as-is. */
-function normalizeSrc(src: string): string {
-  const match = src.match(TINA_CLOUD_ASSET_REGEX);
-  if (match) {
-    return `/${match[1]}`;
-  }
-  return src;
-}
-
 interface ImageEmbedProps {
-  image?: {
-    src?: string;
-    width?: number;
-    height?: number;
-    alt?: string;
-  };
+  image?: Partial<ImageMetadata>;
   caption?: string;
   disableLightbox?: boolean;
 }
@@ -36,7 +24,7 @@ const ImageEmbed = ({
 
   if (!image?.src) return null;
 
-  const localSrc = normalizeSrc(image.src);
+  const localSrc = normalizeTinaCloudSrc(image.src);
   const resolvedSrc = resolveImageSrc(localSrc);
   const alt = image.alt || caption || "";
   const hasDimensions = !!(image.width && image.height);

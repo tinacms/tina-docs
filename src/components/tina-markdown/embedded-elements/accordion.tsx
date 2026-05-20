@@ -1,3 +1,4 @@
+import type { ImageMetadata } from "@/tina/collections/image-metadata";
 import { resolveImageSrc } from "@/utils/resolve-image-src";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
@@ -6,13 +7,6 @@ import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
 import MarkdownComponentMapping from "../markdown-component-mapping";
-
-interface ImageMetadata {
-  src: string;
-  width?: number;
-  height?: number;
-  alt?: string;
-}
 
 interface AccordionProps {
   docText: string;
@@ -62,7 +56,7 @@ const Accordion = (props) => {
             isExpanded
               ? "max-h-[2000px] opacity-100"
               : "max-h-0 overflow-hidden opacity-0"
-          } ${image ? "sm:grid-cols-2" : ""}`}
+          } ${imageData ? "sm:grid-cols-2" : ""}`}
           ref={contentRef}
           data-tina-field={tinaField(props, "docText")}
         >
@@ -186,7 +180,7 @@ export const AccordionBlock = (props) => {
                 isExpanded[index]
                   ? "max-h-[2000px] opacity-100"
                   : "max-h-0 overflow-hidden opacity-0"
-              } ${item.image ? "sm:grid-cols-2" : ""}`}
+              } ${imageData ? "sm:grid-cols-2" : ""}`}
               ref={(el: HTMLDivElement | null) => {
                 contentRefs.current[index] = el;
               }}

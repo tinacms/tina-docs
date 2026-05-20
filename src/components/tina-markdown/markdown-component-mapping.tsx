@@ -1,3 +1,4 @@
+import type { ImageMetadata } from "@/tina/collections/image-metadata";
 import type { Components, TinaMarkdownContent } from "tinacms/dist/rich-text";
 import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
 import { ApiReference } from "./embedded-elements/api-reference";
@@ -15,13 +16,6 @@ import { CodeBlock } from "./standard-elements/code-block/code-block";
 import HeaderFormat from "./standard-elements/header-format";
 import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
-
-interface ImageMetadata {
-  src: string;
-  width?: number;
-  height?: number;
-  alt?: string;
-}
 
 type ComponentMapping = {
   youtube: { embedSrc: string; caption?: string; minutes?: string };
@@ -64,7 +58,7 @@ type ComponentMapping = {
 
   accordion: {
     docText: string;
-    image: string | ImageMetadata;
+    image: ImageMetadata;
     heading?: string;
     fullWidth?: boolean;
   };
@@ -103,7 +97,7 @@ type ComponentMapping = {
   accordionBlock: {
     accordionItems: {
       docText: string;
-      image: string | ImageMetadata;
+      image: ImageMetadata;
       heading?: string;
       fullWidth?: boolean;
     }[];
@@ -175,6 +169,12 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
     <code
       className="rounded border-y-neutral-border bg-neutral-surface shadow-sm px-1 py-0.5 text-brand-primary border border-neutral-border"
       {...props}
+    />
+  ),
+  img: (props) => (
+    <ImageEmbed
+      image={{ src: props?.url, alt: props?.alt }}
+      caption={props?.caption}
     />
   ),
   table: (props) => <Table {...props} />,
