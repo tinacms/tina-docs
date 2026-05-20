@@ -65,35 +65,17 @@ export const ImageWithMetadataField = wrapFieldsWithMeta((props: any) => {
         previousSrcRef.current = newSrc;
 
         try {
-          // Load the image to get its natural dimensions
           const img = new Image();
+          img.src = newSrc;
+          await img.decode();
 
-          // Wait for the image to load
-          await new Promise<void>((resolve, reject) => {
-            img.onload = () => resolve();
-            img.onerror = () => reject(new Error("Failed to load image"));
-
-            // Handle both absolute URLs and relative paths
-            if (newSrc.startsWith("http://") || newSrc.startsWith("https://")) {
-              img.src = newSrc;
-            } else {
-              // For relative paths, construct the full URL
-              const publicPath = newSrc.startsWith("/")
-                ? newSrc
-                : `/${newSrc}`.replace("/public/", "/");
-              img.src = publicPath;
-            }
-          });
-
-          // Update the field value with dimensions
           input.onChange({
             src: newSrc,
             width: img.naturalWidth,
             height: img.naturalHeight,
             alt: currentValue.alt || "",
           });
-        } catch (error) {
-          // Still update the src, but without dimensions
+        } catch {
           input.onChange({
             src: newSrc,
             width: undefined,
