@@ -38,22 +38,12 @@ const ImageEmbed = ({
             width={image.width}
             height={image.height}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
-            className="rounded-xl"
-            style={{
-              objectFit: "contain",
-              width: "100%",
-              height: "auto",
-              opacity: isLoading ? 0 : 1,
-              transition: "opacity 0.3s ease-in-out",
-            }}
+            className={`rounded-xl object-contain w-full h-auto transition-opacity duration-300 ease-in-out ${isLoading ? "opacity-0" : "opacity-100"}`}
             onLoad={() => setIsLoading(false)}
           />
         </span>
       ) : (
-        <span
-          className="relative overflow-hidden rounded-xl block w-full"
-          style={{ paddingBottom: "56.25%", height: 0 }}
-        >
+        <span className="relative overflow-hidden rounded-xl block w-full aspect-video">
           {isLoading && (
             <span className="absolute inset-0 bg-neutral-background-secondary animate-pulse rounded-xl z-0" />
           )}
@@ -62,11 +52,7 @@ const ImageEmbed = ({
             alt={alt}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
-            style={{
-              objectFit: "contain",
-              opacity: isLoading ? 0 : 1,
-              transition: "opacity 0.3s ease-in-out",
-            }}
+            className={`object-contain transition-opacity duration-300 ease-in-out ${isLoading ? "opacity-0" : "opacity-100"}`}
             onLoad={() => setIsLoading(false)}
           />
         </span>

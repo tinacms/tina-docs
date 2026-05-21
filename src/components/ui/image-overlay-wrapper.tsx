@@ -104,12 +104,7 @@ export const ImageOverlayWrapper = ({
                     src={src}
                     alt={alt}
                     fill
-                    style={{
-                      objectFit: "contain",
-                      objectPosition: "center",
-                      opacity: isLoading ? 0 : 1,
-                      transition: "opacity 0.3s ease-in-out",
-                    }}
+                    className={`object-contain object-center transition-opacity duration-300 ease-in-out ${isLoading ? "opacity-0" : "opacity-100"}`}
                     onLoad={handleImageLoad}
                   />
                 </div>

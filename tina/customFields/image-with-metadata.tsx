@@ -57,8 +57,11 @@ export const ImageWithMetadataField = wrapFieldsWithMeta((props: any) => {
           return;
         }
 
-        // If the src hasn't actually changed, don't re-fetch dimensions
-        if (newSrc === previousSrcRef.current) {
+        const hasCurrentDimensions =
+          typeof currentValue.width === "number" &&
+          typeof currentValue.height === "number";
+
+        if (newSrc === previousSrcRef.current && hasCurrentDimensions) {
           return;
         }
 
