@@ -1,3 +1,4 @@
+import type { ImageMetadata } from "@/tina/collections/image-metadata";
 import type { Components, TinaMarkdownContent } from "tinacms/dist/rich-text";
 import Accordion, { AccordionBlock } from "./embedded-elements/accordion";
 import { ApiReference } from "./embedded-elements/api-reference";
@@ -5,6 +6,7 @@ import Callout from "./embedded-elements/callout";
 import { CardGrid } from "./embedded-elements/card-grid";
 import { CodeTabs } from "./embedded-elements/code-tabs";
 import { FileStructure } from "./embedded-elements/file-structure";
+import ImageEmbed from "./embedded-elements/image-embed";
 import RecipeBlock from "./embedded-elements/recipe";
 import { ScrollBasedShowcase } from "./embedded-elements/scroll-showcase";
 import TypeDefinition from "./embedded-elements/type-definition";
@@ -12,7 +14,6 @@ import Youtube from "./embedded-elements/youtube";
 import Blockquote from "./standard-elements/blockquote";
 import { CodeBlock } from "./standard-elements/code-block/code-block";
 import HeaderFormat from "./standard-elements/header-format";
-import { ImageComponent } from "./standard-elements/image";
 import MermaidElement from "./standard-elements/mermaid-diagram";
 import Table from "./standard-elements/table";
 
@@ -57,7 +58,7 @@ type ComponentMapping = {
 
   accordion: {
     docText: string;
-    image: string;
+    image: ImageMetadata;
     heading?: string;
     fullWidth?: boolean;
   };
@@ -96,7 +97,7 @@ type ComponentMapping = {
   accordionBlock: {
     accordionItems: {
       docText: string;
-      image: string;
+      image: ImageMetadata;
       heading?: string;
       fullWidth?: boolean;
     }[];
@@ -108,6 +109,11 @@ type ComponentMapping = {
       type: "file" | "folder";
       parentId: string | null;
     }[];
+  };
+  imageEmbed: {
+    image?: ImageMetadata;
+    caption?: string;
+    disableLightbox?: boolean;
   };
 };
 
@@ -132,6 +138,7 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
   Callout: (props: { body: TinaMarkdownContent; variant: string }) => (
     <Callout {...props} variant={props.variant as CalloutVariant} />
   ),
+  imageEmbed: (props) => <ImageEmbed {...props} />,
   // Our default markdown components
   h1: (props) => <HeaderFormat level={1} {...props} />,
   h2: (props) => <HeaderFormat level={2} {...props} />,
@@ -164,7 +171,12 @@ export const MarkdownComponentMapping: Components<ComponentMapping> = {
       {...props}
     />
   ),
-  img: (props) => <ImageComponent {...props} />,
+  img: (props) => (
+    <ImageEmbed
+      image={{ src: props?.url, alt: props?.alt }}
+      caption={props?.caption}
+    />
+  ),
   table: (props) => <Table {...props} />,
   code_block: (props) =>
     props?.lang === "mermaid" ? (

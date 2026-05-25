@@ -12,18 +12,9 @@ interface ImageOverlayWrapperProps {
   caption?: string;
 }
 
-// Custom image loader to bypass Next.js image optimization
-const customImageLoader: ImageLoader = ({ src, width, quality }) => {
-  // If it's already an absolute URL (starts with http:// or https://), return as-is
-  if (src.startsWith("http://") || src.startsWith("https://")) {
-    return src;
-  }
-
-  // For relative paths, prepend the base path if it exists
+const imageLoader: ImageLoader = ({ src, width, quality }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const fullSrc = `${basePath}${src}`;
-
-  // If the src already includes query parameters, append with &, otherwise use ?
   const separator = fullSrc.includes("?") ? "&" : "?";
   return `${fullSrc}${separator}w=${width}&q=${quality || 75}`;
 };
@@ -82,7 +73,7 @@ export const ImageOverlayWrapper = ({
           <div
             ref={overlayRef}
             tabIndex={-1}
-            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-lg outline-none"
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-lg outline-none animate-fade-in"
             onClick={closeOverlay}
             onKeyDown={handleKeyDown}
           >
@@ -105,22 +96,15 @@ export const ImageOverlayWrapper = ({
                 >
                   {/* Loading skeleton */}
                   {isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-neutral-background-secondary/50 rounded-lg">
-                      <div className="flex flex-col items-center gap-3">
-                        <div className="w-12 h-12 border-4 border-brand-primary border-t-transparent rounded-full animate-spin" />
-                        <p className="text-neutral-text-secondary text-sm">
-                          Loading image...
-                        </p>
-                      </div>
-                    </div>
+                    <div className="absolute inset-0 bg-neutral-background-secondary animate-pulse rounded-lg" />
                   )}
 
                   <Image
-                    loader={customImageLoader}
+                    loader={imageLoader}
                     src={src}
                     alt={alt}
                     fill
-                    style={{ objectFit: "contain", objectPosition: "center" }}
+                    className={`object-contain object-center transition-opacity duration-300 ease-in-out ${isLoading ? "opacity-0" : "opacity-100"}`}
                     onLoad={handleImageLoad}
                   />
                 </div>
