@@ -32,6 +32,12 @@ jobs:
       - name: Setup dependencies
         id: setup
         uses: ./.github/actions/setup-deps
+        with:
+          # .nvmrc is `lts/*`, which now resolves to Node 24 — and Playwright
+          # 1.54's browser-archive extraction hangs deterministically on Node 24.
+          # Pin this job to Node 22 (previous LTS, known-good) so the install can
+          # extract chromium. Scoped to this workflow only.
+          node-version: "22"
 
       # System deps (apt) and the browser download are split because they fail
       # for different reasons. apt previously hung on an interactive frontend, so

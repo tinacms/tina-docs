@@ -5,6 +5,10 @@ inputs:
   node-version-file:
     description: File to read Node.js version from
     default: .nvmrc
+  node-version:
+    description: Explicit Node.js version; takes precedence over node-version-file when set
+    required: false
+    default: ""
   pnpm-version:
     description: pnpm version to use if pnpm is detected
     default: "9.15.2"
@@ -47,6 +51,7 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
+        node-version: ${{ inputs.node-version }}
         node-version-file: ${{ inputs.node-version-file }}
         cache: ${{ steps.detect.outputs.manager }}
 
