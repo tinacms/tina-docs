@@ -144,6 +144,31 @@ test.describe("Search Functionality", () => {
 
     await searchHelper.testMobileSearch();
   });
+
+  test("should focus search input with cmd/ctrl + k", async ({ page }) => {
+    const searchHelper = new SearchHelper(page);
+
+    // The input should not be focused on page load.
+    const searchInput = searchHelper.getSearchInput();
+    await expect(searchInput).not.toBeFocused();
+
+    // Pressing cmd/ctrl + k should focus the search input.
+    await searchHelper.openSearchWithShortcut();
+    await searchHelper.expectSearchInputFocused();
+  });
+
+  test("should dismiss search with Escape", async ({ page }) => {
+    const searchHelper = new SearchHelper(page);
+
+    // Open search and type a query.
+    await searchHelper.openSearchWithShortcut();
+    await searchHelper.getSearchInput().fill(SEARCH_TEST_DATA.knownTerms[0]);
+
+    // Escape should clear the input and blur it.
+    await searchHelper.getSearchInput().press("Escape");
+    await searchHelper.expectSearchInputValue("");
+    await expect(searchHelper.getSearchInput()).not.toBeFocused();
+  });
 });
 
 test.describe("Search Performance", () => {

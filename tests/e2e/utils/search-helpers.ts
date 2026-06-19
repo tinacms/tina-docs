@@ -112,6 +112,22 @@ export class SearchHelper {
   }
 
   /**
+   * Open search via the cmd/ctrl + k keyboard shortcut
+   */
+  async openSearchWithShortcut() {
+    const modifier = process.platform === "darwin" ? "Meta" : "Control";
+    await this.page.keyboard.press(`${modifier}+KeyK`);
+  }
+
+  /**
+   * Verify the search input is currently focused
+   */
+  async expectSearchInputFocused() {
+    const searchInput = this.getSearchInput();
+    await expect(searchInput).toBeFocused();
+  }
+
+  /**
    * Clear search by clicking the copy button
    */
   async clearSearch() {

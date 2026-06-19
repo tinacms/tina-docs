@@ -17,6 +17,7 @@ export function Search({ className }: { className?: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -32,6 +33,22 @@ export function Search({ className }: { className?: string }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Open search with cmd/ctrl + k from anywhere on the page.
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      }
+    };
+
+    document.addEventListener("keydown", handleShortcut);
+    return () => {
+      document.removeEventListener("keydown", handleShortcut);
     };
   }, []);
 
@@ -127,6 +144,7 @@ export function Search({ className }: { className?: string }) {
     >
       <div className={`relative md:mr-4 ${className || ""}`}>
         <input
+          ref={inputRef}
           type="text"
           value={searchTerm}
           className={`w-full text-neutral-text p-1 lg:p-2 lg:pl-6 pl-6 rounded-full bg-neutral-background-secondary shadow-lg border border-neutral-border/50 dark:border-neutral-border-subtle/50 focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
@@ -134,6 +152,13 @@ export function Search({ className }: { className?: string }) {
           }`}
           placeholder="Search..."
           onChange={handleSearch}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setResults([]);
+              setSearchTerm("");
+              inputRef.current?.blur();
+            }
+          }}
         />
         <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-primary h-5 w-5" />
       </div>
