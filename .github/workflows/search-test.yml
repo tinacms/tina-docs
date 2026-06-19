@@ -34,24 +34,19 @@ jobs:
         uses: ./.github/actions/setup-deps
 
       - name: Install Playwright browsers
-        timeout-minutes: 8
-        # `--with-deps` shells out to apt, which intermittently wedges on the
-        # runner's dpkg lock. Cap each attempt with `timeout` so a hang is killed
-        # (a hang is not a non-zero exit, so a plain retry would never fire) and
-        # retry a few times to ride out the transient lock.
+        timeout-minutes: 10
+        # `--with-deps` runs `sudo apt-get`, which fetched and unpacked fine but
+        # then hung deterministically in the configure phase — zero output for the
+        # full timeout on every attempt. The cause is apt blocking on an
+        # interactive frontend (needrestart/debconf) with no TTY to answer it, so
+        # the old per-attempt-timeout-plus-retry just repeated the same stall and
+        # then blew the step cap. Force the debconf frontend non-interactive in the
+        # debconf database so the sudo apt-get Playwright spawns reads it and never
+        # prompts. One attempt, generous cap — no retry, because the failure was
+        # deterministic, not transient.
         run: |
-          for attempt in 1 2 3; do
-            echo "::group::playwright install (attempt $attempt)"
-            if timeout 180 npx playwright install chromium --with-deps; then
-              echo "::endgroup::"
-              exit 0
-            fi
-            echo "::endgroup::"
-            echo "Attempt $attempt failed or timed out; retrying in 15s..."
-            sleep 15
-          done
-          echo "Playwright browser install failed after 3 attempts."
-          exit 1
+          echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
+          npx playwright install chromium --with-deps
 
       - name: Run search tests
         run: ${{ steps.setup.outputs.runner }} test
