@@ -7,6 +7,11 @@ on:
         description: 'Base URL to test (required)'
         required: true
         type: string
+      NEXT_PUBLIC_BASE_PATH:
+        description: 'Base path for the site (e.g. /tinadocs)'
+        required: false
+        default: ''
+        type: string
   workflow_call:
     inputs:
       base_url:
