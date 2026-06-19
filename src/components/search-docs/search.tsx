@@ -52,15 +52,25 @@ export function Search({ className }: { className?: string }) {
       if (typeof window !== "undefined") {
         let pagefindModule: any;
         try {
-          // Using eval to import pagefind.js is a workaround since the script isn't available during the build process.
-          // This also improves performance by loading the script only when needed, reducing initial page load time.
-          // A direct import would require committing the file with the codebase, which would change frequently
-          // with every content update.
+          // pagefind.js is generated at build time and lives outside the bundle. The
+          // webpackIgnore/turbopackIgnore comments tell both bundlers to leave this dynamic
+          // import alone (the reason the old code resorted to `window.eval`), emitting it as a
+          // runtime import. Avoiding `eval` means no CSP 'unsafe-eval' is required, which is
+          // what was breaking search under Chromium's stricter enforcement.
+          const pagefindUrl = new URL(
+            `${pagefindPath}/pagefind.js`,
+            window.location.origin
+          ).href;
 
-          pagefindModule = await (window as any).eval(
-            `import("${pagefindPath}/pagefind.js")`
+          pagefindModule = await import(
+            /* webpackIgnore: true */
+            /* turbopackIgnore: true */
+            pagefindUrl
           );
         } catch (importError) {
+          // Surface the real cause (CSP, MIME type, or 404) instead of swallowing it.
+          // biome-ignore lint/suspicious/noConsole: needed to diagnose load failures in prod
+          console.error("Pagefind failed to load:", importError);
           setError(
             "Unable to load search functionality. For more information, please check this README: https://github.com/tinacms/tina-docs?tab=readme-ov-file#search-functionality and refresh the page."
           );
