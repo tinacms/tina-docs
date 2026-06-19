@@ -1,13 +1,15 @@
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 const entryPath = path.join(__dirname, "..", "public", "pagefind", "pagefind-entry.json");
 
 if (!fs.existsSync(entryPath)) {
-  console.warn(
-    "\x1b[33m⚠  Pagefind index not found. Search will not work in dev.\n" +
-    "   Run: pnpm build-local-pagefind\x1b[0m\n"
+  console.log(
+    "\x1b[33mPagefind index not found — building it now from your content.\n" +
+    "   (First run only; this does a full build and can take a minute or two.)\x1b[0m\n"
   );
+  execSync("pnpm build-local-pagefind", { stdio: "inherit" });
   process.exit(0);
 }
 
