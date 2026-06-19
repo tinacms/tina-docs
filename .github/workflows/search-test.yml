@@ -23,6 +23,7 @@ jobs:
   test-search:
     name: Test Search Functionality
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -33,6 +34,7 @@ jobs:
         uses: ./.github/actions/setup-deps
 
       - name: Install Playwright browsers
+        timeout-minutes: 8
         run: npx playwright install chromium --with-deps
 
       - name: Run search tests
