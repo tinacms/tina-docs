@@ -18,6 +18,20 @@ export function Search({ className }: { className?: string }) {
   const [error, setError] = useState<string | null>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Resolved on the client so we can show the platform-correct shortcut without
+  // a hydration mismatch (the server has no way to know the user's OS).
+  const [shortcutHint, setShortcutHint] = useState<string | null>(null);
+
+  useEffect(() => {
+    const platform =
+      (navigator as { userAgentData?: { platform?: string } }).userAgentData
+        ?.platform ||
+      navigator.platform ||
+      "";
+    setShortcutHint(
+      /mac|iphone|ipad|ipod/i.test(platform) ? "⌘ + K" : "Ctrl + K"
+    );
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -147,7 +161,7 @@ export function Search({ className }: { className?: string }) {
           ref={inputRef}
           type="text"
           value={searchTerm}
-          className={`w-full text-neutral-text p-1 lg:p-2 lg:pl-6 pl-6 rounded-full bg-neutral-background-secondary shadow-lg border border-neutral-border/50 dark:border-neutral-border-subtle/50 focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
+          className={`w-full text-neutral-text p-1 lg:p-2 lg:pl-6 pl-6 pr-12 sm:pr-24 rounded-full bg-neutral-background-secondary shadow-lg border border-neutral-border/50 dark:border-neutral-border-subtle/50 focus:outline-none focus:ring-1 focus:ring-[#0574e4]/50 focus:border-[#0574e4]/50 transition-all ${
             error !== null ? "opacity-50 cursor-not-allowed" : ""
           }`}
           placeholder="Search..."
@@ -160,7 +174,14 @@ export function Search({ className }: { className?: string }) {
             }
           }}
         />
-        <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-primary h-5 w-5" />
+        <div className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
+          {shortcutHint && !searchTerm && (
+            <kbd className="hidden select-none items-center rounded-md border border-neutral-border/60 bg-neutral-background px-1.5 py-0.5 text-xs font-medium text-neutral-text-secondary sm:flex dark:border-neutral-border-subtle/60">
+              {shortcutHint}
+            </kbd>
+          )}
+          <MagnifyingGlassIcon className="h-5 w-5 text-brand-primary" />
+        </div>
       </div>
 
       {error && (
