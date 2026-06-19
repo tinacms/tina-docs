@@ -33,20 +33,38 @@ jobs:
         id: setup
         uses: ./.github/actions/setup-deps
 
-      - name: Install Playwright browsers
-        timeout-minutes: 10
-        # `--with-deps` runs `sudo apt-get`, which fetched and unpacked fine but
-        # then hung deterministically in the configure phase — zero output for the
-        # full timeout on every attempt. The cause is apt blocking on an
-        # interactive frontend (needrestart/debconf) with no TTY to answer it, so
-        # the old per-attempt-timeout-plus-retry just repeated the same stall and
-        # then blew the step cap. Force the debconf frontend non-interactive in the
-        # debconf database so the sudo apt-get Playwright spawns reads it and never
-        # prompts. One attempt, generous cap — no retry, because the failure was
-        # deterministic, not transient.
+      # System deps (apt) and the browser download are split because they fail
+      # for different reasons. apt previously hung on an interactive frontend, so
+      # force debconf non-interactive in the db before the sudo apt-get Playwright
+      # runs — this now completes in seconds.
+      - name: Install Playwright system dependencies
+        timeout-minutes: 6
         run: |
           echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
-          npx playwright install chromium --with-deps
+          npx playwright install-deps chromium
+
+      # The browser archive downloads fully (hits 100%) and then Playwright stalls
+      # indefinitely with no output. Cap each attempt with `timeout` so a stall is
+      # killed (a hang is not a non-zero exit) and retry; per-attempt cap × attempts
+      # stays under the step timeout. DEBUG=pw:install surfaces exactly what
+      # Playwright is doing if it stalls again.
+      - name: Install Playwright browser
+        timeout-minutes: 10
+        env:
+          DEBUG: pw:install
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::playwright browser install (attempt $attempt)"
+            if timeout 150 npx playwright install chromium; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+            echo "Attempt $attempt stalled or failed; retrying in 10s..."
+            sleep 10
+          done
+          echo "Playwright browser install failed after 3 attempts."
+          exit 1
 
       - name: Run search tests
         run: ${{ steps.setup.outputs.runner }} test
