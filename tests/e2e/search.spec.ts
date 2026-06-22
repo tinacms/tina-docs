@@ -79,14 +79,18 @@ test.describe("Search Functionality", () => {
     await searchHelper.expectSearchInputValue("");
   });
 
-  test("should handle empty search input", async ({ page }) => {
+  test("should show prompt and no results for empty search input", async ({
+    page,
+  }) => {
     const searchHelper = new SearchHelper(page);
 
-    // Try to search with empty input
+    // Focusing the empty input shows the prompt, not actual results.
     await searchHelper.performSearch("");
 
-    // Verify no search results are shown
-    await searchHelper.expectSearchResultsNotVisible();
+    // The empty-state prompt should be visible as feedback...
+    await expect(searchHelper.getSearchPromptMessage()).toBeVisible();
+    // ...but the "No Llamas Found" message should not appear for empty input.
+    await expect(searchHelper.getNoResultsMessage()).not.toBeVisible();
   });
 
   test("should navigate to search result pages", async ({ page }) => {
@@ -155,6 +159,10 @@ test.describe("Search Functionality", () => {
     // Pressing cmd/ctrl + k should focus the search input.
     await searchHelper.openSearchWithShortcut();
     await searchHelper.expectSearchInputFocused();
+
+    // It should also show the empty-state prompt so the shortcut gives
+    // clear, visible feedback rather than just moving the cursor.
+    await expect(searchHelper.getSearchPromptMessage()).toBeVisible();
   });
 
   test("should dismiss search with Escape", async ({ page }) => {

@@ -10,6 +10,7 @@ interface SearchResultsProps {
   results: SearchResult[];
   isLoading: boolean;
   searchTerm: string;
+  isFocused: boolean;
 }
 
 const searchResultsContainer =
@@ -19,6 +20,7 @@ export function SearchResults({
   results,
   isLoading,
   searchTerm,
+  isFocused,
 }: SearchResultsProps) {
   if (isLoading) {
     return (
@@ -72,6 +74,24 @@ export function SearchResults({
           data-testid="no-results-message"
         >
           No Llamas Found...
+        </div>
+      </div>
+    );
+  }
+
+  // When the search is focused but empty (e.g. just opened with cmd/ctrl + k),
+  // show a prompt so the shortcut gives clear, visible feedback.
+  if (isFocused) {
+    return (
+      <div
+        className={searchResultsContainer}
+        data-testid="search-results-container"
+      >
+        <div
+          className="py-2 px-4 text-md font-inter font-semibold text-gray-500 text-bold"
+          data-testid="search-prompt-message"
+        >
+          Start searching the llamas...
         </div>
       </div>
     );

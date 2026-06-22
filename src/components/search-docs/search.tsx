@@ -15,6 +15,7 @@ export function Search({ className }: { className?: string }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,6 +42,7 @@ export function Search({ className }: { className?: string }) {
       ) {
         setResults([]);
         setSearchTerm("");
+        setIsFocused(false);
       }
     };
 
@@ -166,10 +168,12 @@ export function Search({ className }: { className?: string }) {
           }`}
           placeholder="Search..."
           onChange={handleSearch}
+          onFocus={() => setIsFocused(true)}
           onKeyDown={(e) => {
             if (e.key === "Escape") {
               setResults([]);
               setSearchTerm("");
+              setIsFocused(false);
               inputRef.current?.blur();
             }
           }}
@@ -195,6 +199,7 @@ export function Search({ className }: { className?: string }) {
           results={results}
           isLoading={isLoading}
           searchTerm={searchTerm}
+          isFocused={isFocused}
         />
       )}
     </div>

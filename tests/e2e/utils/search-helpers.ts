@@ -61,6 +61,13 @@ export class SearchHelper {
   }
 
   /**
+   * Get the empty-state prompt message shown when the search is focused but empty
+   */
+  getSearchPromptMessage() {
+    return this.page.locator('[data-testid="search-prompt-message"]');
+  }
+
+  /**
    * Get loading message
    */
   getLoadingMessage() {
