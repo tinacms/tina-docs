@@ -29,9 +29,9 @@ test.describe("Search Functionality", () => {
     // Wait for the page to load completely
     await page.waitForLoadState("networkidle");
 
-    // Wait for the search input to be available (client component hydration)
-    const searchInput = page.locator('input[placeholder="Search..."]');
-    await searchInput.waitFor({ state: "visible", timeout: 10000 });
+    // Wait for the search trigger to be available (client component hydration)
+    const searchTrigger = page.locator('[data-testid="search-trigger"]');
+    await searchTrigger.waitFor({ state: "visible", timeout: 10000 });
   });
 
   test("should show search results for existing content", async ({ page }) => {
@@ -61,22 +61,18 @@ test.describe("Search Functionality", () => {
     await expect(noResultsMessage).toBeVisible();
   });
 
-  test("should clear search results when clicking outside", async ({
-    page,
-  }) => {
+  test("should close the overlay when clicking outside", async ({ page }) => {
     const searchHelper = new SearchHelper(page);
 
     // Perform a search
     await searchHelper.performSearch(SEARCH_TEST_DATA.knownTerms[0]);
 
-    // Click outside the search area
-    await searchHelper.clearSearch();
+    // Click outside the dialog (on the backdrop) to dismiss it
+    await searchHelper.closeByClickingOutside();
 
-    // Verify search results are cleared
+    // The overlay (and its input) should be gone, taking the results with it
+    await expect(searchHelper.getSearchInput()).not.toBeVisible();
     await searchHelper.expectSearchResultsNotVisible();
-
-    // Verify search input is cleared
-    await searchHelper.expectSearchInputValue("");
   });
 
   test("should show prompt and no results for empty search input", async ({
@@ -120,18 +116,14 @@ test.describe("Search Functionality", () => {
   test("should show loading state during search", async ({ page }) => {
     const searchHelper = new SearchHelper(page);
 
-    // Start typing to trigger search
+    // Open the overlay, then start typing to trigger search
+    await searchHelper.openSearch();
     const searchInput = searchHelper.getSearchInput();
-    // Ensure the input is visible before interacting
-    await searchInput.waitFor({ state: "visible", timeout: 10000 });
     await searchInput.fill(SEARCH_TEST_DATA.knownTerms[0]);
 
     // Check for loading indicator (if implemented)
     // This might show "Mustering all the Llamas..." message
     const loadingMessage = searchHelper.getLoadingMessage();
-
-    // The loading state might be very brief, so we'll just verify the search works
-    await searchInput.press("Enter");
 
     // Verify search completed (either with results or no results message)
     await searchHelper.expectSearchResultsVisible();
@@ -149,33 +141,31 @@ test.describe("Search Functionality", () => {
     await searchHelper.testMobileSearch();
   });
 
-  test("should focus search input with cmd/ctrl + k", async ({ page }) => {
+  test("should open the search overlay with cmd/ctrl + k", async ({ page }) => {
     const searchHelper = new SearchHelper(page);
 
-    // The input should not be focused on page load.
-    const searchInput = searchHelper.getSearchInput();
-    await expect(searchInput).not.toBeFocused();
+    // The overlay (and its input) should not exist on page load.
+    await expect(searchHelper.getSearchInput()).not.toBeVisible();
 
-    // Pressing cmd/ctrl + k should focus the search input.
+    // Pressing cmd/ctrl + k should open the overlay and focus the input.
     await searchHelper.openSearchWithShortcut();
     await searchHelper.expectSearchInputFocused();
 
-    // It should also show the empty-state prompt so the shortcut gives
-    // clear, visible feedback rather than just moving the cursor.
+    // It should also show the empty-state prompt so the overlay gives
+    // clear, visible feedback rather than sitting blank.
     await expect(searchHelper.getSearchPromptMessage()).toBeVisible();
   });
 
-  test("should dismiss search with Escape", async ({ page }) => {
+  test("should dismiss the overlay with Escape", async ({ page }) => {
     const searchHelper = new SearchHelper(page);
 
     // Open search and type a query.
     await searchHelper.openSearchWithShortcut();
     await searchHelper.getSearchInput().fill(SEARCH_TEST_DATA.knownTerms[0]);
 
-    // Escape should clear the input and blur it.
+    // Escape should close the overlay entirely.
     await searchHelper.getSearchInput().press("Escape");
-    await searchHelper.expectSearchInputValue("");
-    await expect(searchHelper.getSearchInput()).not.toBeFocused();
+    await expect(searchHelper.getSearchInput()).not.toBeVisible();
   });
 });
 

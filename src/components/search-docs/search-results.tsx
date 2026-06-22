@@ -10,48 +10,43 @@ interface SearchResultsProps {
   results: SearchResult[];
   isLoading: boolean;
   searchTerm: string;
-  isFocused: boolean;
+  onSelect?: () => void;
 }
 
-const searchResultsContainer =
-  "absolute mt-2 p-4 z-10 py-2 max-h-[45vh] md:w-11/12 w-full mx-auto rounded-lg shadow-lg md:ml-2 left translate-x-1 overflow-y-auto bg-neutral-background";
+const stateMessage =
+  "py-6 px-4 text-center text-md font-inter font-semibold text-neutral-text-secondary";
 
 export function SearchResults({
   results,
   isLoading,
   searchTerm,
-  isFocused,
+  onSelect,
 }: SearchResultsProps) {
   if (isLoading) {
     return (
-      <div
-        className={searchResultsContainer}
-        data-testid="search-results-container"
-      >
-        <h4 className="text-brand-primary font-bold my-2">
+      <div data-testid="search-results-container">
+        <p className={`${stateMessage} text-brand-primary`}>
           Mustering all the Llamas...
-        </h4>
+        </p>
       </div>
     );
   }
 
   if (results.length > 0) {
     return (
-      <div
-        className={searchResultsContainer}
-        data-testid="search-results-container"
-      >
+      <div data-testid="search-results-container">
         {results.map((result, index) => (
           <Link
             key={index}
             href={result.url}
-            className="block p-2 border-b-1 border-b-gray-200 last:border-b-0 group"
+            onClick={onSelect}
+            className="block rounded-lg p-3 hover:bg-neutral-background-secondary group transition-colors"
           >
             <h3 className="font-medium text-brand-primary group-hover:text-orange-400">
               {result.title}
             </h3>
             <p
-              className="mt-1 text-sm text-neutral-text"
+              className="mt-1 text-sm text-neutral-text-secondary line-clamp-2"
               // biome-ignore lint/security/noDangerouslySetInnerHtml: For Highlighting the search term, it is important to use dangerouslySetInnerHTML
               dangerouslySetInnerHTML={{
                 __html: result.excerpt || "",
@@ -65,37 +60,21 @@ export function SearchResults({
 
   if (searchTerm.length > 0) {
     return (
-      <div
-        className={searchResultsContainer}
-        data-testid="search-results-container"
-      >
-        <div
-          className="py-2 px-4 text-md font-inter font-semibold text-gray-500 text-bold"
-          data-testid="no-results-message"
-        >
+      <div data-testid="search-results-container">
+        <p className={stateMessage} data-testid="no-results-message">
           No Llamas Found...
-        </div>
+        </p>
       </div>
     );
   }
 
-  // When the search is focused but empty (e.g. just opened with cmd/ctrl + k),
-  // show a prompt so the shortcut gives clear, visible feedback.
-  if (isFocused) {
-    return (
-      <div
-        className={searchResultsContainer}
-        data-testid="search-results-container"
-      >
-        <div
-          className="py-2 px-4 text-md font-inter font-semibold text-gray-500 text-bold"
-          data-testid="search-prompt-message"
-        >
-          Start searching the llamas...
-        </div>
-      </div>
-    );
-  }
-
-  return null;
+  // Empty input: prompt the user so the open dialog has clear, visible feedback
+  // rather than sitting blank.
+  return (
+    <div data-testid="search-results-container">
+      <p className={stateMessage} data-testid="search-prompt-message">
+        Start searching the llamas...
+      </p>
+    </div>
+  );
 }
