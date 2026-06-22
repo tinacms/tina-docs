@@ -145,11 +145,11 @@ test.describe("Search Functionality", () => {
     const searchInput = searchHelper.getSearchInput();
     await searchInput.fill(SEARCH_TEST_DATA.knownTerms[0]);
 
-    // Check for loading indicator (if implemented)
-    // This might show "Mustering all the Llamas..." message
-    const loadingMessage = searchHelper.getLoadingMessage();
+    // The first search loads the Pagefind module, so the "Mustering all the
+    // Llamas..." loading state is shown long enough to observe.
+    await expect(searchHelper.getLoadingMessage()).toBeVisible();
 
-    // Verify search completed (either with results or no results message)
+    // It then resolves to actual results (or the no-results message).
     await searchHelper.expectSearchResultsVisible();
   });
 

@@ -39,7 +39,10 @@ export function SearchResults({
   if (isLoading) {
     return (
       <div data-testid="search-results-container">
-        <p className={`${stateMessage} text-brand-primary`}>
+        <p
+          className={`${stateMessage} text-brand-primary`}
+          data-testid="search-loading-message"
+        >
           Mustering all the Llamas...
         </p>
       </div>
@@ -48,14 +51,24 @@ export function SearchResults({
 
   if (results.length > 0) {
     return (
-      <div data-testid="search-results-container">
+      <div
+        data-testid="search-results-container"
+        id="search-results-listbox"
+        // biome-ignore lint/a11y/useSemanticElements: a custom keyboard-navigable results widget is an ARIA listbox, not a native <select>
+        role="listbox"
+        aria-label="Search results"
+        tabIndex={-1}
+      >
         {results.map((result, index) => {
           const isActive = index === activeIndex;
           return (
             <Link
               key={index}
               ref={isActive ? activeRef : null}
+              id={`search-result-option-${index}`}
               href={result.url}
+              // biome-ignore lint/a11y/useSemanticElements: an ARIA option inside the listbox, rendered as a link so results stay client-navigable
+              role="option"
               onClick={onSelect}
               onMouseMove={() => onActivate?.(index)}
               aria-selected={isActive}

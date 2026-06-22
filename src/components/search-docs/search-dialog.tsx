@@ -2,7 +2,7 @@
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { SearchResults } from "./search-results";
 
@@ -22,18 +22,50 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
   const [mounted, setMounted] = useState(false);
   // Index of the result highlighted for keyboard (arrow-key) navigation.
   const [activeIndex, setActiveIndex] = useState(0);
+  // Monotonic id so a slow, out-of-order Pagefind response can't overwrite a
+  // newer one. The dialog panel ref backs the Tab focus trap.
+  const latestRequest = useRef(0);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Lock body scroll and close on Escape while open. (Input focus is handled by
-  // the input's `autoFocus`, which is reliable across headless environments.)
+  // Lock body scroll, close on Escape, and trap Tab focus inside the dialog
+  // while open. (Input focus is handled by the input's `autoFocus`, which is
+  // reliable across headless environments.)
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !panelRef.current) return;
+
+      const focusable = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => el.offsetParent !== null);
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      // Wrap at the ends, and pull focus back if it ever escaped the panel.
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      } else if (!panelRef.current.contains(active)) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", handleKeyDown);
 
@@ -51,11 +83,14 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
     setActiveIndex(0);
 
     if (!value.trim()) {
+      latestRequest.current++;
       setResults([]);
       setSearchTerm("");
+      setIsLoading(false);
       return;
     }
 
+    const requestId = ++latestRequest.current;
     setIsLoading(true);
 
     try {
@@ -120,21 +155,29 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
 
         const filteredResults = searchResults.filter(Boolean);
 
+        // A newer keystroke already kicked off a fresh search — drop this
+        // (possibly out-of-order) response so it can't clobber the newer one.
+        if (requestId !== latestRequest.current) return;
+
         setResults(filteredResults);
         setActiveIndex(0);
       }
     } catch (error) {
+      if (requestId !== latestRequest.current) return;
       setError("An error occurred while searching. Please try again.");
       setResults([]);
     } finally {
-      setIsLoading(false);
+      // Only the latest request owns the loading flag.
+      if (requestId === latestRequest.current) setIsLoading(false);
     }
   };
 
   // Arrow keys move the highlight; Enter opens the highlighted result. This
   // mirrors the command-palette behaviour users expect from ⌘/Ctrl + K search.
   const handleKeyNav = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (results.length === 0) return;
+    // While a fresh search is in flight the visible results are stale, so don't
+    // let Enter open one that's about to be replaced.
+    if (isLoading || results.length === 0) return;
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -161,7 +204,11 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
       role="presentation"
     >
       <div
+        ref={panelRef}
         className="flex w-full max-w-xl flex-col overflow-hidden rounded-xl border border-neutral-border/50 bg-neutral-background shadow-2xl animate-zoom-in dark:border-neutral-border-subtle/60"
+        // biome-ignore lint/a11y/useSemanticElements: a portal'd command palette needs role="dialog" + aria-modal; native <dialog> doesn't fit this createPortal/backdrop setup and isn't used elsewhere in this codebase
+        role="dialog"
+        aria-modal="true"
         aria-label="Search documentation"
         onClick={(e) => e.stopPropagation()}
       >
@@ -177,6 +224,15 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
             placeholder="Search..."
             onChange={handleSearch}
             onKeyDown={handleKeyNav}
+            role="combobox"
+            aria-expanded={results.length > 0}
+            aria-controls="search-results-listbox"
+            aria-activedescendant={
+              results.length > 0
+                ? `search-result-option-${activeIndex}`
+                : undefined
+            }
+            aria-autocomplete="list"
           />
           <kbd className="hidden shrink-0 select-none items-center rounded-md border border-neutral-border/60 bg-neutral-background-secondary px-1.5 py-0.5 text-xs font-medium text-neutral-text-secondary sm:flex dark:border-neutral-border-subtle/60">
             Esc

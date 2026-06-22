@@ -87,10 +87,7 @@ export class SearchHelper {
    * Get loading message
    */
   getLoadingMessage() {
-    // Look for the loading message within the search results container
-    return this.page.locator(
-      '[data-testid="search-results-container"] h4:has-text("Mustering all the Llamas")'
-    );
+    return this.page.locator('[data-testid="search-loading-message"]');
   }
 
   /**
