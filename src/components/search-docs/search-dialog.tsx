@@ -1,6 +1,7 @@
 "use client";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { SearchResults } from "./search-results";
@@ -13,11 +14,14 @@ const pagefindPath = isDev
   : `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/_next/static/pagefind`;
 
 export function SearchDialog({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  // Index of the result highlighted for keyboard (arrow-key) navigation.
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -43,6 +47,8 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
     const value = e.target.value;
     setSearchTerm(value);
     setError(null);
+    // A new query starts the highlight back at the top.
+    setActiveIndex(0);
 
     if (!value.trim()) {
       setResults([]);
@@ -115,12 +121,34 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
         const filteredResults = searchResults.filter(Boolean);
 
         setResults(filteredResults);
+        setActiveIndex(0);
       }
     } catch (error) {
       setError("An error occurred while searching. Please try again.");
       setResults([]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Arrow keys move the highlight; Enter opens the highlighted result. This
+  // mirrors the command-palette behaviour users expect from ⌘/Ctrl + K search.
+  const handleKeyNav = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (results.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % results.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i - 1 + results.length) % results.length);
+    } else if (e.key === "Enter") {
+      const active = results[activeIndex];
+      if (active?.url) {
+        e.preventDefault();
+        onClose();
+        router.push(active.url);
+      }
     }
   };
 
@@ -148,6 +176,7 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
             className="w-full bg-transparent py-4 text-neutral-text placeholder:text-neutral-text-secondary focus:outline-none"
             placeholder="Search..."
             onChange={handleSearch}
+            onKeyDown={handleKeyNav}
           />
           <kbd className="hidden shrink-0 select-none items-center rounded-md border border-neutral-border/60 bg-neutral-background-secondary px-1.5 py-0.5 text-xs font-medium text-neutral-text-secondary sm:flex dark:border-neutral-border-subtle/60">
             Esc
@@ -165,6 +194,8 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
               results={results}
               isLoading={isLoading}
               searchTerm={searchTerm}
+              activeIndex={activeIndex}
+              onActivate={setActiveIndex}
               onSelect={onClose}
             />
           )}

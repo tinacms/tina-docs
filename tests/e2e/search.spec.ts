@@ -113,6 +113,30 @@ test.describe("Search Functionality", () => {
     await expect(page).toHaveURL(/\/docs/);
   });
 
+  test("should navigate results with arrow keys and open with Enter", async ({
+    page,
+  }) => {
+    const searchHelper = new SearchHelper(page);
+
+    await searchHelper.performSearch(SEARCH_TEST_DATA.knownTerms[0]);
+
+    // The first result starts highlighted; ArrowDown moves the highlight down.
+    const results = searchHelper.getSearchResultLinks();
+    await expect(results.first()).toHaveAttribute("aria-selected", "true");
+
+    await page.keyboard.press("ArrowDown");
+    await expect(results.nth(1)).toHaveAttribute("aria-selected", "true");
+    await expect(results.first()).toHaveAttribute("aria-selected", "false");
+
+    // Enter opens the highlighted result and dismisses the overlay.
+    const targetHref = await results.nth(1).getAttribute("href");
+    await page.keyboard.press("Enter");
+
+    await page.waitForLoadState("networkidle");
+    await expect(page).toHaveURL(new RegExp(`${targetHref}$`));
+    await expect(searchHelper.getSearchInput()).not.toBeVisible();
+  });
+
   test("should show loading state during search", async ({ page }) => {
     const searchHelper = new SearchHelper(page);
 
