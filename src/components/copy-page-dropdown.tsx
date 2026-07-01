@@ -17,7 +17,7 @@ import {
   MdContentCopy,
   MdFilePresent,
 } from "react-icons/md";
-import { SiOpenai } from "react-icons/si";
+import { RiOpenaiFill } from "react-icons/ri";
 
 interface CopyPageDropdownProps {
   title?: string;
@@ -187,7 +187,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
             },
             {
               icon: (
-                <SiOpenai className="w-4 h-4 text-neutral-text-secondary" />
+                <RiOpenaiFill className="w-4 h-4 text-neutral-text-secondary" />
               ),
               label: "Open in ChatGPT",
               description: "Ask questions about this page",
