@@ -10,28 +10,44 @@ export class SearchHelper {
   async navigateToDocs() {
     await this.page.goto(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/docs`);
     await this.page.waitForLoadState("networkidle");
-    // Wait for the search input to be available (client component hydration)
-    const searchInput = this.getSearchInput();
-    await searchInput.waitFor({ state: "attached", timeout: 10000 });
+    // Wait for the search trigger to be available (client component hydration)
+    const searchTrigger = this.getSearchTrigger();
+    await searchTrigger.waitFor({ state: "attached", timeout: 10000 });
   }
 
   /**
-   * Find and return the search input field
+   * The button in the nav that opens the search overlay
+   */
+  getSearchTrigger() {
+    return this.page.locator('[data-testid="search-trigger"]');
+  }
+
+  /**
+   * Find and return the search input field (only present while the overlay is open)
    */
   getSearchInput() {
     return this.page.locator('input[placeholder="Search..."]');
   }
 
   /**
-   * Perform a search with the given term
+   * Open the search overlay by clicking the trigger, then wait for the input
+   */
+  async openSearch() {
+    const trigger = this.getSearchTrigger();
+    await trigger.waitFor({ state: "visible", timeout: 10000 });
+    await trigger.click();
+    await this.getSearchInput().waitFor({ state: "visible", timeout: 10000 });
+  }
+
+  /**
+   * Perform a search with the given term, opening the overlay first if needed
    */
   async performSearch(searchTerm: string) {
     const searchInput = this.getSearchInput();
-    // Wait for the search input to be visible and attached to the DOM
-    // This is important because the Search component is a client component that needs to hydrate
-    await searchInput.waitFor({ state: "visible", timeout: 10000 });
+    if (!(await searchInput.isVisible())) {
+      await this.openSearch();
+    }
     await searchInput.fill(searchTerm);
-    await searchInput.press("Enter");
 
     // Wait for search to complete
     await this.page.waitForTimeout(1000);
@@ -61,20 +77,27 @@ export class SearchHelper {
   }
 
   /**
+   * Get the empty-state prompt message shown when the search is focused but empty
+   */
+  getSearchPromptMessage() {
+    return this.page.locator('[data-testid="search-prompt-message"]');
+  }
+
+  /**
    * Get loading message
    */
   getLoadingMessage() {
-    // Look for the loading message within the search results container
-    return this.page.locator(
-      '[data-testid="search-results-container"] h4:has-text("Mustering all the Llamas")'
-    );
+    return this.page.locator('[data-testid="search-loading-message"]');
   }
 
   /**
    * Get all search result links
    */
   getSearchResultLinks() {
-    return this.page.locator('a[href*="/docs"]');
+    // Scope to the overlay's results so we don't match nav/sidebar /docs links.
+    return this.page.locator(
+      '[data-testid="search-results-container"] a[href*="/docs"]'
+    );
   }
 
   /**
@@ -112,10 +135,29 @@ export class SearchHelper {
   }
 
   /**
-   * Clear search by clicking the copy button
+   * Open the search overlay via the cmd/ctrl + k keyboard shortcut
    */
-  async clearSearch() {
-    await this.page.click('button:has-text("Copy")');
+  async openSearchWithShortcut() {
+    const modifier = process.platform === "darwin" ? "Meta" : "Control";
+    await this.page.keyboard.press(`${modifier}+KeyK`);
+    await this.getSearchInput().waitFor({ state: "visible", timeout: 10000 });
+  }
+
+  /**
+   * Verify the search input is currently focused
+   */
+  async expectSearchInputFocused() {
+    const searchInput = this.getSearchInput();
+    await expect(searchInput).toBeFocused();
+  }
+
+  /**
+   * Close the overlay by clicking outside the dialog (on the backdrop)
+   */
+  async closeByClickingOutside() {
+    // Click near the top-left corner of the backdrop, away from the centered dialog.
+    await this.page.mouse.click(10, 10);
+    await this.getSearchInput().waitFor({ state: "hidden", timeout: 5000 });
   }
 
   /**
@@ -162,10 +204,10 @@ export class SearchHelper {
    * Test search with multiple terms
    */
   async testMultipleSearches(searchTerms: string[]) {
+    // The overlay stays open between searches, so each term just refills the input.
     for (const term of searchTerms) {
       await this.performSearch(term);
       await this.expectSearchResultsVisible();
-      await this.clearSearch();
     }
   }
 
@@ -174,7 +216,7 @@ export class SearchHelper {
    */
   async testMobileSearch() {
     await this.page.setViewportSize({ width: 375, height: 667 });
-    await this.expectSearchInputVisible();
+    await expect(this.getSearchTrigger()).toBeVisible();
 
     await this.performSearch("TinaDocs");
     await this.expectSearchResultsVisible();
