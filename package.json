@@ -43,7 +43,7 @@
     "react-markdown": "^10.1.0",
     "rehype-pretty-code": "^0.14.1",
     "shiki": "^3.6.0",
-    "tinacms": "^3.8.1",
+    "tinacms": "^3.10.0",
     "title-case": "^4.3.2",
     "typescript": "5.8.3"
   },
@@ -53,7 +53,7 @@
     "@shikijs/transformers": "^3.6.0",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.8",
-    "@tinacms/cli": "^2.3.1",
+    "@tinacms/cli": "^2.5.3",
     "@types/node": "^24.2.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
