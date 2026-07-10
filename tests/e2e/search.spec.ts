@@ -29,9 +29,9 @@ test.describe("Search Functionality", () => {
     // Wait for the page to load completely
     await page.waitForLoadState("networkidle");
 
-    // Wait for the search input to be available (client component hydration)
-    const searchInput = page.locator('input[placeholder="Search..."]');
-    await searchInput.waitFor({ state: "visible", timeout: 10000 });
+    // Wait for the search trigger to be available (client component hydration)
+    const searchTrigger = page.locator('[data-testid="search-trigger"]');
+    await searchTrigger.waitFor({ state: "visible", timeout: 10000 });
   });
 
   test("should show search results for existing content", async ({ page }) => {
@@ -61,32 +61,32 @@ test.describe("Search Functionality", () => {
     await expect(noResultsMessage).toBeVisible();
   });
 
-  test("should clear search results when clicking outside", async ({
-    page,
-  }) => {
+  test("should close the overlay when clicking outside", async ({ page }) => {
     const searchHelper = new SearchHelper(page);
 
     // Perform a search
     await searchHelper.performSearch(SEARCH_TEST_DATA.knownTerms[0]);
 
-    // Click outside the search area
-    await searchHelper.clearSearch();
+    // Click outside the dialog (on the backdrop) to dismiss it
+    await searchHelper.closeByClickingOutside();
 
-    // Verify search results are cleared
+    // The overlay (and its input) should be gone, taking the results with it
+    await expect(searchHelper.getSearchInput()).not.toBeVisible();
     await searchHelper.expectSearchResultsNotVisible();
-
-    // Verify search input is cleared
-    await searchHelper.expectSearchInputValue("");
   });
 
-  test("should handle empty search input", async ({ page }) => {
+  test("should show prompt and no results for empty search input", async ({
+    page,
+  }) => {
     const searchHelper = new SearchHelper(page);
 
-    // Try to search with empty input
+    // Focusing the empty input shows the prompt, not actual results.
     await searchHelper.performSearch("");
 
-    // Verify no search results are shown
-    await searchHelper.expectSearchResultsNotVisible();
+    // The empty-state prompt should be visible as feedback...
+    await expect(searchHelper.getSearchPromptMessage()).toBeVisible();
+    // ...but the "No Llamas Found" message should not appear for empty input.
+    await expect(searchHelper.getNoResultsMessage()).not.toBeVisible();
   });
 
   test("should navigate to search result pages", async ({ page }) => {
@@ -113,23 +113,43 @@ test.describe("Search Functionality", () => {
     await expect(page).toHaveURL(/\/docs/);
   });
 
+  test("should navigate results with arrow keys and open with Enter", async ({
+    page,
+  }) => {
+    const searchHelper = new SearchHelper(page);
+
+    await searchHelper.performSearch(SEARCH_TEST_DATA.knownTerms[0]);
+
+    // The first result starts highlighted; ArrowDown moves the highlight down.
+    const results = searchHelper.getSearchResultLinks();
+    await expect(results.first()).toHaveAttribute("aria-selected", "true");
+
+    await page.keyboard.press("ArrowDown");
+    await expect(results.nth(1)).toHaveAttribute("aria-selected", "true");
+    await expect(results.first()).toHaveAttribute("aria-selected", "false");
+
+    // Enter opens the highlighted result and dismisses the overlay.
+    const targetHref = await results.nth(1).getAttribute("href");
+    await page.keyboard.press("Enter");
+
+    await page.waitForLoadState("networkidle");
+    await expect(page).toHaveURL(new RegExp(`${targetHref}$`));
+    await expect(searchHelper.getSearchInput()).not.toBeVisible();
+  });
+
   test("should show loading state during search", async ({ page }) => {
     const searchHelper = new SearchHelper(page);
 
-    // Start typing to trigger search
+    // Open the overlay, then start typing to trigger search
+    await searchHelper.openSearch();
     const searchInput = searchHelper.getSearchInput();
-    // Ensure the input is visible before interacting
-    await searchInput.waitFor({ state: "visible", timeout: 10000 });
     await searchInput.fill(SEARCH_TEST_DATA.knownTerms[0]);
 
-    // Check for loading indicator (if implemented)
-    // This might show "Mustering all the Llamas..." message
-    const loadingMessage = searchHelper.getLoadingMessage();
+    // The first search loads the Pagefind module, so the "Mustering all the
+    // Llamas..." loading state is shown long enough to observe.
+    await expect(searchHelper.getLoadingMessage()).toBeVisible();
 
-    // The loading state might be very brief, so we'll just verify the search works
-    await searchInput.press("Enter");
-
-    // Verify search completed (either with results or no results message)
+    // It then resolves to actual results (or the no-results message).
     await searchHelper.expectSearchResultsVisible();
   });
 
@@ -143,6 +163,33 @@ test.describe("Search Functionality", () => {
     const searchHelper = new SearchHelper(page);
 
     await searchHelper.testMobileSearch();
+  });
+
+  test("should open the search overlay with cmd/ctrl + k", async ({ page }) => {
+    const searchHelper = new SearchHelper(page);
+
+    // The overlay (and its input) should not exist on page load.
+    await expect(searchHelper.getSearchInput()).not.toBeVisible();
+
+    // Pressing cmd/ctrl + k should open the overlay and focus the input.
+    await searchHelper.openSearchWithShortcut();
+    await searchHelper.expectSearchInputFocused();
+
+    // It should also show the empty-state prompt so the overlay gives
+    // clear, visible feedback rather than sitting blank.
+    await expect(searchHelper.getSearchPromptMessage()).toBeVisible();
+  });
+
+  test("should dismiss the overlay with Escape", async ({ page }) => {
+    const searchHelper = new SearchHelper(page);
+
+    // Open search and type a query.
+    await searchHelper.openSearchWithShortcut();
+    await searchHelper.getSearchInput().fill(SEARCH_TEST_DATA.knownTerms[0]);
+
+    // Escape should close the overlay entirely.
+    await searchHelper.getSearchInput().press("Escape");
+    await expect(searchHelper.getSearchInput()).not.toBeVisible();
   });
 });
 
