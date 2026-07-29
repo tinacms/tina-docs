@@ -61,19 +61,17 @@ export async function generateMetadata({
   const slug = dynamicParams?.slug?.join("/");
   const { data } = await fetchTinaData(client.queries.docs, slug);
 
-  if (!data.docs.seo) {
-    data.docs.seo = {
-      __typename: "DocsSeo",
-      canonicalUrl: `${siteUrl}/tinadocs/docs/${slug}`,
-    };
-  } else if (!data.docs.seo?.canonicalUrl) {
-    data.docs.seo.canonicalUrl = `${siteUrl}/tinadocs/docs/${slug}`;
-  }
-
-  return getSeo(data.docs.seo, {
-    pageTitle: data.docs.title,
-    body: data.docs.body,
-  });
+  return getSeo(
+    {
+      ...data.docs.seo,
+      canonicalUrl:
+        data.docs.seo?.canonicalUrl || `${siteUrl}/tinadocs/docs/${slug}`,
+    },
+    {
+      pageTitle: data.docs.title,
+      body: data.docs.body,
+    }
+  );
 }
 
 async function getData(slug: string) {

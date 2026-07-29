@@ -16,19 +16,16 @@ const siteUrl =
 export async function generateMetadata() {
   const slug = "index";
   const { data } = await client.queries.docs({ relativePath: `${slug}.mdx` });
-  if (!data.docs.seo) {
-    data.docs.seo = {
-      __typename: "DocsSeo",
-      canonicalUrl: `${siteUrl}/tinadocs/docs`,
-    };
-  } else if (!data.docs.seo?.canonicalUrl) {
-    data.docs.seo.canonicalUrl = `${siteUrl}/tinadocs/docs`;
-  }
-
-  return getSeo(data.docs.seo, {
-    pageTitle: data.docs.title,
-    body: data.docs.body,
-  });
+  return getSeo(
+    {
+      ...data.docs.seo,
+      canonicalUrl: data.docs.seo?.canonicalUrl || `${siteUrl}/tinadocs/docs`,
+    },
+    {
+      pageTitle: data.docs.title,
+      body: data.docs.body,
+    }
+  );
 }
 
 async function getData() {
