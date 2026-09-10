@@ -2,7 +2,7 @@
 // (https://design.ssw.com.au/r/breadcrumb.json), styled with TinaDocs tokens.
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { MdChevronRight, MdMoreHoriz } from "react-icons/md";
+import { MdMoreHoriz } from "react-icons/md";
 
 export const Breadcrumb = ({
   className = "",
@@ -73,7 +73,7 @@ export const BreadcrumbSeparator = ({
     className={`shrink-0 [&>svg]:size-3.5 ${className}`}
     {...props}
   >
-    {children ?? <MdChevronRight />}
+    {children ?? ">"}
   </li>
 );
 
