@@ -34,7 +34,7 @@ const Accordion = (props) => {
       {/* Header */}
       <div
         className={`mb-5 max-w-full overflow-hidden rounded-lg bg-neutral-background shadow-md transition-[width] duration-700 ease-in-out border border-neutral-border ${
-          fullWidth ? "w-full" : "w-3/4"
+          fullWidth ? "w-full" : "w-full md:w-3/4"
         }`}
         data-tina-field={tinaField(props, "heading")}
       >
@@ -114,7 +114,7 @@ interface AccordionBlockProps {
 }
 
 export const AccordionBlock = (props) => {
-  const { accordionItems, fullWidth = false }: AccordionBlockProps = props;
+  const { accordionItems, fullWidth = true }: AccordionBlockProps = props;
   const [isExpanded, setIsExpanded] = useState<boolean[]>(
     accordionItems?.map(() => false) || []
   );
@@ -154,7 +154,7 @@ export const AccordionBlock = (props) => {
   return (
     <div
       className={`mx-auto flex flex-col justify-center items-center rounded-lg bg-neutral-background shadow-md mb-5 border border-neutral-border ${
-        fullWidth ? "w-full" : "w-3/4"
+        fullWidth ? "w-full" : "w-full md:w-3/4"
       }`}
     >
       {accordionItems.map((item, index) => {
