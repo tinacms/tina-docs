@@ -1,13 +1,16 @@
 import type { ImageMetadata } from "@/tina/collections/image-metadata";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import AnimateHeight from "react-animate-height";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { ImageOverlayWrapper } from "../../ui/image-overlay-wrapper";
 import MarkdownComponentMapping from "../markdown-component-mapping";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
+const TRANSITION_DURATION = 700;
 
 interface AccordionProps {
   docText: string;
@@ -19,7 +22,6 @@ interface AccordionProps {
 const Accordion = (props) => {
   const { docText, image, heading, fullWidth = true }: AccordionProps = props;
   const [isExpanded, setIsExpanded] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -32,7 +34,7 @@ const Accordion = (props) => {
       {/* Header */}
       <div
         className={`mb-5 max-w-full overflow-hidden rounded-lg bg-neutral-background shadow-md transition-[width] duration-700 ease-in-out border border-neutral-border ${
-          fullWidth ? "w-full" : "w-3/4"
+          fullWidth ? "w-full" : "w-full md:w-3/4"
         }`}
         data-tina-field={tinaField(props, "heading")}
       >
@@ -52,44 +54,48 @@ const Accordion = (props) => {
           </div>
         </div>
         {/* Expandable content */}
-        <div
-          className={`grid gap-4  transition-all duration-700 ease-in-out ${
-            isExpanded
-              ? "max-h-[2000px] opacity-100"
-              : "max-h-0 overflow-hidden opacity-0"
-          } ${imageData ? "sm:grid-cols-2" : ""}`}
-          ref={contentRef}
-          data-tina-field={tinaField(props, "docText")}
+        <AnimateHeight
+          duration={TRANSITION_DURATION}
+          height={isExpanded ? "auto" : 0}
+          animateOpacity
+          className="w-full min-w-0"
         >
-          <div className="p-4">
-            <TinaMarkdown
-              content={docText as any}
-              components={MarkdownComponentMapping}
-            />
-          </div>
-          {imageData && (
-            <div className="p-4" data-tina-field={tinaField(props, "image")}>
-              <ImageOverlayWrapper
-                src={imageData.src}
-                alt={imageData.alt || heading || "image"}
-                caption={heading}
-              >
-                <Image
-                  src={`${basePath}${imageData.src}`}
-                  alt={imageData.alt || heading || "image"}
-                  className="rounded-lg"
-                  {...(imageData.width && imageData.height
-                    ? {
-                        width: imageData.width,
-                        height: imageData.height,
-                        style: { width: "100%", height: "auto" },
-                      }
-                    : { width: 500, height: 500 })}
-                />
-              </ImageOverlayWrapper>
+          <div
+            className={`grid w-full min-w-0 gap-4 grid-cols-1 ${
+              imageData ? "sm:grid-cols-2" : ""
+            }`}
+            data-tina-field={tinaField(props, "docText")}
+          >
+            <div className="min-w-0 p-4">
+              <TinaMarkdown
+                content={docText as any}
+                components={MarkdownComponentMapping}
+              />
             </div>
-          )}
-        </div>
+            {imageData && (
+              <div className="p-4" data-tina-field={tinaField(props, "image")}>
+                <ImageOverlayWrapper
+                  src={imageData.src}
+                  alt={imageData.alt || heading || "image"}
+                  caption={heading}
+                >
+                  <Image
+                    src={`${basePath}${imageData.src}`}
+                    alt={imageData.alt || heading || "image"}
+                    className="rounded-lg"
+                    {...(imageData.width && imageData.height
+                      ? {
+                          width: imageData.width,
+                          height: imageData.height,
+                          style: { width: "100%", height: "auto" },
+                        }
+                      : { width: 500, height: 500 })}
+                  />
+                </ImageOverlayWrapper>
+              </div>
+            )}
+          </div>
+        </AnimateHeight>
       </div>
     </div>
   );
@@ -108,11 +114,10 @@ interface AccordionBlockProps {
 }
 
 export const AccordionBlock = (props) => {
-  const { accordionItems, fullWidth = false }: AccordionBlockProps = props;
+  const { accordionItems, fullWidth = true }: AccordionBlockProps = props;
   const [isExpanded, setIsExpanded] = useState<boolean[]>(
     accordionItems?.map(() => false) || []
   );
-  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [accordionLength, setAccordionLength] = useState(
     accordionItems?.length || 0
   );
@@ -149,7 +154,7 @@ export const AccordionBlock = (props) => {
   return (
     <div
       className={`mx-auto flex flex-col justify-center items-center rounded-lg bg-neutral-background shadow-md mb-5 border border-neutral-border ${
-        fullWidth ? "w-full" : "w-3/4"
+        fullWidth ? "w-full" : "w-full md:w-3/4"
       }`}
     >
       {accordionItems.map((item, index) => {
@@ -176,61 +181,63 @@ export const AccordionBlock = (props) => {
                 )}
               </div>
             </div>
-            <div
-              className={`grid gap-4 transition-all duration-700 ease-in-out ${
-                isExpanded[index]
-                  ? "max-h-[2000px] opacity-100"
-                  : "max-h-0 overflow-hidden opacity-0"
-              } ${imageData ? "sm:grid-cols-2" : ""}`}
-              ref={(el: HTMLDivElement | null) => {
-                contentRefs.current[index] = el;
-              }}
-              data-tina-field={tinaField(
-                props.accordionItems[index],
-                "docText"
-              )}
+            <AnimateHeight
+              duration={TRANSITION_DURATION}
+              height={isExpanded[index] ? "auto" : 0}
+              animateOpacity
+              className="w-full min-w-0"
             >
               <div
-                className="px-4"
+                className={`grid w-full min-w-0 gap-4 grid-cols-1 ${
+                  imageData ? "sm:grid-cols-2" : ""
+                }`}
                 data-tina-field={tinaField(
                   props.accordionItems[index],
                   "docText"
                 )}
               >
-                <TinaMarkdown
-                  content={item.docText as any}
-                  components={MarkdownComponentMapping}
-                />
-              </div>
-              {imageData && (
                 <div
-                  className="p-4"
+                  className="min-w-0 px-4"
                   data-tina-field={tinaField(
                     props.accordionItems[index],
-                    "image"
+                    "docText"
                   )}
                 >
-                  <ImageOverlayWrapper
-                    src={imageData.src}
-                    alt={imageData.alt || item?.heading || "image"}
-                    caption={item?.heading}
-                  >
-                    <Image
-                      src={`${basePath}${imageData.src}`}
-                      alt={imageData.alt || item?.heading || "image"}
-                      className="rounded-lg"
-                      {...(imageData.width && imageData.height
-                        ? {
-                            width: imageData.width,
-                            height: imageData.height,
-                            style: { width: "100%", height: "auto" },
-                          }
-                        : { width: 500, height: 500 })}
-                    />
-                  </ImageOverlayWrapper>
+                  <TinaMarkdown
+                    content={item.docText as any}
+                    components={MarkdownComponentMapping}
+                  />
                 </div>
-              )}
-            </div>
+                {imageData && (
+                  <div
+                    className="p-4"
+                    data-tina-field={tinaField(
+                      props.accordionItems[index],
+                      "image"
+                    )}
+                  >
+                    <ImageOverlayWrapper
+                      src={imageData.src}
+                      alt={imageData.alt || item?.heading || "image"}
+                      caption={item?.heading}
+                    >
+                      <Image
+                        src={`${basePath}${imageData.src}`}
+                        alt={imageData.alt || item?.heading || "image"}
+                        className="rounded-lg"
+                        {...(imageData.width && imageData.height
+                          ? {
+                              width: imageData.width,
+                              height: imageData.height,
+                              style: { width: "100%", height: "auto" },
+                            }
+                          : { width: 500, height: 500 })}
+                      />
+                    </ImageOverlayWrapper>
+                  </div>
+                )}
+              </div>
+            </AnimateHeight>
             {index < accordionLength - 1 && (
               <hr className="w-full h-0.5 text-neutral-border/50" />
             )}
