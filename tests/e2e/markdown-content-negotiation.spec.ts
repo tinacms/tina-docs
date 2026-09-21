@@ -26,4 +26,5 @@ test("continues serving HTML by default", async ({ request }) => {
 
   expect(response.ok()).toBe(true);
   expect(response.headers()["content-type"]).toContain("text/html");
+  expect(response.headers().vary).toContain("Accept");
 });

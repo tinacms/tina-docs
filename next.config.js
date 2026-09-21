@@ -6,6 +6,8 @@ const redirects = require("./content/settings/config.json")?.redirects || [];
 const isStatic = process.env.EXPORT_MODE === "static";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || basePath;
+const varyHeader =
+  "Accept, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch";
 
 const extraConfig = {};
 
@@ -46,40 +48,49 @@ module.exports = {
     ],
   },
 
-  async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: "/docs",
-          destination: "/api/markdown/index",
-          has: [
-            {
-              type: "header",
-              key: "accept",
-              value: "(.*)text/markdown(.*)",
-            },
-          ],
-        },
-        {
-          source: "/docs/:path+",
-          destination: "/api/markdown/:path+",
-          has: [
-            {
-              type: "header",
-              key: "accept",
-              value: "(.*)text/markdown(.*)",
-            },
-          ],
-        },
-      ],
-      afterFiles: [
-        {
-          source: "/admin",
-          destination: "/admin/index.html",
-        },
-      ],
-    };
-  },
+  ...(!isStatic && {
+    async rewrites() {
+      return {
+        beforeFiles: [
+          {
+            source: "/docs",
+            destination: "/api/markdown/index",
+            has: [
+              {
+                type: "header",
+                key: "accept",
+                value: "(.*)text/markdown(.*)",
+              },
+            ],
+          },
+          {
+            source: "/docs/:path+",
+            destination: "/api/markdown/:path+",
+            has: [
+              {
+                type: "header",
+                key: "accept",
+                value: "(.*)text/markdown(.*)",
+              },
+            ],
+          },
+        ],
+        afterFiles: [
+          {
+            source: "/admin",
+            destination: "/admin/index.html",
+          },
+        ],
+      };
+    },
+
+    async headers() {
+      return ["/docs", "/docs/:path+"].map((source) => ({
+        source,
+        headers: [{ key: "Vary", value: varyHeader }],
+      }));
+    },
+  }),
 
   async redirects() {
     return redirects.map((redirect) => ({
