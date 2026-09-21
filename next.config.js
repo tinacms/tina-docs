@@ -47,12 +47,38 @@ module.exports = {
   },
 
   async rewrites() {
-    return [
-      {
-        source: "/admin",
-        destination: "/admin/index.html",
-      },
-    ];
+    return {
+      beforeFiles: [
+        {
+          source: "/docs",
+          destination: "/api/markdown/index",
+          has: [
+            {
+              type: "header",
+              key: "accept",
+              value: "(.*)text/markdown(.*)",
+            },
+          ],
+        },
+        {
+          source: "/docs/:path+",
+          destination: "/api/markdown/:path+",
+          has: [
+            {
+              type: "header",
+              key: "accept",
+              value: "(.*)text/markdown(.*)",
+            },
+          ],
+        },
+      ],
+      afterFiles: [
+        {
+          source: "/admin",
+          destination: "/admin/index.html",
+        },
+      ],
+    };
   },
 
   async redirects() {
