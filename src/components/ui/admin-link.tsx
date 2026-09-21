@@ -1,46 +1,43 @@
 "use client";
 
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import React from "react";
-import { useEffect } from "react";
+import { TinaIcon } from "@/components/icons/tina-icon";
+import { useEffect, useState } from "react";
 import { useEditState } from "tinacms/dist/react";
+
+const hasTinaSession = () => {
+  const raw = window.localStorage.getItem("tinacms-auth");
+  if (!raw) return false;
+  try {
+    const auth: unknown = JSON.parse(raw);
+    return (
+      typeof auth === "object" &&
+      auth !== null &&
+      "access_token" in auth &&
+      Boolean(auth.access_token)
+    );
+  } catch {
+    return false;
+  }
+};
 
 const AdminLink = () => {
   const { edit } = useEditState();
-  const [showAdminLink, setShowAdminLink] = React.useState(false);
+  const [showAdminLink, setShowAdminLink] = useState(false);
 
   useEffect(() => {
-    setShowAdminLink(
-      !edit &&
-        JSON.parse((window.localStorage.getItem("tinacms-auth") as any) || "{}")
-          ?.access_token
-    );
+    setShowAdminLink(!edit && hasTinaSession());
   }, [edit]);
 
-  const handleDismiss = () => {
-    setShowAdminLink(false);
-  };
+  if (!showAdminLink) return null;
 
   return (
-    <>
-      {showAdminLink && (
-        <div className="fixed right-4 top-4 z-50 flex items-center justify-between rounded-full bg-blue-500 px-3 py-1 text-white">
-          <a
-            href={`/admin/index.html#/~${window.location.pathname}`}
-            className="text-xs"
-          >
-            Edit This Page
-          </a>
-          <button
-            type="button"
-            onClick={handleDismiss}
-            className="ml-2 text-sm"
-          >
-            <XMarkIcon className="size-4" />
-          </button>
-        </div>
-      )}
-    </>
+    <a
+      href={`/admin/index.html#/~${window.location.pathname}`}
+      className="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-[#EC4815] px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#D13F13]"
+    >
+      <TinaIcon className="h-5 w-auto" />
+      Edit ✏️
+    </a>
   );
 };
 

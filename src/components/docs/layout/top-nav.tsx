@@ -5,6 +5,7 @@ import type React from "react";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Search } from "../../search-docs/search";
+import AdminLink from "../../ui/admin-link";
 import LightDarkSwitch from "../../ui/light-dark-switch";
 import { NavbarLogo } from "./navbar-logo";
 
@@ -122,6 +123,7 @@ export const TopNav = ({
           <div className="w-full hidden lg:flex justify-end">
             <LightDarkSwitch />
           </div>
+          <AdminLink />
         </div>
       </div>
     </div>
