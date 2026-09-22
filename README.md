@@ -158,6 +158,10 @@ pnpm build
 
 TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.io/docs/tina-cloud/deployment-options/vercel) for detailed instructions.
 
+### **Markdown Responses**
+
+Server deployments can return a page's source MDX when a request accepts `text/markdown`. Static exports continue to serve HTML. If your CDN or proxy does not include `Accept` in its cache key automatically, configure it to do so.
+
 ---
 
 ## 🔍 Search Setup
