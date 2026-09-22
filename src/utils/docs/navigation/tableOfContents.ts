@@ -21,9 +21,10 @@ interface TocItem {
  * @returns An array of heading objects with type and text properties
  */
 export function getTableOfContents(
-  markdown: MarkdownNode | MarkdownNode[]
+  markdown: MarkdownNode | MarkdownNode[] | null | undefined
 ): TocItem[] {
   const toc: TocItem[] = [];
+  if (!markdown) return toc;
 
   // If markdown is an object with a "children" property, use it;
   // otherwise, assume markdown itself is an array
