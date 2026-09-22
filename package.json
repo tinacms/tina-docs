@@ -9,7 +9,7 @@
     "build-local": "tinacms build --content=local --skip-cloud-checks -c \"next build\" && npx pagefind --site .next --output-path .next/static/pagefind && next-sitemap",
     "postbuild": "npx pagefind --site .next --output-path .next/static/pagefind && next-sitemap",
     "build-local-pagefind": "tinacms build && next build && npx pagefind --site .next --output-subdir ../public/pagefind",
-    "export": "tinacms build && EXPORT_MODE=static,UNOPTIMIZED_IMAGES=true next build",
+    "export": "tinacms build && EXPORT_MODE=static UNOPTIMIZED_IMAGES=true next build",
     "start": "tinacms build && next start",
     "lint": "biome check src/ tina/",
     "lint:fix": "biome check src/ tina/ --fix",
