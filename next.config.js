@@ -6,8 +6,6 @@ const redirects = require("./content/settings/config.json")?.redirects || [];
 const isStatic = process.env.EXPORT_MODE === "static";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || basePath;
-const varyHeader =
-  "Accept, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch";
 
 const extraConfig = {};
 
@@ -84,12 +82,6 @@ module.exports = {
       };
     },
 
-    async headers() {
-      return ["/docs", "/docs/:path+"].map((source) => ({
-        source,
-        headers: [{ key: "Vary", value: varyHeader }],
-      }));
-    },
   }),
 
   async redirects() {

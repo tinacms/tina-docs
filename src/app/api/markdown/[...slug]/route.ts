@@ -32,7 +32,6 @@ export async function GET(
     return new Response(await readFile(filePath, "utf8"), {
       headers: {
         "Content-Type": "text/markdown; charset=utf-8",
-        Vary: "Accept",
       },
     });
   } catch {

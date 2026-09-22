@@ -14,7 +14,6 @@ test("serves source Markdown when requested", async ({ request }) => {
 
     expect(response.ok()).toBe(true);
     expect(response.headers()["content-type"]).toContain("text/markdown");
-    expect(response.headers().vary).toContain("Accept");
     expect(await response.text()).toContain(`title: ${page.title}`);
   }
 });
@@ -26,5 +25,4 @@ test("continues serving HTML by default", async ({ request }) => {
 
   expect(response.ok()).toBe(true);
   expect(response.headers()["content-type"]).toContain("text/html");
-  expect(response.headers().vary).toContain("Accept");
 });
