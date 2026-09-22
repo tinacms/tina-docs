@@ -10,14 +10,9 @@ import copy from "copy-to-clipboard";
 import htmlToMd from "html-to-md";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { FaCommentDots } from "react-icons/fa";
-import {
-  MdArrowDropDown,
-  MdCheck,
-  MdContentCopy,
-  MdFilePresent,
-} from "react-icons/md";
+import { MdArrowDropDown, MdCheck, MdContentCopy } from "react-icons/md";
 import { RiOpenaiFill } from "react-icons/ri";
+import { SiClaude, SiMarkdown } from "react-icons/si";
 
 interface CopyPageDropdownProps {
   title?: string;
@@ -179,7 +174,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
             },
             {
               icon: (
-                <MdFilePresent className="w-4 h-4 text-neutral-text-secondary" />
+                <SiMarkdown className="w-5 h-5 text-neutral-text-secondary" />
               ),
               label: "View as Markdown",
               description: "View this page as plain text",
@@ -187,7 +182,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
             },
             {
               icon: (
-                <RiOpenaiFill className="w-4 h-4 text-neutral-text-secondary" />
+                <RiOpenaiFill className="w-5 h-5 text-neutral-text-secondary" />
               ),
               label: "Open in ChatGPT",
               description: "Ask questions about this page",
@@ -201,7 +196,7 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
             },
             {
               icon: (
-                <FaCommentDots className="w-4 h-4 text-neutral-text-secondary" />
+                <SiClaude className="w-5 h-5 text-neutral-text-secondary" />
               ),
               label: "Open in Claude",
               description: "Ask questions about this page",

@@ -51,7 +51,7 @@ export const AccordionTemplate = {
         src: "/img/rico-replacement.jpg",
         alt: "",
       },
-      fullWidth: false,
+      fullWidth: true,
     },
   },
   fields: [
