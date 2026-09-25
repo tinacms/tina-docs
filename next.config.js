@@ -7,6 +7,10 @@ const isStatic = process.env.EXPORT_MODE === "static";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || basePath;
 
+// Match a Markdown media type unless its own quality parameter explicitly rejects it.
+const markdownAccept =
+  "(?:.*?,\\s*)?text/markdown\\s*(?![^,]*;\\s*q\\s*=\\s*0(?:\\.0{0,3})?\\s*(?:;|,|$))(?:;[^,]*)?(?:,.*)?";
+
 const extraConfig = {};
 
 if (isStatic) {
@@ -57,7 +61,7 @@ module.exports = {
               {
                 type: "header",
                 key: "accept",
-                value: "(.*)text/markdown(.*)",
+                value: markdownAccept,
               },
             ],
           },
@@ -68,7 +72,7 @@ module.exports = {
               {
                 type: "header",
                 key: "accept",
-                value: "(.*)text/markdown(.*)",
+                value: markdownAccept,
               },
             ],
           },
