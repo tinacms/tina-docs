@@ -7,6 +7,10 @@ const isStatic = process.env.EXPORT_MODE === "static";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || basePath;
 
+// Match a Markdown media type unless its own quality parameter explicitly rejects it.
+const markdownAccept =
+  "(?:.*?,\\s*)?text/markdown\\s*(?![^,]*;\\s*q\\s*=\\s*0(?:\\.0{0,3})?\\s*(?:;|,|$))(?:;[^,]*)?(?:,.*)?";
+
 const extraConfig = {};
 
 if (isStatic) {
@@ -46,14 +50,43 @@ module.exports = {
     ],
   },
 
-  async rewrites() {
-    return [
-      {
-        source: "/admin",
-        destination: "/admin/index.html",
-      },
-    ];
-  },
+  ...(!isStatic && {
+    async rewrites() {
+      return {
+        beforeFiles: [
+          {
+            source: "/docs",
+            destination: "/api/markdown/index",
+            has: [
+              {
+                type: "header",
+                key: "accept",
+                value: markdownAccept,
+              },
+            ],
+          },
+          {
+            source: "/docs/:path+",
+            destination: "/api/markdown/:path+",
+            has: [
+              {
+                type: "header",
+                key: "accept",
+                value: markdownAccept,
+              },
+            ],
+          },
+        ],
+        afterFiles: [
+          {
+            source: "/admin",
+            destination: "/admin/index.html",
+          },
+        ],
+      };
+    },
+
+  }),
 
   async redirects() {
     return redirects.map((redirect) => ({
