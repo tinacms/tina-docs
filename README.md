@@ -160,7 +160,7 @@ TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.
 
 ### **Markdown Responses**
 
-Markdown responses let AI agents request documentation without the surrounding HTML layout, reducing the markup they need to process. This can support generative engine optimization (GEO): making content easier for AI-powered search tools to access and understand. Use [Tina's AI Search Readiness Checker](https://tina.io/geo) to assess a page's readiness for AI search.
+Markdown gives AI agents your docs with less markup to process, helping make your content accessible to AI search (GEO). Check your page with [Tina's AI Search Readiness Checker](https://tina.io/geo).
 
 Server deployments return source MDX for requests accepting `text/markdown`; ordinary requests return HTML.
 
