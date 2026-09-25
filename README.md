@@ -160,7 +160,11 @@ TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.
 
 ### **Markdown Responses**
 
-Server deployments can return a page's source MDX when a request accepts `text/markdown`. Static exports continue to serve HTML. If your CDN or proxy does not include `Accept` in its cache key automatically, configure it to do so.
+Server deployments return source MDX for requests accepting `text/markdown`; ordinary requests return HTML.
+
+- **Vercel:** No additional CDN configuration is needed: its cache key includes `Accept` by default. See [Vercel's caching documentation](https://vercel.com/docs/caching/cdn-cache).
+- **Cloudflare proxying your deployment:** Configure a Cache Rule to bypass caching for `/docs` and `/docs/*` (include your base path, if configured). To cache these responses instead, configure separate cache entries by `Accept`; Cloudflare documents an Enterprise custom-cache-key option. See [Cloudflare's content negotiation guidance](https://developers.cloudflare.com/cache/advanced-configuration/serve-tailored-content/).
+- **Static hosting (for example, GitHub Pages):** Requesting a docs page returns HTML, even with `Accept: text/markdown`. Automatic selection between HTML and Markdown requires a server deployment or additional routing configured on your host.
 
 ---
 
