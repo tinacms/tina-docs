@@ -1,4 +1,6 @@
+import { middleware } from "@/src/middleware";
 import { expect, test } from "@playwright/test";
+import { NextRequest } from "next/server";
 
 for (const { accept, type } of [
   { accept: "text/html;q=1, text/markdown;q=0.1", type: "text/html" },
@@ -19,9 +21,6 @@ for (const { accept, type } of [
         { headers: { Accept: accept } }
       );
       expect(response.ok()).toBe(true);
-      expect(response.headers().vary?.toLowerCase().split(/,\s*/)).toContain(
-        "accept"
-      );
       expect(response.headers()["content-type"]).toContain(type);
     }
   });
@@ -52,4 +51,38 @@ test("continues serving HTML by default", async ({ request }) => {
 
   expect(response.ok()).toBe(true);
   expect(response.headers()["content-type"]).toContain("text/html");
+});
+
+// Vercel replaces Vary on prerendered responses and keys its cache on Accept.
+// Check our header before hosting-specific response processing.
+test("middleware varies both formats by Accept", () => {
+  for (const accept of ["text/html", "text/markdown"]) {
+    const response = middleware(
+      new NextRequest("http://localhost/docs", { headers: { Accept: accept } })
+    );
+    expect(response.headers.get("vary")).toBe("Accept");
+  }
+});
+
+test("keeps HTML and Markdown separate across repeated requests", async ({
+  request,
+}) => {
+  for (const path of ["/docs", "/docs/introduction/showcase"]) {
+    for (const type of [
+      "text/html",
+      "text/markdown",
+      "text/html",
+      "text/markdown",
+    ]) {
+      const response = await request.get(
+        `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${path}`,
+        { headers: { Accept: type } }
+      );
+      expect(response.ok()).toBe(true);
+      expect(response.headers()["content-type"]).toContain(type);
+      expect(await response.text()).toMatch(
+        type === "text/html" ? /<!doctype html>/i : /^---\s*\n/
+      );
+    }
+  }
 });
