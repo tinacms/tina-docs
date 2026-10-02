@@ -1,6 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 for (const { accept, type } of [
+  { accept: "text/html;q=1, text/markdown;q=0.1", type: "text/html" },
+  { accept: "text/html;q=0.1, text/markdown;q=1", type: "text/markdown" },
+  { accept: "*/*", type: "text/html" },
+  { accept: "text/*", type: "text/html" },
+  { accept: "Text/Markdown", type: "text/markdown" },
   { accept: "text/html, text/markdown;q=0", type: "text/html" },
   { accept: "text/markdown;q=0.000, text/html", type: "text/html" },
   { accept: "text/markdown; charset=utf-8; q=0, text/html", type: "text/html" },
@@ -14,6 +19,9 @@ for (const { accept, type } of [
         { headers: { Accept: accept } }
       );
       expect(response.ok()).toBe(true);
+      expect(response.headers().vary?.toLowerCase().split(/,\s*/)).toContain(
+        "accept"
+      );
       expect(response.headers()["content-type"]).toContain(type);
     }
   });
