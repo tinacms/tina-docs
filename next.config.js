@@ -46,14 +46,11 @@ module.exports = {
     ],
   },
 
-  async rewrites() {
-    return [
-      {
-        source: "/admin",
-        destination: "/admin/index.html",
-      },
-    ];
-  },
+  ...(!isStatic && {
+    async rewrites() {
+      return [{ source: "/admin", destination: "/admin/index.html" }];
+    },
+  }),
 
   async redirects() {
     return redirects.map((redirect) => ({
