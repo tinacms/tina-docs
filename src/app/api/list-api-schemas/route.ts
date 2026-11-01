@@ -1,29 +1,30 @@
-import fs from "node:fs";
-import path from "node:path";
+import { client } from "@/tina/__generated__/client";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const schemasDir = path.join(process.cwd(), "content", "apiSchema");
+    let page = await client.queries.apiSchemaConnection();
+    const edges = [...(page.data.apiSchemaConnection.edges ?? [])];
 
-    if (!fs.existsSync(schemasDir)) {
-      return NextResponse.json({ schemas: [] });
+    while (page.data.apiSchemaConnection.pageInfo.hasNextPage) {
+      page = await client.queries.apiSchemaConnection({
+        after: page.data.apiSchemaConnection.pageInfo.endCursor,
+      });
+      edges.push(...(page.data.apiSchemaConnection.edges ?? []));
     }
 
-    const files = fs.readdirSync(schemasDir);
-    const schemas = files
-      .filter((file) => file.endsWith(".json"))
-      .map((file) => {
-        const displayName = path.basename(file, ".json");
-        return {
-          id: displayName,
-          filename: file,
-          displayName,
-          apiSchema: JSON.parse(
-            fs.readFileSync(path.join(schemasDir, file), "utf-8")
-          ).apiSchema,
-        };
-      });
+    const schemas = edges.flatMap((edge) =>
+      edge?.node
+        ? [
+            {
+              id: edge.node._sys.filename,
+              filename: edge.node._sys.relativePath,
+              displayName: edge.node._sys.filename,
+              apiSchema: edge.node.apiSchema,
+            },
+          ]
+        : []
+    );
 
     return NextResponse.json({ schemas });
   } catch (error) {

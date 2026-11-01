@@ -38,9 +38,6 @@ yarn-error.log*
 
 .yarn
 
-# exports
-/public/exports
-
 #sitemaps
 /public/sitemap.xml
 /public/sitemap-0.xml
