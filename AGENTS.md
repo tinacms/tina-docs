@@ -8,7 +8,8 @@ TinaDocs is a **public starter/template** — anyone can fork it and deploy thei
 
 - Never hardcode deployment-specific values (URLs, org names, branding). Use environment variables or TinaCMS settings instead.
 - New features that not every user will want must be toggleable via TinaCMS settings or environment variables — don't assume all consumers want the same feature set.
-- Avoid dependencies on specific hosting providers. Support multiple deployment modes (Vercel, GitHub Pages, static export).
+- Avoid dependencies on specific hosting providers. Support multiple deployment modes (Vercel, Cloudflare Workers, GitHub Pages, static export).
+- Cloudflare Workers builds use OpenNext (`wrangler.jsonc`, `open-next.config.ts`). They run when `WORKERS_CI` (Workers Builds) or `DEPLOY_ADAPTER=cloudflare` is set; see `scripts/deploy-target.js`.
 
 ## Architecture
 
@@ -36,6 +37,8 @@ pnpm lint:fix                   # Auto-fix lint issues
 pnpm test                       # Playwright E2E tests (Chromium)
 pnpm test:ui                    # Playwright interactive UI
 pnpm build-local-pagefind       # Rebuild search index locally
+pnpm run deploy                 # Deploy to Cloudflare Workers after DEPLOY_ADAPTER=cloudflare pnpm build (not `pnpm deploy`)
+pnpm preview:cf                 # Run the Cloudflare Worker locally after DEPLOY_ADAPTER=cloudflare pnpm build
 npx playwright test tests/e2e/some-test.spec.ts  # Run a single test
 ```
 
@@ -123,4 +126,4 @@ myEmbed: (props) => <MyEmbed {...props} />,
 
 ## Environment
 
-Copy `.env.example`. Required: `NEXT_PUBLIC_TINA_CLIENT_ID`, `TINA_TOKEN`, `NEXT_PUBLIC_TINA_BRANCH` (from app.tina.io). Optional: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_BASE_PATH`.
+Copy `.env.example`. Required: `NEXT_PUBLIC_TINA_CLIENT_ID`, `TINA_TOKEN`, `NEXT_PUBLIC_TINA_BRANCH` (from app.tina.io). Optional: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_BASE_PATH`, `DEPLOY_ADAPTER` (`cloudflare` forces a Cloudflare Workers build; any other value forces the default output).
