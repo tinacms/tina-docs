@@ -83,40 +83,5 @@
         "description": "Read-only token from [app.tina.io](https://app.tina.io). Also add it as a Workers Builds **build** variable."
       }
     }
-  },
-  "pnpm": {
-    "overrides": {
-      "@aws-sdk/checksums": "3.1002.0",
-      "@aws-sdk/core": "3.979.0",
-      "@aws-sdk/credential-provider-env": "3.972.79",
-      "@aws-sdk/credential-provider-http": "3.972.81",
-      "@aws-sdk/credential-provider-ini": "3.973.24",
-      "@aws-sdk/credential-provider-login": "3.972.86",
-      "@aws-sdk/credential-provider-node": "3.972.91",
-      "@aws-sdk/credential-provider-process": "3.972.79",
-      "@aws-sdk/credential-provider-sso": "3.973.23",
-      "@aws-sdk/credential-provider-web-identity": "3.972.85",
-      "@aws-sdk/dynamodb-codec": "3.973.53",
-      "@aws-sdk/middleware-bucket-endpoint": "3.972.57",
-      "@aws-sdk/middleware-endpoint-discovery": "3.972.36",
-      "@aws-sdk/middleware-expect-continue": "3.972.53",
-      "@aws-sdk/middleware-flexible-checksums": "3.974.63",
-      "@aws-sdk/middleware-host-header": "3.972.54",
-      "@aws-sdk/middleware-location-constraint": "3.972.50",
-      "@aws-sdk/middleware-logger": "3.972.53",
-      "@aws-sdk/middleware-recursion-detection": "3.972.55",
-      "@aws-sdk/middleware-sdk-s3": "3.972.84",
-      "@aws-sdk/middleware-sdk-sqs": "3.972.47",
-      "@aws-sdk/middleware-ssec": "3.972.50",
-      "@aws-sdk/middleware-user-agent": "3.972.83",
-      "@aws-sdk/nested-clients": "3.997.53",
-      "@aws-sdk/region-config-resolver": "3.972.57",
-      "@aws-sdk/signature-v4-multi-region": "3.996.50",
-      "@aws-sdk/token-providers": "3.1160.0",
-      "@aws-sdk/util-user-agent-browser": "3.972.54",
-      "@aws-sdk/util-user-agent-node": "3.973.69",
-      "@smithy/core": "3.38.0",
-      "@smithy/node-http-handler": "4.14.0"
-    }
   }
 }
