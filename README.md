@@ -164,7 +164,7 @@ TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.
 
 TinaDocs runs on Cloudflare Workers with [OpenNext](https://opennext.js.org/cloudflare). When Workers Builds builds your site, it builds a Worker instead of the default Next.js output; nothing changes for Vercel.
 
-1. Click the button and follow the steps. Cloudflare sets up a Worker that builds from your copy of this repository with Workers Builds.
+1. Click the button and follow the steps. Cloudflare sets up a Worker that builds from your copy of this repository with Workers Builds. The form asks only for `NEXT_PUBLIC_TINA_CLIENT_ID` and `TINA_TOKEN`, the secrets listed in `.dev.vars.example`.
 2. Add these as **build** variables in your Worker's Workers Builds settings ([docs](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)). Runtime variables and secrets are not visible to the build.
    - `NEXT_PUBLIC_TINA_CLIENT_ID` and `TINA_TOKEN` (required, from [app.tina.io](https://app.tina.io))
    - `NEXT_PUBLIC_SITE_URL` (optional, used for the sitemap)

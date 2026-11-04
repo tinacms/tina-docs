@@ -126,4 +126,4 @@ myEmbed: (props) => <MyEmbed {...props} />,
 
 ## Environment
 
-Copy `.env.example`. Required: `NEXT_PUBLIC_TINA_CLIENT_ID`, `TINA_TOKEN`, `NEXT_PUBLIC_TINA_BRANCH` (from app.tina.io). Optional: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_BASE_PATH`, `DEPLOY_ADAPTER` (`cloudflare` forces a Cloudflare Workers build; any other value forces the default output).
+`.dev.vars.example` lists only the secrets the Deploy to Cloudflare button asks for; Cloudflare reads it instead of `.env.example`. For local development, copy `.env.example`. Required: `NEXT_PUBLIC_TINA_CLIENT_ID`, `TINA_TOKEN`, `NEXT_PUBLIC_TINA_BRANCH` (from app.tina.io). Optional: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_BASE_PATH`, `DEPLOY_ADAPTER` (`cloudflare` forces a Cloudflare Workers build; any other value forces the default output).
