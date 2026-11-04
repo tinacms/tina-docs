@@ -27,7 +27,9 @@ on:
 jobs:
   test-search:
     name: Test Search Functionality
-    runs-on: ubuntu-latest
+    # ubuntu-latest is now 26.04, which Playwright 1.54 can't install chromium on.
+    # Pin to 24.04 until Playwright is upgraded.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
 
     steps:
