@@ -1,9 +1,11 @@
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const redirects = require("./content/settings/config.json")?.redirects || [];
+const { isCloudflareBuild } = require("./scripts/deploy-target");
 
 /** @type {import('next').NextConfig} */
 
 const isStatic = process.env.EXPORT_MODE === "static";
+const isCloudflare = !isStatic && isCloudflareBuild();
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || basePath;
 
@@ -15,12 +17,25 @@ if (isStatic) {
   extraConfig.skipTrailingSlashRedirect = true;
 }
 
+if (isCloudflare) {
+  // OpenNext builds the Worker from Next's standalone output.
+  extraConfig.output = "standalone";
+
+  // Workers Builds only sets WORKERS_CI_BRANCH at build time, so inline it
+  // for the runtime TinaCloud client.
+  if (!process.env.NEXT_PUBLIC_TINA_BRANCH && process.env.WORKERS_CI_BRANCH) {
+    extraConfig.env = { NEXT_PUBLIC_TINA_BRANCH: process.env.WORKERS_CI_BRANCH };
+  }
+}
+
 module.exports = {
   ...extraConfig,
   basePath,
   assetPrefix,
   images: {
     ...(assetPrefix ? { path: `${assetPrefix}/_next/image` } : {}),
+    // No IMAGES binding on Workers, so serve images as-is.
+    ...(isCloudflare ? { unoptimized: true } : {}),
     remotePatterns: [
       {
         protocol: "https",

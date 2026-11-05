@@ -1,0 +1,14 @@
+// Only read when deploying to Cloudflare Workers. OpenNext writes the Worker
+// and its static assets to .open-next/, so don't change main or
+// assets.directory.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tina-docs",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  }
+}

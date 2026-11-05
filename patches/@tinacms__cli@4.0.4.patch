@@ -1,0 +1,12 @@
+diff --git a/dist/index.js b/dist/index.js
+index 866276707541f86e87e5526b8b44064029ee00ed..e0bd8f8877eece6828efc19fe96c98ac8a58bf27 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -4009,6 +4009,7 @@ var buildProductionSpa = async (configManager, database, apiURL) => {
+     apiURL,
+     noWatch: true,
+     rollupOptions: {
++      maxParallelFileOps: 100,
+       onwarn(warning, warn) {
+         if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
+           return;

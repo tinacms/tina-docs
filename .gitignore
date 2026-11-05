@@ -36,10 +36,13 @@ yarn-error.log*
 # vercel
 .vercel
 
-.yarn
+# cloudflare
+/.open-next/
+/.wrangler/
+.dev.vars*
+!.dev.vars.example
 
-# exports
-/public/exports
+.yarn
 
 #sitemaps
 /public/sitemap.xml

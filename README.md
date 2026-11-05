@@ -158,6 +158,34 @@ pnpm build
 
 TinaDocs works great with Vercel. Check out our [deployment guide](https://tina.io/docs/tina-cloud/deployment-options/vercel) for detailed instructions.
 
+### **Deploy to Cloudflare Workers**
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tinacms/tina-docs)
+
+TinaDocs runs on Cloudflare Workers with [OpenNext](https://opennext.js.org/cloudflare). When Workers Builds builds your site, it builds a Worker instead of the default Next.js output; nothing changes for Vercel.
+
+1. Click the button and follow the steps. Cloudflare sets up a Worker that builds from your copy of this repository with Workers Builds. The form asks only for `NEXT_PUBLIC_TINA_CLIENT_ID` and `TINA_TOKEN`, the secrets listed in `.dev.vars.example`.
+2. Add these as **build** variables in your Worker's Workers Builds settings ([docs](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)). Runtime variables and secrets are not visible to the build.
+   - `NEXT_PUBLIC_TINA_CLIENT_ID` and `TINA_TOKEN` (required, from [app.tina.io](https://app.tina.io))
+   - `NEXT_PUBLIC_SITE_URL` (optional, used for the sitemap)
+   - `GITHUB_TOKEN`, `GITHUB_OWNER` and `GITHUB_REPO` (optional, see Step 5; there is no `VERCEL_GIT_REPO_*` fallback on Cloudflare, so set all three)
+3. The first build fails with a clear message until the required variables are set. Set them, then retry the build.
+
+Good to know:
+
+- The TinaCloud branch comes from `WORKERS_CI_BRANCH`, unless you set `NEXT_PUBLIC_TINA_BRANCH`. The branch must be indexed in your TinaCloud project.
+- Images are served as-is (unoptimized) on Workers.
+- `/` redirects to `/docs` through `content/settings/config.json`. `vercel.json` only applies on Vercel.
+
+To deploy or preview from your machine:
+
+```bash
+DEPLOY_ADAPTER=cloudflare pnpm build
+pnpm run deploy        # deploy to Cloudflare (not `pnpm deploy`, which is a built-in pnpm command)
+pnpm preview:cf        # or run the Worker locally with Wrangler
+pnpm run upload:cf     # upload a new version without deploying it, for non-production branches (untested)
+```
+
 ### **Markdown Responses**
 
 Markdown gives AI agents your docs with less markup to process, helping make your content accessible to AI search (GEO). Check your page with [Tina's AI Search Readiness Checker](https://tina.io/geo).
@@ -165,6 +193,7 @@ Markdown gives AI agents your docs with less markup to process, helping make you
 Server deployments return source MDX for requests accepting `text/markdown`; ordinary requests return HTML.
 
 - **Vercel:** No additional CDN configuration is needed: its cache key includes `Accept` by default. See [Vercel's caching documentation](https://vercel.com/docs/caching/cdn-cache).
+- **Cloudflare Workers:** The Worker picks HTML or Markdown on every request. If you add Cache Rules on a custom domain, follow the next bullet.
 - **Cloudflare proxying your deployment:** Configure a Cache Rule to bypass caching for `/docs` and `/docs/*` (include your base path, if configured). To cache these responses instead, configure separate cache entries by `Accept`; Cloudflare documents an Enterprise custom-cache-key option. See [Cloudflare's content negotiation guidance](https://developers.cloudflare.com/cache/advanced-configuration/serve-tailored-content/).
 - **Static hosting (for example, GitHub Pages):** Requesting a docs page returns HTML, even with `Accept: text/markdown`. Automatic selection between HTML and Markdown requires a server deployment or additional routing configured on your host.
 

@@ -10,8 +10,8 @@ inputs:
     required: false
     default: ""
   pnpm-version:
-    description: pnpm version to use if pnpm is detected
-    default: "9.15.2"
+    description: pnpm version to use if pnpm is detected; empty uses package.json packageManager
+    default: ""
 
 outputs:
   manager:

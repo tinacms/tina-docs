@@ -1,5 +1,6 @@
 "use client";
 
+import { getMarkdownPath } from "@/utils/markdown-path";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +25,6 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [markdownUrl, setMarkdownUrl] = useState<string | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
 
   // Prevent hydration mismatch
@@ -70,45 +70,20 @@ export const CopyPageDropdown: React.FC<CopyPageDropdownProps> = ({
     setCopied(true);
   };
 
-  const exportMarkdownAndOpen = async (): Promise<string | null> => {
-    if (markdownUrl) return markdownUrl;
-
-    const htmlContent = getCleanHtmlContent()?.innerHTML || "";
-    const markdown = convertToMarkdown(htmlContent);
-    const pathname = window.location.pathname.replace(/^\//, "") || "index";
-    const filename = `${pathname}.md`;
-
-    try {
-      // Include basePath if configured
-      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-      const apiUrl = `${basePath}/api/export-md`;
-
-      const res = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: markdown, filename }),
-      });
-
-      if (!res.ok) throw new Error("Export failed");
-
-      const data = await res.json();
-      const fullUrl = `${window.location.origin}${data.url}`;
-      setMarkdownUrl(fullUrl);
-      return fullUrl;
-    } catch (err) {
-      alert("Failed to export Markdown.");
-      return null;
-    }
+  const getMarkdownUrl = () => {
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+    const pathname = window.location.pathname
+      .slice(basePath.length)
+      .replace(/\/+$/, "");
+    return `${window.location.origin}${basePath}${getMarkdownPath(pathname)}`;
   };
 
-  const handleViewMarkdown = async () => {
-    const url = await exportMarkdownAndOpen();
-    if (url) window.open(url, "_blank");
+  const handleViewMarkdown = () => {
+    window.open(getMarkdownUrl(), "_blank");
   };
 
-  const openInLLM = async (generateUrl: (url: string) => string) => {
-    const url = await exportMarkdownAndOpen();
-    if (url) window.open(generateUrl(url), "_blank", "noopener,noreferrer");
+  const openInLLM = (generateUrl: (url: string) => string) => {
+    window.open(generateUrl(getMarkdownUrl()), "_blank", "noopener,noreferrer");
   };
 
   if (!hasMounted) return null;
