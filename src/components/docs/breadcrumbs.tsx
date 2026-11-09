@@ -1,213 +1,205 @@
 "use client";
 
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import type {
+  FormattedNavigation,
+  NavItem,
+} from "@/utils/docs/navigation/documentNavigation";
+import { matchActualTarget } from "@/utils/docs/urls";
+import { getUrl } from "@/utils/get-url";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import { Fragment } from "react";
+import { MdChevronLeft } from "react-icons/md";
 
-interface BreadcrumbItem {
+const MAX_VISIBLE_CRUMBS = 5;
+
+interface Crumb {
   title: string;
   url?: string;
 }
 
+type TrailNode =
+  | { kind: "crumb"; crumb: Crumb }
+  | { kind: "collapsed"; crumbs: Crumb[] };
+
+const titleOf = (item: NavItem): string => {
+  if (item.slug && typeof item.slug === "object" && item.slug.title) {
+    return item.slug.title;
+  }
+  return item.title ?? "Untitled";
+};
+
+const firstPageUrl = (items: NavItem[] = []): string | undefined => {
+  for (const item of items) {
+    if (item.slug) return getUrl(item.slug);
+    const nested = firstPageUrl(item.items);
+    if (nested) return nested;
+  }
+  return undefined;
+};
+
+const findTrail = (items: NavItem[] | undefined, path: string): Crumb[] => {
+  for (const item of items ?? []) {
+    if (item.slug && matchActualTarget(getUrl(item.slug), path)) {
+      return [{ title: titleOf(item) }];
+    }
+    const nested = findTrail(item.items, path);
+    if (nested.length > 0) {
+      return [
+        { title: item.title ?? "Untitled", url: firstPageUrl(item.items) },
+        ...nested,
+      ];
+    }
+  }
+  return [];
+};
+
+const buildTrail = (
+  navigation: FormattedNavigation | undefined,
+  path: string
+): Crumb[] => {
+  for (const tab of navigation?.data ?? []) {
+    for (const group of tab.items ?? []) {
+      const trail = findTrail(group.items, path);
+      if (trail.length === 0) continue;
+
+      const ancestors: Crumb[] = [];
+      if (tab.title) {
+        ancestors.push({
+          title: tab.title,
+          url: firstPageUrl(
+            (tab.items ?? []).flatMap((sibling) => sibling.items ?? [])
+          ),
+        });
+      }
+      if (group.title) {
+        ancestors.push({
+          title: group.title,
+          url: firstPageUrl(group.items),
+        });
+      }
+
+      return [...ancestors, ...trail].map((crumb) =>
+        crumb.url && matchActualTarget(crumb.url, path)
+          ? { title: crumb.title }
+          : crumb
+      );
+    }
+  }
+  return [];
+};
+
+const collapseTrail = (trail: Crumb[]): TrailNode[] => {
+  if (trail.length <= MAX_VISIBLE_CRUMBS) {
+    return trail.map((crumb): TrailNode => ({ kind: "crumb", crumb }));
+  }
+  const [root, ...rest] = trail;
+  return [
+    { kind: "crumb", crumb: root },
+    { kind: "collapsed", crumbs: rest.slice(0, -2) },
+    ...rest.slice(-2).map((crumb): TrailNode => ({ kind: "crumb", crumb })),
+  ];
+};
+
+const CollapsedCrumbs = ({ crumbs }: { crumbs: Crumb[] }) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger
+      aria-label="Show hidden breadcrumbs"
+      className="flex items-center rounded-sm transition-colors hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+    >
+      <BreadcrumbEllipsis />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent
+      align="start"
+      className="z-50 min-w-40 rounded-md border border-neutral-border bg-neutral-surface py-1 text-sm shadow-lg"
+    >
+      {crumbs.map((crumb) => (
+        <DropdownMenuItem
+          key={crumb.url ?? crumb.title}
+          asChild
+          className="cursor-pointer px-3 py-1.5 text-neutral-text-secondary outline-none hover:bg-neutral-background-secondary hover:text-neutral-text"
+        >
+          <Link href={crumb.url ?? "#"}>{crumb.title}</Link>
+        </DropdownMenuItem>
+      ))}
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
+
 export const BreadCrumbs = ({
   navigationDocsData,
 }: {
-  navigationDocsData: any;
+  navigationDocsData?: FormattedNavigation;
 }) => {
-  // Helper function to extract a clean URL path from a slug object
-  const getUrlFromSlug = (slug: any): string => {
-    if (typeof slug === "string") {
-      // Handle special case for docs homepage
-      if (slug === "content/docs/index.mdx") {
-        return "/docs";
-      }
-      return slug;
-    }
-    if (slug && typeof slug === "object" && slug._sys?.relativePath) {
-      // Handle special case for docs homepage
-      if (slug._sys.relativePath === "index.mdx") {
-        return "/docs";
-      }
-      return `/docs/${slug._sys.relativePath.replace(/\.mdx$/, "")}`;
-    }
-    if (slug && typeof slug === "object" && slug.id) {
-      // Handle special case for docs homepage
-      if (slug.id === "content/docs/index.mdx") {
-        return "/docs";
-      }
-      return slug.id.replace(/^content\//, "/").replace(/\.mdx$/, "");
-    }
-    return "";
-  };
+  const pathname = usePathname();
+  const trail = buildTrail(navigationDocsData, pathname ?? "");
+  const backTo = trail
+    .slice(0, -1)
+    .reverse()
+    .find((crumb) => crumb.url);
 
-  // Find the first page URL in a list of items (recursively)
-  const findFirstPageUrl = (items: any[]): string | null => {
-    if (!Array.isArray(items)) return null;
+  if (!backTo) return null;
 
-    for (const item of items) {
-      // If this item has a slug, it's a page - return its URL
-      if (item.slug) {
-        return getUrlFromSlug(item.slug);
-      }
-
-      // If this item has nested items, search recursively
-      if (item.items && Array.isArray(item.items)) {
-        const nestedUrl = findFirstPageUrl(item.items);
-        if (nestedUrl) return nestedUrl;
-      }
-    }
-
-    return null;
-  };
-
-  // Recursive function to search through nested items and return breadcrumb items
-  const searchInItems = (
-    items: any[],
-    currentPath: string
-  ): BreadcrumbItem[] => {
-    if (!Array.isArray(items) || !currentPath) return [];
-
-    for (const item of items) {
-      if (!item) continue;
-
-      // Check if this item has a slug that matches the current page
-      if (item.slug) {
-        const itemUrl = getUrlFromSlug(item.slug);
-        if (itemUrl) {
-          // Normalize URLs for comparison (remove trailing slashes)
-          const normalizedCurrentPath = currentPath.replace(/\/$/, "") || "/";
-          const normalizedItemUrl = itemUrl.replace(/\/$/, "") || "/";
-
-          if (normalizedCurrentPath === normalizedItemUrl) {
-            // This is the current page - no URL needed
-            const title = item.slug?.title || item.title || "Untitled";
-            return [{ title }];
-          }
-        }
-      }
-
-      // If this item has nested items, search recursively
-      if (item.items && Array.isArray(item.items)) {
-        const nestedResult = searchInItems(item.items, currentPath);
-        if (nestedResult.length > 0) {
-          // Found the current page in nested items
-          // Add this item's title with a link to its first page
-          const firstPageUrl = findFirstPageUrl(item.items);
-          return [
-            {
-              title: item.title || "Untitled",
-              url: firstPageUrl || undefined,
-            },
-            ...nestedResult,
-          ];
-        }
-      }
-    }
-
-    return [];
-  };
-
-  // Function to find the breadcrumb trail for the current page
-  const findBreadcrumbTrail = (
-    navigationData: any,
-    currentPath: string
-  ): BreadcrumbItem[] => {
-    const trail: BreadcrumbItem[] = [];
-
-    if (!navigationData || !currentPath) {
-      return trail;
-    }
-
-    // Check if navigationData has a 'data' property (formatted navigation structure)
-    const tabsData = navigationData.data || [];
-
-    if (!Array.isArray(tabsData)) {
-      return trail;
-    }
-
-    // Search through all tabs to find the current page
-    for (const tab of tabsData) {
-      if (!tab || !tab.items || !Array.isArray(tab.items)) {
-        continue;
-      }
-
-      // Search through supermenu groups in this tab
-      for (const supermenuGroup of tab.items) {
-        if (
-          !supermenuGroup ||
-          !supermenuGroup.items ||
-          !Array.isArray(supermenuGroup.items)
-        ) {
-          continue;
-        }
-
-        // Check if the current page exists in this supermenu group
-        const foundInGroup = searchInItems(supermenuGroup.items, currentPath);
-
-        if (foundInGroup.length > 0) {
-          // Add the supermenu group title with link to its first page
-          if (supermenuGroup.title) {
-            const firstPageUrl = findFirstPageUrl(supermenuGroup.items);
-            trail.push({
-              title: supermenuGroup.title,
-              url: firstPageUrl || undefined,
-            });
-          }
-          // Add any nested group titles and the final page title
-          trail.push(...foundInGroup);
-          return trail; // Found it, return early
-        }
-      }
-    }
-
-    return trail;
-  };
-
-  const currentPath = usePathname();
-
-  const breadcrumbs = findBreadcrumbTrail(navigationDocsData, currentPath);
-
-  if (!navigationDocsData || breadcrumbs.length === 0) {
-    return null;
-  }
+  const nodes = collapseTrail(trail);
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-2">
-      <ol className="flex items-center space-x-2 text-sm text-brand-primary-light">
-        {breadcrumbs.map((crumb, index) => {
-          const isLast = index === breadcrumbs.length - 1;
-          const isClickable = !isLast && crumb.url;
+    <Breadcrumb className="mb-2">
+      <div className="sm:hidden">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href={backTo.url ?? "/docs"}
+              className="inline-flex min-w-0 items-center gap-1"
+            >
+              <MdChevronLeft className="size-4 shrink-0" aria-hidden="true" />
+              <span className="truncate">{backTo.title}</span>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </div>
 
-          return (
-            <li key={index} className="flex items-center">
-              {index > 0 && (
-                <span className="mx-2 text-brand-primary" aria-hidden="true">
-                  ›
-                </span>
-              )}
-
-              {isClickable ? (
-                <Link
-                  href={crumb?.url || "/"}
-                  className="text-sm uppercase text-neutral-text-secondary hover:text-brand-primary transition-all duration-300 cursor-pointer"
-                >
-                  {crumb.title}
-                </Link>
-              ) : (
-                <span
-                  className={`text-sm uppercase tracking-wide ${
-                    isLast
-                      ? "font-medium text-neutral-text"
-                      : "text-neutral-text-secondary"
-                  }`}
-                >
-                  {crumb.title}
-                </span>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-    </nav>
+      <div className="hidden sm:block">
+        <BreadcrumbList>
+          {nodes.map((node, index) => (
+            <Fragment key={index}>
+              {index > 0 && <BreadcrumbSeparator />}
+              <BreadcrumbItem>
+                {node.kind === "collapsed" ? (
+                  <CollapsedCrumbs crumbs={node.crumbs} />
+                ) : index === nodes.length - 1 ? (
+                  <BreadcrumbPage className="truncate">
+                    {node.crumb.title}
+                  </BreadcrumbPage>
+                ) : node.crumb.url ? (
+                  <BreadcrumbLink
+                    href={node.crumb.url}
+                    className="whitespace-nowrap"
+                  >
+                    {node.crumb.title}
+                  </BreadcrumbLink>
+                ) : (
+                  <span className="whitespace-nowrap">{node.crumb.title}</span>
+                )}
+              </BreadcrumbItem>
+            </Fragment>
+          ))}
+        </BreadcrumbList>
+      </div>
+    </Breadcrumb>
   );
 };

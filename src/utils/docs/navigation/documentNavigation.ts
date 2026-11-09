@@ -2,11 +2,20 @@ import siteConfig from "@/content/siteConfig.json";
 import client from "@/tina/__generated__/client";
 
 /**
+ * A document reference on a navigation item, as resolved by the GraphQL query
+ */
+export interface NavItemReference {
+  title?: string | null;
+  id?: string | null;
+  [key: string]: unknown;
+}
+
+/**
  * A single navigation item
  */
 export interface NavItem {
   _template?: string;
-  slug?: string;
+  slug?: string | NavItemReference;
   title?: string;
   items?: NavItem[];
   [key: string]: unknown;
@@ -109,13 +118,13 @@ const transformReferencesToSlugs = (navItems: NavItem[]): NavItem[] => {
     if (item._template) {
       if (item._template === "items") {
         array[index].items = transformReferencesToSlugs(item.items || []);
-      } else {
+      } else if (typeof item.slug === "string") {
         // Handle the docs homepage case as a special case with no slug
         // Otherwise reformat the path from content reference to URL path
         array[index].slug =
-          array[index].slug === `content${siteConfig.docsHomepage}.mdx`
+          item.slug === `content${siteConfig.docsHomepage}.mdx`
             ? "/docs"
-            : item.slug?.replace(/^content\/|\.mdx$/g, "/") || "";
+            : item.slug.replace(/^content\/|\.mdx$/g, "/");
       }
     }
   });
