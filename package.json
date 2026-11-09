@@ -2,7 +2,6 @@
   "name": "tina-docs",
   "version": "0.0.1",
   "private": true,
-  "packageManager": "pnpm@10.34.9",
   "scripts": {
     "predev": "node scripts/check-pagefind.js",
     "dev": "tinacms dev -c \"next dev --turbopack\"",
@@ -49,7 +48,7 @@
     "react-markdown": "^10.1.0",
     "rehype-pretty-code": "^0.14.1",
     "shiki": "^3.6.0",
-    "tinacms": "^3.15.0",
+    "tinacms": "^3.15.2",
     "title-case": "^4.3.2",
     "typescript": "5.8.3"
   },
@@ -60,7 +59,7 @@
     "@shikijs/transformers": "^3.6.0",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.8",
-    "@tinacms/cli": "^4.0.4",
+    "@tinacms/cli": "^4.0.5",
     "@types/negotiator": "^0.6.5",
     "@types/node": "^24.2.1",
     "@types/react": "^19.0.0",
