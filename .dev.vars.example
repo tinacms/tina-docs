@@ -1,0 +1,5 @@
+# The secrets the Deploy to Cloudflare button asks for. Cloudflare reads this
+# file instead of .env.example, so list only what the deploy needs here.
+# For local development, copy .env.example to .env instead.
+NEXT_PUBLIC_TINA_CLIENT_ID=
+TINA_TOKEN=
