@@ -1,5 +1,7 @@
-# The secrets the Deploy to Cloudflare button asks for. Cloudflare reads this
-# file instead of .env.example, so list only what the deploy needs here.
+# The Deploy to Cloudflare button turns every uncommented line in this file into
+# a required field on its form. These lines are commented out on purpose: the
+# keys are build variables, which TinaCloud (or you, see the README) add after
+# the deploy, so the form should not ask for them.
 # For local development, copy .env.example to .env instead.
-NEXT_PUBLIC_TINA_CLIENT_ID=
-TINA_TOKEN=
+# NEXT_PUBLIC_TINA_CLIENT_ID=
+# TINA_TOKEN=
