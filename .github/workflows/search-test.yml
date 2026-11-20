@@ -49,12 +49,27 @@ jobs:
       # System deps (apt) and the browser download are split because they fail
       # for different reasons. apt previously hung on an interactive frontend, so
       # force debconf non-interactive in the db before the sudo apt-get Playwright
-      # runs — this now completes in seconds.
+      # runs — this normally completes in seconds. The runner's apt mirror can
+      # still stall with no output, and a hang is not a non-zero exit, so cap each
+      # attempt with `timeout` and retry, like the browser install below.
       - name: Install Playwright system dependencies
         timeout-minutes: 6
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
           echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
-          npx playwright install-deps chromium
+          for attempt in 1 2 3; do
+            echo "::group::playwright system deps (attempt $attempt)"
+            if timeout 100 npx playwright install-deps chromium; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+            echo "Attempt $attempt stalled or failed; retrying in 10s..."
+            sleep 10
+          done
+          echo "Playwright system dependencies failed after 3 attempts."
+          exit 1
 
       # The browser archive downloads fully (hits 100%) and then Playwright stalls
       # indefinitely with no output. Cap each attempt with `timeout` so a stall is
