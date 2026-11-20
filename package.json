@@ -73,15 +73,5 @@
     "tailwindcss": "^4.1.8",
     "worker-loader": "^3.0.8",
     "wrangler": "^4.155.0"
-  },
-  "cloudflare": {
-    "bindings": {
-      "NEXT_PUBLIC_TINA_CLIENT_ID": {
-        "description": "Client ID from your project at [app.tina.io](https://app.tina.io). `tinacms build` needs it at **build** time, so also add it as a Workers Builds build variable."
-      },
-      "TINA_TOKEN": {
-        "description": "Read-only token from [app.tina.io](https://app.tina.io). Also add it as a Workers Builds **build** variable."
-      }
-    }
   }
 }
